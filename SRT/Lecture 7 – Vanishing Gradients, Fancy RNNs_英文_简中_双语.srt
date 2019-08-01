@@ -1,0 +1,7333 @@
+1
+00:00:04,700 --> 00:00:07,140
+Hi, everyone. I'm Abby.
+嗨，大家好。我是艾比。
+
+2
+00:00:07,140 --> 00:00:08,355
+If you weren't here last week,
+如果你上周不在这里，
+
+3
+00:00:08,355 --> 00:00:10,190
+I'm the head TA of this course.
+我是本课程的主任TA。
+
+4
+00:00:10,190 --> 00:00:13,325
+And this is the second [NOISE] of three lectures that I'm
+这是我讲的三个讲座的第二个[NOISE]
+
+5
+00:00:13,325 --> 00:00:17,180
+going to be giving on RNNs and related topics.
+将给出RNN和相关主题。
+
+6
+00:00:17,360 --> 00:00:20,430
+Okay. So, welcome to week four.
+好的。所以，欢迎来到第四周。
+
+7
+00:00:20,430 --> 00:00:22,960
+Today, we're going to be learning about vanishing gradients,
+今天，我们将学习消失的渐变，
+
+8
+00:00:22,960 --> 00:00:25,120
+and some more complex types of RNNs.
+以及一些更复杂的RNN类型。
+
+9
+00:00:25,120 --> 00:00:26,815
+So, before we get started,
+所以，在我们开始之前，
+
+10
+00:00:26,815 --> 00:00:28,000
+I've got a few announcements.
+我有几个公告。
+
+11
+00:00:28,000 --> 00:00:33,150
+Uh, the first announcement is that assignment four is released today, uh,
+呃，第一个宣布是今天发布了第四个任务，呃，
+
+12
+00:00:33,150 --> 00:00:35,835
+it's due Thursday of next week, not Tuesday,
+它将在下周四，而不是周二，
+
+13
+00:00:35,835 --> 00:00:39,795
+so that means you have two days more to do it than you did for all the other homeworks.
+所以这意味着你比其他所有作业都要多做两天。
+
+14
+00:00:39,795 --> 00:00:41,410
+And the reason for that is assignment four is
+其原因是任务四是
+
+15
+00:00:41,410 --> 00:00:43,360
+probably more work than the other homework so far,
+到目前为止，可能比其他作业更多的工作，
+
+16
+00:00:43,360 --> 00:00:45,415
+so don't be surprised by that.
+所以不要对此感到惊讶。
+
+17
+00:00:45,415 --> 00:00:48,575
+Uh, assignment four is all about Neural Machine Translation.
+呃，任务四是关于神经机器翻译。
+
+18
+00:00:48,575 --> 00:00:52,135
+Uh, we're gonna learn about NMT on Thursday's lecture this week.
+呃，我们本周将在周四的讲座上了解NMT。
+
+19
+00:00:52,135 --> 00:00:54,270
+And, uh, this is really exciting,
+而且，呃，这真的令人兴奋，
+
+20
+00:00:54,270 --> 00:00:57,600
+because actually CS 224 has never had an NMT assignment before,
+因为CS 224之前从未进行过NMT任务，
+
+21
+00:00:57,600 --> 00:00:58,740
+so this is all new this year,
+所以今年全新，
+
+22
+00:00:58,740 --> 00:01:02,420
+and you're gonna be the first year students who are going to be doing an NMT assignment.
+你将成为第一年开始做NMT任务的学生。
+
+23
+00:01:02,420 --> 00:01:04,910
+Uh, something else that's different about
+呃，其他一些不同的东西
+
+24
+00:01:04,910 --> 00:01:07,610
+assignment four is that you're going to be using Azure, which is, uh,
+任务四是你将使用Azure，呃，
+
+25
+00:01:07,610 --> 00:01:09,170
+a cloud computing service,
+云计算服务，
+
+26
+00:01:09,170 --> 00:01:13,145
+in order to train your NMT systems on a virtual machine with a GPU.
+为了在具有GPU的虚拟机上训练您的NMT系统。
+
+27
+00:01:13,145 --> 00:01:17,365
+And, uh, this is necessary in order to be able to do it in a reasonable amount of time.
+而且，呃，这是必要的，以便能够在合理的时间内完成。
+
+28
+00:01:17,365 --> 00:01:19,250
+So, I have a warning which is,
+所以，我有一个警告，是，
+
+29
+00:01:19,250 --> 00:01:20,930
+if you're a person who perhaps doesn't have, ah,
+如果你是一个可能没有的人啊，
+
+30
+00:01:20,930 --> 00:01:24,145
+learnt- a lot of experience working on remote machines,
+学习 - 在远程机器上工作的很多经验，
+
+31
+00:01:24,145 --> 00:01:26,360
+so for example if you're not very familiar with SSH,
+例如，如果你不熟悉SSH，
+
+32
+00:01:26,360 --> 00:01:28,880
+or tmux, or remote text editing,
+或tmux，或远程文本编辑，
+
+33
+00:01:28,880 --> 00:01:31,580
+then I advise you to budget some extra time for assignment four,
+然后我建议你预算一些额外的时间来完成作业四，
+
+34
+00:01:31,580 --> 00:01:34,945
+because that's probably gonna take you a little while to set up and get used to.
+因为这可能需要你一段时间来设置并习惯。
+
+35
+00:01:34,945 --> 00:01:37,280
+So, again, I'm going to emphasize,
+所以，我再次强调，
+
+36
+00:01:37,280 --> 00:01:40,250
+do get started early on assignment four, because, uh,
+在任务四开始提前开始，因为，呃，
+
+37
+00:01:40,250 --> 00:01:43,775
+the NMT system takes about four hours to train on your virtual machine,
+NMT系统需要大约四个小时来训练您的虚拟机，
+
+38
+00:01:43,775 --> 00:01:47,230
+so you really can't start it the night before and expect to get it in on time.
+所以你真的无法在前一天晚上开始它并期望准时到达它。
+
+39
+00:01:47,230 --> 00:01:51,245
+Uh, and assignment four is really quite a lot more complicated than assignment three.
+呃，任务四真的要比任务三复杂得多。
+
+40
+00:01:51,245 --> 00:01:55,250
+So, uh, don't get into a false sense of security if you found assignment three easy.
+所以，呃，如果你发现任务很简单，就不要陷入虚假的安全感。
+
+41
+00:01:55,250 --> 00:02:00,640
+Um, so Thursday's slides on NMT are ready on the website today,
+嗯，所以星期四在NMT的幻灯片今天在网站上准备好，
+
+42
+00:02:00,640 --> 00:02:02,610
+so you can even start looking at it today if you
+如果你今天你甚至可以开始看它
+
+43
+00:02:02,610 --> 00:02:05,910
+want- if you wanna get started on assignment four early.
+希望 - 如果你想早点开始任务四。
+
+44
+00:02:05,910 --> 00:02:08,310
+Uh, so, I have a few more announcements, uh,
+呃，我还有几个公告，呃，
+
+45
+00:02:08,310 --> 00:02:10,080
+on the subject of projects, uh,
+关于项目的主题，呃，
+
+46
+00:02:10,080 --> 00:02:11,860
+next week's lectures are going to be all about projects.
+下周的讲座将全部与项目有关。
+
+47
+00:02:11,860 --> 00:02:14,630
+So, you're going to hear about, uh, question answering,
+所以，你会听到，呃，回答问题，
+
+48
+00:02:14,630 --> 00:02:16,445
+and the default final projects,
+和默认的最终项目，
+
+49
+00:02:16,445 --> 00:02:18,620
+and then you're also gonna get some tips about how you might,
+然后你也会得到一些关于你怎么样的提示，
+
+50
+00:02:18,620 --> 00:02:21,205
+uh, choose and define your own custom projects.
+呃，选择并定义自己的自定义项目。
+
+51
+00:02:21,205 --> 00:02:24,180
+So, it's fine if you're not thinking about a project this week, that's okay.
+所以，如果你本周没有考虑一个项目，这很好，那没关系。
+
+52
+00:02:24,180 --> 00:02:27,130
+You can delay until next week to start thinking about it for the first time.
+你可以推迟到下周开始第一次考虑它。
+
+53
+00:02:27,130 --> 00:02:29,630
+But if you are a person who is already thinking about your projects,
+但如果你是一个已经考虑过你的项目的人，
+
+54
+00:02:29,630 --> 00:02:32,200
+for example, if you're trying to choose your custom projects, uh,
+例如，如果您正在尝试选择自定义项目，呃，
+
+55
+00:02:32,200 --> 00:02:34,295
+then you should check out the website's project page,
+那么你应该查看网站的项目页面，
+
+56
+00:02:34,295 --> 00:02:36,230
+because it has quite a lot of information about, uh,
+因为它有很多关于的信息，呃，
+
+57
+00:02:36,230 --> 00:02:39,170
+how to choose your projects, and also some inspiration.
+如何选择你的项目，还有一些灵感。
+
+58
+00:02:39,170 --> 00:02:41,645
+And that includes- we've collected some, uh,
+这包括 - 我们收集了一些，呃，
+
+59
+00:02:41,645 --> 00:02:44,650
+project ideas from various members of the Stanford AI Lab.
+来自斯坦福大学人工智能实验室各成员的项目创意。
+
+60
+00:02:44,650 --> 00:02:48,155
+So, these are faculty and PhD students and postdocs,
+所以，这些是教师和博士生和博士后，
+
+61
+00:02:48,155 --> 00:02:49,760
+who have ideas for, uh,
+谁有想法，呃，
+
+62
+00:02:49,760 --> 00:02:51,560
+NLP deep learning projects that they would like
+他们想要的NLP深度学习项目
+
+63
+00:02:51,560 --> 00:02:54,150
+CS224n students such as yourself to work on.
+CS224n等学生就像自己一样工作。
+
+64
+00:02:54,150 --> 00:02:57,095
+So, especially, if you're looking to maybe get into research later,
+所以，特别是，如果你想在以后进行研究，
+
+65
+00:02:57,095 --> 00:02:59,180
+this is a really great opportunity, uh,
+这是一个非常好的机会，呃，
+
+66
+00:02:59,180 --> 00:03:00,905
+to work with someone in the Stanford AI Lab,
+与斯坦福大学人工智能实验室的人合作，
+
+67
+00:03:00,905 --> 00:03:03,270
+and maybe get some mentorship as well.
+并且也许会获得一些指导。
+
+68
+00:03:03,700 --> 00:03:06,840
+Okay. So here's an overview.
+好的。所以这是一个概述。
+
+69
+00:03:06,840 --> 00:03:10,080
+Uh, last week, we learned about Recurrent Neural Networks,
+呃，上周，我们了解了回归神经网络，
+
+70
+00:03:10,080 --> 00:03:12,725
+um, we learned about why they're really great for Language Modeling.
+嗯，我们了解了为什么他们真的非常适合语言建模。
+
+71
+00:03:12,725 --> 00:03:15,335
+And today, we're gonna learn about some problems with RNNs,
+今天，我们将了解RNN的一些问题，
+
+72
+00:03:15,335 --> 00:03:16,880
+and we're gonna learn about how to fix them.
+我们将学习如何修复它们。
+
+73
+00:03:16,880 --> 00:03:22,035
+And this is gonna motiva- motivate us to learn about some more complex RNN variants.
+这将是动机 - 激励我们学习一些更复杂的RNN变种。
+
+74
+00:03:22,035 --> 00:03:24,300
+And then, uh, next lecture on Thursday,
+然后，呃，周四的下一个讲座，
+
+75
+00:03:24,300 --> 00:03:27,570
+we're going to, uh, have some more application-based, uh, contents,
+我们要去，呃，还有一些基于应用程序的内容，
+
+76
+00:03:27,570 --> 00:03:29,750
+so we are going to be learning about Neural Machine Translation,
+所以我们将学习神经机器翻译，
+
+77
+00:03:29,750 --> 00:03:31,700
+which is a really important task in, uh,
+这是一个非常重要的任务，呃，
+
+78
+00:03:31,700 --> 00:03:33,830
+NLP and deep learning, and in particular,
+NLP和深度学习，特别是
+
+79
+00:03:33,830 --> 00:03:37,435
+we're gonna learn about this architecture called sequence-to-sequence with attention.
+我们将要了解这种称为序列到序列的架构。
+
+80
+00:03:37,435 --> 00:03:40,080
+But in more detail,
+但更详细地说，
+
+81
+00:03:40,080 --> 00:03:41,640
+today's lecture, uh, first,
+今天的讲座，呃，第一，
+
+82
+00:03:41,640 --> 00:03:43,650
+we are going to learn about the vanishing gradient problem.
+我们将了解消失的梯度问题。
+
+83
+00:03:43,650 --> 00:03:46,220
+And this is gonna motivate us to learn about two new types of
+这将激励我们学习两种新类型
+
+84
+00:03:46,220 --> 00:03:48,890
+RNN called Long Short-Term Memory,
+RNN称为长期短期记忆，
+
+85
+00:03:48,890 --> 00:03:50,855
+and Gated Recurrent Unit.
+和门控经常性单位。
+
+86
+00:03:50,855 --> 00:03:52,940
+We're also going to learn about some other kind of
+我们还将学习其他一些
+
+87
+00:03:52,940 --> 00:03:55,640
+miscellaneous fixes for the vanishing gradient problem,
+对于消失的梯度问题的杂项修复，
+
+88
+00:03:55,640 --> 00:03:57,190
+or the exploding gradient problem.
+或爆炸梯度问题。
+
+89
+00:03:57,190 --> 00:03:58,370
+Uh, so in particular,
+呃，特别是，
+
+90
+00:03:58,370 --> 00:03:59,790
+we're going to learn about gradient clipping,
+我们将学习渐变剪辑，
+
+91
+00:03:59,790 --> 00:04:02,190
+which is, uh, fairly simple, but quite important.
+这是，呃，相当简单，但非常重要。
+
+92
+00:04:02,190 --> 00:04:04,710
+Uh, we're also going to learn about skip connections,
+呃，我们也将学习跳过连接，
+
+93
+00:04:04,710 --> 00:04:07,080
+which is a fairly new neural architecture,
+这是一个相当新的神经结构，
+
+94
+00:04:07,080 --> 00:04:08,150
+which tries to, uh,
+试图，呃，
+
+95
+00:04:08,150 --> 00:04:09,350
+fix the vanishing gradient problem.
+解决消失的梯度问题。
+
+96
+00:04:09,350 --> 00:04:11,640
+[NOISE] And then, at the end of the lecture,
+[NOISE]然后，在讲座结束时，
+
+97
+00:04:11,640 --> 00:04:14,210
+we're gonna learn about some more fancy RNN variants such as, uh,
+我们将学习一些更奇特的RNN变种，例如，呃，
+
+98
+00:04:14,210 --> 00:04:17,780
+bidirectional RN- RNNs, those are the ones which go not just left to right,
+双向RN-RNN，那些不仅仅是从左到右的，
+
+99
+00:04:17,780 --> 00:04:18,980
+but also right to left,
+而且从右到左，
+
+100
+00:04:18,980 --> 00:04:21,740
+and we're going to learn about multi-layer RNNs.
+我们将学习多层RNN。
+
+101
+00:04:21,740 --> 00:04:24,880
+And that's when you stack multiple RNNs on top of each other.
+那就是当你将多个RNN堆叠在一起时。
+
+102
+00:04:24,880 --> 00:04:27,560
+So, there's a lot of important definitions today.
+所以，今天有很多重要的定义。
+
+103
+00:04:27,560 --> 00:04:29,870
+Um, so, you're gonna find that the information in
+嗯，所以，你会发现信息
+
+104
+00:04:29,870 --> 00:04:31,160
+this lecture is pretty important for
+这个讲座非常重要
+
+105
+00:04:31,160 --> 00:04:34,080
+assignment four and probably for your project as well.
+任务四，也可能适用于您的项目。
+
+106
+00:04:35,450 --> 00:04:40,250
+Okay. So, let's get started thinking about the vanishing gradients.
+好的。所以，让我们开始考虑消失的渐变。
+
+107
+00:04:40,250 --> 00:04:42,350
+Uh, so here we have an RNN,
+呃，所以我们这里有一个RNN，
+
+108
+00:04:42,350 --> 00:04:44,390
+with, let say, ah, four steps,
+用，啊，四步，
+
+109
+00:04:44,390 --> 00:04:46,955
+and suppose that we have some kind of loss that's, uh,
+并假设我们有某种损失，呃，
+
+110
+00:04:46,955 --> 00:04:50,915
+J4, and that's computed based on the four hidden states.
+J4，这是基于四个隐藏状态计算的。
+
+111
+00:04:50,915 --> 00:04:56,300
+So, let's suppose we're interested in asking what is the derivative of this loss J4,
+那么，让我们假设我们有兴趣询问这种损失J4的衍生物，
+
+112
+00:04:56,300 --> 00:04:58,340
+with respect to the hidden states,
+关于隐藏的状态，
+
+113
+00:04:58,340 --> 00:05:00,865
+uh, h1, the first hidden state?
+呃，h1，第一个隐藏状态？
+
+114
+00:05:00,865 --> 00:05:03,390
+So, I'm representing that with this, uh,
+所以，我代表那个，呃，
+
+115
+00:05:03,390 --> 00:05:05,720
+blue arrow notation to kind of represent how we have
+蓝色箭头符号表示我们如何拥有
+
+116
+00:05:05,720 --> 00:05:09,070
+to make the gradients flow backwards in order to complete this.
+使渐变向后流动以完成此操作。
+
+117
+00:05:09,070 --> 00:05:11,750
+So, if we're interested in what this gradient is,
+所以，如果我们对这个渐变是什么感兴趣，
+
+118
+00:05:11,750 --> 00:05:13,850
+we can apply the chain rule and say, "Well,
+我们可以应用连锁规则并说：“嗯，
+
+119
+00:05:13,850 --> 00:05:15,035
+it's the product of the, uh,
+它是，呃的产物，
+
+120
+00:05:15,035 --> 00:05:17,560
+gradient of the loss with respect to h2,
+相对于h2的损失梯度，
+
+121
+00:05:17,560 --> 00:05:20,975
+and then gradient of h2, with respect to h1."
+然后是h2的梯度，相对于h1。“
+
+122
+00:05:20,975 --> 00:05:23,670
+And then, similarly, we can decompose that
+然后，类似地，我们可以分解它
+
+123
+00:05:23,670 --> 00:05:27,255
+again using the chain rule, and we can do it again.
+再次使用链规则，我们可以再做一次。
+
+124
+00:05:27,255 --> 00:05:31,790
+So, what we've done here is we've decomposed the gradient that we were interested in,
+所以，我们在这里所做的是我们已经分解了我们感兴趣的渐变，
+
+125
+00:05:31,790 --> 00:05:35,375
+into the products of these various intermediate gradients.
+进入这些各种中间梯度的产品。
+
+126
+00:05:35,375 --> 00:05:39,290
+And in particular, we're seeing all these ht by ht minus 1,
+特别是，我们看到所有这些ht减去ht减去1，
+
+127
+00:05:39,290 --> 00:05:41,975
+uh, adjacent gradients of the hidden states.
+呃，隐藏状态的相邻梯度。
+
+128
+00:05:41,975 --> 00:05:43,910
+So, the thing I want to ask you is,
+那么，我想问你的是，
+
+129
+00:05:43,910 --> 00:05:47,130
+what happens if these gradients are small?
+如果这些渐变很小会发生什么？
+
+130
+00:05:47,130 --> 00:05:49,020
+Given that there's a lot of them,
+鉴于它们中有很多，
+
+131
+00:05:49,020 --> 00:05:52,090
+uh, what happens if they're small in magnitude?
+呃，如果他们的规模很小，会发生什么？
+
+132
+00:05:52,130 --> 00:05:56,865
+So, the overall problem of the vanishing gradient problem,
+那么，消失梯度问题的整体问题，
+
+133
+00:05:56,865 --> 00:05:59,340
+is that when these gradients are small,
+当这些梯度很小时，
+
+134
+00:05:59,340 --> 00:06:02,525
+then our overall gradient is gonna get smaller and smaller,
+然后我们的整体渐变会变得越来越小，
+
+135
+00:06:02,525 --> 00:06:04,375
+as it back propagates further.
+因为它进一步传播。
+
+136
+00:06:04,375 --> 00:06:09,150
+Because the accumulated gradient is the product of all of these intermediate gradients.
+因为累积梯度是所有这些中间梯度的乘积。
+
+137
+00:06:09,150 --> 00:06:11,275
+And when you multiply something by something small,
+当你把东西乘以小东西时，
+
+138
+00:06:11,275 --> 00:06:12,970
+then the whole thing gets smaller.
+然后整个事情变小了。
+
+139
+00:06:12,970 --> 00:06:15,220
+So, that's what I'm representing here with these, uh,
+所以，这就是我在这里用这些代表的，呃，
+
+140
+00:06:15,220 --> 00:06:18,230
+smaller and smaller blue arrows going backwards.
+越来越小的蓝色箭头向后。
+
+141
+00:06:18,290 --> 00:06:21,565
+So, that's the general idea of the vanishing gradient problem.
+所以，这就是消失梯度问题的一般概念。
+
+142
+00:06:21,565 --> 00:06:23,735
+Here's a slightly more formal definition.
+这是一个稍微更正式的定义。
+
+143
+00:06:23,735 --> 00:06:25,905
+So, if you remember from last time,
+所以，如果你记得上次，
+
+144
+00:06:25,905 --> 00:06:28,095
+uh, if we have a null RNN,
+呃，如果我们有一个无效的RNN，
+
+145
+00:06:28,095 --> 00:06:30,490
+then the hidden state ht is
+然后隐藏的状态是
+
+146
+00:06:30,490 --> 00:06:33,490
+computed as a function of the previous hidden state ht minus 1,
+计算为先前隐藏状态ht减1的函数，
+
+147
+00:06:33,490 --> 00:06:34,810
+and the current input xt.
+和当前输入xt。
+
+148
+00:06:34,810 --> 00:06:37,880
+Uh, so you might remember in the previous lecture we
+呃，所以你可能还记得在上一次演讲中我们
+
+149
+00:06:37,880 --> 00:06:41,075
+said that xt were one-hot vectors representing words,
+说xt是代表单词的热门向量，
+
+150
+00:06:41,075 --> 00:06:42,620
+and then ET is the embedding.
+然后ET是嵌入。
+
+151
+00:06:42,620 --> 00:06:44,060
+Uh, this lecture we're going to be,
+呃，这个讲座我们会的，
+
+152
+00:06:44,060 --> 00:06:45,110
+uh, getting rid of that detail,
+呃，摆脱那个细节，
+
+153
+00:06:45,110 --> 00:06:47,060
+and we're just gonna be thinking very abstractly about
+而且我们只会非常抽象地思考
+
+154
+00:06:47,060 --> 00:06:49,455
+an RNN that has some kind of input xt,
+一个有某种输入xt的RNN，
+
+155
+00:06:49,455 --> 00:06:51,210
+and xt is just any kind of vector.
+和xt只是任何一种向量。
+
+156
+00:06:51,210 --> 00:06:52,260
+Probably a dense vector,
+可能是一个密集的矢量，
+
+157
+00:06:52,260 --> 00:06:53,925
+but you know, it could be words or not.
+但是你知道，这可能是文字与否。
+
+158
+00:06:53,925 --> 00:06:55,500
+It could be one-hot or dense.
+它可能是一热的或密集的。
+
+159
+00:06:55,500 --> 00:06:57,810
+Uh, but that's just the input.
+呃，但这只是输入。
+
+160
+00:06:57,810 --> 00:07:00,210
+So, that's the, uh,
+所以，那就是，呃，
+
+161
+00:07:00,210 --> 00:07:03,365
+the definition that we learned last time for Vanilla RNNs.
+我们上次为Vanilla RNN学习的定义。
+
+162
+00:07:03,365 --> 00:07:05,930
+So, this means that the derivative of ht,
+所以，这意味着ht的衍生物，
+
+163
+00:07:05,930 --> 00:07:08,480
+hidden state on step t with respect to the previous hidden state,
+相对于先前隐藏状态的步骤t的隐藏状态，
+
+164
+00:07:08,480 --> 00:07:10,075
+uh, is this expression here.
+呃，这是这里的表达。
+
+165
+00:07:10,075 --> 00:07:13,880
+Uh, so this is just an application of the chain rule, and, uh,
+呃，所以这只是链规则的应用，而且，呃，
+
+166
+00:07:13,880 --> 00:07:16,010
+if you looked long enough or refer back to
+如果你看得够久或者回头看
+
+167
+00:07:16,010 --> 00:07:18,590
+the backprop lecture you'll see, uh, that that make sense.
+你会看到的backprop讲座，呃，那是有道理的。
+
+168
+00:07:18,590 --> 00:07:20,585
+So, in particular, we're, um,
+所以，特别是，我们是，嗯，
+
+169
+00:07:20,585 --> 00:07:23,210
+multiplying by Wh at the end, uh,
+最后乘以Wh，呃，
+
+170
+00:07:23,210 --> 00:07:27,400
+because we have the multiplication of Wh and ht minus 1 on the inside.
+因为我们在内部有Wh和ht减1的乘法。
+
+171
+00:07:27,400 --> 00:07:30,590
+Okay. So, if you remember, on the previous slide,
+好的。所以，如果你还记得，在上一张幻灯片中，
+
+172
+00:07:30,590 --> 00:07:33,650
+we were thinking about what's the gradient of the loss on some step,
+我们在考虑某些步骤的损失梯度是什么，
+
+173
+00:07:33,650 --> 00:07:34,910
+step i I'd say,
+我会说，
+
+174
+00:07:34,910 --> 00:07:36,980
+with respect to a hidden state hj,
+关于隐藏状态hj，
+
+175
+00:07:36,980 --> 00:07:38,795
+on some previous step j.
+在前面的一些步骤j。
+
+176
+00:07:38,795 --> 00:07:41,950
+And maybe J is quite a few steps before i.
+也许J在我之前还有很多步骤。
+
+177
+00:07:41,950 --> 00:07:44,235
+So, we can now write this,
+所以，我们现在可以写这个，
+
+178
+00:07:44,235 --> 00:07:46,130
+uh, in the following way.
+呃，用以下方式。
+
+179
+00:07:46,130 --> 00:07:48,455
+So just by applying the chain rule,
+所以只要应用链规则，
+
+180
+00:07:48,455 --> 00:07:51,365
+now on the first line we're saying that this derivative that we're interested in
+现在在第一行，我们说的是我们感兴趣的这种衍生物
+
+181
+00:07:51,365 --> 00:07:54,920
+can be decomposed into the derivative with respect to step i,
+可以分解为关于步骤i的导数，
+
+182
+00:07:54,920 --> 00:07:56,270
+which is kind of the last step,
+这是最后一步，
+
+183
+00:07:56,270 --> 00:08:00,265
+and then do all of those intermediate gradients of the adjacent hidden states as well.
+然后也做相邻隐藏状态的所有中间梯度。
+
+184
+00:08:00,265 --> 00:08:04,100
+So, that- that first slide is just exactly the same thing as we were looking at on the,
+那么，第一张幻灯片就像我们看到的那样完全一样，
+
+185
+00:08:04,100 --> 00:08:08,160
+uh, the picture, uh, the diagram on the previous slide.
+呃，图片，呃，上一张幻灯片上的图表。
+
+186
+00:08:08,300 --> 00:08:11,435
+Okay. And then, given that we figured out what is, uh,
+好的。然后，鉴于我们弄清楚是什么，呃，
+
+187
+00:08:11,435 --> 00:08:14,030
+dht by dht minus one,
+dht减去一，
+
+188
+00:08:14,030 --> 00:08:15,050
+ah, further on the slide,
+啊，进一步在幻灯片上，
+
+189
+00:08:15,050 --> 00:08:16,775
+then we can just substitute that in.
+然后我们可以替换它。
+
+190
+00:08:16,775 --> 00:08:19,370
+So, what we're finding is that this overall gradient that we're
+所以，我们发现的是我们的整体梯度
+
+191
+00:08:19,370 --> 00:08:21,795
+interested in, in particular,
+特别感兴趣的是
+
+192
+00:08:21,795 --> 00:08:23,445
+has this term, uh,
+有这个词，呃，
+
+193
+00:08:23,445 --> 00:08:26,790
+Wh, the weight matrix, and it's, uh,
+Wh，重量矩阵，它是，呃，
+
+194
+00:08:26,790 --> 00:08:29,020
+multiplied by itself, i minus j times,
+乘以它自己减去j次，
+
+195
+00:08:29,020 --> 00:08:32,535
+because there's i minus j many steps between, uh,
+因为我之间有很多步骤，呃，
+
+196
+00:08:32,535 --> 00:08:33,825
+step j and step i,
+步骤j和步骤i，
+
+197
+00:08:33,825 --> 00:08:37,520
+which is the- the distance that we're traveling with this gradient.
+这是我们用这个梯度旅行的距离。
+
+198
+00:08:37,520 --> 00:08:39,755
+So, the big problem here is,
+所以，这里的大问题是，
+
+199
+00:08:39,755 --> 00:08:42,665
+if this weight matrix Wh is small,
+如果这个权重矩阵Wh很小，
+
+200
+00:08:42,665 --> 00:08:45,445
+then this term is gonna get vanishingly small,
+然后这个词会变得非常小，
+
+201
+00:08:45,445 --> 00:08:49,960
+exponentially small, as i and j get further apart.
+指数小，因为我和j进一步分开。
+
+202
+00:08:49,960 --> 00:08:53,740
+So, to give this a little more detail, uh,
+那么，给这个更多细节，呃，
+
+203
+00:08:53,740 --> 00:08:55,150
+we can think about the, uh,
+我们可以考虑一下，呃，
+
+204
+00:08:55,150 --> 00:08:58,360
+L2 matrix norms of all of these matrices, right?
+所有这些矩阵的L2矩阵规范，对吗？
+
+205
+00:08:58,360 --> 00:09:03,840
+And, uh, as a- as a- uh, as a- sorry.
+而且，呃，作为一个呃呀，抱歉。
+
+206
+00:09:03,840 --> 00:09:06,405
+I'm- it's a known fact of,
+我 - 这是一个众所周知的事实，
+
+207
+00:09:06,405 --> 00:09:08,340
+uh, L2 norms that you have this, um,
+呃，L2规范，你有这个，嗯，
+
+208
+00:09:08,340 --> 00:09:10,605
+inequality that's the, uh,
+这是不平等，呃，
+
+209
+00:09:10,605 --> 00:09:12,450
+norm of the products of
+产品规范
+
+210
+00:09:12,450 --> 00:09:15,740
+some matrices is less and equal to the product of the norms of the matrices.
+一些矩阵小于和等于矩阵范数的乘积。
+
+211
+00:09:15,740 --> 00:09:19,705
+So, in particular, we're seeing that the norm of this gradient that we're interested in,
+所以，特别是，我们看到了我们感兴趣的这种梯度的规范，
+
+212
+00:09:19,705 --> 00:09:21,905
+is less than or equal to, uh,
+小于或等于，呃，
+
+213
+00:09:21,905 --> 00:09:26,690
+the product i minus j many times of the norm of the weight matrix Wh.
+产品i减去重量矩阵Wh的范数的许多倍。
+
+214
+00:09:26,690 --> 00:09:30,415
+So, this is what we mean when we say we're concerned about Wh being small,
+所以，当我们说我们担心Wh很小时，这就是我们的意思，
+
+215
+00:09:30,415 --> 00:09:34,180
+because if it's small, then the thing on the left has to be exponentially small.
+因为如果它很小，那么左边的东西必须是指数小的。
+
+216
+00:09:34,180 --> 00:09:36,000
+So in particular in this,
+特别是在这个，
+
+217
+00:09:36,000 --> 00:09:37,065
+uh, paper that, uh,
+呃，纸，呃，
+
+218
+00:09:37,065 --> 00:09:40,080
+you can take a look at the bottom if you're interested, um, uh,
+如果你有兴趣，你可以看看底部，嗯，呃，
+
+219
+00:09:40,080 --> 00:09:41,960
+Pascanu et al showed that if
+Pascanu等人表明如果
+
+220
+00:09:41,960 --> 00:09:46,265
+the largest eigenvalue of the weight matrix Wh is less than one,
+权重矩阵Wh的最大特征值小于1，
+
+221
+00:09:46,265 --> 00:09:49,910
+then this gradient on the left is going to shrink exponentially.
+然后左边的这个渐变将呈指数缩小。
+
+222
+00:09:49,910 --> 00:09:52,385
+And you can probably see intuitively why this is true.
+你可以直观地看到为什么这是真的。
+
+223
+00:09:52,385 --> 00:09:53,960
+So if, you know, as a simplifying assumption,
+所以，如果你知道，作为一个简化的假设，
+
+224
+00:09:53,960 --> 00:09:56,090
+we suppose that Wh was not a matrix,
+我们假设Wh不是矩阵，
+
+225
+00:09:56,090 --> 00:09:58,765
+but simply a scalar that was just a single number,
+但只是一个只是一个数字的标量，
+
+226
+00:09:58,765 --> 00:10:01,760
+then you can see why if that number was greater than one,
+然后你可以看到为什么如果这个数字大于1，
+
+227
+00:10:01,760 --> 00:10:03,350
+then the whole thing is gonna explode.
+然后整件事就要爆炸了。
+
+228
+00:10:03,350 --> 00:10:04,955
+And if that number is less than one,
+如果这个数字少于一个，
+
+229
+00:10:04,955 --> 00:10:06,305
+then it is going to shrink
+然后它会缩小
+
+230
+00:10:06,305 --> 00:10:09,070
+exponentially as you multiply by the same number again and again.
+当你一次又一次地乘以相同的数字时，指数地增加。
+
+231
+00:10:09,070 --> 00:10:12,710
+Uh, so you can check out the paper for more details,
+呃，所以你可以查看论文了解更多细节，
+
+232
+00:10:12,710 --> 00:10:14,960
+but here, uh, the bound is one,
+但在这里，呃，界限是一个，
+
+233
+00:10:14,960 --> 00:10:17,725
+partially because we have the sigmoid nonlinearity.
+部分是因为我们有sigmoid非线性。
+
+234
+00:10:17,725 --> 00:10:21,140
+And that's, uh, based on the bounds of what we know as the,
+那就是，呃，基于我们所知道的范围，
+
+235
+00:10:21,140 --> 00:10:24,300
+uh, norm of the sigmoid function to be.
+呃，sigmoid函数的规范。
+
+236
+00:10:24,490 --> 00:10:29,400
+So, uh, this shows you why if the, uh,
+所以，呃，这告诉你为什么，如果，呃，
+
+237
+00:10:29,400 --> 00:10:31,020
+Wh matrix is small,
+Wh矩阵很小，
+
+238
+00:10:31,020 --> 00:10:32,600
+or if its largest eigenvalue was small,
+或者如果它的最大特征值很小，
+
+239
+00:10:32,600 --> 00:10:34,280
+then we're going to have vanishing gradients.
+然后我们将会消失渐变。
+
+240
+00:10:34,280 --> 00:10:35,930
+And similarly, if you check out the paper,
+同样，如果你查看纸张，
+
+241
+00:10:35,930 --> 00:10:38,140
+you can see that there's a similar proof, uh,
+你可以看到有类似的证据，呃，
+
+242
+00:10:38,140 --> 00:10:40,975
+relating if the largest eigenvalue is greater than one,
+关联最大特征值是否大于1，
+
+243
+00:10:40,975 --> 00:10:43,000
+to having exploding gradients.
+有爆炸的渐变。
+
+244
+00:10:43,000 --> 00:10:45,145
+So that's when the gradients get bigger and bigger,
+所以当渐变越来越大时，
+
+245
+00:10:45,145 --> 00:10:47,240
+as you backprop further.
+当你进一步支持。
+
+246
+00:10:48,270 --> 00:10:52,075
+Okay. So hopefully I've convinced you that
+好的。所以希望我已经说服你了
+
+247
+00:10:52,075 --> 00:10:55,240
+vanishing gradients is a phenomenon that happens in our norms.
+消失的梯度是我们的规范中发生的现象。
+
+248
+00:10:55,240 --> 00:10:57,475
+But I haven't yet said why this is a problem.
+但我还没有说明为什么这是一个问题。
+
+249
+00:10:57,475 --> 00:11:00,340
+So, why should we view this as a bad thing,
+那么，为什么我们认为这是一件坏事，
+
+250
+00:11:00,340 --> 00:11:02,515
+if the gradients are getting larger and larger,
+如果渐变越来越大，
+
+251
+00:11:02,515 --> 00:11:04,570
+or smaller and smaller as you backprop?
+或者越来越小，因为你支持？
+
+252
+00:11:04,570 --> 00:11:08,795
+So here's, uh, here's a picture that might illustrate why it's a bad thing.
+所以这里，呃，这是一张图片，可以说明为什么这是一件坏事。
+
+253
+00:11:08,795 --> 00:11:10,500
+So, uh, as before,
+所以，呃，和以前一样，
+
+254
+00:11:10,500 --> 00:11:11,790
+suppose that we're thinking about,
+假设我们正在考虑，
+
+255
+00:11:11,790 --> 00:11:14,130
+what's the derivative of the loss on
+什么是损失的衍生物
+
+256
+00:11:14,130 --> 00:11:16,740
+the fourth step with respect to the first hidden state?
+关于第一个隐藏状态的第四步？
+
+257
+00:11:16,740 --> 00:11:18,270
+And we have this situation where
+我们有这种情况
+
+258
+00:11:18,270 --> 00:11:21,560
+the gradient is getting smaller and smaller as it goes backwards.
+随着向后倾斜，渐变越来越小。
+
+259
+00:11:21,560 --> 00:11:24,820
+But then, think about what is the gradient of let's say
+但是，想想让我们说的渐变是什么
+
+260
+00:11:24,820 --> 00:11:28,270
+the loss in the second step also with respect to the first hidden state.
+第二步中的损失也与第一隐藏状态有关。
+
+261
+00:11:28,270 --> 00:11:30,745
+So I'm representing that with the orange arrows.
+所以我用橙色箭头代表那个。
+
+262
+00:11:30,745 --> 00:11:32,635
+And what my point is here,
+我的观点是什么，
+
+263
+00:11:32,635 --> 00:11:37,765
+is that the magnitude of the gradient signal from close by,
+是附近的梯度信号的幅度，
+
+264
+00:11:37,765 --> 00:11:42,175
+is a lot bigger than the magnitude of the gradient signal from far away.
+远远大于远处梯度信号的幅度。
+
+265
+00:11:42,175 --> 00:11:45,790
+And this means that when you update your model weights,
+这意味着当您更新模型权重时，
+
+266
+00:11:45,790 --> 00:11:48,520
+the signal that you're getting from close by is gonna
+你要从附近得到的信号就是
+
+267
+00:11:48,520 --> 00:11:50,770
+be so much bigger than the signal from far away,
+远远超过遥远的信号，
+
+268
+00:11:50,770 --> 00:11:52,585
+that essentially you're only going to learn,
+基本上你只是要学习，
+
+269
+00:11:52,585 --> 00:11:54,610
+you're only going to optimize with respect to
+你只是要优化
+
+270
+00:11:54,610 --> 00:11:57,535
+these nearby effects and not the long-term effects.
+这些附近的影响，而不是长期影响。
+
+271
+00:11:57,535 --> 00:12:02,200
+So you're gonna, you're gonna lose the long-term effects, er, inside the,
+所以你要去，你会失去长期的影响，呃，在里面，
+
+272
+00:12:02,200 --> 00:12:07,385
+the nearby effects. Any questions about this, yeah?
+附近的影响。对此有任何疑问，是吗？
+
+273
+00:12:07,385 --> 00:12:11,490
+So, uh, where they say there that you do actual updates.
+所以，呃，他们在那里说你做了实际的更新。
+
+274
+00:12:11,490 --> 00:12:15,235
+You know, there are actually some that are multiple chains, not just one chain.
+你知道，实际上有一些是多链，而不仅仅是一条链。
+
+275
+00:12:15,235 --> 00:12:17,815
+So the nearer term should cover it.
+因此，较近的术语应该涵盖它。
+
+276
+00:12:17,815 --> 00:12:19,330
+Sorry, what's the last part?
+对不起，最后一部分是什么？
+
+277
+00:12:19,330 --> 00:12:22,405
+The nearer term should have a larger effect considering you're
+考虑到你，较近的术语应该有更大的影响
+
+278
+00:12:22,405 --> 00:12:25,870
+updating the sum of the weights over different chains.
+更新不同链上的权重总和。
+
+279
+00:12:25,870 --> 00:12:29,035
+Okay. So I think, ah, the observation was that,
+好的。所以我想啊，观察的是，
+
+280
+00:12:29,035 --> 00:12:30,250
+given that, for example,
+鉴于此，例如，
+
+281
+00:12:30,250 --> 00:12:32,800
+in Language Modeling you might be summing over multiple losses.
+在语言模型中，您可能会在多个损失中进行总结。
+
+282
+00:12:32,800 --> 00:12:35,860
+There is a loss in every step and you sum all of them and that's your overall loss.
+每一步都有一个损失，你总结所有这些，这就是你的整体损失。
+
+283
+00:12:35,860 --> 00:12:40,600
+Then you do want to update more with respect to the nearby losses than the far losses.
+那么你确实希望更新更多关于附近的损失而不是远远的损失。
+
+284
+00:12:40,600 --> 00:12:41,950
+So I think, uh, yeah,
+所以我想，呃，是的，
+
+285
+00:12:41,950 --> 00:12:43,750
+so if the design of your objective function
+所以如果设计你的目标函数
+
+286
+00:12:43,750 --> 00:12:45,460
+is that it's the sum of the loss in every step,
+是每一步中损失的总和，
+
+287
+00:12:45,460 --> 00:12:46,765
+then you do want to, uh,
+那你确实想要，呃，
+
+288
+00:12:46,765 --> 00:12:48,325
+weight all of them equally.
+所有这些都是平等的。
+
+289
+00:12:48,325 --> 00:12:50,410
+I think, uh, my point was more about,
+我想，呃，我的观点更多，
+
+290
+00:12:50,410 --> 00:12:52,675
+what is the influence of, uh,
+是什么影响，呃，
+
+291
+00:12:52,675 --> 00:12:55,285
+the action of the weight matrix at this early stage.
+在这个早期阶段，权重矩阵的作用。
+
+292
+00:12:55,285 --> 00:12:57,595
+What is its influence on a loss that's nearby?
+它对附近的损失有什么影响？
+
+293
+00:12:57,595 --> 00:13:00,250
+And what is its influence on a loss that's far away?
+它对远在外的损失有何影响？
+
+294
+00:13:00,250 --> 00:13:02,875
+Um, and due to, uh,
+嗯，由于，呃，
+
+295
+00:13:02,875 --> 00:13:05,290
+the dynamics of how the vanishing gradient, uh,
+消失梯度的动态，呃，
+
+296
+00:13:05,290 --> 00:13:07,420
+problem works, then, uh,
+问题有效，那么，呃，
+
+297
+00:13:07,420 --> 00:13:09,250
+the influence on the loss that's far away
+对远方损失的影响
+
+298
+00:13:09,250 --> 00:13:11,185
+is gonna be much less than the influence nearby.
+比附近的影响要小得多。
+
+299
+00:13:11,185 --> 00:13:15,040
+And I'm gonna give some more linguistics examples later of why you might want to learn,
+我稍后会给你一些更多的语言学例子，说明你为什么要学习，
+
+300
+00:13:15,040 --> 00:13:17,065
+uh, the connections that are farther away.
+呃，更远的连接。
+
+301
+00:13:17,065 --> 00:13:18,190
+So essentially the problem is,
+基本上问题是，
+
+302
+00:13:18,190 --> 00:13:20,260
+in situations where you do want to learn the connection
+在您确实想要学习连接的情况下
+
+303
+00:13:20,260 --> 00:13:23,125
+between something that happens early and something that happens later,
+在早期发生的事情和稍后发生的事情之间，
+
+304
+00:13:23,125 --> 00:13:25,090
+then you're going to be unable to learn that connection.
+然后你将无法学习这种联系。
+
+305
+00:13:25,090 --> 00:13:28,330
+Uh, so we'll see some motivating examples in a minute.
+呃，所以我们会在一分钟内看到一些激励人心的例子。
+
+306
+00:13:28,330 --> 00:13:36,130
+Any other questions on this? Yeah?
+还有其他问题吗？是吗？
+
+307
+00:13:36,130 --> 00:13:39,970
+Um, I'm getting confused like, why are you talking about like dh, dj dh.
+嗯，我很困惑，为什么你要说像dh，dj dh。
+
+308
+00:13:39,970 --> 00:13:46,509
+Uh, it's like H parameter, like, are we going-
+呃，就像H参数一样，我们要去 -
+
+309
+00:13:46,509 --> 00:13:46,835
+Yeah.
+是啊。
+
+310
+00:13:46,835 --> 00:13:47,020
+from-
+从-
+
+311
+00:13:47,020 --> 00:13:48,685
+Okay. That's a great question.
+好的。这是一个很好的问题。
+
+312
+00:13:48,685 --> 00:13:52,510
+So you're asking why are we interested in some kind of dj by
+所以你问我们为什么对某种dj感兴趣
+
+313
+00:13:52,510 --> 00:13:56,935
+dh given that we're not updating H. H is an activation not a weight.
+dh，因为我们没有更新H.H是激活而不是重量。
+
+314
+00:13:56,935 --> 00:14:00,520
+Um, so the reason why we're thinking about that,
+嗯，所以我们考虑的原因，
+
+315
+00:14:00,520 --> 00:14:04,330
+is because when you think about what is dj by dw,
+是因为当你想到什么是dw dj时，
+
+316
+00:14:04,330 --> 00:14:05,800
+which is a thing that we're going to update.
+这是我们要更新的事情。
+
+317
+00:14:05,800 --> 00:14:10,300
+That's always gonna be in terms of dj by dh at some point, right?
+在某些时候，这总是以dj为单位，对吧？
+
+318
+00:14:10,300 --> 00:14:12,040
+So if we're thinking about W, you know,
+所以如果我们考虑W，你知道，
+
+319
+00:14:12,040 --> 00:14:13,615
+and how it acts on, uh,
+它是如何作用的，呃，
+
+320
+00:14:13,615 --> 00:14:15,550
+the transmission from h_1 to h_2,
+从h_1到h_2的传输，
+
+321
+00:14:15,550 --> 00:14:21,355
+then dj4 by W in that position is going to have to go through dj4 by dh_2.
+然后由W在那个位置的dj4将必须通过dh_2经过dj4。
+
+322
+00:14:21,355 --> 00:14:23,620
+So if we're getting vanishing gradients,
+所以如果我们渐渐消失了渐变，
+
+323
+00:14:23,620 --> 00:14:25,795
+uh, as we back propagate further,
+呃，当我们进一步传播时，
+
+324
+00:14:25,795 --> 00:14:27,190
+then it's kind of like a bottleneck.
+那有点像瓶颈。
+
+325
+00:14:27,190 --> 00:14:29,740
+Then you're certainly going to have vanishing gradients as they affect, uh,
+然后，你肯定会有影响消失的渐变，呃，
+
+326
+00:14:29,740 --> 00:14:31,540
+the recurrence matrix there,
+那里的递归矩阵，
+
+327
+00:14:31,540 --> 00:14:35,540
+and indeed the matrix that's applied to the inputs.
+实际上是应用于输入的矩阵。
+
+328
+00:14:38,880 --> 00:14:41,990
+Okay. I'm gonna move off now.
+好的。我现在要离开了。
+
+329
+00:14:42,150 --> 00:14:46,300
+Uh, so another way to explain why vanishing gradients is a problem,
+呃，另一种解释为什么消失梯度是一个问题的方法，
+
+330
+00:14:46,300 --> 00:14:49,435
+is you can think of it as, uh, a gradient.
+你能想到它，呃，渐变。
+
+331
+00:14:49,435 --> 00:14:53,185
+You can think of it as a measure of the effect of the past on the future.
+您可以将其视为过去对未来影响的衡量标准。
+
+332
+00:14:53,185 --> 00:14:54,760
+So we've already talked about this little bit.
+所以我们已经谈过这一点了。
+
+333
+00:14:54,760 --> 00:14:57,460
+Uh, gradient is like saying, if I change, uh,
+呃，渐变就像在说，如果我改变，呃，
+
+334
+00:14:57,460 --> 00:14:59,575
+this weight or this activation a little bit,
+这个重量或这个激活一点点，
+
+335
+00:14:59,575 --> 00:15:03,010
+then how much and how does it affect this thing in the future.
+那么它将来会对这件事产生多大影响？
+
+336
+00:15:03,010 --> 00:15:08,650
+So in particular, if our gradient is becoming vanishingly small over longer distances,
+所以特别是，如果我们的渐变在较长的距离上变得越来越小，
+
+337
+00:15:08,650 --> 00:15:12,130
+let say from step T, step T to step T plus N,
+让我们从步骤T，步骤T到步骤T加N，
+
+338
+00:15:12,130 --> 00:15:15,790
+then we can't tell whether in one of two situations.
+那么我们无法判断是否存在两种情况之一。
+
+339
+00:15:15,790 --> 00:15:18,970
+So the first situation is maybe there's no dependency between
+所以第一种情况可能是之间没有依赖关系
+
+340
+00:15:18,970 --> 00:15:22,165
+step T and step T plus N in the data.
+步骤T和步骤T加数据中的N.
+
+341
+00:15:22,165 --> 00:15:24,715
+So perhaps we're learning on a task where,
+所以也许我们正在学习一项任务，
+
+342
+00:15:24,715 --> 00:15:27,190
+in the task there truly is no collect, uh,
+在任务中确实没有收集，呃，
+
+343
+00:15:27,190 --> 00:15:29,080
+connection or relationship to be
+连接或关系
+
+344
+00:15:29,080 --> 00:15:31,510
+learned between what happens on step T and what happens on
+了解在第T步发生的事情和发生的事情
+
+345
+00:15:31,510 --> 00:15:33,580
+step T plus N. So there truly is nothing to be
+步骤T加N.所以真的没什么可做的
+
+346
+00:15:33,580 --> 00:15:35,980
+learned and it's actually correct that there should be,
+学到了，实际上应该有，
+
+347
+00:15:35,980 --> 00:15:38,800
+you know, small gradients with respect to those two things.
+你知道，关于这两件事的小渐变。
+
+348
+00:15:38,800 --> 00:15:41,620
+But the second possibility is that, yes,
+但第二种可能性是，是的，
+
+349
+00:15:41,620 --> 00:15:44,965
+that is a true connection between those two things in the data and in the task.
+这是数据和任务中这两件事之间的真正联系。
+
+350
+00:15:44,965 --> 00:15:47,650
+And really ideally we should be learning that connection.
+理想情况下，我们应该学习这种联系。
+
+351
+00:15:47,650 --> 00:15:52,480
+Um, but we have the wrong parameters in our model to capture this thing,
+嗯，但我们的模型中有错误的参数来捕获这个东西，
+
+352
+00:15:52,480 --> 00:15:54,115
+and therefore that is why the,
+因此这就是为什么
+
+353
+00:15:54,115 --> 00:15:55,165
+the gradients are small.
+渐变很小。
+
+354
+00:15:55,165 --> 00:15:57,340
+Because the model doesn't see them as connected.
+因为模型没有看到它们是连接的。
+
+355
+00:15:57,340 --> 00:16:00,940
+So we are not learning the true dependency between these two things.
+所以我们没有学习这两件事之间真正的依赖关系。
+
+356
+00:16:00,940 --> 00:16:03,970
+And the problem with the vanishing gradient problem is that it's,
+消失梯度问题的问题在于，
+
+357
+00:16:03,970 --> 00:16:05,740
+we're unable to tell in this situation,
+在这种情况下我们无法分辨
+
+358
+00:16:05,740 --> 00:16:07,795
+which of these two situations we're in.
+我们所处的这两种情况中的哪一种。
+
+359
+00:16:07,795 --> 00:16:09,820
+Okay. So this is all pretty theoretical.
+好的。所以这完全是理论上的。
+
+360
+00:16:09,820 --> 00:16:11,365
+I think this example should make it a little more,
+我认为这个例子应该多一点，
+
+361
+00:16:11,365 --> 00:16:14,590
+more clear why the vanishing gradient problem is bad.
+更清楚为什么消失的梯度问题是坏的。
+
+362
+00:16:14,590 --> 00:16:17,695
+So, uh, last week we learned about RNN-Language Models.
+所以，呃，上周我们了解了RNN语言模型。
+
+363
+00:16:17,695 --> 00:16:20,680
+And if you remember Language Modeling is a task where you have some kind of
+如果你还记得语言建模是一个你有某种特殊性的任务
+
+364
+00:16:20,680 --> 00:16:24,010
+text and then you're trying to predict what word should come next.
+文本，然后你试图预测接下来会有什么词。
+
+365
+00:16:24,010 --> 00:16:25,630
+So, uh, here's a piece of text.
+所以，呃，这是一段文字。
+
+366
+00:16:25,630 --> 00:16:28,420
+It says, um, ''When she tried to print her tickets,
+它说，嗯，''当她试图打印她的票时，
+
+367
+00:16:28,420 --> 00:16:30,310
+she found that the printer was out of toner.
+她发现打印机没有墨粉。
+
+368
+00:16:30,310 --> 00:16:32,665
+She went to the stationery store to buy more toner.
+她去文具店买了更多的碳粉。
+
+369
+00:16:32,665 --> 00:16:34,150
+It was very overpriced.
+这是非常高估的。
+
+370
+00:16:34,150 --> 00:16:36,115
+After installing the toner into the printer,
+将墨粉安装到打印机后，
+
+371
+00:16:36,115 --> 00:16:38,110
+she finally printed her,'' and
+她终于打印了她，'和
+
+372
+00:16:38,110 --> 00:16:40,524
+can someone shout out what word you think should come next?
+有人会喊出你认为接下来应该出现的词吗？
+
+373
+00:16:40,524 --> 00:16:41,395
+Tickets.
+门票。
+
+374
+00:16:41,395 --> 00:16:42,790
+Tickets. Yes, exactly.
+门票。对，就是这样。
+
+375
+00:16:42,790 --> 00:16:44,920
+So that was easy for you to do because, uh,
+这对你来说很容易，因为，呃，
+
+376
+00:16:44,920 --> 00:16:47,275
+it makes sense logically that if that was the thing she was trying to do,
+从逻辑上讲，如果这是她想要做的事情，
+
+377
+00:16:47,275 --> 00:16:51,055
+that's the thing she's gonna do once she's gone the whole detour for the, for the toner.
+对于碳粉而言，一旦她走完整个绕道，她就会做的事情。
+
+378
+00:16:51,055 --> 00:16:53,830
+Um, so the question is,
+嗯，所以问题是，
+
+379
+00:16:53,830 --> 00:16:57,400
+can RNN-Language Models easily answer this question.
+RNN-Language Models可以轻松回答这个问题。
+
+380
+00:16:57,400 --> 00:17:00,429
+Would they do well at this particular Language Modeling example?
+他们会在这个特定的语言建模示例中做得好吗？
+
+381
+00:17:00,429 --> 00:17:04,060
+So for an RNN-Language Model to do well at this kind of example,
+因此，对于RNN语言模型来说，在这种示例中做得很好，
+
+382
+00:17:04,060 --> 00:17:07,360
+then they need to learn from this kind of example in the Training Data.
+然后他们需要从训练数据中的这种例子中学习。
+
+383
+00:17:07,360 --> 00:17:09,745
+So if it solves the example in the Training Data,
+因此，如果它解决了训练数据中的示例，
+
+384
+00:17:09,745 --> 00:17:12,475
+then the RNN-Language Model will need to model the dependency.
+那么RNN语言模型将需要对依赖关系进行建模。
+
+385
+00:17:12,475 --> 00:17:14,560
+Learn the connection between the appearance of
+了解外观之间的联系
+
+386
+00:17:14,560 --> 00:17:17,065
+the word tickets early on on the 7th step,
+在第7步早期的单词门票，
+
+387
+00:17:17,065 --> 00:17:20,200
+and the target word tickets at the end.
+和最后的目标词票。
+
+388
+00:17:20,200 --> 00:17:22,945
+But if we have the vanishing gradient problem,
+但如果我们有消失的梯度问题，
+
+389
+00:17:22,945 --> 00:17:25,855
+then these gradients, uh, if they know the step,
+然后这些渐变，呃，如果他们知道这一步，
+
+390
+00:17:25,855 --> 00:17:27,955
+the, the last step with respect to the early step,
+关于早期步骤的最后一步，
+
+391
+00:17:27,955 --> 00:17:29,380
+it's gonna be very small because it's,
+它会非常小，因为它是，
+
+392
+00:17:29,380 --> 00:17:31,120
+it's a fairly long distance, right?
+这是一个相当长的距离，对吗？
+
+393
+00:17:31,120 --> 00:17:33,310
+And this means that the model is going to be unable to
+这意味着该模型将无法实现
+
+394
+00:17:33,310 --> 00:17:36,040
+learn this dependency, easily or at all.
+轻松地或完全地学习这种依赖性。
+
+395
+00:17:36,040 --> 00:17:39,340
+So if the model can't learn this kind of dependency during training,
+因此，如果模型在训练期间无法学习这种依赖性，
+
+396
+00:17:39,340 --> 00:17:41,590
+then the model is going to be unable to predict
+然后模型将无法预测
+
+397
+00:17:41,590 --> 00:17:44,845
+similar kinds of long distance dependencies at test-time.
+在测试时类似的各种长距离依赖。
+
+398
+00:17:44,845 --> 00:17:47,545
+Okay, here's another example.
+好的，这是另一个例子。
+
+399
+00:17:47,545 --> 00:17:50,200
+Um, here's a piece of text.
+嗯，这是一段文字。
+
+400
+00:17:50,200 --> 00:17:52,780
+Uh, the text says and this isn't a full sentence.
+呃，文字说，这不是一个完整的句子。
+
+401
+00:17:52,780 --> 00:17:54,160
+This is just a partial sentence.
+这只是一个部分句子。
+
+402
+00:17:54,160 --> 00:17:56,935
+It says, the writer of the books, blank.
+它说，书的作者，空白。
+
+403
+00:17:56,935 --> 00:17:58,570
+And I'm gonna give you two options.
+而且我会给你两个选择。
+
+404
+00:17:58,570 --> 00:18:03,325
+It's either, the writer of the books is or the writer of the books are.
+它既可以是书籍的作者，也可以是书籍的作者。
+
+405
+00:18:03,325 --> 00:18:07,480
+So, uh, again shout out which one do you think it is, is or are?
+所以，呃，再次喊出你认为它是哪一个，是或是？
+
+406
+00:18:07,480 --> 00:18:08,200
+Is.
+是。
+
+407
+00:18:08,200 --> 00:18:10,930
+Is, that's right. So, uh, the correct answer,
+是的，那是对的。所以，呃，正确答案，
+
+408
+00:18:10,930 --> 00:18:13,435
+a correct possible continuation of the sentence would be,
+这句话的正确可能的继续是，
+
+409
+00:18:13,435 --> 00:18:15,700
+uh, the writer of the books is planning a sequel.
+呃，这本书的作者正在策划一部续集。
+
+410
+00:18:15,700 --> 00:18:18,910
+I can't think of a continuation that goes the writer of the books are,
+我想不出书籍作者的延续，
+
+411
+00:18:18,910 --> 00:18:21,910
+that would be, uh, grammatically correct.
+那会是，呃，语法正确。
+
+412
+00:18:21,910 --> 00:18:24,655
+So the reason why I'm bringing up this example,
+所以我提出这个例子的原因，
+
+413
+00:18:24,655 --> 00:18:27,490
+is because this shows a kind of tension between, uh,
+是因为这显示出一种紧张关系，呃，
+
+414
+00:18:27,490 --> 00:18:28,600
+two things called, uh,
+有两件事，呃，
+
+415
+00:18:28,600 --> 00:18:32,725
+syntactic recency and sem- uh, sequential recency.
+句法新近度和顺序新近度。
+
+416
+00:18:32,725 --> 00:18:36,790
+So syntactic recency is the idea that in
+因此，句法新近就是这样的想法
+
+417
+00:18:36,790 --> 00:18:40,780
+order to correctly predict the next word should be more is than are,
+为了正确预测下一个单词应该是多于，
+
+418
+00:18:40,780 --> 00:18:45,370
+is that the word writer is the kind of syntactically close word here.
+就是这个词作者是一种语法上比较接近的词。
+
+419
+00:18:45,370 --> 00:18:48,640
+So we say the writer of the books is because it's the writer is.
+所以我们说这些书的作者是因为它是作家。
+
+420
+00:18:48,640 --> 00:18:51,310
+So you can see this as the word writer and is,
+所以你可以把它看作是作家这个词，是的，
+
+421
+00:18:51,310 --> 00:18:53,425
+are, uh, syntactically close.
+是，呃，语法上很接近。
+
+422
+00:18:53,425 --> 00:18:55,975
+Because if you looked at the dependency paths for example,
+因为如果您查看依赖路径，例如，
+
+423
+00:18:55,975 --> 00:18:59,050
+then there would be a short path in that tree.
+然后那棵树上会有一条短路。
+
+424
+00:18:59,050 --> 00:19:05,155
+So by contrast, se- sequential recency is the,
+相比之下，连续的新近是，
+
+425
+00:19:05,155 --> 00:19:10,960
+uh, simpler concepts of how close words are just in the sentence as a sequence of words.
+呃，关于单词在句子中作为一系列单词的简单概念的简单概念。
+
+426
+00:19:10,960 --> 00:19:12,534
+So in this example,
+所以在这个例子中，
+
+427
+00:19:12,534 --> 00:19:15,865
+books and are, are very sequentially recent because they're right next to each other.
+因为它们彼此相邻，所以书籍和它们是非常有序的。
+
+428
+00:19:15,865 --> 00:19:18,475
+So the reason I'm bringing this up is because,
+所以我提出这个的原因是因为，
+
+429
+00:19:18,475 --> 00:19:22,660
+the second one would be incorrect but it's kind of a tempting option.
+第二个是不正确的，但这是一个诱人的选择。
+
+430
+00:19:22,660 --> 00:19:26,590
+Because if you're mostly only paying attention to things that happened recently,
+因为如果你大多只关注最近发生的事情，
+
+431
+00:19:26,590 --> 00:19:29,155
+um, then you might get distracted and think,
+嗯，那么你可能会分心并思考，
+
+432
+00:19:29,155 --> 00:19:31,090
+"Oh, the books are, that sounds right."
+“哦，这些书听起来是对的。”
+
+433
+00:19:31,090 --> 00:19:35,500
+So the problem here is that RNN-Language Models
+所以这里的问题是RNN语言模型
+
+434
+00:19:35,500 --> 00:19:41,170
+are better at learning from sequential recency than sicta- syntactic recency.
+在顺序新近度方面学习比在sicta-句法新近度方面更好。
+
+435
+00:19:41,170 --> 00:19:42,655
+And this is partially due,
+这部分是由于，
+
+436
+00:19:42,655 --> 00:19:44,455
+due to the vanishing gradient problem.
+由于消失的梯度问题。
+
+437
+00:19:44,455 --> 00:19:47,290
+Because especially perhaps, if your syntactically,
+因为特别是，如果你的语法，
+
+438
+00:19:47,290 --> 00:19:49,765
+uh, related word is actually kind of far away,
+呃，相关词实际上有点远，
+
+439
+00:19:49,765 --> 00:19:54,355
+then it might get really hard to use the information from the syntactically recent word,
+然后可能会很难使用语法上最近的单词中的信息，
+
+440
+00:19:54,355 --> 00:19:58,390
+especially if there's a lot of strong signal from the sequentially recent word.
+特别是如果顺序最近的单词中有很多强信号。
+
+441
+00:19:58,390 --> 00:20:03,520
+So, uh, there are some papers that show that RNN-Language Models make this kind of error,
+那么，有些论文表明RNN语言模型会产生这种错误，
+
+442
+00:20:03,520 --> 00:20:05,200
+of saying are, rather than is.
+说的是，而不是。
+
+443
+00:20:05,200 --> 00:20:08,440
+Uh, they make this kind of error more often than you would like, uh,
+呃，他们比你想要的更经常犯这种错误，呃，
+
+444
+00:20:08,440 --> 00:20:11,860
+especially if you have multiple of these distracting words such as books, uh,
+特别是如果你有多个这些分散注意力的词，比如书，呃，
+
+445
+00:20:11,860 --> 00:20:14,380
+in between, uh, the word you're trying to predict
+介于两者之间，呃，你想要预测的那个词
+
+446
+00:20:14,380 --> 00:20:17,900
+and the true word that you should be, uh, referring to.
+你应该说的真实的话，呃，指的是。
+
+447
+00:20:19,470 --> 00:20:27,490
+Okay, any questions on this? All right, moving on.
+好的，对此有任何疑问吗？好的，继续前进。
+
+448
+00:20:27,490 --> 00:20:31,780
+So, we briefly mentioned that exploding gradients, uh, is a problem.
+所以，我们简要地提到爆炸渐变，呃，是个问题。
+
+449
+00:20:31,780 --> 00:20:34,960
+So, I'm briefly going to justify why is exploding gradients a problem,
+所以，我简单地说明为什么爆炸梯度成为问题，
+
+450
+00:20:34,960 --> 00:20:36,970
+and why does it, uh, what does it look like?
+为什么呢，呃，它看起来像什么？
+
+451
+00:20:36,970 --> 00:20:40,015
+[NOISE] So, the reason why exploding gradients are a problem,
+[NOISE]因此，爆炸渐变的原因是一个问题，
+
+452
+00:20:40,015 --> 00:20:42,460
+is if you remember this is how SGD works.
+如果你还记得这是SGD的工作原理。
+
+453
+00:20:42,460 --> 00:20:44,860
+Uh, we say that the new parameters of the model,
+呃，我们说模型的新参数，
+
+454
+00:20:44,860 --> 00:20:46,495
+which we represent by Theta,
+我们由Theta代表，
+
+455
+00:20:46,495 --> 00:20:48,430
+is equal to the old premises,
+等于旧房屋，
+
+456
+00:20:48,430 --> 00:20:50,620
+and then you take some step in the direction of
+然后你朝着方向迈出了一步
+
+457
+00:20:50,620 --> 00:20:54,040
+negative gradients because you're trying to minimize the loss of J.
+负梯度，因为你试图最小化J.的损失。
+
+458
+00:20:54,040 --> 00:20:58,050
+So, the problem is if your gradient gets really big, uh,
+所以，问题是你的渐变真的很大，呃，
+
+459
+00:20:58,050 --> 00:21:01,890
+then your SGD update step is going to become really big too.
+那么你的SGD更新步骤也将变得非常大。
+
+460
+00:21:01,890 --> 00:21:03,690
+So, you're going to be taking a very big step,
+所以，你将迈出一大步，
+
+461
+00:21:03,690 --> 00:21:07,170
+and you're going to be drastically changing your model parameters, Theta.
+而且你将彻底改变你的模型参数Theta。
+
+462
+00:21:07,170 --> 00:21:10,705
+And this means that you can end up with some bad updates.
+这意味着你最终可能会遇到一些糟糕的更新。
+
+463
+00:21:10,705 --> 00:21:13,075
+We end up taking too large a step.
+我们最终迈出了一大步。
+
+464
+00:21:13,075 --> 00:21:15,580
+And we're changing the parameters too much.
+而且我们正在更改参数。
+
+465
+00:21:15,580 --> 00:21:16,780
+And this means that, uh,
+这意味着，呃，
+
+466
+00:21:16,780 --> 00:21:18,145
+we kind of take a big step,
+我们迈出了一大步，
+
+467
+00:21:18,145 --> 00:21:19,840
+and we end up in some, uh,
+我们最终在某些，呃，
+
+468
+00:21:19,840 --> 00:21:21,940
+area where the parameters are actually very bad.
+参数实际非常糟糕的区域。
+
+469
+00:21:21,940 --> 00:21:25,450
+Uh, with example the- for example,
+呃，举例 - 例如，
+
+470
+00:21:25,450 --> 00:21:27,805
+they might have a much larger loss than they had before.
+他们可能比以前有更大的损失。
+
+471
+00:21:27,805 --> 00:21:29,860
+So, in the worst case,
+所以，在最坏的情况下，
+
+472
+00:21:29,860 --> 00:21:32,755
+this can often manifest as seeing, uh,
+这常常表现为看，呃，
+
+473
+00:21:32,755 --> 00:21:37,920
+infinities or NaNs, not a number in your network when you're training it in practice.
+无穷大或NaN，而不是您在实践中训练时网络中的数字。
+
+474
+00:21:37,920 --> 00:21:41,485
+[NOISE] So, this can happen because if you take such a big step
+[噪音]所以，这可能发生，因为如果你迈出这么大的一步
+
+475
+00:21:41,485 --> 00:21:45,445
+that maybe you update your parameters so much that now they're infinity,
+也许你更新你的参数，现在它们是无限的，
+
+476
+00:21:45,445 --> 00:21:47,290
+or minus infinity, something like that,
+或者减去无穷大，就像那样，
+
+477
+00:21:47,290 --> 00:21:50,245
+then you're gonna have all of these infinities within your activations as well,
+然后你也会在你的激活中拥有所有这些无限，
+
+478
+00:21:50,245 --> 00:21:52,195
+and then all of your losses are going to be infinity,
+然后你所有的损失将是无限的，
+
+479
+00:21:52,195 --> 00:21:54,385
+and the whole thing just isn't going to work, at all.
+而整个事情根本就不起作用了。
+
+480
+00:21:54,385 --> 00:21:56,170
+So, it's very annoying when this happens,
+所以，当这种情况发生时非常烦人，
+
+481
+00:21:56,170 --> 00:21:58,465
+and unfortunately it happens, uh, fairly often.
+不幸的是，它发生了，呃，经常发生。
+
+482
+00:21:58,465 --> 00:22:00,355
+And if it does then you have to essentially
+如果它确实那么你必须基本上
+
+483
+00:22:00,355 --> 00:22:02,590
+restart training from some earlier checkpoint before you
+在您之前从某些早期检查点重新开始训练
+
+484
+00:22:02,590 --> 00:22:04,480
+got the NaNs and the infinities because there's
+得到NaNs和无穷大因为有
+
+485
+00:22:04,480 --> 00:22:06,580
+no kind of salvaging it from its new state.
+没有任何一种从新的国家拯救它。
+
+486
+00:22:06,580 --> 00:22:10,900
+[NOISE] So, what's the solution to this exploding gradient problem?
+[NOISE]那么，这个爆炸梯度问题的解决方案是什么？
+
+487
+00:22:10,900 --> 00:22:13,300
+[NOISE] Uh, the solution is actually pretty
+[NOISE]呃，解决方案实际上很漂亮
+
+488
+00:22:13,300 --> 00:22:16,315
+simple and it's this technique called gradient clipping.
+简单而且这种技术称为渐变剪裁。
+
+489
+00:22:16,315 --> 00:22:18,580
+So, the main idea of gradient clipping,
+所以，渐变剪裁的主要思想，
+
+490
+00:22:18,580 --> 00:22:21,610
+[NOISE] is that if the norm of your gradient is
+[NOISE]是你的渐变的标准是
+
+491
+00:22:21,610 --> 00:22:25,600
+greater than some threshold and the threshold is a hyperparameter that you choose.
+大于某个阈值，阈值是您选择的超参数。
+
+492
+00:22:25,600 --> 00:22:29,110
+uh, then you want to scale down that gradient,
+呃，那么你想缩小那个渐变，
+
+493
+00:22:29,110 --> 00:22:32,035
+um, before you apply the SGD update.
+嗯，在你申请SGD更新之前。
+
+494
+00:22:32,035 --> 00:22:35,410
+So, the intuition is yo- you're still gonna take a step in the same direction.
+所以，直觉就是哟 - 你仍然会向同一个方向迈出一步。
+
+495
+00:22:35,410 --> 00:22:37,030
+But you're gonna make sure that it's a smaller step.
+但是你要确保这是一个较小的步骤。
+
+496
+00:22:37,030 --> 00:22:38,950
+[NOISE] So, here, um,
+[NOISE]所以，在这里，嗯，
+
+497
+00:22:38,950 --> 00:22:41,995
+I've got a screenshot of some pseudocode from, uh,
+我有一些假代码的屏幕截图，呃，
+
+498
+00:22:41,995 --> 00:22:43,375
+the related paper that, uh,
+相关论文，呃，
+
+499
+00:22:43,375 --> 00:22:46,180
+proposed gradient clipping, or at least some version of gradient clipping.
+建议的渐变剪辑，或至少某种版本的渐变剪辑。
+
+500
+00:22:46,180 --> 00:22:48,640
+[NOISE] And, um, it's pretty simple as you can see.
+[噪音]而且，嗯，这很简单，你可以看到。
+
+501
+00:22:48,640 --> 00:22:51,310
+Uh, g hat is the vector which is the, uh,
+呃，帽子是矢量，呃，
+
+502
+00:22:51,310 --> 00:22:54,475
+derivative of the error with respect to the premises,
+关于房地的错误的衍生物，
+
+503
+00:22:54,475 --> 00:22:56,770
+and it's saying that if the norm of
+它说的是，如果是规范的话
+
+504
+00:22:56,770 --> 00:23:00,070
+this gradient is greater than the threshold's, then you just scale it down.
+这个渐变大于阈值，然后你只需缩小它。
+
+505
+00:23:00,070 --> 00:23:03,429
+But the important thing to note is that it's still pointing in the same direction,
+但重要的是要注意它仍指向同一方向，
+
+506
+00:23:03,429 --> 00:23:06,290
+it's just a smaller step.
+这只是一小步。
+
+507
+00:23:06,420 --> 00:23:10,615
+So, here's a picture to show how that might work out in practice.
+所以，这是一张图片，展示了如何在实践中发挥作用。
+
+508
+00:23:10,615 --> 00:23:13,105
+And, uh, this is a diagram from the, uh,
+而且，呃，这是一张图，呃，
+
+509
+00:23:13,105 --> 00:23:16,255
+deep learning textbook which is also linked on [NOISE] the website.
+深度学习教科书，也链接在[NOISE]网站上。
+
+510
+00:23:16,255 --> 00:23:19,615
+So, what's going on here, is that, uh,
+所以，这里发生的是，呃，
+
+511
+00:23:19,615 --> 00:23:23,200
+the picture here is the loss surface of a simple RNN.
+这里的图片是简单RNN的丢失表面。
+
+512
+00:23:23,200 --> 00:23:27,250
+So, they made a very simple RNN that instead of having, uh,
+所以，他们做了一个非常简单的RNN，而不是，呃，
+
+513
+00:23:27,250 --> 00:23:29,275
+a sequence of vectors as the hidden states,
+一系列向量作为隐藏状态，
+
+514
+00:23:29,275 --> 00:23:32,545
+it just suppose that each hidden state is simply just a single scalar.
+它只是假设每个隐藏状态只是一个标量。
+
+515
+00:23:32,545 --> 00:23:35,020
+So, this means that instead of having a weight matrix, w,
+所以，这意味着，而不是有一个权重矩阵，w，
+
+516
+00:23:35,020 --> 00:23:36,490
+and the bias vector, b,
+偏差矢量b，
+
+517
+00:23:36,490 --> 00:23:38,605
+you have a scalar w and a scalar b.
+你有一个标量w和一个标量b。
+
+518
+00:23:38,605 --> 00:23:42,550
+So, that's why in the picture, you just have this like two-dimensional parameter space.
+所以，这就是为什么在图片中，你就像二维参数空间一样。
+
+519
+00:23:42,550 --> 00:23:45,805
+And then the, the z-axis is your, is your loss.
+然后，z轴是你的，是你的损失。
+
+520
+00:23:45,805 --> 00:23:47,515
+So here, high loss is,
+所以在这里，高损失是，
+
+521
+00:23:47,515 --> 00:23:50,335
+is bad and low loss is good in what you're trying to get.
+很糟糕，低损失对你想要得到的东西很好。
+
+522
+00:23:50,335 --> 00:23:52,825
+So, uh, here in this picture,
+所以，呃，在这张照片中，
+
+523
+00:23:52,825 --> 00:23:56,890
+you've got this kind of cliff, right, where you have this very steep cliff face,
+你有这样的悬崖，对，你有这个非常陡峭的悬崖面，
+
+524
+00:23:56,890 --> 00:23:59,290
+uh, where the loss changes very quickly.
+呃，损失变化很快。
+
+525
+00:23:59,290 --> 00:24:03,715
+[NOISE] And this cliff is really dangerous because it has steep, steep gradients.
+[NOISE]这个悬崖真的很危险，因为它有陡峭，陡峭的坡度。
+
+526
+00:24:03,715 --> 00:24:06,160
+And you might be in danger of taking a really big,
+而且你可能会冒很大的危险，
+
+527
+00:24:06,160 --> 00:24:09,970
+[NOISE] uh, update step because you're on the area with a really steep gradient.
+[NOISE]呃，更新一步，因为你在这个区域有一个非常陡峭的梯度。
+
+528
+00:24:09,970 --> 00:24:12,505
+[NOISE] So, on the left,
+[NOISE]所以，在左边，
+
+529
+00:24:12,505 --> 00:24:17,410
+you've got a possible scenario of what might happen if you don't have gradient clipping.
+如果你没有渐变裁剪，你可能会遇到可能发生的情况。
+
+530
+00:24:17,410 --> 00:24:19,330
+[NOISE] So, on the left, uh,
+[NOISE]那么，在左边，呃，
+
+531
+00:24:19,330 --> 00:24:22,615
+you can see that you start kind of at the bottom of the cliff,
+你可以看到你开始在悬崖的底部，
+
+532
+00:24:22,615 --> 00:24:25,465
+and you have a f- a si- a few small updates.
+你有一个小的更新。
+
+533
+00:24:25,465 --> 00:24:28,150
+And then, in particular makes a bad update because you
+然后，特别是因为你做了一个糟糕的更新
+
+534
+00:24:28,150 --> 00:24:30,760
+see there's a small kind of dip before it goes off the cliff.
+看到它离开悬崖之前有一种小小的倾角。
+
+535
+00:24:30,760 --> 00:24:32,590
+So, th- the true local minimum,
+那么，真正的局部最小值，
+
+536
+00:24:32,590 --> 00:24:36,145
+the optimal you're trying to get to is that the bottom of that small kind of ditch.
+你试图达到的最佳状态是那个小沟的底部。
+
+537
+00:24:36,145 --> 00:24:40,375
+And, um, it starts off kind of near the edge of that ditch,
+而且，嗯，它开始靠近那条沟的边缘，
+
+538
+00:24:40,375 --> 00:24:42,670
+and then there's a negative gradient going into it.
+然后有一个负梯度进入它。
+
+539
+00:24:42,670 --> 00:24:45,775
+But unfortunately, the, the update kind of overshoots,
+但不幸的是，更新类型的超调，
+
+540
+00:24:45,775 --> 00:24:47,785
+and it ends up going a long way off the cliff.
+它最终离悬崖很远。
+
+541
+00:24:47,785 --> 00:24:50,470
+So now, it's in this bad situation where it's taken a bad update,
+所以现在，正是在这种糟糕的情况下，这是一个糟糕的更新，
+
+542
+00:24:50,470 --> 00:24:52,930
+and now it's got a much bigger loss than it had [NOISE] before.
+而现在它的损失比之前的[NOISE]大得多。
+
+543
+00:24:52,930 --> 00:24:54,655
+So now that it's on the cliff.
+所以现在它就在悬崖上。
+
+544
+00:24:54,655 --> 00:24:56,485
+Again it, it measures the gradient,
+再一次，它测量梯度，
+
+545
+00:24:56,485 --> 00:24:58,180
+and the gradient is very steep, right?
+而且渐变很陡，对吧？
+
+546
+00:24:58,180 --> 00:24:59,425
+The gradient is very large.
+渐变非常大。
+
+547
+00:24:59,425 --> 00:25:01,360
+So, when it takes a, uh,
+所以，当需要时，呃，
+
+548
+00:25:01,360 --> 00:25:03,115
+update with respect to that gradient,
+更新关于该渐变，
+
+549
+00:25:03,115 --> 00:25:04,300
+then because the gradient is so big,
+然后因为渐变太大了
+
+550
+00:25:04,300 --> 00:25:05,905
+it takes a really huge step.
+这需要迈出一大步。
+
+551
+00:25:05,905 --> 00:25:08,020
+And that's, um, the, the one to the right.
+那是，嗯，是右边的那个。
+
+552
+00:25:08,020 --> 00:25:09,580
+You can see the step going to the right.
+您可以看到右侧的步骤。
+
+553
+00:25:09,580 --> 00:25:12,190
+So, that's also a very bad update because it's just throwing
+所以，这也是一个非常糟糕的更新，因为它只是投掷
+
+554
+00:25:12,190 --> 00:25:15,310
+it really far to some probably fairly random,
+它真的很可能相当随机，
+
+555
+00:25:15,310 --> 00:25:17,635
+uh, configuration of w and b.
+呃，w和b的配置。
+
+556
+00:25:17,635 --> 00:25:20,740
+So, on the left, you can see what can go wrong if you're taking
+所以，在左边，你可以看到如果你正在服用会出现什么问题
+
+557
+00:25:20,740 --> 00:25:24,825
+these really big steps because you were in areas with a very steep gradient.
+这些真正重要的步骤，因为你在陡峭的梯度区域。
+
+558
+00:25:24,825 --> 00:25:26,520
+So, by contrast on the right,
+那么，相比之下，
+
+559
+00:25:26,520 --> 00:25:29,610
+you can see what might happen if you do have a gradient clipping.
+你可以看到如果你有一个渐变剪裁可能会发生什么。
+
+560
+00:25:29,610 --> 00:25:32,550
+[NOISE] [NOISE] And, um, it's much less drastic, right?
+[噪音] [噪音]而且，嗯，它不那么激烈吧？
+
+561
+00:25:32,550 --> 00:25:35,775
+You've got a similar kind of pattern where it takes a few steps into the ditch,
+你有一个类似的模式，它需要几步进入沟渠，
+
+562
+00:25:35,775 --> 00:25:37,745
+and then ends up going off the cliff a little bit,
+然后最终离开悬崖一点点，
+
+563
+00:25:37,745 --> 00:25:39,835
+but not too much because the gradient was clipped.
+但不要太多，因为渐变被剪裁了。
+
+564
+00:25:39,835 --> 00:25:42,400
+And then, it's on the cliff and there's again a really steep gradient,
+然后，它在悬崖上，又有一个非常陡峭的梯度，
+
+565
+00:25:42,400 --> 00:25:45,490
+but it doesn't take such a big step because again the gradient was clipped,
+但它没有采取这么大的一步，因为再次修剪了渐变，
+
+566
+00:25:45,490 --> 00:25:47,095
+so that it kind of comes back down.
+所以它有点回归。
+
+567
+00:25:47,095 --> 00:25:51,085
+So, you can see that plausibly by using this gradient clipping method,
+所以，你可以通过使用这种渐变裁剪方法看到合理的，
+
+568
+00:25:51,085 --> 00:25:53,215
+you've got a, a kind of safer update rule,
+你有一个更安全的更新规则，
+
+569
+00:25:53,215 --> 00:25:54,310
+where you're not gonna take any,
+在哪里你不会采取任何，
+
+570
+00:25:54,310 --> 00:25:57,355
+any big crazy steps and you're more likely to kind of find the,
+任何重大的疯狂步骤，你更有可能找到，
+
+571
+00:25:57,355 --> 00:25:59,590
+the true minimum which is at the bottom of the ditch.
+在沟渠底部的真正最小值。
+
+572
+00:25:59,590 --> 00:26:02,245
+[NOISE] I think there was a question earlier.
+[噪音]我认为之前有一个问题。
+
+573
+00:26:02,245 --> 00:26:03,940
+Was there a question over here? [NOISE]
+这边有问题吗？ [噪声]
+
+574
+00:26:03,940 --> 00:26:05,380
+I just want to see the value. [NOISE] [NOISE]
+我只是想看看它的价值。 [NOISE] [NOISE]
+
+575
+00:26:05,380 --> 00:26:07,870
+Okay. Anyone else?
+好的。还有谁？
+
+576
+00:26:07,870 --> 00:26:09,460
+[NOISE]
+[噪声]
+
+577
+00:26:09,460 --> 00:26:21,190
+Yeah?
+是吗？
+
+578
+00:26:21,190 --> 00:26:21,460
+[NOISE] [inaudible]
+[NOISE] [听不清]
+
+579
+00:26:21,460 --> 00:26:23,005
+So, the question is, in assignment three,
+所以，问题是，在任务三中，
+
+580
+00:26:23,005 --> 00:26:26,320
+y- you saw the atom optimization algorithm which, uh,
+你看过原子优化算法，呃，
+
+581
+00:26:26,320 --> 00:26:27,925
+has this thing called momentum,
+有这个东西叫动量，
+
+582
+00:26:27,925 --> 00:26:31,015
+which essentially says that kind of like physical momentum in,
+这基本上就像是一种体力，
+
+583
+00:26:31,015 --> 00:26:35,755
+in the real world, that if you've been traveling in the same direction for a while,
+在现实世界中，如果你已经在同一个方向旅行了一段时间，
+
+584
+00:26:35,755 --> 00:26:39,190
+then you can take bigger steps,
+然后你可以采取更大的步骤，
+
+585
+00:26:39,190 --> 00:26:41,320
+I think, and if you've recently kind of changed direction,
+我想，如果你最近改变了方向，
+
+586
+00:26:41,320 --> 00:26:42,835
+then you should take smaller steps.
+那么你应该采取更小的步骤。
+
+587
+00:26:42,835 --> 00:26:47,620
+And I think there's another element as well, where you divide by some factor.
+而且我认为还有另一个因素，你可以用一些因素来划分。
+
+588
+00:26:47,620 --> 00:26:49,600
+[NOISE] So, it is a similar kind of idea.
+[NOISE]所以，这是一种类似的想法。
+
+589
+00:26:49,600 --> 00:26:51,190
+I suppose it's a different criterion, right?
+我想这是一个不同的标准，对吧？
+
+590
+00:26:51,190 --> 00:26:54,430
+So, what they both have in common is it's a kind of criterion for when to
+所以，他们两者的共同之处在于它是什么时候的标准
+
+591
+00:26:54,430 --> 00:26:58,045
+scale up or scale down the size of your update step.
+放大或缩小更新步骤的大小。
+
+592
+00:26:58,045 --> 00:27:00,190
+Um, and I think they're based on different notions
+嗯，我认为他们是基于不同的观念
+
+593
+00:27:00,190 --> 00:27:03,160
+of when should you take bigger steps and when should you take smaller steps.
+什么时候应该采取更大的步骤，什么时候应该采取更小的步骤。
+
+594
+00:27:03,160 --> 00:27:05,020
+When should you be cautious or less cautious?
+你什么时候应该谨慎或不那么谨慎？
+
+595
+00:27:05,020 --> 00:27:07,510
+So, I guess here the criterion is different.
+所以，我想这里的标准是不同的。
+
+596
+00:27:07,510 --> 00:27:09,880
+It's kind of a simple criterion saying, like if it's really steep,
+这是一个简单的标准，如果它真的很陡，
+
+597
+00:27:09,880 --> 00:27:13,250
+then be careful. Yeah. Another question?
+那小心点是啊。另一个问题？
+
+598
+00:27:26,730 --> 00:27:31,885
+Uh, so the [inaudible]. [NOISE]
+呃，所以[音频不清晰]。 [噪声]
+
+599
+00:27:31,885 --> 00:27:34,060
+Okay. So the question is,
+好的。所以问题是，
+
+600
+00:27:34,060 --> 00:27:37,150
+is this similar to regularization of some kind, right?
+这类似于某种正规化，对吧？
+
+601
+00:27:37,150 --> 00:27:39,460
+So, I suppose, yeah, there is- there are some things in common.
+所以，我想，是的，有一些共同点。
+
+602
+00:27:39,460 --> 00:27:43,690
+Say for, example, L2 regularization says that you want, for example,
+举例来说，例如，L2正规化表示你想要
+
+603
+00:27:43,690 --> 00:27:49,405
+your weight matrices to have a small L2 norm, right?
+你的权重矩阵有一个小的L2范数，对吗？
+
+604
+00:27:49,405 --> 00:27:51,340
+And the idea is that you're trying to prevent
+而这个想法是你试图阻止
+
+605
+00:27:51,340 --> 00:27:53,920
+your model from over-fitting the data by, um,
+你的模型过度拟合数据，嗯，
+
+606
+00:27:53,920 --> 00:27:57,190
+having some kind of constraint that says you have to keep your weights fairly simple,
+有某种约束，说你必须保持你的重量相当简单，
+
+607
+00:27:57,190 --> 00:27:59,140
+that is keep them, you know, small.
+那就是让他们保持小小。
+
+608
+00:27:59,140 --> 00:28:01,390
+So, I suppose the relationship is that here we're
+所以，我想这就是我们在这里的关系
+
+609
+00:28:01,390 --> 00:28:03,490
+saying that we don't want the norm of the gradients to be too big.
+说我们不希望渐变的规范太大。
+
+610
+00:28:03,490 --> 00:28:07,500
+Ah, I don't know if this is related to overfitting.
+啊，我不知道这是否与过度拟合有关。
+
+611
+00:28:07,500 --> 00:28:09,495
+Um, I guess I have to think more carefully about that,
+嗯，我想我必须仔细考虑一下，
+
+612
+00:28:09,495 --> 00:28:14,175
+but I guess it's a similar kind of constraint that you're placing.
+但我想这是一种类似的约束，你要放置。
+
+613
+00:28:14,175 --> 00:28:16,440
+Okay. I'm gonna move on for now.
+好的。我现在要继续前进。
+
+614
+00:28:16,440 --> 00:28:19,660
+Uh, so we've talked
+呃，所以我们谈过了
+
+615
+00:28:19,660 --> 00:28:23,080
+about how you might fix the exploding gradient problem with gradient clipping,
+关于如何使用渐变剪裁修复爆炸梯度问题，
+
+616
+00:28:23,080 --> 00:28:26,740
+but we haven't talked about how we might fix the vanishing gradient problem.
+但我们还没有谈到如何解决消失的梯度问题。
+
+617
+00:28:26,740 --> 00:28:29,410
+So, um, to recap,
+所以，嗯，回顾一下，
+
+618
+00:28:29,410 --> 00:28:34,270
+I think one way to characterize the problem with the- the vanishing gradients in RNNs is
+我认为用RNN消除渐变来表征问题的一种方法是
+
+619
+00:28:34,270 --> 00:28:39,620
+that it's too difficult for the RNN to learn to preserve information over many timesteps.
+RNN很难学会在很多时间内保存信息。
+
+620
+00:28:39,620 --> 00:28:41,340
+So, in our example with printing
+所以，在我们的打印示例中
+
+621
+00:28:41,340 --> 00:28:44,475
+the tickets and re- remembering that it's the tickets that she wants to print,
+门票并重新记住这是她想要打印的门票，
+
+622
+00:28:44,475 --> 00:28:48,420
+you could think of it as it's hard for the RNN language model to correctly
+你可以想到它，因为RNN语言模型很难正确
+
+623
+00:28:48,420 --> 00:28:52,260
+predict tickets because in a way, it's too hard for the RNN language model to,
+预测门票，因为在某种程度上，RNN语言模型太难了，
+
+624
+00:28:52,260 --> 00:28:56,345
+uh, learn to retain the tickets information and use it later.
+呃，学会保留门票信息并在以后使用。
+
+625
+00:28:56,345 --> 00:28:58,900
+So, um, if you look at the equation
+所以，嗯，如果你看一下这个等式
+
+626
+00:28:58,900 --> 00:29:01,630
+for vanilla RNNs and how we compute the hidden state, uh,
+对于vanilla RNN以及我们如何计算隐藏状态，呃，
+
+627
+00:29:01,630 --> 00:29:03,955
+based on the previous hidden state and- and the inputs,
+基于先前的隐藏状态和 - 和输入，
+
+628
+00:29:03,955 --> 00:29:07,495
+you can see that the hidden state is in a way constantly being rewritten.
+你可以看到隐藏的状态不断被重写。
+
+629
+00:29:07,495 --> 00:29:09,910
+It's always computed based on these, uh,
+它总是基于这些来计算，呃，
+
+630
+00:29:09,910 --> 00:29:11,650
+linear transformations and the,
+线性变换和
+
+631
+00:29:11,650 --> 00:29:13,105
+you know, the non-linearity.
+你知道，非线性。
+
+632
+00:29:13,105 --> 00:29:15,010
+So, it's not all that easy to
+所以，这并不容易
+
+633
+00:29:15,010 --> 00:29:17,965
+preserve the information from one hidden state to the other,
+将信息从一个隐藏状态保存到另一个隐藏状态，
+
+634
+00:29:17,965 --> 00:29:21,145
+in particular, because we are putting it through this non-linearity function.
+特别是因为我们正在通过这种非线性函数。
+
+635
+00:29:21,145 --> 00:29:26,980
+So, this motivates us to ask what about an RNN with some kind of separate memory?
+那么，这促使我们问一下具有某种独立记忆的RNN呢？
+
+636
+00:29:26,980 --> 00:29:31,510
+If we have some kind of separate place to store information that we want to use later,
+如果我们有一些单独的地方来存储我们想要在以后使用的信息，
+
+637
+00:29:31,510 --> 00:29:34,630
+then would this make it easier for our RNN
+那么这会让我们的RNN变得更容易
+
+638
+00:29:34,630 --> 00:29:38,290
+to learn to preserve information over many timesteps?
+学习如何在很多时间内保存信息？
+
+639
+00:29:38,290 --> 00:29:45,205
+So, this is the motivating idea behind LSTMs or Long Short-Term Memory RNNs.
+因此，这是LSTM或长短期内存RNN背后的激励理念。
+
+640
+00:29:45,205 --> 00:29:51,550
+So, the idea here is that an LSTM is a type of RNN and it was proposed back in, uh, 1997.
+因此，这里的想法是LSTM是一种RNN，并且在1997年提出了它。
+
+641
+00:29:51,550 --> 00:29:53,335
+And the idea is that this is, uh,
+而这个想法就是，呃，
+
+642
+00:29:53,335 --> 00:29:56,800
+this was proposed as an explicit solution to the vanishing gradients problem.
+这被提议作为消失梯度问题的明确解决方案。
+
+643
+00:29:56,800 --> 00:30:00,280
+[NOISE] So, one of the main differences here is
+[NOISE]因此，这里的主要区别之一是
+
+644
+00:30:00,280 --> 00:30:03,880
+that on each step T instead of just having a hidden state h_t,
+在每个步骤T而不是只有隐藏状态h_t，
+
+645
+00:30:03,880 --> 00:30:08,320
+we have both the hidden state h_t and the cell state which we denote c_t.
+我们有隐藏状态h_t和我们表示c_t的单元格状态。
+
+646
+00:30:08,320 --> 00:30:12,085
+And both of these are vectors of some same length,
+这两个都是长度相同的矢量，
+
+647
+00:30:12,085 --> 00:30:15,430
+n, and the idea there is that the cell is meant to
+n，并且有一个想法是细胞的意思
+
+648
+00:30:15,430 --> 00:30:20,110
+sto- store our long-term information that, that's on memory units.
+存储我们的长期信息，即存储单元。
+
+649
+00:30:20,110 --> 00:30:23,605
+Another super important thing is that the LSTM can
+另一个非常重要的事情是LSTM可以
+
+650
+00:30:23,605 --> 00:30:26,980
+erase and write [NOISE] and read information from the cell.
+擦除并写入[NOISE]并从单元格中读取信息。
+
+651
+00:30:26,980 --> 00:30:29,995
+So, you kind of think of this a bit like memory in a computer,
+所以，你有点想到这有点像计算机中的内存，
+
+652
+00:30:29,995 --> 00:30:33,715
+in that you can do these operations, reading and writing and erasing,
+因为你可以做这些操作，阅读，写作和擦除，
+
+653
+00:30:33,715 --> 00:30:37,090
+um, and that's how you're gonna keep your information.
+嗯，这就是你要保留信息的方式。
+
+654
+00:30:37,090 --> 00:30:39,220
+[NOISE].
+[噪声]。
+
+655
+00:30:39,220 --> 00:30:43,254
+Another super important thing is that the way the LSTM decides,
+另一个非常重要的事情是LSTM决定的方式，
+
+656
+00:30:43,254 --> 00:30:45,490
+whether it wants to erase, write, read,
+是否要擦除，写入，读取，
+
+657
+00:30:45,490 --> 00:30:48,565
+information and decide how much and which information,
+信息并决定多少和哪些信息，
+
+658
+00:30:48,565 --> 00:30:51,430
+uh, that's all controlled by these [NOISE] gates.
+呃，这些都是由这些[NOISE]门控制的。
+
+659
+00:30:51,430 --> 00:30:56,560
+So, the idea is [NOISE] that the gates are themselves also vectors of length n,
+所以，这个想法是[NOISE]，门本身也是长度为n的向量，
+
+660
+00:30:56,560 --> 00:30:59,590
+and the idea there is that on each timestep,
+并且每个时间步都有这个想法，
+
+661
+00:30:59,590 --> 00:31:04,960
+each element of these gates which are vectors are somewhere between zero and one.
+这些门的每个元素都是矢量，介于0和1之间。
+
+662
+00:31:04,960 --> 00:31:10,165
+So here, uh, one represents an open gate and zero represents a closed gate,
+所以在这里，呃，一个代表一个开放的门，零代表一个封闭的门，
+
+663
+00:31:10,165 --> 00:31:12,715
+and you can have values anywhere in between.
+你可以在两者之间的任何地方拥有价值。
+
+664
+00:31:12,715 --> 00:31:15,475
+So, the overall idea, which we're gonna firm up on the next slide,
+那么，整体想法，我们将在下一张幻灯片中坚定，
+
+665
+00:31:15,475 --> 00:31:17,770
+but the overall idea is that if the gate is open,
+但总的想法是，如果大门打开，
+
+666
+00:31:17,770 --> 00:31:20,590
+that represents some kind of information being passed through,
+代表某种传递的信息，
+
+667
+00:31:20,590 --> 00:31:21,670
+and if the gate is closed,
+如果门关闭，
+
+668
+00:31:21,670 --> 00:31:24,320
+it [NOISE] means that information does not pass through.
+它[NOISE]意味着信息不会通过。
+
+669
+00:31:24,360 --> 00:31:28,705
+Okay. So, the last really important thing is that the gates are dynamic.
+好的。所以，最后一个非常重要的事情是门是动态的。
+
+670
+00:31:28,705 --> 00:31:32,950
+They're not just set at some constant value for the whole sequence.
+它们不仅仅是为整个序列设置了一些恒定值。
+
+671
+00:31:32,950 --> 00:31:34,330
+[NOISE] Um, they're dynamic,
+[NOISE]嗯，他们很有活力，
+
+672
+00:31:34,330 --> 00:31:36,790
+which means that they're different on each timestep T,
+这意味着它们在每个时间步长T上都不同，
+
+673
+00:31:36,790 --> 00:31:41,200
+and the value that is the decision of whether they're open or closed and in which ways,
+以及决定它们是开放还是关闭以及以何种方式决定的价值，
+
+674
+00:31:41,200 --> 00:31:45,100
+[NOISE] um, that is computed based on the current context.
+[NOISE]嗯，这是根据当前的上下文计算的。
+
+675
+00:31:45,100 --> 00:31:46,945
+Okay. So here's, um,
+好的。所以这是，嗯，
+
+676
+00:31:46,945 --> 00:31:50,125
+here's the- the equations for the LSTM which might make it clearer.
+这里是LSTM的方程式，可能会让它更清晰。
+
+677
+00:31:50,125 --> 00:31:54,160
+So, uh, suppose we have some sequence of i- inputs x_t and we
+所以，呃，假设我们有一些i-输入序列x_t和我们
+
+678
+00:31:54,160 --> 00:31:58,435
+want to compute a sequence of hidden state h_t and cell states c_t.
+想要计算一系列隐藏状态h_t和单元状态c_t。
+
+679
+00:31:58,435 --> 00:32:02,740
+So, this is what happens on timestep t. Uh,
+所以，这就是在时间步长t上发生的事情。呃，
+
+680
+00:32:02,740 --> 00:32:07,210
+this process equation shows you the three gates that I talked about before.
+这个过程等式向您展示了我之前谈过的三个门。
+
+681
+00:32:07,210 --> 00:32:09,910
+So, the first one is called the Forget Gates.
+所以，第一个被称为忘记盖茨。
+
+682
+00:32:09,910 --> 00:32:14,545
+And the idea is that this one is controlling what is kept versus what is forgotten,
+而这个想法是，这个是控制什么保持与被遗忘的，
+
+683
+00:32:14,545 --> 00:32:18,130
+um, from the previous cell state, the previous memory.
+嗯，从前一个单元状态，前一个内存。
+
+684
+00:32:18,130 --> 00:32:22,510
+And you can see that this forget gate is computed based on, uh,
+你可以看到这个遗忘门是根据呃计算的，呃，
+
+685
+00:32:22,510 --> 00:32:26,465
+the previous hidden state h_t minus one and the current input x_t.
+先前隐藏状态h_t减去1并且当前输入x_t。
+
+686
+00:32:26,465 --> 00:32:29,110
+Um, so that's what I meant when I said that it's
+嗯，这就是我说的时候我的意思
+
+687
+00:32:29,110 --> 00:32:31,930
+dynamic and it's computed based on the- the current context.
+动态，它是基于当前上下文计算的。
+
+688
+00:32:31,930 --> 00:32:36,190
+[NOISE] Um, you can also see that it's computed using,
+[NOISE]嗯，你也可以看到它是用计算的，
+
+689
+00:32:36,190 --> 00:32:37,390
+uh, the sigmoid function,
+呃，sigmoid函数，
+
+690
+00:32:37,390 --> 00:32:39,920
+which means that it is somewhere between zero and one.
+这意味着它介于0和1之间。
+
+691
+00:32:39,920 --> 00:32:43,050
+Okay. The next gate is called the input gate,
+好的。下一个门称为输入门，
+
+692
+00:32:43,050 --> 00:32:48,645
+and this one controls what parts of the new cell contents are written to the cell.
+并且这个控制新单元格内容的哪些部分被写入单元格。
+
+693
+00:32:48,645 --> 00:32:52,020
+So, the idea there is that you have this- this memory cell and this is kind of, um,
+所以，有这个想法就是你有这个 - 这个记忆细胞，这是一种，嗯，
+
+694
+00:32:52,020 --> 00:32:57,235
+controlling like ho- how and what you get to write to the memory cell.
+控制如何以及如何写入存储单元。
+
+695
+00:32:57,235 --> 00:32:59,995
+Okay. And the last one is called the upper gate.
+好的。最后一个被称为上门。
+
+696
+00:32:59,995 --> 00:33:01,780
+So, this one is controlling, uh,
+所以，这个是控制，呃，
+
+697
+00:33:01,780 --> 00:33:04,930
+what parts of the cell are outputs to the hidden state,
+单元格的哪些部分输出到隐藏状态，
+
+698
+00:33:04,930 --> 00:33:08,620
+[NOISE] so you could view this as kind of like the read function, right?
+[NOISE]所以你可以把它看作有点读功能吧？
+
+699
+00:33:08,620 --> 00:33:10,090
+We're going to read some information from
+我们将从中读取一些信息
+
+700
+00:33:10,090 --> 00:33:12,685
+our memory cell and that's gonna get put into our hidden states,
+我们的记忆细胞，这将被置于我们隐藏的状态，
+
+701
+00:33:12,685 --> 00:33:14,050
+and this gate is gonna control that.
+而这个门将控制它。
+
+702
+00:33:14,050 --> 00:33:16,990
+[NOISE] Okay.
+[NOISE]好的。
+
+703
+00:33:16,990 --> 00:33:22,060
+[NOISE] Uh, yeah, that's just the sigmoid function as we noted before.
+[NOISE]呃，是的，这只是我们之前提到过的S形函数。
+
+704
+00:33:22,060 --> 00:33:25,870
+All right. So, the next set of equation shows how we use these gates.
+行。因此，下一组方程式显示了我们如何使用这些门。
+
+705
+00:33:25,870 --> 00:33:28,120
+[NOISE] So, the first line, uh,
+[NOISE]那么，第一行，呃，
+
+706
+00:33:28,120 --> 00:33:29,335
+you could regard this, uh,
+你可以这么看，呃，
+
+707
+00:33:29,335 --> 00:33:32,095
+c_tilde as the new [NOISE] cell content.
+c_tilde作为新的[NOISE]单元格内容。
+
+708
+00:33:32,095 --> 00:33:34,960
+So, uh, this is the new content that you want to write to the cell,
+所以，呃，这是你要写入单元格的新内容，
+
+709
+00:33:34,960 --> 00:33:37,540
+[NOISE] and this is also computed based on, uh,
+[NOISE]，这也是基于，呃，
+
+710
+00:33:37,540 --> 00:33:39,490
+your previous hidden state and your current inputs,
+您以前的隐藏状态和当前输入，
+
+711
+00:33:39,490 --> 00:33:41,920
+and this goes through your tan h non-linearity.
+这经历了你的非线性。
+
+712
+00:33:41,920 --> 00:33:45,250
+So, uh, this is kind of the- the main contents that
+所以，呃，这是主要的内容
+
+713
+00:33:45,250 --> 00:33:49,570
+you are computing based on the context and you want to write this into memory.
+您正在根据上下文进行计算，并且您希望将其写入内存。
+
+714
+00:33:49,570 --> 00:33:54,550
+So, on the next line what's happening is that we're going to use
+所以，在下一行，我们将要使用的是正在发生的事情
+
+715
+00:33:54,550 --> 00:34:00,070
+the forget gate to selectively forget some of the information from the previous,
+忘记门有选择地忘记了以前的一些信息，
+
+716
+00:34:00,070 --> 00:34:01,930
+[NOISE] uh, memory cell.
+[NOISE]呃，记忆细胞。
+
+717
+00:34:01,930 --> 00:34:04,780
+And you can see that we're doing these element-wise products,
+你可以看到我们正在做这些基于元素的产品，
+
+718
+00:34:04,780 --> 00:34:06,340
+that's what the little circle is.
+这就是小圈子。
+
+719
+00:34:06,340 --> 00:34:08,950
+So, the idea is that if you remember that f_t is
+所以，这个想法是，如果你记得f_t是
+
+720
+00:34:08,950 --> 00:34:11,980
+a vector full of values between zero and one,
+一个充满0到1之间值的向量，
+
+721
+00:34:11,980 --> 00:34:14,380
+when you do an element-wise product between f_t and
+当你在f_t和。之间做一个元素方面的产品时
+
+722
+00:34:14,380 --> 00:34:16,885
+the previous cell state c_t minus one,
+前一个单元格状态c_t减一，
+
+723
+00:34:16,885 --> 00:34:19,000
+then what you're essentially doing is you're kind of masking
+然后你真正在做的是你有点掩饰
+
+724
+00:34:19,000 --> 00:34:21,865
+out some of the information from the previous hidden state.
+从之前的隐藏状态中输出一些信息。
+
+725
+00:34:21,865 --> 00:34:23,680
+Sorry, no. Previous cell state.
+抱歉，没有。以前的细胞状态。
+
+726
+00:34:23,680 --> 00:34:26,155
+So, when f is one,
+所以，当f是1时，
+
+727
+00:34:26,155 --> 00:34:27,805
+then you're copying over the information,
+然后你要复制信息，
+
+728
+00:34:27,805 --> 00:34:30,340
+but when f is zero, then you're getting rid of that information,
+但是当f为零时，你就会摆脱这些信息，
+
+729
+00:34:30,340 --> 00:34:32,840
+you are erasing it or forgetting it.
+你正在删除它或忘记它。
+
+730
+00:34:33,930 --> 00:34:37,030
+Okay. And then the other half of this equation,
+好的。然后是这个等式的另一半，
+
+731
+00:34:37,030 --> 00:34:39,550
+um, i_t times c tilde t, uh,
+嗯，我知道了，呃，
+
+732
+00:34:39,550 --> 00:34:41,500
+that's the input gate controlling
+这是输入门控制
+
+733
+00:34:41,500 --> 00:34:44,215
+which parts of the new cell contents are gonna get written,
+新单元格内容的哪些部分将被写入，
+
+734
+00:34:44,215 --> 00:34:46,910
+written to the, to the cell.
+写到了电池。
+
+735
+00:34:47,130 --> 00:34:50,095
+Okay. And then the last thing we do is we, uh,
+好的。然后我们做的最后一件事就是我们，呃，
+
+736
+00:34:50,095 --> 00:34:52,900
+pass the cell through a tan h,
+让细胞通过棕褐色，
+
+737
+00:34:52,900 --> 00:34:55,390
+that's just adding another non-linearity,
+这只是增加了另一种非线性，
+
+738
+00:34:55,390 --> 00:34:56,530
+and then you pass that through
+然后你通过了
+
+739
+00:34:56,530 --> 00:34:59,380
+the output gates and that gives you [NOISE] the hidden state.
+输出门，给你[NOISE]隐藏状态。
+
+740
+00:34:59,380 --> 00:35:02,950
+So, in LSTMs, we often think of the hidden states as being,
+因此，在LSTM中，我们经常将隐藏状态视为存在，
+
+741
+00:35:02,950 --> 00:35:05,095
+uh, like the outputs of the RNN.
+呃，就像RNN的输出一样。
+
+742
+00:35:05,095 --> 00:35:07,570
+And the reason for this is that you kind of view
+这样做的原因是你有点看法
+
+743
+00:35:07,570 --> 00:35:09,910
+the cell states as being this kind of
+细胞就是这种状态
+
+744
+00:35:09,910 --> 00:35:12,985
+internal memory that's not generally accessible to the outside,
+内部通常无法访问的内存，
+
+745
+00:35:12,985 --> 00:35:15,280
+but the hidden states are the parts that you're
+但隐藏的状态是你的部分
+
+746
+00:35:15,280 --> 00:35:17,905
+gonna pa- pass on to the next part of the model.
+将转到模型的下一部分。
+
+747
+00:35:17,905 --> 00:35:20,620
+So, that's why we view it as kind of like the output of the model.
+所以，这就是为什么我们认为它有点像模型的输出。
+
+748
+00:35:20,620 --> 00:35:24,520
+[NOISE] Uh, and this is, yeah,
+[NOISE]呃，这是，是的，
+
+749
+00:35:24,520 --> 00:35:26,410
+x just to remind the- there is- circles are
+x只是为了提醒 - 有圆圈
+
+750
+00:35:26,410 --> 00:35:29,095
+element-wise products and that's how we apply the gates.
+元素产品，这就是我们应用大门的方式。
+
+751
+00:35:29,095 --> 00:35:30,910
+Uh, did anyone have any questions about this?
+呃，有没有人对此有任何疑问？
+
+752
+00:35:30,910 --> 00:35:40,990
+[NOISE].
+[噪声]。
+
+753
+00:35:40,990 --> 00:35:43,960
+Okay. [NOISE] Um, so as a reminder,
+好的。 [NOISE]嗯，这是一个提醒，
+
+754
+00:35:43,960 --> 00:35:46,420
+all of these are vectors of some same length n.
+所有这些都是长度相同的向量n。
+
+755
+00:35:46,420 --> 00:35:49,510
+[NOISE] Okay.
+[NOISE]好的。
+
+756
+00:35:49,510 --> 00:35:52,914
+So, some people learn better from diagrams than equations,
+所以，有些人从图表而不是方程式中学得更好，
+
+757
+00:35:52,914 --> 00:35:55,660
+and here's a diagram presentation of the same idea.
+这是一个相同想法的图表。
+
+758
+00:35:55,660 --> 00:35:57,895
+So, this is a really nice diagram from a blog post,
+所以，这是博客文章中非常好的图表，
+
+759
+00:35:57,895 --> 00:35:59,665
+uh, by Chris Olah about LSTMs,
+呃，Chris Olah关于LSTMs，
+
+760
+00:35:59,665 --> 00:36:01,420
+and that was a good place to start if you want to
+如果你愿意，这是一个很好的起点
+
+761
+00:36:01,420 --> 00:36:04,450
+get an intuitive understanding of what LSTMs are.
+直观地了解LSTM是什么。
+
+762
+00:36:04,450 --> 00:36:06,505
+So, in this diagram, uh,
+那么，在这个图中，呃，
+
+763
+00:36:06,505 --> 00:36:09,055
+the green boxes represent timesteps,
+绿色框表示时间步长，
+
+764
+00:36:09,055 --> 00:36:12,550
+um, and let's zoom in on the middle one and see what's happening here.
+嗯，让我们放大中间的一个，看看这里发生了什么。
+
+765
+00:36:12,550 --> 00:36:14,860
+So, within one timestep,
+所以，在一个时间步，
+
+766
+00:36:14,860 --> 00:36:17,650
+you can see that this diagram is showing exactly the same thing as
+你可以看到这个图表显示的完全相同
+
+767
+00:36:17,650 --> 00:36:20,755
+those six equations showed on the previous slide.
+在上一张幻灯片中显示了这六个等式。
+
+768
+00:36:20,755 --> 00:36:25,810
+So, uh, the first thing we do is we use the, uh, the current input x_t,
+所以，呃，我们做的第一件事就是使用当前输入x_t，呃，
+
+769
+00:36:25,810 --> 00:36:29,350
+which is at the bottom and the previous hidden state h_t minus the one on the left,
+它位于底部，前一个隐藏状态h_t减去左边一个，
+
+770
+00:36:29,350 --> 00:36:31,420
+and we can use that to compute the forget gate.
+我们可以用它来计算遗忘门。
+
+771
+00:36:31,420 --> 00:36:34,720
+[NOISE] And you can see f_t is on that arrow there.
+[NOISE]你可以看到f_t在那个箭头上。
+
+772
+00:36:34,720 --> 00:36:39,385
+And then you apply the forget gate to the previous, uh, cell,
+然后你将遗忘门应用到前一个，呃，单元格，
+
+773
+00:36:39,385 --> 00:36:42,970
+and that's the same thing as forgetting some of the- the cell content from last time.
+这与忘记上次的一些细胞内容是一回事。
+
+774
+00:36:42,970 --> 00:36:44,695
+[NOISE] Okay.
+[NOISE]好的。
+
+775
+00:36:44,695 --> 00:36:47,290
+And then after that, you can compute the input gate, uh,
+然后，你可以计算输入门，呃，
+
+776
+00:36:47,290 --> 00:36:50,155
+and that's computed in much the same way as the forget gate.
+并且这与忘记门的计算方式大致相同。
+
+777
+00:36:50,155 --> 00:36:55,240
+And then you use the input gate to decide which parts of this,
+然后你使用输入门来决定这个部分，
+
+778
+00:36:55,240 --> 00:36:58,765
+uh, new cell content get written to the cell,
+呃，新细胞内容被写入细胞，
+
+779
+00:36:58,765 --> 00:37:00,565
+and that gives you the cell c_t.
+这会给你单元格c_t。
+
+780
+00:37:00,565 --> 00:37:04,240
+So, here you can see that you computed the impu ga- input gates and
+所以，在这里你可以看到你计算了impu ga-输入门和
+
+781
+00:37:04,240 --> 00:37:08,770
+the new content and then you use that to gate that and write it to the cell.
+新内容，然后你用它来控制并将其写入单元格。
+
+782
+00:37:08,770 --> 00:37:10,600
+So, now we've got our new cell c_t,
+那么，现在我们有了新的细胞c_t，
+
+783
+00:37:10,600 --> 00:37:15,370
+and then the last things we need to do is to compute our new output gate, that's o_t.
+然后我们需要做的最后一件事是计算我们的新输出门，即o_t。
+
+784
+00:37:15,370 --> 00:37:19,780
+And then lastly, use the output gate to select which parts of
+最后，使用输出门选择哪个部分
+
+785
+00:37:19,780 --> 00:37:25,090
+the cell contents you're gonna read and put in the new hidden state h_t.
+您要读取的单元格内容并将其置于新的隐藏状态h_t。
+
+786
+00:37:25,090 --> 00:37:27,310
+So, that's, that's, uh, that's
+那就是，那就是，呃，就是这样
+
+787
+00:37:27,310 --> 00:37:30,440
+the same thing as the equations we saw on the previous slide.
+与我们在上一张幻灯片中看到的方程式相同。
+
+788
+00:37:32,400 --> 00:37:35,035
+Okay. So, that's LSTMs.
+好的。那么，这就是LSTM。
+
+789
+00:37:35,035 --> 00:37:37,510
+Um, is there a question?
+嗯，有问题吗？
+
+790
+00:37:37,510 --> 00:37:50,110
+What's the importance [NOISE]  [inaudible]
+什么是重要[NOISE] [听不清]
+
+791
+00:37:50,110 --> 00:37:52,840
+The question is, why are we applying a tan h
+问题是，为什么我们应用tan h
+
+792
+00:37:52,840 --> 00:37:55,720
+on the very last equation on this, on this slide?
+关于这个的最后一个等式，在这张幻灯片上？
+
+793
+00:37:55,720 --> 00:38:01,120
+Why we're planning a tan h to the cell before applying the output gate?
+为什么我们在应用输出门之前计划对单元格进行调整？
+
+794
+00:38:01,120 --> 00:38:05,800
+Let's see. Um.
+让我们来看看。嗯。
+
+795
+00:38:05,800 --> 00:38:10,330
+Yeah. So, your question is, the- the cell,
+是啊。所以，你的问题是，细胞，
+
+796
+00:38:10,330 --> 00:38:19,330
+the new cell content already went through a tan h. Um, I'm not sure.
+新的细胞内容已经过了一段时间。嗯，我不确定。
+
+797
+00:38:19,330 --> 00:38:21,580
+So, I suppose a- a- a general answer is that it must
+所以，我想一个普遍的答案就是它必须
+
+798
+00:38:21,580 --> 00:38:23,980
+be giving some kind of more expressivity in some way,
+以某种方式给予某种更多的表现力，
+
+799
+00:38:23,980 --> 00:38:26,410
+and that it's not just applying
+并且它不仅仅是应用
+
+800
+00:38:26,410 --> 00:38:31,420
+tan h's sequentially because you do have the gates in between.
+tan h是顺序的，因为你确实有两个门。
+
+801
+00:38:31,420 --> 00:38:34,240
+Um, so I suppose there must be a reason,
+嗯，所以我想必须有一个理由，
+
+802
+00:38:34,240 --> 00:38:36,445
+kind of similarly to when you apply- apply
+与申请时类似
+
+803
+00:38:36,445 --> 00:38:39,640
+a linear layer you won't have a non-linearity before the next linear layer.
+线性图层在下一个线性图层之前不会具有非线性。
+
+804
+00:38:39,640 --> 00:38:43,075
+I suppose maybe we're viewing these cases as a kind of linear layer?
+我想也许我们将这些案例视为一种线性层？
+
+805
+00:38:43,075 --> 00:38:44,920
+I'm not sure. I'll look it up.
+我不确定。我会查一查。
+
+806
+00:38:44,920 --> 00:38:49,450
+[NOISE] Okay.
+[NOISE]好的。
+
+807
+00:38:49,450 --> 00:38:52,075
+So, uh, that's LSTMs.
+所以，呃，那是LSTM。
+
+808
+00:38:52,075 --> 00:38:54,220
+And, um, re- if you recall,
+而且，嗯，如果你还记得，
+
+809
+00:38:54,220 --> 00:38:55,795
+we were- oh, question?
+我们是 - 哦，问题？
+
+810
+00:38:55,795 --> 00:38:58,615
+Yeah. Why is it that in the forget gate,
+是啊。为什么在遗忘之门，
+
+811
+00:38:58,615 --> 00:39:02,185
+you don't look at the previous cell state but you just look at the new hidden state?
+你不看前一个单元状态，但你只看新的隐藏状态？
+
+812
+00:39:02,185 --> 00:39:04,180
+Like it seems like if you're this- instead of
+就好像你是这样 - 而不是
+
+813
+00:39:04,180 --> 00:39:07,090
+deciding what to forget from the cell state, you should look at it.
+决定从细胞状态中忘记什么，你应该看看它。
+
+814
+00:39:07,090 --> 00:39:09,670
+So the question is, why is the forget gate
+所以问题是，为什么忘记门
+
+815
+00:39:09,670 --> 00:39:12,610
+computed only for the previous hidden state and the current input,
+仅针对先前隐藏状态和当前输入计算，
+
+816
+00:39:12,610 --> 00:39:16,840
+why is it not computed based on ct minus one itself, right?
+为什么它不是基于ct减去一个本身计算的，对吧？
+
+817
+00:39:16,840 --> 00:39:18,820
+Because surely you want to look at the thing to figure
+因为你肯定想看看要想的东西
+
+818
+00:39:18,820 --> 00:39:21,880
+out whether you want to forget it or not?
+你是否想忘记它？
+
+819
+00:39:21,880 --> 00:39:24,295
+Um, that's a pretty good question.
+嗯，这是一个非常好的问题。
+
+820
+00:39:24,295 --> 00:39:29,740
+Uh, so, I suppose one reason why you might think that this- this works fine is that
+呃，所以，我想你可能认为这个 - 这个工作得很好的一个原因就是这个
+
+821
+00:39:29,740 --> 00:39:33,039
+the LSTM might be learning a general algorithm
+LSTM可能正在学习一般算法
+
+822
+00:39:33,039 --> 00:39:36,730
+for where it stores different types of information in the cell, right?
+它在哪里存储不同类型的信息，对吧？
+
+823
+00:39:36,730 --> 00:39:39,370
+So, maybe it's learning that in this particular position in the cell,
+所以，也许它正在学习在单元格中的这个特定位置，
+
+824
+00:39:39,370 --> 00:39:44,230
+I learn information about this particular semantic thing and then in this situation,
+我学习有关这个特定语义的信息，然后在这种情况下，
+
+825
+00:39:44,230 --> 00:39:48,295
+I want to use that or not use that, forget it or keep it.
+我想使用它或不使用它，忘记它或保留它。
+
+826
+00:39:48,295 --> 00:39:51,580
+But, yeah, I haven't entirely convinced myself why you don't want to
+但是，是的，我还没有完全相信自己为什么不想这样做
+
+827
+00:39:51,580 --> 00:39:55,090
+look at the contents of the cell itself in order to decide.
+看一下细胞本身的内容以便决定。
+
+828
+00:39:55,090 --> 00:40:02,530
+I suppose another thing to notice is that ht minus one was read from ct minus one.
+我想另一件事需要注意的是，从ct减1来读取ht减去1。
+
+829
+00:40:02,530 --> 00:40:06,010
+So, I suppose there is some information there but not necessarily all of the information.
+所以，我想那里有一些信息，但不一定是所有的信息。
+
+830
+00:40:06,010 --> 00:40:11,095
+Ah, yeah.
+啊，是的
+
+831
+00:40:11,095 --> 00:40:13,420
+I'm not sure, that's another thing I need to look up I guess.
+我不确定，这是我需要抬头的另一件事我想。
+
+832
+00:40:13,420 --> 00:40:18,530
+[NOISE] Any other questions?
+[NOISE]还有其他问题吗？
+
+833
+00:40:21,060 --> 00:40:26,990
+Okay. Ah, so, that's LSTMs and,
+好的。啊，那就是LSTMs，
+
+834
+00:40:27,780 --> 00:40:31,825
+um, LSTMs were introduced to try to solve the vanishing gradient problem.
+嗯，引入LSTM试图解决消失的梯度问题。
+
+835
+00:40:31,825 --> 00:40:33,640
+So, the question is, ah,
+那么，问题是啊，
+
+836
+00:40:33,640 --> 00:40:37,840
+how exactly is this architecture making the vanishing gradient problem any better?
+这个架构究竟是如何使消失梯度问题更好的？
+
+837
+00:40:37,840 --> 00:40:41,710
+So, you could, ah, see that the LSTM architecture
+那么，你可以啊，看看LSTM架构
+
+838
+00:40:41,710 --> 00:40:45,925
+actually makes it easier for RNNs to preserve information over many time steps.
+实际上，RNN更容易在很多时间步骤中保存信息。
+
+839
+00:40:45,925 --> 00:40:48,340
+So, while it w as kind of difficult for
+所以，尽管它很难
+
+840
+00:40:48,340 --> 00:40:52,285
+the vanilla RNN to preserve the information over all of the hidden states,
+vanilla RNN保存所有隐藏状态的信息，
+
+841
+00:40:52,285 --> 00:40:54,730
+there's actually a fairly easy strategy that makes
+这实际上是一个相当简单的策略
+
+842
+00:40:54,730 --> 00:40:57,265
+it simple for the LSTM to preserve the information.
+LSTM很容易保存信息。
+
+843
+00:40:57,265 --> 00:41:02,290
+So, namely, if the forget gate is set to remember everything on every step, um,
+那么，如果忘记门被设置为记住每一步的一切，嗯，
+
+844
+00:41:02,290 --> 00:41:05,290
+that's a fairly simple strategy that will ensure that
+这是一个相当简单的策略，可以确保这一点
+
+845
+00:41:05,290 --> 00:41:09,820
+the information in the cell is going to be preserved indefinitely over many time steps.
+单元格中的信息将在许多时间步骤中无限期地保留。
+
+846
+00:41:09,820 --> 00:41:13,105
+So, I don't know if that's actually a good strategy for whatever task you're trying to do,
+所以，我不知道这对你正在尝试做的任何事情来说实际上是一个好策略，
+
+847
+00:41:13,105 --> 00:41:15,985
+but my point is that there is at least, um,
+但我的观点是，至少有，嗯，
+
+848
+00:41:15,985 --> 00:41:20,680
+a fairly straightforward way for the LSTM to keep the information over many steps.
+LSTM通过多个步骤保持信息的一种相当简单的方法。
+
+849
+00:41:20,680 --> 00:41:25,175
+And as we noted that's relatively harder for the vanilla RNN to do.
+正如我们所指出的那样，香草RNN相对难以做到。
+
+850
+00:41:25,175 --> 00:41:29,640
+So, you can think of this as the key reason why LSTMs are more able,
+因此，您可以将此视为LSTM更有能力的关键原因，
+
+851
+00:41:29,640 --> 00:41:31,859
+ah, to preserve the information
+啊，保存信息
+
+852
+00:41:31,859 --> 00:41:34,820
+and thus are more robust to the vanishing gradient problem.
+因此对于消失的梯度问题更加稳健。
+
+853
+00:41:34,820 --> 00:41:38,590
+Ah, however, I think you should still know that LSTMs don't
+啊，但是，我认为你应该知道LSTM不会
+
+854
+00:41:38,590 --> 00:41:42,175
+necessarily guarantee that we don't have a vanishing or exploding gradient problem.
+必然保证我们没有消失或爆炸的梯度问题。
+
+855
+00:41:42,175 --> 00:41:43,615
+You could still have that problem,
+你仍然可以遇到这个问题，
+
+856
+00:41:43,615 --> 00:41:47,630
+but the thing to remember is that it's easier to avoid it anyway.
+但要记住的是，无论如何要避免它更容易。
+
+857
+00:41:48,080 --> 00:41:51,420
+Okay. So, um, LSTMs, ah,
+好的。那么，嗯，LSTM，啊，
+
+858
+00:41:51,420 --> 00:41:54,825
+have been shown to be more robust to the vanishing gradient problem,
+已被证明对消失的梯度问题更加稳健，
+
+859
+00:41:54,825 --> 00:41:57,180
+ah but I'm going to tell you a little about how they've
+啊，但我会告诉你一些他们的情况
+
+860
+00:41:57,180 --> 00:42:00,110
+actually been more successful in real life. You have a question?
+实际上在现实生活中更成功。你有问题吗？
+
+861
+00:42:00,110 --> 00:42:21,600
+Yeah,  [inaudible]
+是的，[音频不清晰]
+
+862
+00:42:21,600 --> 00:42:26,110
+Okay. So it's a great question.
+好的。所以这是一个很好的问题。
+
+863
+00:42:26,110 --> 00:42:28,480
+The question is, why is it that just because you
+问题是，为什么只是因为你
+
+864
+00:42:28,480 --> 00:42:31,390
+have these LSTM defined forward equations,
+有这些LSTM定义的正演方程，
+
+865
+00:42:31,390 --> 00:42:33,385
+why do you not have the vanishing gradient problem?
+为什么你没有消失的梯度问题？
+
+866
+00:42:33,385 --> 00:42:36,280
+Why does the- the logic about, ah,
+为什么 - 这个逻辑啊，
+
+867
+00:42:36,280 --> 00:42:40,060
+the chain rule kind of getting smaller and smaller or bigger and bigger not apply?
+链规则越来越小或越来越大不适用？
+
+868
+00:42:40,060 --> 00:42:43,795
+So, I think the key here is that, um,
+所以，我认为这里的关键是，嗯，
+
+869
+00:42:43,795 --> 00:42:45,715
+in the vanilla RNN,
+在香草RNN中，
+
+870
+00:42:45,715 --> 00:42:47,920
+the hidden states are kind of like a bottleneck, right?
+隐藏的状态有点像瓶颈，对吧？
+
+871
+00:42:47,920 --> 00:42:50,620
+Like all gradients must pass through them.
+像所有渐变必须通过它们。
+
+872
+00:42:50,620 --> 00:42:52,360
+So, if that gradient is small then,
+那么，如果那个渐变很小那么，
+
+873
+00:42:52,360 --> 00:42:54,595
+all downstream gradients will be small,
+所有下游梯度都很小，
+
+874
+00:42:54,595 --> 00:42:58,405
+whereas here you could regard the cell as being kind of like
+而在这里你可以认为细胞有点像
+
+875
+00:42:58,405 --> 00:43:00,820
+a shortcut connection at least in
+至少在...中的快捷方式连接
+
+876
+00:43:00,820 --> 00:43:04,300
+the case where the forget gate is set to remember things,
+忘记门被设置为记住事物的情况，
+
+877
+00:43:04,300 --> 00:43:07,330
+um, then that's kind of like a shortcut connection where
+嗯，那就像是一个快捷连接
+
+878
+00:43:07,330 --> 00:43:11,020
+the cell will stay the same if you have the forget gate set to remember things.
+如果你设置忘记门来记住事物，那么单元格将保持不变。
+
+879
+00:43:11,020 --> 00:43:14,080
+So, if the cell is staying mostly the same,
+所以，如果细胞大部分保持不变，
+
+880
+00:43:14,080 --> 00:43:17,530
+then you are not going to be,
+然后你不会，
+
+881
+00:43:17,530 --> 00:43:20,200
+ah, having the vanishing gradient via the cell.
+啊，通过细胞消失梯度。
+
+882
+00:43:20,200 --> 00:43:22,510
+So, that means that to get a connection from
+所以，这意味着从中获取连接
+
+883
+00:43:22,510 --> 00:43:25,465
+the gradient of something in the future with respect to something in the past,
+关于过去的事情，未来某种事物的梯度，
+
+884
+00:43:25,465 --> 00:43:27,760
+there is a potential route for the gradient to
+梯度有一条潜在的路径
+
+885
+00:43:27,760 --> 00:43:30,865
+go via the cell that doesn't necessarily vanish.
+经过不一定消失的细胞。
+
+886
+00:43:30,865 --> 00:43:32,860
+So in that, I have one more question.
+所以，我还有一个问题。
+
+887
+00:43:32,860 --> 00:43:33,120
+Um-uh.
+嗯，嗯。
+
+888
+00:43:33,120 --> 00:43:49,830
+Since we have a shortcut [inaudible]
+既然我们有捷径[听不清]
+
+889
+00:43:49,830 --> 00:43:53,680
+So I think the question was how do you check that your gradients are correct given that
+所以我认为问题是你如何检查你的渐变是否正确
+
+890
+00:43:53,680 --> 00:43:57,895
+there are now multiple routes for information to travel?
+现在有多条信息旅行路线？
+
+891
+00:43:57,895 --> 00:43:58,450
+Right.
+对。
+
+892
+00:43:58,450 --> 00:44:01,780
+So, I suppose this somewhat relates to what we talked about last time with
+所以，我认为这与我们上次谈到的内容有些关系
+
+893
+00:44:01,780 --> 00:44:04,660
+the multivariable chain rule about what is
+什么是多变量链规则
+
+894
+00:44:04,660 --> 00:44:08,815
+the derivative of the loss with respect to a repeated weight matrix and we saw that,
+关于重复权重矩阵的损失的导数我们看到了，
+
+895
+00:44:08,815 --> 00:44:10,675
+if there are multiple routes then
+如果有多条路线那么
+
+896
+00:44:10,675 --> 00:44:13,330
+the multivariable chain rule says that you add up the gradients.
+多变量链规则表示你加上渐变。
+
+897
+00:44:13,330 --> 00:44:16,675
+So, if your question is how do you do the calculus correctly and make sure it's correct,
+那么，如果您的问题是如何正确地进行微积分并确保它是正确的，
+
+898
+00:44:16,675 --> 00:44:18,190
+I guess you just kind of apply
+我想你只是申请
+
+899
+00:44:18,190 --> 00:44:19,660
+the multi-variable chain rule and it's more
+多变量链规则，它更多
+
+900
+00:44:19,660 --> 00:44:21,460
+complicated than assessing with the LSTMs.
+比评估LSTM更复杂。
+
+901
+00:44:21,460 --> 00:44:24,085
+Ah if you're using PyTorch 14 you do not have to do that yourself,
+啊，如果你使用PyTorch 14，你不必自己这样做，
+
+902
+00:44:24,085 --> 00:44:25,780
+if you're going to implement it yourself then,
+如果你打算自己实现它，
+
+903
+00:44:25,780 --> 00:44:27,535
+you might have a more difficult time.
+你可能会遇到更困难的时候。
+
+904
+00:44:27,535 --> 00:44:30,775
+Um, yeah. So, I guess, yeah.
+嗯，是的所以，我猜，是的。
+
+905
+00:44:30,775 --> 00:44:38,560
+Okay. All right, so, what do we get to. All right.
+好的。好吧，那么，我们得到了什么。行。
+
+906
+00:44:38,560 --> 00:44:41,395
+So, let's talk about LSTMs and how they work in the- in the real world.
+那么，让我们来谈谈LSTM以及它们如何在现实世界中发挥作用。
+
+907
+00:44:41,395 --> 00:44:44,950
+So, in the pretty recent past,
+所以，在最近的过去，
+
+908
+00:44:44,950 --> 00:44:48,490
+2013-2015 um LSTM started achieving a lot of state of
+2013-2015嗯LSTM开始实现很多状态
+
+909
+00:44:48,490 --> 00:44:52,315
+the art results on a variety of different tasks including for example,
+艺术成果涉及各种不同的任务，例如，
+
+910
+00:44:52,315 --> 00:44:54,370
+handwriting recognition, speech recognition,
+手写识别，语音识别，
+
+911
+00:44:54,370 --> 00:44:57,805
+machine translation, parsing, image captioning.
+机器翻译，解析，图像字幕。
+
+912
+00:44:57,805 --> 00:44:59,380
+So, over this period,
+所以，在此期间，
+
+913
+00:44:59,380 --> 00:45:02,020
+LSTMs became the dominant approach in a lot of
+LSTM在很多方面成为主导方法
+
+914
+00:45:02,020 --> 00:45:08,230
+these application areas because they worked convincingly a lot better than vanilla RNNs.
+这些应用领域因为它们比香草RNN更令人信服地工作。
+
+915
+00:45:08,230 --> 00:45:10,705
+However, today in 2019,
+但是，今天在2019年，
+
+916
+00:45:10,705 --> 00:45:13,465
+things changed pretty fast in deep learning.
+在深度学习中，事情变化很快。
+
+917
+00:45:13,465 --> 00:45:16,240
+So, other approaches for example,
+所以，其他方法，例如，
+
+918
+00:45:16,240 --> 00:45:18,400
+transformers which you're going to learn about later in the class.
+你将在课堂上学习的变形金刚。
+
+919
+00:45:18,400 --> 00:45:20,410
+Ah, in some of these application areas,
+啊，在其中一些应用领域，
+
+920
+00:45:20,410 --> 00:45:21,715
+they seem to have become,
+他们似乎已成为，
+
+921
+00:45:21,715 --> 00:45:23,935
+ah, the dominant approach.
+啊，占主导地位的方法。
+
+922
+00:45:23,935 --> 00:45:25,480
+So, to look into this,
+所以，看看这个，
+
+923
+00:45:25,480 --> 00:45:29,350
+I had a look at WMT which is a machine translation conference and
+我看了一下WMT这是一个机器翻译会议
+
+924
+00:45:29,350 --> 00:45:33,865
+also competition where people submit their MT systems to be evaluated.
+也是人们提交MT系统进行评估的竞争。
+
+925
+00:45:33,865 --> 00:45:35,620
+And I looked at the report,
+我查看了报告，
+
+926
+00:45:35,620 --> 00:45:39,760
+the summary report for WMT 2016 and in this report,
+WMT 2016和本报告的摘要报告，
+
+927
+00:45:39,760 --> 00:45:41,125
+I did a quick Ctrl+F,
+我做了一个快速的Ctrl + F，
+
+928
+00:45:41,125 --> 00:45:44,005
+and I found the word RNN appeared 44 times.
+我发现RNN这个词出现了44次。
+
+929
+00:45:44,005 --> 00:45:46,990
+So, it seems that most people entering this competition were building
+所以，参加本次比赛的大多数人似乎都在建设中
+
+930
+00:45:46,990 --> 00:45:50,800
+their MT systems based on RNNs and in particular LSTMs.
+他们的MT系统基于RNN，特别是LSTM。
+
+931
+00:45:50,800 --> 00:45:52,945
+And then I looked at the report from 2018,
+然后我查看了2018年的报告，
+
+932
+00:45:52,945 --> 00:45:55,210
+just two years later and I found that the RNN,
+两年后，我发现了RNN，
+
+933
+00:45:55,210 --> 00:45:59,785
+the word RNN only appeared nine times and the word transformer appeared 63 times,
+RNN这个词只出现了9次，变压器这个词出现了63次，
+
+934
+00:45:59,785 --> 00:46:02,155
+and in fact the organizers noted that everyone,
+事实上，组织者注意到每个人，
+
+935
+00:46:02,155 --> 00:46:04,330
+well, most people seem to using transformers now.
+好吧，现在大多数人似乎都在使用变形金刚。
+
+936
+00:46:04,330 --> 00:46:07,930
+So um, this shows that things change pretty fast in deep learning.
+所以，这表明在深度学习中事情变化很快。
+
+937
+00:46:07,930 --> 00:46:11,350
+The thing that was hot and new just a few years ago um,
+几年前那个很热的东西，嗯，
+
+938
+00:46:11,350 --> 00:46:15,655
+is- is now being passed by perhaps by other kinds of approaches.
+现在正在通过其他方式传递。
+
+939
+00:46:15,655 --> 00:46:17,260
+So, you're going to learn more about transformers
+所以，你将学习更多关于变形金刚的知识
+
+940
+00:46:17,260 --> 00:46:19,315
+later but I guess that gives you a kind of
+以后但我猜这会给你一种
+
+941
+00:46:19,315 --> 00:46:24,385
+idea of where LSTMs are currently in applications.
+关于LSTM目前在哪些应用中的想法。
+
+942
+00:46:24,385 --> 00:46:29,845
+Okay. So, the second kind of RNN we're going to learn about is gated recurrent units.
+好的。因此，我们将要了解的第二种RNN是门控循环单元。
+
+943
+00:46:29,845 --> 00:46:32,605
+So, these fortunately are simpler than LSTMs,
+所以，幸运的是比LSTM更简单，
+
+944
+00:46:32,605 --> 00:46:36,070
+in fact that was the motivation for them being proposed.
+事实上，这是他们被提议的动机。
+
+945
+00:46:36,070 --> 00:46:40,150
+They were proposed in 2014 as a way to try to retain
+他们在2014年被提议作为一种尝试保留的方式
+
+946
+00:46:40,150 --> 00:46:45,055
+the strengths of LSTMs by getting rid of any unnecessary complexities.
+通过消除任何不必要的复杂性，LSTM的优势。
+
+947
+00:46:45,055 --> 00:46:46,825
+So, in a GRU,
+所以，在GRU中，
+
+948
+00:46:46,825 --> 00:46:48,520
+we don't have a cell state.
+我们没有细胞状态。
+
+949
+00:46:48,520 --> 00:46:50,470
+We again just have a hidden state.
+我们再次只是一个隐藏的状态。
+
+950
+00:46:50,470 --> 00:46:54,070
+But the thing it has in ah in common with LSTMs is that we're going to be
+但它与LSTM的共同之处在于我们将会如此
+
+951
+00:46:54,070 --> 00:46:57,460
+using gates to control the flow of information.
+使用门来控制信息流。
+
+952
+00:46:57,460 --> 00:47:00,415
+So, here are the equations for GRU.
+所以，这是GRU的等式。
+
+953
+00:47:00,415 --> 00:47:02,890
+We start off with two gates.
+我们从两个门开始。
+
+954
+00:47:02,890 --> 00:47:06,430
+So the first gate is called the update gate and this
+所以第一个门叫做更新门，这个
+
+955
+00:47:06,430 --> 00:47:11,050
+controls what parts of the hidden states are going to be updated versus preserved.
+控制隐藏状态的哪些部分将被更新而不是保留。
+
+956
+00:47:11,050 --> 00:47:13,750
+So, you can kind of view this as playing
+所以，你可以把它看作是玩
+
+957
+00:47:13,750 --> 00:47:17,170
+the role of both the forget gate and the input gate in
+忘记门和输入门的作用
+
+958
+00:47:17,170 --> 00:47:24,580
+the LSTM and it's computed in much the same way as the gates in the LSTM were.
+LSTM和它的计算方式与LSTM中的门大致相同。
+
+959
+00:47:24,580 --> 00:47:27,565
+The second gate is called the reset gate rt,
+第二个门称为复位门rt，
+
+960
+00:47:27,565 --> 00:47:30,550
+and this gate is controlling which parts of
+这个门控制着哪个部分
+
+961
+00:47:30,550 --> 00:47:34,915
+the previous hidden state are going to be used to compute new contents.
+先前的隐藏状态将用于计算新内容。
+
+962
+00:47:34,915 --> 00:47:37,735
+So, you can think of the- the reset gate as kind of selecting
+因此，您可以将复位门视为一种选择
+
+963
+00:47:37,735 --> 00:47:41,305
+which parts of the previous hidden states are useful versus not useful.
+以前隐藏状态的哪些部分是有用的而不是有用的。
+
+964
+00:47:41,305 --> 00:47:45,010
+So, it's going to discard some things and select some other things.
+所以，它会丢弃一些东西并选择其他一些东西。
+
+965
+00:47:45,010 --> 00:47:48,055
+Okay. So, here's how those gates get used.
+好的。那么，这就是这些门的使用方式。
+
+966
+00:47:48,055 --> 00:47:49,690
+Um, h tilde here.
+嗯，这儿到了。
+
+967
+00:47:49,690 --> 00:47:54,400
+This is you can think of it as the new hidden state contents and what's
+这是你可以把它想象成新的隐藏状态内容和什么
+
+968
+00:47:54,400 --> 00:47:56,440
+going on in that equation is that we are applying
+继续这个等式是我们正在申请
+
+969
+00:47:56,440 --> 00:47:59,410
+the reset gate to the previous hidden state ht minus
+复位门到前一个隐藏状态ht减去
+
+970
+00:47:59,410 --> 00:48:04,150
+one um and then putting all of that through some linear transformations and
+一个嗯，然后把所有这些通过一些线性变换和
+
+971
+00:48:04,150 --> 00:48:07,420
+a tan H and then this gives us the new content
+晒黑H然后这给了我们新的内容
+
+972
+00:48:07,420 --> 00:48:11,305
+which we want to write to the hidden cell.
+我们想要写入隐藏的单元格。
+
+973
+00:48:11,305 --> 00:48:15,655
+And then lastly our new hidden cell is going to be a combination
+然后最后我们的新隐藏单元将成为一个组合
+
+974
+00:48:15,655 --> 00:48:20,065
+of ah this new content and the previous hidden state.
+这个新内容和以前的隐藏状态啊。
+
+975
+00:48:20,065 --> 00:48:24,790
+So, the important thing to notice here is that we have this one minus u and u term.
+所以，这里要注意的重要一点是我们有这个减去你和你的术语。
+
+976
+00:48:24,790 --> 00:48:27,370
+So um, it's kind of like a balance right?
+那么，这有点像平衡吗？
+
+977
+00:48:27,370 --> 00:48:31,079
+U is ah is setting the balance between
+你是啊正在设置之间的平衡
+
+978
+00:48:31,079 --> 00:48:35,085
+preserving things from the previous hidden state versus writing new stuff.
+保留以前隐藏状态的东西而不是写新东西。
+
+979
+00:48:35,085 --> 00:48:36,360
+So, whereas in the LSTM,
+所以，在LSTM中，
+
+980
+00:48:36,360 --> 00:48:39,195
+those were two completely separate gates that could be whatever value.
+那是两个完全独立的大门，可以是任何价值。
+
+981
+00:48:39,195 --> 00:48:42,240
+Here we have this constraint that U is being uh, balanced.
+在这里，我们有这个约束，U是呃，平衡。
+
+982
+00:48:42,240 --> 00:48:44,765
+So, if you have more of one, you have to have less of the other.
+所以，如果你有更多的，你必须少用另一个。
+
+983
+00:48:44,765 --> 00:48:51,160
+So, this is one way in which the creators of the GRU sought to make LSTMs more simple.
+因此，这是GRU创作者寻求使LSTM更简单的一种方式。
+
+984
+00:48:51,160 --> 00:48:54,520
+Was by having a single gate play both of these roles.
+是通过一个门来发挥这两个角色。
+
+985
+00:48:54,520 --> 00:48:59,410
+Okay. So, that's GRUs and I think it's a little less obvious just looking at it.
+好的。所以，那是GRU，我认为仅仅看一下就不那么明显了。
+
+986
+00:48:59,410 --> 00:49:04,870
+Why GRUs help the vanishing gradients problem because there is no explicit ah memory
+为什么GRU有助于消失渐变问题，因为没有明确的内存
+
+987
+00:49:04,870 --> 00:49:06,520
+cell, like there is in LSTMs.
+细胞，就像LSTMs一样。
+
+988
+00:49:06,520 --> 00:49:10,360
+So, I think the way to look at this here is um GRUs,
+所以，我认为在这里看待这个的方式是你的GRU，
+
+989
+00:49:10,360 --> 00:49:12,160
+you can view this as also being a solution to
+你可以将其视为一种解决方案
+
+990
+00:49:12,160 --> 00:49:15,220
+the vanishing gradient problem because like LSTMs,
+消失的梯度问题，因为像LSTM一样，
+
+991
+00:49:15,220 --> 00:49:19,425
+GRUs make it easier to retain information ah long-term.
+GRU可以更容易地保留信息啊长期。
+
+992
+00:49:19,425 --> 00:49:21,240
+So, for example here,
+所以，举个例子，
+
+993
+00:49:21,240 --> 00:49:25,094
+if the update gate ut is set to zero,
+如果更新门ut设置为零，
+
+994
+00:49:25,094 --> 00:49:30,385
+then we're going to be ah keeping the hidden state the same on every step.
+然后我们将会在每一步保持隐藏状态相同。
+
+995
+00:49:30,385 --> 00:49:33,640
+And again that's maybe not a good idea but at least that is a strategy you can easily
+而且这可能不是一个好主意，但至少这是一个你可以轻松实现的策略
+
+996
+00:49:33,640 --> 00:49:37,315
+do in order to retain information over long distances.
+这样做是为了保留长距离的信息。
+
+997
+00:49:37,315 --> 00:49:40,420
+So that's kind of like- like the same explanation of how GRUs make it
+这就像GRU如何制作它一样
+
+998
+00:49:40,420 --> 00:49:44,660
+potentially easier for RNNs to retain information long-term.
+RNN可能更容易长期保留信息。
+
+999
+00:49:46,410 --> 00:49:51,490
+Okay. So, we've learned about these two different types of RNNs. Yes.
+好的。所以，我们已经了解了这两种不同类型的RNN。是。
+
+1000
+00:49:51,490 --> 00:50:08,230
+[inaudible]
+[听不见]
+
+1001
+00:50:08,230 --> 00:50:10,105
+I think the question was,
+我认为问题是，
+
+1002
+00:50:10,105 --> 00:50:12,790
+if we view the two gates in the GRU, as being, uh,
+如果我们在GRU中查看两个门，那么，呃，
+
+1003
+00:50:12,790 --> 00:50:20,440
+a precise, um, analogy to the gates in the LSTM or are they more of a fuzzy analogy.
+精确的，嗯，类似于LSTM中的门，或者它们更像是模糊的类比。
+
+1004
+00:50:20,440 --> 00:50:22,794
+I'd say probably more of a fuzzy analogy
+我想说的可能是模糊的比喻
+
+1005
+00:50:22,794 --> 00:50:26,080
+because there are other changes going on in here, like,
+因为这里还有其他变化，比如
+
+1006
+00:50:26,080 --> 00:50:28,510
+for example, the fact that there's no separate, um,
+例如，没有单独的，嗯，
+
+1007
+00:50:28,510 --> 00:50:32,260
+memory cell, it means they're not performing exactly the same functions.
+内存单元，这意味着它们没有执行完全相同的功能。
+
+1008
+00:50:32,260 --> 00:50:39,895
+Yeah. Okay. So, we've learned about LSTMs and GRUs which are both,
+是啊。好的。所以，我们已经了解了LSTM和GRU两者，
+
+1009
+00:50:39,895 --> 00:50:41,650
+um, more complicated forms of RNNs,
+嗯，更复杂的RNN形式，
+
+1010
+00:50:41,650 --> 00:50:43,705
+more complicated than Vanilla RNNs.
+比Vanilla RNN更复杂。
+
+1011
+00:50:43,705 --> 00:50:45,610
+And they are both,
+它们都是，
+
+1012
+00:50:45,610 --> 00:50:48,865
+uh, more robust to the vanishing gradient problem.
+呃，对消失的梯度问题更加强大。
+
+1013
+00:50:48,865 --> 00:50:53,950
+So, um, it would be useful to know which of these should we be using in practice?
+所以，嗯，了解我们应该在实践中使用哪些内容会很有用？
+
+1014
+00:50:53,950 --> 00:50:55,120
+Which one is more successful,
+哪一个更成功，
+
+1015
+00:50:55,120 --> 00:50:56,770
+the LSTM or GRU?
+LSTM还是GRU？
+
+1016
+00:50:56,770 --> 00:50:59,770
+Uh, so, I- I did a little reading and it looks like researchers have
+呃，所以，我 - 我做了一点阅读，看起来像研究人员
+
+1017
+00:50:59,770 --> 00:51:02,890
+proposed a lot of different types of gated RNNs.
+提出了许多不同类型的门控RNN。
+
+1018
+00:51:02,890 --> 00:51:04,450
+So, it's not just GRUs and LSTMs,
+所以，它不仅仅是GRU和LSTM，
+
+1019
+00:51:04,450 --> 00:51:07,585
+there's many other papers with lots of other different variants.
+还有很多其他论文有很多其他不同的变体。
+
+1020
+00:51:07,585 --> 00:51:11,845
+Uh, but these are definitely the two that are most widely used.
+呃，但这些绝对是最广泛使用的两个。
+
+1021
+00:51:11,845 --> 00:51:15,340
+And, ah, you can probably say that the biggest difference between the two, um,
+啊，你可以说两者之间最大的区别，嗯，
+
+1022
+00:51:15,340 --> 00:51:17,920
+for sure is the fact that GRUs are simpler
+可以肯定的是，GRU更简单
+
+1023
+00:51:17,920 --> 00:51:21,115
+and quicker to compute and they have fewer parameters.
+并且计算速度更快，参数更少。
+
+1024
+00:51:21,115 --> 00:51:23,500
+So, this makes an actual practical difference to you as, uh,
+所以，这对你来说是一个实际的实际差异，呃，
+
+1025
+00:51:23,500 --> 00:51:27,970
+a deep learning practitioner because if you build your net based on GRUs,
+一个深度学习的实践者，因为如果你基于GRU构建你的网络，
+
+1026
+00:51:27,970 --> 00:51:29,965
+then it's gonna be faster to run forwards and,
+那么前进的速度会更快，
+
+1027
+00:51:29,965 --> 00:51:32,170
+you know, faster to train and so on.
+你知道，训练更快，等等。
+
+1028
+00:51:32,170 --> 00:51:34,540
+So, other than that, there appears to be
+所以，除此之外，似乎还有
+
+1029
+00:51:34,540 --> 00:51:38,680
+no very conclusive evidence that one of these LSTM or GRUs,
+没有非常确凿的证据表明其中一个LSTM或GRU，
+
+1030
+00:51:38,680 --> 00:51:42,790
+uh, is consistently outperforming the other on lots of different tasks.
+呃，在很多不同的任务上始终优于对方。
+
+1031
+00:51:42,790 --> 00:51:45,955
+Uh, it seems that often, uh,
+呃，似乎经常，呃，
+
+1032
+00:51:45,955 --> 00:51:48,250
+sometimes GRUs do perform as well as LSTMs,
+有时GRU的表现与LSTM一样好，
+
+1033
+00:51:48,250 --> 00:51:51,520
+but there are cases where one of them performs better than the other.
+但有些情况下，其中一个表现优于另一个。
+
+1034
+00:51:51,520 --> 00:51:53,440
+So, as a rule of thumb,
+所以，根据经验，
+
+1035
+00:51:53,440 --> 00:51:57,190
+it seems like LSTM is often a good default choice to start with, uh,
+看起来LSTM通常是一个很好的默认选择，呃，
+
+1036
+00:51:57,190 --> 00:51:58,840
+especially if your data has
+特别是如果您的数据有
+
+1037
+00:51:58,840 --> 00:52:01,150
+particularly long dependencies because there's evidence to think
+特别长的依赖，因为有证据可以思考
+
+1038
+00:52:01,150 --> 00:52:05,500
+that LSTMs might be slightly better at keeping information over very long distances.
+LSTM可能在保持长距离信息方面略胜一筹。
+
+1039
+00:52:05,500 --> 00:52:07,570
+And also, if you have a lot of training data,
+而且，如果你有很多培训数据，
+
+1040
+00:52:07,570 --> 00:52:09,670
+you might think that LSTMs are a better choice because they
+您可能认为LSTM是更好的选择，因为它们
+
+1041
+00:52:09,670 --> 00:52:12,340
+have more parameters which means that,
+有更多的参数意味着，
+
+1042
+00:52:12,340 --> 00:52:15,860
+um, maybe you need more train data to learn them.
+嗯，也许你需要更多的火车数据来学习它们。
+
+1043
+00:52:17,940 --> 00:52:21,700
+So, a rule of thumb is that maybe you want to start with LSTMs
+所以，经验法则是你可能想要从LSTM开始
+
+1044
+00:52:21,700 --> 00:52:23,500
+and if you're happy with their performance and you're
+如果你对他们的表现感到满意，那你就是
+
+1045
+00:52:23,500 --> 00:52:25,675
+happy with how long it takes to train, then you stick with that.
+很高兴训练需要多长时间，然后你坚持下去。
+
+1046
+00:52:25,675 --> 00:52:27,610
+But if you feel like you need it to be more efficient,
+但如果你觉得你需要它更高效，
+
+1047
+00:52:27,610 --> 00:52:30,850
+then maybe you should switch to GRUs and see how that goes with the performance
+那么也许你应该切换到GRU，看看性能如何
+
+1048
+00:52:30,850 --> 00:52:34,690
+and if it's faster. All right.
+如果它更快行。
+
+1049
+00:52:34,690 --> 00:52:36,970
+So, um, we've talked so far about how
+那么，嗯，到目前为止我们已经谈过如何做了
+
+1050
+00:52:36,970 --> 00:52:40,720
+the vanishing/exploding gradients are a problem that occur a lot in RNNs.
+消失/爆炸的梯度是RNN中出现很多问题。
+
+1051
+00:52:40,720 --> 00:52:42,415
+But, um, the question is,
+但是，嗯，问题是，
+
+1052
+00:52:42,415 --> 00:52:43,735
+is it only an RNN problem?
+它只是一个RNN问题吗？
+
+1053
+00:52:43,735 --> 00:52:46,330
+Does this occur in other kinds of neural networks as well?
+这是否也发生在其他类型的神经网络中？
+
+1054
+00:52:46,330 --> 00:52:48,115
+And the answer is,
+答案是，
+
+1055
+00:52:48,115 --> 00:52:50,170
+uh, no, it's not just an RNN problem.
+呃，不，这不仅仅是一个RNN问题。
+
+1056
+00:52:50,170 --> 00:52:52,390
+In fact, vanishing and exploding gradients are a
+事实上，消失和爆炸的渐变是一个
+
+1057
+00:52:52,390 --> 00:52:55,150
+pretty significant problem for
+非常重要的问题
+
+1058
+00:52:55,150 --> 00:52:58,419
+most neural architecture such as feed-forward and convolutional,
+大多数神经结构，如前馈和卷积，
+
+1059
+00:52:58,419 --> 00:52:59,740
+especially when they're deep.
+特别是当他们很深的时候。
+
+1060
+00:52:59,740 --> 00:53:02,410
+And this is a really serious problem because there's no point having
+这是一个非常严重的问题，因为没有必要
+
+1061
+00:53:02,410 --> 00:53:06,655
+a really cool neural architecture if you can't learn it efficiently because of the,
+一个非常酷的神经架构如果你因为这个而无法有效地学习它，
+
+1062
+00:53:06,655 --> 00:53:08,500
+uh, vanishing gradient problem.
+呃，消失了梯度问题。
+
+1063
+00:53:08,500 --> 00:53:13,030
+So, in particular, uh, in these feed-forward and convolutional networks, uh,
+所以，特别是，呃，在这些前馈和卷积网络中，呃，
+
+1064
+00:53:13,030 --> 00:53:15,280
+you often have a gradient becoming vanishingly
+你经常会有一个渐渐消失的渐变
+
+1065
+00:53:15,280 --> 00:53:18,520
+small over back-propagation, uh, because of the Chain Rule,
+由于链规则，反向传播小，呃
+
+1066
+00:53:18,520 --> 00:53:20,200
+because of this multiplying by
+因为这个乘以
+
+1067
+00:53:20,200 --> 00:53:22,390
+all these different intermediate gradients or
+所有这些不同的中间梯度或
+
+1068
+00:53:22,390 --> 00:53:25,120
+sometimes due to your choice of non-linearity function.
+有时由于您选择了非线性函数。
+
+1069
+00:53:25,120 --> 00:53:29,260
+So, if this happens, this means that your- the lower layers of your, let's say,
+所以，如果发生这种情况，这意味着你 - 你的较低层，比方说，
+
+1070
+00:53:29,260 --> 00:53:31,285
+convolutional or feed-forward network,
+卷积或前馈网络，
+
+1071
+00:53:31,285 --> 00:53:32,950
+they have a much smaller,
+他们有一个小得多，
+
+1072
+00:53:32,950 --> 00:53:35,935
+uh, gradient than the high levels.
+呃，梯度比高水平。
+
+1073
+00:53:35,935 --> 00:53:39,970
+And this means that they get changed very slowly during SGD.
+这意味着他们在SGD期间变得非常缓慢。
+
+1074
+00:53:39,970 --> 00:53:41,290
+So, this means that, overall,
+所以，这意味着，整体而言，
+
+1075
+00:53:41,290 --> 00:53:43,990
+your network is very slow to train because when you take updates,
+您的网络训练非常慢，因为当您进行更新时，
+
+1076
+00:53:43,990 --> 00:53:47,080
+then your lower layers are changing very slowly.
+然后你的下层变化非常缓慢。
+
+1077
+00:53:47,080 --> 00:53:49,300
+So, one solution, uh,
+所以，一个解决方案，呃，
+
+1078
+00:53:49,300 --> 00:53:51,280
+the kind of like a family of solutions that we've seen in
+就像我们见过的一系列解决方案一样
+
+1079
+00:53:51,280 --> 00:53:53,620
+recent years is that there's been lots of
+最近几年有很多
+
+1080
+00:53:53,620 --> 00:53:58,720
+proposals for new types of deep feed-forward or convolutional architectures.
+关于新型深前馈或卷积架构的建议。
+
+1081
+00:53:58,720 --> 00:54:02,740
+And what they do is, they add more direct connections in the network.
+他们所做的是，他们在网络中添加更多直接连接。
+
+1082
+00:54:02,740 --> 00:54:04,330
+And the- the idea,
+而这个想法，
+
+1083
+00:54:04,330 --> 00:54:05,755
+kind of as we talked about before,
+我们之前谈过的那种，
+
+1084
+00:54:05,755 --> 00:54:08,530
+is that if you add all of these direct connections between layers,
+如果你在图层之间添加所有这些直接连接，
+
+1085
+00:54:08,530 --> 00:54:12,085
+like maybe not just adjacent layers but further apart layers,
+可能不仅仅是相邻的层，而是更远的层，
+
+1086
+00:54:12,085 --> 00:54:14,680
+then it makes it much easier for the gradients to flow,
+然后它使渐变更容易流动，
+
+1087
+00:54:14,680 --> 00:54:17,635
+and you're going to find it easier to train your network overall.
+而且你会发现整体训练网络更容易。
+
+1088
+00:54:17,635 --> 00:54:19,660
+So, I'm going to show you some examples of these in
+所以，我将向您展示一些这样的例子
+
+1089
+00:54:19,660 --> 00:54:21,670
+particular because it's fairly likely you're going to
+特别是因为你很可能会这样做
+
+1090
+00:54:21,670 --> 00:54:25,705
+run into these kinds of architectures when you're doing your projects and reading papers.
+当你在做项目和阅读论文时遇到这些架构。
+
+1091
+00:54:25,705 --> 00:54:29,410
+So, one example is something called residual connections or,
+所以，一个例子叫做残余连接，或者，
+
+1092
+00:54:29,410 --> 00:54:32,515
+uh, the network itself is sometimes referred to as ResNet.
+呃，网络本身有时也被称为ResNet。
+
+1093
+00:54:32,515 --> 00:54:36,350
+And here we've got a figure from the related paper.
+在这里，我们从相关论文中得到了一个数字。
+
+1094
+00:54:36,350 --> 00:54:41,070
+So, what's going on in this diagram is that you have, uh,
+那么，这张图中发生的是你有，呃，
+
+1095
+00:54:41,070 --> 00:54:42,930
+the usual kind of you've got weight layer and
+通常那种你有重量层和
+
+1096
+00:54:42,930 --> 00:54:45,480
+a non-linearity which is ReLU, and another weight layer.
+非线性，即ReLU，和另一个权重层。
+
+1097
+00:54:45,480 --> 00:54:49,180
+So, if you regard that function as being f of x, ah,
+所以，如果你认为那个函数是x的f，啊，
+
+1098
+00:54:49,180 --> 00:54:50,695
+what they're doing is instead of just, ah,
+他们正在做的不仅仅是，啊，
+
+1099
+00:54:50,695 --> 00:54:52,540
+transforming x to f of x,
+将x转换为x的f，
+
+1100
+00:54:52,540 --> 00:54:55,150
+the- they're taking f of x plus x.
+他们采用x加x的f。
+
+1101
+00:54:55,150 --> 00:54:58,435
+So they're adding this identity skip connection where
+所以他们在这里添加了这个身份跳过连接
+
+1102
+00:54:58,435 --> 00:55:01,990
+the input x is skipped over those two layers and then,
+在这两层上跳过输入x然后，
+
+1103
+00:55:01,990 --> 00:55:05,470
+um, added to the output of the two layers.
+嗯，添加到两层的输出中。
+
+1104
+00:55:05,470 --> 00:55:07,510
+So, the reason why this is a good idea,
+所以，这是一个好主意的原因，
+
+1105
+00:55:07,510 --> 00:55:10,150
+uh, also known as skip connections,
+呃，也称为跳过连接，
+
+1106
+00:55:10,150 --> 00:55:15,280
+is that the identity connection is going to preserve information by default, right?
+是标识连接默认保存信息，对吧？
+
+1107
+00:55:15,280 --> 00:55:18,010
+So, if you imagine perhaps if you, um,
+所以，如果你想象一下，如果你，嗯，
+
+1108
+00:55:18,010 --> 00:55:20,110
+initialize your network and you
+初始化您的网络和您
+
+1109
+00:55:20,110 --> 00:55:22,600
+initialize your weight layers to have small random values,
+初始化您的权重图层以获得小的随机值，
+
+1110
+00:55:22,600 --> 00:55:24,835
+then if they're small and kind of close to zero,
+那么如果它们很小并且接近零，
+
+1111
+00:55:24,835 --> 00:55:28,885
+then you're going to have something like a noisy identity function, right?
+然后你会有一个像嘈杂的身份功能，对吧？
+
+1112
+00:55:28,885 --> 00:55:32,245
+So you're going to be preserving information by default through all of your layers.
+因此，默认情况下，您将通过所有图层保留信息。
+
+1113
+00:55:32,245 --> 00:55:33,520
+And if you have a very deep network,
+如果你有一个非常深的网络，
+
+1114
+00:55:33,520 --> 00:55:35,110
+that means that even often many,
+这意味着即使经常很多，
+
+1115
+00:55:35,110 --> 00:55:39,410
+um, many layers, you're still gonna have something like your original input.
+嗯，很多层，你仍然会有类似你原始输入的东西。
+
+1116
+00:55:40,320 --> 00:55:44,215
+So, uh, the- the people who wrote this paper, they show that, uh,
+所以，呃，写这篇论文的人，他们表明，呃，
+
+1117
+00:55:44,215 --> 00:55:46,660
+if you don't have something like skip connections then
+如果你没有像跳过连接那样的话
+
+1118
+00:55:46,660 --> 00:55:49,570
+actually you can find that deep layers- uh,
+实际上你可以找到深层 - 呃，
+
+1119
+00:55:49,570 --> 00:55:53,245
+deep networks perform worse on some tasks than shallow networks.
+深度网络在某些任务上比浅层网络表现更差。
+
+1120
+00:55:53,245 --> 00:55:54,955
+Not because they're not expressive enough,
+不是因为他们没有足够的表现力，
+
+1121
+00:55:54,955 --> 00:55:56,665
+but because they're too difficult to learn.
+但是因为他们太难学了。
+
+1122
+00:55:56,665 --> 00:55:58,285
+So, when you attempt to learn deep networks,
+所以，当你尝试学习深层网络时，
+
+1123
+00:55:58,285 --> 00:55:59,950
+it just doesn't learn effectively and you end up
+它只是没有有效学习，你最终
+
+1124
+00:55:59,950 --> 00:56:01,795
+getting worse performance in the shallow network.
+在浅层网络中表现越来越差。
+
+1125
+00:56:01,795 --> 00:56:03,070
+So, the people who wrote this paper,
+所以，写这篇论文的人，
+
+1126
+00:56:03,070 --> 00:56:05,050
+they show that when they add these skip connections,
+他们表明，当他们添加这些跳过连接时，
+
+1127
+00:56:05,050 --> 00:56:07,105
+then they made the deep networks, uh,
+然后他们建立了深层网络，呃，
+
+1128
+00:56:07,105 --> 00:56:10,550
+much more effective and they managed to get good performance.
+更有效，他们设法获得了良好的表现。
+
+1129
+00:56:12,000 --> 00:56:15,280
+Uh, so another example which kinda take this- this idea
+呃，这是另一个例子，有点采取这个想法
+
+1130
+00:56:15,280 --> 00:56:18,220
+further is something called dense connections or DenseNet.
+进一步称为密集连接或密集网络。
+
+1131
+00:56:18,220 --> 00:56:19,585
+And again, this was, uh,
+再一次，这是，呃，
+
+1132
+00:56:19,585 --> 00:56:23,965
+something proposed I think in a feed-forward or or convolutional setting.
+我认为在前馈或卷积设置中提出了一些建议。
+
+1133
+00:56:23,965 --> 00:56:26,770
+And, ah, it's just kind of the same as skip connections but except ,
+而啊，它与跳过连接有点相似但除外
+
+1134
+00:56:26,770 --> 00:56:28,030
+um, connects everything to everything.
+嗯，把一切都连接到一切。
+
+1135
+00:56:28,030 --> 00:56:30,070
+So, add more of these skip connections kind of
+因此，添加更多这些跳过连接类型
+
+1136
+00:56:30,070 --> 00:56:32,680
+from all layers to all layers and they showed that this,
+从所有层到所有层，他们表明，
+
+1137
+00:56:32,680 --> 00:56:34,480
+uh, performs even better.
+呃，表现得更好。
+
+1138
+00:56:34,480 --> 00:56:37,450
+And, uh, the last one I want to talk about which I don't have a picture
+而且，呃，我想谈的最后一个我没有照片
+
+1139
+00:56:37,450 --> 00:56:40,210
+for is something called highway connections.
+因为是高速公路连接。
+
+1140
+00:56:40,210 --> 00:56:43,180
+So, this is similar to the residual or skip connections.
+因此，这类似于残余或跳过连接。
+
+1141
+00:56:43,180 --> 00:56:46,585
+Ah, but the idea is that instead of just adding your x,
+啊，但想法是，不只是添加你的x，
+
+1142
+00:56:46,585 --> 00:56:48,640
+adding your identity, uh, connection,
+添加你的身份，呃，连接，
+
+1143
+00:56:48,640 --> 00:56:52,060
+the idea is that you're gonna have a gate that controls the balance between, um,
+我的想法是，你将有一个控制平衡的大门，嗯，
+
+1144
+00:56:52,060 --> 00:56:55,960
+adding the identity and computing, ah, the transformation.
+添加身份和计算啊，转型。
+
+1145
+00:56:55,960 --> 00:56:58,405
+So, instead of f of x plus x, you're gonna have, you know,
+所以，你知道，你将拥有x加x的f，而不是
+
+1146
+00:56:58,405 --> 00:56:59,995
+gate times f of x plus, you know,
+你知道，x加的门时间f
+
+1147
+00:56:59,995 --> 00:57:02,110
+one minus gate times x, something like that.
+一减去门时间x，就像那样。
+
+1148
+00:57:02,110 --> 00:57:05,560
+Um, so, this work was actually inspired by LSTMs,
+嗯，这项工作实际上是受LSTM的启发，
+
+1149
+00:57:05,560 --> 00:57:07,510
+but instead of applying it to a recurrent setting,
+但不是将其应用于周期性设置，
+
+1150
+00:57:07,510 --> 00:57:11,570
+they were seeking to apply it to a feed-forward setting.
+他们正在寻求将其应用于前馈设置。
+
+1151
+00:57:13,860 --> 00:57:16,120
+Okay. I'm gonna keep going for now.
+好的。我现在要继续前进。
+
+1152
+00:57:16,120 --> 00:57:19,390
+Um. So, overall the question was,
+嗯。所以，问题总的来说是，
+
+1153
+00:57:19,390 --> 00:57:20,620
+you know, how much uh,
+你知道吗，呃，
+
+1154
+00:57:20,620 --> 00:57:23,650
+vanishing and exploding gradients a problem outside of the setting of RNNs?
+消失和爆炸梯度是RNN设置之外的问题？
+
+1155
+00:57:23,650 --> 00:57:26,710
+And I think uh, the important takeaway is that it is a big problem
+而且我想，呃，重要的一点是它是一个大问题
+
+1156
+00:57:26,710 --> 00:57:30,595
+but you should notice that it is particularly a problem for RNNs.
+但你应该注意到这对RNN来说尤其严重。
+
+1157
+00:57:30,595 --> 00:57:34,000
+So, um, RNNs are particularly unstable and
+所以，嗯，RNN特别不稳定
+
+1158
+00:57:34,000 --> 00:57:37,525
+this is essentially due to the repeated multiplication by the same weight matrix.
+这主要是由于重复乘以相同的权重矩阵。
+
+1159
+00:57:37,525 --> 00:57:39,175
+If you remember from last time, um,
+如果你记得上次，嗯，
+
+1160
+00:57:39,175 --> 00:57:41,890
+the characteristic thing about RNNs that makes them recurrent is
+关于RNNs的特征性事件使它们反复发作
+
+1161
+00:57:41,890 --> 00:57:44,770
+the fact that you are applying the same weight matrix over and over again.
+事实上你一遍又一遍地应用相同的权重矩阵。
+
+1162
+00:57:44,770 --> 00:57:47,095
+So, this is actually the core reason
+所以，这实际上是核心原因
+
+1163
+00:57:47,095 --> 00:57:49,865
+why they are so prone to the vanishing and exploding gradients,
+为什么他们如此倾向于消失和爆炸的渐变，
+
+1164
+00:57:49,865 --> 00:57:53,590
+and ah, you can see some more information about that in the paper.
+啊，你可以在论文中看到更多关于它的信息。
+
+1165
+00:57:53,670 --> 00:57:57,730
+Okay. So, I know there's been a lot of dense information today,
+好的。所以，我知道今天有很多密集的信息，
+
+1166
+00:57:57,730 --> 00:57:59,815
+a lot of um, lot of notation.
+很多嗯，很多符号。
+
+1167
+00:57:59,815 --> 00:58:01,690
+So, here's a recap, if I've lost you at any point.
+所以，这是一个回顾，如果我在任何时候都失去了你。
+
+1168
+00:58:01,690 --> 00:58:03,280
+Now's a good time to jump back in because it's gonna
+现在是跳回来的好时机，因为它会
+
+1169
+00:58:03,280 --> 00:58:05,515
+get a little easier to understand perhaps.
+或许更容易理解。
+
+1170
+00:58:05,515 --> 00:58:07,600
+So, okay, recap. What have we learned about today?
+所以，好的，回顾一下。我们今天学到了什么？
+
+1171
+00:58:07,600 --> 00:58:10,435
+Um, the first thing we learned about was the vanishing gradient problem.
+嗯，我们学到的第一件事就是消失的梯度问题。
+
+1172
+00:58:10,435 --> 00:58:11,830
+We learned uh, what it is.
+我们学到了呃，它是什么。
+
+1173
+00:58:11,830 --> 00:58:15,580
+We learned why it happens and we saw why it's bad for RNNs,
+我们了解了它为什么会发生，我们看到了为什么它对RNN不利，
+
+1174
+00:58:15,580 --> 00:58:18,085
+for example, RNN language models.
+例如，RNN语言模型。
+
+1175
+00:58:18,085 --> 00:58:21,640
+Ah, and we also learned about LSTMs and GRUs which are
+啊，我们也了解了LSTM和GRU
+
+1176
+00:58:21,640 --> 00:58:25,480
+more complicated RNNs and they use gates to control the flow of information.
+更复杂的RNN，他们使用门来控制信息流。
+
+1177
+00:58:25,480 --> 00:58:29,395
+And by doing that, they are more resilient to the vanishing gradient problem.
+通过这样做，他们对消失的梯度问题更具弹性。
+
+1178
+00:58:29,395 --> 00:58:31,390
+Okay. So, if the remainder of this lecture,
+好的。那么，如果本讲座的其余部分，
+
+1179
+00:58:31,390 --> 00:58:32,740
+I think we've got about 20 minutes left,
+我想我们还剩下大约20分钟，
+
+1180
+00:58:32,740 --> 00:58:36,445
+ah, we're going to be learning about two more advanced type of RNNs.
+啊，我们将学习两种更先进的RNN。
+
+1181
+00:58:36,445 --> 00:58:39,040
+So, the first one is bidirectional RNNs and that's all
+所以，第一个是双向RNN，就是这样
+
+1182
+00:58:39,040 --> 00:58:43,105
+about information flowing left to right and right to left.
+关于从左到右流动的信息。
+
+1183
+00:58:43,105 --> 00:58:44,905
+And then we're also going to learn about
+然后我们也将学习
+
+1184
+00:58:44,905 --> 00:58:49,780
+multi-layer RNNs which is when you apply multiple RNNs on top of each other.
+多层RNN，当您将多个RNN应用于彼此之上时。
+
+1185
+00:58:49,780 --> 00:58:54,100
+So, I'd say that both of these are pretty simple conceptually.
+所以，我会说这两个在概念上都非常简单。
+
+1186
+00:58:54,100 --> 00:58:56,905
+Um, so it shouldn't be too hard to understand.
+嗯，所以不应该太难理解。
+
+1187
+00:58:56,905 --> 00:59:00,160
+All right, so let's start with bidirectional RNNs.
+好的，让我们从双向RNN开始吧。
+
+1188
+00:59:00,160 --> 00:59:04,225
+Um, this is a picture which you saw at the end of last lecture.
+嗯，这是你在上次讲座结束时看到的一张照片。
+
+1189
+00:59:04,225 --> 00:59:05,305
+So, if you remember,
+所以，如果你还记得，
+
+1190
+00:59:05,305 --> 00:59:07,690
+sentiment classification is the task when you have
+情绪分类是你的任务
+
+1191
+00:59:07,690 --> 00:59:10,150
+some kind of input sentence such as the movie was
+某种输入句子如电影是
+
+1192
+00:59:10,150 --> 00:59:15,460
+terribly exciting and you want to classify this as a positive or negative sentiment.
+非常令人兴奋，你想把它归类为积极或消极的情绪。
+
+1193
+00:59:15,460 --> 00:59:19,160
+So, in this example, it should be seen as positive sentiment.
+因此，在这个例子中，它应被视为积极的情绪。
+
+1194
+00:59:19,680 --> 00:59:23,650
+So, um, this is an example of how you might try to
+所以，嗯，这是你可能尝试的一个例子
+
+1195
+00:59:23,650 --> 00:59:26,860
+solve sentiment classification using a fairly simple RNN model.
+使用相当简单的RNN模型解决情绪分类。
+
+1196
+00:59:26,860 --> 00:59:29,830
+Ah, here we're using the RNN as a kind of encoder of
+啊，我们在这里使用RNN作为一种编码器
+
+1197
+00:59:29,830 --> 00:59:32,890
+the sentence and the hidden states represent the sentence.
+句子和隐藏状态代表句子。
+
+1198
+00:59:32,890 --> 00:59:35,740
+And we'll do some kind of combination of the hidden states to compute uh,
+我们会做一些隐藏状态的组合来计算呃，
+
+1199
+00:59:35,740 --> 00:59:37,765
+what we think the sentiment is.
+我们认为情绪是什么。
+
+1200
+00:59:37,765 --> 00:59:40,165
+So, my question is, if we look at let's say,
+所以，我的问题是，如果我们看看，让我们说，
+
+1201
+00:59:40,165 --> 00:59:44,350
+the hidden state that corresponds to the word terribly and we're regarding
+与这个词相对应的隐藏状态，我们正在考虑
+
+1202
+00:59:44,350 --> 00:59:46,420
+this hidden state as a representation of the word
+这个隐藏的状态作为这个词的表示
+
+1203
+00:59:46,420 --> 00:59:49,510
+terribly in the context of the sentence.
+非常在句子的背景下。
+
+1204
+00:59:49,510 --> 00:59:53,455
+So, for this reason we- we sometimes call hidden states in this kind of situation
+因此，出于这个原因，我们有时会在这种情况下调用隐藏状态
+
+1205
+00:59:53,455 --> 00:59:55,930
+a contextual representation because the idea is that it's
+一个上下文表示，因为这个想法就是它
+
+1206
+00:59:55,930 --> 00:59:59,785
+a representation of the word terribly in the context of the sentence.
+在句子的语境中非常表达这个词。
+
+1207
+00:59:59,785 --> 01:00:04,150
+So, thing to think about here is that this contextual representation,
+所以，在这里考虑的是这个上下文表示，
+
+1208
+01:00:04,150 --> 01:00:07,165
+it only contains information about the left context.
+它只包含有关左上下文的信息。
+
+1209
+01:00:07,165 --> 01:00:10,150
+So, for terribly, the left context is the words um,
+所以，非常，左边的上下文是单词um，
+
+1210
+01:00:10,150 --> 01:00:13,120
+the movie was and this hidden state the one that's got
+电影是，这个隐藏的状态是有的
+
+1211
+01:00:13,120 --> 01:00:16,435
+a blue box around it has only seen information to the left.
+它周围的蓝框只能看到左边的信息。
+
+1212
+01:00:16,435 --> 01:00:20,485
+It hasn't seen the information of the words exciting or exclamation mark.
+它没有看到令人兴奋或感叹号的信息。
+
+1213
+01:00:20,485 --> 01:00:24,715
+So, what we're asking is what about the right context?
+那么，我们要问的是正确的背景呢？
+
+1214
+01:00:24,715 --> 01:00:28,690
+The right context of terribly is- is what exciting and the exclamation mark.
+正确的背景是令人兴奋和惊叹号。
+
+1215
+01:00:28,690 --> 01:00:33,040
+And do we think that the right context is useful here?
+我们认为正确的背景在这里有用吗？
+
+1216
+01:00:33,040 --> 01:00:35,230
+Do we think that this is something we want to know about?
+我们是否认为这是我们想知道的事情？
+
+1217
+01:00:35,230 --> 01:00:37,405
+And I would argue that in this example,
+我会争辩说，在这个例子中，
+
+1218
+01:00:37,405 --> 01:00:41,695
+it is actually kind of important because we've got the phrase terribly exciting.
+它实际上很重要，因为我们有这句话非常令人兴奋。
+
+1219
+01:00:41,695 --> 01:00:44,829
+And if you look at the word terribly in isolation,
+如果你孤立地看着这个词，
+
+1220
+01:00:44,829 --> 01:00:47,005
+terrible or terribly usually means something bad, right?
+可怕或非常通常意味着坏事，对吧？
+
+1221
+01:00:47,005 --> 01:00:50,650
+But terribly exciting, you can mean something good because it just means very exciting.
+但非常令人兴奋，你可以说一些好东西，因为它只是意味着非常令人兴奋。
+
+1222
+01:00:50,650 --> 01:00:53,230
+So, if you know about the right context,
+所以，如果你了解正确的背景，
+
+1223
+01:00:53,230 --> 01:00:56,680
+the word exciting then this might quite significantly
+这个词令人兴奋，那么这可能非常显着
+
+1224
+01:00:56,680 --> 01:00:58,900
+modify your perception of the meaning of the word
+修改你对这个词含义的看法
+
+1225
+01:00:58,900 --> 01:01:01,210
+terribly in the context of the sentence.
+非常在句子的背景下。
+
+1226
+01:01:01,210 --> 01:01:03,790
+And especially given that we're trying to do sentiment classification,
+特别考虑到我们正在尝试进行情绪分类，
+
+1227
+01:01:03,790 --> 01:01:05,815
+this is- this is kind of important.
+这是 - 这很重要。
+
+1228
+01:01:05,815 --> 01:01:10,150
+So this motivates why you might want to have information
+所以这就激发了为什么你可能想要获得信息
+
+1229
+01:01:10,150 --> 01:01:13,915
+from both the left and the right when you're making your representations.
+当您进行陈述时，从左侧和右侧开始。
+
+1230
+01:01:13,915 --> 01:01:16,000
+Ah, if when you were a kid,
+啊，如果你小时候，
+
+1231
+01:01:16,000 --> 01:01:18,535
+your parents told you to look both ways before you cross the street.
+你的父母告诉你在过马路之前要两面看。
+
+1232
+01:01:18,535 --> 01:01:20,620
+You might regard it as the same kind of idea that there's
+你可能会认为它是同一种想法
+
+1233
+01:01:20,620 --> 01:01:22,510
+useful information to the left and the right that
+左侧和右侧的有用信息
+
+1234
+01:01:22,510 --> 01:01:24,970
+you'd like to know about ah, before you do anything.
+在你做任何事之前，你想知道啊。
+
+1235
+01:01:24,970 --> 01:01:27,925
+Okay. So that's the motivation and um,
+好的。这就是动力和嗯，
+
+1236
+01:01:27,925 --> 01:01:31,900
+here is how a bidirectional RNN might work in practice.
+这里是双向RNN如何在实践中发挥作用。
+
+1237
+01:01:31,900 --> 01:01:35,065
+I have a kind of accidentally festive color scheme here.
+我这里有一种偶然的节日配色方案。
+
+1238
+01:01:35,065 --> 01:01:38,755
+And so the idea is that you have two RNNs going on.
+所以我们的想法是你有两个RNN正在进行中。
+
+1239
+01:01:38,755 --> 01:01:42,880
+You have the forward RNN as before that encodes the sentence left to right.
+你有前面的RNN，从左到右编码句子。
+
+1240
+01:01:42,880 --> 01:01:46,000
+And then separately, you also have a backwards RNN.
+然后另外，你还有一个向后的RNN。
+
+1241
+01:01:46,000 --> 01:01:49,135
+And this has completely separate weights to the forward RNN.
+并且这与前向RNN具有完全独立的权重。
+
+1242
+01:01:49,135 --> 01:01:52,660
+So, the backward RNN is just doing the same thing
+因此，后向RNN正在做同样的事情
+
+1243
+01:01:52,660 --> 01:01:56,110
+except that it's encoding the sequence from right to left.
+除了它从右到左编码序列。
+
+1244
+01:01:56,110 --> 01:01:59,980
+So, each of the hidden states is computed based on the one to the right.
+因此，每个隐藏状态都是基于右边的一个计算的。
+
+1245
+01:01:59,980 --> 01:02:02,500
+And then finally, you just take the hidden states from
+然后最后，你只需要隐藏状态
+
+1246
+01:02:02,500 --> 01:02:06,700
+the two RNNs and then you concatenate them together and you've got your uh,
+两个RNN，然后你把它们连接在一起，你就得到了你的呃，
+
+1247
+01:02:06,700 --> 01:02:09,385
+your final kind of representations.
+你的最后一种陈述。
+
+1248
+01:02:09,385 --> 01:02:12,025
+So, in particular, if we now think about
+所以，特别是，如果我们现在考虑一下
+
+1249
+01:02:12,025 --> 01:02:16,330
+this contextual representation of the word terribly in the context,
+这个词在语境中非常可见，
+
+1250
+01:02:16,330 --> 01:02:22,180
+um, this- this vector has information from both the left and the right, right?
+嗯，这个 - 这个向量有来自左边和右边的信息，对吧？
+
+1251
+01:02:22,180 --> 01:02:24,235
+Because you had the forwards and backwards RNNs that
+因为你有前向和后向的RNN
+
+1252
+01:02:24,235 --> 01:02:27,295
+respectively had information from both left and right.
+分别有左右两侧的信息。
+
+1253
+01:02:27,295 --> 01:02:30,190
+So the idea is that these concatenated hidden states,
+所以这个想法是这些连接的隐藏状态，
+
+1254
+01:02:30,190 --> 01:02:34,735
+those can be regarded as kind of like the outputs of the bidirectional RNN.
+那些可以被视为类似于双向RNN的输出。
+
+1255
+01:02:34,735 --> 01:02:36,460
+Like if you're going to use these hidden states for
+就像你要使用这些隐藏状态一样
+
+1256
+01:02:36,460 --> 01:02:38,680
+any kind of further computation, then ah,
+任何进一步的计算，然后啊，
+
+1257
+01:02:38,680 --> 01:02:40,780
+it's these concatenated hidden states that you are going to be
+这些是你将要成为的连锁隐藏状态
+
+1258
+01:02:40,780 --> 01:02:44,210
+passing on to the next part of the network.
+传递到网络的下一部分。
+
+1259
+01:02:44,250 --> 01:02:48,205
+Um, here- here are the equations that just say the same thing.
+嗯，这里 - 这里是说同样的事情的方程式。
+
+1260
+01:02:48,205 --> 01:02:51,790
+So, you have your forward RNN and here we've got ah,
+所以，你有你的前进RNN，在这里我们有啊，
+
+1261
+01:02:51,790 --> 01:02:53,995
+a notation that you might not have seen before
+你可能以前没见过的符号
+
+1262
+01:02:53,995 --> 01:02:57,010
+this kind of notation where it says RNN and then in brackets,
+这种符号表示RNN，然后在括号中，
+
+1263
+01:02:57,010 --> 01:03:00,775
+the previous hidden state and the input that's simply saying that you know,
+以前隐藏的状态和输入只是说你知道，
+
+1264
+01:03:00,775 --> 01:03:04,180
+HT is computed from the previous hidden state and the input.
+HT是根据先前的隐藏状态和输入计算的。
+
+1265
+01:03:04,180 --> 01:03:08,590
+And RNN forward could be a vanilla or a GRU or an LSTM.
+RNN转发可以是香草或GRU或LSTM。
+
+1266
+01:03:08,590 --> 01:03:10,810
+It doesn't really matter, we're looking at it abstractly.
+这并不重要，我们正在抽象地看待它。
+
+1267
+01:03:10,810 --> 01:03:16,104
+So, you have these two separate RNNs,
+所以，你有这两个独立的RNN，
+
+1268
+01:03:16,104 --> 01:03:19,540
+RNN forwards and RNN backwards and generally, these have separate weights.
+RNN向后转发和RNN向后并且通常，它们具有单独的权重。
+
+1269
+01:03:19,540 --> 01:03:21,910
+Although I have seen some papers where they have shared weights.
+虽然我看过一些他们有共同权重的论文。
+
+1270
+01:03:21,910 --> 01:03:23,875
+So, it seems that sometimes that does work better,
+所以，有时似乎确实有效，
+
+1271
+01:03:23,875 --> 01:03:26,600
+perhaps maybe when you have enough training data.
+也许当你有足够的训练数据时。
+
+1272
+01:03:26,790 --> 01:03:32,020
+And then finally, we regard these concatenated hidden states which you might just
+最后，我们将这些连接的隐藏状态视为您可能只是
+
+1273
+01:03:32,020 --> 01:03:37,610
+notice ht as being like the hidden state of the bidirectional RNN.
+请注意，就像双向RNN的隐藏状态一样。
+
+1274
+01:03:38,550 --> 01:03:42,550
+So, um, the previous diagram is pretty unwieldy.
+那么，嗯，上面的图表非常笨拙。
+
+1275
+01:03:42,550 --> 01:03:44,395
+So here's a simplified diagram.
+所以这是一个简化的图表。
+
+1276
+01:03:44,395 --> 01:03:46,240
+And this is probably the only kind of diagram you're going to
+这可能是你要去的唯一一种图表
+
+1277
+01:03:46,240 --> 01:03:48,700
+see from now on to denote bidirectional RNNs.
+从现在开始看，表示双向RNN。
+
+1278
+01:03:48,700 --> 01:03:50,770
+Um, so, what we've done here is you've just
+嗯，所以，我们在这里所做的就是你
+
+1279
+01:03:50,770 --> 01:03:53,575
+made all of the horizontal arrows go left and right ah,
+使所有的水平箭头左右啊，
+
+1280
+01:03:53,575 --> 01:03:56,260
+to represent that this is a bidirectional RNN.
+表示这是双向RNN。
+
+1281
+01:03:56,260 --> 01:04:00,370
+So, the other thing you should assume is that the hidden states depicted here, you know,
+所以，你应该假设的另一件事是这里描述的隐藏状态，你知道，
+
+1282
+01:04:00,370 --> 01:04:04,240
+these red- red trying- red rectangles with the dots.
+这些带有圆点的红红色试图红色矩形。
+
+1283
+01:04:04,240 --> 01:04:06,580
+You can assume that those are the concatenated forwards,
+你可以假设那些是连接的前锋，
+
+1284
+01:04:06,580 --> 01:04:08,590
+backwards hidden states from the bidirectional RNN.
+从双向RNN向后隐藏的状态。
+
+1285
+01:04:08,590 --> 01:04:16,000
+[inaudible]
+[听不见]
+
+1286
+01:04:16,000 --> 01:04:18,415
+Okay. So the question is, um,
+好的。所以问题是，嗯，
+
+1287
+01:04:18,415 --> 01:04:22,060
+would you train your forwards and backwards RNNs kind of separately,
+你会分别训练你的前锋和后退RNN吗？
+
+1288
+01:04:22,060 --> 01:04:23,890
+um, on some kind of task and then
+嗯，在某种任务上，然后
+
+1289
+01:04:23,890 --> 01:04:26,665
+maybe concatenate them together once they're separately trained networks,
+一旦他们被分别训练的网络，也许可以将它们连接在一起，
+
+1290
+01:04:26,665 --> 01:04:28,285
+or would you train them all together?
+或者你会一起训练他们吗？
+
+1291
+01:04:28,285 --> 01:04:32,200
+Um, it seems to me that it's much more common to train them together,
+嗯，在我看来，将它们训练在一起更为常见，
+
+1292
+01:04:32,200 --> 01:04:35,230
+but I don- I don't think I've heard of anyone training them separately.
+但是我 - 我不认为我听说过有人单独训练它们。
+
+1293
+01:04:35,230 --> 01:04:37,270
+Uh, so yeah, it seems like the standard practice is usually
+呃，所以是的，似乎通常是标准做法
+
+1294
+01:04:37,270 --> 01:04:39,160
+to train them together. Does that make sense?
+一起训练他们。那有意义吗？
+
+1295
+01:04:39,160 --> 01:04:53,290
+[inaudible].
+[听不见的。
+
+1296
+01:04:53,290 --> 01:04:55,690
+So, let's suppose that we were trying to build
+所以，让我们假设我们正在努力建立
+
+1297
+01:04:55,690 --> 01:04:59,440
+a sentiment classification system using the bidirectional RNN.
+使用双向RNN的情绪分类系统。
+
+1298
+01:04:59,440 --> 01:05:03,460
+Then what you do, which maybe I should have pictured but I didn't have space, is uh,
+然后你做了什么，也许我应该想象，但我没有空间，是呃，
+
+1299
+01:05:03,460 --> 01:05:07,420
+you would do the same thing that you were doing with the unidirectional RNN, uh,
+你会做与单向RNN一样的事情，呃，
+
+1300
+01:05:07,420 --> 01:05:10,045
+which was, let's say an element y is min or max,
+也就是说，元素y是min或max，
+
+1301
+01:05:10,045 --> 01:05:11,665
+um, to get your sentence encoding.
+嗯，得到你的句子编码。
+
+1302
+01:05:11,665 --> 01:05:16,490
+Maybe you just do that but over the concatenated, um, n states.
+也许你只是这样做，但在连接的，嗯，n州。
+
+1303
+01:05:16,950 --> 01:05:20,560
+Okay. So, an important thing to note is that, uh,
+好的。所以，需要注意的一点是，呃，
+
+1304
+01:05:20,560 --> 01:05:23,020
+when talking about applying bidirectional RNNs,
+在谈论应用双向RNN时，
+
+1305
+01:05:23,020 --> 01:05:26,935
+we've assumed that we actually have access to the entire input sequence.
+我们假设我们实际上可以访问整个输入序列。
+
+1306
+01:05:26,935 --> 01:05:28,780
+So, we assume that we have the full sentence,
+所以，我们假设我们有完整的句子，
+
+1307
+01:05:28,780 --> 01:05:31,565
+uh, the movie was very exciting, and,
+呃，这部电影很精彩，而且，
+
+1308
+01:05:31,565 --> 01:05:34,740
+uh, that, that was a necessary assumption in order to
+呃，那是一个必要的假设
+
+1309
+01:05:34,740 --> 01:05:37,935
+be able to run the forwards and the backwards RNN, right?
+能够运行前进和后退RNN，对吗？
+
+1310
+01:05:37,935 --> 01:05:40,935
+Um, so there are some situations where you can't assume this.
+嗯，所以在某些情况下你不能假设这一点。
+
+1311
+01:05:40,935 --> 01:05:43,185
+Like, for example, in Language Modeling,
+例如，在语言建模中，
+
+1312
+01:05:43,185 --> 01:05:47,355
+you only have access to the left context kind of by definition of the task.
+根据任务的定义，您只能访问左上下文类型。
+
+1313
+01:05:47,355 --> 01:05:48,990
+You only know the words that have come so far.
+你只知道到目前为止所说的话。
+
+1314
+01:05:48,990 --> 01:05:50,405
+You don't know what's coming next.
+你不知道接下来会发生什么。
+
+1315
+01:05:50,405 --> 01:05:54,070
+So, you can't use a bidirectional RNN, uh,
+所以，你不能使用双向RNN，呃，
+
+1316
+01:05:54,070 --> 01:05:55,525
+to do Language Modeling, uh,
+做语言建模，呃，
+
+1317
+01:05:55,525 --> 01:05:57,760
+in the way that we've depicted here because uh,
+就像我们在这里描绘的那样，因为呃，
+
+1318
+01:05:57,760 --> 01:05:59,815
+you don't have the full sequence.
+你没有完整的序列。
+
+1319
+01:05:59,815 --> 01:06:03,115
+However, if you do have access to the entire sequence.
+但是，如果您确实可以访问整个序列。
+
+1320
+01:06:03,115 --> 01:06:05,230
+Uh, so, for example, if you're doing any kind of encoding
+呃，所以，例如，如果您正在进行任何类型的编码
+
+1321
+01:06:05,230 --> 01:06:07,495
+similar to the sentiment example,
+类似于情绪的例子，
+
+1322
+01:06:07,495 --> 01:06:11,680
+uh, then bidirectionally- bidirectionality is pretty powerful.
+呃，那么双向 - 双向性非常强大。
+
+1323
+01:06:11,680 --> 01:06:14,815
+And you should probably regard it as a good thing to do by default uh,
+而你应该认为默认情况下这是一件好事呃，
+
+1324
+01:06:14,815 --> 01:06:16,870
+because it turns out that getting this information from
+因为事实证明从中获取此信息
+
+1325
+01:06:16,870 --> 01:06:18,805
+both the left and the right, uh,
+左边和右边，呃，
+
+1326
+01:06:18,805 --> 01:06:23,725
+makes it a lot easier to learn these more useful contextual representations.
+这使得学习这些更有用的上下文表示变得更加容易。
+
+1327
+01:06:23,725 --> 01:06:25,870
+So, in particular, as a preview of
+因此，特别是作为预览
+
+1328
+01:06:25,870 --> 01:06:28,030
+something you're going to learn about later in the class, uh,
+你将在课堂上学到的东西，呃，
+
+1329
+01:06:28,030 --> 01:06:30,610
+there's a model called BERT, B-E-R-T,
+有一个名为BERT，BERT的模型，
+
+1330
+01:06:30,610 --> 01:06:34,330
+and that stands for Bidirectional Encoder Representations from Transformers.
+这代表变形金刚的双向编码器表示。
+
+1331
+01:06:34,330 --> 01:06:36,010
+And this is a pretty recently.
+这是最近的一个。
+
+1332
+01:06:36,010 --> 01:06:39,070
+Like, a few months ago, uh, proposed system,
+就像，几个月前，呃，建议的系统，
+
+1333
+01:06:39,070 --> 01:06:42,460
+and it's this pre-trained contextual representation system.
+这是这种预先训练的语境表达系统。
+
+1334
+01:06:42,460 --> 01:06:46,450
+Um, and it's heavily reliant on the idea of bidirectionality.
+嗯，它严重依赖双向性的想法。
+
+1335
+01:06:46,450 --> 01:06:48,760
+It turns out that the bidirectional, uh,
+事实证明是双向的，呃，
+
+1336
+01:06:48,760 --> 01:06:51,565
+nature of BERT is pretty important to its success.
+BERT的本质对其成功非常重要。
+
+1337
+01:06:51,565 --> 01:06:53,290
+So, you're gonna learn more about that later,
+那么，你以后会更多地了解它，
+
+1338
+01:06:53,290 --> 01:06:55,990
+but that's just an example of how bidirectionality can give you much
+但这只是双向性如何给你带来更多的一个例子
+
+1339
+01:06:55,990 --> 01:06:59,875
+more uh, powerful contextual representations.
+更呃，强大的语境表征。
+
+1340
+01:06:59,875 --> 01:07:04,390
+Okay. So the last thing we're going to talk about today is multi-layer RNNs.
+好的。所以我们今天要讨论的最后一件事是多层RNN。
+
+1341
+01:07:04,390 --> 01:07:08,800
+Uh, so you could regard RNNs as already being deep
+呃，所以你可以认为RNN已经很深了
+
+1342
+01:07:08,800 --> 01:07:14,200
+in some sense because you've already unrolled them over potentially very many timesteps,
+从某种意义上讲，因为你已经将它们展开了非常多的时间步，
+
+1343
+01:07:14,200 --> 01:07:16,630
+and you could regard that as a kind of depth, right?
+你可以把它视为一种深度，对吧？
+
+1344
+01:07:16,630 --> 01:07:19,390
+But there's another way that RNNs could be deep.
+但是还有另一种方式可以让RNN深入人心。
+
+1345
+01:07:19,390 --> 01:07:25,210
+So, for example, if you applied multiple RNNs kind of one after another,
+因此，例如，如果您一个接一个地应用多个RNN，
+
+1346
+01:07:25,210 --> 01:07:28,555
+then this would be a different way to make your RNN deep,
+那么这将是让你的RNN深入的另一种方式，
+
+1347
+01:07:28,555 --> 01:07:30,490
+and this is the idea between, uh,
+这是呃之间的想法，呃，
+
+1348
+01:07:30,490 --> 01:07:33,775
+behind a multi-layer RNN.
+在多层RNN背后。
+
+1349
+01:07:33,775 --> 01:07:37,315
+So, the reason why you would want to do this is because uh,
+那么，你想要这样做的原因是因为呃，
+
+1350
+01:07:37,315 --> 01:07:40,660
+this might allow the network to compute more complex representations.
+这可能允许网络计算更复杂的表示。
+
+1351
+01:07:40,660 --> 01:07:43,840
+So, this is the logic betwe- behind deep networks in general.
+因此，这是深层网络背后的逻辑。
+
+1352
+01:07:43,840 --> 01:07:45,280
+So, if you're familiar with the idea of why
+所以，如果你熟悉为什么这么做的话
+
+1353
+01:07:45,280 --> 01:07:47,620
+deeper is better for let's say convolutional networks,
+更糟糕的是让我们说卷积网络，
+
+1354
+01:07:47,620 --> 01:07:49,195
+then this is kind of the same logic.
+那么这是一种相同的逻辑。
+
+1355
+01:07:49,195 --> 01:07:54,760
+It's saying that, uh, your lower RNNs might be computing lower-level features like,
+它说，呃，你的较低RNN可能正在计算低级功能，如，
+
+1356
+01:07:54,760 --> 01:07:56,770
+let's suppose maybe it's keeping track of syntax,
+让我们假设它可能跟踪语法，
+
+1357
+01:07:56,770 --> 01:08:01,700
+and your higher  level RNN's gonna compute higher-level features like maybe semantics.
+而你的更高级别的RNN将计算更高级别的功能，例如语义。
+
+1358
+01:08:02,100 --> 01:08:06,775
+And a note on terminology, these are sometimes called stacked RNNs.
+关于术语的注释，这些有时被称为堆叠RNN。
+
+1359
+01:08:06,775 --> 01:08:09,640
+So, this works much as you'd imagine.
+所以，这就像你想象的那样有效。
+
+1360
+01:08:09,640 --> 01:08:13,630
+So here's an example of how a multi-layer RNN might work.
+所以这是一个多层RNN如何工作的例子。
+
+1361
+01:08:13,630 --> 01:08:15,610
+Uh, if it's three layers.
+呃，如果它是三层。
+
+1362
+01:08:15,610 --> 01:08:18,115
+So this is a unidirectional RNN,
+所以这是一个单向的RNN，
+
+1363
+01:08:18,115 --> 01:08:20,530
+but it could be bidirectional,
+但它可能是双向的，
+
+1364
+01:08:20,530 --> 01:08:23,680
+um, If you have access to the entire input sequence.
+嗯，如果您可以访问整个输入序列。
+
+1365
+01:08:23,680 --> 01:08:29,290
+So, I guess the, the main thing is that the hidden states from one RNN layer are going to
+所以，我猜，主要是来自一个RNN层的隐藏状态
+
+1366
+01:08:29,290 --> 01:08:35,390
+be used as the inputs to the RNN layer that's coming next.
+用作下一个RNN层的输入。
+
+1367
+01:08:35,400 --> 01:08:38,800
+Um, any questions on this?
+嗯，有什么问题吗？
+
+1368
+01:08:38,800 --> 01:08:45,270
+Yeah.
+是啊。
+
+1369
+01:08:45,270 --> 01:08:46,450
+[inaudible].
+[听不见的。
+
+1370
+01:08:46,450 --> 01:08:49,450
+That's a great question. So the question I think it's about the order of computation.
+这是一个很好的问题。所以我认为这是关于计算顺序的问题。
+
+1371
+01:08:49,450 --> 01:08:52,390
+What order will you compute all of these hidden states in?
+您将以什么顺序计算所有这些隐藏状态？
+
+1372
+01:08:52,390 --> 01:08:56,100
+I suppose there's some flexibility, right?
+我想有一些灵活性，对吧？
+
+1373
+01:08:56,100 --> 01:08:59,640
+But you could compute all of the step one ones,
+但你可以计算所有第一步，
+
+1374
+01:08:59,640 --> 01:09:02,295
+like all of the V ones and then all of the movie ones,
+像所有的V，然后所有的电影，
+
+1375
+01:09:02,295 --> 01:09:05,970
+or you could do all of RNN layer one and then all of RNN layer two.
+或者你可以做所有RNN第一层，然后是RNN第二层。
+
+1376
+01:09:05,970 --> 01:09:08,880
+So, it's- I think that, um, when you- you know,
+所以，我认为，嗯，当你 - 你知道的时候，
+
+1377
+01:09:08,880 --> 01:09:11,055
+call the PyTorch function to do a multi-layer RNN,
+调用PyTorch函数来做一个多层RNN，
+
+1378
+01:09:11,055 --> 01:09:13,380
+it will do all of RNN layer one, then two, then three.
+它将完成所有RNN第一层，然后是第二层，然后是第三层。
+
+1379
+01:09:13,380 --> 01:09:14,580
+That's what I think happens.
+这就是我认为发生的事情。
+
+1380
+01:09:14,580 --> 01:09:16,270
+But it seems like logically,
+但似乎逻辑上，
+
+1381
+01:09:16,270 --> 01:09:19,000
+there's no reason why you couldn't do it the other way.
+你无法以其他方式做到这一点。
+
+1382
+01:09:19,000 --> 01:09:30,190
+Yep?  [inaudible].
+是的？ [听不见的。
+
+1383
+01:09:30,190 --> 01:09:32,110
+Yes, yes. That's a great point as well.
+是的是的。这也是一个很好的观点。
+
+1384
+01:09:32,110 --> 01:09:35,950
+Um, so uh, someone pointed out that if they were bidirectional,
+嗯，所以，有人指出，如果它们是双向的，
+
+1385
+01:09:35,950 --> 01:09:37,480
+then you no longer have that flexibility.
+然后你不再具有这种灵活性。
+
+1386
+01:09:37,480 --> 01:09:39,955
+You would have to do all of layer one before layer two.
+您必须在第二层之前完成第一层的所有操作。
+
+1387
+01:09:39,955 --> 01:09:44,090
+Yeah, good point. Anyone else?
+是的，好的一点。还有谁？
+
+1388
+01:09:47,040 --> 01:09:52,480
+Okay. Uh, so mostly RNNs in practice,
+好的。呃，实际上大部分是RNN，
+
+1389
+01:09:52,480 --> 01:09:56,065
+um, this tends to perform pretty well,
+嗯，这往往表现得很好，
+
+1390
+01:09:56,065 --> 01:09:58,090
+uh, in that when I look at, um,
+呃，当我看着，嗯，
+
+1391
+01:09:58,090 --> 01:10:00,970
+RNN-based systems that are doing very well on some kind of task,
+基于RNN的系统在某种任务上做得非常好，
+
+1392
+01:10:00,970 --> 01:10:04,330
+they usually are some kind of multi-layer RNN, um,
+他们通常是某种多层RNN，嗯，
+
+1393
+01:10:04,330 --> 01:10:06,400
+but they certainly aren't as deep as
+但他们肯定没有那么深
+
+1394
+01:10:06,400 --> 01:10:09,430
+the deep convolutional or feed-forward networks you might have seen in,
+您可能已经看过的深度卷积或前馈网络，
+
+1395
+01:10:09,430 --> 01:10:10,795
+for example, image tasks.
+例如，图像任务。
+
+1396
+01:10:10,795 --> 01:10:12,550
+So whereas, you know, very deep convolutional networks,
+所以，你知道，非常深的卷积网络，
+
+1397
+01:10:12,550 --> 01:10:14,470
+I think hundreds of layers now, um,
+我想现在有数百层，嗯，
+
+1398
+01:10:14,470 --> 01:10:16,795
+you certainly aren't getting RNNs that are that deep.
+你肯定没有得到那么深的RNN。
+
+1399
+01:10:16,795 --> 01:10:18,790
+So, for example, um,
+所以，例如，嗯，
+
+1400
+01:10:18,790 --> 01:10:22,300
+in this paper from, uh, Google, uh,
+在本文中，呃，Google，呃，
+
+1401
+01:10:22,300 --> 01:10:25,165
+they're doing this kind of large hyperparameter search for
+他们正在进行这种大型超参数搜索
+
+1402
+01:10:25,165 --> 01:10:29,740
+neural machine translation to find which kinds of hyperparameters work well for NMT.
+神经机器翻译找到哪种超参数适用于NMT。
+
+1403
+01:10:29,740 --> 01:10:31,720
+And in this paper, they found that um,
+在本文中，他们发现嗯，
+
+1404
+01:10:31,720 --> 01:10:34,165
+two to four layers was best for the encoder RNN,
+两到四层最适合编码器RNN，
+
+1405
+01:10:34,165 --> 01:10:36,280
+and four layers was best for the decoder RNN.
+四层最适合解码器RNN。
+
+1406
+01:10:36,280 --> 01:10:39,430
+Uh, you'll find out more about what encoder and decoder mean next time.
+呃，你会发现下一次编码器和解码器的含义。
+
+1407
+01:10:39,430 --> 01:10:41,275
+Um, but those are fairly small numbers.
+嗯，但那些数字相当小。
+
+1408
+01:10:41,275 --> 01:10:43,330
+Although they did find that if you add these skip
+虽然他们确实发现如果你添加这些跳过
+
+1409
+01:10:43,330 --> 01:10:45,355
+connections or these dense connections, um,
+连接或这些密集的连接，嗯，
+
+1410
+01:10:45,355 --> 01:10:49,750
+then it makes it much easier to learn some even deeper RNNs more effectively,
+那么它可以更容易地更有效地学习更深层次的RNN，
+
+1411
+01:10:49,750 --> 01:10:51,055
+like, maybe up to eight layers,
+喜欢，可能多达八层，
+
+1412
+01:10:51,055 --> 01:10:53,605
+but these certainly aren'tx  hundreds of layers deep.
+但这些肯定不会超过数百层。
+
+1413
+01:10:53,605 --> 01:10:55,750
+And one of the reasons why, uh,
+还有一个原因，呃，
+
+1414
+01:10:55,750 --> 01:10:59,095
+RNNs don't tend to be nearly as deep as these other kinds of networks,
+RNN往往不如其他类型的网络那么深，
+
+1415
+01:10:59,095 --> 01:11:01,675
+is that because as we commented before,
+是因为我们之前评论过，
+
+1416
+01:11:01,675 --> 01:11:03,205
+RNNs have to be computed, uh,
+必须计算RNN，呃，
+
+1417
+01:11:03,205 --> 01:11:05,380
+sequentially; they can't be computed in parallel.
+顺序;它们无法并行计算。
+
+1418
+01:11:05,380 --> 01:11:07,330
+This means that they're pretty expensive to compute.
+这意味着它们的计算成本非常高。
+
+1419
+01:11:07,330 --> 01:11:09,519
+If you have this depth in like, two-dimensions,
+如果你有这样的深度，像二维，
+
+1420
+01:11:09,519 --> 01:11:13,675
+you have the depth over the timesteps and then the depth over the RNN layer is two,
+你有时间步长的深度，然后RNN层的深度是两个，
+
+1421
+01:11:13,675 --> 01:11:15,160
+then it beco- it becomes very,
+然后它变得非常，
+
+1422
+01:11:15,160 --> 01:11:17,830
+very expensive to compute these, these RNNs.
+这些RNN非常昂贵。
+
+1423
+01:11:17,830 --> 01:11:19,885
+So, that's another reason why they don't get very deep.
+所以，这是他们不深入的另一个原因。
+
+1424
+01:11:19,885 --> 01:11:23,290
+Uh, so again, we just mentioned transformers.
+呃，我们再次提到变形金刚。
+
+1425
+01:11:23,290 --> 01:11:25,165
+Uh, you gonna learn about transformers later.
+呃，你以后会学习变形金刚。
+
+1426
+01:11:25,165 --> 01:11:27,280
+But these, it seems, um,
+但是，似乎这些，嗯，
+
+1427
+01:11:27,280 --> 01:11:30,400
+can be deeper fro- from what I can tell of,
+可以更深入地从我所知道的，
+
+1428
+01:11:30,400 --> 01:11:31,900
+of what people are using these days.
+人们现在使用的是什么
+
+1429
+01:11:31,900 --> 01:11:33,580
+Transformer-based networks can be pretty deep.
+基于变压器的网络可能非常深入。
+
+1430
+01:11:33,580 --> 01:11:35,530
+So, uh, but for example,
+所以，呃，但是，例如，
+
+1431
+01:11:35,530 --> 01:11:38,425
+there's a 24-layer version and a 12-layer version, um,
+有一个24层版本和一个12层版本，嗯，
+
+1432
+01:11:38,425 --> 01:11:39,820
+and admittedly, that was trained by Google,
+不可否认，这是由Google培训的，
+
+1433
+01:11:39,820 --> 01:11:41,860
+and they have a lot of computational power.
+他们有很多计算能力。
+
+1434
+01:11:41,860 --> 01:11:43,600
+Um, but I think part of the reason why
+嗯，但我认为部分原因
+
+1435
+01:11:43,600 --> 01:11:45,685
+these transformer-based networks can be quite deep,
+这些基于变压器的网络可以很深，
+
+1436
+01:11:45,685 --> 01:11:48,220
+is that they have a lot of these skipping like connections.
+是他们有很多这样的跳过连接。
+
+1437
+01:11:48,220 --> 01:11:49,750
+In fact, the whole um,
+事实上，整个嗯，
+
+1438
+01:11:49,750 --> 01:11:52,570
+innovation of transformers is that they're built on a lot of, kind of,
+变形金刚的创新是它们建立在很多种类的基础之上，
+
+1439
+01:11:52,570 --> 01:11:57,520
+skip connections. Okay, any questions?
+跳过连接。好的，有什么问题吗？
+
+1440
+01:11:57,520 --> 01:12:01,450
+We're almost done. Okay. All right.
+我们差不多完成了。好的。行。
+
+1441
+01:12:01,450 --> 01:12:04,030
+So, uh, here's a summary of what we've learned today.
+所以，呃，这是我们今天学到的东西的总结。
+
+1442
+01:12:04,030 --> 01:12:05,965
+I know it's been a lot of information.
+我知道这是很多信息。
+
+1443
+01:12:05,965 --> 01:12:11,530
+Um, but I think here are four practical takeaways from today that, uh,
+嗯，但我认为这是今天的四个实际要点，呃，
+
+1444
+01:12:11,530 --> 01:12:13,795
+are probably useful to you in your projects,
+对你的项目可能有用，
+
+1445
+01:12:13,795 --> 01:12:14,920
+even if you, um,
+即使你，嗯，
+
+1446
+01:12:14,920 --> 01:12:17,800
+uh, even if you
+呃，即使你
+
+1447
+01:12:17,800 --> 01:12:21,130
+didn't find them very interesting in themselves they're probably pretty useful.
+没发现它们本身很有趣，它们可能非常有用。
+
+1448
+01:12:21,130 --> 01:12:24,190
+So, the first one is that LSTMs are very powerful.
+所以，第一个是LSTM非常强大。
+
+1449
+01:12:24,190 --> 01:12:25,990
+They're certainly a lot powerful than,
+他们肯定比很强大，
+
+1450
+01:12:25,990 --> 01:12:27,910
+uh, more powerful than Vanila RNNs.
+呃，比Vanila RNN更强大。
+
+1451
+01:12:27,910 --> 01:12:31,450
+Um, GRUs are also more powerful than, uh, Vanila RNNs.
+嗯，GRU也比Vanila RNN更强大。
+
+1452
+01:12:31,450 --> 01:12:34,210
+Uh, and the only difference that is consistently the
+呃，唯一的区别是一贯的
+
+1453
+01:12:34,210 --> 01:12:37,480
+same is that GRUs are faster than LSTMs.
+同样是GRU比LSTM更快。
+
+1454
+01:12:37,480 --> 01:12:40,465
+The next one is that you should probably clip your gradients,
+下一个是你应该剪辑你的渐变，
+
+1455
+01:12:40,465 --> 01:12:42,055
+because if you don't clip your gradients,
+因为如果你没有剪辑你的渐变，
+
+1456
+01:12:42,055 --> 01:12:47,050
+you're in danger of walking off cliffs and then ending up with NaNs in your model.
+你有走出悬崖然后在模型中使用NaNs的危险。
+
+1457
+01:12:47,050 --> 01:12:52,105
+Uh, the next tip is that bidirectionality is useful if you can apply it.
+呃，下一个提示是，如果您可以应用双向性，那么它很有用。
+
+1458
+01:12:52,105 --> 01:12:56,125
+And, basically, anytime when you have access to the entire input sequence,
+而且，基本上，只要您有权访问整个输入序列，
+
+1459
+01:12:56,125 --> 01:12:57,850
+you can apply bidirectionality,
+你可以申请双向性，
+
+1460
+01:12:57,850 --> 01:12:59,790
+so you should probably do that by default.
+所以你应该默认这样做。
+
+1461
+01:12:59,790 --> 01:13:04,140
+And then the last tip is that multi-layer RNNs are pretty powerful.
+然后最后一个提示是多层RNN非常强大。
+
+1462
+01:13:04,140 --> 01:13:06,330
+And again, you should probably do that if you,
+再说一遍，如果你，你应该这样做
+
+1463
+01:13:06,330 --> 01:13:08,355
+uh, have enough computational power to do so.
+呃，有足够的计算能力来做到这一点。
+
+1464
+01:13:08,355 --> 01:13:11,405
+But if you're going to make your multi-layer RNN pretty deep,
+但是如果你要让你的多层RNN相当深，
+
+1465
+01:13:11,405 --> 01:13:13,255
+then you might need skip connections.
+那么你可能需要跳过连接。
+
+1466
+01:13:13,255 --> 01:13:22,840
+All right. Thanks [NOISE].
+行。谢谢[NOISE]。
+
+1467
+
+

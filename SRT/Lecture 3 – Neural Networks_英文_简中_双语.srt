@@ -1,0 +1,6033 @@
+1
+00:00:04,160 --> 00:00:07,470
+Okay. Hi everyone.
+好的。嗨，大家好。
+
+2
+00:00:07,470 --> 00:00:10,410
+Okay. Let's get started.
+好的。让我们开始吧。
+
+3
+00:00:10,410 --> 00:00:12,480
+Um- great to see you all here.
+嗯 - 很高兴在这里见到你们。
+
+4
+00:00:12,480 --> 00:00:17,385
+Welcome back for um- week two of CS224N.
+欢迎回来第二周的CS224N。
+
+5
+00:00:17,385 --> 00:00:21,345
+Um- so- so this is a little preview
+嗯 - 所以这是一个小预览
+
+6
+00:00:21,345 --> 00:00:25,800
+of what's coming up in the class for this week and next week.
+本周和下周课堂上将会发生什么。
+
+7
+00:00:25,800 --> 00:00:29,790
+Um- you know, this week is perhaps the worst week of this class.
+嗯 - 你知道，本周也许是本课最糟糕的一周。
+
+8
+00:00:29,790 --> 00:00:36,435
+[LAUGHTER]. Um- so in week two of the class our hope is to actually kind of
+[笑声]。嗯 - 所以在课堂的第二周，我们希望实际上是这样的
+
+9
+00:00:36,435 --> 00:00:43,360
+go through some of the nitty gritty of neural networks and how they're trained,
+仔细研究一下神经网络的一些细节以及它们是如何训练的，
+
+10
+00:00:43,360 --> 00:00:48,795
+and how we can learn good neural networks by backpropagation,
+以及我们如何通过反向传播学习良好的神经网络，
+
+11
+00:00:48,795 --> 00:00:52,820
+which means in particular we're gonna be sort of talking about the training
+这尤其意味着我们会谈论培训
+
+12
+00:00:52,820 --> 00:00:58,100
+algorithms and doing calculus to work out gradients from proving them.
+算法和做微积分来计算出证明它们的渐变。
+
+13
+00:00:58,100 --> 00:01:01,580
+Um, so we are looking a bi- a little bit,
+嗯，我们正在寻找一点点，
+
+14
+00:01:01,580 --> 00:01:07,130
+at- um- um, word window classification named entity recognition.
+在某种程度上，单词窗口分类命名为实体识别。
+
+15
+00:01:07,130 --> 00:01:12,290
+So there's a teeny bit of natural language processing in there, but basically,
+所以那里有很少的自然语言处理，但基本上，
+
+16
+00:01:12,290 --> 00:01:15,290
+sort of week two is sort of,
+有点像第二周，
+
+17
+00:01:15,290 --> 00:01:18,440
+um- math of deep learning and
+嗯 - 深度学习和数学的数学
+
+18
+00:01:18,440 --> 00:01:23,045
+neural network models and sort of really neural network fundamentals.
+神经网络模型和真正的神经网络基础。
+
+19
+00:01:23,045 --> 00:01:26,130
+Um, but the hope is that that will give you kind
+嗯，但希望是那会给你带来帮助
+
+20
+00:01:26,130 --> 00:01:29,740
+of a good understanding of how these things really work,
+很好地理解这些东西是如何工作的，
+
+21
+00:01:29,740 --> 00:01:32,570
+and we'll give you all the information you need to do,
+我们会为您提供您需要做的所有信息，
+
+22
+00:01:32,570 --> 00:01:35,240
+um- the coming up homework and so then,
+嗯 - 即将完成的作业，所以，
+
+23
+00:01:35,240 --> 00:01:38,280
+in week three we kind of flips.
+在第三周，我们有点翻转。
+
+24
+00:01:38,280 --> 00:01:42,110
+So, then week three is going to be mainly about
+那么，第三周将主要是关于
+
+25
+00:01:42,110 --> 00:01:45,020
+natural language processing so we then gonna talk about how
+自然语言处理，所以我们将谈谈如何
+
+26
+00:01:45,020 --> 00:01:48,230
+to put syntactic structures over sentences,
+把句法结构放在句子上，
+
+27
+00:01:48,230 --> 00:01:51,215
+um- for building dependency parses of sentences
+嗯 - 用于构建依赖句子的句子
+
+28
+00:01:51,215 --> 00:01:54,260
+which is then actually what's used in homework three.
+这实际上是家庭作业中使用的三个。
+
+29
+00:01:54,260 --> 00:01:56,060
+So we're chugging along rapidly.
+所以我们正在快速地走来走去。
+
+30
+00:01:56,060 --> 00:01:59,210
+And then we'll talk about this idea of the probability of
+然后我们将讨论这种概率的概念
+
+31
+00:01:59,210 --> 00:02:02,870
+a sentence which leads into neural language models.
+一个导致神经语言模型的句子。
+
+32
+00:02:02,870 --> 00:02:05,640
+Um- so on the homeworks.
+嗯 - 在家庭作业。
+
+33
+00:02:05,640 --> 00:02:09,665
+Homework one was due approximately two minutes ago,
+家庭作业大约两分钟前，
+
+34
+00:02:09,665 --> 00:02:15,190
+um- so I hope everyone has submitted their homework one, I mean as,
+嗯 - 所以我希望每个人都提交了他们的作业，我的意思是，
+
+35
+00:02:15,190 --> 00:02:18,570
+um- one just sort of admonition,
+嗯 - 只是一种警告，
+
+36
+00:02:18,570 --> 00:02:21,950
+um- in general so you know homework one we
+嗯 - 总的来说你知道我们的作业
+
+37
+00:02:21,950 --> 00:02:25,550
+hope you found was a good warm up and not too too hard
+希望你发现是一个很好的热身，而不是太难
+
+38
+00:02:25,550 --> 00:02:29,059
+and so really be best to get homework one in quickly
+因此，最好快速完成作业
+
+39
+00:02:29,059 --> 00:02:32,690
+rather than to burn lots of your late days doing homework one.
+而不是燃烧很多你的日常工作做功课。
+
+40
+00:02:32,690 --> 00:02:35,419
+Um, and now right now out on the website,
+嗯，现在就在网站上，
+
+41
+00:02:35,419 --> 00:02:37,160
+um there's homework two.
+嗯有两个作业。
+
+42
+00:02:37,160 --> 00:02:39,895
+Um so, we are chugging along.
+嗯，我们正在匆匆忙忙。
+
+43
+00:02:39,895 --> 00:02:44,025
+So homework two kind of corresponds to this week's lectures.
+家庭作业有两种与本周的讲座相对应。
+
+44
+00:02:44,025 --> 00:02:47,430
+So on the first part of that we are expecting you to
+所以在我们期待你的第一部分
+
+45
+00:02:47,430 --> 00:02:52,335
+grind through some math problems of working out gradient derivations.
+研究解决梯度推导的一些数学问题。
+
+46
+00:02:52,335 --> 00:02:55,970
+Um- and then the second part of that is then implementing
+嗯 - 然后第二部分就是实施
+
+47
+00:02:55,970 --> 00:02:59,480
+your own version of word2vec making use of NumPy.
+你自己的word2vec版本使用NumPy。
+
+48
+00:02:59,480 --> 00:03:02,480
+And so this time sort of writing a Python program.
+所以这次写一个Python程序。
+
+49
+00:03:02,480 --> 00:03:04,555
+It's no longer an IPython notebook.
+它不再是IPython笔记本了。
+
+50
+00:03:04,555 --> 00:03:07,575
+Um, I encourage you to get early,
+嗯，我鼓励你早点，
+
+51
+00:03:07,575 --> 00:03:10,545
+um- look at the materials,
+嗯 - 看看材料，
+
+52
+00:03:10,545 --> 00:03:11,880
+um- on the web.
+嗯 - 在网上。
+
+53
+00:03:11,880 --> 00:03:15,635
+I mean, in particular corresponding to today's lecture there's,
+我的意思是，特别是对应今天的讲座，
+
+54
+00:03:15,635 --> 00:03:18,980
+um- some quite good tutorial materials that are available
+嗯 - 一些非常好的教程材料
+
+55
+00:03:18,980 --> 00:03:22,250
+on the website and so also encourage you to look at those.
+在网站上，所以也鼓励你看看那些。
+
+56
+00:03:22,250 --> 00:03:23,520
+[NOISE].
+[噪声]。
+
+57
+00:03:23,520 --> 00:03:24,650
+Um- more generally,
+嗯 - 更一般地说，
+
+58
+00:03:24,650 --> 00:03:27,950
+just to make a couple more comments on things.
+只是为了对事情做出更多评论。
+
+59
+00:03:27,950 --> 00:03:32,990
+I mean, I guess this is true of a lot of classes at Stanford but,
+我的意思是，我想斯坦福大学的很多课程都是如此，但是，
+
+60
+00:03:32,990 --> 00:03:37,460
+you know when we get the course reviews for this class we always get
+你知道，当我们得到这门课程的评论时，我们总能得到
+
+61
+00:03:37,460 --> 00:03:42,710
+the full spectrum from people who say the class is terrible and it's way too much work,
+来自那些认为课程很糟糕并且工作太多的人的全部谱
+
+62
+00:03:42,710 --> 00:03:45,050
+um- to the people who say it's a really great class,
+对那些说这是一个非常好的班级的人来说，
+
+63
+00:03:45,050 --> 00:03:47,180
+one of their favorite classes at Stanford,
+他们在斯坦福大学最喜欢的课程之一，
+
+64
+00:03:47,180 --> 00:03:49,520
+obvious the instructors care, et cetera.
+明显的教师关心，等等。
+
+65
+00:03:49,520 --> 00:03:52,910
+And I mean, partly this reflects that we get this very,
+我的意思是，部分这反映了我们得到了这个，
+
+66
+00:03:52,910 --> 00:03:57,750
+um- wide range of people coming to take this class on the one hand,
+嗯 - 一方面有很多人来上这门课，
+
+67
+00:03:57,750 --> 00:04:01,550
+on the right hand margin perhaps we have the physics PhDs,
+在右边缘或许我们有物理学博士，
+
+68
+00:04:01,550 --> 00:04:06,140
+and on the left hand margin we have some fresh who think this will be fun to do anyway.
+在左手边缘，我们有一些新鲜的人认为这无论如何都会很有趣。
+
+69
+00:04:06,140 --> 00:04:09,125
+Um, we welcome e- we welcome everybody,
+嗯，我们欢迎e-我们欢迎大家，
+
+70
+00:04:09,125 --> 00:04:13,205
+um- but in principle this is uh, graduate level class.
+嗯 - 但原则上这是呃，研究生班级。
+
+71
+00:04:13,205 --> 00:04:15,470
+You know, that doesn't mean we want to fail people out,
+你知道，这并不意味着我们想让人们失败，
+
+72
+00:04:15,470 --> 00:04:20,295
+we'd like everyone to succeed but also like graduate level class.
+我们希望每个人都能成功，但也喜欢研究生班级。
+
+73
+00:04:20,295 --> 00:04:22,000
+Um- we'd like you to- you know,
+嗯 - 我们希望你 - 你知道，
+
+74
+00:04:22,000 --> 00:04:24,575
+take some initiative in your success.
+在你的成功中采取一些主动。
+
+75
+00:04:24,575 --> 00:04:26,900
+Meaning, if there are things that you need to know to
+意思是，如果你需要知道的事情
+
+76
+00:04:26,900 --> 00:04:29,375
+do the assignments and you don't know them,
+做任务，你不知道，
+
+77
+00:04:29,375 --> 00:04:33,755
+um- then you should be taking some initiative to find some tutorials,
+嗯 - 那么你应该采取一些主动寻找一些教程，
+
+78
+00:04:33,755 --> 00:04:37,100
+come to office hours and talk to people and get
+上班时间与人交谈并获得
+
+79
+00:04:37,100 --> 00:04:41,615
+any help you need and learn to sort of for any holes in your knowledge.
+您需要的任何帮助，并学习如何解决您的知识漏洞。
+
+80
+00:04:41,615 --> 00:04:44,420
+Okay. So here's the plan for today.
+好的。所以这是今天的计划。
+
+81
+00:04:44,420 --> 00:04:47,280
+Um- so that was the course information update.
+嗯 - 这是课程信息更新。
+
+82
+00:04:47,280 --> 00:04:49,675
+So you know, is- this is sort of,
+所以你知道，是 - 这是一种，
+
+83
+00:04:49,675 --> 00:04:53,030
+in some sense you know machine learning neural nets intro- Just to
+在某种意义上，你知道机器学习神经网络介绍 - 只是为了
+
+84
+00:04:53,030 --> 00:04:56,400
+try and make sure everyone else is up to speed on all of this stuff.
+尽量确保其他人都能快速掌握所有这些内容。
+
+85
+00:04:56,400 --> 00:04:59,510
+So I'll talk a little bit about classification, um,
+所以我会谈谈分类，嗯，
+
+86
+00:04:59,510 --> 00:05:02,000
+introduce neural networks, um,
+介绍神经网络，嗯，
+
+87
+00:05:02,000 --> 00:05:04,505
+little detour into named Entity Recognition,
+很少绕道命名的实体识别，
+
+88
+00:05:04,505 --> 00:05:08,580
+then sort of show a model of doing um
+然后有点展示做某事的模型
+
+89
+00:05:08,580 --> 00:05:13,330
+Window- Word Window classification and then the end part,
+窗口 -  Word窗口分类然后是结束部分，
+
+90
+00:05:13,330 --> 00:05:17,030
+we sort of then dive deeper into what kind of tools we
+然后我们会更深入地了解我们的工具类型
+
+91
+00:05:17,030 --> 00:05:21,920
+need to learn neural networks and so today um we're gonna go
+需要学习神经网络，所以今天我们要去
+
+92
+00:05:21,920 --> 00:05:29,060
+through um somewhere between review and primer of matrix calculus and then that will
+通过审查和矩阵演算的引物之间的某个地方，然后那将
+
+93
+00:05:29,060 --> 00:05:32,720
+lead into next time's lecture where it's talking
+进入下一次讲座的地方
+
+94
+00:05:32,720 --> 00:05:37,040
+more about backpropagation and computation graphs.
+更多关于反向传播和计算图。
+
+95
+00:05:37,040 --> 00:05:42,755
+So, yeah. So this material was especially the part at the end.
+是的。所以这种材料特别是最后的部分。
+
+96
+00:05:42,755 --> 00:05:45,740
+You know for some people it'll seem really
+你知道有些人看起来真的如此
+
+97
+00:05:45,740 --> 00:05:49,430
+babyish if- it's the kind of stuff you do every week, um,
+如果这是你每周都做的那种东西，嗯，
+
+98
+00:05:49,430 --> 00:05:52,490
+for other people it um- might seem impossibly
+对于其他人来说，它似乎是不可能的
+
+99
+00:05:52,490 --> 00:05:56,300
+difficult but hopefully for a large percentage of you in the middle
+很难，但希望你中间有很大一部分人
+
+100
+00:05:56,300 --> 00:06:00,290
+this will be kind of a useful review of doing this kind of
+对于这样做，这将是一种有用的回顾
+
+101
+00:06:00,290 --> 00:06:06,125
+matrix calculus and the kind of things that we hope that you can do on homework two.
+矩阵演算和我们希望你可以做两件事的东西。
+
+102
+00:06:06,125 --> 00:06:09,840
+Um, okay. So um, yeah.
+嗯，好的。嗯，是的
+
+103
+00:06:09,840 --> 00:06:12,000
+So sorry if I'm boring some people.
+很抱歉，如果我让一些人感到无聊。
+
+104
+00:06:12,000 --> 00:06:15,300
+If you sat through 229 last quarter you
+如果你在上个季度坐了229你
+
+105
+00:06:15,300 --> 00:06:19,510
+saw um what a classifier was like and hopefully this
+看到分类器是什么样的，希望如此
+
+106
+00:06:19,510 --> 00:06:23,200
+will seem familiar but I'm just sort of hoping to try and have
+看起来很熟悉，但我只是希望尝试一下
+
+107
+00:06:23,200 --> 00:06:27,160
+everyone in week two sort of up to speed and on roughly the same page.
+在第二周的每个人都达到速度和大致相同的页面。
+
+108
+00:06:27,160 --> 00:06:29,380
+So here's our classification setup.
+所以这是我们的分类设置。
+
+109
+00:06:29,380 --> 00:06:34,800
+So we have assumed we have a- training data set where we have these um vector
+所以我们假设我们有一个训练数据集，我们有这些um向量
+
+110
+00:06:34,800 --> 00:06:41,245
+x um of our x points and then for each one of them we have a class.
+x我们的x点，然后对于每一个我们有一个类。
+
+111
+00:06:41,245 --> 00:06:46,344
+So the input might be words or sentences documents or something,
+所以输入可能是文字或句子文件或其他东西，
+
+112
+00:06:46,344 --> 00:06:48,415
+there are d to mention vector, um,
+还有提到矢量，嗯，
+
+113
+00:06:48,415 --> 00:06:52,490
+the Yi, the labels or classes that we want to
+易，我们想要的标签或类
+
+114
+00:06:52,490 --> 00:06:57,155
+classify to and we've got a set of C classes that we're trying to predict.
+归类为，我们有一组我们试图预测的C类。
+
+115
+00:06:57,155 --> 00:07:00,770
+And so those might be something like the topic of the document,
+所以那些可能类似于文档的主题，
+
+116
+00:07:00,770 --> 00:07:03,860
+the sentiment positive or negative um of
+情绪的积极或消极的
+
+117
+00:07:03,860 --> 00:07:08,125
+a document or later we'll look a bit more at named entities.
+一个文档或稍后我们将看一些命名实体。
+
+118
+00:07:08,125 --> 00:07:12,645
+Okay. So if we have that um-
+好的。所以如果我们有那个 -
+
+119
+00:07:12,645 --> 00:07:18,570
+for this sort of intuition is we got this vector space which we again have
+对于这种直觉，我们得到了这个我们再次拥有的向量空间
+
+120
+00:07:18,570 --> 00:07:22,730
+a 2D picture and we have points in that vector space which
+一张2D图片，我们在那个矢量空间中有点
+
+121
+00:07:22,730 --> 00:07:27,620
+correspond to Rx items and what we'd want to do is we'll
+对应于Rx项目，我们想要做的就是我们
+
+122
+00:07:27,620 --> 00:07:31,370
+look at the ones in our training sample and see which ones are
+看看我们的训练样本中的那些，看看哪些是
+
+123
+00:07:31,370 --> 00:07:35,810
+green and red for our two classes here and then we want to sort of learn
+绿色和红色为我们的两个班级，然后我们想要学习
+
+124
+00:07:35,810 --> 00:07:39,680
+a line that could divide between the green and
+可以在绿色和绿色之间划分的线
+
+125
+00:07:39,680 --> 00:07:45,670
+the red ones as best as possible and that learned line is our classifier.
+红色的那些尽可能最好，学习的线是我们的分类器。
+
+126
+00:07:45,670 --> 00:07:50,285
+So on traditional machine learning or statistics we have the sort of
+因此，在传统的机器学习或统计学方面，我们就是这样的
+
+127
+00:07:50,285 --> 00:07:54,860
+XI vectors that are data items that are purely fixed but
+XI向量是纯粹固定但是的数据项
+
+128
+00:07:54,860 --> 00:08:00,245
+we're going to then multiply those XI by
+然后我们将乘以那些XI
+
+129
+00:08:00,245 --> 00:08:03,440
+some estimated weight vector and
+一些估计的重量矢量和
+
+130
+00:08:03,440 --> 00:08:08,215
+that estimated weight vector will then go into a classification decision.
+然后，估计的权重向量将进入分类决策。
+
+131
+00:08:08,215 --> 00:08:10,880
+And the classifier that I'm showing here is
+而我在这里展示的分类器是
+
+132
+00:08:10,880 --> 00:08:15,050
+a softmax classifier which is almost identical but not quite to
+softmax分类器几乎相同但不完全相同
+
+133
+00:08:15,050 --> 00:08:20,090
+logistic regression classifier which you should've seen in CS 109 or a stats
+你应该在CS 109或统计数据中看到的逻辑回归分类器
+
+134
+00:08:20,090 --> 00:08:26,110
+class or something like that which is giving a probability of different classes.
+类或类似于给出不同类概率的类。
+
+135
+00:08:26,110 --> 00:08:29,780
+Okay. And in particular if you've got
+好的。特别是如果你有的话
+
+136
+00:08:29,780 --> 00:08:35,195
+a softmax classifier or a logistic- logistic regression classifier,
+softmax分类器或logistic-logistic回归分类器，
+
+137
+00:08:35,195 --> 00:08:37,805
+these are what are called linear classifiers.
+这些就是所谓的线性分类器。
+
+138
+00:08:37,805 --> 00:08:41,630
+So the decision boundary between two classes here
+所以两个类之间的决策边界在这里
+
+139
+00:08:41,630 --> 00:08:45,860
+is a line in some suitably high-dimensional space.
+在一些适当的高维空间中是一条线。
+
+140
+00:08:45,860 --> 00:08:50,710
+So it's a plane or a hyperplane once you've got a bigger expecter.
+一旦你有了更大的前景，它就是飞机或超平面。
+
+141
+00:08:50,710 --> 00:08:55,140
+Okay. So here's our softmax classifier.
+好的。所以这是我们的softmax分类器。
+
+142
+00:08:55,140 --> 00:08:57,815
+Um, and there are sort of two parts to that.
+嗯，这有两个部分。
+
+143
+00:08:57,815 --> 00:09:02,660
+So in the- in the weight matrix double U
+所以在重量矩阵中双U.
+
+144
+00:09:02,660 --> 00:09:07,600
+we have a row corresponding to each class and then for
+我们有一个对应于每个类的行，然后是
+
+145
+00:09:07,600 --> 00:09:11,350
+that row we're sort of dot-producting it with
+那一行，我们有点点产品
+
+146
+00:09:11,350 --> 00:09:17,170
+our data point vector XI and that's giving us a kind of a score for
+我们的数据点向量XI，这给了我们一种得分
+
+147
+00:09:17,170 --> 00:09:22,030
+how likely it is that the example belongs to that class and then we're
+这个例子属于那个类的可能性是多少，然后我们就是这样
+
+148
+00:09:22,030 --> 00:09:27,190
+running that through a softmax function and just as we saw on week one,
+通过softmax功能运行，就像我们在第一周看到的一样，
+
+149
+00:09:27,190 --> 00:09:32,825
+the softmax takes a bunch of numbers and turn them into a probability distribution.
+softmax需要一堆数字并将它们转换为概率分布。
+
+150
+00:09:32,825 --> 00:09:34,605
+Does that makes sense to people?
+这对人们有意义吗？
+
+151
+00:09:34,605 --> 00:09:38,265
+People remember that from last week? Good so far?
+人们记得从上周开始？目前很好？
+
+152
+00:09:38,265 --> 00:09:43,885
+Okay. Um, I'm not gonna go to this in detail but I mean,
+好的。嗯，我不打算详细谈谈这个，但我的意思是，
+
+153
+00:09:43,885 --> 00:09:50,285
+ah- essentially this is what the logistic regression does as well.
+啊 - 基本上这也是逻辑回归的作用。
+
+154
+00:09:50,285 --> 00:09:58,760
+Um, the difference is that here in this setup we have a weight vector um
+嗯，不同的是，在这个设置中我们有一个权重向量嗯
+
+155
+00:09:58,760 --> 00:10:02,590
+for each class whereas what
+对于每个班级而言什么
+
+156
+00:10:02,590 --> 00:10:07,460
+the statisticians doing logistic regression is they say weight,
+进行逻辑回归的统计学家说他们说体重，
+
+157
+00:10:07,460 --> 00:10:12,425
+that gives us one more number of weight vectors than we really need.
+这给了我们比我们真正需要的更多的权重向量。
+
+158
+00:10:12,425 --> 00:10:15,650
+We can get away for- for C classes,
+我们可以为C课程逃脱
+
+159
+00:10:15,650 --> 00:10:18,560
+we can get away with C minus one weight vectors.
+我们可以用C减去一个权重向量。
+
+160
+00:10:18,560 --> 00:10:20,270
+So in particular if you're doing binary
+所以特别是如果你在做二进制文件的话
+
+161
+00:10:20,270 --> 00:10:23,780
+logistic regression you only need one weight vector whereas
+逻辑回归你只需要一个权重向量而
+
+162
+00:10:23,780 --> 00:10:26,330
+this softmax regression formulation you've
+这个softmax回归公式你已经
+
+163
+00:10:26,330 --> 00:10:29,115
+actually got two weight vectors one for each class.
+实际上每个班级有两个权重向量。
+
+164
+00:10:29,115 --> 00:10:31,610
+Um, so there's that sort of a little difference there which we
+嗯，所以那里有一点我们的差别
+
+165
+00:10:31,610 --> 00:10:34,020
+could get into but basically the same.
+可以进入，但基本相同。
+
+166
+00:10:34,020 --> 00:10:38,520
+It's just say it's we're either doing softmax or logistic regression, doesn't matter.
+它只是说我们要么做softmax或逻辑回归，无关紧要。
+
+167
+00:10:38,520 --> 00:10:43,130
+Um, so when we're training what we want to
+嗯，所以当我们训练我们想要的东西时
+
+168
+00:10:43,130 --> 00:10:48,865
+do is we want to be able to predict um the correct class.
+我们希望能够预测正确的班级。
+
+169
+00:10:48,865 --> 00:10:52,180
+And so the way we're gonna do that is we're gonna wanna
+所以我们要这样做的方式是我们想要的
+
+170
+00:10:52,180 --> 00:10:55,730
+train our model so it gives us highest probability as
+训练我们的模型，因此它给我们最高概率
+
+171
+00:10:55,730 --> 00:10:59,750
+possible to the correct class and therefore they'll give us
+可以到正确的班级，因此他们会给我们
+
+172
+00:10:59,750 --> 00:11:06,170
+low probability po- as possible um to um the wrong classes.
+低概率po-尽可能错误的类。
+
+173
+00:11:06,170 --> 00:11:10,850
+And so our criterion for doing that is we're going to create
+所以我们这样做的标准是我们要创造的
+
+174
+00:11:10,850 --> 00:11:16,160
+this negative log probability um of our assignments and then
+这个负的对数概率是我们的任务然后
+
+175
+00:11:16,160 --> 00:11:21,770
+we're gonna want to minimize the negative log probability which corresponds to maximizing
+我们想要最小化对应于最大化的负对数概率
+
+176
+00:11:21,770 --> 00:11:28,155
+the log probability which corresponds to maximizing um the probability. Um.
+对数最大化概率的对数概率。嗯。
+
+177
+00:11:28,155 --> 00:11:32,665
+And, but, um, sort of,
+而且，但是，嗯，有点像，
+
+178
+00:11:32,665 --> 00:11:37,465
+pretty soon now, we're gonna start doing more stuff with deep learning frameworks,
+很快，我们将开始用深度学习框架做更多的事情，
+
+179
+00:11:37,465 --> 00:11:41,275
+in particular PyTorch and you can discover in that,
+特别是PyTorch，你可以发现，
+
+180
+00:11:41,275 --> 00:11:43,540
+that there's actually a thing called NLL
+实际上有一种叫做NLL的东西
+
+181
+00:11:43,540 --> 00:11:47,515
+loss which stands for negative log-likelihood loss.
+损失代表负对数似然丢失。
+
+182
+00:11:47,515 --> 00:11:52,150
+Basically, no one uses it because the more convenient thing to use is what's called
+基本上，没有人使用它，因为使用更方便的东西就是所谓的
+
+183
+00:11:52,150 --> 00:11:54,820
+the cross entropy loss and so you'll
+交叉熵损失，所以你会
+
+184
+00:11:54,820 --> 00:11:58,000
+hear everywhere that we're training with cross entropy loss.
+听到我们正在训练的交叉熵损失。
+
+185
+00:11:58,000 --> 00:12:02,995
+So, I just wanted to briefly mention that and explain what's going on there.
+所以，我只想简单地提一下并解释那里发生了什么。
+
+186
+00:12:02,995 --> 00:12:06,430
+Um, so the concept of cross entropy comes from
+嗯，因此交叉熵的概念来自
+
+187
+00:12:06,430 --> 00:12:10,855
+baby Information Theory which is about the amount of information theory I know.
+婴儿信息理论，这是关于我所知道的信息理论的数量。
+
+188
+00:12:10,855 --> 00:12:17,800
+Um, so, we're assuming that there's some true probability distribution P and our model,
+嗯，所以，我们假设有一些真实的概率分布P和我们的模型，
+
+189
+00:12:17,800 --> 00:12:20,890
+we've built some probability distribution, Q.
+我们建立了一些概率分布，Q。
+
+190
+00:12:20,890 --> 00:12:25,270
+That's what we've built with our soft-max regression and we want to have
+这就是我们用soft-max回归构建的，我们希望拥有
+
+191
+00:12:25,270 --> 00:12:30,685
+a measure of whether our estimated probability distribution is a good one.
+衡量我们估计的概率分布是否合适的指标。
+
+192
+00:12:30,685 --> 00:12:33,595
+And the way we do it in cross entropy is,
+我们在交叉熵中的方式是，
+
+193
+00:12:33,595 --> 00:12:36,370
+we go through the classes and we say,
+我们通过课程，我们说，
+
+194
+00:12:36,370 --> 00:12:40,045
+"what's the probability of the class according to the true model?"
+“根据真实模特，班级的概率是多少？”
+
+195
+00:12:40,045 --> 00:12:44,320
+Using that waiting, we then work out the log of, um,
+使用那个等待，然后我们计算出日志，嗯，
+
+196
+00:12:44,320 --> 00:12:50,215
+the probability according to our estimated model and we sum those up and negate it,
+根据我们的估计模型的概率，我们总结并否定它，
+
+197
+00:12:50,215 --> 00:12:53,305
+and that is our cross entropy measure.
+这就是我们的交叉熵测量。
+
+198
+00:12:53,305 --> 00:12:59,635
+Okay. Um, but- so this in general gives you
+好的。嗯，但是 - 这一般给你
+
+199
+00:12:59,635 --> 00:13:06,520
+a measure of sort of information, um, between distributions.
+分布之间的一种信息，嗯。
+
+200
+00:13:06,520 --> 00:13:09,355
+But in our particular case,
+但在我们的特殊情况下，
+
+201
+00:13:09,355 --> 00:13:11,725
+remember that for each example,
+记得每个例子，
+
+202
+00:13:11,725 --> 00:13:14,260
+we've sort of assuming that this is a piece of
+我们有点假设这是一块
+
+203
+00:13:14,260 --> 00:13:18,025
+labeled training data so we are saying for that example,
+标记的训练数据，所以我们说的是这个例子，
+
+204
+00:13:18,025 --> 00:13:20,470
+the right answer is class seven.
+正确的答案是七年级。
+
+205
+00:13:20,470 --> 00:13:23,665
+So therefore, our true distribution,
+因此，我们的真实分布，
+
+206
+00:13:23,665 --> 00:13:26,740
+our p is- for this example,
+我们的p是 - 这个例子，
+
+207
+00:13:26,740 --> 00:13:31,030
+it's class seven with probability one and it's class,
+这是七级概率一级和它的级别，
+
+208
+00:13:31,030 --> 00:13:34,000
+um, anything else with probability zero.
+嗯，其他概率为零的东西。
+
+209
+00:13:34,000 --> 00:13:37,929
+So if you think about then what happens with this formula,
+所以，如果你考虑一下这个公式会发生什么，
+
+210
+00:13:37,929 --> 00:13:40,630
+you've got this summation of all the classes.
+你得到了所有课程的总结。
+
+211
+00:13:40,630 --> 00:13:45,055
+The PFC is gonna be either one or zero and it's gonna be one
+PFC将是一个或零，它将是一个
+
+212
+00:13:45,055 --> 00:13:49,750
+only for the true class here and so what you're left with is,
+只有真正的类在这里，所以你留下的是，
+
+213
+00:13:49,750 --> 00:13:54,055
+this is going to equal minus the log of qc, um,
+这将等于减去qc的对数，嗯，
+
+214
+00:13:54,055 --> 00:14:01,465
+for the true class which is sort of what we were then computing in the previous slide.
+对于真正的类，这是我们在上一张幻灯片中计算的那种。
+
+215
+00:14:01,465 --> 00:14:04,930
+Okay. So that's- um, yeah.
+好的。所以，是的，是的。
+
+216
+00:14:04,930 --> 00:14:08,425
+So that's basically where you'd get with cross entropy loss.
+所以这基本上是你得到的交叉熵损失。
+
+217
+00:14:08,425 --> 00:14:12,085
+Um, but one other concept to mention.
+嗯，但另外一个概念要提。
+
+218
+00:14:12,085 --> 00:14:16,300
+So when you have a full data-set of a whole bunch of examples,
+因此，当您拥有一大堆示例的完整数据集时，
+
+219
+00:14:16,300 --> 00:14:21,010
+the cross entropy loss is then taking the per example average.
+然后，交叉熵损失取每个例子的平均值。
+
+220
+00:14:21,010 --> 00:14:25,270
+So, I guess it's what information theory people sometimes call the cross entropy rate.
+所以，我猜这是人们有时称之为交叉熵率的信息理论。
+
+221
+00:14:25,270 --> 00:14:27,280
+So additionally, factored in there.
+另外，在那里考虑因素。
+
+222
+00:14:27,280 --> 00:14:33,025
+If you are training it on any examples is that one on in vector that's coming in there.
+如果你正在训练任何一个例子，那就是那个进入那里的向量。
+
+223
+00:14:33,025 --> 00:14:36,805
+Okay. Um, okay.
+好的。嗯，好的。
+
+224
+00:14:36,805 --> 00:14:39,865
+Um, so that's cross entropy loss.
+嗯，这样就是交叉熵损失。
+
+225
+00:14:39,865 --> 00:14:40,990
+Is that okay? Yeah.
+这样可以吗？是啊。
+
+226
+00:14:40,990 --> 00:14:45,775
+[NOISE] There's some- there's some mixture of the actual labels in the ground?
+[NOISE]有一些 - 地面上有一些实际标签的混合物？
+
+227
+00:14:45,775 --> 00:14:47,980
+Sure. Good question.
+当然。好问题。
+
+228
+00:14:47,980 --> 00:14:52,615
+Right. So, the simplest case is that your gold data,
+对。所以，最简单的情况是你的黄金数据，
+
+229
+00:14:52,615 --> 00:14:55,225
+someone has hand labeled it and,
+有人用手标记了它，
+
+230
+00:14:55,225 --> 00:14:58,060
+um, they've labeled one and the rest is zero.
+嗯，他们标记了一个，剩下的就是零。
+
+231
+00:14:58,060 --> 00:15:02,380
+Um, they are- you can think of cases where that isn't the case.
+嗯，他们是 - 你可以想到不是这种情况的情况。
+
+232
+00:15:02,380 --> 00:15:05,800
+I mean, one case is you could believe that human beings
+我的意思是，有一种情况是你可以相信人类
+
+233
+00:15:05,800 --> 00:15:09,520
+sometimes don't know the right answer so if human beings said,
+如果人类说，有时候不知道正确的答案，
+
+234
+00:15:09,520 --> 00:15:13,870
+"I'm not sure whether this should be class three or four," you could imagine that we
+“我不确定这应该是三年级还是四年级，”你可以想象我们
+
+235
+00:15:13,870 --> 00:15:18,685
+can make training data where we put probability half on both of them,
+可以制作训练数据，我们将概率降低一半，
+
+236
+00:15:18,685 --> 00:15:21,550
+um, and that wouldn't be a crazy thing to do,
+嗯，这不会是一件疯狂的事情，
+
+237
+00:15:21,550 --> 00:15:26,680
+and so then you'd have a true cross entropy loss using more of a distribution.
+所以你会使用更多的分布来获得真正的交叉熵损失。
+
+238
+00:15:26,680 --> 00:15:34,270
+Um, the case where it's much more commonly used in actual practice is,
+嗯，在实际操作中更常用的情况是，
+
+239
+00:15:34,270 --> 00:15:39,490
+there are many circumstances in which people wanna do semi-supervised learning.
+在许多情况下，人们想要进行半监督学习。
+
+240
+00:15:39,490 --> 00:15:41,230
+So, I guess this is a topic that
+所以，我想这是一个话题
+
+241
+00:15:41,230 --> 00:15:44,740
+both my group and Chris Re's group have worked on quite a lot,
+我的小组和Chris Re的小组都做了很多工作，
+
+242
+00:15:44,740 --> 00:15:47,935
+where we don't actually have fully labeled data,
+我们实际上没有完全标记数据，
+
+243
+00:15:47,935 --> 00:15:51,340
+but we've got some means of guessing what the labels
+但我们有一些猜测标签的方法
+
+244
+00:15:51,340 --> 00:15:54,790
+of the data are and if we try and guess labels of data,
+的数据是，如果我们尝试猜测数据的标签，
+
+245
+00:15:54,790 --> 00:15:56,845
+well then quite often we'll say,
+那么我们经常说，
+
+246
+00:15:56,845 --> 00:15:58,465
+"Here's this data right in.
+“这是正确的数据。
+
+247
+00:15:58,465 --> 00:16:00,760
+It's two-thirds chances this label,
+这个标签有三分之二的机会，
+
+248
+00:16:00,760 --> 00:16:05,125
+but it could be these other four labels," and we'd use a probability distribution,
+但它可能是其他四个标签，“我们会使用概率分布，
+
+249
+00:16:05,125 --> 00:16:07,825
+and yeah, then it's more general cross entropy loss.
+是的，那么它是更普遍的交叉熵损失。
+
+250
+00:16:07,825 --> 00:16:12,560
+Okay? Um, right. So, um,
+好的？嗯，对。那么，嗯，
+
+251
+00:16:12,560 --> 00:16:16,335
+that's cross entropy loss, pretty good with.
+这是交叉熵损失，相当不错。
+
+252
+00:16:16,335 --> 00:16:19,425
+Um, this bottom bit is a little bit different, um,
+嗯，这个底部有点不同，嗯，
+
+253
+00:16:19,425 --> 00:16:20,895
+which is to say, "Well now we,
+也就是说，“现在我们，
+
+254
+00:16:20,895 --> 00:16:23,130
+this is the sort of the full data-set."
+这就是完整的数据集。“
+
+255
+00:16:23,130 --> 00:16:25,290
+The other thing to notice, um,
+另外需要注意的是，嗯，
+
+256
+00:16:25,290 --> 00:16:33,285
+when we have a full data- we can have a full data-set of x's,
+当我们有完整数据时 - 我们可以拥有x的完整数据集，
+
+257
+00:16:33,285 --> 00:16:37,665
+um, and then we have a full set of weights.
+嗯，然后我们有一整套重量。
+
+258
+00:16:37,665 --> 00:16:40,770
+Um, where here we're working a row,
+嗯，我们在这里工作，
+
+259
+00:16:40,770 --> 00:16:43,020
+a row vector for the weights for one class,
+一个类的权重的行向量，
+
+260
+00:16:43,020 --> 00:16:45,420
+but we're gonna work it out for all classes.
+但是我们要为所有课程解决这个问题。
+
+261
+00:16:45,420 --> 00:16:48,180
+So, we can sort of simplify what we're writing
+因此，我们可以简化我们正在编写的内容
+
+262
+00:16:48,180 --> 00:16:51,015
+here and we can start using matrix notation
+在这里，我们可以开始使用矩阵表示法
+
+263
+00:16:51,015 --> 00:16:56,980
+and just work directly in terms of the matrix w. Okay.
+并直接就矩阵w工作。好的。
+
+264
+00:16:56,980 --> 00:17:01,075
+So for traditional ML optimization,
+所以对于传统的ML优化，
+
+265
+00:17:01,075 --> 00:17:05,200
+our parameters are these sets of weights,
+我们的参数是这些权重集，
+
+266
+00:17:05,200 --> 00:17:07,240
+um, for the different classes.
+嗯，对于不同的班级。
+
+267
+00:17:07,240 --> 00:17:09,280
+So for each of the classes,
+所以对于每个班级，
+
+268
+00:17:09,280 --> 00:17:12,085
+we have a d-dimensional, um,
+我们有一个d维，嗯，
+
+269
+00:17:12,085 --> 00:17:14,620
+row vector of weights because we're gonna
+行矢量的重量，因为我们要去
+
+270
+00:17:14,620 --> 00:17:19,225
+sort of dot-product wi- with rd, dimensional, input vector.
+与rd，维度，输入向量的点积。
+
+271
+00:17:19,225 --> 00:17:28,975
+So we have c times d items and our W matrix and those are the parameters of our model.
+所以我们有c次d项和我们的W矩阵，这些是我们模型的参数。
+
+272
+00:17:28,975 --> 00:17:35,305
+So if we want to learn that model using the ideas of gradient descent,
+因此，如果我们想要使用梯度下降的思想来学习该模型，
+
+273
+00:17:35,305 --> 00:17:37,960
+stochastic gradient descent, we're gonna do
+随机梯度下降，我们要做
+
+274
+00:17:37,960 --> 00:17:40,585
+sort of what we started to talk about last time.
+我们上次开始谈论的那种。
+
+275
+00:17:40,585 --> 00:17:43,255
+We have these set of parameters.
+我们有这些参数。
+
+276
+00:17:43,255 --> 00:17:45,295
+We work out, um,
+我们锻炼，嗯，
+
+277
+00:17:45,295 --> 00:17:50,845
+the gradient, the partial derivatives of all of these, um,
+梯度，所有这些的偏导数，嗯，
+
+278
+00:17:50,845 --> 00:17:54,790
+of the loss with respect to all of these parameters and we
+关于所有这些参数和我们的损失
+
+279
+00:17:54,790 --> 00:17:58,840
+use that to get a gradient update on our loss function,
+用它来获取我们的损失函数的渐变更新，
+
+280
+00:17:58,840 --> 00:18:01,240
+and we move around the w's,
+我们绕着w走动，
+
+281
+00:18:01,240 --> 00:18:04,930
+and moving around the w's corresponds to sort of
+并且在w周围移动对应于某种类型
+
+282
+00:18:04,930 --> 00:18:09,700
+moving this line that separates between the classes and we fiddle
+移动这条分隔类的行，我们就是小提琴
+
+283
+00:18:09,700 --> 00:18:15,490
+that around so as to minimize our loss which corresponds to choosing a line that
+周围的，以尽量减少我们的损失，这对应于选择一条线
+
+284
+00:18:15,490 --> 00:18:22,045
+best separates between the items of the classes in some sense.
+在某种意义上，最好区分类的项目。
+
+285
+00:18:22,045 --> 00:18:25,135
+Okay. So, that's a basic classifier.
+好的。所以，这是一个基本的分类器。
+
+286
+00:18:25,135 --> 00:18:28,945
+So the first question is, well,
+所以第一个问题是，好吧，
+
+287
+00:18:28,945 --> 00:18:35,840
+how are things gonna be different with a neural network classifier?
+神经网络分类器的情况会有什么不同？
+
+288
+00:18:36,120 --> 00:18:40,765
+Um, so the central observation is that sort of
+嗯，所以中央观察就是那种
+
+289
+00:18:40,765 --> 00:18:46,405
+most of the classic classifiers that people used a lot of the time,
+大多数人经常使用的经典分类器，
+
+290
+00:18:46,405 --> 00:18:50,470
+so that includes things like Naive Bayes models, um,
+所以包括朴素贝叶斯模型之类的东西，嗯，
+
+291
+00:18:50,470 --> 00:18:52,810
+basic support vector machines,
+基本支持向量机，
+
+292
+00:18:52,810 --> 00:18:55,495
+Softmax or logistic regressions.
+Softmax或逻辑回归。
+
+293
+00:18:55,495 --> 00:19:00,955
+They're sort of fairly simple classifiers.
+它们是一种相当简单的分类器。
+
+294
+00:19:00,955 --> 00:19:06,100
+In particular those are all linear classifiers which are going to classified by drawing
+特别是那些都是线性分类器，它们将通过绘图进行分类
+
+295
+00:19:06,100 --> 00:19:08,680
+a line or in the higher dimensional space by
+一条线或在更高维空间中
+
+296
+00:19:08,680 --> 00:19:12,175
+drawing some kind of plane that separates examples.
+绘制某种分隔例子的平面。
+
+297
+00:19:12,175 --> 00:19:18,235
+Having a simple classifier like that can be useful in certain circumstances.
+拥有这样的简单分类器在某些情况下可能很有用。
+
+298
+00:19:18,235 --> 00:19:22,090
+I mean, that gives you what a machine learning as a high bias classifiers,
+我的意思是，这给你机器学习的高偏差分类器，
+
+299
+00:19:22,090 --> 00:19:25,465
+there's lots of, talk of in CS229,
+在CS229中有很多，谈论，
+
+300
+00:19:25,465 --> 00:19:27,430
+but if you have a data-set, um,
+但如果你有一个数据集，嗯，
+
+301
+00:19:27,430 --> 00:19:32,050
+that's like this, you can't do a very good job at classifying
+就像这样，你在分类方面做得不好
+
+302
+00:19:32,050 --> 00:19:34,390
+all the points correctly if you have
+如果你有正确的所有点
+
+303
+00:19:34,390 --> 00:19:38,080
+a high bias classifier because you're gonna only draw a line.
+一个高偏差分类器，因为你只会画一条线。
+
+304
+00:19:38,080 --> 00:19:41,995
+So you'd like to have a more powerful classifier.
+所以你想拥有一个更强大的分类器。
+
+305
+00:19:41,995 --> 00:19:46,390
+Essentially, what's been powering a lot of the use of
+从本质上讲，正在为许多人的使用提供动力
+
+306
+00:19:46,390 --> 00:19:51,580
+deep learning is that in a lot of cases when you have natural signals,
+深度学习是指在很多情况下，当你有自然信号时，
+
+307
+00:19:51,580 --> 00:19:53,950
+so those are things like, um, speech,
+所以这些都是，嗯，演讲，
+
+308
+00:19:53,950 --> 00:19:56,620
+language, images, and things like that,
+语言，图像和类似的东西，
+
+309
+00:19:56,620 --> 00:20:02,440
+you have a ton of data so you could learn a quite sophisticated classifier.
+你有大量的数据，所以你可以学习一个非常复杂的分类器。
+
+310
+00:20:02,440 --> 00:20:10,180
+Um, but representing the classes in terms of the input data is sort of very complex.
+嗯，但是根据输入数据表示类是非常复杂的。
+
+311
+00:20:10,180 --> 00:20:14,365
+You could never do it by just drawing a line between the two classes.
+你永远不能通过在两个类之间画一条线来做到这一点。
+
+312
+00:20:14,365 --> 00:20:19,150
+So, you'd like to use some more complicated kind of classifier.
+所以，你想使用一些更复杂的分类器。
+
+313
+00:20:19,150 --> 00:20:22,060
+So neural networks, the multi-layer
+所以神经网络，多层次
+
+314
+00:20:22,060 --> 00:20:25,015
+neural networks that we're gonna be starting to get into now,
+我们现在要开始进入的神经网络，
+
+315
+00:20:25,015 --> 00:20:31,480
+precisely what they do is provide you a way to learn very complex,
+正是他们所做的是为你提供一种学习非常复杂的方法，
+
+316
+00:20:31,480 --> 00:20:35,560
+you know, almost limitlessly complex classifiers.
+你知道，几乎是无限复杂的分类器。
+
+317
+00:20:35,560 --> 00:20:41,364
+So that if you look at the decisions that they're making in terms of the original space,
+因此，如果你看看他们在原始空间方面做出的决定，
+
+318
+00:20:41,364 --> 00:20:44,110
+they can be learning cases like this.
+他们可以像这样学习案例。
+
+319
+00:20:44,110 --> 00:20:47,050
+Um, I put this- I put the,
+嗯，我把它 - 我把它，
+
+320
+00:20:47,050 --> 00:20:50,920
+um, pointer on a couple of the slides here.
+嗯，指针在这里的几张幻灯片上。
+
+321
+00:20:50,920 --> 00:20:55,330
+Um, this- this is a visualization that was done by Andrei Karpathy.
+嗯，这是一个由Andrei Karpathy完成的可视化。
+
+322
+00:20:55,330 --> 00:20:58,525
+He was a PhD student here until a couple of years ago.
+直到几年前，他还是这里的博士生。
+
+323
+00:20:58,525 --> 00:21:00,535
+So this is a little JavaScript, um,
+所以这是一个小JavaScript，嗯，
+
+324
+00:21:00,535 --> 00:21:03,430
+app that you can find off his website and it's
+你可以在他的网站上找到它的应用程序
+
+325
+00:21:03,430 --> 00:21:06,385
+actually a lot of fun to play with to see what kind of,
+实际上很有趣，看看是什么样的，
+
+326
+00:21:06,385 --> 00:21:11,035
+um, decision boundaries you can get a neural net to come up with.
+嗯，决策边界你可以得到一个神经网络。
+
+327
+00:21:11,035 --> 00:21:21,415
+Okay. Um, so for getting- for getting more advanced classification out of,
+好的。嗯，所以为了获得更高级的分类，
+
+328
+00:21:21,415 --> 00:21:24,760
+um, a neural net used for natural language,
+嗯，一种用于自然语言的神经网络，
+
+329
+00:21:24,760 --> 00:21:29,260
+there are sort of two things going- that you can do,
+你可以做两件事 -
+
+330
+00:21:29,260 --> 00:21:31,810
+that I want to talk about which are in
+我想谈谈哪些内容
+
+331
+00:21:31,810 --> 00:21:35,110
+some sense the same thing when it comes down to it.
+归结为它时，有些意义相同。
+
+332
+00:21:35,110 --> 00:21:41,890
+But I'll sort of mention separately at the beginning that one of them is that we
+但我会在开头分别提到其中一个就是我们
+
+333
+00:21:41,890 --> 00:21:45,370
+have these word vectors and then
+有这些单词向量然后
+
+334
+00:21:45,370 --> 00:21:49,915
+the second one is that we're gonna build deeper multi-layer networks.
+第二个是我们要构建更深层次的多层网络。
+
+335
+00:21:49,915 --> 00:21:53,065
+Okay. So, at first crucial difference said,
+好的。所以，起初关键的差异说，
+
+336
+00:21:53,065 --> 00:21:56,290
+um, we already started to see, um,
+嗯，我们已经开始看到了，嗯，
+
+337
+00:21:56,290 --> 00:21:59,770
+with what we were doing last week is rather than
+我们上周所做的不是
+
+338
+00:21:59,770 --> 00:22:03,595
+sort of having a word being this is the word house,
+有一句话，这就是房子这个词，
+
+339
+00:22:03,595 --> 00:22:10,720
+we instead say house is a vector of real numbers and what we can do is
+我们改为说房子是实数的矢量，我们能做的是
+
+340
+00:22:10,720 --> 00:22:14,620
+change the vector that corresponds to house in
+更改对应于house的向量
+
+341
+00:22:14,620 --> 00:22:19,030
+such a way as we can build better classifiers,
+这样我们可以建立更好的分类器，
+
+342
+00:22:19,030 --> 00:22:23,080
+which means that we are gonna be sort of moving houses representation around
+这意味着我们将成为移动房屋的代表
+
+343
+00:22:23,080 --> 00:22:27,220
+the space to capture things that we're interested in like word similarity,
+捕捉我们感兴趣的东西的空间，如单词相似度，
+
+344
+00:22:27,220 --> 00:22:29,605
+analogies, and things like that.
+类比，等等。
+
+345
+00:22:29,605 --> 00:22:31,150
+So this is actually, you know,
+所以这实际上是，你知道，
+
+346
+00:22:31,150 --> 00:22:35,830
+kind of a weird idea compared to conventional steps or ML.
+与常规步骤或ML相比，这是一种奇怪的想法。
+
+347
+00:22:35,830 --> 00:22:40,075
+So rather than saying we just have the parameters w,
+所以，而不是说我们只有参数w，
+
+348
+00:22:40,075 --> 00:22:47,290
+we also say that all of these word representations are also parameters of our model.
+我们还说所有这些单词表示也是我们模型的参数。
+
+349
+00:22:47,290 --> 00:22:49,840
+So, we're actually going to change
+所以，我们实际上会改变
+
+350
+00:22:49,840 --> 00:22:54,685
+the representations of words to allow our classifiers to do better.
+允许我们的分类器做得更好的单词表示。
+
+351
+00:22:54,685 --> 00:22:57,320
+So, we're simultaneously changing the weights
+所以，我们同时改变了权重
+
+352
+00:22:57,320 --> 00:23:00,290
+and we're changing the representation of words,
+我们正在改变单词的表示，
+
+353
+00:23:00,290 --> 00:23:04,685
+and we're optimizing both of them at once to try and make our model as,
+我们正在同时优化它们，试图使我们的模型成为，
+
+354
+00:23:04,685 --> 00:23:06,410
+um, good as possible.
+嗯，尽可能好。
+
+355
+00:23:06,410 --> 00:23:10,250
+So, this is the sense in which people often talk about
+所以，这是人们经常谈论的感觉
+
+356
+00:23:10,250 --> 00:23:15,210
+the deep learning models that we're doing representation learning.
+我们正在做代表性学习的深度学习模型。
+
+357
+00:23:15,230 --> 00:23:18,375
+I sort of said there are two ways,
+我有点说有两种方法，
+
+358
+00:23:18,375 --> 00:23:19,830
+I was going to mention two things.
+我要提两件事。
+
+359
+00:23:19,830 --> 00:23:21,540
+One is this sort of, um,
+一个就是这种，嗯，
+
+360
+00:23:21,540 --> 00:23:25,050
+word vector representation learning and then the second one
+单词矢量表示学习然后第二个
+
+361
+00:23:25,050 --> 00:23:29,160
+is that we're going to start looking at deeper multi layer neural networks.
+我们将开始研究更深层次的多层神经网络。
+
+362
+00:23:29,160 --> 00:23:32,835
+Um, sort of hidden over here on the slide
+嗯，有点隐藏在幻灯片上
+
+363
+00:23:32,835 --> 00:23:37,035
+is the observation that really you can think of word,
+是观察，你真的可以想到的是，
+
+364
+00:23:37,035 --> 00:23:40,770
+word vector embedding as just putting your,
+单词矢量嵌入只是把你的，
+
+365
+00:23:40,770 --> 00:23:44,280
+having a model with one more neural network layer.
+拥有一个具有一个神经网络层的模型。
+
+366
+00:23:44,280 --> 00:23:50,280
+So, if you imagine that each word was a one hot vector,
+所以，如果你想象每个单词都是一个热矢量，
+
+367
+00:23:50,280 --> 00:23:53,730
+um, with, for the different word types in your model.
+嗯，对于模型中的不同单词类型。
+
+368
+00:23:53,730 --> 00:23:55,095
+So, you had a, uh, you know,
+所以，你有一个，呃，你知道，
+
+369
+00:23:55,095 --> 00:24:00,735
+150,000 dimensional vector with the one-hot encoding of different words.
+150,000维向量与不同单词的单热编码。
+
+370
+00:24:00,735 --> 00:24:03,855
+Um, then you could say you have a ma-, um,
+嗯，那你可以说你有一个ma，嗯，
+
+371
+00:24:03,855 --> 00:24:11,790
+matrix L which is sort of your lexicon matrix and you will pass your one-hot vector for
+矩阵L，它是你的词典矩阵，你将通过你的单热矢量
+
+372
+00:24:11,790 --> 00:24:15,870
+a word through a layer of neural net which
+一个词通过一层神经网络
+
+373
+00:24:15,870 --> 00:24:20,925
+multiplies the one-hot vector or L1, the one-hot vector.
+乘以单热矢量或L1，单热矢量。
+
+374
+00:24:20,925 --> 00:24:22,905
+And since this was a one-hot vector,
+因为这是一个单热的矢量，
+
+375
+00:24:22,905 --> 00:24:30,525
+what that will have the effect of doing is taking out a column of L. So,
+这样做会产生什么效果就是取出一列L.所以，
+
+376
+00:24:30,525 --> 00:24:34,590
+really, we've got an extra layer of matrix, um,
+真的，我们有一层额外的矩阵，嗯，
+
+377
+00:24:34,590 --> 00:24:37,215
+in our neural net and we're learning
+在我们的神经网络中，我们正在学习
+
+378
+00:24:37,215 --> 00:24:41,595
+the parameters of that matrix in the same way as we're learning,
+该矩阵的参数与我们学习的方式相同，
+
+379
+00:24:41,595 --> 00:24:44,910
+um, a deep neural network for other purposes.
+嗯，用于其他目的的深层神经网络。
+
+380
+00:24:44,910 --> 00:24:48,030
+So, mathematically that completely makes sense and
+因此，数学上完全有意义
+
+381
+00:24:48,030 --> 00:24:51,375
+that's sort of a sensible way to think about,
+这是一种明智的思考方式，
+
+382
+00:24:51,375 --> 00:24:53,385
+um, what you're doing, um,
+嗯，你在做什么，嗯，
+
+383
+00:24:53,385 --> 00:24:56,250
+with word embeddings in neural networks.
+用嵌入式神经网络。
+
+384
+00:24:56,250 --> 00:24:58,890
+Um, implementation wise, this makes
+嗯，实施明智，这使得
+
+385
+00:24:58,890 --> 00:25:02,100
+no sense at all and no one does this because it just doesn't
+没有任何意义，没有人这样做，因为它没有
+
+386
+00:25:02,100 --> 00:25:08,100
+make sense to do a matrix multiply when the result of the matrix multiply will be, okay.
+有意义的是，当矩阵乘法的结果将是一个矩阵乘法，好吧。
+
+387
+00:25:08,100 --> 00:25:12,405
+This is word ID 17, um, sort of,
+这是单词ID 17，嗯，有点像，
+
+388
+00:25:12,405 --> 00:25:16,380
+then constructing a one-hot vector of length a 150,000 with a
+然后用a构造一个长度为150,000的单热矢量
+
+389
+00:25:16,380 --> 00:25:20,325
+one in position 17 and then doing a matrix multiplied, makes no sense.
+一个位置17，然后做一个矩阵倍增，没有任何意义。
+
+390
+00:25:20,325 --> 00:25:22,065
+You just take up, um,
+你接受了，嗯，
+
+391
+00:25:22,065 --> 00:25:24,090
+column or, or, the row,
+列，或者，行，
+
+392
+00:25:24,090 --> 00:25:29,230
+as we've discussed, 17 of your matrix and that's what everyone actually does.
+正如我们已经讨论过的那样，你的矩阵中有17个，这就是每个人实际做的事情。
+
+393
+00:25:29,230 --> 00:25:35,940
+Okay. Here's my one obligatory picture of neurons, um, for the class.
+好的。这是我对班级神经元的一张强制性图片。
+
+394
+00:25:35,940 --> 00:25:38,475
+So, don't miss it, I'm not going to show it again, all class.
+所以，不要错过它，我不打算再次展示它，全班同学。
+
+395
+00:25:38,475 --> 00:25:42,585
+Okay. So, the origins [LAUGHTER] of Neural Networks, um,
+好的。那么，神经网络的起源[笑声]，嗯，
+
+396
+00:25:42,585 --> 00:25:47,130
+was in some sense to try and construct
+在某种意义上，尝试和构建
+
+397
+00:25:47,130 --> 00:25:50,520
+an artificial neuron that seemed to in
+似乎是一个人造神经元
+
+398
+00:25:50,520 --> 00:25:54,540
+some sense kind of capture the kind of computations,
+某种意义上捕获那种计算，
+
+399
+00:25:54,540 --> 00:25:57,765
+um, that go on in human brains.
+嗯，继续人类的大脑。
+
+400
+00:25:57,765 --> 00:26:02,205
+It's a very loose analogy for what was produced but, you know,
+对于生产的产品来说，这是一个非常宽松的比喻，但是，你知道，
+
+401
+00:26:02,205 --> 00:26:04,200
+our model here is these are our,
+我们这里的模型是我们的，
+
+402
+00:26:04,200 --> 00:26:07,500
+this is our a TB part of our human brains.
+这是我们人类大脑中的结核病部分。
+
+403
+00:26:07,500 --> 00:26:08,940
+So, here are neurons,
+所以，这是神经元，
+
+404
+00:26:08,940 --> 00:26:12,075
+this is a neuron cell here and so,
+这是一个神经细胞，所以，
+
+405
+00:26:12,075 --> 00:26:14,565
+what does a neuron consist of.
+神经元是由什么组成的。
+
+406
+00:26:14,565 --> 00:26:16,470
+Um, so, up the back,
+嗯，所以，在后面，
+
+407
+00:26:16,470 --> 00:26:19,455
+it's got these dendrites, lots of dendrites.
+它有这些枝晶，很多枝晶。
+
+408
+00:26:19,455 --> 00:26:25,200
+Then it's got a cell body and if there's stuff coming in on the dendrites, um,
+然后它有一个细胞体，如果树枝上有东西进来，嗯，
+
+409
+00:26:25,200 --> 00:26:28,800
+the cell body will become active and then it all starts
+细胞体将变为活跃状态然后全部开始
+
+410
+00:26:28,800 --> 00:26:32,880
+spiking down this long thing which is called the Axon.
+贬低这个被称为Axon的长事。
+
+411
+00:26:32,880 --> 00:26:35,580
+So, then these axons lead to
+那么，这些轴突就会导致
+
+412
+00:26:35,580 --> 00:26:39,300
+the dendrites of a different cell or lots of different cells, right.
+对不同细胞的树突或许多不同的细胞，对。
+
+413
+00:26:39,300 --> 00:26:41,640
+This one, um, I'm not sure it's shown but
+这个，嗯，我不确定它的显示但是
+
+414
+00:26:41,640 --> 00:26:44,625
+some of these are kind of going to different cells.
+其中一些是去不同的细胞。
+
+415
+00:26:44,625 --> 00:26:48,105
+Um, and so, you then have these sort of, um,
+嗯，等你有这些，嗯，
+
+416
+00:26:48,105 --> 00:26:51,120
+terminal buttons on the Axon which are kind of close
+Axon上的终端按钮有点紧密
+
+417
+00:26:51,120 --> 00:26:54,270
+to the dendrites but have a little gap in them and some min-,
+对树枝状结构但它们有一点间隙和一些最小的，
+
+418
+00:26:54,270 --> 00:26:56,955
+miracles of biochemistry happen there.
+那里发生了生物化学的奇迹。
+
+419
+00:26:56,955 --> 00:26:58,920
+So, that's the synapse, of course,
+那么，这就是突触，当然，
+
+420
+00:26:58,920 --> 00:27:03,870
+which you'll then have sort of activation flowing which goes into the next neuron.
+然后你会有一些激活流动进入下一个神经元。
+
+421
+00:27:03,870 --> 00:27:06,870
+So, that was the starting off, um,
+所以，那是开始，嗯，
+
+422
+00:27:06,870 --> 00:27:10,710
+model that people wanted to try and simulate in computation.
+人们想要在计算中尝试和模拟的模型。
+
+423
+00:27:10,710 --> 00:27:15,060
+So, people came up with this model of an artificial neuron.
+因此，人们提出了这种人工神经元的模型。
+
+424
+00:27:15,060 --> 00:27:22,050
+So, that we have things coming in from other neurons at some level of activations.
+所以，我们在某些激活水平上从其他神经元进入的东西。
+
+425
+00:27:22,050 --> 00:27:25,710
+So, that's a number X0, X1, X2.
+所以，这是一个数字X0，X1，X2。
+
+426
+00:27:25,710 --> 00:27:30,690
+Um, then synapses vary depending on how excitable
+嗯，然后突触取决于兴奋程度
+
+427
+00:27:30,690 --> 00:27:35,535
+they are as to how easily they'll let signal cross across the synapse.
+他们是多么容易让信号穿过突触。
+
+428
+00:27:35,535 --> 00:27:42,675
+So, that's being modeled by multiplying them by a weight W0, W1, W2.
+因此，通过将它们乘以权重W0，W1，W2来建模。
+
+429
+00:27:42,675 --> 00:27:46,365
+Then the cell body, sort of correctly,
+那么细胞体，正确的，
+
+430
+00:27:46,365 --> 00:27:50,190
+is sort of summing this amount of excitation it's
+有点总结这个激励量
+
+431
+00:27:50,190 --> 00:27:54,510
+getting from the different dendrites, um,
+来自不同的树突，嗯，
+
+432
+00:27:54,510 --> 00:27:58,320
+and then it can have its own biases to how likely it is to fire,
+然后它可能有自己的偏见，以解雇它的可能性，
+
+433
+00:27:58,320 --> 00:28:00,210
+that's the B. Um, so,
+那是B.嗯，所以，
+
+434
+00:28:00,210 --> 00:28:06,240
+we get that and then it has some overall kind of threshold or propensity for firing.
+我们得到了它然后它有一些整体的门槛或射击倾向。
+
+435
+00:28:06,240 --> 00:28:09,405
+So, we sort of stick it through an activation function,
+所以，我们通过激活功能来坚持下去，
+
+436
+00:28:09,405 --> 00:28:11,280
+um, which will sort of,
+嗯，这将是，
+
+437
+00:28:11,280 --> 00:28:13,920
+will determine a firing rate and that will be,
+将确定射击率，将是，
+
+438
+00:28:13,920 --> 00:28:17,205
+um, the signal that's going out on the output axon.
+嗯，输出轴上的信号。
+
+439
+00:28:17,205 --> 00:28:21,150
+So, that was sort of the starting point of that but,
+所以，那是一个起点，但是，
+
+440
+00:28:21,150 --> 00:28:22,575
+you know, really, um,
+你知道的，真的，嗯，
+
+441
+00:28:22,575 --> 00:28:24,600
+for what we've ended up computing.
+因为我们最终计算了什么。
+
+442
+00:28:24,600 --> 00:28:28,890
+We just have a little bit of baby math here which actually, um,
+我们这里有一点婴儿数学，实际上，嗯，
+
+443
+00:28:28,890 --> 00:28:33,090
+looks very familiar to the kind of baby math you see
+你看到的那种宝贝数学看起来非常熟悉
+
+444
+00:28:33,090 --> 00:28:37,920
+in linear algebra and statistics and so it's really no different.
+在线性代数和统计学中，它确实没有什么不同。
+
+445
+00:28:37,920 --> 00:28:40,140
+So, in particular, um,
+所以，特别是，嗯，
+
+446
+00:28:40,140 --> 00:28:46,380
+a neuron can very easily be a Binary Logistic Regression Unit.
+神经元很容易成为二元Logistic回归单元。
+
+447
+00:28:46,380 --> 00:28:49,305
+Um, so that, this is sort of,
+嗯，所以，这是一种，
+
+448
+00:28:49,305 --> 00:28:52,800
+for logistic regression you're taking for your input X,
+对于逻辑回归，你需要输入X，
+
+449
+00:28:52,800 --> 00:28:54,855
+you multiply it by a weight vector.
+你把它乘以一个权重向量。
+
+450
+00:28:54,855 --> 00:28:58,065
+You're adding, um, your, um,
+你在补充，嗯，你的，嗯，
+
+451
+00:28:58,065 --> 00:29:01,920
+bias term and then you're putting it through,
+偏见期，然后你把它通过，
+
+452
+00:29:01,920 --> 00:29:03,990
+um, a non linearity,
+嗯，非线性，
+
+453
+00:29:03,990 --> 00:29:06,315
+like the logistic function.
+喜欢后勤功能。
+
+454
+00:29:06,315 --> 00:29:10,665
+Um, and then, so you're calculating a logistic regression,
+嗯，然后，所以你正在计算逻辑回归，
+
+455
+00:29:10,665 --> 00:29:14,625
+um, inside this sort of neuron model.
+嗯，在这种神经元模型中。
+
+456
+00:29:14,625 --> 00:29:17,535
+Um, and so this is the,
+嗯，这就是，
+
+457
+00:29:17,535 --> 00:29:20,970
+this is the difference between the soft maximum logistic regression,
+这是软最大逻辑回归之间的差异，
+
+458
+00:29:20,970 --> 00:29:26,655
+that I was saying that there is the soft-max for two classes has two sets of parameters.
+我说有两个类的soft-max有两组参数。
+
+459
+00:29:26,655 --> 00:29:30,420
+This sort of just has one set of parameters Z and your modeling
+这种只有一组参数Z和你的建模
+
+460
+00:29:30,420 --> 00:29:35,790
+the two classes by giving the probability of one class from 0 to one,
+两个类通过给出一个类的概率从0到1，
+
+461
+00:29:35,790 --> 00:29:37,500
+depending on whether the input to
+取决于是否输入
+
+462
+00:29:37,500 --> 00:29:41,490
+logistic regression is highly negative or highly positive.
+逻辑回归是高度消极或高度积极的。
+
+463
+00:29:41,490 --> 00:29:47,625
+Okay. So, really, we can just say these artificial neurons are sort of like
+好的。所以，真的，我们可以说这些人工神经元有点像
+
+464
+00:29:47,625 --> 00:29:51,780
+binary logistic regression units or we can make variants of
+二元逻辑回归单位或我们可以做出变体
+
+465
+00:29:51,780 --> 00:29:56,730
+binary logistic regression units by using some different F function.
+二元逻辑回归单元通过使用一些不同的F函数。
+
+466
+00:29:56,730 --> 00:29:59,925
+And we'll come back to that again and pretty soon.
+我们将很快再次回到那里。
+
+467
+00:29:59,925 --> 00:30:04,560
+Okay. Um, well, so that gives us one neuron.
+好的。嗯，好吧，这样就给了我们一个神经元。
+
+468
+00:30:04,560 --> 00:30:09,495
+So, one neuron is a logistic regression unit for current purposes.
+因此，一个神经元是用于当前目的的逻辑回归单元。
+
+469
+00:30:09,495 --> 00:30:13,410
+So, crucially what we're wanting to do with neural networks is say, well,
+所以，关键的是，我们想要用神经网络做什么就是说，好吧，
+
+470
+00:30:13,410 --> 00:30:16,500
+why only run one logistic regression,
+为什么只进行一次逻辑回归，
+
+471
+00:30:16,500 --> 00:30:17,865
+why don't we, um,
+我们为什么不呢，嗯，
+
+472
+00:30:17,865 --> 00:30:21,960
+run a whole bunch of logistic regressions at the same time?
+同时运行一大堆逻辑回归？
+
+473
+00:30:21,960 --> 00:30:27,465
+So, you know, here are our inputs and here's our little logistic regression unit, um,
+所以，你知道，这是我们的输入，这里是我们的小逻辑回归单元，嗯，
+
+474
+00:30:27,465 --> 00:30:30,420
+but we could run three logistic regressions at
+但我们可以在三处进行三次逻辑回归
+
+475
+00:30:30,420 --> 00:30:33,855
+the same time or we can run any number of them.
+同时或我们可以运行任意数量的它们。
+
+476
+00:30:33,855 --> 00:30:39,690
+Um, well, that's good but sort of for conventional training of
+嗯，嗯，这很好，但有点适合常规训练
+
+477
+00:30:39,690 --> 00:30:42,810
+a statistical model which sort of have to
+一种必须的统计模型
+
+478
+00:30:42,810 --> 00:30:47,865
+determine for those orange outputs of the logistic regression.
+确定逻辑回归的那些橙色输出。
+
+479
+00:30:47,865 --> 00:30:51,540
+You know, what we're training each of them to try and capture.
+你知道，我们正在训练他们每个人尝试捕捉。
+
+480
+00:30:51,540 --> 00:30:56,235
+We have to have data to predict what they're going to try and capture.
+我们必须有数据来预测他们将要尝试和捕获的内容。
+
+481
+00:30:56,235 --> 00:31:02,865
+And so, the secret of sort of then building bigger neural networks is to say,
+因此，建立更大的神经网络的秘密就是说，
+
+482
+00:31:02,865 --> 00:31:06,720
+we don't actually want to decide ahead of time what
+我们实际上并不想提前决定什么
+
+483
+00:31:06,720 --> 00:31:11,595
+those little orange logistic regressions are trying to capture.
+那些小橙色物流回归试图捕捉。
+
+484
+00:31:11,595 --> 00:31:15,450
+We want the neural network to self-organize,
+我们希望神经网络自我组织，
+
+485
+00:31:15,450 --> 00:31:18,450
+so that those orange logistic regression,
+那些橙色逻辑回归，
+
+486
+00:31:18,450 --> 00:31:22,500
+um, units learn something useful.
+嗯，单位学到一些有用的东西。
+
+487
+00:31:22,500 --> 00:31:25,020
+And well, what is something useful?
+那么，什么是有用的？
+
+488
+00:31:25,020 --> 00:31:27,270
+Well, our idea is to say,
+好吧，我们的想法是说，
+
+489
+00:31:27,270 --> 00:31:31,095
+we do actually have some tasks that we want to do.
+我们确实有一些我们想要做的任务。
+
+490
+00:31:31,095 --> 00:31:34,650
+So, we- we have some tasks that we want to do.
+所以，我们 - 我们有一些我们想要做的任务。
+
+491
+00:31:34,650 --> 00:31:39,450
+So maybe, we want to sort of decide whether a movie review is positive or negative,
+所以，也许，我们想要决定电影评论是积极的还是消极的，
+
+492
+00:31:39,450 --> 00:31:41,925
+something like sentiment analysis or something like that.
+像情绪分析或类似的东西。
+
+493
+00:31:41,925 --> 00:31:44,670
+There is something we want to do at the end of the day.
+我们想在一天结束时做些什么。
+
+494
+00:31:44,670 --> 00:31:47,625
+Um, and we're gonna have, uh,
+嗯，我们会的，呃，
+
+495
+00:31:47,625 --> 00:31:52,275
+logistic regression classifier there telling us positive or negative.
+逻辑回归分类器告诉我们正面或负面。
+
+496
+00:31:52,275 --> 00:31:55,440
+Um, but the inputs to that aren't going to
+嗯，但对此的投入是不会的
+
+497
+00:31:55,440 --> 00:31:58,785
+directly be something like words in the document.
+直接就像文档中的单词一样。
+
+498
+00:31:58,785 --> 00:32:03,480
+They're going to be this intermediate layer of logistic regression units
+它们将成为逻辑回归单元的中间层
+
+499
+00:32:03,480 --> 00:32:09,180
+and we're gonna train this whole thing to minimize our cross entropy loss.
+我们将训练这整件事来减少我们的交叉熵损失。
+
+500
+00:32:09,180 --> 00:32:12,120
+Essentially, what we're going to want to have
+基本上，我们希望拥有什么
+
+501
+00:32:12,120 --> 00:32:15,015
+happen in the back propagation algorithm will do for us,
+发生在反向传播算法中会为我们做的，
+
+502
+00:32:15,015 --> 00:32:18,015
+is to say, you things in the middle,
+就是说，你在中间的东西，
+
+503
+00:32:18,015 --> 00:32:23,280
+it's your job to find some useful way to calculate values from
+找到一些有用的计算价值的方法是你的工作
+
+504
+00:32:23,280 --> 00:32:29,715
+the underlying data such that it'll help our final classifier make a good decision.
+基础数据，这将有助于我们的最终分类器做出正确的决定。
+
+505
+00:32:29,715 --> 00:32:31,695
+I mean in particular, you know,
+我的意思是，你知道，
+
+506
+00:32:31,695 --> 00:32:34,605
+back to this picture, you know.
+你知道，回到这张照片。
+
+507
+00:32:34,605 --> 00:32:38,520
+The final classifier, its just a linear classifier,
+最终的分类器，它只是一个线性分类器，
+
+508
+00:32:38,520 --> 00:32:40,770
+a soft-max or logistic regression.
+软最大或逻辑回归。
+
+509
+00:32:40,770 --> 00:32:42,915
+It's gonna have a line like this.
+它会有这样一条线。
+
+510
+00:32:42,915 --> 00:32:45,900
+But if the intermediate classifiers,
+但如果是中间分类器，
+
+511
+00:32:45,900 --> 00:32:48,000
+they are like a word embedding,
+它们就像一个单词嵌入，
+
+512
+00:32:48,000 --> 00:32:52,260
+they can kind of sort of re-represent the space and shift things around.
+它们可以重新代表空间并改变周围的事物。
+
+513
+00:32:52,260 --> 00:32:57,180
+So, they can learn to shift things around in such a way as
+因此，他们可以学会以这样的方式改变现状
+
+514
+00:32:57,180 --> 00:33:03,190
+you're learning a highly non-linear function of the original input space.
+你正在学习原始输入空间的高度非线性函数。
+
+515
+00:33:06,810 --> 00:33:10,930
+Okay. Um, and so at that point,
+好的。嗯，等等，
+
+516
+00:33:10,930 --> 00:33:12,430
+it's simply a matter of saying,
+这只是一个问题，
+
+517
+00:33:12,430 --> 00:33:13,960
+well, why stop there?
+那么，为什么停在那里？
+
+518
+00:33:13,960 --> 00:33:18,085
+Maybe it gets even better if we put in more layers.
+如果我们增加更多层次，也许会变得更好。
+
+519
+00:33:18,085 --> 00:33:24,400
+And this sort of gets us into the area of deep learning and sort of precisely,
+而这种让我们进入深度学习的领域，正是如此，
+
+520
+00:33:24,400 --> 00:33:26,590
+um, this is, um,
+嗯，这是，嗯，
+
+521
+00:33:26,590 --> 00:33:31,180
+that sort of there was- sort of being three comings of neural networks.
+那种神经网络有三种结合。
+
+522
+00:33:31,180 --> 00:33:33,940
+So the first work in the 50s which is
+所以50年代的第一部作品就是
+
+523
+00:33:33,940 --> 00:33:38,320
+essentially when people had a model of a single neuron
+基本上当人们拥有单个神经元的模型时
+
+524
+00:33:38,320 --> 00:33:41,710
+like this and then only gradually worked out how it
+像这样然后才逐渐弄清楚它是怎么回事
+
+525
+00:33:41,710 --> 00:33:45,965
+related to more conventional statistics than there was.
+与更传统的统计数据有关。
+
+526
+00:33:45,965 --> 00:33:53,220
+Um, the second version of neural networks which we saw the 80s and early 90s, um,
+嗯，我们看到了80年代和90年代初的神经网络的第二个版本，嗯，
+
+527
+00:33:53,220 --> 00:33:56,640
+where people, um, built neural networks like this that had
+人们，嗯，建立这样的神经网络
+
+528
+00:33:56,640 --> 00:34:01,865
+this one hidden layer where a representation could be learned in the middle.
+这一个隐藏层，可以在中间学习表示。
+
+529
+00:34:01,865 --> 00:34:06,220
+But at that time it really wasn't effective.
+但当时它确实无效。
+
+530
+00:34:06,220 --> 00:34:12,850
+Of all people weren't able to build deeper networks and get them to do anything useful.
+在所有人中，他们无法建立更深层次的网络并让他们做任何有用的事情。
+
+531
+00:34:12,850 --> 00:34:18,040
+So you sort of had these neural networks with one hidden layer and so precisely with
+所以你有一些神经网络有一个隐藏层，所以精确地使用
+
+532
+00:34:18,040 --> 00:34:24,715
+research that started in- into deep learning that precisely the motivating question is,
+从深入学习开始的研究，恰恰是激励性问题，
+
+533
+00:34:24,715 --> 00:34:29,710
+um, we believe we'll be able to do even more sophisticated,
+嗯，我们相信我们能够做得更复杂，
+
+534
+00:34:29,710 --> 00:34:32,950
+um, classification for more complex tasks.
+嗯，更复杂任务的分类。
+
+535
+00:34:32,950 --> 00:34:36,760
+Things like speech recognition and image recognition if we could
+如果我们能做的话，比如语音识别和图像识别
+
+536
+00:34:36,760 --> 00:34:40,960
+have a deeper network which will be able to more
+有一个更深的网络，将能够更多
+
+537
+00:34:40,960 --> 00:34:45,100
+effectively learn more sophisticated functions of the input which
+有效地学习更复杂的输入功能
+
+538
+00:34:45,100 --> 00:34:49,405
+will allow us to do things like recognize sounds of a language.
+将允许我们做一些事情，如识别语言的声音。
+
+539
+00:34:49,405 --> 00:34:52,060
+How could we possibly train such a,
+我们怎么可能训练这样的，
+
+540
+00:34:52,060 --> 00:34:55,210
+um, network so they'll work effectively?
+嗯，网络，所以他们会有效地工作？
+
+541
+00:34:55,210 --> 00:34:56,875
+And that's the kind of thing,
+这就是那种事，
+
+542
+00:34:56,875 --> 00:34:58,465
+um, will go on to,
+嗯，会继续，
+
+543
+00:34:58,465 --> 00:35:03,055
+um, more so starting this lecture more so in the next lecture.
+嗯，更多的是在下一个讲座中开始这个讲座。
+
+544
+00:35:03,055 --> 00:35:05,859
+But before we get to there,
+但在我们到达之前
+
+545
+00:35:05,859 --> 00:35:08,050
+um, just to underline it again.
+嗯，只是为了再次强调它。
+
+546
+00:35:08,050 --> 00:35:11,440
+So once we have something like this is our,
+所以一旦我们有这样的东西是我们的，
+
+547
+00:35:11,440 --> 00:35:13,765
+um, layer of a neural network.
+嗯，神经网络的一层。
+
+548
+00:35:13,765 --> 00:35:16,330
+We have a vector of inputs,
+我们有一个输入矢量，
+
+549
+00:35:16,330 --> 00:35:21,040
+we have a vector of outputs and everything is
+我们有一个输出向量，一切都是
+
+550
+00:35:21,040 --> 00:35:28,135
+connected so that we've got this sort of weights along every one of these black lines.
+连接，以便我们在这些黑线中的每一条都有这种权重。
+
+551
+00:35:28,135 --> 00:35:32,145
+And so we can say A1 is you're taking
+所以我们可以说A1是你正在服用
+
+552
+00:35:32,145 --> 00:35:36,715
+weights times each component of X1 and adding a bias term,
+权重乘以X1的每个分量并添加偏差项，
+
+553
+00:35:36,715 --> 00:35:41,305
+um, and then you're going to be running which is sort of
+嗯，然后你就要开始运行了
+
+554
+00:35:41,305 --> 00:35:47,575
+this part and then running it through our non-linearity and that will give us an output.
+这部分，然后通过我们的非线性运行它，这将给我们一个输出。
+
+555
+00:35:47,575 --> 00:35:51,265
+And we're gonna do that for each of A1, A2, and A3.
+我们将为A1，A2和A3中的每一个做到这一点。
+
+556
+00:35:51,265 --> 00:35:56,710
+Um, so again, we can kind of regard A is a vector and we can
+嗯，再说一遍，我们可以认为A是一个矢量，我们可以
+
+557
+00:35:56,710 --> 00:36:02,260
+kind of collapse it into this matrix notation for working out the effects of layers.
+将它折叠成这种矩阵表示法来计算层的效果。
+
+558
+00:36:02,260 --> 00:36:07,780
+The fully connected layers are effectively matrices of weights, um,
+完全连接的层是有效的权重矩阵，嗯，
+
+559
+00:36:07,780 --> 00:36:13,720
+and commonly rewrite them like this where we have a bias term as a vector of bias terms.
+并且通常会像这样重写它们，我们将偏差项作为偏差项的向量。
+
+560
+00:36:13,720 --> 00:36:15,445
+There's sort of a choice there.
+那里有一种选择。
+
+561
+00:36:15,445 --> 00:36:18,670
+You can either have an always on import and then
+您可以随时进行导入
+
+562
+00:36:18,670 --> 00:36:24,190
+the bias terms become part of the weights of a slightly bigger matrix with one extra,
+偏差项成为稍微更大的矩阵的权重的一部分，有一个额外的，
+
+563
+00:36:24,190 --> 00:36:28,670
+uh, one extra either column or row.
+呃，一个额外的列或行。
+
+564
+00:36:30,810 --> 00:36:36,835
+One extra, a- row, right?
+一个额外的，一排，对吧？
+
+565
+00:36:36,835 --> 00:36:41,530
+Or you can just sort of have them separately within those Bs.
+或者你可以在这些B中分别拥有它们。
+
+566
+00:36:41,530 --> 00:36:45,580
+Okay. Um, and then the final note here- right?
+好的。嗯，然后最后的说明在这里 - 对吗？
+
+567
+00:36:45,580 --> 00:36:49,600
+So once we've calculated this part,
+所以一旦我们计算了这个部分，
+
+568
+00:36:49,600 --> 00:36:54,760
+we always put things through non-linearity which is referred to as
+我们总是通过非线性来处理事情，这被称为
+
+569
+00:36:54,760 --> 00:36:58,000
+the activation function and so something like
+激活功能等等
+
+570
+00:36:58,000 --> 00:37:02,395
+the logistic transform I showed earlier is an activation function.
+我之前展示的逻辑变换是激活函数。
+
+571
+00:37:02,395 --> 00:37:07,660
+And this is written as sort of vector in port, um,
+这是作为端口中的矢量写的，嗯，
+
+572
+00:37:07,660 --> 00:37:11,319
+activation function giving a vector output,
+激活函数给出矢量输出，
+
+573
+00:37:11,319 --> 00:37:16,060
+and what this always means is that we apply this function element-wise.
+这总是意味着我们在元素方面应用这个功能。
+
+574
+00:37:16,060 --> 00:37:19,720
+So we're applying the logistic function which is sort of a
+所以我们应用的是逻辑函数
+
+575
+00:37:19,720 --> 00:37:25,705
+naturally a one input one output function like the little graph I showed before.
+自然是一个输入一个输出功能，就像我之前展示的小图。
+
+576
+00:37:25,705 --> 00:37:28,180
+So when we apply that to a vector,
+所以当我们将它应用于矢量时，
+
+577
+00:37:28,180 --> 00:37:32,845
+we apply it to each element of the vector element-wise.
+我们将它应用于向量元素的每个元素。
+
+578
+00:37:32,845 --> 00:37:39,820
+Okay. We will come back very soon to sort of saying
+好的。我们很快就会回来说
+
+579
+00:37:39,820 --> 00:37:46,945
+more about non-linearities and what non-linearities people actually use.
+更多关于非线性和人们实际使用的非线性。
+
+580
+00:37:46,945 --> 00:37:48,705
+Um, but, you know,
+嗯，但是，你知道，
+
+581
+00:37:48,705 --> 00:37:51,585
+something you might be wondering is well,
+你可能想知道的事情很好，
+
+582
+00:37:51,585 --> 00:37:53,850
+why does he always have these non-linearities
+为什么他总是有这些非线性
+
+583
+00:37:53,850 --> 00:37:56,265
+and say there has to be an f function there?
+并说那里必须有一个f函数？
+
+584
+00:37:56,265 --> 00:37:58,140
+Why don't we just, um,
+我们为什么不这样做，嗯，
+
+585
+00:37:58,140 --> 00:38:02,190
+calculate Z equals WX plus B in one layer and then go
+在一层中计算Z等于WX加B然后去
+
+586
+00:38:02,190 --> 00:38:07,250
+on to another layer that also does Z2 equals W2,
+在另一层上，Z2也等于W2，
+
+587
+00:38:07,250 --> 00:38:12,040
+Z1 plus B and keep on going with layers like that?
+Z1加B并继续使用这样的图层？
+
+588
+00:38:12,040 --> 00:38:16,360
+And there's a very precise reason for that which is if you want
+如果你想要的话，有一个非常精确的原因
+
+589
+00:38:16,360 --> 00:38:21,540
+to have a neural network learn anything interesting,
+让神经网络学到任何有趣的东西，
+
+590
+00:38:21,540 --> 00:38:24,960
+you have to stick in some function F which is
+你必须坚持一些功能F.
+
+591
+00:38:24,960 --> 00:38:30,365
+a non-linear function such as the logistic curve I showed before.
+非线性函数，例如我之前显示的逻辑曲线。
+
+592
+00:38:30,365 --> 00:38:36,955
+And the reason for that is that if you're sort of doing
+这样做的原因是，如果你有点干嘛
+
+593
+00:38:36,955 --> 00:38:43,915
+linear transforms like WX plus B and then W2 Z1 plus B,
+线性变换如WX加B然后W2 Z1加B，
+
+594
+00:38:43,915 --> 00:38:49,360
+W3Z2 plus B and you're doing a sequence of linear transforms.
+W3Z2加B，你正在进行一系列线性变换。
+
+595
+00:38:49,360 --> 00:38:54,790
+Well, multiple linear transforms just composed to become a linear transform, right?
+那么，多个线性变换只是组成一个线性变换，对吗？
+
+596
+00:38:54,790 --> 00:39:01,135
+So one linear transform is rotating and stretching the space somehow and you can
+因此，一个线性变换是以某种方式旋转和拉伸空间，你可以
+
+597
+00:39:01,135 --> 00:39:04,510
+rotate and stretch the space again but the result of
+再次旋转和拉伸空间，但结果
+
+598
+00:39:04,510 --> 00:39:07,915
+that is just one bigger rotate and stretch of the space.
+这只是一个更大的旋转和伸展的空间。
+
+599
+00:39:07,915 --> 00:39:11,230
+So you don't get any extra power for a classifier
+所以你没有为分类器获得任何额外的动力
+
+600
+00:39:11,230 --> 00:39:14,620
+by simply having multiple linear transforms.
+通过简单地进行多次线性变换。
+
+601
+00:39:14,620 --> 00:39:20,980
+But as soon as you stick in almost any kind of non-linearity,
+但是只要你坚持几乎任何一种非线性，
+
+602
+00:39:20,980 --> 00:39:23,830
+then you get additional power.
+然后你获得额外的力量。
+
+603
+00:39:23,830 --> 00:39:26,965
+And so you know in general,
+所以你知道，
+
+604
+00:39:26,965 --> 00:39:30,760
+what we're doing when we're doing deep networks, um,
+当我们做深层网络时，我们正在做什么，嗯，
+
+605
+00:39:30,760 --> 00:39:34,210
+in the middle of them we're not thinking, "Ah,
+在他们中间，我们没有想到，“啊，
+
+606
+00:39:34,210 --> 00:39:37,225
+it's really important to have
+拥有它真的很重要
+
+607
+00:39:37,225 --> 00:39:41,845
+non-linearity thinking about probabilities or something like that."
+关于概率的非线性思考或类似的东西。“
+
+608
+00:39:41,845 --> 00:39:44,500
+Our general picture is well,
+我们的总体情况很好，
+
+609
+00:39:44,500 --> 00:39:50,095
+we want to be able to do effective function approximation or curve fitting.
+我们希望能够进行有效的函数逼近或曲线拟合。
+
+610
+00:39:50,095 --> 00:39:55,750
+We'd like to learn a space like this and we can only do that if we're sort of putting in
+我们想要学习这样的空间，如果我们有点投入，我们只能这样做
+
+611
+00:39:55,750 --> 00:40:03,085
+some non-linearities which allow us to learn these kind of curvy decision, um, patterns.
+一些非线性，使我们能够学习这些弯曲的决定，嗯，模式。
+
+612
+00:40:03,085 --> 00:40:07,390
+And so- so F is used effectively for doing accurate
+因此，F有效地用于做准确
+
+613
+00:40:07,390 --> 00:40:14,630
+[NOISE] fu- function approximation or sort of pattern matching as you go along.
+[NOISE]功能近似或类型匹配。
+
+614
+00:40:14,880 --> 00:40:20,365
+Okay. You are behind already. Um, okay.
+好的。你已经落后了。嗯，好的。
+
+615
+00:40:20,365 --> 00:40:25,120
+So that was the intro to baby neural networks.
+这就是婴儿神经网络的介绍。
+
+616
+00:40:25,120 --> 00:40:28,100
+All good? Any questions?
+都好？任何问题？
+
+617
+00:40:28,200 --> 00:40:31,150
+Yes?
+是？
+
+618
+00:40:31,150 --> 00:40:34,780
+Yeah, like er, feature one and feature
+是的，像呃，功能一和功能
+
+619
+00:40:34,780 --> 00:40:39,475
+four if- if you multiply it together it's highly indicative of like the label Y,
+四，如果你将它们相乘，它就像标签Y一样高度指示，
+
+620
+00:40:39,475 --> 00:40:41,845
+can you get to that product relationship
+你能达到那种产品关系吗？
+
+621
+00:40:41,845 --> 00:40:43,960
+to just say [NOISE] couple of layers that are linear?
+只是说[NOISE]几个线性的层？
+
+622
+00:40:43,960 --> 00:40:46,765
+Um, yes. Good question.
+嗯，是的。好问题。
+
+623
+00:40:46,765 --> 00:40:49,780
+So, in conventional stats,
+所以，在传统的统计数据中，
+
+624
+00:40:49,780 --> 00:40:53,470
+you have your basic input features and when
+你有基本的输入功能和时间
+
+625
+00:40:53,470 --> 00:40:58,210
+people are building something like a logistic regression model by hand,
+人们正在手工建立类似逻辑回归模型的东西，
+
+626
+00:40:58,210 --> 00:41:00,070
+people often say well,
+人们经常说得好，
+
+627
+00:41:00,070 --> 00:41:03,910
+something that's really important for classification is
+对分类来说非常重要的东西是
+
+628
+00:41:03,910 --> 00:41:08,260
+looking at the pair of feature four and feature seven.
+看着这对特色四和七特色。
+
+629
+00:41:08,260 --> 00:41:09,625
+Um, that you know,
+嗯，你知道，
+
+630
+00:41:09,625 --> 00:41:13,210
+if both of those are true at the same time something i-important
+如果这两个都是同时真实的东西我很重要
+
+631
+00:41:13,210 --> 00:41:17,545
+happens and so that's referred to normally in stats as an interaction term,
+发生，因此在统计中通常称为交互术语，
+
+632
+00:41:17,545 --> 00:41:22,470
+and you can by hand a-add interaction terms to your model.
+您可以手动为模型添加交互项。
+
+633
+00:41:22,470 --> 00:41:29,490
+So, essentially a large part of the secret here is having these intermediate layers.
+因此，这里的秘密很大一部分就是拥有这些中间层。
+
+634
+00:41:29,490 --> 00:41:33,890
+They can learn, build interaction terms by themselves.
+他们可以自己学习，建立互动条款。
+
+635
+00:41:33,890 --> 00:41:36,700
+Yeah, so it's sort of, um,
+是的，所以它有点，嗯，
+
+636
+00:41:36,700 --> 00:41:42,560
+automating the search for higher-order terms that you wanna put into your model.
+自动搜索您想要放入模型的高阶项。
+
+637
+00:41:46,800 --> 00:41:50,635
+Okay. I'll go on, other questions?
+好的。我会继续，其他问题？
+
+638
+00:41:50,635 --> 00:41:55,360
+Okay. Um, so um, yeah.
+好的。嗯，恩，是的。
+
+639
+00:41:55,360 --> 00:41:59,230
+So here's a brief little interlude on a teeny bit more of
+所以这里有一个简短的小插曲
+
+640
+00:41:59,230 --> 00:42:03,430
+NLP which is sort of a kind of problem we're gonna to look at for a moment.
+NLP这是一种我们暂时会看到的问题。
+
+641
+00:42:03,430 --> 00:42:08,860
+So this is the task of named entity recognition that I very briefly mentioned last time.
+所以这是我上次非常简要提到的命名实体识别的任务。
+
+642
+00:42:08,860 --> 00:42:12,820
+So, um, if we have some text,
+那么，嗯，如果我们有一些文字，
+
+643
+00:42:12,820 --> 00:42:15,595
+wait, it isn't appearing here.
+等等，它没有出现在这里。
+
+644
+00:42:15,595 --> 00:42:17,710
+Okay. Uh, okay.
+好的。呃，好的。
+
+645
+00:42:17,710 --> 00:42:19,000
+If we have some text,
+如果我们有一些文字，
+
+646
+00:42:19,000 --> 00:42:22,525
+something that in all sorts of places people want to do
+在人们想要做的各种各样的地方
+
+647
+00:42:22,525 --> 00:42:28,800
+is I'd like to find the names of things that are mentioned.
+我想找到提到的东西的名字。
+
+648
+00:42:28,800 --> 00:42:32,230
+Um and then normally, as well as,
+嗯，然后通常，以及，
+
+649
+00:42:32,230 --> 00:42:35,920
+finding the names of things you'd actually like to classify them,
+找到你真正喜欢的东西的名字，
+
+650
+00:42:35,920 --> 00:42:38,800
+say it's like to say some of them are organizations,
+说这就像是说其中一些是组织，
+
+651
+00:42:38,800 --> 00:42:41,065
+some of them are people,
+其中一些是人，
+
+652
+00:42:41,065 --> 00:42:43,765
+um, some of them are places.
+嗯，其中一些是地方。
+
+653
+00:42:43,765 --> 00:42:46,855
+And so you know this has lots of uses, you know,
+所以你知道这有很多用途，你知道，
+
+654
+00:42:46,855 --> 00:42:49,120
+people like to track mentions of companies and
+人们喜欢跟踪公司和公司的提及
+
+655
+00:42:49,120 --> 00:42:51,850
+people and newspapers and things like that.
+人和报纸等等。
+
+656
+00:42:51,850 --> 00:42:56,320
+Um, people when they do question-answering that a lot of the time the answers
+嗯，人们在做问题时很多时候回答问题
+
+657
+00:42:56,320 --> 00:43:00,520
+to questions are what we call named entities the names of people,
+问题就是我们称之为命名实体的名字，
+
+658
+00:43:00,520 --> 00:43:03,430
+locations, organizations, pop songs,
+地点，组织，流行歌曲，
+
+659
+00:43:03,430 --> 00:43:07,645
+movie names all of those kind of things are named entities.
+电影名称所有这些东西都是命名实体。
+
+660
+00:43:07,645 --> 00:43:10,570
+Um, and if you want to sort of start
+嗯，如果你想开始
+
+661
+00:43:10,570 --> 00:43:13,690
+building up a knowledge base automatically from a lot of text,
+从大量文本中自动构建知识库，
+
+662
+00:43:13,690 --> 00:43:15,730
+well, what you normally wanna do is get out
+好吧，你通常想做的就是出去
+
+663
+00:43:15,730 --> 00:43:19,600
+the named entities and get out relations between them.
+命名实体并获得它们之间的关系。
+
+664
+00:43:19,600 --> 00:43:21,250
+So this is a common task.
+所以这是一项常见的任务。
+
+665
+00:43:21,250 --> 00:43:24,430
+So, how can we go about doing that?
+那么，我们该怎么做呢？
+
+666
+00:43:24,430 --> 00:43:28,420
+And a common way of doing that is to say well,
+这样做的一种常见方式就是说，
+
+667
+00:43:28,420 --> 00:43:32,905
+we're going to go through the words one at a time
+我们将逐个完成一个单词
+
+668
+00:43:32,905 --> 00:43:38,035
+and they're gonna be words that are in a context just like they were for word to deck,
+而且他们会成为一种语境，就像他们的言语一样，
+
+669
+00:43:38,035 --> 00:43:43,630
+and what we're gonna do is run a classifier and we're going to assign them a class.
+而我们要做的就是运行一个分类器，我们将为它们分配一个类。
+
+670
+00:43:43,630 --> 00:43:46,420
+So we're gonna say first word is organization,
+所以我们要说第一个词是组织，
+
+671
+00:43:46,420 --> 00:43:48,085
+second word is organization,
+第二个词是组织，
+
+672
+00:43:48,085 --> 00:43:50,440
+third word isn't a named entity,
+第三个字不是命名实体，
+
+673
+00:43:50,440 --> 00:43:51,700
+fourth word is a person,
+第四个字是一个人，
+
+674
+00:43:51,700 --> 00:43:54,235
+fifth word is a person and continue down.
+第五个字是一个人并继续下去。
+
+675
+00:43:54,235 --> 00:43:58,300
+So in running a classification of a word within
+所以在运行一个单词的分类
+
+676
+00:43:58,300 --> 00:44:03,085
+a position in the text so it's got surrounding words around it.
+文本中的一个位置，所以它周围有周围的单词。
+
+677
+00:44:03,085 --> 00:44:07,075
+Um and so to say what the entities are
+嗯，所以说实体是什么
+
+678
+00:44:07,075 --> 00:44:11,650
+many entities are multi-word terms and so the simplest thing you can
+许多实体都是多字词，所以最简单的事情就是你
+
+679
+00:44:11,650 --> 00:44:15,880
+imagine doing is just say we'll take the sequence that are all classified the
+想象做的只是说我们将采取所有分类的序列
+
+680
+00:44:15,880 --> 00:44:20,935
+same and call that the e-entity Shen Guofang or something like that.
+同样称之为电子实体沉国放之类的东西。
+
+681
+00:44:20,935 --> 00:44:23,755
+There's a reason why that's slightly defective and so
+有一个原因，那就是有点缺陷等等
+
+682
+00:44:23,755 --> 00:44:26,635
+what people often use is that BIO encoding,
+人们经常使用的是BIO编码，
+
+683
+00:44:26,635 --> 00:44:31,150
+um, that I show on the right but I'll just gonna run ahead and not do that now.
+嗯，我在右边展示，但我会跑到前面而不是现在就这样做。
+
+684
+00:44:31,150 --> 00:44:37,240
+Um so, it might seem at first that named entity recognition is trivial because you know,
+嗯，起初看起来可能认为实体识别是微不足道的，因为你知道，
+
+685
+00:44:37,240 --> 00:44:41,230
+you have company names Google and Facebook are company names.
+你有公司名称谷歌和Facebook是公司名称。
+
+686
+00:44:41,230 --> 00:44:47,125
+And whenever you see Google or Facebook you just say company and how could you be wrong?
+每当你看到谷歌或Facebook时，你只是说公司，你怎么会错？
+
+687
+00:44:47,125 --> 00:44:49,225
+But in practice, there's a lot of subtlety and it's
+但在实践中，有很多微妙之处
+
+688
+00:44:49,225 --> 00:44:51,310
+easy to be wrong in named entity recognition.
+在命名实体识别中容易出错。
+
+689
+00:44:51,310 --> 00:44:54,370
+So this is sort of just some of the hard cases.
+所以这只是一些困难的案例。
+
+690
+00:44:54,370 --> 00:44:58,810
+So it's often hard to work out the boundaries of an entity.
+因此，通常很难找出实体的边界。
+
+691
+00:44:58,810 --> 00:44:59,994
+So in this sentence,
+所以在这句话中，
+
+692
+00:44:59,994 --> 00:45:04,840
+First National Bank don-donates two vans to Future School of Fort Smith.
+第一国民银行向史密斯堡未来学校捐赠两辆面包车。
+
+693
+00:45:04,840 --> 00:45:10,960
+So, there's presumably the name of a bank there but is it National Bank and the first is
+所以，可能有一家银行的名称，但它是国家银行，第一个是
+
+694
+00:45:10,960 --> 00:45:14,320
+just the first word of a sentence which is cap-capitalized
+只是一个限额的句子的第一个单词
+
+695
+00:45:14,320 --> 00:45:18,160
+like first she ordered some food or something.
+就像她先点一些食物一样。
+
+696
+00:45:18,160 --> 00:45:20,560
+So kind of unclear what it is.
+所以有点不清楚它是什么。
+
+697
+00:45:20,560 --> 00:45:24,310
+Sometimes it's hard to know whether something's an entity at all.
+有时很难知道某些东西是否是一个实体。
+
+698
+00:45:24,310 --> 00:45:29,455
+So at the end of this sentence is Future School the name of
+所以在这句话的最后是Future School的名字
+
+699
+00:45:29,455 --> 00:45:33,040
+some exciting kind of 21st-century school or is it
+一些令人兴奋的21世纪学校或是它
+
+700
+00:45:33,040 --> 00:45:36,970
+just meaning it's a future school that's gonna be built in this town, right?
+只是意味着这是一个未来的学校，将在这个城镇建造，对吧？
+
+701
+00:45:36,970 --> 00:45:39,535
+Is it an entity or not at all?
+它是一个实体还是根本没有？
+
+702
+00:45:39,535 --> 00:45:44,530
+Working out the class of an entity is often difficult so to find out more
+制定一个实体的类通常很困难，以便找到更多
+
+703
+00:45:44,530 --> 00:45:49,480
+about Zig Ziglar and read features by what class is Zig Ziglar?
+关于Zig Ziglar和读Zig Ziglar这个类的功能？
+
+704
+00:45:49,480 --> 00:45:51,370
+Kinda hard to tell if you don't know.
+如果你不知道，有点难以分辨。
+
+705
+00:45:51,370 --> 00:45:54,700
+Um, it's actually a person's name, um,
+嗯，这实际上是一个人的名字，嗯，
+
+706
+00:45:54,700 --> 00:45:58,870
+and there are various entities that are ambiguous, right?
+并且有各种各样的实体是模棱两可的，对吧？
+
+707
+00:45:58,870 --> 00:46:02,230
+So Charles Schwab in text is
+所以Charles Schwab在文中是
+
+708
+00:46:02,230 --> 00:46:08,425
+90% of the time an organization name because there's Charles Schwab Brokerage.
+组织名称的90％是因为有Charles Schwab Brokerage。
+
+709
+00:46:08,425 --> 00:46:10,945
+Um, but in this particular sentence here,
+嗯，但在这个特别的句子里，
+
+710
+00:46:10,945 --> 00:46:13,180
+in Woodside where Larry Ellison and
+在伍德赛德拉里埃里森和
+
+711
+00:46:13,180 --> 00:46:16,524
+Charles Schwab can live discreetly among wooded estates,
+查尔斯施瓦布可以在树木繁茂的庄园中谨慎地生活，
+
+712
+00:46:16,524 --> 00:46:19,450
+that is then a reference to Charles Schwab the person.
+那就是这个人对查尔斯施瓦布的提及。
+
+713
+00:46:19,450 --> 00:46:25,330
+So there's sort of a fair bit of understanding variously that's needed to get it right.
+因此，为了做到这一点，需要进行各种各样的理解。
+
+714
+00:46:25,330 --> 00:46:30,250
+Okay. Um, so what are we gonna do with that?
+好的。嗯，那我们要做什么呢？
+
+715
+00:46:30,250 --> 00:46:32,875
+And so this suggests, um,
+所以这表明，嗯，
+
+716
+00:46:32,875 --> 00:46:40,270
+what we wanna do is build classifiers for language that work inside a context.
+我们想要做的是为在上下文中工作的语言构建分类器。
+
+717
+00:46:40,270 --> 00:46:42,760
+Um, so you know, in general,
+嗯，所以你知道，一般来说，
+
+718
+00:46:42,760 --> 00:46:45,460
+it's not very interesting classifying a word
+分类一个单词并不是很有趣
+
+719
+00:46:45,460 --> 00:46:49,000
+outside a context we don't actually do that much in NLP.
+在上下文之外，我们实际上并没有在NLP中做那么多。
+
+720
+00:46:49,000 --> 00:46:51,685
+Um, but once you're in a context, um,
+嗯，但是一旦你处在一个环境中，嗯，
+
+721
+00:46:51,685 --> 00:46:55,360
+then it's interesting to do and named entity recognition
+那么做和命名实体识别很有意思
+
+722
+00:46:55,360 --> 00:46:58,300
+is one case there are lots of other places that comes up.
+是一个案例，有很多其他地方出现。
+
+723
+00:46:58,300 --> 00:47:00,085
+I mean, here's a slightly cool one,
+我的意思是，这里有点酷，
+
+724
+00:47:00,085 --> 00:47:02,500
+that there are some words that can mean
+有一些词可能意味着
+
+725
+00:47:02,500 --> 00:47:06,190
+themselves and their opposite at the same time, right?
+他们自己和他们的对立面同时对吧？
+
+726
+00:47:06,190 --> 00:47:09,040
+So to sanction something can either mean to allow
+因此，制裁某事可能意味着允许
+
+727
+00:47:09,040 --> 00:47:12,460
+something or it can mean to punish people who do
+某事或它可能意味着惩罚做的人
+
+728
+00:47:12,460 --> 00:47:17,770
+things or to seed something can either mean to plant seeds
+事物或种子的东西可能意味着种植种子
+
+729
+00:47:17,770 --> 00:47:20,440
+and things that you're seeding the soil or it can
+以及你正在播种土壤的东西
+
+730
+00:47:20,440 --> 00:47:23,275
+take seeds out of something like a watermelon, right?
+从西瓜这样的东西中取出种子，对吧？
+
+731
+00:47:23,275 --> 00:47:27,060
+You just need to know the context as to which it is.
+您只需要了解它的背景。
+
+732
+00:47:27,060 --> 00:47:32,195
+Okay. So, that suggests the tasks that we can classify a word
+好的。所以，这表明我们可以对一个单词进行分类的任务
+
+733
+00:47:32,195 --> 00:47:36,995
+in its context of neighboring words and any has an example of that.
+在其相邻单词的上下文中，任何一个都有这样的例子。
+
+734
+00:47:36,995 --> 00:47:39,530
+And the question is how might we do that?
+问题是我们如何做到这一点？
+
+735
+00:47:39,530 --> 00:47:42,770
+And a very simple way to do it might be to say, "Well,
+一个非常简单的方法可能就是说，“嗯，
+
+736
+00:47:42,770 --> 00:47:46,145
+we have a bunch of words in a row
+我们有一堆连续的单词
+
+737
+00:47:46,145 --> 00:47:50,105
+which each have a word vector from something like word to vec.
+每个人都有一个单词向量，从单词到vec。
+
+738
+00:47:50,105 --> 00:47:52,490
+Um, maybe we could just average
+嗯，也许我们可以平均
+
+739
+00:47:52,490 --> 00:47:56,540
+those word vectors and then classify the resulting vector.
+那些单词向量然后对结果向量进行分类。
+
+740
+00:47:56,540 --> 00:48:02,075
+The problem is that doesn't work very well because you lose position information.
+问题是，由于丢失了位置信息，因此效果不佳。
+
+741
+00:48:02,075 --> 00:48:04,550
+You don't actually know anymore which of
+你实际上不知道哪个
+
+742
+00:48:04,550 --> 00:48:08,270
+those word vectors is the one that you're meant to be classifying.
+那些单词向量是你要分类的那个。
+
+743
+00:48:08,270 --> 00:48:12,065
+So, a simple way to do better than that is to say,
+所以，一个比这更好的简单方法就是说，
+
+744
+00:48:12,065 --> 00:48:16,190
+"Well, why didn't we make a big vector of a word window?"
+“好吧，为什么我们没有制作一个文字窗口的大矢量？”
+
+745
+00:48:16,190 --> 00:48:20,510
+So, here are words and they each have a word vector,
+所以，这里是单词，每个都有一个单词向量，
+
+746
+00:48:20,510 --> 00:48:26,960
+and so to classify the middle word in the context of here plus or minus two words,
+所以要在这里加上或减去两个单词的上下文中对中间词进行分类，
+
+747
+00:48:26,960 --> 00:48:31,970
+we're simply going to concatenate these five vectors together and say now we have
+我们只是简单地将这五个向量连接在一起并说现在我们有
+
+748
+00:48:31,970 --> 00:48:37,280
+a bigger vector and let's build a classifier over that vector.
+一个更大的向量，让我们在该向量上构建一个分类器。
+
+749
+00:48:37,280 --> 00:48:41,480
+So, we're classifying this x window which is then a vector in,
+所以，我们将这个x窗口分类，然后是一个向量，
+
+750
+00:48:41,480 --> 00:48:47,150
+ah, 5D if we're using D dimensional word vectors.
+啊，5D如果我们使用D维词向量。
+
+751
+00:48:47,150 --> 00:48:56,525
+We can do that um in the kind of way that we did previously which is, um,
+我们可以用我们之前做过的那种方式做到这一点，嗯，
+
+752
+00:48:56,525 --> 00:48:59,570
+that we could say, "Okay,
+我们可以说，“好的，
+
+753
+00:48:59,570 --> 00:49:03,110
+for that big vector we're going to learn w weights
+对于那个大矢量，我们将学习w权重
+
+754
+00:49:03,110 --> 00:49:06,965
+and we're put- gonna put it through a softmax classifier,
+我们会把它放到softmax分类器中，
+
+755
+00:49:06,965 --> 00:49:09,485
+and then we're going to do the decisions."
+然后我们将做出决定。“
+
+756
+00:49:09,485 --> 00:49:13,445
+Um, that's a perfectly good way to do things and,
+嗯，这是一个非常好的做事方式，
+
+757
+00:49:13,445 --> 00:49:16,640
+um, for the purpose of it.
+嗯，为了它的目的。
+
+758
+00:49:16,640 --> 00:49:19,580
+What I want to get to in the last part of this is to
+我想在最后一部分得到的是
+
+759
+00:49:19,580 --> 00:49:23,240
+start looking at my, um, matrix calculus.
+开始看我的，嗯，矩阵演算。
+
+760
+00:49:23,240 --> 00:49:26,885
+And you know we could use this model and do
+你知道我们可以使用这个模型
+
+761
+00:49:26,885 --> 00:49:30,740
+a classifier and learn the weights of it and indeed, um,
+一个分类器，并学习它的重量，实际上，嗯，
+
+762
+00:49:30,740 --> 00:49:35,750
+for the handout on the website that we suggest you look at it does
+对于我们建议你看看它的网站上的讲义
+
+763
+00:49:35,750 --> 00:49:41,345
+do it with a softmax classifier of precisely this kind.
+使用这种类似的softmax分类器来做到这一点。
+
+764
+00:49:41,345 --> 00:49:46,940
+Um, but for the example I do in class I try to make it a bit simpler.
+嗯，但是我在课堂上做的例子我试着让它更简单一些。
+
+765
+00:49:46,940 --> 00:49:51,410
+Um, and I've wanted to do this I think very quickly because I'm fast running out of time.
+嗯，我想要这么做我想很快，因为我快速耗尽时间。
+
+766
+00:49:51,410 --> 00:49:56,150
+So, one of the famous early papers of neural NLP, um,
+那么，神经NLP的着名早期论文之一，嗯，
+
+767
+00:49:56,150 --> 00:49:59,090
+was this paper by Collobert and Weston which was first
+这是Collobert和Weston的第一篇论文
+
+768
+00:49:59,090 --> 00:50:03,755
+an ICML paper in 2008 which actually just a couple of weeks ago,
+2008年的ICML论文，实际上就在几周前，
+
+769
+00:50:03,755 --> 00:50:08,270
+um, won the ICML 2018 test of time award.
+嗯，赢得了ICML 2018年度时间奖测试。
+
+770
+00:50:08,270 --> 00:50:13,405
+Um, and then there's a more recent journal version of it 2011.
+嗯，然后是2011年的最新期刊版本。
+
+771
+00:50:13,405 --> 00:50:16,780
+And um, they use this idea of
+嗯，他们使用这个想法
+
+772
+00:50:16,780 --> 00:50:21,880
+window classification to assign classes like named entities,
+窗口分类，用于分配命名实体等类，
+
+773
+00:50:21,880 --> 00:50:25,015
+ti- to words in context, um,
+在上下文中的话，嗯，
+
+774
+00:50:25,015 --> 00:50:28,255
+but they did it in a slightly different way.
+但他们以稍微不同的方式做到了。
+
+775
+00:50:28,255 --> 00:50:30,835
+So, what they said is, "Well,
+所以，他们说的是，“嗯，
+
+776
+00:50:30,835 --> 00:50:35,750
+we've got these windows and this is one with the, um,
+我们有这些窗户，这是一个与，嗯，
+
+777
+00:50:35,750 --> 00:50:38,480
+location named entity in the middle and
+位于中间的位置命名实体
+
+778
+00:50:38,480 --> 00:50:41,660
+this is one without a location entity in the middle.
+这是一个中间没有位置实体的人。
+
+779
+00:50:41,660 --> 00:50:47,825
+So, what we want to do is have a system that returns a score,
+所以，我们想做的是有一个返回分数的系统，
+
+780
+00:50:47,825 --> 00:50:52,280
+and it should return a high score just as a real number in this case and
+在这种情况下，它应该返回一个高分，就像一个实数一样
+
+781
+00:50:52,280 --> 00:50:56,960
+it can should return a low score if it- if there isn't,
+如果没有，它应该返回低分，如果没有，
+
+782
+00:50:56,960 --> 00:51:00,605
+ah, location name in the middle of the window in this case.
+啊，在这种情况下窗口中间的位置名称。
+
+783
+00:51:00,605 --> 00:51:05,105
+So, explicitly the model just return the score.
+所以，明确地说模型只返回得分。
+
+784
+00:51:05,105 --> 00:51:09,875
+So, if you had the top level of your neural network a,
+所以，如果你拥有神经网络的顶级水平，
+
+785
+00:51:09,875 --> 00:51:13,430
+and you just then dot product did with a vector u,
+然后你就点了产品做了矢量你，
+
+786
+00:51:13,430 --> 00:51:16,250
+you then kind of with that final dot product,
+那么你最后的点产品，
+
+787
+00:51:16,250 --> 00:51:19,295
+you just return a real number.
+你只需要返回一个实数。
+
+788
+00:51:19,295 --> 00:51:22,595
+They use that as the basis of their classifier.
+他们将其作为分类器的基础。
+
+789
+00:51:22,595 --> 00:51:24,290
+So in full glory,
+如此充满荣耀，
+
+790
+00:51:24,290 --> 00:51:27,950
+what you had is you had this window of words,
+你有什么，你有这个窗口，
+
+791
+00:51:27,950 --> 00:51:32,810
+you looked up a word vector for each word, you then, um,
+你抬起每个单词的单词向量，然后你，嗯，
+
+792
+00:51:32,810 --> 00:51:35,690
+multiplied that the, the- well you
+乘以你，好吧
+
+793
+00:51:35,690 --> 00:51:38,810
+concatenated the word vectors for the window.
+连接窗口的单词向量。
+
+794
+00:51:38,810 --> 00:51:42,680
+You multiplied them by a matrix and edited a bias to get
+您将它们乘以矩阵并编辑偏差得到
+
+795
+00:51:42,680 --> 00:51:47,300
+a second hidden layer which is a and then you multiply that by
+第二个隐藏层是a，然后你乘以
+
+796
+00:51:47,300 --> 00:51:51,710
+a final vector and that gave you a score for the window and you
+一个最终的矢量，并给你一个窗口和你的分数
+
+797
+00:51:51,710 --> 00:51:56,525
+wanted the score to be large if it was the location and small,
+想要得分很大，如果它是位置和小，
+
+798
+00:51:56,525 --> 00:51:58,860
+if it wasn't a location.
+如果它不是一个位置。
+
+799
+00:51:58,860 --> 00:52:04,900
+So, in this sort of pretend example where we have four dimensional word vectors,
+所以，在这种我们有四维单词向量的假装示例中，
+
+800
+00:52:04,900 --> 00:52:07,720
+um, that's meaning you know for the window,
+嗯，这意味着你知道窗户，
+
+801
+00:52:07,720 --> 00:52:11,245
+this is a 20 x 1 vector.
+这是一个20 x 1的向量。
+
+802
+00:52:11,245 --> 00:52:14,440
+Um, for calculating the next hidden layer we've
+嗯，我们计算下一个隐藏层
+
+803
+00:52:14,440 --> 00:52:17,515
+got an 8 by 20 matrix plus the bias vector.
+得到一个8乘20矩阵加偏置向量。
+
+804
+00:52:17,515 --> 00:52:20,770
+Then, we've got this sort of 8-dimensional second hidden layer
+然后，我们有了这种8维第二隐藏层
+
+805
+00:52:20,770 --> 00:52:24,205
+and then we are computing a final real number.
+然后我们计算最终的实数。
+
+806
+00:52:24,205 --> 00:52:31,250
+Okay. Um, and so crucially this is an example of what the question was about.
+好的。嗯，所以关键是这是问题的一个例子。
+
+807
+00:52:31,250 --> 00:52:33,800
+Um, we've put in this extra layer here, right?
+嗯，我们在这里加上这个额外的层，对吗？
+
+808
+00:52:33,800 --> 00:52:36,620
+We could have just said here's a word vector,
+我们刚才可以说这是一个单词向量，
+
+809
+00:52:36,620 --> 00:52:39,035
+a big word vector of, of context.
+上下文的大词矢量。
+
+810
+00:52:39,035 --> 00:52:41,240
+Let's just stick a softmax or
+让我们坚持使用softmax或
+
+811
+00:52:41,240 --> 00:52:45,455
+logistic classification on top to say yes or no for location.
+最上面的逻辑分类，对位置说是或否。
+
+812
+00:52:45,455 --> 00:52:47,900
+But by putting in that extra hidden layer
+但是通过添加额外的隐藏层
+
+813
+00:52:47,900 --> 00:52:51,860
+precisely this extra hidden layer can calculate
+正是这个额外的隐藏层可以计算出来
+
+814
+00:52:51,860 --> 00:52:56,090
+non-linear interactions between the input word vectors.
+输入词向量之间的非线性相互作用。
+
+815
+00:52:56,090 --> 00:52:58,745
+So, it can calculate things like if
+所以，它可以计算像if这样的东西
+
+816
+00:52:58,745 --> 00:53:03,410
+the first word is a word like museum and the second and the second
+第一个词是像博物馆这样的词，第二个词和第二个词
+
+817
+00:53:03,410 --> 00:53:06,710
+was a word like the preposition in or
+是一个像介词中的词或
+
+818
+00:53:06,710 --> 00:53:11,300
+around then that's a very good signal that this should be,
+在那附近，这是一个非常好的信号，这应该是，
+
+819
+00:53:11,300 --> 00:53:14,900
+ah, location in the middle position of the window.
+啊，位置在窗口的中间位置。
+
+820
+00:53:14,900 --> 00:53:18,560
+So, extra layers of a neural network let us calculate
+因此，神经网络的额外层让我们计算
+
+821
+00:53:18,560 --> 00:53:22,850
+these kind of interaction terms between our basic features.
+我们的基本功能之间的这种互动术语。
+
+822
+00:53:22,850 --> 00:53:25,640
+Okay. Um, so there's
+好的。嗯，所以有
+
+823
+00:53:25,640 --> 00:53:29,735
+a few more slides here that sort of go through the details of their model,
+这里有一些幻灯片，它们会详细介绍他们的模型，
+
+824
+00:53:29,735 --> 00:53:34,100
+but I'm gonna just skip those for now because I'm a little bit behind.
+但是我现在要跳过那些因为我有点落后了。
+
+825
+00:53:34,100 --> 00:53:38,120
+And at the end of it we've just got this score.
+最后我们得到了这个分数。
+
+826
+00:53:38,120 --> 00:53:42,200
+So this is our model which is the one that I just outlined where we're
+所以这就是我们刚才概述的那个模型
+
+827
+00:53:42,200 --> 00:53:47,810
+calculating the score and we're wanting a big score, um, for location.
+计算得分，我们想要一个大分，嗯，位置。
+
+828
+00:53:47,810 --> 00:53:52,625
+And so, what we're gonna want to do is consider, um,
+所以，我们要做的就是考虑，嗯，
+
+829
+00:53:52,625 --> 00:53:56,405
+how we can use this model,
+我们如何使用这个模型，
+
+830
+00:53:56,405 --> 00:53:59,000
+um, to learn, um,
+嗯，要学习，嗯，
+
+831
+00:53:59,000 --> 00:54:01,580
+our parameters in a neural network.
+我们在神经网络中的参数。
+
+832
+00:54:01,580 --> 00:54:03,095
+Um, so in particular,
+嗯，特别是，
+
+833
+00:54:03,095 --> 00:54:06,155
+remember it's the same story we've had before.
+记住这是我们以前的故事。
+
+834
+00:54:06,155 --> 00:54:08,975
+We had a loss function J,
+我们有一个损失函数J，
+
+835
+00:54:08,975 --> 00:54:11,480
+and we're wanting to work out, um,
+我们想要锻炼，嗯，
+
+836
+00:54:11,480 --> 00:54:17,180
+the gradient with respect to our current theta parameters of the loss function.
+相对于我们当前损失函数的θ参数的梯度。
+
+837
+00:54:17,180 --> 00:54:22,490
+Then, we want to sort of subtract a little multiple of that, um,
+那么，我们想减去那个的一点点，嗯，
+
+838
+00:54:22,490 --> 00:54:27,320
+given by the learning rate from our current parameters to get updated parameters,
+根据我们当前参数的学习率给出更新参数，
+
+839
+00:54:27,320 --> 00:54:29,570
+and if we repeatedly do then stochastic
+如果我们反复做那么随机
+
+840
+00:54:29,570 --> 00:54:32,870
+gradient descent we'll have better and better parameters
+梯度下降我们会有更好更好的参数
+
+841
+00:54:32,870 --> 00:54:35,900
+which give higher probability to the things
+这给了事物更高的概率
+
+842
+00:54:35,900 --> 00:54:39,305
+that we're actually observing in our training data.
+我们实际上正在观察我们的训练数据。
+
+843
+00:54:39,305 --> 00:54:42,215
+So, the thing we want to know is, well,
+所以，我们想知道的是，嗯，
+
+844
+00:54:42,215 --> 00:54:45,350
+in general how can we do this um,
+一般来说我们怎么能这样做，
+
+845
+00:54:45,350 --> 00:54:50,585
+differentiation and work out the gradient of our loss function?
+区分并计算出我们的损失函数的梯度？
+
+846
+00:54:50,585 --> 00:54:55,370
+And so, I sort of wanted to sort of this the remaining time in this lecture,
+所以，我有点想把这个剩下的时间放在这个讲座中，
+
+847
+00:54:55,370 --> 00:54:59,270
+um, go through how we can do that by hand, um,
+嗯，看看我们怎么能用手做，嗯，
+
+848
+00:54:59,270 --> 00:55:02,090
+using math and then that'll lead into sort of
+使用数学，那将导致一些
+
+849
+00:55:02,090 --> 00:55:06,275
+discussing and more generally the backpropagation algorithm,
+讨论，更一般地说，反向传播算法，
+
+850
+00:55:06,275 --> 00:55:08,060
+um, for the next one.
+嗯，为下一个。
+
+851
+00:55:08,060 --> 00:55:10,490
+Okay. So, if we're doing um,
+好的。那么，如果我们这样做，
+
+852
+00:55:10,490 --> 00:55:16,700
+gradients by hand well we're doing multi-variable calculus, multi-variable derivatives.
+手动渐变我们正在做多变量微积分，多变量导数。
+
+853
+00:55:16,700 --> 00:55:23,090
+But in particular normally the most useful way to think about this is as doing
+但特别是通常最有用的思考方式就是这样做
+
+854
+00:55:23,090 --> 00:55:26,780
+matrix calculus which means we're directly working with
+矩阵演算意味着我们正在直接使用
+
+855
+00:55:26,780 --> 00:55:30,935
+vectors and matrices to work out our gradients,
+矢量和矩阵来计算我们的渐变，
+
+856
+00:55:30,935 --> 00:55:36,230
+and that that's normally sort of much faster and more convenient for
+而这通常更快，更方便
+
+857
+00:55:36,230 --> 00:55:41,660
+summarizing our neural network layers than trying to do it in a non vectorized way.
+总结我们的神经网络层而不是尝试以非矢量化方式进行。
+
+858
+00:55:41,660 --> 00:55:44,555
+But that doesn't mean that's the only way to do it.
+但这并不意味着这是唯一的方法。
+
+859
+00:55:44,555 --> 00:55:47,285
+If you're sort of confused about what's going on,
+如果你对发生的事情感到困惑，
+
+860
+00:55:47,285 --> 00:55:49,340
+sometimes thinking it through in
+有时候会考虑进去
+
+861
+00:55:49,340 --> 00:55:53,780
+the non vectorized way can be a better way to understand what's going on and,
+非矢量化方式可以更好地了解正在发生的事情，
+
+862
+00:55:53,780 --> 00:55:55,040
+um, make more progress.
+嗯，取得更多进展。
+
+863
+00:55:55,040 --> 00:55:56,795
+So, like when, um,
+所以，就像什么时候一样，嗯，
+
+864
+00:55:56,795 --> 00:55:59,570
+last time I did the word2vec um
+上次我做了word2vec嗯
+
+865
+00:55:59,570 --> 00:56:03,260
+derivatives when I was writing too small on that board,
+当我在那块板上写得太小时，衍生品，
+
+866
+00:56:03,260 --> 00:56:08,750
+sorry, um, that was doing it in a non vectorized way of working out the weights,
+对不起，嗯，那是用非矢量化的方法来计算权重，
+
+867
+00:56:08,750 --> 00:56:10,700
+talking about them individually.
+单独谈论他们。
+
+868
+00:56:10,700 --> 00:56:12,875
+Um, but here we're going to do it with,
+嗯，但是我们要在这里做，
+
+869
+00:56:12,875 --> 00:56:14,945
+um, vectors and matrices.
+嗯，矢量和矩阵。
+
+870
+00:56:14,945 --> 00:56:19,175
+And again, look for the lecture notes to cover this material in more detail.
+再次，查看讲义以更详细地介绍这些材料。
+
+871
+00:56:19,175 --> 00:56:22,025
+In particular, so that no one misses it.
+特别是，没有人会错过它。
+
+872
+00:56:22,025 --> 00:56:25,130
+Um, let me just clarify what I mean by lecture notes.
+嗯，让我通过讲义来澄清我的意思。
+
+873
+00:56:25,130 --> 00:56:29,645
+So, if you look at the course syllabus on the left-hand column, um,
+所以，如果你看一下左栏的课程大纲，嗯，
+
+874
+00:56:29,645 --> 00:56:32,840
+there's the slides that you can download and,
+你可以下载幻灯片，
+
+875
+00:56:32,840 --> 00:56:34,400
+on straight under the slides,
+在幻灯片的正下方，
+
+876
+00:56:34,400 --> 00:56:35,915
+it says lecture notes.
+它说讲义。
+
+877
+00:56:35,915 --> 00:56:38,105
+That's what I'm meaning by the lecture notes.
+这就是我在讲义中所说的意思。
+
+878
+00:56:38,105 --> 00:56:42,530
+In the- in the middle column it then has some readings and
+在中间列中，它有一些读数和
+
+879
+00:56:42,530 --> 00:56:47,150
+actually there are some diffe- additional things there that cover similar material.
+实际上，那里有一些不同的东西，涵盖类似的材料。
+
+880
+00:56:47,150 --> 00:56:48,725
+Um, so there's, um,
+嗯，所以，嗯，
+
+881
+00:56:48,725 --> 00:56:51,110
+so there's they might be helpful as well.
+所以他们也可能会有所帮助。
+
+882
+00:56:51,110 --> 00:56:54,830
+But first the thing that's closest to what I'm about to present,
+但首先是最接近我要呈现的东西，
+
+883
+00:56:54,830 --> 00:56:58,730
+it's the lecture notes that appear immediately under the slides link.
+它是立即出现在幻灯片链接下的讲义。
+
+884
+00:56:58,730 --> 00:57:03,815
+Okay. Um, so my hope here, um,
+好的。嗯，我的希望在这里，嗯，
+
+885
+00:57:03,815 --> 00:57:06,520
+my hope here is the following: Um,
+我的希望如下：嗯，
+
+886
+00:57:06,520 --> 00:57:10,730
+if you can't remembered how to do single variable calculus,
+如果你不记得如何做单变量微积分，
+
+887
+00:57:10,730 --> 00:57:13,565
+sorry you're basically sunken and might as well leave now.
+对不起，你基本上是沉没的，不妨现在离开。
+
+888
+00:57:13,565 --> 00:57:15,560
+Um, [LAUGHTER] I'm assuming you know how to do
+嗯，[笑声]我假设你知道怎么做
+
+889
+00:57:15,560 --> 00:57:21,245
+single-variable calculus and I'm assuming you know what a um a vector and a matrix is.
+单变量微积分，我假设你知道什么是矢量和矩阵。
+
+890
+00:57:21,245 --> 00:57:23,960
+Um, but you know, um,
+嗯，但是你知道，嗯，
+
+891
+00:57:23,960 --> 00:57:27,680
+I sort of hope that even if you never
+我希望即使你永远也不会
+
+892
+00:57:27,680 --> 00:57:31,820
+did multi-variable calculus or you can't remember any of it,
+做了多变量微积分，或者你不记得任何一个，
+
+893
+00:57:31,820 --> 00:57:34,220
+it's sort of for what we have to do here,
+这是我们在这里必须做的事情，
+
+894
+00:57:34,220 --> 00:57:37,445
+not that hard and you can do it.
+没那么难，你可以做到。
+
+895
+00:57:37,445 --> 00:57:40,430
+So, here's what, um, what you do.
+那么，这就是你所做的。
+
+896
+00:57:40,430 --> 00:57:42,230
+Um, all right.
+嗯，好的。
+
+897
+00:57:42,230 --> 00:57:46,820
+So, if we have a simple function f of x equals x cubed, right.
+所以，如果我们有一个简单的函数f，x等于x立方，对。
+
+898
+00:57:46,820 --> 00:57:50,765
+Its gradient, um, and so the gradient is the slope, right?
+它的渐变，嗯，渐变是斜率，对吗？
+
+899
+00:57:50,765 --> 00:57:53,915
+Saying how steep or shallow is the slope of something,
+说某事的斜率有多么陡峭或浅浅，
+
+900
+00:57:53,915 --> 00:57:59,075
+and then when we and also saw the direction of slope when we go into multiple dimensions.
+然后当我们进入多个维度时，我们也看到了斜率的方向。
+
+901
+00:57:59,075 --> 00:58:01,610
+Um, its gradient is just as derivatives.
+嗯，它的梯度就像衍生物一样。
+
+902
+00:58:01,610 --> 00:58:04,430
+So, its derivative is 3x squared.
+因此，它的衍生物是3倍平方。
+
+903
+00:58:04,430 --> 00:58:07,865
+Um, so if you're at the point x equals 3, that you know,
+嗯，所以，如果你在x等于3，你知道，
+
+904
+00:58:07,865 --> 00:58:10,415
+the sort of this 27 of sloppiness,
+这种27的邋,,
+
+905
+00:58:10,415 --> 00:58:12,305
+um, is very steep.
+嗯，非常陡峭。
+
+906
+00:58:12,305 --> 00:58:20,060
+Okay. So well, what if we have a function with one output but now it has many inputs?
+好的。那么，如果我们有一个输出功能，但现在它有很多输入怎么办？
+
+907
+00:58:20,060 --> 00:58:24,170
+Um, so that we're sort of doing that sort of, um,
+嗯，这样我们就是这样做的，嗯，
+
+908
+00:58:24,170 --> 00:58:31,295
+function that was like the dot products where we're doing the sort of the UTV or WTX,
+功能，就像我们正在做UTV或WTX那样的点积，
+
+909
+00:58:31,295 --> 00:58:33,170
+um, to calculate a value.
+嗯，计算一个值。
+
+910
+00:58:33,170 --> 00:58:36,410
+Well, then what we're gonna calculate is
+好吧，那么我们要计算的是
+
+911
+00:58:36,410 --> 00:58:42,815
+a gradient which is a vector of partial derivatives with respect to each input.
+梯度，它是关于每个输入的偏导数的向量。
+
+912
+00:58:42,815 --> 00:58:45,065
+So, you take, um,
+所以，你拿，嗯，
+
+913
+00:58:45,065 --> 00:58:49,505
+the slope of the function as you change x1,
+更改x1时函数的斜率，
+
+914
+00:58:49,505 --> 00:58:55,040
+the slope of the function as you change x2 through the slope of the, ah,
+当你改变x2的斜率时，函数的斜率啊，
+
+915
+00:58:55,040 --> 00:59:00,710
+function as you change xn and each of these you can just calculate as if you were doing
+当你改变xn时你会发挥作用，你可以像计算每一个一样进行计算
+
+916
+00:59:00,710 --> 00:59:04,910
+single variable calculus and you just put them all in a vector and
+单变量微积分，你只需将它们全部放在矢量中
+
+917
+00:59:04,910 --> 00:59:09,920
+that's then giving you the gradient and then the gradient and multi-dimensional,
+然后给你渐变，然后渐变和多维，
+
+918
+00:59:09,920 --> 00:59:14,570
+um, spaces then giving you the direction and slope of a sort of
+嗯，空间然后给你一种方向和斜率
+
+919
+00:59:14,570 --> 00:59:19,730
+a surface that touches your multi-dimensional, um, f function.
+一个接触你的多维，嗯，f函数的表面。
+
+920
+00:59:19,730 --> 00:59:22,670
+Okay. So that's getting a bit scarier,
+好的。所以这有点可怕，
+
+921
+00:59:22,670 --> 00:59:24,500
+but it gets a little bit scarier than that
+但它比那更可怕
+
+922
+00:59:24,500 --> 00:59:27,635
+because if we have a neutral network layer, um,
+因为如果我们有一个中立的网络层，嗯，
+
+923
+00:59:27,635 --> 00:59:32,000
+we then have a function which will have n inputs,
+然后我们有一个有n个输入的函数，
+
+924
+00:59:32,000 --> 00:59:33,770
+which are the input neurons,
+哪些是输入神经元，
+
+925
+00:59:33,770 --> 00:59:36,305
+and it will have m outputs.
+它将有m个输出。
+
+926
+00:59:36,305 --> 00:59:39,260
+So if that's the case, um,
+如果是这样的话，嗯，
+
+927
+00:59:39,260 --> 00:59:44,765
+you then have a matrix of partial derivatives which is referred to as the Jacobian.
+然后你有一个偏导数矩阵，称为雅可比矩阵。
+
+928
+00:59:44,765 --> 00:59:47,435
+So in the Jacobian, um,
+所以雅各比派，嗯，
+
+929
+00:59:47,435 --> 00:59:51,695
+you're sort of taking these partial derivatives, um,
+你有点拿这些偏导数，嗯，
+
+930
+00:59:51,695 --> 00:59:54,125
+with respect to each, um,
+关于每一个，嗯，
+
+931
+00:59:54,125 --> 01:00:00,455
+output along the rows and with respect to each input down the columns.
+沿着行输出并相对于列下的每个输入。
+
+932
+01:00:00,455 --> 01:00:04,235
+And so you're getting these m by n partial derivatives,
+因此，您可以通过n个偏导数得到这些，
+
+933
+01:00:04,235 --> 01:00:09,620
+considering every combination of an output and an input.
+考虑输出和输入的每种组合。
+
+934
+01:00:09,620 --> 01:00:13,700
+Um, but again, you can fill in every cell of this matrix
+嗯，但同样，你可以填写这个矩阵的每个单元格
+
+935
+01:00:13,700 --> 01:00:18,545
+just by doing single-variable calculus provided you don't get yourself confused.
+只需通过单变量微积分，只要你不要让自己感到困惑。
+
+936
+01:00:18,545 --> 01:00:24,665
+Okay. Um, then we already saw when we were doing word2vec,
+好的。嗯，那时我们已经看到我们在做word2vec了，
+
+937
+01:00:24,665 --> 01:00:29,435
+that sort of a central tool that we have to use to work out,
+那种我们必须用来解决的核心工具，
+
+938
+01:00:29,435 --> 01:00:32,480
+um, to work out, um,
+嗯，锻炼，嗯，
+
+939
+01:00:32,480 --> 01:00:35,150
+our derivatives of something like
+我们的衍生品之类的
+
+940
+01:00:35,150 --> 01:00:37,490
+a neural network model is we have
+我们有一个神经网络模型
+
+941
+01:00:37,490 --> 01:00:40,820
+a sequence of functions that we run up one after another.
+我们一个接一个地运行的一系列功能。
+
+942
+01:00:40,820 --> 01:00:43,280
+So, um, in a neural network you're sort of
+所以，嗯，在一个神经网络中，你有点像
+
+943
+01:00:43,280 --> 01:00:45,875
+running a sequence of functions one after another.
+一个接一个地运行一系列功能。
+
+944
+01:00:45,875 --> 01:00:47,660
+So we have to use, um,
+所以我们必须使用，嗯，
+
+945
+01:00:47,660 --> 01:00:52,880
+the chain rule to work out derivatives when we compose functions.
+在我们撰写函数时计算导数的链式规则。
+
+946
+01:00:52,880 --> 01:00:56,240
+So if we have one variable function, so we have,
+所以，如果我们有一个变量函数，那么我们有，
+
+947
+01:00:56,240 --> 01:01:00,665
+um, C equals 3y and y equals x squared.
+嗯，C等于3y，y等于x平方。
+
+948
+01:01:00,665 --> 01:01:03,725
+If we want to work out, um,
+如果我们想要锻炼，嗯，
+
+949
+01:01:03,725 --> 01:01:07,430
+the derivative of z with respect to x,
+z相对于x的导数，
+
+950
+01:01:07,430 --> 01:01:11,180
+we say, aha, that's a composition of two functions.
+我们说，啊哈，这是两个功能的组合。
+
+951
+01:01:11,180 --> 01:01:13,190
+So I use the chain rule.
+所以我使用链规则。
+
+952
+01:01:13,190 --> 01:01:18,350
+And so that means what I do is I multiply, um, the derivative.
+所以这就意味着我所做的就是乘法，嗯，衍生物。
+
+953
+01:01:18,350 --> 01:01:21,620
+So I take, um, dz/dy.
+所以我接受，嗯，dz / dy。
+
+954
+01:01:21,620 --> 01:01:25,220
+So that's 2x, um,
+那是2x，嗯，
+
+955
+01:01:25,220 --> 01:01:29,030
+wait, [NOISE] Sorry, I said that wrong, right?
+等等，[NOISE]对不起，我说错了，对吧？
+
+956
+01:01:29,030 --> 01:01:30,530
+Is my example wrong?
+我的例子错了吗？
+
+957
+01:01:30,530 --> 01:01:32,290
+Oh yeah, its right, dz/dy.
+哦是的，它的权利，dz / dy。
+
+958
+01:01:32,290 --> 01:01:34,180
+So yeah, dz/dy is just three.
+所以是的，dz / dy只有三个。
+
+959
+01:01:34,180 --> 01:01:36,790
+That's, right, that's the derivative of the top line,
+那是，对，这是顶线的衍生物，
+
+960
+01:01:36,790 --> 01:01:40,120
+and then dy/dx is 2x.
+然后dy / dx是2x。
+
+961
+01:01:40,120 --> 01:01:44,005
+And I multiply those together and I get the answer, um,
+我将它们相乘，我得到了答案，嗯，
+
+962
+01:01:44,005 --> 01:01:48,490
+that the derivative of z with respect to x is 6x.
+z相对于x的导数是6x。
+
+963
+01:01:48,490 --> 01:01:53,990
+Okay. Um, this bit then gets a little bit freakier, but it's true.
+好的。嗯，这一点变得有点怪，但这是真的。
+
+964
+01:01:53,990 --> 01:01:57,560
+If you have lots of variables at once,
+如果你一次有很多变量，
+
+965
+01:01:57,560 --> 01:02:02,465
+you simply multiply the Jacobians and you get the right answer.
+你只需乘以雅各比人就可以得到正确的答案。
+
+966
+01:02:02,465 --> 01:02:05,390
+So if we're now imagining our neural net,
+所以，如果我们现在想象我们的神经网络，
+
+967
+01:02:05,390 --> 01:02:07,910
+well sort of, this is our typical neural net right?
+那么，这是我们典型的神经网络吗？
+
+968
+01:02:07,910 --> 01:02:11,480
+So we're doing the neural net layer where we have
+所以我们正在做我们所拥有的神经网络层
+
+969
+01:02:11,480 --> 01:02:15,290
+our weight matrix multiplied their input vector plus,
+我们的权重矩阵乘以它们的输入向量加，
+
+970
+01:02:15,290 --> 01:02:19,520
+um, the bias, and then we're putting it through a non-linearity.
+嗯，偏见，然后我们通过非线性。
+
+971
+01:02:19,520 --> 01:02:24,875
+And then if we want to know what's the partials of h with respect to x,
+然后如果我们想知道关于x的h的部分是什么，
+
+972
+01:02:24,875 --> 01:02:27,320
+we just say, huh, it's a function composition.
+我们只是说，呵呵，这是一个功能组合。
+
+973
+01:02:27,320 --> 01:02:28,820
+So this is easy to do.
+所以这很容易做到。
+
+974
+01:02:28,820 --> 01:02:31,340
+We work out our first Jacobian,
+我们制作了我们的第一个雅可比人，
+
+975
+01:02:31,340 --> 01:02:34,025
+which is the partials of h with respect to z,
+这是h相对于z的部分，
+
+976
+01:02:34,025 --> 01:02:38,225
+and then we just multiply it by the partials of z with respect to x,
+然后我们将它乘以z相对于x的部分，
+
+977
+01:02:38,225 --> 01:02:39,965
+and we get the right answer.
+我们得到了正确的答案。
+
+978
+01:02:39,965 --> 01:02:44,135
+Um, easy.
+嗯，很简单。
+
+979
+01:02:44,135 --> 01:02:47,840
+Um, so here's sort of um
+嗯，所以这里有点嗯
+
+980
+01:02:47,840 --> 01:02:53,660
+an example Jacobian which is a special case that comes up a lot.
+Jacobian的一个例子，这是一个很常见的特殊情况。
+
+981
+01:02:53,660 --> 01:02:58,850
+Um, so it's just good to realize this one which we'll see with our neural net.
+嗯，所以我们用神经网络看到的这个很好。
+
+982
+01:02:58,850 --> 01:03:03,560
+So well one of the things that we have are these element-wise activation function.
+我们所拥有的一件事就是这些元素激活功能。
+
+983
+01:03:03,560 --> 01:03:06,035
+So we have h equals f of z.
+所以我们有h等于z的f。
+
+984
+01:03:06,035 --> 01:03:09,200
+So, um, what is the, um,
+那么，嗯，这是什么，嗯，
+
+985
+01:03:09,200 --> 01:03:14,330
+partial derivative of h with respect to z. Um,
+h的偏导数相对于z。嗯，
+
+986
+01:03:14,330 --> 01:03:18,710
+well the thing- remember that we sort of apply this element-wise.
+好的东西 - 记住，我们有点应用这个元素。
+
+987
+01:03:18,710 --> 01:03:22,475
+So we're actually saying hi equals f of zi.
+所以我们实际上说hi等于zi的f。
+
+988
+01:03:22,475 --> 01:03:28,460
+So, you know, formally this function has n inputs and n outputs,
+所以，你知道，这个函数正式有n个输入和n个输出，
+
+989
+01:03:28,460 --> 01:03:33,035
+so it's partial derivatives are going to be an n by n Jacobian.
+所以它的偏导数将成为雅各比亚的n。
+
+990
+01:03:33,035 --> 01:03:36,529
+But if we think about what's happening there,
+但如果我们考虑那里发生的事情，
+
+991
+01:03:36,529 --> 01:03:40,615
+um, what we're actually going to find is, sort of,
+嗯，我们实际上会发现的是，有点像，
+
+992
+01:03:40,615 --> 01:03:45,010
+when we're working out the terms of this so we're working out,
+当我们计算出这个条款时，我们正在努力，
+
+993
+01:03:45,010 --> 01:03:50,985
+how does f of zi change as you change zj?
+当你改变zj时，zi如何改变？
+
+994
+01:03:50,985 --> 01:03:55,280
+Well, if j is not equal to i,
+好吧，如果j不等于i，
+
+995
+01:03:55,280 --> 01:03:57,410
+it's gonna make no difference at all, right?
+它根本没有任何区别，对吧？
+
+996
+01:03:57,410 --> 01:04:00,020
+So if my f function is something like putting it through
+所以，如果我的f函数就像通过它一样
+
+997
+01:04:00,020 --> 01:04:04,160
+the logistic function or anything else absolute valuing a number,
+逻辑函数或其他任何绝对重要的数字，
+
+998
+01:04:04,160 --> 01:04:07,880
+it's gonna make no difference for the calculation of f of zi
+对于zi的f的计算，它没有任何区别
+
+999
+01:04:07,880 --> 01:04:12,005
+if I chains zj because it's just not in the equation.
+如果我链zj因为它不在等式中。
+
+1000
+01:04:12,005 --> 01:04:16,925
+And so, therefore, the only terms that are actually going to occur
+因此，实际上将会发生的唯一条款
+
+1001
+01:04:16,925 --> 01:04:22,235
+and be non-zero are the terms where i equals j.
+并且非零是i等于j的项。
+
+1002
+01:04:22,235 --> 01:04:28,300
+So for working out these partial derivatives if i does not equal j, um, it's zero.
+因此，如果我不等于j，那么为了计算出这些偏导数，它就是零。
+
+1003
+01:04:28,300 --> 01:04:30,564
+If i does equal j,
+如果我确实等于j，
+
+1004
+01:04:30,564 --> 01:04:34,390
+then we have to work out a single-variable calculus.
+那么我们必须计算出单变量微积分。
+
+1005
+01:04:34,390 --> 01:04:37,090
+What's the derivative, um,
+什么是衍生物，嗯，
+
+1006
+01:04:37,090 --> 01:04:41,290
+of the, um, activation function, um,
+嗯，激活功能，嗯，
+
+1007
+01:04:41,290 --> 01:04:44,670
+for- and so this is what,
+因为 - 这就是，
+
+1008
+01:04:44,670 --> 01:04:49,445
+a um, Jacobian looks like for an activation function.
+嗯，Jacobian看起来像激活功能。
+
+1009
+01:04:49,445 --> 01:04:51,605
+It's a diagonal matrix.
+这是一个对角矩阵。
+
+1010
+01:04:51,605 --> 01:04:53,510
+Everything else is zero,
+其他一切都是零，
+
+1011
+01:04:53,510 --> 01:04:55,640
+and we thought this activation function,
+我们认为这个激活功能，
+
+1012
+01:04:55,640 --> 01:04:57,455
+we work out its derivative,
+我们计算出它的衍生物，
+
+1013
+01:04:57,455 --> 01:05:00,095
+and then we calculate that for the difference, um,
+然后我们计算差异，嗯，
+
+1014
+01:05:00,095 --> 01:05:05,630
+we have it for the different kind of um, zi values.
+我们有不同类型的um，zi值。
+
+1015
+01:05:05,630 --> 01:05:10,970
+Okay. Um, so that's a,
+好的。嗯，这是一个，
+
+1016
+01:05:10,970 --> 01:05:14,165
+um, Jacobians for an activation function.
+嗯，Jacobians的激活功能。
+
+1017
+01:05:14,165 --> 01:05:15,950
+What are the other main cases,
+还有哪些主要案例，
+
+1018
+01:05:15,950 --> 01:05:18,410
+uh, that we need for a neural network?
+呃，我们需要神经网络吗？
+
+1019
+01:05:18,410 --> 01:05:23,690
+And these I'll go in through a little bit more slowly in the same lecture notes.
+而这些我将在同一个讲义中慢慢地进入。
+
+1020
+01:05:23,690 --> 01:05:27,965
+But they're kind of similar to what we saw in the very first class.
+但它们与我们在第一堂课中所看到的相似。
+
+1021
+01:05:27,965 --> 01:05:34,490
+So if we are wanting to work out the partial derivatives of wx plus b with respect to x,
+因此，如果我们想要计算wx加b的偏导数x，
+
+1022
+01:05:34,490 --> 01:05:39,000
+um, what we get is w. Um,
+嗯，我们得到的是w。嗯，
+
+1023
+01:05:39,580 --> 01:05:47,225
+and if we want to work out the partial derivative of wx plus b with respect to b,
+如果我们想要计算wx加b的偏导数b，
+
+1024
+01:05:47,225 --> 01:05:54,080
+um, that means that we get an identity matrix because b is sort of like a 1b, right?
+嗯，这意味着我们得到一个单位矩阵，因为b有点像1b，对吧？
+
+1025
+01:05:54,080 --> 01:05:56,270
+It's this almost always on vector,
+这几乎总是在矢量上，
+
+1026
+01:05:56,270 --> 01:06:00,455
+so you're just getting the ones coming out to preserve the b. Um,
+所以你只是把那些出来保存b。嗯，
+
+1027
+01:06:00,455 --> 01:06:02,585
+this was the case, um,
+是这样的，嗯，
+
+1028
+01:06:02,585 --> 01:06:05,030
+that we saw, um,
+我们看到了，嗯，
+
+1029
+01:06:05,030 --> 01:06:07,640
+when we were doing the word vectors.
+当我们做单词向量时。
+
+1030
+01:06:07,640 --> 01:06:13,415
+That if you have a vector dot product of u and h and you say,
+如果你有一个u和h的矢量点积，你说，
+
+1031
+01:06:13,415 --> 01:06:17,870
+what's the partial derivatives of that with respect to u,
+关于你的那部分衍生物是什么，
+
+1032
+01:06:17,870 --> 01:06:21,530
+then you get out h transpose.
+然后你出去转置。
+
+1033
+01:06:21,530 --> 01:06:25,340
+Um, if you haven't seen those before,
+嗯，如果你之前没见过，
+
+1034
+01:06:25,340 --> 01:06:29,420
+um, look at the lecture notes handouts, um,
+嗯，看看讲义上的讲义，嗯，
+
+1035
+01:06:29,420 --> 01:06:34,010
+and see if you can compute them and they make sense at home, um,
+并看看你是否可以计算它们，它们在家里有意义，嗯，
+
+1036
+01:06:34,010 --> 01:06:38,540
+but for the moment we're gonna believe those and use those to
+但是目前我们会相信那些并使用它们
+
+1037
+01:06:38,540 --> 01:06:44,030
+see how we can then work out derivatives inside the neural network.
+看看我们如何在神经网络中找出衍生物。
+
+1038
+01:06:44,030 --> 01:06:48,695
+Okay. So here's the same neural network we saw before.
+好的。所以这是我们之前看到的相同的神经网络。
+
+1039
+01:06:48,695 --> 01:06:51,365
+So we have a window of words,
+所以我们有一个词窗口，
+
+1040
+01:06:51,365 --> 01:06:53,150
+we're looking at word vectors,
+我们正在寻找单词向量，
+
+1041
+01:06:53,150 --> 01:06:55,040
+we're putting it through a hidden layer,
+我们把它穿过隐藏层，
+
+1042
+01:06:55,040 --> 01:06:57,590
+and then we're just doing a vector modal, um,
+然后我们只是做一个矢量模态，嗯，
+
+1043
+01:06:57,590 --> 01:07:00,935
+vector dot product, you get this final score.
+矢量点积，你得到这个最终得分。
+
+1044
+01:07:00,935 --> 01:07:05,840
+And so, what we [NOISE] want to do to be able to train our neural network,
+所以，我们[NOISE]希望能够训练我们的神经网络，
+
+1045
+01:07:05,840 --> 01:07:15,425
+is we want to find out how- how s changes depending on all the parameters of the model.
+我们是否想要了解如何根据模型的所有参数进行更改。
+
+1046
+01:07:15,425 --> 01:07:18,950
+The x, the w, the b, the u. Um,
+x，w，b，u。嗯，
+
+1047
+01:07:18,950 --> 01:07:24,320
+and so we want to work out partial derivatives of S with respect
+所以我们想要尊重S的偏导数
+
+1048
+01:07:24,320 --> 01:07:30,110
+to each of those because we can then work out okay if you move b up,
+对于每一个，因为如果你向上移动b，我们可以做得很好
+
+1049
+01:07:30,110 --> 01:07:32,465
+um, the score gets better,
+嗯，分数越来越好，
+
+1050
+01:07:32,465 --> 01:07:36,350
+which is good if it's actually a plus in the middle,
+如果它实际上是中间的加号，这是好的，
+
+1051
+01:07:36,350 --> 01:07:38,435
+and therefore we'll want to nudge up,
+因此我们想要轻推，
+
+1052
+01:07:38,435 --> 01:07:41,270
+um, elements of b appropriately.
+嗯，b的元素恰当。
+
+1053
+01:07:41,270 --> 01:07:45,050
+Okay, um, and so I'm just doing the gradient with
+好的，嗯，所以我只是做渐变
+
+1054
+01:07:45,050 --> 01:07:48,725
+respect to the score here and I skipped over those couple of slides.
+尊重这里的分数，我跳过了那几张幻灯片。
+
+1055
+01:07:48,725 --> 01:07:50,930
+Um, so if you're just, sort of,
+嗯，如果你只是，有点像，
+
+1056
+01:07:50,930 --> 01:07:52,970
+staring at this picture and say, well,
+盯着这张照片说，好吧，
+
+1057
+01:07:52,970 --> 01:07:58,400
+how do I work out the partial derivative of s with respect to b?
+我如何计算出关于b的s的偏导数？
+
+1058
+01:07:58,400 --> 01:08:00,950
+Um, probably it doesn't look obvious.
+嗯，可能看起来并不明显。
+
+1059
+01:08:00,950 --> 01:08:04,520
+So the first thing here that you want to do is sort of break up
+所以你要做的第一件事就是分手
+
+1060
+01:08:04,520 --> 01:08:09,080
+the eq- equations into simple pieces that compose together, right?
+将方程式组合成简单的组合，对吧？
+
+1061
+01:08:09,080 --> 01:08:12,170
+So you have the input x,
+所以你有输入x，
+
+1062
+01:08:12,170 --> 01:08:16,475
+and then that goes into z equals wx plus b,
+然后进入z等于wx加b，
+
+1063
+01:08:16,475 --> 01:08:19,580
+and then you compose that with the next thing.
+然后你用下一个东西组成。
+
+1064
+01:08:19,580 --> 01:08:23,240
+So h equals f of z, our activation function,
+所以h等于z，我们的激活函数，
+
+1065
+01:08:23,240 --> 01:08:27,500
+and then this h goes into the next thing of s equals uTh.
+然后这个h进入下一个等于你的东西。
+
+1066
+01:08:27,500 --> 01:08:29,960
+So we've got these sequence of functions.
+所以我们有这些功能序列。
+
+1067
+01:08:29,960 --> 01:08:35,480
+And pretty much you want to break things up as much as you can.
+而且你想要尽可能多地分解。
+
+1068
+01:08:35,480 --> 01:08:37,880
+I mean, I could have broken this up even further.
+我的意思是，我可以进一步打破这个。
+
+1069
+01:08:37,880 --> 01:08:41,000
+I could have said z1 equals wx,
+我可以说z1等于wx，
+
+1070
+01:08:41,000 --> 01:08:44,165
+z equals z1 plus b. Um,
+z等于z1加b。嗯，
+
+1071
+01:08:44,165 --> 01:08:45,620
+it turns out um,
+事实证明，嗯，
+
+1072
+01:08:45,620 --> 01:08:48,200
+but if you've just got things added and subtracted,
+但是如果你只是添加和减少了东西，
+
+1073
+01:08:48,200 --> 01:08:52,790
+you can sort of do that in one step because that sort of pathway separating the,
+你可以一步到位，因为这种途径分开了，
+
+1074
+01:08:52,790 --> 01:08:54,170
+when doing the derivatives,
+在做衍生品时，
+
+1075
+01:08:54,170 --> 01:08:59,090
+but sort of anything else that composes together you want to pull it out for the pieces.
+但是，除了组合在一起的任何其他东西，你想把它拉出来。
+
+1076
+01:08:59,090 --> 01:09:05,605
+Okay. So now our neural net is doing a sequence of function compositions.
+好的。所以现在我们的神经网络正在做一系列功能组合。
+
+1077
+01:09:05,605 --> 01:09:07,000
+And when we say, okay,
+当我们说，好吧，
+
+1078
+01:09:07,000 --> 01:09:09,295
+we know how to do that, the chain rule.
+我们知道如何做到这一点，链条规则。
+
+1079
+01:09:09,295 --> 01:09:13,975
+So if you wanna work out the partials of s with respect to b,
+所以如果你想弄清楚关于b的部分s，
+
+1080
+01:09:13,975 --> 01:09:19,960
+it's just going to be the product of the derivatives of each step along the way.
+它将成为沿途每一步的衍生产品。
+
+1081
+01:09:19,960 --> 01:09:25,130
+So it's gonna be um the partial of s with respect to h times h with
+因此，对于h次h而言，它将是部分s
+
+1082
+01:09:25,130 --> 01:09:30,530
+respect to z times z with respect to b and that will give us the right answer.
+尊重关于b的z次z，这将给我们正确的答案。
+
+1083
+01:09:30,530 --> 01:09:35,225
+So then all we have to do is actually compute that.
+那么我们所要做的就是实际计算。
+
+1084
+01:09:35,225 --> 01:09:38,580
+Um, so, I think this just sort of
+嗯，所以，我认为这只是一种
+
+1085
+01:09:38,580 --> 01:09:42,040
+shows okay we're taking the partials of each step of that composition.
+显示我们正在考虑该组合的每一步的部分内容。
+
+1086
+01:09:42,040 --> 01:09:44,975
+Okay. So now we want to compute that.
+好的。所以现在我们要计算它。
+
+1087
+01:09:44,975 --> 01:09:49,800
+And so this is where I'm going to sort of use the Jacobians that I
+所以这就是我要使用雅各比人的地方
+
+1088
+01:09:49,800 --> 01:09:54,415
+sort of asserted without much proof on the preceding slide.
+在上一张幻灯片中没有太多证据的断言。
+
+1089
+01:09:54,415 --> 01:10:00,280
+Okay. So first of all um we have ds/dh.
+好的。首先，我们有ds / dh。
+
+1090
+01:10:00,280 --> 01:10:03,900
+Well, that's just the dot product of two vectors.
+嗯，这只是两个向量的点积。
+
+1091
+01:10:03,900 --> 01:10:11,070
+So the um, the Jacobian for that is just h transpose.
+所以嗯，Jacobian就是这个转座。
+
+1092
+01:10:11,070 --> 01:10:12,640
+Okay, that's a start.
+好的，这是一个开始。
+
+1093
+01:10:12,640 --> 01:10:15,935
+Then we have um h equals f of z.
+然后我们将u等于z的f。
+
+1094
+01:10:15,935 --> 01:10:18,505
+Well, that's the activation function.
+好吧，这就是激活功能。
+
+1095
+01:10:18,505 --> 01:10:22,270
+So the um Jacobian of that is
+所以雅各比亚的那个是
+
+1096
+01:10:22,270 --> 01:10:27,615
+this diagonal matrix made of the element wise um derivative of the function
+这个对角矩阵由元素的um函数的导数组成
+
+1097
+01:10:27,615 --> 01:10:32,190
+f. And then we have the partial of z
+F。然后我们有部分z
+
+1098
+01:10:32,190 --> 01:10:37,080
+with respect to b and that's the bit that comes out as the identity matrix.
+关于b，这是作为单位矩阵出现的位。
+
+1099
+01:10:37,080 --> 01:10:45,950
+And so that's then giving us our calculation of the partial of s with respect to b.
+然后，这就是给我们计算相对于b的s的部分。
+
+1100
+01:10:46,460 --> 01:10:51,890
+And so we can see that the- the identity matrix sort of goes
+所以我们可以看到 - 身份矩阵的类型
+
+1101
+01:10:51,890 --> 01:10:57,905
+away so we end up with this composition of ht times f prime of z.
+因此我们最终得到了这个组成的ht次f的z。
+
+1102
+01:10:57,905 --> 01:11:05,960
+Okay, suppose we then want to go on and compute now the partial of s with respect to w?
+好吧，假设我们现在想继续计算关于w的部分s？
+
+1103
+01:11:05,960 --> 01:11:08,410
+Well, as starting off point is
+那么，起点就是
+
+1104
+01:11:08,410 --> 01:11:13,640
+exactly the same chain rule that we work out each of the stages.
+我们计算出每个阶段完全相同的链规则。
+
+1105
+01:11:13,640 --> 01:11:19,120
+So, that first of all you're working
+所以，首先你要工作
+
+1106
+01:11:19,120 --> 01:11:24,500
+out the z from the wx part then putting it through the non linearity,
+从wx部分输出z，然后通过非线性，
+
+1107
+01:11:24,500 --> 01:11:27,860
+then doing the dot product of the vectors.
+然后做矢量的点积。
+
+1108
+01:11:27,860 --> 01:11:29,700
+So that part is the same.
+那部分是一样的。
+
+1109
+01:11:29,700 --> 01:11:33,500
+And what you should notice is that if you
+而你应该注意的是，如果你
+
+1110
+01:11:33,500 --> 01:11:39,620
+compare the partial of s with respect to w versus s with respect to b,
+比较s的部分关于w与s的关系，
+
+1111
+01:11:39,620 --> 01:11:45,510
+most of them are the same and it's only the part at the end that's different.
+他们中的大多数是相同的，只有最后的部分是不同的。
+
+1112
+01:11:45,510 --> 01:11:49,260
+And that sort of makes sense in terms of our neural net right?
+从神经网络的角度来看，那种有意义吗？
+
+1113
+01:11:49,260 --> 01:11:57,370
+That when we had our neural net that the w and the b were coming in here.
+当我们拥有神经网络时，w和b进入这里。
+
+1114
+01:11:57,370 --> 01:12:01,740
+And once you've sort of done some stuff with them you're putting things through
+一旦你用它们做了一些事情，你就会把事情做好
+
+1115
+01:12:01,740 --> 01:12:07,230
+the same activation function and doing the same dot product to create a score.
+相同的激活功能和做同样的点积来创建得分。
+
+1116
+01:12:07,230 --> 01:12:11,085
+So, you're sort of doing the same calculations that you're then composing with.
+所以，你有点做你正在编写的计算。
+
+1117
+01:12:11,085 --> 01:12:13,675
+So it sort of makes sense that you should be getting
+所以你应该得到它是有道理的
+
+1118
+01:12:13,675 --> 01:12:16,100
+the same derivatives that are
+相同的衍生物
+
+1119
+01:12:16,100 --> 01:12:20,270
+occur- same partial derivatives that occurring at that point.
+发生 - 在该点发生的相同偏导数。
+
+1120
+01:12:20,270 --> 01:12:26,410
+Oops. And so effectively you know
+哎呀。你知道的有效
+
+1121
+01:12:26,410 --> 01:12:29,930
+these partial dev- derivatives correspond to
+这些部分dev-衍生物对应于
+
+1122
+01:12:29,930 --> 01:12:35,650
+the computations in the neural network that are above where w and b are.
+神经网络中高于w和b的计算。
+
+1123
+01:12:35,650 --> 01:12:40,585
+And so those are commonly referred to as delta,
+所以这些通常被称为delta，
+
+1124
+01:12:40,585 --> 01:12:44,880
+note delta which is different from partial derivative d. And so
+注意delta与偏导数d不同。所以
+
+1125
+01:12:44,880 --> 01:12:49,295
+delta is referred to as the error signal and neural network talk.
+delta被称为误差信号和神经网络对话。
+
+1126
+01:12:49,295 --> 01:12:52,520
+So, it's the what you're calculating as
+所以，这就是你在计算的东西
+
+1127
+01:12:52,520 --> 01:12:55,070
+the partial derivatives above
+上面的偏导数
+
+1128
+01:12:55,070 --> 01:12:59,885
+the parameters that you are working out the partial derivatives with respect to.
+你正在计算的偏导数的参数。
+
+1129
+01:12:59,885 --> 01:13:04,270
+So, a lot of the secret as we'll see next time,
+所以，我们下次会看到很多秘密，
+
+1130
+01:13:04,270 --> 01:13:11,240
+a lot of the secret of what happens with backpropagation is
+反向传播发生的很多秘密就是
+
+1131
+01:13:11,240 --> 01:13:15,160
+just we want to do efficient computation in
+只是我们想要进行有效的计算
+
+1132
+01:13:15,160 --> 01:13:19,525
+the sort of way that's computer science people like to do efficient computation.
+那种计算机科学人喜欢进行高效计算的方式。
+
+1133
+01:13:19,525 --> 01:13:23,170
+And so precisely what we want to notice is that there is
+所以我们要注意的是，确实存在
+
+1134
+01:13:23,170 --> 01:13:28,510
+one error signal that comes from above and we want to compute it once.
+一个错误信号来自上面，我们想要计算一次。
+
+1135
+01:13:28,510 --> 01:13:31,145
+And then reuse that when calculating
+然后在计算时重用它
+
+1136
+01:13:31,145 --> 01:13:36,075
+both partial derivatives with respect to w and with b.
+关于w和b的偏导数。
+
+1137
+01:13:36,075 --> 01:13:43,100
+Okay. So there's sort of two things to still do.
+好的。所以还有两件事要做。
+
+1138
+01:13:43,100 --> 01:13:46,920
+So one is well,
+一个人很好，
+
+1139
+01:13:46,920 --> 01:13:49,990
+it'd be kind of useful to know what the partial derivative
+知道偏导数是什么有用
+
+1140
+01:13:49,990 --> 01:13:53,150
+of s with respect to w actually looks like.
+关于w的s实际上看起来像。
+
+1141
+01:13:53,150 --> 01:13:55,065
+I mean, is that a number, a vector,
+我的意思是，这是一个数字，一个矢量，
+
+1142
+01:13:55,065 --> 01:13:58,185
+a matrix, a three-dimensional tensor?
+矩阵，三维张量？
+
+1143
+01:13:58,185 --> 01:14:02,000
+And then we actually want to work out its values
+然后我们实际上想要弄清楚它的价值观
+
+1144
+01:14:02,000 --> 01:14:05,970
+and to work out its values we're going to still have to work
+为了弄清楚它的价值，我们仍然需要努力
+
+1145
+01:14:05,970 --> 01:14:08,640
+out the partial derivative of z with respect to
+出z的偏导数
+
+1146
+01:14:08,640 --> 01:14:13,755
+w. But if first of all we just try and work out its shape,
+W上。但是，如果我们首先尝试找出它的形状，
+
+1147
+01:14:13,755 --> 01:14:17,160
+what kind of shape does it have?
+它有什么样的形状？
+
+1148
+01:14:17,160 --> 01:14:20,900
+And this is actually sort of a bit tricky and is
+这实际上有点棘手
+
+1149
+01:14:20,900 --> 01:14:25,240
+sort of a dirty underbelly of doing this kind of matrix calculus.
+做这种矩阵演算的一种肮脏的下腹部。
+
+1150
+01:14:25,240 --> 01:14:31,060
+So, since our weight vector is an n by m matrix,
+所以，因为我们的权重向量是一个n乘m矩阵，
+
+1151
+01:14:31,060 --> 01:14:37,870
+the end result of the partial of s with respect to w is we have a function with
+关于w的部分s的最终结果是我们有一个函数
+
+1152
+01:14:37,870 --> 01:14:45,995
+n times m inputs all of the elements of w and simply one output which is our score.
+n次m输入w的所有元素，只输出一个输出，这是我们的分数。
+
+1153
+01:14:45,995 --> 01:14:49,920
+So, that makes it sound like according to what I said before we
+所以，这听起来像我之前所说的那样
+
+1154
+01:14:49,920 --> 01:14:54,380
+should have a one by n times m Jacobian.
+应该有一个n倍m雅可比。
+
+1155
+01:14:54,380 --> 01:14:57,010
+But it turns out that's not really what we want, right?
+但事实证明，这不是我们想要的，对吗？
+
+1156
+01:14:57,010 --> 01:15:01,450
+Because what we wanted to do is use what we calculate
+因为我们想要做的是使用我们计算的东西
+
+1157
+01:15:01,450 --> 01:15:07,380
+inside this stochastic gradient descent update algorithm.
+在这个随机梯度下降更新算法中。
+
+1158
+01:15:07,380 --> 01:15:12,470
+And if we're doing this with sort of like to have
+如果我们这样做有点喜欢
+
+1159
+01:15:12,470 --> 01:15:19,130
+the old weight matrix and we'd like to subtract a bit format to get a new weight matrix.
+旧的权重矩阵，我们想减去一点格式来获得一个新的权重矩阵。
+
+1160
+01:15:19,130 --> 01:15:29,465
+So, be kind of nice if the shape of our Jacobian was the same shape as w. And so we-
+所以，如果雅各布的形状和w的形状相同，那就太好了。所以我们 -
+
+1161
+01:15:29,465 --> 01:15:32,520
+we and in general what you always want to do with
+我们以及一般您想要做的事情
+
+1162
+01:15:32,520 --> 01:15:37,500
+neural nets is follow what we call the shape convention which
+神经网络遵循我们称之为形状约定的方式
+
+1163
+01:15:37,500 --> 01:15:45,875
+is we're going to sort of represent the Jacobian so it's in the same shape as the inputs.
+我们是否会代表Jacobian，所以它与输入的形状相同。
+
+1164
+01:15:45,875 --> 01:15:50,775
+And this whole thing is kind of the- the bad part of
+而这一切都是 - 不好的一部分
+
+1165
+01:15:50,775 --> 01:15:56,105
+the bad part of doing matrix calculus.
+做矩阵演算的不好的部分。
+
+1166
+01:15:56,105 --> 01:16:00,615
+Like there's a lot of inconsistency as to how people represent matrix calculus.
+就像人们如何表示矩阵演算一样，存在很多不一致之处。
+
+1167
+01:16:00,615 --> 01:16:03,030
+That in general if you just go to different fields like
+一般来说，如果你只是去不同的领域，如
+
+1168
+01:16:03,030 --> 01:16:05,890
+economics and physics some people use a numerator convention.
+经济学和物理学有些人使用分子约定。
+
+1169
+01:16:05,890 --> 01:16:08,085
+Some people use a denominator convention.
+有些人使用分母惯例。
+
+1170
+01:16:08,085 --> 01:16:09,350
+We're using neither of those.
+我们都没有使用这些。
+
+1171
+01:16:09,350 --> 01:16:12,580
+We're going to use this shape convention so we match the shape of
+我们将使用这种形状约定，因此我们匹配的形状
+
+1172
+01:16:12,580 --> 01:16:16,655
+the input so it makes it easy to do our weight updates.
+输入因此可以轻松进行重量更新。
+
+1173
+01:16:16,655 --> 01:16:23,125
+Okay. So. Right. So that's what we want the answer to look like.
+好的。所以。对。这就是我们想要的答案。
+
+1174
+01:16:23,125 --> 01:16:26,690
+So, then the final thing we need to do to work out on the
+那么，最后我们需要做的就是解决这个问题
+
+1175
+01:16:26,690 --> 01:16:30,320
+partial of s with respect to w is we have the error signal delta
+相对于w的部分s是我们有误差信号delta
+
+1176
+01:16:30,320 --> 01:16:34,105
+that's gonna be part of the answer and then we want to work out the partial
+这将是答案的一部分，然后我们想要解决部分问题
+
+1177
+01:16:34,105 --> 01:16:39,415
+of z with respect to w. Well,
+关于w的z。好，
+
+1178
+01:16:39,415 --> 01:16:44,360
+um what's that going to be.
+那将是什么样的。
+
+1179
+01:16:44,360 --> 01:16:47,690
+Well, it turns out and I'm about to be
+好吧，事实证明，我即将成为
+
+1180
+01:16:47,690 --> 01:16:51,195
+saved by the bell here since I'm down to two minutes left.
+因为我还剩下两分钟就被钟声保存了。
+
+1181
+01:16:51,195 --> 01:16:57,070
+Um, it turns out that what we end up with for that is we take
+嗯，事实证明我们最终得到的就是我们
+
+1182
+01:16:57,070 --> 01:17:03,250
+the product of the partial- the product of delta times x.
+部分的乘积 -  delta乘以x的乘积。
+
+1183
+01:17:03,250 --> 01:17:08,020
+So effectively we've got the local error signal above w. And then we
+因此，我们有效地获得了高于w的本地错误信号。然后我们
+
+1184
+01:17:08,020 --> 01:17:13,715
+have the inputs x and we are working out an outer product of them.
+有输入x，我们正在研究它们的外部产品。
+
+1185
+01:17:13,715 --> 01:17:19,565
+And the sort of way to think about this is sort of for the w's.
+而考虑这种情况的方式就像w一样。
+
+1186
+01:17:19,565 --> 01:17:23,190
+You know, we've got the elements of the w matrix,
+你知道，我们已经得到了w矩阵的元素，
+
+1187
+01:17:23,190 --> 01:17:26,780
+these different connections between our neurons.
+这些不同神经元之间的联系。
+
+1188
+01:17:26,780 --> 01:17:32,170
+And so each one of these is connecting one output to one input.
+因此，每个都将一个输出连接到一个输入。
+
+1189
+01:17:32,170 --> 01:17:35,990
+And so we're going to be sort of making this n by
+所以我们将会有点像这样做
+
+1190
+01:17:35,990 --> 01:17:40,700
+m matrix of our partial derivatives that are going to be the product of
+我们的偏导数的矩阵将成为
+
+1191
+01:17:40,700 --> 01:17:44,880
+the error signal for the appropriate output
+适当输出的错误信号
+
+1192
+01:17:44,880 --> 01:17:50,505
+multiplied by input and those goes give us the partial derivatives.
+乘以输入，那些给我们的偏导数。
+
+1193
+01:17:50,505 --> 01:17:55,980
+I'm skipping ahead quickly in my last one minute.
+我在最后一分钟快速跳过了。
+
+1194
+01:17:55,980 --> 01:17:59,850
+Okay. So uh, right.
+好的。嗯，对。
+
+1195
+01:17:59,850 --> 01:18:01,430
+So this is sort of what I said have used
+所以这就是我所说过的
+
+1196
+01:18:01,430 --> 01:18:04,675
+the shape con- convention. I'm going to skip that.
+形状公约。我要跳过那个。
+
+1197
+01:18:04,675 --> 01:18:10,770
+Okay. So, um, I- I ran out of time a teeny bit at the end but I mean,
+好的。所以，嗯，我 - 最后我的时间不多了，但我的意思是，
+
+1198
+01:18:10,770 --> 01:18:13,860
+I think hopefully that's conveyed most of
+我希望大部分都能传达出来
+
+1199
+01:18:13,860 --> 01:18:18,630
+the idea of how you can sort of use the chain rule and
+关于如何使用链规则的想法
+
+1200
+01:18:18,630 --> 01:18:22,080
+work out the derivatives and work them out in
+找出衍生品并将其解决
+
+1201
+01:18:22,080 --> 01:18:26,400
+terms of these vector and matrix derivatives.
+这些向量和矩阵导数的术语。
+
+1202
+01:18:26,400 --> 01:18:31,170
+[NOISE] And essentially what we wanna do for backpropagation is to say how can we
+[NOISE]基本上我们想做的反向传播就是说我们怎么做
+
+1203
+01:18:31,170 --> 01:18:37,205
+do ah get a computer to do this automatically for us and to do it efficiently.
+做啊让计算机自动为我们这样做，并有效地做到这一点。
+
+1204
+01:18:37,205 --> 01:18:39,820
+And that's what's sort of the deep learning frameworks like
+这就是深度学习框架之类的东西
+
+1205
+01:18:39,820 --> 01:18:43,110
+TensorFlow and PyTorch do and how you can do that.
+TensorFlow和PyTorch以及如何做到这一点。
+
+1206
+01:18:43,110 --> 01:18:45,600
+We'll look at more next time.
+我们下次会看更多。
+
+1207
+
+

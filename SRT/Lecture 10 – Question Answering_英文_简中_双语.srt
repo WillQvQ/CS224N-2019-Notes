@@ -1,0 +1,6818 @@
+1
+00:00:05,480 --> 00:00:11,115
+Okay. Hi, everyone. Um, so let's get started again today.
+好的。嗨，大家好。嗯，让我们今天再次开始吧。
+
+2
+00:00:11,115 --> 00:00:14,610
+So today's lecture what I'm going to do,
+那么今天的讲座我要做什么，
+
+3
+00:00:14,610 --> 00:00:16,710
+is be talking about, um,
+是在谈论，嗯，
+
+4
+00:00:16,710 --> 00:00:19,060
+question answering over text.
+回答文本的问题。
+
+5
+00:00:19,060 --> 00:00:22,025
+Um, this is another of the big successes
+嗯，这是另一个重大成功
+
+6
+00:00:22,025 --> 00:00:25,655
+in using deep learning inside natural language processing,
+在自然语言处理中使用深度学习，
+
+7
+00:00:25,655 --> 00:00:30,140
+and it's also a technology that has some really obvious commercial uses.
+它也是一种具有一些非常明显的商业用途的技术。
+
+8
+00:00:30,140 --> 00:00:32,660
+So it's an, it's an area that has attracted
+所以这是一个吸引人的领域
+
+9
+00:00:32,660 --> 00:00:36,265
+a lot of attention in the last couple of years.
+在过去几年中备受关注。
+
+10
+00:00:36,265 --> 00:00:38,790
+So this is the overall plan.
+所以这是整体计划。
+
+11
+00:00:38,790 --> 00:00:43,970
+Um, just a couple of reminders and things at the beginning about final project stuff,
+嗯，刚开始时关于最终项目的一些提醒和事情，
+
+12
+00:00:43,970 --> 00:00:48,875
+and then we'll, basically all of it is talking about question-answering starting with, um,
+然后我们基本上所有这些都是在谈论问答，首先，嗯，
+
+13
+00:00:48,875 --> 00:00:53,000
+motivation history, um, talking about the SQuAD data,
+动机历史，嗯，谈论SQuAD数据，
+
+14
+00:00:53,000 --> 00:00:56,390
+uh, a particular simple model, our Stanford Attentive Reader.
+呃，一个特别简单的模型，我们的Stanford Attentive Reader。
+
+15
+00:00:56,390 --> 00:00:58,940
+Then talking about some other more complex,
+然后谈论其他一些更复杂的，
+
+16
+00:00:58,940 --> 00:01:02,460
+um, stuff into the most modern stuff.
+嗯，进入最现代化的东西。
+
+17
+00:01:02,460 --> 00:01:05,815
+Um, yeah, so in a census, um,
+嗯，是的，所以在人口普查中，嗯，
+
+18
+00:01:05,815 --> 00:01:09,365
+lecture serves a double purpose because if you're going to do the,
+讲座有双重目的，因为如果你要去做，
+
+19
+00:01:09,365 --> 00:01:11,390
+the default final project, well,
+默认的最终项目，嗯，
+
+20
+00:01:11,390 --> 00:01:13,410
+it's about textual question-answering,
+这是关于文本问答，
+
+21
+00:01:13,410 --> 00:01:17,855
+and this is your chance to learn something about the area of textual question-answering,
+这是你学习文本问答领域的机会，
+
+22
+00:01:17,855 --> 00:01:21,410
+and the kinds of models you might want to be thinking about and building.
+以及您可能想要思考和构建的模型类型。
+
+23
+00:01:21,410 --> 00:01:24,890
+Um but the content of this lecture pretty much is in
+嗯，但这个讲座的内容几乎就是
+
+24
+00:01:24,890 --> 00:01:28,915
+no way specifically tied to the default final project,
+没有办法专门绑定默认的最终项目，
+
+25
+00:01:28,915 --> 00:01:32,720
+apart from by subject matter that really it's telling you about
+除了它真正告诉你的主题之外
+
+26
+00:01:32,720 --> 00:01:37,580
+how people use neural nets to build question-answering systems.
+人们如何使用神经网络建立问答系统。
+
+27
+00:01:37,580 --> 00:01:41,205
+Okay. So first just quickly on the reminders,
+好的。所以首先快速提醒一下，
+
+28
+00:01:41,205 --> 00:01:43,050
+um, mid-quarter survey.
+嗯，季度调查。
+
+29
+00:01:43,050 --> 00:01:45,149
+I mean, a huge number of people,
+我的意思是，有很多人，
+
+30
+00:01:45,149 --> 00:01:47,330
+um, have actually filled this in already.
+嗯，实际上已经填补了这个。
+
+31
+00:01:47,330 --> 00:01:51,140
+Uh, we already had over 60 percent, um, um,
+呃，我们已经有超过60％，嗯，嗯，
+
+32
+00:01:51,140 --> 00:01:54,170
+filling-it-in rate by which by the standards of people
+按人们的标准填写的加入率
+
+33
+00:01:54,170 --> 00:01:57,245
+who do surveys they come as a huge success already.
+谁做了调查他们已经取得了巨大的成功。
+
+34
+00:01:57,245 --> 00:01:59,510
+But if you're not in that percent, um,
+但如果你不是那个百分比，嗯，
+
+35
+00:01:59,510 --> 00:02:03,480
+we'd still love to have your feedback and now's the perfect time to do it.
+我们仍然希望得到您的反馈，现在是完成它的最佳时机。
+
+36
+00:02:03,480 --> 00:02:05,515
+Um, yeah.
+嗯，是的
+
+37
+00:02:05,515 --> 00:02:09,455
+I just wanted to sort of have a note on custom final projects.
+我只想对自定义最终项目进行说明。
+
+38
+00:02:09,455 --> 00:02:11,390
+Um, so in general, um,
+嗯，一般来说，嗯，
+
+39
+00:02:11,390 --> 00:02:14,645
+it's great to get feedback on custom final projects.
+很高兴获得有关自定义最终项目的反馈。
+
+40
+00:02:14,645 --> 00:02:16,910
+There's a formal mechanism for that which is
+这是一个正式的机制
+
+41
+00:02:16,910 --> 00:02:19,625
+the project proposal that I mentioned last time.
+我上次提到的项目提案。
+
+42
+00:02:19,625 --> 00:02:22,330
+It's also great to chat to people,
+和人聊天也很棒，
+
+43
+00:02:22,330 --> 00:02:25,930
+um, informally about, um, final projects.
+嗯，非正式地说，嗯，最后的项目。
+
+44
+00:02:25,930 --> 00:02:28,685
+And so I'm one of those people and I have
+所以我是那些人中的一员而且我拥有
+
+45
+00:02:28,685 --> 00:02:31,610
+been talking to lots of people about final projects,
+一直在与很多人谈论最终项目，
+
+46
+00:02:31,610 --> 00:02:33,455
+and, uh, very happy to do so.
+而且，呃，非常高兴这样做。
+
+47
+00:02:33,455 --> 00:02:36,500
+But there's sort of a problem that there's only one of me.
+但有一个问题是我只有一个人。
+
+48
+00:02:36,500 --> 00:02:38,630
+Um, so I do also, um,
+嗯，所以我也这样做，嗯，
+
+49
+00:02:38,630 --> 00:02:42,080
+encourage you to realize that among the various TAs that
+鼓励你在各种TA之间意识到这一点
+
+50
+00:02:42,080 --> 00:02:46,070
+really lots of them have had experience of different deep learning projects,
+他们中很多人都有过不同深度学习项目的经验，
+
+51
+00:02:46,070 --> 00:02:48,620
+and in particular on the office hours page,
+特别是在办公时间页面，
+
+52
+00:02:48,620 --> 00:02:53,420
+there's a table that's like this but you can read it if you look at it on your own laptop,
+有一张像这样的桌子，但是如果你在自己的笔记本电脑上看到它，你可以阅读它，
+
+53
+00:02:53,420 --> 00:02:57,125
+which talks about the experience of different TA's.
+谈论不同TA的经验。
+
+54
+00:02:57,125 --> 00:02:59,930
+And many of them have experience in different areas,
+他们中的许多人都有不同领域的经验，
+
+55
+00:02:59,930 --> 00:03:04,930
+and many of them are also good people to talk to about final projects.
+他们中的许多人也是谈论最终项目的好人。
+
+56
+00:03:04,930 --> 00:03:10,860
+Okay. Um, so for the default final project, the textual question-answering.
+好的。嗯，对于默认的最终项目，文本问答。
+
+57
+00:03:10,860 --> 00:03:15,194
+So um, draft materials for that app today,
+那么，今天该应用程序的材料草案，
+
+58
+00:03:15,194 --> 00:03:17,340
+um, right now on the website actually.
+嗯，现在在网站上。
+
+59
+00:03:17,340 --> 00:03:20,720
+Um, we're calling them draft because we think that there are still
+嗯，我们称之为草案，因为我们认为还有
+
+60
+00:03:20,720 --> 00:03:24,230
+probably a few things that are gonna get changed over the next week,
+可能有一些事情会在下周改变，
+
+61
+00:03:24,230 --> 00:03:29,840
+so um, don't regard as completely final in terms of the code that,
+所以，在代码方面，不要认为完全是最终的，
+
+62
+00:03:29,840 --> 00:03:32,120
+you know, it's sort of 90 percent final.
+你知道，这是90％的决赛。
+
+63
+00:03:32,120 --> 00:03:35,405
+So in terms of deciding whether you're going to do, um,
+所以在决定你是否会这样做的时候，嗯，
+
+64
+00:03:35,405 --> 00:03:38,495
+a custom final project or a default final project,
+自定义最终项目或默认最终项目，
+
+65
+00:03:38,495 --> 00:03:41,465
+and working out what you're putting into your project proposal.
+并确定你在项目提案中的内容。
+
+66
+00:03:41,465 --> 00:03:42,755
+Um, it should be, you know,
+嗯，它应该是，你知道，
+
+67
+00:03:42,755 --> 00:03:44,270
+well more than, um,
+嗯，嗯，
+
+68
+00:03:44,270 --> 00:03:46,470
+what you need for this year.
+你今年需要什么。
+
+69
+00:03:46,470 --> 00:03:48,670
+Okay. The one other, um,
+好的。另一个，嗯，
+
+70
+00:03:48,670 --> 00:03:52,040
+final bit I just wanted to say that I didn't get to
+最后一点我只想说我没有达到
+
+71
+00:03:52,040 --> 00:03:55,520
+last time is so for the final projects,
+最后一次是最后的项目，
+
+72
+00:03:55,520 --> 00:03:58,055
+regardless of which kind you're doing,
+不管你在做什么，
+
+73
+00:03:58,055 --> 00:04:00,750
+um, well, part of it is, um,
+嗯，好吧，部分原因是，嗯，
+
+74
+00:04:00,750 --> 00:04:02,545
+doing some experiments, of
+做一些实验
+
+75
+00:04:02,545 --> 00:04:04,700
+doing stuff with data and code,
+做数据和代码的东西，
+
+76
+00:04:04,700 --> 00:04:06,880
+and getting some numbers and things like that.
+并获得一些数字和类似的东西。
+
+77
+00:04:06,880 --> 00:04:08,480
+But I do really, um,
+但我真的，嗯，
+
+78
+00:04:08,480 --> 00:04:11,630
+encourage people to also remember that an important part of
+鼓励人们也记住这一重要部分
+
+79
+00:04:11,630 --> 00:04:15,515
+the final project is writing a final project report.
+最后的项目是撰写最终的项目报告。
+
+80
+00:04:15,515 --> 00:04:20,900
+And this is no different to any research project of the kinds that,
+这与任何类型的研究项目没有什么不同，
+
+81
+00:04:20,900 --> 00:04:25,590
+um, students do for conferences or journals and things like that, right?
+嗯，学生们为会议或期刊以及类似的事情做的，对吗？
+
+82
+00:04:25,590 --> 00:04:30,020
+You spend months commonly working over your code and experiments.
+您花费数月时间来处理代码和实验。
+
+83
+00:04:30,020 --> 00:04:31,970
+But in most cases,
+但在大多数情况下，
+
+84
+00:04:31,970 --> 00:04:36,365
+the main evaluation of your work is from people reading,
+你工作的主要评价来自人们阅读，
+
+85
+00:04:36,365 --> 00:04:39,200
+a written paper output version of things.
+事物的书面纸输出版本。
+
+86
+00:04:39,200 --> 00:04:41,420
+So it's really important that,
+所以非常重要的是，
+
+87
+00:04:41,420 --> 00:04:44,480
+that paper version sort of reflects the work
+那纸质版本反映了这项工作
+
+88
+00:04:44,480 --> 00:04:47,840
+that you did and the interesting ideas that you came up with,
+你做过的以及你想出的有趣想法，
+
+89
+00:04:47,840 --> 00:04:50,720
+and explains them well and present your experiments,
+并解释它们并展示你的实验，
+
+90
+00:04:50,720 --> 00:04:52,100
+and all of those things.
+以及所有这些事情。
+
+91
+00:04:52,100 --> 00:04:56,670
+And so we encourage you to sort of do a good job at writing up your projects.
+因此，我们鼓励您在编写项目时做得很好。
+
+92
+00:04:56,670 --> 00:04:59,680
+Um, here is just sort of a vague outline of, you know,
+嗯，这里只是一个模糊的轮廓，你知道，
+
+93
+00:04:59,680 --> 00:05:03,320
+what a typical project write-up is likely to look like.
+典型的项目写作可能是什么样子。
+
+94
+00:05:03,320 --> 00:05:06,620
+Now, there isn't really one size completely fits all
+现在，并没有一个尺寸完全适合所有人
+
+95
+00:05:06,620 --> 00:05:09,950
+because depending on what you've done different things might be appropriate.
+因为取决于你做了什么，不同的事情可能是合适的。
+
+96
+00:05:09,950 --> 00:05:11,990
+But, you know, typically the first page,
+但是，你知道，通常是第一页，
+
+97
+00:05:11,990 --> 00:05:15,905
+you'll have an abstract for the paper and the introduction to the paper.
+你将有一篇论文的摘要和论文的介绍。
+
+98
+00:05:15,905 --> 00:05:19,220
+You'll spend some time talking about related prior work.
+你会花一些时间谈论相关的先前工作。
+
+99
+00:05:19,220 --> 00:05:23,615
+Um, you'll talk about what kind of models you built for a while.
+嗯，你会谈谈你建立了一段时间的模型。
+
+100
+00:05:23,615 --> 00:05:28,565
+Um, there's probably some discussion of what data you are using for your projects.
+嗯，可能会讨论你正在为项目使用什么数据。
+
+101
+00:05:28,565 --> 00:05:34,920
+Um, experiments commonly with some tables and figures about the things that you're doing.
+嗯，通常用一些关于你正在做的事情的表格和数字进行实验。
+
+102
+00:05:34,920 --> 00:05:39,740
+Um, more tables and figures talking about the results as to how well your systems work.
+嗯，更多的表格和数字谈论你的系统运作良好的结果。
+
+103
+00:05:39,740 --> 00:05:43,010
+Um, it's great to have some error analysis to see
+嗯，很高兴看到一些错误分析
+
+104
+00:05:43,010 --> 00:05:46,290
+what kind of things that you got right and wrong,
+什么样的事情你是对是非，
+
+105
+00:05:46,290 --> 00:05:48,500
+and then maybe at the end there's sort of
+然后也许最后会有一些
+
+106
+00:05:48,500 --> 00:05:51,965
+plans for the future, conclusions, or something like that.
+计划未来，结论或类似的东西。
+
+107
+00:05:51,965 --> 00:05:59,475
+Okay. Um, that's sort of it for my extra administrative reminders.
+好的。嗯，这就是我的额外行政提醒。
+
+108
+00:05:59,475 --> 00:06:03,470
+Um, are there any questions on final projects that people are dying to know?
+嗯，对于人们最不知道的最终项目有什么问题吗？
+
+109
+00:06:03,470 --> 00:06:09,800
+[NOISE] Okay. Good luck.
+[NOISE]好的。祝好运。
+
+110
+00:06:09,800 --> 00:06:10,925
+I just meant to say good luck.
+我只想说祝你好运。
+
+111
+00:06:10,925 --> 00:06:13,470
+Yeah. Good luck with your final projects. [LAUGHTER] Okay.
+是啊。祝你最后的项目好运。 [大笑]好的。
+
+112
+00:06:13,470 --> 00:06:15,375
+So now moving into,
+所以现在进入，
+
+113
+00:06:15,375 --> 00:06:18,550
+um, yeah, the question answering.
+嗯，是的，问题回答。
+
+114
+00:06:18,550 --> 00:06:23,165
+Okay. So, I mean- so question answering is
+好的。所以，我的意思是 - 所以问题回答是
+
+115
+00:06:23,165 --> 00:06:28,610
+a very direct application for something that human beings,
+一个人类非常直接的应用，
+
+116
+00:06:28,610 --> 00:06:30,095
+um, want to do.
+嗯，想做。
+
+117
+00:06:30,095 --> 00:06:33,620
+Um, well, maybe human beings don't in general want to know this.
+嗯，也许人类通常不想知道这一点。
+
+118
+00:06:33,620 --> 00:06:37,355
+Um, here's my query of "Who was Australia's third prime minister?".
+嗯，这是我对“谁是澳大利亚第三任总理？”的质询。
+
+119
+00:06:37,355 --> 00:06:39,500
+Um, maybe, yeah, that's not really the kind of
+嗯，也许，是的，那不是真的那种
+
+120
+00:06:39,500 --> 00:06:41,645
+thing you're gonna put into your queries but,
+你要提出的问题但是，
+
+121
+00:06:41,645 --> 00:06:43,145
+you know, maybe you query,
+你知道，也许你查询，
+
+122
+00:06:43,145 --> 00:06:45,110
+"Who was the lead singer of Big Thief?"
+“谁是Big Thief的主唱？”
+
+123
+00:06:45,110 --> 00:06:46,745
+or something like that. I don't know.
+或类似的东西。我不知道。
+
+124
+00:06:46,745 --> 00:06:48,050
+Um, you're, uh, but you know,
+嗯，你，呃，但是你知道，
+
+125
+00:06:48,050 --> 00:06:51,770
+lots- a large percentage of stuff [NOISE] on the web
+很多 - 网上很大比例的东西[噪音]
+
+126
+00:06:51,770 --> 00:06:56,090
+is that people actually are asking for answers to questions.
+人们实际上是在寻求问题的答案。
+
+127
+00:06:56,090 --> 00:06:59,120
+And so, if I put in this query into Google,
+所以，如果我将此查询添加到Google中，
+
+128
+00:06:59,120 --> 00:07:00,530
+it actually just works.
+它实际上只是工作。
+
+129
+00:07:00,530 --> 00:07:03,920
+It tells me the answer is John Christian Watson.
+它告诉我答案是John Christian Watson。
+
+130
+00:07:03,920 --> 00:07:08,915
+And, um, so that's sort of question answering working in the real world.
+而且，嗯，所以这是回答在现实世界中工作的问题。
+
+131
+00:07:08,915 --> 00:07:11,540
+Um, if you try different kinds of questions in Google,
+嗯，如果你在谷歌尝试不同类型的问题，
+
+132
+00:07:11,540 --> 00:07:14,585
+you'll find that some of them work and lots of them don't work.
+你会发现其中一些是有效的，而且很多都不起作用。
+
+133
+00:07:14,585 --> 00:07:15,770
+And when they don't work,
+当他们不工作时，
+
+134
+00:07:15,770 --> 00:07:20,090
+you're just sort of getting whatever kind of information retrieval, web search results.
+你只是得到任何类型的信息检索，网络搜索结果。
+
+135
+00:07:20,090 --> 00:07:23,315
+Um, there is one fine point that I just wanted,
+嗯，有一个我想要的好点，
+
+136
+00:07:23,315 --> 00:07:25,130
+um, to mention down here.
+嗯，在这里提一下。
+
+137
+00:07:25,130 --> 00:07:28,790
+So another thing that Google has is the Google Knowledge Graph,
+谷歌的另一件事是谷歌知识图，
+
+138
+00:07:28,790 --> 00:07:32,225
+which is a structured graph representation of knowledge.
+这是知识的结构化图形表示。
+
+139
+00:07:32,225 --> 00:07:35,405
+And some kinds of questions,
+还有一些问题，
+
+140
+00:07:35,405 --> 00:07:39,080
+um, being answered from that structured knowledge representation.
+嗯，从结构化的知识表示中得到回答。
+
+141
+00:07:39,080 --> 00:07:40,430
+And so, I mean,
+所以，我的意思是，
+
+142
+00:07:40,430 --> 00:07:43,025
+quite a lot of the time for things like movies,
+很多时候像电影这样的东西，
+
+143
+00:07:43,025 --> 00:07:44,870
+it's coming from that structured graph.
+它来自那个结构化的图形。
+
+144
+00:07:44,870 --> 00:07:47,690
+If you're sort of saying, "Who's the director of a movie?"
+如果你有点说，“谁是电影导演？”
+
+145
+00:07:47,690 --> 00:07:48,890
+or something like that.
+或类似的东西。
+
+146
+00:07:48,890 --> 00:07:51,050
+But this answer isn't coming from that.
+但这个答案并非来自于此。
+
+147
+00:07:51,050 --> 00:07:53,000
+This answer is a genuine,
+这个答案是真的，
+
+148
+00:07:53,000 --> 00:07:55,400
+the kind of stuff we're gonna talk about today.
+我们今天要讨论的那种东西。
+
+149
+00:07:55,400 --> 00:07:59,360
+It's textual question answering from a web page where
+这是从网页上回答的文字问题
+
+150
+00:07:59,360 --> 00:08:01,580
+Google's question and answering system has
+谷歌的问答系统有
+
+151
+00:08:01,580 --> 00:08:04,505
+extracted the answer and is sticking it up there.
+提取答案并坚持到那里。
+
+152
+00:08:04,505 --> 00:08:06,365
+Um, if you're, um,
+嗯，如果你是，嗯，
+
+153
+00:08:06,365 --> 00:08:09,485
+wanting to explore these things, um,
+想要探索这些东西，嗯，
+
+154
+00:08:09,485 --> 00:08:14,735
+if you get one of these boxes sort of down here where I've cut it off,
+如果你把这些盒子中的一个放在这里，我把它切掉了，
+
+155
+00:08:14,735 --> 00:08:16,340
+there's a little bit of gray that says,
+有一点灰色说，
+
+156
+00:08:16,340 --> 00:08:17,990
+"How did I get this result?".
+“我是怎么得到这个结果的？”
+
+157
+00:08:17,990 --> 00:08:19,415
+And if you click on that,
+如果你点击它，
+
+158
+00:08:19,415 --> 00:08:23,300
+it actually tells you what source it's getting it from and you can see if it's doing it
+它实际上告诉你它是从哪个来源得到的，你可以看看它是否正在这样做
+
+159
+00:08:23,300 --> 00:08:28,130
+from the textual question answering system or from something like the Knowledge Graph.
+来自文本问答系统或知识图。
+
+160
+00:08:28,130 --> 00:08:31,040
+Okay. Um, so the- in general,
+好的。嗯，所以 - 一般来说，
+
+161
+00:08:31,040 --> 00:08:35,600
+the motivation for question answering is that these days there's
+问答的动机是这些日子
+
+162
+00:08:35,600 --> 00:08:40,355
+just these sort of massive collections of full text documents,
+只是这些大量的全文文档集，
+
+163
+00:08:40,355 --> 00:08:42,110
+i.e., there's the web.
+即，有网络。
+
+164
+00:08:42,110 --> 00:08:46,580
+Um, so that there are sort of billions of documents of information.
+嗯，所以有数十亿的信息文件。
+
+165
+00:08:46,580 --> 00:08:49,730
+And traditionally, when people first started
+传统上，当人们第一次开始时
+
+166
+00:08:49,730 --> 00:08:53,330
+thinking about search information retrieval as a field,
+将搜索信息检索视为一个领域，
+
+167
+00:08:53,330 --> 00:08:59,020
+you know, nothing of that kind of quantity and size existed, right?
+你知道，这种数量和大小都不存在，对吧？
+
+168
+00:08:59,020 --> 00:09:02,320
+That when people first started building search systems,
+当人们第一次开始构建搜索系统时，
+
+169
+00:09:02,320 --> 00:09:05,200
+it was sort of unthinkable to index
+索引是不可想象的
+
+170
+00:09:05,200 --> 00:09:09,340
+whole documents because no one had hard disks big enough in those days, right?
+整个文件，因为当时没有人有足够大的硬盘，对吧？
+
+171
+00:09:09,340 --> 00:09:15,335
+That really- they were indexing titles or titles and abstracts or something like that.
+真的 - 他们正在索引标题或标题和摘要或类似的东西。
+
+172
+00:09:15,335 --> 00:09:19,925
+And so, it seemed perfectly adequate in those days to say, "Okay.
+因此，在那些日子里，说“好吧。
+
+173
+00:09:19,925 --> 00:09:22,760
+We're just gonna send you- give you your results."
+我们只是要发给你 - 给你结果。“
+
+174
+00:09:22,760 --> 00:09:24,680
+as to "Here's a list of documents."
+关于“这是一份文件清单”。
+
+175
+00:09:24,680 --> 00:09:27,440
+because the documents are only a hundred words long.
+因为这些文件只有一百多字。
+
+176
+00:09:27,440 --> 00:09:31,010
+But that's clearly not the case now when we have the sort of, you know,
+但是，当我们有这种情况时，情况显然不是这样，你知道，
+
+177
+00:09:31,010 --> 00:09:36,275
+ten minute read, Medium posts um, which might have the answer to a question.
+十分钟阅读，中等帖子，这可能有一个问题的答案。
+
+178
+00:09:36,275 --> 00:09:39,080
+And so, there's this need to sort of say, "Well,
+所以，有必要说，“嗯，
+
+179
+00:09:39,080 --> 00:09:43,205
+can we just have systems that will give us answers to questions?".
+我们能否拥有能够为我们提供问题答案的系统？“
+
+180
+00:09:43,205 --> 00:09:49,730
+And a lot of the recent changes in technology have hugely underlined that need.
+最近很多技术变化都强调了这种需求。
+
+181
+00:09:49,730 --> 00:09:54,950
+So, returning documents works okay if you're sitting at your laptop,
+所以，如果你坐在你的笔记本电脑上，退回的文件也可以，
+
+182
+00:09:54,950 --> 00:09:59,150
+but it works really terribly if you're on your phone and it works even more
+但如果你在手机上它的工作原理会更加有效，那么它的工作非常糟糕
+
+183
+00:09:59,150 --> 00:10:04,040
+terribly if you're trying to work with speech on a digital assistant device,
+非常糟糕的是，如果你想在数字助理设备上使用语音，
+
+184
+00:10:04,040 --> 00:10:06,110
+something like an Alexa system.
+像Alexa系统的东西。
+
+185
+00:10:06,110 --> 00:10:08,840
+And so, we really want to actually be able to produce
+所以，我们真的希望能够生产出来
+
+186
+00:10:08,840 --> 00:10:12,260
+systems that can give the answers to people's questions.
+能够回答人们问题的系统。
+
+187
+00:10:12,260 --> 00:10:16,865
+And so typically, doing that is factored into two parts.
+通常情况下，这样做会分为两部分。
+
+188
+00:10:16,865 --> 00:10:21,500
+That the first part of that is we still do information retrieval.
+第一部分是我们仍在进行信息检索。
+
+189
+00:10:21,500 --> 00:10:26,270
+We use stand- normally quite standard information retrieval techniques to
+我们使用通常非常标准的信息检索技术
+
+190
+00:10:26,270 --> 00:10:32,150
+find documents that quite likely to con- maintain- contain an answer.
+找到很可能包含答案的文件。
+
+191
+00:10:32,150 --> 00:10:36,200
+And the reason that this is normally done by quite traditional techniques is because
+而这通常是通过相当传统的技术来完成的原因是因为
+
+192
+00:10:36,200 --> 00:10:41,390
+the traditional techniques are extremely scalable over billions of documents,
+传统技术在数十亿文档上具有极高的可扩展性，
+
+193
+00:10:41,390 --> 00:10:43,790
+whereas current neural systems actually
+而实际的当前神经系统
+
+194
+00:10:43,790 --> 00:10:46,225
+aren't really scalable over billions of documents.
+并不是真正可扩展到数十亿个文档。
+
+195
+00:10:46,225 --> 00:10:50,380
+But that's an area in sort of which research is ongoing.
+但这是一个正在进行研究的领域。
+
+196
+00:10:50,380 --> 00:10:53,920
+But then once we have sort of some candidate likely documents,
+但是，一旦我们有一些候选人可能的文件，
+
+197
+00:10:53,920 --> 00:10:55,645
+we want to find, uh,
+我们想找到，呃，
+
+198
+00:10:55,645 --> 00:10:57,369
+do they contain an answer,
+他们是否包含答案，
+
+199
+00:10:57,369 --> 00:10:59,305
+and if so, what is the answer?
+如果是的话，答案是什么？
+
+200
+00:10:59,305 --> 00:11:00,520
+And so at that point,
+所以在这一点上，
+
+201
+00:11:00,520 --> 00:11:03,275
+we have a document or a paragraph,
+我们有一个文件或段落，
+
+202
+00:11:03,275 --> 00:11:07,445
+and we're saying, "Can we answer this question from there?"
+我们说，“我们可以从那里回答这个问题吗？”
+
+203
+00:11:07,445 --> 00:11:11,345
+And then that problem is often referred to as the Reading Comprehension problem.
+然后，这个问题通常被称为阅读理解问题。
+
+204
+00:11:11,345 --> 00:11:14,705
+And so that's really what I'm gonna focus on today.
+所以这就是我今天要关注的事情。
+
+205
+00:11:14,705 --> 00:11:19,535
+Um, Reading Comprehension isn't a new problem.
+嗯，阅读理解不是一个新问题。
+
+206
+00:11:19,535 --> 00:11:26,345
+I mean it- you can trace it back into the early days of artificial intelligence and NLP.
+我的意思是 - 你可以追溯到人工智能和NLP的早期阶段。
+
+207
+00:11:26,345 --> 00:11:28,295
+So, back in the 70's,
+所以，早在70年代，
+
+208
+00:11:28,295 --> 00:11:31,520
+a lot of NLP work was trying to do Reading Comprehension.
+很多NLP工作都试图做阅读理解。
+
+209
+00:11:31,520 --> 00:11:35,420
+I mean one of the famous strands of that, um, was, um,
+我的意思是其中一个着名的股，嗯，是，嗯，
+
+210
+00:11:35,420 --> 00:11:38,435
+Sir Roger Shank was a famous,
+Roger Shank爵士是着名的，
+
+211
+00:11:38,435 --> 00:11:41,030
+um, early NLP person.
+嗯，早期的NLP人。
+
+212
+00:11:41,030 --> 00:11:42,650
+Though not a terribly nice man.
+虽然不是一个非常好的男人。
+
+213
+00:11:42,650 --> 00:11:43,985
+I don't think, actually.
+实际上，我不这么认为。
+
+214
+00:11:43,985 --> 00:11:48,440
+Um, but the Yale School of AI was a very well-known,
+嗯，但耶鲁大学的人工智能学校是一个非常有名的，
+
+215
+00:11:48,440 --> 00:11:51,830
+um, NLP approach and really,
+嗯，NLP方法真的，
+
+216
+00:11:51,830 --> 00:11:55,385
+it was very focused on Reading Comprehension.
+它非常注重阅读理解。
+
+217
+00:11:55,385 --> 00:11:58,205
+Um, but it's sort of,
+嗯，但是有点像，
+
+218
+00:11:58,205 --> 00:12:01,070
+you know, I think it was sort of the time, it was too early in any way.
+你知道，我认为这有点时间，任何方式都太早了。
+
+219
+00:12:01,070 --> 00:12:03,725
+It sort of died out. Nothing much came out of that.
+它有点死了。没有太多的东西出来。
+
+220
+00:12:03,725 --> 00:12:07,670
+Um, but then in- right just before the turn of the mil- millennium,
+嗯，但接下来就在千禧年之前，
+
+221
+00:12:07,670 --> 00:12:11,150
+Lynette Hirschman revived this idea and said, "Well,
+Lynette Hirschman恢复了这个想法并说：“好吧，
+
+222
+00:12:11,150 --> 00:12:14,000
+maybe a good challenge would be to find the kind of
+也许一个很好的挑战就是找到那种
+
+223
+00:12:14,000 --> 00:12:18,155
+Reading Comprehension questions that elementary school kids do,
+阅读小学生做的理解问题，
+
+224
+00:12:18,155 --> 00:12:19,700
+and let's see if we could get,
+让我们看看我们能否得到，
+
+225
+00:12:19,700 --> 00:12:21,500
+um, computers to do that.
+嗯，计算机就是这样做的。
+
+226
+00:12:21,500 --> 00:12:24,530
+And some people tried that with fairly simple methods,
+有些人用相当简单的方法尝试过，
+
+227
+00:12:24,530 --> 00:12:26,690
+which only work mediocrely.
+这只是平庸的工作。
+
+228
+00:12:26,690 --> 00:12:29,180
+Then sort of somewhat after that, um,
+那之后有点，嗯，
+
+229
+00:12:29,180 --> 00:12:31,460
+Chris Burges who was a guy who was at
+克里斯伯格斯谁是一个人在
+
+230
+00:12:31,460 --> 00:12:34,610
+Microsoft Research and he wasn't really an NLP person at all.
+微软研究院，他根本不是一个NLP人。
+
+231
+00:12:34,610 --> 00:12:36,335
+He was a machine learning person,
+他是一个机器学习者，
+
+232
+00:12:36,335 --> 00:12:39,065
+but he got it into his head, um,
+但他把它放到他的头上，嗯，
+
+233
+00:12:39,065 --> 00:12:43,820
+that while really a big problem that should be being worked on is
+虽然真正应该解决的一个大问题是
+
+234
+00:12:43,820 --> 00:12:49,115
+Machine Comprehension and he suggested that you sort of could codify it like this.
+机器理解，他建议你可以像这样编纂它。
+
+235
+00:12:49,115 --> 00:12:52,715
+And this is a particular clean codification
+这是一个特别干净的编纂
+
+236
+00:12:52,715 --> 00:12:55,340
+that has lived on and we'll look at more today.
+已经存在，我们今天会看到更多。
+
+237
+00:12:55,340 --> 00:12:58,880
+All right. So, a machine comprehends a passage of text.
+行。因此，一台机器理解了一段文字。
+
+238
+00:12:58,880 --> 00:13:01,640
+If there's any question regarding that text that can be
+如果有任何关于该文本的问题可以
+
+239
+00:13:01,640 --> 00:13:04,490
+answered correctly by a majority of native speakers,
+大多数母语人士正确回答，
+
+240
+00:13:04,490 --> 00:13:06,890
+that machine can provide a string,
+那台机器可以提供一个字符串，
+
+241
+00:13:06,890 --> 00:13:09,470
+which those speakers would agree both answers
+那些发言者会同意这两个答案
+
+242
+00:13:09,470 --> 00:13:13,565
+that question and does not contain information irrelevant to that question.
+该问题并不包含与该问题无关的信息。
+
+243
+00:13:13,565 --> 00:13:17,750
+Um, and he sort of proposed this as sort of a challenge problem for
+嗯，他有点认为这是一个挑战问题
+
+244
+00:13:17,750 --> 00:13:21,980
+artificial intelligence and set about collecting a corpus,
+人工智能和着手收集语料库，
+
+245
+00:13:21,980 --> 00:13:27,410
+the MCTest corpus, which was meant to be a simple Reading Comprehension challenge.
+MCTest语料库，这是一个简单的阅读理解挑战。
+
+246
+00:13:27,410 --> 00:13:29,855
+Um, so they collected, um,
+嗯，所以他们收集了，嗯，
+
+247
+00:13:29,855 --> 00:13:32,840
+stories, um, which, um,
+故事，嗯，哪，嗯，
+
+248
+00:13:32,840 --> 00:13:35,510
+were meant to be kids' stories, you know.
+你知道，这些都是孩子们的故事。
+
+249
+00:13:35,510 --> 00:13:37,790
+"Alyssa got to the beach after a long trip.
+“长途旅行后，艾莉莎到了海边。
+
+250
+00:13:37,790 --> 00:13:40,010
+She's from Charlotte. She traveled from Atlanta.
+她来自夏洛特。她从亚特兰大旅行。
+
+251
+00:13:40,010 --> 00:13:41,570
+She's now in Miami".
+她现在在迈阿密“。
+
+252
+00:13:41,570 --> 00:13:43,505
+Sort of pretty easy stuff.
+很简单的东西。
+
+253
+00:13:43,505 --> 00:13:45,185
+And then there were questions.
+然后有问题。
+
+254
+00:13:45,185 --> 00:13:47,795
+"Why did Alyssa go to Miami?"
+“为什么Alyssa去了迈阿密？”
+
+255
+00:13:47,795 --> 00:13:49,895
+Um, and then the answer is,
+嗯，然后答案是，
+
+256
+00:13:49,895 --> 00:13:51,320
+"To visit some friends".
+“拜访一些朋友”。
+
+257
+00:13:51,320 --> 00:13:55,130
+And so you've got there this string that is coming from the passage.
+所以你已经到了那条来自通道的字符串。
+
+258
+00:13:55,130 --> 00:13:57,515
+That's the answer to the question.
+这就是问题的答案。
+
+259
+00:13:57,515 --> 00:14:00,950
+Um, so the MCTest is a corpus of
+嗯，所以MCTest是一个语料库
+
+260
+00:14:00,950 --> 00:14:07,160
+about 600 such stories and that challenge existed, and a few people worked on it.
+大约600个这样的故事和挑战存在，并且有一些人参与其中。
+
+261
+00:14:07,160 --> 00:14:11,240
+But that never really went very far either for the next couple of years.
+但是在接下来的几年里，这种情况从未真正走得太远。
+
+262
+00:14:11,240 --> 00:14:15,350
+But what really changed things was that in 2015,
+但真正改变的是2015年，
+
+263
+00:14:15,350 --> 00:14:18,515
+and then with more stuff in 2016,
+然后在2016年有更多的东西，
+
+264
+00:14:18,515 --> 00:14:23,000
+um, deep learning people got interested in this idea of,
+嗯，深入学习的人对这个想法感兴趣，
+
+265
+00:14:23,000 --> 00:14:27,620
+"Could we perhaps build neural question answering systems?"
+“我们可能会建立神经问答系统吗？”
+
+266
+00:14:27,620 --> 00:14:30,965
+And it seemed like if you wanted to do that, um,
+似乎你想要这样做，嗯，
+
+267
+00:14:30,965 --> 00:14:33,980
+something like MCTest could only be a test set
+像MCTest这样的东西只能是一个测试集
+
+268
+00:14:33,980 --> 00:14:38,240
+and the ways to make progress would be to do what had been done
+取得进展的方法是做所做的事情
+
+269
+00:14:38,240 --> 00:14:45,680
+in other domains and to actually build just- hand build a large training set of passages,
+在其他领域并实际构建一个大型的训练集通道，
+
+270
+00:14:45,680 --> 00:14:50,870
+questions, and answers in such a way that would be able to train neural networks using
+以能够训练神经网络的方式提出问题和答案
+
+271
+00:14:50,870 --> 00:14:53,600
+the kind of supervised learning techniques that we've
+我们采用的监督学习技巧
+
+272
+00:14:53,600 --> 00:14:56,540
+concentrated on so far in this class.
+到目前为止集中在这堂课上。
+
+273
+00:14:56,540 --> 00:15:00,445
+And indeed, the kind of supervised neural network learning techniques,
+事实上，这种监督神经网络学习技术，
+
+274
+00:15:00,445 --> 00:15:02,990
+which is [NOISE] actually the successful stuff that
+这是[NOISE]实际上是成功的东西
+
+275
+00:15:02,990 --> 00:15:06,500
+powers nearly all the applications of deep learning,
+几乎所有深度学习的应用，
+
+276
+00:15:06,500 --> 00:15:07,955
+not only in NLP,
+不仅在NLP，
+
+277
+00:15:07,955 --> 00:15:10,200
+but also in other fields like vision.
+而且在视觉等其他领域。
+
+278
+00:15:10,200 --> 00:15:15,680
+Um, and so the first subs- the first such dataset was built by
+嗯，所以第一个子 - 第一个这样的数据集是由
+
+279
+00:15:15,680 --> 00:15:20,990
+people at DeepMind over CNN and Daily Mail news stories.
+DeepMind的人们通过美国有线电视新闻网和每日邮报新闻报道。
+
+280
+00:15:20,990 --> 00:15:23,300
+Um, but then the next year, um,
+嗯，但接下来的第二年，嗯，
+
+281
+00:15:23,300 --> 00:15:26,270
+Pranav Rajpurkar is a Stanford PhD student
+Pranav Rajpurkar是斯坦福大学博士生
+
+282
+00:15:26,270 --> 00:15:29,270
+working with Percy Liang and a couple of other students, um,
+与Percy Liang和其他几个学生一起工作，嗯，
+
+283
+00:15:29,270 --> 00:15:31,055
+produced the SQuAD dataset,
+制作了SQuAD数据集，
+
+284
+00:15:31,055 --> 00:15:34,580
+which was actually a much better designed dataset and proved to be
+这实际上是一个设计得更好的数据集并且被证明是
+
+285
+00:15:34,580 --> 00:15:38,120
+sort of much more successful at driving this forward.
+在推动这一进展方面取得更大的成功。
+
+286
+00:15:38,120 --> 00:15:39,830
+And then following along from that,
+接下来，
+
+287
+00:15:39,830 --> 00:15:42,770
+other people started to produce lots of other,
+其他人开始生产其他很多，
+
+288
+00:15:42,770 --> 00:15:45,590
+um, question answering datasets which, you know,
+嗯，问题回答数据集，你知道，
+
+289
+00:15:45,590 --> 00:15:48,215
+many of them have interesting advantages
+其中许多都有其有趣的优点
+
+290
+00:15:48,215 --> 00:15:51,320
+and disadvantages of their own including MS MARCO,
+他们自己的缺点，包括MS MARCO，
+
+291
+00:15:51,320 --> 00:15:53,810
+TriviaQA, RACE, blah, blah, blah, lots of them.
+TriviaQA，RACE，等等，等等，等等。
+
+292
+00:15:53,810 --> 00:15:55,760
+Um, but for today's class,
+嗯，但对于今天的班级，
+
+293
+00:15:55,760 --> 00:15:58,100
+I'm gonna concentrate on SQuAD,
+我会专注于SQUAD，
+
+294
+00:15:58,100 --> 00:16:03,890
+because SQuAD is actually the one that has been by far the most widely used.
+因为SQuAD实际上是迄今为止使用最广泛的SQUAD。
+
+295
+00:16:03,890 --> 00:16:10,145
+And because it - it was just a well-constructed clean dataset,
+因为它 - 它只是一个构造良好的干净数据集，
+
+296
+00:16:10,145 --> 00:16:13,670
+that it sort of just proved a profitable one for people to work with.
+它有点被证明是一个有利可图的人与之合作。
+
+297
+00:16:13,670 --> 00:16:17,260
+[NOISE]
+[噪声]
+
+298
+00:16:17,260 --> 00:16:20,230
+Okay. Um, so, that was reading comprehension.
+好的。嗯，这就是阅读理解。
+
+299
+00:16:20,230 --> 00:16:23,050
+I'll also just quickly tell you the, um,
+我也会很快告诉你，嗯，
+
+300
+00:16:23,050 --> 00:16:26,485
+the history of open domain question answering.
+开放域名问答的历史。
+
+301
+00:16:26,485 --> 00:16:29,080
+So, the difference here for the- the field of
+所以，这里的区别是 - 的领域
+
+302
+00:16:29,080 --> 00:16:33,305
+Open-domain Question Answering that we're saying, okay,
+我们说的开放域问题回答，好的，
+
+303
+00:16:33,305 --> 00:16:37,350
+there's an encyclopedia or there's a web crawl,
+有一个百科全书或者有一个网络爬行，
+
+304
+00:16:37,350 --> 00:16:39,405
+I'm just going to ask a question,
+我只是想问一个问题，
+
+305
+00:16:39,405 --> 00:16:40,560
+can you answer it?
+你能回答吗？
+
+306
+00:16:40,560 --> 00:16:43,555
+So, it's this bigger task of question answering.
+所以，这是一个更大的问题回答任务。
+
+307
+00:16:43,555 --> 00:16:46,570
+And, you know, that was something that again was thought about,
+并且，你知道，这是一个被再次考虑的事情，
+
+308
+00:16:46,570 --> 00:16:49,000
+um, very early on.
+嗯，非常早。
+
+309
+00:16:49,000 --> 00:16:51,460
+So, there's this kind of early, um,
+所以，有这种早期，嗯，
+
+310
+00:16:51,460 --> 00:16:56,170
+CACM paper by Simmons who sort of explores how you could
+西蒙斯的CACM论文，探讨了你的方法
+
+311
+00:16:56,170 --> 00:17:00,940
+do answering questions as textual question-answering, um, and yet, you know,
+回答问题作为文本问答，嗯，但是，你知道，
+
+312
+00:17:00,940 --> 00:17:03,010
+he has the idea that what's going to
+他知道会发生什么
+
+313
+00:17:03,010 --> 00:17:05,755
+happen is you're gonna dependency parse the question,
+碰巧是你要依赖解析这个问题，
+
+314
+00:17:05,755 --> 00:17:08,470
+and dependency parse sentences of the text,
+和依赖解​​析文本的句子，
+
+315
+00:17:08,470 --> 00:17:11,830
+and then sort of do tree matching over the dependency parses,
+然后在依赖关系解析上进行树匹配，
+
+316
+00:17:11,830 --> 00:17:13,660
+um, to get out the answers.
+嗯，得出答案。
+
+317
+00:17:13,660 --> 00:17:15,865
+And, you know, that's in some sense
+而且，你知道，这在某种意义上说
+
+318
+00:17:15,865 --> 00:17:22,120
+actually prefigured work that people actually were then attempting to do 35 years later.
+实际上是人们实际上在35年后尝试做的预示工作。
+
+319
+00:17:22,120 --> 00:17:25,570
+Um, getting a bit more modern, um, Julian Kupiec,
+嗯，变得更现代，嗯，Julian Kupiec，
+
+320
+00:17:25,570 --> 00:17:28,000
+she was working at Xerox PARC at the time,
+她当时在Xerox PARC工作，
+
+321
+00:17:28,000 --> 00:17:31,240
+um, came up with this system called MURAX,
+嗯，想出了这个名为MURAX的系统，
+
+322
+00:17:31,240 --> 00:17:35,890
+and so at this stage in the 90s there started to be the first, um,
+所以在90年代的这个阶段开始有第一个，嗯，
+
+323
+00:17:35,890 --> 00:17:38,770
+digitally available encyclopedias available,
+数字可用的百科全书，
+
+324
+00:17:38,770 --> 00:17:41,275
+so he was using the Grolier's Encyclopedia,
+所以他正在使用Grolier的百科全书，
+
+325
+00:17:41,275 --> 00:17:44,560
+and so he said about trying to build a system that could answer
+所以他说试图建立一个可以回答的系统
+
+326
+00:17:44,560 --> 00:17:47,980
+questions over that encyclopedia using,
+关于该百科全书使用的问题，
+
+327
+00:17:47,980 --> 00:17:50,590
+in general, fairly sort of shallow, um,
+一般来说，相当浅，嗯，
+
+328
+00:17:50,590 --> 00:17:55,435
+linguistic processing methods, i.e, regular expressions.
+语言处理方法，即正则表达式。
+
+329
+00:17:55,435 --> 00:17:58,210
+Um, for, after [LAUGHTER] having, um,
+嗯，因为，在[笑声]之后，嗯，
+
+330
+00:17:58,210 --> 00:18:01,555
+done information retrieval search over that.
+完成信息检索搜索。
+
+331
+00:18:01,555 --> 00:18:05,515
+But that started to evoke more interest from other people,
+但这开始引起其他人的兴趣，
+
+332
+00:18:05,515 --> 00:18:13,135
+and so in 1999 the US National Institutes of Standards and Technology, um,
+所以1999年美国国家标准与技术研究院，嗯，
+
+333
+00:18:13,135 --> 00:18:17,170
+instituted a TREC question-answering track where the idea was,
+设立了一个TREC问答环节，其中的想法是，
+
+334
+00:18:17,170 --> 00:18:21,145
+there was a large collection of News-wire documents,
+有大量的新闻线文件，
+
+335
+00:18:21,145 --> 00:18:25,090
+and you could be asked to provide the question of them,
+你可能会被要求提供他们的问题，
+
+336
+00:18:25,090 --> 00:18:28,390
+and lots of people started to build question answering systems.
+很多人开始建立问答系统。
+
+337
+00:18:28,390 --> 00:18:30,850
+Indeed, if in some sense that was
+的确，如果从某种意义上说是这样的话
+
+338
+00:18:30,850 --> 00:18:35,560
+this competition which was where people at IBM started,
+这场比赛是IBM人们开始的地方，
+
+339
+00:18:35,560 --> 00:18:38,320
+um, working on textual question-answering,
+嗯，致力于文本问答，
+
+340
+00:18:38,320 --> 00:18:42,010
+and then, um, sort of a decade later, um,
+然后，嗯，十年后，嗯，
+
+341
+00:18:42,010 --> 00:18:47,305
+IBM rejigged things into the sexier format of,
+IBM将事物重新调整为更性感的格式，
+
+342
+00:18:47,305 --> 00:18:52,975
+um, let's build a Jeopardy contestant rather than let's answer questions from the news,
+嗯，让我们建立一个Jeopardy选手，而不是让我们回答新闻中的问题，
+
+343
+00:18:52,975 --> 00:18:56,620
+and that then led to their DeepQA system in 2011.
+然后在2011年导致了他们的DeepQA系统。
+
+344
+00:18:56,620 --> 00:18:59,155
+Which I presume quite a few of you saw,
+我认为你看到了很多，
+
+345
+00:18:59,155 --> 00:19:02,545
+these people saw Jeopardy IBM?
+这些人看到了Jeopardy IBM？
+
+346
+00:19:02,545 --> 00:19:04,120
+Yeah, some of you.
+是的，有些人。
+
+347
+00:19:04,120 --> 00:19:07,195
+Okay. So, that they were able to successfully, um,
+好的。所以，他们能够成功，嗯，
+
+348
+00:19:07,195 --> 00:19:13,180
+build a question answering system that could compete at Jeopardy, um, and win.
+建立一个可以在Jeopardy，嗯和胜利中竞争的问答系统。
+
+349
+00:19:13,180 --> 00:19:17,710
+Um, and, you know, like a lot of these demonstrations of
+嗯，而且，你知道，就像很多这些演示一样
+
+350
+00:19:17,710 --> 00:19:23,950
+technological success there are things you can quibble about the way it was set up,
+技术上的成功有些东西你可以对它的设置方式嗤之以鼻，
+
+351
+00:19:23,950 --> 00:19:27,250
+um, that really the kind of computer just had
+嗯，那真是那种电脑
+
+352
+00:19:27,250 --> 00:19:32,260
+a speed advantage versus the human beings that had to buzz in to answer the question.
+速度优势与人类不得不热衷于回答这个问题。
+
+353
+00:19:32,260 --> 00:19:34,945
+But, you know, nevertheless, fundamentally,
+但是，你知道，从根本上说，
+
+354
+00:19:34,945 --> 00:19:37,540
+the textual question-answering had to work,
+文本问答必须起作用，
+
+355
+00:19:37,540 --> 00:19:42,895
+that this was a system that was answering questions mainly based on textual passages,
+这是一个主要基于文本段落回答问题的系统，
+
+356
+00:19:42,895 --> 00:19:47,079
+and it had to be able to find the answers to those questions correctly,
+它必须能够正确找到这些问题的答案，
+
+357
+00:19:47,079 --> 00:19:48,790
+for the system to work.
+使系统工作。
+
+358
+00:19:48,790 --> 00:19:52,090
+Um, so then, more recently again, um,
+嗯，那么，最近又一次，嗯，
+
+359
+00:19:52,090 --> 00:19:55,990
+and really the first piece of work that did this with a neural system was,
+并且真正用神经系统做的第一件工作是，
+
+360
+00:19:55,990 --> 00:19:58,000
+um, work that was, um,
+嗯，那是工作，嗯，
+
+361
+00:19:58,000 --> 00:19:59,650
+done by a Stanford PhD student,
+由斯坦福大学博士生完成，
+
+362
+00:19:59,650 --> 00:20:00,925
+that I'll get to later,
+我以后会到的，
+
+363
+00:20:00,925 --> 00:20:02,350
+was then the idea of well,
+那么好的想法，
+
+364
+00:20:02,350 --> 00:20:06,940
+could we replace traditional complex question answering systems
+我们能否取代传统的复杂问答系统
+
+365
+00:20:06,940 --> 00:20:09,954
+by using a neural reading comprehension system,
+通过使用神经阅读理解系统，
+
+366
+00:20:09,954 --> 00:20:12,280
+and that's proved to be very successful.
+事实证明这是非常成功的。
+
+367
+00:20:12,280 --> 00:20:15,970
+So, to, to explain that a little bit more, um,
+所以，要解释一下，嗯，
+
+368
+00:20:15,970 --> 00:20:20,410
+if you look at the kind of systems that were built for TREC question-answering,
+如果你看一下那些为TREC问答而建的系统，
+
+369
+00:20:20,410 --> 00:20:24,640
+um, they were very complex multi-part systems.
+嗯，它们是非常复杂的多部分系统。
+
+370
+00:20:24,640 --> 00:20:27,565
+And really, if you then look at something like,
+真的，如果你再看看像，
+
+371
+00:20:27,565 --> 00:20:31,510
+IBM's Deep QA system it was sort of like this
+IBM的Deep QA系统有点像这样
+
+372
+00:20:31,510 --> 00:20:35,950
+times 10 because it both had very complex systems like this,
+10倍，因为它们都有非常复杂的系统，
+
+373
+00:20:35,950 --> 00:20:40,465
+but it ensembled together sort of six different components in every place,
+但它在每个地方都有六种不同的组件，
+
+374
+00:20:40,465 --> 00:20:41,860
+and then did sort of,
+然后做了一些，
+
+375
+00:20:41,860 --> 00:20:45,220
+um, classify a combination on top of them.
+嗯，在它们之上对组合进行分类。
+
+376
+00:20:45,220 --> 00:20:46,660
+But so far, the current-.
+但到目前为止，目前 - 。
+
+377
+00:20:46,660 --> 00:20:51,850
+This is sort of around a sort of a 2003 question answering system,
+这类似于2003年的问答系统，
+
+378
+00:20:51,850 --> 00:20:55,120
+and so the kind of things that went through is,
+所以经历的事情是，
+
+379
+00:20:55,120 --> 00:20:56,980
+so when there was a question,
+所以当有问题时，
+
+380
+00:20:56,980 --> 00:20:59,470
+it parsed the question with a parser
+它用解析器解析了这个问题
+
+381
+00:20:59,470 --> 00:21:02,380
+kind of like the ones we saw with our dependency parsers.
+有点像我们用依赖解析器看到的那些。
+
+382
+00:21:02,380 --> 00:21:03,875
+It did some sort of
+它做了某种
+
+383
+00:21:03,875 --> 00:21:09,435
+handwritten semantic normalization rules to try and get them into a better semantic form.
+手写的语义规范化规则，试图让它们变成更好的语义形式。
+
+384
+00:21:09,435 --> 00:21:13,140
+It then had a question type classifier which tried to
+然后它有一个问题类型分类器试图
+
+385
+00:21:13,140 --> 00:21:16,890
+work out what kind of semantic type is this question looking for,
+找出这个问题寻找什么样的语义类型，
+
+386
+00:21:16,890 --> 00:21:18,780
+is it looking for a person name,
+它在寻找一个人的名字，
+
+387
+00:21:18,780 --> 00:21:19,890
+or a country name,
+或国名，
+
+388
+00:21:19,890 --> 00:21:22,860
+or a temperature, or something like that.
+或温度，或类似的东西。
+
+389
+00:21:22,860 --> 00:21:27,825
+Um, it would, um, then, um,
+恩，嗯，那么，嗯，
+
+390
+00:21:27,825 --> 00:21:32,280
+have an information retrieval system out of the document collection,
+有一个文件集之外的信息检索系统，
+
+391
+00:21:32,280 --> 00:21:37,565
+um, which would find paragraphs that were likely to contain the answers.
+嗯，会找到可能包含答案的段落。
+
+392
+00:21:37,565 --> 00:21:40,510
+Um, and then it would have a method of ranking
+嗯，然后它会有一个排名的方法
+
+393
+00:21:40,510 --> 00:21:45,175
+those paragraph choices to see which ones are likely to have the answers.
+那些段落选择，看看哪些可能有答案。
+
+394
+00:21:45,175 --> 00:21:47,740
+Um, it would then,
+嗯，那么，
+
+395
+00:21:47,740 --> 00:21:50,365
+um, over there somewhere, um,
+嗯，那边的某个地方，嗯，
+
+396
+00:21:50,365 --> 00:21:56,320
+run Named Entity Recognition on those passages to find entities that were in them.
+在这些段落上运行命名实体识别以查找其中的实体。
+
+397
+00:21:56,320 --> 00:21:59,515
+These systems depended strongly on the use of
+这些系统强烈依赖于使用
+
+398
+00:21:59,515 --> 00:22:02,350
+fine matching entities because then it could look for
+精细匹配实体，因为它可以寻找
+
+399
+00:22:02,350 --> 00:22:05,755
+an entity which corresponded to the question type.
+对应于问题类型的实体。
+
+400
+00:22:05,755 --> 00:22:09,970
+Um, then once it had candidate entities,
+嗯，那么一旦它有候选实体，
+
+401
+00:22:09,970 --> 00:22:11,980
+it had to actually try and determine whether
+它必须实际尝试并确定是否
+
+402
+00:22:11,980 --> 00:22:14,980
+these entities did or didn't answer the question.
+这些实体确实或没有回答这个问题。
+
+403
+00:22:14,980 --> 00:22:18,745
+So, these people, this is the system from LCC by,
+所以，这些人，这是来自LCC的系统，
+
+404
+00:22:18,745 --> 00:22:21,100
+um, Sanda Harabagiu and Dan Moldovan.
+嗯，Sanda Harabagiu和Dan Moldovan。
+
+405
+00:22:21,100 --> 00:22:23,605
+They actually had some quite interesting stuff here,
+他们实际上有一些非常有趣的东西，
+
+406
+00:22:23,605 --> 00:22:28,900
+where they had a kind of a loose theorem prover that would try and prove that, um,
+他们有一种松散的定理证明，试图证明，嗯，
+
+407
+00:22:28,900 --> 00:22:31,510
+the semantic form of a piece of text,
+一段文字的语义形式，
+
+408
+00:22:31,510 --> 00:22:34,120
+um, gave an answer to what the question was.
+嗯，回答了问题所在。
+
+409
+00:22:34,120 --> 00:22:38,410
+So, you know, that was kind of cool stuff with an Axiomatic Knowledge Base,
+所以，你知道，这是一个很酷的东西与Axiomatic知识库，
+
+410
+00:22:38,410 --> 00:22:41,275
+um, and eventually out would come an answer.
+嗯，最终会出来答案。
+
+411
+00:22:41,275 --> 00:22:44,305
+Um, so, you know, something that is,
+嗯，所以，你知道的，是的，
+
+412
+00:22:44,305 --> 00:22:46,300
+I do just want to emphasize, you know,
+我只是想强调，你知道，
+
+413
+00:22:46,300 --> 00:22:50,050
+sometimes with these deep learning courses you get these days,
+有时这些天你会得到这些深度学习课程，
+
+414
+00:22:50,050 --> 00:22:55,330
+the impression you have is that absolutely nothing worked before 2014,
+你的印象是2014年之前绝对没有用，
+
+415
+00:22:55,330 --> 00:22:57,445
+uh, when we got back to deep learning,
+呃，当我们回到深度学习时，
+
+416
+00:22:57,445 --> 00:22:59,440
+and that's not actually true.
+而事实并非如此。
+
+417
+00:22:59,440 --> 00:23:01,570
+So, these kind of factoid question on,
+所以，这类事实问题，
+
+418
+00:23:01,570 --> 00:23:03,970
+these kind of question answering systems within
+这些问题的回答系统
+
+419
+00:23:03,970 --> 00:23:07,135
+a certain domain actually really worked rather well.
+某个领域实际上真的很有效。
+
+420
+00:23:07,135 --> 00:23:10,690
+Um, so, I started saying the word Factoid Question Answering,
+嗯，所以，我开始说“Factoid Question Answering”这个词，
+
+421
+00:23:10,690 --> 00:23:13,120
+and so let me explain that because that's the secret.
+所以让我解释一下，因为这是秘密。
+
+422
+00:23:13,120 --> 00:23:14,860
+So, people, at least in NLP,
+所以，人们，至少在NLP，
+
+423
+00:23:14,860 --> 00:23:17,965
+use the term "Factoid Question Answering" to mean
+使用术语“Factoid Question Answering”来表示
+
+424
+00:23:17,965 --> 00:23:21,790
+the case that your answer is a named entity.
+您的答案是命名实体的情况。
+
+425
+00:23:21,790 --> 00:23:23,890
+So, it's sort of something like, you know,
+所以，它有点像，你知道，
+
+426
+00:23:23,890 --> 00:23:26,215
+what year was Elvis Presley born,
+埃尔维斯普雷斯利出生于哪一年，
+
+427
+00:23:26,215 --> 00:23:32,050
+or what is the name of Beyonce's husband, or, um,
+或者Beyonce的丈夫是什么名字，或者，嗯，
+
+428
+00:23:32,050 --> 00:23:35,320
+you know, which state,
+你知道，哪个州，
+
+429
+00:23:35,320 --> 00:23:38,740
+um, has the most pork or something, I don't know.
+嗯，有最多的猪肉什么的，我不知道。
+
+430
+00:23:38,740 --> 00:23:40,240
+Right, anything that's got,
+对，任何有的东西，
+
+431
+00:23:40,240 --> 00:23:45,205
+anything that's sort of the answer is sort of some clear semantic type entity,
+任何类似答案的东西都是一些清晰的语义类型实体，
+
+432
+00:23:45,205 --> 00:23:46,735
+and that's your answer.
+那是你的答案。
+
+433
+00:23:46,735 --> 00:23:50,935
+I mean, so, within the space of those kind of questions,
+我的意思是，在这类问题的空间内，
+
+434
+00:23:50,935 --> 00:23:55,195
+which actually is a significant part of the questions you get in web search, right?
+这实际上是你在网络搜索中遇到的重要问题，对吗？
+
+435
+00:23:55,195 --> 00:23:58,630
+Lots of web search is just, you know,
+你知道，很多网络搜索都是
+
+436
+00:23:58,630 --> 00:24:01,120
+who was the star of this movie,
+谁是这部电影的明星，
+
+437
+00:24:01,120 --> 00:24:03,355
+or what year was somebody born, right?
+或者哪一年出生，对吗？
+
+438
+00:24:03,355 --> 00:24:05,785
+There's zillions of those all the time.
+那里有数以万计的人。
+
+439
+00:24:05,785 --> 00:24:08,710
+These systems actually really did work quite well
+这些系统确实非常有效
+
+440
+00:24:08,710 --> 00:24:12,070
+that they could get about 70 percent of those questions right,
+他们可以得到大约70％的问题，
+
+441
+00:24:12,070 --> 00:24:14,110
+um, which wasn't bad at all, um,
+嗯，这一点都不差，嗯，
+
+442
+00:24:14,110 --> 00:24:16,270
+though that they really sort of didn't really
+虽然他们真的不是真的
+
+443
+00:24:16,270 --> 00:24:19,380
+extend it out to other kinds of stuff beyond that.
+将其扩展到其他类型的东西。
+
+444
+00:24:19,380 --> 00:24:22,400
+But whatever virtues they had, um,
+但无论他们有什么美德，嗯，
+
+445
+00:24:22,400 --> 00:24:28,280
+they were extremely complex systems that people spent years put togeth- putting together,
+他们是非常复杂的系统，人们花了多年的时间把它放在一起，
+
+446
+00:24:28,280 --> 00:24:32,885
+which had many components with a huge amount of hand-built stuff.
+它有很多组件，手工制作的东西很多。
+
+447
+00:24:32,885 --> 00:24:39,035
+And most of the stuff was sort of built quite separately and tied together,
+而且大多数东西都是完全独立构建并捆绑在一起的，
+
+448
+00:24:39,035 --> 00:24:41,120
+and you just sort of hope that it worked,
+而你只是希望它有效，
+
+449
+00:24:41,120 --> 00:24:44,045
+um, well, when put together in composite.
+嗯，好吧，当复合在一起时。
+
+450
+00:24:44,045 --> 00:24:47,690
+And so we can contrast that to what we then see later,
+所以我们可以将其与我们后面看到的相对照，
+
+451
+00:24:47,690 --> 00:24:51,275
+um, for neural network-style systems.
+嗯，对于神经网络式系统。
+
+452
+00:24:51,275 --> 00:24:57,350
+Okay. Um, so let me now say some more stuff about, um,
+好的。嗯，现在让我说一些关于的东西，嗯，
+
+453
+00:24:57,350 --> 00:25:02,870
+the Stanford Question Answering Dataset or SQuAD that I just mentioned a little bit ago,
+我刚才提到的Stanford Question Answering Dataset或SQuAD，
+
+454
+00:25:02,870 --> 00:25:07,055
+and as this is the data for the default final project as well.
+因为这也是默认最终项目的数据。
+
+455
+00:25:07,055 --> 00:25:10,040
+Um, so what SQuAD has is,
+嗯，那么SQUAD是什么，
+
+456
+00:25:10,040 --> 00:25:13,490
+questions in SQuAD have a passage,
+SQUAD中的问题有一个段落，
+
+457
+00:25:13,490 --> 00:25:16,070
+which is a paragraph from Wikipedia.
+这是维基百科的一段。
+
+458
+00:25:16,070 --> 00:25:18,425
+And then there is a question,
+然后有一个问题，
+
+459
+00:25:18,425 --> 00:25:21,755
+here it's, "Which team won Super Bowl 50?"
+在这里，“哪支球队赢得了超级碗50？”
+
+460
+00:25:21,755 --> 00:25:27,270
+And the goal of the system is to come up with the answer to this question.
+该系统的目标是提出这个问题的答案。
+
+461
+00:25:27,270 --> 00:25:30,430
+Um, human reading comprehension.
+嗯，人类的阅读理解力。
+
+462
+00:25:30,430 --> 00:25:32,350
+What is the answer to the question?
+这个问题的答案是什么？
+
+463
+00:25:32,350 --> 00:25:36,640
+[NOISE]
+[噪声]
+
+464
+00:25:36,640 --> 00:25:37,510
+Broncos.
+野马。
+
+465
+00:25:37,510 --> 00:25:39,130
+Broncos. [LAUGHTER] Okay.
+野马。 [大笑]好的。
+
+466
+00:25:39,130 --> 00:25:42,730
+Yeah. Um, so that's the answer to the question.
+是啊。嗯，这就是问题的答案。
+
+467
+00:25:42,730 --> 00:25:47,060
+Um, and so by construction for SQuAD,
+嗯，通过施工SQUAD，
+
+468
+00:25:47,060 --> 00:25:53,570
+the answer to a question is always a sub-sequence of words from the passage which is,
+一个问题的答案总是来自该段落的一系列单词序列，
+
+469
+00:25:53,570 --> 00:25:56,345
+normally, it ends up being referred to as a span,
+通常，它最终被称为跨度，
+
+470
+00:25:56,345 --> 00:25:58,580
+a sub-sequence of words from the passage.
+文章的一个子序列。
+
+471
+00:25:58,580 --> 00:26:01,670
+So that's the only kind of questions you can have.
+所以这是你唯一可以提出的问题。
+
+472
+00:26:01,670 --> 00:26:04,639
+You can't have questions that are counting questions,
+你不能有问题，
+
+473
+00:26:04,639 --> 00:26:07,130
+or yes, no questions, or anything like that.
+或是，没有问题，或类似的东西。
+
+474
+00:26:07,130 --> 00:26:10,475
+You can just pick out a sub-sequence.
+你可以选择一个子序列。
+
+475
+00:26:10,475 --> 00:26:12,260
+Um, okay.
+嗯，好的。
+
+476
+00:26:12,260 --> 00:26:18,650
+But, um, so they created in the first version about 100,000 examples.
+但是，嗯，所以他们在第一个版本中创建了大约100,000个例子。
+
+477
+00:26:18,650 --> 00:26:22,040
+So there are a bunch of questions about each passage.
+因此每个段落都有很多问题。
+
+478
+00:26:22,040 --> 00:26:24,200
+So it's sort of something like, um,
+所以它有点像，嗯，
+
+479
+00:26:24,200 --> 00:26:28,580
+I think it's maybe sort of about five questions per passage,
+我认为每篇文章可能有五个问题，
+
+480
+00:26:28,580 --> 00:26:32,315
+and there are 20,000 different bits that Wikipedia uses, used.
+维基百科使用，使用了20,000个不同的位。
+
+481
+00:26:32,315 --> 00:26:34,910
+Um, and this sort of must be a span form,
+嗯，这种必须是跨度形式，
+
+482
+00:26:34,910 --> 00:26:39,260
+as often referred to as extractive question answering.
+通常被称为提取问题回答。
+
+483
+00:26:39,260 --> 00:26:43,520
+Okay. Um, here's just one more example
+好的。嗯，这里只是另一个例子
+
+484
+00:26:43,520 --> 00:26:47,540
+that can give you some more sense of some of the things that are there,
+这可以让你更多地了解一些存在的东西，
+
+485
+00:26:47,540 --> 00:26:50,345
+and it illustrates a couple of other factors.
+它说明了其他几个因素。
+
+486
+00:26:50,345 --> 00:26:52,760
+Um, so, you know,
+嗯，你知道，
+
+487
+00:26:52,760 --> 00:26:56,360
+even this one, I guess the previous one wasn't, um,
+即便是这个，我想前一个不是，嗯，
+
+488
+00:26:56,360 --> 00:26:59,600
+completely obvious what your answers should be because
+完全明显你的答案应该是什么，因为
+
+489
+00:26:59,600 --> 00:27:02,900
+maybe you could say the answer should just have been Broncos,
+也许你可以说答案应该是野​​马队，
+
+490
+00:27:02,900 --> 00:27:05,720
+or you could have said it was Denver Broncos.
+或者你可以说这是丹佛野马队。
+
+491
+00:27:05,720 --> 00:27:07,340
+Um, and in general,
+嗯，总的来说，
+
+492
+00:27:07,340 --> 00:27:09,785
+even if you're answering with a span,
+即使你正在回答，
+
+493
+00:27:09,785 --> 00:27:13,445
+there's gonna be variation as to how long a span you choose.
+关于你选择的跨度多长时间会有变化。
+
+494
+00:27:13,445 --> 00:27:16,040
+Um, so what they did, um,
+嗯，他们做了什么，嗯，
+
+495
+00:27:16,040 --> 00:27:18,680
+and so this was done with, on Mechanical Turk,
+所以这是在Mechanical Turk上完成的，
+
+496
+00:27:18,680 --> 00:27:21,170
+gathering the data, or building questions,
+收集数据或构建问题，
+
+497
+00:27:21,170 --> 00:27:25,790
+and getting answers, is that they got answers from three different people.
+得到答案的是，他们得到了三个不同的人的答案。
+
+498
+00:27:25,790 --> 00:27:26,900
+So here's this question,
+所以这是这个问题，
+
+499
+00:27:26,900 --> 00:27:29,810
+"Along with non-governmental and non-state schools,
+“与非政府和非公立学校一起，
+
+500
+00:27:29,810 --> 00:27:32,029
+what is another name for private schools?"
+私立学校的另一个名字是什么？“
+
+501
+00:27:32,029 --> 00:27:35,585
+And three human beings were asked the answer based on this passage.
+根据这段经文，三个人被问到了答案。
+
+502
+00:27:35,585 --> 00:27:37,009
+And one said independent,
+一个说独立，
+
+503
+00:27:37,009 --> 00:27:39,485
+and two said independent schools.
+还有两所独立学校。
+
+504
+00:27:39,485 --> 00:27:42,950
+Um, this one, all three people gave the same answer.
+嗯，这一个，所有三个人给出了相同的答案。
+
+505
+00:27:42,950 --> 00:27:45,515
+This one, again, you get two different answers,
+这一次，你得到两个不同的答案，
+
+506
+00:27:45,515 --> 00:27:48,020
+so that they sample three answers.
+这样他们就可以得到三个答案。
+
+507
+00:27:48,020 --> 00:27:52,670
+And basically, then, you can be correct if you're going with any of the answers.
+基本上，如果你正在使用任何答案，那么你可以是正确的。
+
+508
+00:27:52,670 --> 00:27:59,330
+And so that sort of at least gives you a bit of robustness to variation in human answers.
+因此，至少可以让你对人类答案的变化有一点强大感。
+
+509
+00:27:59,330 --> 00:28:04,460
+Okay. And that starts me into the topic of evaluation.
+好的。这让我开始进入评估主题。
+
+510
+00:28:04,460 --> 00:28:05,855
+Um, yeah.
+嗯，是的
+
+511
+00:28:05,855 --> 00:28:08,450
+And these slides here are entitled
+这些幻灯片有权获得
+
+512
+00:28:08,450 --> 00:28:12,140
+SQuAD version 1,1 because that means in five minutes time,
+SQuAD 1,1版，因为这意味着在五分钟的时间内，
+
+513
+00:28:12,140 --> 00:28:14,600
+I'm gonna tell you about SQuAD version 2,
+我要告诉你有关SQuAD版本2的信息，
+
+514
+00:28:14,600 --> 00:28:16,640
+which adds a bit more stuff into it,
+这会增加更多的东西，
+
+515
+00:28:16,640 --> 00:28:19,535
+but we'll just get 1,1 straight first.
+但我们先得到1,1。
+
+516
+00:28:19,535 --> 00:28:22,895
+All right. So there are three answers that col- were collected.
+行。因此收集了三个答案。
+
+517
+00:28:22,895 --> 00:28:25,280
+And so for evaluation metrics,
+对于评估指标，
+
+518
+00:28:25,280 --> 00:28:28,145
+they suggested two evaluation metrics.
+他们建议了两个评估指标。
+
+519
+00:28:28,145 --> 00:28:31,340
+The first one is exact match.
+第一个是完全匹配。
+
+520
+00:28:31,340 --> 00:28:34,250
+So you're going to return a span.
+所以你要返回一个跨度。
+
+521
+00:28:34,250 --> 00:28:37,970
+If the span is one of these three,
+如果跨度是这三个中的一个，
+
+522
+00:28:37,970 --> 00:28:39,515
+you get one point,
+你得到一分，
+
+523
+00:28:39,515 --> 00:28:40,820
+and if the scan,
+如果扫描，
+
+524
+00:28:40,820 --> 00:28:42,980
+span is not one of these three,
+跨度不是这三者中的一个，
+
+525
+00:28:42,980 --> 00:28:45,185
+you get zero for that question.
+你得到的问题为零。
+
+526
+00:28:45,185 --> 00:28:48,560
+And then your accuracy is just the percent correct,
+然后你的准确性只是正确的百分比，
+
+527
+00:28:48,560 --> 00:28:50,345
+so that's extremely simple.
+所以这非常简单。
+
+528
+00:28:50,345 --> 00:28:52,910
+But the second metric, and actually,
+但第二个指标，实际上，
+
+529
+00:28:52,910 --> 00:28:55,984
+the one that was favored as the primary metric,
+作为主要指标的人，
+
+530
+00:28:55,984 --> 00:28:58,235
+was an F1 metric.
+是一个F1指标。
+
+531
+00:28:58,235 --> 00:29:01,504
+So what you do for this F1 metric
+那么你为这个F1指标做了什么
+
+532
+00:29:01,504 --> 00:29:05,105
+is you're matching at the word level for the different answers.
+你是否在单词级别匹配不同的答案。
+
+533
+00:29:05,105 --> 00:29:06,935
+So you've treat each,
+所以你要对待每一个，
+
+534
+00:29:06,935 --> 00:29:12,275
+you treat the system span and each gold answer as a bag of words,
+你将系统范围和每个黄金答案视为一包文字，
+
+535
+00:29:12,275 --> 00:29:14,930
+and then you work out a precision, which is,
+然后你计算出一个精度，
+
+536
+00:29:14,930 --> 00:29:22,780
+um, the percent of words in the system's answer that are actually in a span,
+嗯，系统答案中的单词百分比实际上是跨度，
+
+537
+00:29:22,780 --> 00:29:25,765
+i- in a gold span, the recall,
+我在黄金时段召回，
+
+538
+00:29:25,765 --> 00:29:31,615
+which is the percent of words in a gold span that are in the system's span.
+这是系统跨度中黄金跨度中单词的百分比。
+
+539
+00:29:31,615 --> 00:29:34,720
+And then you calculate the harmonic mean of those two numbers
+然后计算这两个数的调和平均值
+
+540
+00:29:34,720 --> 00:29:37,760
+and the harmonic mean is sort of a very conservative average.
+调和均值是一种非常保守的平均值。
+
+541
+00:29:37,760 --> 00:29:40,460
+So it's close to the mean of those two numbers,
+所以它接近这两个数字的平均值，
+
+542
+00:29:40,460 --> 00:29:42,800
+and that gives you a score.
+这会给你一个分数。
+
+543
+00:29:42,800 --> 00:29:47,375
+And what you then do is, for each question,
+那么你接下来要做的是，对于每个问题，
+
+544
+00:29:47,375 --> 00:29:50,090
+you'd return, you say its score is
+你回来了，你说它的得分是
+
+545
+00:29:50,090 --> 00:29:55,355
+the maximum F1 over the three different answers that were collected from human beings.
+从人类收集的三个不同答案中的最大F1。
+
+546
+00:29:55,355 --> 00:29:58,850
+And then for the whole, um, dataset,
+然后对整个，嗯，数据集，
+
+547
+00:29:58,850 --> 00:30:05,195
+you then average those F1 scores across questions and that's then your final F1 result.
+然后你可以在问题中平均那些F1得分，那就是你的最终F1成绩。
+
+548
+00:30:05,195 --> 00:30:08,345
+So that's a more complicated thing to say.
+所以这是一个更复杂的事情。
+
+549
+00:30:08,345 --> 00:30:12,080
+Um, and we provide there sort of a val code,
+嗯，我们提供那种val代码，
+
+550
+00:30:12,080 --> 00:30:13,970
+um, for you that does that.
+嗯，对你这样做。
+
+551
+00:30:13,970 --> 00:30:18,230
+Um, but it sort of seems that F1 is actually
+嗯，但实际上看起来有点像F1
+
+552
+00:30:18,230 --> 00:30:24,199
+a more reliable and better measure because if you use exact match,
+一个更可靠和更好的措施，因为如果你使用完全匹配，
+
+553
+00:30:24,199 --> 00:30:25,850
+you know, even though there's of,
+你知道，即使有，
+
+554
+00:30:25,850 --> 00:30:29,525
+a bit of robustness that comes on three people's answers,
+三个人的答案有点强健，
+
+555
+00:30:29,525 --> 00:30:31,940
+three is not a very large sample,
+三个不是很大的样本，
+
+556
+00:30:31,940 --> 00:30:34,310
+so there's sort of a bit of guessing as to whether you get
+所以有一点猜测你是否得到了
+
+557
+00:30:34,310 --> 00:30:37,760
+exactly the same span some human being got,
+一些人得到的完全相同的范围，
+
+558
+00:30:37,760 --> 00:30:41,180
+whereas you're sort of going to get a reasonable score
+而你有点得到一个合理的分数
+
+559
+00:30:41,180 --> 00:30:44,330
+in the F1 even if your boundaries are off by a little.
+在F1中，即使你的界限有点​​偏差。
+
+560
+00:30:44,330 --> 00:30:47,345
+So the F1 metric sort of, um,
+那么F1指标，嗯，
+
+561
+00:30:47,345 --> 00:30:52,760
+is more reliable and avoids various kinds of artifacts as to how big
+更可靠，避免各种各样的文物
+
+562
+00:30:52,760 --> 00:30:58,295
+or small an answer human beings tend to choose in some circumstances.
+或者在某些情况下人类倾向于选择的答案。
+
+563
+00:30:58,295 --> 00:31:00,650
+Um, and so that's sort of being used as
+嗯，所以这被用作
+
+564
+00:31:00,650 --> 00:31:04,955
+the primary metric that people score people on in the leader boards.
+人们在排行榜中为人们评分的主要指标。
+
+565
+00:31:04,955 --> 00:31:07,970
+Um, final detail, both metrics, um,
+嗯，最后的细节，两个指标，嗯，
+
+566
+00:31:07,970 --> 00:31:13,235
+ignore punctuation and the English articles a, an, the.
+忽略标点符号和英文文章a，an，the。
+
+567
+00:31:13,235 --> 00:31:17,390
+Okay. Um, so how did things work out?
+好的。嗯，那怎么办呢？
+
+568
+00:31:17,390 --> 00:31:21,170
+Um, so for SQuAD version 1,1, um.
+嗯，对于SQuAD 1,1版，嗯。
+
+569
+00:31:21,170 --> 00:31:23,090
+A long time ago,
+很久以前，
+
+570
+00:31:23,090 --> 00:31:25,250
+at the end of 2016,
+在2016年底，
+
+571
+00:31:25,250 --> 00:31:27,905
+um, this is how the leaderboard looked.
+嗯，这就是排行榜的样子。
+
+572
+00:31:27,905 --> 00:31:30,680
+Um, this is the bottom of the leaderboard at this point in
+嗯，这是此时排行榜的底部
+
+573
+00:31:30,680 --> 00:31:34,145
+time because that allows me to show you a couple of things.
+时间，因为这可以让我向你展示一些事情。
+
+574
+00:31:34,145 --> 00:31:36,890
+So down at the bottom of the leaderboard, um,
+所以在排行榜的底部，嗯，
+
+575
+00:31:36,890 --> 00:31:40,520
+so they tested how well human beings did, um,
+所以他们测试了人类的表现，嗯，
+
+576
+00:31:40,520 --> 00:31:42,830
+at answering these questions because you know,
+回答这些问题，因为你知道，
+
+577
+00:31:42,830 --> 00:31:45,875
+human beings aren't perfect at answering questions either.
+人类也不善于回答问题。
+
+578
+00:31:45,875 --> 00:31:49,145
+Um, and so the human performance that they measured,
+嗯，他们测量的人的表现，
+
+579
+00:31:49,145 --> 00:31:52,895
+um, had an F1 score of 91,2.
+嗯，得分为91,2。
+
+580
+00:31:52,895 --> 00:31:56,285
+And I'll come back to that again in a minute.
+我会在一分钟后再回到那里。
+
+581
+00:31:56,285 --> 00:31:59,015
+Um, and so when they built the dataset,
+嗯，当他们建立数据集时，
+
+582
+00:31:59,015 --> 00:32:04,790
+they built a logistic regression baseline which was sort of a conventional NLP system.
+他们建立了一个逻辑回归基线，这是一种传统的NLP系统。
+
+583
+00:32:04,790 --> 00:32:09,320
+So, they dependency parsed the question and sentences of the answer.
+因此，他们依赖解析问题和答案的句子。
+
+584
+00:32:09,320 --> 00:32:12,200
+They looked for dependency.
+他们寻找依赖。
+
+585
+00:32:12,200 --> 00:32:14,780
+So dependency link matches,
+所以依赖链接匹配，
+
+586
+00:32:14,780 --> 00:32:18,350
+so a word at both ends with the dependency relation in
+所以两端的一个词都有依赖关系
+
+587
+00:32:18,350 --> 00:32:23,615
+between and count and matches of those and sort of pointing to a likely answer.
+之间的计数和匹配，以及指向可能的答案。
+
+588
+00:32:23,615 --> 00:32:29,795
+Um, so as sort of a fairly competently built traditional NLP system of it's
+嗯，所以它是一个相当完善的传统NLP系统
+
+589
+00:32:29,795 --> 00:32:32,150
+not as complex as but it's sort of in
+没有那么复杂，但它有点像
+
+590
+00:32:32,150 --> 00:32:36,110
+the same vein of that early question answering system I mentioned.
+与我提到的那个早期问答系统的脉络相同。
+
+591
+00:32:36,110 --> 00:32:39,410
+And it got an F1 of about 51.
+它有一个大约51的F1。
+
+592
+00:32:39,410 --> 00:32:41,225
+So not hopeless, um,
+所以不是没有希望，嗯，
+
+593
+00:32:41,225 --> 00:32:43,985
+but not that great compared to human beings.
+但与人类相比并不是那么伟大。
+
+594
+00:32:43,985 --> 00:32:46,520
+And so, very shortly after that, um,
+所以，在那之后不久，嗯，
+
+595
+00:32:46,520 --> 00:32:48,635
+people then started building
+然后人们开始建设
+
+596
+00:32:48,635 --> 00:32:53,750
+neural network systems to try and do better at this task on this dataset.
+神经网络系统尝试在此数据集上完成此任务。
+
+597
+00:32:53,750 --> 00:32:58,040
+And so, one of the first people to do this quite successfully,
+所以，第一批成功完成这项工作的人之一，
+
+598
+00:32:58,040 --> 00:33:01,580
+um, were these people from Singapore Management University,
+嗯，这些人来自新加坡管理大学，
+
+599
+00:33:01,580 --> 00:33:05,150
+maybe not the first place you would have thought of but, um,
+也许不是你想到的第一个地方，但是，嗯，
+
+600
+00:33:05,150 --> 00:33:08,870
+they were really sort of the first people who showed that, yes,
+他们真的是第一批表现出来的人，是的，
+
+601
+00:33:08,870 --> 00:33:12,320
+you could build an end-to-end trained neural network
+你可以建立一个端到端训练的神经网络
+
+602
+00:33:12,320 --> 00:33:15,320
+for this task and do rather better.
+为了完成这项任务而且做得更好。
+
+603
+00:33:15,320 --> 00:33:18,935
+And so, they got up to 67 F1.
+所以，他们达到了67 F1。
+
+604
+00:33:18,935 --> 00:33:22,100
+Um, and well, then they had a second system.
+嗯，那么他们有第二个系统。
+
+605
+00:33:22,100 --> 00:33:24,995
+They got 70 and then things started,
+他们得到70然后开始了，
+
+606
+00:33:24,995 --> 00:33:28,145
+um, to, um, go on.
+嗯，对，嗯，继续。
+
+607
+00:33:28,145 --> 00:33:29,675
+So that even by,
+即便如此，
+
+608
+00:33:29,675 --> 00:33:32,570
+um, the end of 2016,
+嗯，2016年底，
+
+609
+00:33:32,570 --> 00:33:38,180
+um, there started to be systems that really worked rather well on this task.
+嗯，开始有这样的系统在这项任务上真的很有效。
+
+610
+00:33:38,180 --> 00:33:40,985
+Um, so here, this time was the,
+嗯，所以这里，这次是，
+
+611
+00:33:40,985 --> 00:33:42,815
+um, top of the leaderboard.
+嗯，排行榜的顶部。
+
+612
+00:33:42,815 --> 00:33:46,455
+So I'll talk later about this BiDAF system from, uh,
+所以我稍后会谈到这个BiDAF系统，呃，
+
+613
+00:33:46,455 --> 00:33:48,380
+the AI to,
+AI到，
+
+614
+00:33:48,380 --> 00:33:51,800
+Allen Institute for Artificial Intelligence and the University of Washington.
+艾伦人工智能研究所和华盛顿大学。
+
+615
+00:33:51,800 --> 00:33:53,810
+So, it was getting to 77 as
+所以，它达到了77
+
+616
+00:33:53,810 --> 00:33:57,770
+a single system that like in just about all machine learning,
+一个像几乎所有机器学习一样的系统，
+
+617
+00:33:57,770 --> 00:34:00,260
+people pretty soon noticed that if you made
+人们很快就注意到，如果你做了
+
+618
+00:34:00,260 --> 00:34:03,440
+an ensemble of identically structured systems,
+一系列结构相同的系统，
+
+619
+00:34:03,440 --> 00:34:06,830
+you could push the number higher and so if you ensemble those,
+你可以把数字推得更高，所以如果你合奏那些，
+
+620
+00:34:06,830 --> 00:34:11,090
+you could then get another sort of whatever it is about four points
+然后你可以得到另外一种关于四点的东西
+
+621
+00:34:11,090 --> 00:34:15,800
+and get up to 81, um, F1.
+并且达到81，嗯，F1。
+
+622
+00:34:15,800 --> 00:34:22,445
+And so this was sort of around the situation when in the, uh, 2017, um,
+所以这就像2017年的那种情况一样，嗯，
+
+623
+00:34:22,445 --> 00:34:30,440
+224N class, we first used SQuAD version one as jus- as a default final project.
+224N类，我们首先使用SQuAD第一版作为jus-作为默认的最终项目。
+
+624
+00:34:30,440 --> 00:34:32,240
+And at that point, you know,
+那时，你知道，
+
+625
+00:34:32,240 --> 00:34:36,470
+actually the best students got almost to the top of this leaderboard.
+实际上，最好的学生几乎达到了这个排行榜的顶峰。
+
+626
+00:34:36,470 --> 00:34:38,180
+So our best, um,
+所以我们最好的，嗯，
+
+627
+00:34:38,180 --> 00:34:44,239
+CS224N Final Project in winter 2017 made it into,
+2017年冬季CS224N最终项目进入，
+
+628
+00:34:44,239 --> 00:34:47,690
+um, the equivalent of fourth place on this leaderboard,
+嗯，相当于这个排行榜的第四名，
+
+629
+00:34:47,690 --> 00:34:51,080
+um, with 77,5 as their score.
+嗯，得分为77,5。
+
+630
+00:34:51,080 --> 00:34:52,790
+So that was really rather cool.
+所以这真的很酷。
+
+631
+00:34:52,790 --> 00:34:56,105
+Um, but that's a couple of years ago and since then,
+嗯，但那是几年前和从那时起，
+
+632
+00:34:56,105 --> 00:34:58,100
+people have started building, um,
+人们已经开始建设了，嗯，
+
+633
+00:34:58,100 --> 00:35:02,780
+bigger and bigger and more and more complex, um, systems.
+越来越大，越来越复杂，嗯，系统。
+
+634
+00:35:02,780 --> 00:35:06,140
+And, um, so essentially,
+而且，嗯，基本上，
+
+635
+00:35:06,140 --> 00:35:10,790
+you could sort of say that SQuAD version one is basically solved.
+你可以说SQUAD第一版基本上已经解决了。
+
+636
+00:35:10,790 --> 00:35:13,970
+So the very best systems are now getting
+所以最好的系统现在正在变得越来越好
+
+637
+00:35:13,970 --> 00:35:18,470
+F1 scores that are in the low 90s and in particular,
+F1得分低于90，特别是
+
+638
+00:35:18,470 --> 00:35:22,910
+you can see that the best couple of, um,
+你可以看到最好的一对，嗯，
+
+639
+00:35:22,910 --> 00:35:25,895
+systems have higher F1s and
+系统有更高的F1和
+
+640
+00:35:25,895 --> 00:35:31,250
+well higher exact matches than what was measured for human beings.
+比人类测量的精确匹配要高得多。
+
+641
+00:35:31,250 --> 00:35:34,145
+Uh, but like a lot of the claims of
+呃，但是像很多人的说法一样
+
+642
+00:35:34,145 --> 00:35:37,310
+deep learning being better and performing from human being,
+深度学习更好，表现更好，
+
+643
+00:35:37,310 --> 00:35:41,000
+than human beings, there's sort of some asterisks you can put after that.
+比起人类，你可以在那之后添加一些星号。
+
+644
+00:35:41,000 --> 00:35:43,520
+I mean, in particular for this dataset,
+我的意思是，特别是对于这个数据集，
+
+645
+00:35:43,520 --> 00:35:48,125
+the way they measured human performance was a little bit
+他们衡量人类表现的方式有点儿
+
+646
+00:35:48,125 --> 00:35:53,870
+unfair because they only actually collected three human beings' answers.
+不公平，因为他们实际上只收集了三个人的答案。
+
+647
+00:35:53,870 --> 00:35:58,340
+So, to judge, um, the human performance,
+那么，判断，嗯，人类的表现，
+
+648
+00:35:58,340 --> 00:36:05,780
+the hu- those hu- each of those humans was being scored versus only two other humans.
+hu-那些人 - 每个人都被评分而不是另外两个人。
+
+649
+00:36:05,780 --> 00:36:08,780
+And so, that means you only had two chances to match instead of three.
+所以，这意味着你只有两次机会匹配而不是三次。
+
+650
+00:36:08,780 --> 00:36:13,820
+So, there's actually sort of a systematic underscoring of the human performance.
+因此，实际上有一种系统性的强调人类表现。
+
+651
+00:36:13,820 --> 00:36:17,745
+But whatever, systems got very good at doing this.
+但无论如何，系统都非常擅长这样做。
+
+652
+00:36:17,745 --> 00:36:20,960
+Um, so the next step, um,
+嗯，下一步，嗯，
+
+653
+00:36:20,960 --> 00:36:22,520
+was then to introduce, uh,
+然后介绍，呃，
+
+654
+00:36:22,520 --> 00:36:25,445
+the SQuAD vers- version 2 task.
+SQuAD第2版任务。
+
+655
+00:36:25,445 --> 00:36:29,990
+And so many people felt that a defect of SQuAD version
+而且很多人都觉得SQuAD版本存在缺陷
+
+656
+00:36:29,990 --> 00:36:34,985
+1 was that in all cases, questions had answers.
+1在所有情况下，问题都有答案。
+
+657
+00:36:34,985 --> 00:36:40,445
+So, that you just had to find the answer in the paragraph,
+那么，你只需要在段落中找到答案，
+
+658
+00:36:40,445 --> 00:36:44,120
+um, and so that's sort of turned into a kind of a ranking task.
+嗯，这样就变成了一种排名任务。
+
+659
+00:36:44,120 --> 00:36:48,355
+You just had to work out what seems the most likely answer.
+你只需要弄清楚最可能的答案。
+
+660
+00:36:48,355 --> 00:36:50,500
+I'll return that without really having
+如果没有，我会回来的
+
+661
+00:36:50,500 --> 00:36:53,910
+any idea whether it was an answer to the question or not.
+任何想法是否是问题的答案。
+
+662
+00:36:53,910 --> 00:36:56,525
+And so, for SQuAD version two,
+因此，对于SQuAD第二版，
+
+663
+00:36:56,525 --> 00:36:58,790
+for the dev and test sets,
+对于开发和测试集，
+
+664
+00:36:58,790 --> 00:37:01,760
+half of the questions have answers and half of
+一半的问题有答案，有一半
+
+665
+00:37:01,760 --> 00:37:04,955
+the questions just don't have an answer in the passage,
+这些问题在文章中没有答案，
+
+666
+00:37:04,955 --> 00:37:08,015
+um, it's slightly different distribution, the training data.
+嗯，这是一个略有不同的分布，训练数据。
+
+667
+00:37:08,015 --> 00:37:12,785
+Um, and the way it works for scoring is the sort of, like,
+嗯，它的评分方式就像是，
+
+668
+00:37:12,785 --> 00:37:18,920
+the no answer kind of counts as like one word as a sort of a special token.
+无答案类似于一个单词作为一种特殊的标记。
+
+669
+00:37:18,920 --> 00:37:23,690
+So, if it's, if it should be a no answer and you say no answer,
+所以，如果它是，如果它应该是一个没有答案，你说没有答案，
+
+670
+00:37:23,690 --> 00:37:28,580
+you get a score of one on the either exact match or the F-measure.
+你在精确匹配或F测量得分为1。
+
+671
+00:37:28,580 --> 00:37:30,560
+And if you don't do that,
+如果你不这样做，
+
+672
+00:37:30,560 --> 00:37:32,210
+you get a score of zero.
+得分为零。
+
+673
+00:37:32,210 --> 00:37:38,690
+Um, and so, the simplest way of approaching SQuAD 2,0 would be to say, well,
+嗯，接近SQuAD 2,0最简单的方法就是说，好吧，
+
+674
+00:37:38,690 --> 00:37:42,274
+rather than just always returning the best match in my system,
+而不是总是在我的系统中返回最佳匹配，
+
+675
+00:37:42,274 --> 00:37:47,075
+I'll use some kind of threshold and only if the score is above a threshold,
+我会使用某种阈值，只有当分数高于阈值时，
+
+676
+00:37:47,075 --> 00:37:48,785
+our counters and answer.
+我们的柜台和答案。
+
+677
+00:37:48,785 --> 00:37:51,050
+You could do more sophisticated things.
+你可以做更复杂的事情。
+
+678
+00:37:51,050 --> 00:37:54,080
+So another area that we've worked on quite a bit at Stanford is
+所以我们在斯坦福大学工作的另一个领域是
+
+679
+00:37:54,080 --> 00:37:58,520
+this natural language inference task that I'll talk about later in the course.
+这个自然语言推理任务，我将在后面的课程中讨论。
+
+680
+00:37:58,520 --> 00:38:02,840
+Um, but that's really about saying whether one piece of,
+嗯，但这真的是说是否一件，
+
+681
+00:38:02,840 --> 00:38:05,630
+um, text is the conclusion of another,
+嗯，文字是另一个的结论，
+
+682
+00:38:05,630 --> 00:38:06,890
+um, piece of text.
+嗯，一块文字。
+
+683
+00:38:06,890 --> 00:38:10,670
+And so that's sort of a way that you can try and see whether, uh,
+所以这是一种你可以尝试看看是否的方式，呃，
+
+684
+00:38:10,670 --> 00:38:17,120
+a piece of text actually gives you a justification and answer to what the question was.
+实际上，一段文字可以为您提供理由并回答问题所在。
+
+685
+00:38:17,120 --> 00:38:21,530
+But at any rate, this trying to decide whether
+但无论如何，这试图决定是否
+
+686
+00:38:21,530 --> 00:38:27,005
+you've actually got an answer or not is a quite difficult problem in many cases.
+在很多情况下，你真的得到了答案是一个非常困难的问题。
+
+687
+00:38:27,005 --> 00:38:31,880
+So here's an example from SQuAD, um, 2,0.
+所以这是SQuAD的一个例子，嗯，2,0。
+
+688
+00:38:31,880 --> 00:38:35,120
+So Genghis Khan united the Mongol and Turkic tribes of
+所以成吉思汗联合了蒙古和突厥部落
+
+689
+00:38:35,120 --> 00:38:38,855
+the steppes and became Great Khan in 1206.
+大草原在1206年成为大汗。
+
+690
+00:38:38,855 --> 00:38:42,290
+He and his successors expanded the Mongol Empire across Asia,
+他和他的继任者扩大了整个亚洲的蒙古帝国，
+
+691
+00:38:42,290 --> 00:38:43,940
+blah, blah, blah, blah.
+等等，等等，等等。
+
+692
+00:38:43,940 --> 00:38:45,635
+And the question is,
+问题是，
+
+693
+00:38:45,635 --> 00:38:48,260
+when did Genghis Khan kill Great Khan?
+成吉思汗何时杀死大汗？
+
+694
+00:38:48,260 --> 00:38:50,480
+And the answer to that is,
+答案就是，
+
+695
+00:38:50,480 --> 00:38:53,525
+you know, uh, there isn't an answer because actually,
+你知道，呃，没有答案，因为实际上，
+
+696
+00:38:53,525 --> 00:38:59,150
+Genghis Khan was a person named Great Khan and he didn't kill a Great Khan.
+成吉思汗是一个名叫大汗的人，他并没有杀死一个大汗。
+
+697
+00:38:59,150 --> 00:39:01,835
+It's just not a question with an answer.
+这不是一个问题的答案。
+
+698
+00:39:01,835 --> 00:39:07,985
+Um, but it's precisely what happens with systems is, you know,
+嗯，但正是系统发生的事情是，你知道，
+
+699
+00:39:07,985 --> 00:39:11,645
+even though these systems get high scores in terms of points,
+即使这些系统在积分方面得分很高，
+
+700
+00:39:11,645 --> 00:39:15,980
+they don't actually understand human language that well.
+他们实际上并不了解人类语言。
+
+701
+00:39:15,980 --> 00:39:17,615
+So they look at something that says,
+所以他们看的东西说，
+
+702
+00:39:17,615 --> 00:39:20,855
+when did Genghis Khan kill Great Khan?
+成吉思汗何时杀死大汗？
+
+703
+00:39:20,855 --> 00:39:23,930
+Well, this is something that's looking for a date and there are
+嗯，这是寻找约会的东西
+
+704
+00:39:23,930 --> 00:39:27,740
+some obvious dates in this passage there's 1206, 1234,
+这篇文章中有一些明显的日期是1206,1234，
+
+705
+00:39:27,740 --> 00:39:31,835
+1251 and well, there's kill,
+1251嗯，有杀，
+
+706
+00:39:31,835 --> 00:39:36,560
+and kill looks a little bit similar to destroyed.
+和杀戮看起来有点类似于被摧毁。
+
+707
+00:39:36,560 --> 00:39:38,645
+I can see the word destroyed.
+我看到这个词被毁了。
+
+708
+00:39:38,645 --> 00:39:41,345
+So that probably kind of matches.
+所以这可能是一种匹配。
+
+709
+00:39:41,345 --> 00:39:43,400
+And then we're talking about, um,
+然后我们谈论的，嗯，
+
+710
+00:39:43,400 --> 00:39:45,560
+Genghis Khan and there,
+成吉思汗在那里，
+
+711
+00:39:45,560 --> 00:39:48,395
+I can see Genghis and Khan in this passage.
+在这段经文中，我可以看到成吉思汗和汗。
+
+712
+00:39:48,395 --> 00:39:50,960
+And so it sort of puts that together and says
+所以有点把它放在一起然后说
+
+713
+00:39:50,960 --> 00:39:55,175
+1234 is the answer when that isn't the answer at all.
+当答案根本不是答案时，1234就是答案。
+
+714
+00:39:55,175 --> 00:39:59,870
+And that's actually kind of pretty typical of the behavior of these systems.
+这实际上是这些系统行为的典型特征。
+
+715
+00:39:59,870 --> 00:40:03,560
+And so that, on the one hand, they work great.
+因此，一方面，它们的工作效果很好。
+
+716
+00:40:03,560 --> 00:40:06,155
+On the other hand, they don't actually understand that much,
+另一方面，他们实际上并没有那么了解，
+
+717
+00:40:06,155 --> 00:40:10,025
+and effectively asking whether there's,
+并有效地询问是否存在，
+
+718
+00:40:10,025 --> 00:40:14,930
+this question is actually answered in the passage is a way of
+这个问题实际上是在文章中回答的一种方式
+
+719
+00:40:14,930 --> 00:40:17,360
+revealing the extent to which these models
+揭示这些模型的程度
+
+720
+00:40:17,360 --> 00:40:20,945
+do or don't understand what's actually going on.
+做或不明白实际发生了什么。
+
+721
+00:40:20,945 --> 00:40:23,915
+Okay. So, at the time, um,
+好的。所以，当时，嗯，
+
+722
+00:40:23,915 --> 00:40:27,095
+they built SQuAD version 2,0.
+他们建立了SQuAD 2,0版。
+
+723
+00:40:27,095 --> 00:40:28,835
+They took some of, um,
+他们拿了一些，嗯，
+
+724
+00:40:28,835 --> 00:40:32,090
+the existing SQuAD version one's systems,
+现有的SQuAD版本系统，
+
+725
+00:40:32,090 --> 00:40:36,725
+and, um, modified them in a very simple way.
+并且，嗯，以非常简单的方式修改它们。
+
+726
+00:40:36,725 --> 00:40:39,275
+I put in a threshold, um,
+我提出了一个门槛，嗯，
+
+727
+00:40:39,275 --> 00:40:43,175
+score as to how good the final match was deemed to be,
+评分最终比赛被认为有多好，
+
+728
+00:40:43,175 --> 00:40:47,645
+and said, Well, how well do you do on SQuAD 2,0?
+并且说，你在SQuAD 2,0上的表现如何？
+
+729
+00:40:47,645 --> 00:40:50,825
+And the kind of systems that we saw doing well before,
+我们之前看到的那种系统做得很好，
+
+730
+00:40:50,825 --> 00:40:52,370
+now didn't do that well,
+现在做得不好，
+
+731
+00:40:52,370 --> 00:40:58,820
+so something like the BiDAF system that we mentioned before was now scoring about 62 F1,
+所以像我们之前提到的BiDAF系统现在得分约为62 F1，
+
+732
+00:40:58,820 --> 00:41:01,370
+so that that was sort of hugely lowering
+所以这有点大幅降低
+
+733
+00:41:01,370 --> 00:41:05,210
+its performance and reflecting the limits of understanding.
+它的表现和反映了理解的极限。
+
+734
+00:41:05,210 --> 00:41:09,650
+Um, but it turned out actually that this problem didn't prove to
+嗯，但事实证明这个问题并没有证明
+
+735
+00:41:09,650 --> 00:41:14,240
+be q- quite as difficult as the dataset authors,
+是q-与数据集作者一样困难，
+
+736
+00:41:14,240 --> 00:41:16,820
+um, maybe thought either.
+嗯，也许还在想。
+
+737
+00:41:16,820 --> 00:41:19,775
+Um, because it turns out that um,
+嗯，因为事实证明，嗯，
+
+738
+00:41:19,775 --> 00:41:23,375
+here we are now in February 2019,
+我们现在在2019年2月，
+
+739
+00:41:23,375 --> 00:41:26,285
+and if you look at the top of the leaderboard,
+如果你看一下排行榜的顶部，
+
+740
+00:41:26,285 --> 00:41:29,465
+we're kind of getting close again to the point
+我们有点接近这一点
+
+741
+00:41:29,465 --> 00:41:32,780
+where the best systems are almost as good as human beings.
+最好的系统几乎和人类一样好。
+
+742
+00:41:32,780 --> 00:41:39,080
+So, um, the current top rate system there you can see is getting 87,6 F1,
+所以，嗯，你可以看到目前的最高费率系统是87,6 F1，
+
+743
+00:41:39,080 --> 00:41:43,220
+which is less than two points behind where the human beings are.
+这比人类落后不到两点。
+
+744
+00:41:43,220 --> 00:41:47,510
+Um, the SQuAD version 2 they also co- corrected the,
+嗯，SQuAD版本2他们也共同纠正了，
+
+745
+00:41:47,510 --> 00:41:49,400
+um, scoring of human beings,
+嗯，人类的得分，
+
+746
+00:41:49,400 --> 00:41:52,805
+so it's more of a fair evaluation this time, um,
+所以这次更公平的评价，嗯，
+
+747
+00:41:52,805 --> 00:41:54,920
+so there's still a bit of a gap but, you know,
+所以还有一点差距，但是，你知道，
+
+748
+00:41:54,920 --> 00:41:58,010
+the systems are actually doing, um, really well.
+系统实际上正在做，嗯，非常好。
+
+749
+00:41:58,010 --> 00:42:01,040
+And the interesting thing there is,
+而有趣的是，
+
+750
+00:42:01,040 --> 00:42:04,625
+you know, on the one hand these systems are impressively good.
+你知道，一方面这些系统非常好。
+
+751
+00:42:04,625 --> 00:42:06,890
+Um, you can go on the SQuAD website and look
+嗯，你可以去SQuAD网站看看
+
+752
+00:42:06,890 --> 00:42:09,275
+at the output of several of the good systems,
+在几个好系统的输出，
+
+753
+00:42:09,275 --> 00:42:12,335
+and you can see that there are just a ton of things that they get right.
+你可以看到他们做对的事情很多。
+
+754
+00:42:12,335 --> 00:42:14,330
+They're absolutely not bad systems.
+他们绝对不是坏系统。
+
+755
+00:42:14,330 --> 00:42:18,980
+You have to be a good system to be getting five out of six of the questions right.
+你必须成为一个好的系统，才能使六个问题中的五个正确。
+
+756
+00:42:18,980 --> 00:42:21,860
+Um, but, you know, on the other hand they still
+嗯，但是，你知道，另一方面他们仍然
+
+757
+00:42:21,860 --> 00:42:25,130
+make quite elementary Natural Language Understanding Errors.
+使相当基本的自然语言理解错误。
+
+758
+00:42:25,130 --> 00:42:28,295
+And so here's an example of one of those.
+所以这是其中一个例子。
+
+759
+00:42:28,295 --> 00:42:29,720
+Okay, so this one,
+好的，所以这个，
+
+760
+00:42:29,720 --> 00:42:32,540
+the Yuan dynasty is considered both a successor to
+元朝被认为是两者的继承者
+
+761
+00:42:32,540 --> 00:42:36,155
+the Mongol Empire and an imperial Chinese dynasty.
+蒙古帝国和中国的帝国王朝。
+
+762
+00:42:36,155 --> 00:42:38,840
+It was the khanate ruled by the successors of
+这是由接班人统治的汗国
+
+763
+00:42:38,840 --> 00:42:42,665
+Mongke Khan after the division of the Mongol Empire.
+蒙古帝国分裂后的蒙克汗。
+
+764
+00:42:42,665 --> 00:42:46,730
+In official Chinese histories the Yuan dynasty bore the Mandate of Heaven,
+在中国官方历史中，元朝有天命，
+
+765
+00:42:46,730 --> 00:42:50,480
+following the Song dynasty and preceding the Ming dynasty.
+继宋朝之后和明朝之前。
+
+766
+00:42:50,480 --> 00:42:52,655
+Okay. And then the question is,
+好的。然后问题是，
+
+767
+00:42:52,655 --> 00:42:55,760
+what dynasty came before the Yuan?
+元朝前来的是什么王朝？
+
+768
+00:42:55,760 --> 00:42:58,490
+And that's a pretty easy question,
+这是一个非常简单的问题，
+
+769
+00:42:58,490 --> 00:42:59,990
+I'd hope, for a human being.
+我希望，对于一个人来说。
+
+770
+00:42:59,990 --> 00:43:02,790
+Everyone can answer that question?
+每个人都可以回答这个问题？
+
+771
+00:43:02,830 --> 00:43:08,480
+Okay, um, yeah, so it says in official Chinese histories Yuan Dynast- uh,
+好的，恩，是的，所以在官方的中国历史上说，元代，
+
+772
+00:43:08,480 --> 00:43:09,920
+sorry the next sentence.
+对不起下一句话。
+
+773
+00:43:09,920 --> 00:43:12,560
+Um, yeah followed- right the Yuan Dynasty following
+嗯，是的，跟随着元朝
+
+774
+00:43:12,560 --> 00:43:15,245
+the Song dynasty and preceding the Ming dynasty.
+宋朝和明朝之前。
+
+775
+00:43:15,245 --> 00:43:17,555
+But, you know actually um,
+但是，你知道嗯，
+
+776
+00:43:17,555 --> 00:43:20,960
+this sort of the leading um,
+这种领先的嗯，
+
+777
+00:43:20,960 --> 00:43:25,310
+Google BERT model says that it was the Ming dynasty that came before
+谷歌BERT模型说明是以前的明朝
+
+778
+00:43:25,310 --> 00:43:29,450
+the Yuan Dynasty which you know is sort of elementarily
+你知道的元朝是一种元素
+
+779
+00:43:29,450 --> 00:43:33,320
+wrong that reveals some of the same kind of it's
+错了，揭示了一些同样的东西
+
+780
+00:43:33,320 --> 00:43:38,240
+not really understanding everything but it's doing a sort of a matching problem still.
+没有真正了解一切，但它仍然在做一种匹配问题。
+
+781
+00:43:38,240 --> 00:43:45,620
+Okay. So, this SQuAD dataset has been useful and good.
+好的。因此，这个SQuAD数据集非常有用。
+
+782
+00:43:45,620 --> 00:43:48,860
+It still has some major limitations and I just thought I'd
+它仍有一些主要的局限性，我只是想到了
+
+783
+00:43:48,860 --> 00:43:52,370
+mentioned what a few of those are so you're aware of some of the issues.
+提到了其中一些，所以你知道一些问题。
+
+784
+00:43:52,370 --> 00:43:54,950
+So one of them I've already mentioned, right,
+所以其中一个我已经提过了，对，
+
+785
+00:43:54,950 --> 00:44:00,740
+that you're in this space where all answers are a span from the passage.
+你在这个空间里所有的答案都是从这段经文开始的。
+
+786
+00:44:00,740 --> 00:44:03,890
+And that just limits the kind of questions you can
+这只会限制你可以提出的问题
+
+787
+00:44:03,890 --> 00:44:07,025
+ask and the kind of difficult situations there can be.
+问及可能存在的那种困难情况。
+
+788
+00:44:07,025 --> 00:44:10,370
+So, there can't be yes-no questions counting
+所以，不能有 - 没有问题可数
+
+789
+00:44:10,370 --> 00:44:15,785
+questions or even any of the sort of more difficult implicit questions.
+问题甚至是任何更困难的隐含问题。
+
+790
+00:44:15,785 --> 00:44:21,185
+So, if you think back to when you were in middle school and did reading comprehension,
+所以，如果你回想起你在中学时的阅读理解，
+
+791
+00:44:21,185 --> 00:44:23,825
+I mean, it wasn't typically um,
+我的意思是，它通常不是，
+
+792
+00:44:23,825 --> 00:44:27,440
+the case um, that you're being asked
+你问的那个案子
+
+793
+00:44:27,440 --> 00:44:31,400
+questions that were just stated explicitly in the text of,
+在文本中明确陈述的问题，
+
+794
+00:44:31,400 --> 00:44:34,880
+you know, Sue is visiting her mother in Miami.
+你知道，苏正在迈阿密拜访她的母亲。
+
+795
+00:44:34,880 --> 00:44:36,335
+And the question was,
+问题是，
+
+796
+00:44:36,335 --> 00:44:38,315
+who was visiting in Miami?
+谁在迈阿密访问？
+
+797
+00:44:38,315 --> 00:44:43,730
+That wasn't the kind of questions you were asked you were normally asked questions um,
+这不是你被问到通常被问到问题的问题，嗯，
+
+798
+00:44:43,730 --> 00:44:46,310
+like um, you know,
+像嗯，你知道，
+
+799
+00:44:46,310 --> 00:44:52,505
+um, Sue is going to a job interview this morning,
+嗯，苏今天早上要去面试，
+
+800
+00:44:52,505 --> 00:44:56,360
+um, it's a really important job interview for her future.
+嗯，对她的未来来说，这是一次非常重要的面试。
+
+801
+00:44:56,360 --> 00:44:59,435
+At breakfast she um,
+早餐时，她，嗯，
+
+802
+00:44:59,435 --> 00:45:03,395
+starts buttering both sides of her piece of toast um,
+开始涂抹她吐司的两面，
+
+803
+00:45:03,395 --> 00:45:06,410
+and you are asked a question like, um,
+并且你被问到一个类似的问题，嗯，
+
+804
+00:45:06,410 --> 00:45:11,320
+why um, is Sue buttering both sides of her piece of toast?
+为什么，苏是在她的吐司的两面涂抹黄油？
+
+805
+00:45:11,320 --> 00:45:13,420
+And you're meant to be able to answer,
+而你的意思是能够回答，
+
+806
+00:45:13,420 --> 00:45:17,680
+"She's distracted by her important job interview coming up later in the day."
+“她在当天晚些时候接受的重要面试时会分心。”
+
+807
+00:45:17,680 --> 00:45:20,995
+Which isn't the- something that you can answer um,
+哪个不是你可以回答的问题，
+
+808
+00:45:20,995 --> 00:45:23,505
+by just picking out a sub span.
+通过挑选一个子跨度。
+
+809
+00:45:23,505 --> 00:45:31,055
+Um, a second problem which is sort of actually a bigger problem is um,
+嗯，第二个问题实际上是一个更大的问题是嗯，
+
+810
+00:45:31,055 --> 00:45:35,645
+the way SQuAD was constructed for ease
+SQuAD的构建方式是为了方便
+
+811
+00:45:35,645 --> 00:45:41,970
+and not to be too expensive and various other reasons was um,
+而且不要太昂贵，还有其他各种原因，嗯，
+
+812
+00:45:41,970 --> 00:45:46,235
+paragraphs of Wikipedia were selected and then,
+维基百科的段落被选中然后，
+
+813
+00:45:46,235 --> 00:45:48,680
+Mechanical Turkers were hired to say,
+雇用机械车手说，
+
+814
+00:45:48,680 --> 00:45:51,215
+"Come up with some questions um,
+“想出一些问题，嗯，
+
+815
+00:45:51,215 --> 00:45:56,210
+that can be answered by this this passage in version 1,1."
+可以通过版本1,1中的这段文章来回答。“
+
+816
+00:45:56,210 --> 00:45:59,315
+And then in version two they were said- told,
+然后在第二版他们被告知 -
+
+817
+00:45:59,315 --> 00:46:03,170
+"Also come up with some questions that
+“还提出了一些问题
+
+818
+00:46:03,170 --> 00:46:07,385
+look like they're related to this passage but aren't actually answered in the passage."
+看起来他们与这段经文有关，但实际上并没有回答这段经文。“
+
+819
+00:46:07,385 --> 00:46:10,070
+But, in all cases people were coming up with
+但是，在所有情况下，人们都想出来
+
+820
+00:46:10,070 --> 00:46:14,870
+the questions staring at the passage and if you do that,
+盯着文章的问题，如果你这样做，
+
+821
+00:46:14,870 --> 00:46:18,260
+it means that your questions are strongly
+这意味着你的问题很强烈
+
+822
+00:46:18,260 --> 00:46:21,905
+overlapping with the passage both in terms of the,
+与通道重叠，无论是
+
+823
+00:46:21,905 --> 00:46:26,630
+the words that are used and even the syntactic structures that are
+使用的单词，甚至是句法结构
+
+824
+00:46:26,630 --> 00:46:31,520
+used for your questions tending to match the syntactic structures of the passage.
+用于你的问题倾向于匹配文章的句法结构。
+
+825
+00:46:31,520 --> 00:46:37,085
+And so that makes question answering um, naturally easy.
+所以这使问题回答嗯，自然很容易。
+
+826
+00:46:37,085 --> 00:46:39,125
+What happens in the real world,
+在现实世界中会发生什么，
+
+827
+00:46:39,125 --> 00:46:42,260
+is this human beings think up questions and
+这是人类想出的问题吗？
+
+828
+00:46:42,260 --> 00:46:46,010
+type something into a search engine and the way
+在搜索引擎和方式中输入内容
+
+829
+00:46:46,010 --> 00:46:49,355
+that they type it in is completely distinct
+他们输入它是完全不同的
+
+830
+00:46:49,355 --> 00:46:53,075
+from the way something might be worded on a website.
+从网站上的措辞方式来看。
+
+831
+00:46:53,075 --> 00:46:56,600
+So that they might be saying something like,
+所以他们可能会这样说，
+
+832
+00:46:56,600 --> 00:47:02,720
+you know, "In what year did the price of hard disks drop below a dollar a megabyte?"
+你知道，“在哪一年，硬盘的价格降到一美元以下？”
+
+833
+00:47:02,720 --> 00:47:07,220
+Um, and the webpage will say something like
+嗯，网页会说些什么
+
+834
+00:47:07,220 --> 00:47:12,050
+the cost of hard disks has being dropping for many years um,
+硬盘的成本已经下降了很多年，
+
+835
+00:47:12,050 --> 00:47:18,470
+in I know whenever it was 2004 prices eventually crossed um,
+我知道无论何时2004年的价格最终都超过了，
+
+836
+00:47:18,470 --> 00:47:20,870
+the dollar megabyte barrier or something like that.
+美元兆字节的障碍或类似的东西。
+
+837
+00:47:20,870 --> 00:47:24,785
+But there's a quite different discussion of the ideas.
+但是对这些想法的讨论却截然不同。
+
+838
+00:47:24,785 --> 00:47:28,220
+And that kinda matching is much harder and that's one of
+那种匹配更难，而且是其中之一
+
+839
+00:47:28,220 --> 00:47:32,270
+the things that people have done other datasets have tried to do differently.
+人们做过其他数据集的事情试图以不同的方式做。
+
+840
+00:47:32,270 --> 00:47:35,960
+Um, another limitation is that these questions and
+嗯，另一个限制是这些问题和
+
+841
+00:47:35,960 --> 00:47:40,355
+answers are very much, find the sentence that's addressing the fact,
+答案非常多，找到解决事实的句子，
+
+842
+00:47:40,355 --> 00:47:42,545
+match your question to the sentence,
+将你的问题与句子相匹配，
+
+843
+00:47:42,545 --> 00:47:45,080
+return the right thing,
+回归正确的事，
+
+844
+00:47:45,080 --> 00:47:49,400
+that there's nothing sort of more difficult than involves multi sentence,
+没有什么比涉及多句更难的了，
+
+845
+00:47:49,400 --> 00:47:53,210
+combine facts together styles of inferencing,
+将事实结合在一起的推理风格，
+
+846
+00:47:53,210 --> 00:47:57,050
+that the limits of cross sentence stuff there is pretty much limited to
+那里的交叉句子的限制几乎是有限的
+
+847
+00:47:57,050 --> 00:48:01,295
+resolving co-reference which is something we'll talk about later in the class,
+解决共同参考问题，这是我们将在课堂上讨论的内容，
+
+848
+00:48:01,295 --> 00:48:04,310
+that means that you see a he or she or an it,
+这意味着你看到他或她或它，
+
+849
+00:48:04,310 --> 00:48:09,125
+and you can work out who that refers to earlier in the, this course.
+你可以找出本课程前面提到的那些人。
+
+850
+00:48:09,125 --> 00:48:12,590
+Um, nevertheless, despite all those disadvantages,
+嗯，尽管有这些缺点，
+
+851
+00:48:12,590 --> 00:48:15,230
+it sort of proved that SQuAD was, you know,
+事实证明，SQuAD是，你知道，
+
+852
+00:48:15,230 --> 00:48:20,180
+well-targeted in terms of its level of difficulty, well-structured,
+在困难程度，结构良好，目标明确，
+
+853
+00:48:20,180 --> 00:48:22,910
+clean dataset, and it's just been
+干净的数据集，它就是这样
+
+854
+00:48:22,910 --> 00:48:27,140
+sort of everybody's favorite for a question answering dataset.
+对于回答数据集的问题，每个人都很喜欢。
+
+855
+00:48:27,140 --> 00:48:30,080
+It also seems to have proved that actually for
+它似乎也证明了其实
+
+856
+00:48:30,080 --> 00:48:33,530
+people who work in industry and want to build a question answering system,
+在工业界工作并希望建立问答系统的人，
+
+857
+00:48:33,530 --> 00:48:36,005
+starting off by training a model in SQuAD,
+从SQUAD培训模型开始，
+
+858
+00:48:36,005 --> 00:48:39,230
+actually turns out to work pretty well it turns out.
+事实证明，事实证明它工作得很好。
+
+859
+00:48:39,230 --> 00:48:41,420
+I mean, it's not everything you want to do.
+我的意思是，这不是你想做的一切。
+
+860
+00:48:41,420 --> 00:48:46,250
+You definitely wanna have relevant in domain data and be using that as well,
+你肯定想要在域数据中有相关性并使用它，
+
+861
+00:48:46,250 --> 00:48:50,450
+but you know, it turns out that it seems to actually be a quite useful starting point.
+但是你知道，事实证明它似乎是一个非常有用的起点。
+
+862
+00:48:50,450 --> 00:48:55,865
+Okay. So, what I wanted to show you now was a- is a concrete,
+好的。那么，我现在想要告诉你的是一个具体的，
+
+863
+00:48:55,865 --> 00:49:00,710
+simple, neural question answering system.
+简单的神经问答系统。
+
+864
+00:49:00,710 --> 00:49:08,300
+Um, and this is the model that was built by here and I guess she was
+嗯，这是在这里建造的模型，我猜她是
+
+865
+00:49:08,300 --> 00:49:15,860
+sort of an Abby predecessor since she was the preceding head TA for CS 224N.
+因为她是CS 224N的前任主管TA，所以有点像Abby的前任。
+
+866
+00:49:15,860 --> 00:49:18,650
+Um, so this system,
+嗯，这个系统，
+
+867
+00:49:18,650 --> 00:49:21,830
+um, Stanford Attentive Reader it kind of gets called now.
+嗯，Stanford Attentive Reader现在被称为。
+
+868
+00:49:21,830 --> 00:49:24,575
+I mean, this is sort of essentially
+我的意思是，这有点基本上
+
+869
+00:49:24,575 --> 00:49:29,990
+the simplest neural question answering system that works pretty well.
+最简单的神经问题回答系统，效果很好。
+
+870
+00:49:29,990 --> 00:49:32,780
+So, it's not a bad thing to have in mind as
+因此，考虑到这一点并不是一件坏事
+
+871
+00:49:32,780 --> 00:49:36,320
+a baseline and it's not the current state of the art by any means.
+一个基线，它不是任何方式的现有技术水平。
+
+872
+00:49:36,320 --> 00:49:40,790
+But you know, if you're sort of wondering what's the simplest thing that I can build
+但是你知道，如果你想知道我能建立什么是最简单的事情
+
+873
+00:49:40,790 --> 00:49:45,215
+that basically works as a question answering system decently,
+这基本上可以作为一个问题回答系统，
+
+874
+00:49:45,215 --> 00:49:47,315
+this is basically it.
+这基本上就是这样。
+
+875
+00:49:47,315 --> 00:49:50,390
+Um, okay. So how does this work?
+嗯，好的。那么这是如何工作的呢？
+
+876
+00:49:50,390 --> 00:49:52,595
+So the way it works is like this.
+所以它的工作方式是这样的。
+
+877
+00:49:52,595 --> 00:49:53,930
+So, first of all,
+所以，首先，
+
+878
+00:49:53,930 --> 00:49:58,205
+we have a question which team won Super Bowl 50?
+我们有一个问题哪支球队赢得了超级碗50？
+
+879
+00:49:58,205 --> 00:50:04,175
+And what we're gonna wanna do is build a representation of a question as a vector.
+而我们想要做的是建立一个问题的表示作为向量。
+
+880
+00:50:04,175 --> 00:50:06,920
+And the way we can do that is like this,
+我们这样做的方式是这样的，
+
+881
+00:50:06,920 --> 00:50:09,035
+for each word in the question,
+对于问题中的每个单词，
+
+882
+00:50:09,035 --> 00:50:10,835
+we look up a word embedding.
+我们查找一个单词嵌入。
+
+883
+00:50:10,835 --> 00:50:15,440
+So, in particular it used GloVe- GloVe 300 dimensional word embeddings.
+所以，特别是它使用了GloVe-GloVe 300维字嵌入。
+
+884
+00:50:15,440 --> 00:50:19,235
+Um, we then run an LSTM
+嗯，我们然后运行LSTM
+
+885
+00:50:19,235 --> 00:50:23,330
+forward through the question and then kind of like Abby talked about,
+通过问题前进然后有点像Abby谈到的，
+
+886
+00:50:23,330 --> 00:50:25,295
+we actually make it a bi-LSTM.
+我们实际上把它变成了双LSTM。
+
+887
+00:50:25,295 --> 00:50:29,030
+So, we run a second LSTM backwards through the question.
+因此，我们通过问题向后运行第二个LSTM。
+
+888
+00:50:29,030 --> 00:50:34,880
+And so then, we grab the end state of both LSTMs
+然后，我们抓住两个LSTM的最终状态
+
+889
+00:50:34,880 --> 00:50:40,760
+and we simply concatenate them together into a vector of dimension 2D if,
+如果，我们只是将它们连接成一个2D维度的向量，
+
+890
+00:50:40,760 --> 00:50:43,730
+if our hidden states of the LSTM are dimension
+如果我们隐藏的LSTM状态是维度
+
+891
+00:50:43,730 --> 00:50:48,425
+d and we say that is the representation of the question.
+d我们说这是问题的代表。
+
+892
+00:50:48,425 --> 00:50:51,245
+Okay. So, once we have that,
+好的。所以，一旦我们拥有了，
+
+893
+00:50:51,245 --> 00:50:54,230
+we then start looking at the passage.
+然后我们开始看这段话。
+
+894
+00:50:54,230 --> 00:50:57,635
+And so, for the start of dealing with the passage,
+因此，对于处理该段落的开始，
+
+895
+00:50:57,635 --> 00:50:59,180
+we do the same thing.
+我们做同样的事情。
+
+896
+00:50:59,180 --> 00:51:03,110
+We, um, look up a word vector for every word in
+我们，嗯，查找每个单词的单词向量
+
+897
+00:51:03,110 --> 00:51:07,340
+the passage and we run a bidirectional LSTM,
+通道，我们运行双向LSTM，
+
+898
+00:51:07,340 --> 00:51:12,200
+now being represented a bit more compactly um, across the passage.
+在整个段落中，现在表现得更紧凑一点。
+
+899
+00:51:12,200 --> 00:51:15,710
+But then we have to do a little bit more work because we actually
+但是我们必须做更多的工作，因为我们实际上
+
+900
+00:51:15,710 --> 00:51:19,040
+have to find the answer in the passage.
+必须在文章中找到答案。
+
+901
+00:51:19,040 --> 00:51:21,680
+And so what we're gonna do is use
+所以我们要做的就是使用
+
+902
+00:51:21,680 --> 00:51:28,175
+the question representation to sort of work out where the answer is using attention.
+问题表示，以解决答案在哪里使用注意力。
+
+903
+00:51:28,175 --> 00:51:31,805
+So this is a different use of attention to machine translation.
+所以这是对机器翻译的不同注意。
+
+904
+00:51:31,805 --> 00:51:35,105
+That kind of attention equations are still exactly the same.
+那种注意方程式仍然完全相同。
+
+905
+00:51:35,105 --> 00:51:39,170
+But we've now got this sort of one question vector that we gonna be trying to
+但是我们现在有了这样一个问题向量，我们将要尝试
+
+906
+00:51:39,170 --> 00:51:43,385
+match against to return the answer.
+匹配以返回答案。
+
+907
+00:51:43,385 --> 00:51:47,150
+So, what we do is we, um,
+所以，我们做的是我们，嗯，
+
+908
+00:51:47,150 --> 00:51:51,125
+work out an attention score between
+计算出一个注意力得分
+
+909
+00:51:51,125 --> 00:51:57,575
+each word's bi-LSTM representation and the question.
+每个单词的双LSTM表示和问题。
+
+910
+00:51:57,575 --> 00:52:02,930
+And so the way that's being done is we're using this bi-linear attention,
+所以我们正在使用这种双线性关注，
+
+911
+00:52:02,930 --> 00:52:07,370
+um, that um, Abby briefly discussed and we'll see more of today.
+嗯，那个，Abby简要讨论过，我们今天会看到更多。
+
+912
+00:52:07,370 --> 00:52:09,140
+We've got the question vector,
+我们有问题向量，
+
+913
+00:52:09,140 --> 00:52:12,530
+the vector for a particular position in the passage
+通道中特定位置的向量
+
+914
+00:52:12,530 --> 00:52:15,770
+to the two concatenated LSTM hidden states.
+两个连接的LSTM隐藏状态。
+
+915
+00:52:15,770 --> 00:52:17,930
+So they're the same dimensionality.
+所以它们是相同的维度。
+
+916
+00:52:17,930 --> 00:52:21,020
+We have this intervening learn W matrix.
+我们有这个介入学习W矩阵。
+
+917
+00:52:21,020 --> 00:52:23,360
+So, we work out that quantity,
+所以，我们计算出这个数量，
+
+918
+00:52:23,360 --> 00:52:25,115
+um, for each position,
+嗯，对于每个职位，
+
+919
+00:52:25,115 --> 00:52:27,890
+and then we put that through a softmax which will give us
+然后我们把它通过softmax给我们
+
+920
+00:52:27,890 --> 00:52:32,180
+probabilities over the different words in the passage.
+对段落中不同词语的概率。
+
+921
+00:52:32,180 --> 00:52:34,220
+Um, and those give us,
+嗯，那些给我们的，
+
+922
+00:52:34,220 --> 00:52:36,665
+um, our attention weights.
+嗯，我们的注意力量。
+
+923
+00:52:36,665 --> 00:52:39,350
+And so at that point we have attention weights,
+所以在这一点上我们有注意力量，
+
+924
+00:52:39,350 --> 00:52:42,140
+um, for different positions, um,
+嗯，对于不同的职位，嗯，
+
+925
+00:52:42,140 --> 00:52:45,410
+in the passage and we just declare that,
+在文章中，我们只是宣布，
+
+926
+00:52:45,410 --> 00:52:47,030
+um, that is where,
+嗯，那就是，
+
+927
+00:52:47,030 --> 00:52:49,610
+um, the answer starts.
+嗯，答案开始了。
+
+928
+00:52:49,610 --> 00:52:53,270
+Um, and then to get the end of the answer,
+嗯，然后得到答案的结束，
+
+929
+00:52:53,270 --> 00:53:01,310
+we simply do exactly the same thing again apart from we train a different W matrix here,
+除了我们在这里训练一个不同的W矩阵之外，我们再简单地做同样的事情，
+
+930
+00:53:01,310 --> 00:53:02,840
+and we have that,
+我们有，
+
+931
+00:53:02,840 --> 00:53:04,940
+um, predict the end token.
+嗯，预测结束标记。
+
+932
+00:53:04,940 --> 00:53:07,490
+And there's something a little bit subtle here.
+这里有点微妙的东西。
+
+933
+00:53:07,490 --> 00:53:10,610
+Um, because, you know, really we're asking it to sort
+嗯，因为，你知道，我们真的要求它排序
+
+934
+00:53:10,610 --> 00:53:13,685
+of predict the starts and the ends of the answer,
+预测答案的开始和结束，
+
+935
+00:53:13,685 --> 00:53:15,830
+and you might think, but wait a minute.
+你可能会想，但等一下。
+
+936
+00:53:15,830 --> 00:53:19,595
+Surely, we need to look at the middle of the answer as well because maybe the,
+当然，我们也需要看看答案的中间部分，因为也许，
+
+937
+00:53:19,595 --> 00:53:23,405
+the most indicative words are actually going to be in the middle of the answer.
+最具指示性的词实际上将在答案的中间。
+
+938
+00:53:23,405 --> 00:53:27,710
+Um, but, you know, really really what we're,
+嗯，但是，你知道，我们真的是真的，
+
+939
+00:53:27,710 --> 00:53:32,960
+we're sort of implicitly telling the model of well,
+我们有点含蓄地告诉模型，
+
+940
+00:53:32,960 --> 00:53:37,055
+when you're training, if there's stuff in the middle that's useful,
+当你训练时，如果中间的东西有用，
+
+941
+00:53:37,055 --> 00:53:42,440
+it's the bi-LSTM's job to push it to the extremes of the span,
+这是bi-LSTM的工作，将其推向极限，
+
+942
+00:53:42,440 --> 00:53:47,075
+so that this simple bi-linear attention
+这样简单的双线性关注
+
+943
+00:53:47,075 --> 00:53:51,950
+will be able to get a big score at the start of the span.
+将在跨度开始时获得一个大的分数。
+
+944
+00:53:51,950 --> 00:53:55,040
+And you might also think there's something
+而且你可能也认为有些东西
+
+945
+00:53:55,040 --> 00:53:58,370
+funny that this equation and that equation are exactly the same.
+有趣的是，这个等式和那个等式是完全一样的。
+
+946
+00:53:58,370 --> 00:54:02,270
+So, how come one of them is meant to know it's picking up beginning, um,
+那么，他们中的其中一个是怎么意识到它正在开始，嗯，
+
+947
+00:54:02,270 --> 00:54:04,400
+and the other at the end?
+而另一个在最后？
+
+948
+00:54:04,400 --> 00:54:07,475
+And again, you know, we're not doing anything to impose that.
+而且，你知道，我们没有采取任何措施强加这一点。
+
+949
+00:54:07,475 --> 00:54:09,890
+We're just saying, neural network.
+我们只是说，神经网络。
+
+950
+00:54:09,890 --> 00:54:11,915
+It is your job to learn.
+这是你学习的工作。
+
+951
+00:54:11,915 --> 00:54:16,115
+Um, you have to learn a matrix here and a different one over there,
+嗯，你必须在这里学习一个矩阵，在那里学习一个不同的矩阵，
+
+952
+00:54:16,115 --> 00:54:20,240
+so that one of them will pick out parts of the representation that
+这样他们中的一个就会挑选出那些代表性的部分
+
+953
+00:54:20,240 --> 00:54:25,175
+indicate starts of answer spans and the other one ends of answer spans.
+指示答案跨度的开始和答案跨度的另一端。
+
+954
+00:54:25,175 --> 00:54:28,160
+And so, that will then again pressure
+然后，这将再次施加压力
+
+955
+00:54:28,160 --> 00:54:31,550
+the neural network to sort of self organize itself in
+神经网络将自我组织起来
+
+956
+00:54:31,550 --> 00:54:34,100
+such a way that there'll be some parts of
+这样的方式会有一些部分
+
+957
+00:54:34,100 --> 00:54:38,270
+this hidden representation that will be good at learning starts of spans.
+这个隐藏的表示将擅长学习跨度的开始。
+
+958
+00:54:38,270 --> 00:54:40,010
+You know, maybe there'll be carried backwards by
+你知道，也许会被倒退
+
+959
+00:54:40,010 --> 00:54:43,520
+the backwards LSTM and and some parts of it will be good at
+向后的LSTM以及它的某些部分将擅长
+
+960
+00:54:43,520 --> 00:54:45,980
+learning where the spans end and then
+学习跨度结束的地方
+
+961
+00:54:45,980 --> 00:54:50,610
+the W matrix will be able to pick out those parts of the representation.
+W矩阵将能够挑选出表示的那些部分。
+
+962
+00:54:50,610 --> 00:54:54,130
+Um, but yeah, uh,
+嗯，但是，呃，
+
+963
+00:54:54,130 --> 00:54:58,360
+that's the system. Um, yeah.
+这就是系统。嗯，是的
+
+964
+00:54:58,360 --> 00:55:00,640
+So, um, so this is
+所以，嗯，所以这是
+
+965
+00:55:00,640 --> 00:55:05,980
+the basic Stanford Attentive Reader model and it's just no more complex than that.
+基本的Stanford Attentive Reader模型并没有比这更复杂。
+
+966
+00:55:05,980 --> 00:55:08,770
+Um, and the interesting thing is, you know,
+嗯，有趣的是，你知道，
+
+967
+00:55:08,770 --> 00:55:14,245
+that very simple model actually works nicely well.
+这个非常简单的模型实际上效果很好。
+
+968
+00:55:14,245 --> 00:55:16,360
+Um, so this is going back in time.
+嗯，所以这可以追溯到时间。
+
+969
+00:55:16,360 --> 00:55:23,230
+Again, this was the February 2017 SQuAD version 1 leaderboard.
+同样，这是2017年2月的SQuAD版本1排行榜。
+
+970
+00:55:23,230 --> 00:55:28,690
+Um, but at that time, that provide- like,
+嗯，但那个时候，那个提供，像，
+
+971
+00:55:28,690 --> 00:55:32,680
+it always in neural networks quite a bit of your success
+它总是在神经网络中相当于你的成功
+
+972
+00:55:32,680 --> 00:55:39,280
+is training your hyperparameters and optimizing your model really well.
+正在训练你的超参数并真正优化你的模型。
+
+973
+00:55:39,280 --> 00:55:41,260
+And some time, you know,
+有一段时间，你知道，
+
+974
+00:55:41,260 --> 00:55:47,020
+it's been repeatedly proven in neural network land that often you can get
+它在神经网络领域被反复证明，通常你可以获得
+
+975
+00:55:47,020 --> 00:55:50,170
+much better scores than you would think from
+比你想象的要好得多
+
+976
+00:55:50,170 --> 00:55:53,845
+very simple models if you optimize them really well.
+非常简单的模型如果你真的很好地优化它们。
+
+977
+00:55:53,845 --> 00:55:57,280
+So there have been multiple cycles in sort of
+所以有各种各样的循环
+
+978
+00:55:57,280 --> 00:55:59,830
+deep learning research where there
+那里的深度学习研究
+
+979
+00:55:59,830 --> 00:56:02,950
+was a paper that did something and then the next person says,
+是一篇论文做了什么然后下一个人说，
+
+980
+00:56:02,950 --> 00:56:04,960
+"Here's a more- more- more complex model that
+“这是一个更复杂的模型
+
+981
+00:56:04,960 --> 00:56:07,540
+works better," and then someone else published a paper saying,
+效果更好，“然后其他人发表了一篇论文说，
+
+982
+00:56:07,540 --> 00:56:09,640
+"Here's an even more complex than that model that works
+“这比那个有效的模型更复杂
+
+983
+00:56:09,640 --> 00:56:12,490
+better," and then someone points out, "No.
+更好，“然后有人指出，”没有。
+
+984
+00:56:12,490 --> 00:56:17,140
+If you go back to the first model and just really train its hyperparameters well,
+如果你回到第一个模型并且真的很好地训练它的超参数，
+
+985
+00:56:17,140 --> 00:56:19,375
+you can beat both of those two models."
+你可以击败这两种模式。“
+
+986
+00:56:19,375 --> 00:56:21,880
+And that was effectively the case about what
+这实际上是关于什么的情况
+
+987
+00:56:21,880 --> 00:56:24,610
+was happening with the Stanford Attentive Reader.
+斯坦福大学读者会发生这种情况。
+
+988
+00:56:24,610 --> 00:56:29,245
+That, you know, back in- back in February 2017,
+你知道，2017年2月回来了，
+
+989
+00:56:29,245 --> 00:56:32,920
+if you just train this model really well,
+如果你真的很好地训练这个模型，
+
+990
+00:56:32,920 --> 00:56:37,990
+it could actually outperform most of the early SQuAD systems.
+它实际上可以胜过大多数早期的SQuAD系统。
+
+991
+00:56:37,990 --> 00:56:39,235
+I mean, in particular,
+我的意思是，特别是
+
+992
+00:56:39,235 --> 00:56:41,875
+it could outperform, um, the BiDAF,
+它可能胜过BiDAF，
+
+993
+00:56:41,875 --> 00:56:46,390
+the version of BiDAF that was around in early 2017 and,
+2017年初出现的BiDAF版本，
+
+994
+00:56:46,390 --> 00:56:49,315
+you know, various of these other systems from other people.
+你知道，其他人的其他各种系统。
+
+995
+00:56:49,315 --> 00:56:51,340
+But it was actually, at that time,
+但实际上，当时，
+
+996
+00:56:51,340 --> 00:56:55,405
+it was pretty close to the best system that anyone had built.
+它非常接近任何人建造的最佳系统。
+
+997
+00:56:55,405 --> 00:56:57,970
+Um, as I've already pointed out to you,
+嗯，正如我已经向你指出的那样，
+
+998
+00:56:57,970 --> 00:57:00,280
+um, the numbers have gone up a lot since then.
+嗯，从那时起，这些数字已经上升了很多。
+
+999
+00:57:00,280 --> 00:57:02,500
+So I'm not claiming that, um,
+所以我没有声称，嗯，
+
+1000
+00:57:02,500 --> 00:57:08,785
+this system is still as good as the best systems that you can build. But there you go.
+这个系统仍然可以与您构建的最佳系统一样好。但是你去吧。
+
+1001
+00:57:08,785 --> 00:57:13,000
+Um, so that's the simple system that already works pretty well,
+嗯，这是一个已经很好用的简单系统，
+
+1002
+00:57:13,000 --> 00:57:15,070
+but of course you want this system to work better.
+但是你当然希望这个系统更好地工作。
+
+1003
+00:57:15,070 --> 00:57:19,690
+Um, and so Danqi did quite a bit of work on that.
+嗯，Danqi做了相当多的工作。
+
+1004
+00:57:19,690 --> 00:57:23,305
+And so here I'll just mention a few things for, um,
+所以我在这里只提几件事，嗯，
+
+1005
+00:57:23,305 --> 00:57:26,125
+Stanford Attentive Reader++ as to
+Stanford Attentive Reader ++ as
+
+1006
+00:57:26,125 --> 00:57:29,635
+what kind of things can you do to make the model better.
+你可以做些什么来改善模型。
+
+1007
+00:57:29,635 --> 00:57:34,705
+And so here's a sort of a picture of, um,
+所以这是一张照片，嗯，
+
+1008
+00:57:34,705 --> 00:57:37,960
+the sort of the improved system and we'll go through
+改进的系统，我们将经历
+
+1009
+00:57:37,960 --> 00:57:41,290
+some of the differences and what makes it better.
+一些差异以及使它变得更好的原因。
+
+1010
+00:57:41,290 --> 00:57:45,190
+Um, there's something I didn't have before that I should just mention, right?
+嗯，我之前没有的东西，我应该提一下，对吧？
+
+1011
+00:57:45,190 --> 00:57:50,215
+Sort of this whole model, all the parameters of this model are just trained end to end,
+整个模型的排序，这个模型的所有参数都是刚刚端到端的训练，
+
+1012
+00:57:50,215 --> 00:57:53,980
+where your training objective is simply, um,
+你的培训目标很简单，嗯，
+
+1013
+00:57:53,980 --> 00:57:56,380
+working out how accurately you're predicting
+弄清楚你预测的准确程度
+
+1014
+00:57:56,380 --> 00:57:59,050
+the start position and how accurately you're predicting
+起始位置以及您预测的准确程度
+
+1015
+00:57:59,050 --> 00:58:02,680
+the end position so that the attention gives
+结束位置，以便引起注意
+
+1016
+00:58:02,680 --> 00:58:06,505
+you a probability distribution over start positions and end positions.
+你在起始位置和结束位置的概率分布。
+
+1017
+00:58:06,505 --> 00:58:09,820
+So you're just being asked what probability estimate
+所以你只是被问到概率估算是多少
+
+1018
+00:58:09,820 --> 00:58:13,330
+are you giving to the true start position and the true end position.
+你是否给出了真正的起始位置和真正的终点位置？
+
+1019
+00:58:13,330 --> 00:58:15,250
+And to the extent that though,
+并且在某种程度上，
+
+1020
+00:58:15,250 --> 00:58:17,289
+you know, those aren't one,
+你知道，那些不是一个，
+
+1021
+00:58:17,289 --> 00:58:22,375
+you've then got loss that is then being sort of summed in terms of log probability.
+然后你就得到了损失，然后根据对数概率进行求和。
+
+1022
+00:58:22,375 --> 00:58:25,570
+Okay. So how is this model, um,
+好的。那么这个模型怎么样，嗯，
+
+1023
+00:58:25,570 --> 00:58:28,855
+more complex now than what I showed before?
+现在比我之前展示的更复杂？
+
+1024
+00:58:28,855 --> 00:58:31,945
+Essentially in two main ways.
+基本上有两种主要方式。
+
+1025
+00:58:31,945 --> 00:58:36,370
+So the first one is looking at the question,
+所以第一个是看问题，
+
+1026
+00:58:36,370 --> 00:58:40,075
+we still run the BiLSTM as before.
+我们仍然像以前一样运行BiLSTM。
+
+1027
+00:58:40,075 --> 00:58:44,530
+Um, but now what we're going to do is it's a little bit crude
+嗯，但现在我们要做的是它有点粗糙
+
+1028
+00:58:44,530 --> 00:58:48,850
+just to take the end states of the LSTM and concatenate them together.
+只是为了获取LSTM的最终状态并将它们连接在一起。
+
+1029
+00:58:48,850 --> 00:58:54,280
+It turns out that you can do better by making use of all states in an LSTM.
+事实证明，通过利用LSTM中的所有状态，您可以做得更好。
+
+1030
+00:58:54,280 --> 00:58:57,880
+And this is true for most tasks where you
+对于你来说，大多数任务都是如此
+
+1031
+00:58:57,880 --> 00:59:01,975
+want some kind of sentence representation from a sequence model.
+想要从序列模型中获得某种句子表示。
+
+1032
+00:59:01,975 --> 00:59:04,585
+It turns out you can generally gain by using
+事实证明，你通常可以通过使用获得
+
+1033
+00:59:04,585 --> 00:59:07,510
+all of them rather than just the endpoints or that.
+所有这些而不仅仅是端点或那些。
+
+1034
+00:59:07,510 --> 00:59:12,685
+Um, so but this is just an interesting general thing to know again because, you know,
+嗯，所以这只是一个有趣的一般事情再次知道，因为，你知道，
+
+1035
+00:59:12,685 --> 00:59:18,415
+this is actually another variant of how that- how you can use attention.
+这实际上是另一种变体 - 如何使用注意力。
+
+1036
+00:59:18,415 --> 00:59:25,525
+There are, you know, a lot of sort of the last two years of neural NLP can be summed
+你知道，有很多种神经NLP可以归结为最近两年
+
+1037
+00:59:25,525 --> 00:59:29,230
+up as people have found a lot of clever ways to use
+人们已经发现了许多聪明的使用方法
+
+1038
+00:59:29,230 --> 00:59:33,220
+attention and that's been pairing just about all the advances.
+注意力和所有的进步一直在配对。
+
+1039
+00:59:33,220 --> 00:59:41,890
+Um, so what we wanna do is we want to have attention over the positions in this LSTM.
+嗯，所以我们想做的是我们想要关注这个LSTM中的位置。
+
+1040
+00:59:41,890 --> 00:59:46,255
+But, you know, this- we're processing the query first.
+但是，你知道，我们首先处理查询。
+
+1041
+00:59:46,255 --> 00:59:51,355
+So it sort of seems like we've got nothing to calculate attention with respect to.
+所以我们似乎没有什么可以计算注意力的。
+
+1042
+00:59:51,355 --> 00:59:55,150
+So what we do is we just invent something.
+所以我们所做的就是发明一些东西。
+
+1043
+00:59:55,150 --> 00:59:56,860
+So we just sort of invent.
+所以我们只是发明。
+
+1044
+00:59:56,860 --> 01:00:01,660
+Here is a vector and it's sometimes called a sentinel or some word like that,
+这是一个向量，它有时被称为哨兵或类似的一些词，
+
+1045
+01:00:01,660 --> 01:00:03,850
+but, you know, we just in our PyTorch say,
+但是，你知道，我们只是在PyTorch中说，
+
+1046
+01:00:03,850 --> 01:00:05,185
+"Here is a vector.
+“这是一个载体。
+
+1047
+01:00:05,185 --> 01:00:07,690
+Um, we're going to calculate, um,
+嗯，我们要计算，嗯，
+
+1048
+01:00:07,690 --> 01:00:09,460
+we initialize it randomly,
+我们随机初始化它，
+
+1049
+01:00:09,460 --> 01:00:13,495
+and we're gonna calculate attention with respect to that vector,
+我们将计算关于该向量的注意力，
+
+1050
+01:00:13,495 --> 01:00:20,950
+and we're going to use those attention scores, um, to, um,
+我们将使用那些注意力分数，嗯，对，嗯，
+
+1051
+01:00:20,950 --> 01:00:24,250
+work out where to pay attention, um,
+找出要注意的地方，嗯，
+
+1052
+01:00:24,250 --> 01:00:30,625
+in this BiLSTM, and then we just sort of train that vector so it gets values.
+在这个BiLSTM中，然后我们只是训练该向量，以便获得值。
+
+1053
+01:00:30,625 --> 01:00:34,270
+And so then we end up with a weighted sum of the time
+因此，我们最终得到了时间的加权和
+
+1054
+01:00:34,270 --> 01:00:39,430
+steps of that LSTM that uh, then form the question representation.
+那个LSTM的步骤呃，然后形成问题表示。
+
+1055
+01:00:39,430 --> 01:00:42,370
+Um, second change, uh,
+嗯，第二次改变，呃，
+
+1056
+01:00:42,370 --> 01:00:45,400
+the pictures only show a shallow BiLSTM but, you know,
+图片只显示浅的BiLSTM，但是，你知道，
+
+1057
+01:00:45,400 --> 01:00:48,940
+it turns out you can do better if you have a deep BiLSTM and say
+事实证明，如果你有一个深刻的BiLSTM，你可以做得更好
+
+1058
+01:00:48,940 --> 01:00:53,005
+use a three-layer deep BiLSTM rather than a single layer.
+使用三层深BiLSTM而不是单层。
+
+1059
+01:00:53,005 --> 01:00:56,200
+Okay. Then the other changes in
+好的。然后其他的变化
+
+1060
+01:00:56,200 --> 01:01:02,350
+the passage representations and this part arguably gets a little bit more hacky,
+段落表示和这部分可以说有点多hacky，
+
+1061
+01:01:02,350 --> 01:01:06,520
+um, but there are things that you can do that make the numbers go up, I guess.
+嗯，但有些事情可以让你的数字上升，我想。
+
+1062
+01:01:06,520 --> 01:01:07,810
+Um, okay.
+嗯，好的。
+
+1063
+01:01:07,810 --> 01:01:13,840
+So- so firstly for the representation of words rather than only using
+所以首先是表示单词而不是仅使用
+
+1064
+01:01:13,840 --> 01:01:18,070
+the GloVe representation that the input vectors are
+输入向量的GloVe表示
+
+1065
+01:01:18,070 --> 01:01:24,055
+expanded so that- so a named entity recognizer and a part of speech tagger is run.
+扩展，以便运行命名实体识别器和词性标记器。
+
+1066
+01:01:24,055 --> 01:01:28,615
+And since those are sort of small sets of values,
+因为这些是一些小的价值观，
+
+1067
+01:01:28,615 --> 01:01:33,910
+that the output of those is just one-hot encoded and concatenated onto
+那些输出只是一个热门编码并连接到
+
+1068
+01:01:33,910 --> 01:01:36,490
+the word vector, so it represents if it's
+单词矢量，所以它代表它是否
+
+1069
+01:01:36,490 --> 01:01:40,195
+a location or a person name and whether it's a noun or a verb.
+位置或人名，以及它是名词还是动词。
+
+1070
+01:01:40,195 --> 01:01:44,080
+Um, word frequency proves to be a bit useful.
+嗯，词频证明有点有用。
+
+1071
+01:01:44,080 --> 01:01:52,165
+So there's your concatenating on sort of a representation of the word frequency as,
+所以你的词汇频率表示为，
+
+1072
+01:01:52,165 --> 01:01:57,370
+um, just sort of a float of the unigram probability.
+嗯，只是unigram概率的浮点数。
+
+1073
+01:01:57,370 --> 01:02:05,335
+Um, and then this part is kind of key to getting some further advances which is, well,
+嗯，然后这部分是获得进一步发展的关键，这是，嗯，
+
+1074
+01:02:05,335 --> 01:02:11,140
+it turns out that we can do a better job by doing some sort
+事实证明，我们可以通过某种方式做得更好
+
+1075
+01:02:11,140 --> 01:02:16,945
+of better understanding of the matching between the question and the passage.
+更好地理解问题与段落之间的匹配。
+
+1076
+01:02:16,945 --> 01:02:20,170
+And, um, this feature seems like it's
+而且，嗯，这个功能看起来像是
+
+1077
+01:02:20,170 --> 01:02:23,815
+very simple but turns out to actually give you quite a lot of value.
+非常简单但事实证明实际上给了你很多价值。
+
+1078
+01:02:23,815 --> 01:02:28,420
+So you're simply saying for each word in the question,
+所以你只是对问题中的每个单词说，
+
+1079
+01:02:28,420 --> 01:02:32,215
+uh, so for each word- well,  I said that wrong.
+呃，所以对于每个字 - 好吧，我说错了。
+
+1080
+01:02:32,215 --> 01:02:35,920
+For each word in the passage,
+对于段落中的每个单词，
+
+1081
+01:02:35,920 --> 01:02:39,040
+you were just saying, "Does this word appear in the question?"
+你只是说，“这个词出现在问题中吗？”
+
+1082
+01:02:39,040 --> 01:02:42,160
+And if so you're setting a one bit into
+如果是这样的话，你就要设置一个
+
+1083
+01:02:42,160 --> 01:02:46,105
+the input and that's done in three different ways: exact match,
+输入和以三种不同的方式完成：完全匹配，
+
+1084
+01:02:46,105 --> 01:02:48,580
+uncased match, and lemma match.
+无限制的匹配和引理匹配。
+
+1085
+01:02:48,580 --> 01:02:51,655
+So that means something like drive and driving, um,
+所以这意味着驾驶和驾驶，嗯，
+
+1086
+01:02:51,655 --> 01:02:53,590
+will match, and just that sort of
+会匹配，就这样
+
+1087
+01:02:53,590 --> 01:02:56,755
+indicator of here's where in the passage that's in the question.
+这里的指标是问题所在段落中的位置。
+
+1088
+01:02:56,755 --> 01:02:59,230
+In theory, the system should be able to work that out
+理论上，系统应该能够解决这个问题
+
+1089
+01:02:59,230 --> 01:03:03,115
+anyway that explicitly indicate and it gives quite a bit of value.
+无论如何，它明确表明并且它给出了相当多的价值。
+
+1090
+01:03:03,115 --> 01:03:09,310
+And then this last one does a sort of a softer version of that where it's using word
+然后这最后一个做了一个更柔和的版本，它正在使用单词
+
+1091
+01:03:09,310 --> 01:03:12,550
+embedding similarities to sort of calculate
+嵌入相似性来计算
+
+1092
+01:03:12,550 --> 01:03:16,210
+a kind of similarity between questions and answers,
+问题和答案之间的一种相似性，
+
+1093
+01:03:16,210 --> 01:03:19,345
+and that's a slightly complex equation that you can look up.
+这是一个稍微复杂的等式，你可以查找。
+
+1094
+01:03:19,345 --> 01:03:26,035
+But effectively, um, that you're getting the embedding of words and the question answers.
+但实际上，嗯，你正在接受单词和问题答案的嵌入。
+
+1095
+01:03:26,035 --> 01:03:30,085
+Each of those, you're running through a single hidden layer,
+其中每一个，你都在通过一个隐藏层，
+
+1096
+01:03:30,085 --> 01:03:31,585
+neural network, you know,
+神经网络，你知道，
+
+1097
+01:03:31,585 --> 01:03:35,245
+dot producting it, and then putting all that through a Softmax,
+点击它产生它，然后通过Softmax将所有这些产品，
+
+1098
+01:03:35,245 --> 01:03:40,820
+and that kind of gives you a sort of word similarity score and that helps as well.
+这种类型给你一种单词相似度得分，这也有帮助。
+
+1099
+01:03:41,040 --> 01:03:46,510
+Okay. So here's the kind of just overall picture this gives you.
+好的。所以这是给你的整体画面。
+
+1100
+01:03:46,510 --> 01:03:49,435
+So if you remember, um, um,
+所以，如果你还记得，嗯，嗯，
+
+1101
+01:03:49,435 --> 01:03:52,540
+there was the sort of the classical NLP
+有那种经典的NLP
+
+1102
+01:03:52,540 --> 01:03:55,825
+with logistic regression baseline, there's around 51.
+使用逻辑回归基线，大约有51个。
+
+1103
+01:03:55,825 --> 01:03:58,810
+So for sort of a fairly simple model,
+所以对于一个相当简单的模型，
+
+1104
+01:03:58,810 --> 01:04:00,970
+like the Stanford Attentive Reader,
+像Stanford Attentive Reader，
+
+1105
+01:04:00,970 --> 01:04:03,760
+it gives you an enormous boost in performance, right?
+它会给你带来巨大的性能提升，对吧？
+
+1106
+01:04:03,760 --> 01:04:07,765
+That's giving you close to 30 percent performance gain.
+这样可以获得接近30％的性能提升。
+
+1107
+01:04:07,765 --> 01:04:10,180
+And then, you know, from there,
+然后，你知道，从那里，
+
+1108
+01:04:10,180 --> 01:04:13,420
+people have kept on pushing up neural systems.
+人们一直在推动神经系统。
+
+1109
+01:04:13,420 --> 01:04:17,410
+But, you know, so this gives you kind of in some sense three quarters of
+但是，你知道，所以这在某种意义上给你了四分之三
+
+1110
+01:04:17,410 --> 01:04:22,525
+the value over the traditional NLP system and in the much more,
+传统NLP系统的价值以及更多，
+
+1111
+01:04:22,525 --> 01:04:26,080
+um, complex, um, neural systems that come after it.
+嗯，复杂，嗯，它后面的神经系统。
+
+1112
+01:04:26,080 --> 01:04:27,145
+Um, yeah.
+嗯，是的
+
+1113
+01:04:27,145 --> 01:04:28,555
+In terms of error reduction,
+在减少错误方面，
+
+1114
+01:04:28,555 --> 01:04:31,780
+they're huge but it's sort of more like they're giving you the sort of,
+它们很大但有点像它们给你的那种，
+
+1115
+01:04:31,780 --> 01:04:34,880
+um, 12 percent after that.
+嗯，之后是12％。
+
+1116
+01:04:35,310 --> 01:04:43,030
+Why did these systems work such a ton better um, than traditional systems?
+为什么这些系统比传统系统工作得更好？
+
+1117
+01:04:43,030 --> 01:04:46,750
+And so we actually did some error analysis of this and, you know,
+所以我们实际上对此做了一些错误分析，你知道，
+
+1118
+01:04:46,750 --> 01:04:52,180
+it turns out that most of their gains is because they can just do
+事实证明，他们的大部分收益都是因为他们可以做到
+
+1119
+01:04:52,180 --> 01:04:56,890
+better semantic matching of word similarities
+单词相似度的语义匹配更好
+
+1120
+01:04:56,890 --> 01:05:02,080
+or rephrasings that are semantically related but don't use the same words.
+或与语义相关但不使用相同词语的改写。
+
+1121
+01:05:02,080 --> 01:05:10,675
+So, to- to the extent that the question is where was Christopher Manning born?
+那么，问题就在于克里斯托弗·曼宁出生的地方？
+
+1122
+01:05:10,675 --> 01:05:15,595
+And the sentence says Christopher Manning was born in Australia,
+句子说克里斯托弗曼宁出生在澳大利亚，
+
+1123
+01:05:15,595 --> 01:05:18,790
+a traditional NLP system would get that right too.
+传统的NLP系统也能做到这一点。
+
+1124
+01:05:18,790 --> 01:05:21,565
+But that to the extent that you being able to get it right,
+但是，只要你能够做到正确，
+
+1125
+01:05:21,565 --> 01:05:23,980
+depends on being able to match,
+取决于能够匹配，
+
+1126
+01:05:23,980 --> 01:05:29,575
+sort of looser semantic matches so that we understand the sort of um,
+一种更宽松的语义匹配，以便我们理解那种嗯，
+
+1127
+01:05:29,575 --> 01:05:33,610
+you know, the place of birth has to be matching was born or something.
+你知道，出生地必须匹配才能诞生或者什么。
+
+1128
+01:05:33,610 --> 01:05:37,750
+That's where the neural systems actually do work much much better.
+这就是神经系统实际上工作得更好的地方。
+
+1129
+01:05:37,750 --> 01:05:44,950
+Okay. So, that's not the end of the story on question-answering systems.
+好的。所以，这不是问答系统故事的结尾。
+
+1130
+01:05:44,950 --> 01:05:48,400
+And I wanted to say just a little bit about um,
+我想说一点关于嗯，
+
+1131
+01:05:48,400 --> 01:05:51,670
+more complex systems to give you some idea um,
+更复杂的系统给你一些想法嗯，
+
+1132
+01:05:51,670 --> 01:05:53,725
+of what goes on after that.
+之后发生了什么。
+
+1133
+01:05:53,725 --> 01:05:56,260
+Um, but before I go further into that,
+嗯，但在我进一步深入研究之前，
+
+1134
+01:05:56,260 --> 01:05:59,980
+are there any questions on uh,
+对呃有什么问题吗
+
+1135
+01:05:59,980 --> 01:06:03,130
+up until now, Stanford Attentive Reader?
+到目前为止，Stanford Attentive Reader？
+
+1136
+01:06:03,130 --> 01:06:09,760
+[NOISE] Yeah.
+[NOISE]是的
+
+1137
+01:06:09,760 --> 01:06:12,925
+I have a question about attention in general.
+一般来说，我有一个关于注意力的问题。
+
+1138
+01:06:12,925 --> 01:06:18,550
+Every example we've seen has been just linear mapping with a weight matrix.
+我们看到的每个例子都只是一个权重矩阵的线性映射。
+
+1139
+01:06:18,550 --> 01:06:23,695
+Has anybody tried to convert that to a deep neural network and see what happens?
+有没有人试图将其转换为深度神经网络，看看会发生什么？
+
+1140
+01:06:23,695 --> 01:06:26,335
+Um, so yes they have.
+嗯，是的，他们有。
+
+1141
+01:06:26,335 --> 01:06:30,040
+Well, at least a shallow neural network.
+好吧，至少是一个浅层的神经网络。
+
+1142
+01:06:30,040 --> 01:06:33,010
+Um, I'll actually show an example of that in just a minute.
+嗯，我实际上会在一分钟内展示一个例子。
+
+1143
+01:06:33,010 --> 01:06:35,800
+So maybe I will um, save it till then.
+所以也许我会，直到那时保存。
+
+1144
+01:06:35,800 --> 01:06:38,305
+But yeah absolutely, um,
+但是，是的，嗯，
+
+1145
+01:06:38,305 --> 01:06:43,520
+yeah people have done that and that can be a good thing to um, play with.
+是的，人们已经做到了，这对你来说是件好事，玩耍。
+
+1146
+01:06:45,030 --> 01:06:52,060
+Anything else? Okay. Um, okay.
+还要别的吗？好的。嗯，好的。
+
+1147
+01:06:52,060 --> 01:06:57,970
+So, this is a picture of the BiDAF system,
+那么，这是BiDAF系统的图片，
+
+1148
+01:06:57,970 --> 01:07:00,730
+so this is the one from AI2 UDub.
+所以这是来自AI2 UDub的那个。
+
+1149
+01:07:00,730 --> 01:07:03,490
+And the BiDAF system is very well known.
+BiDAF系统非常有名。
+
+1150
+01:07:03,490 --> 01:07:06,880
+Um, it's another sort of classic version of
+嗯，这是另一种经典版本
+
+1151
+01:07:06,880 --> 01:07:11,140
+question-answering system that lots of people have used and built off.
+许多人使用和建立的问答系统。
+
+1152
+01:07:11,140 --> 01:07:14,260
+Um, and, you know,
+嗯，你知道，
+
+1153
+01:07:14,260 --> 01:07:20,260
+some of it isn't completely different to what we saw before but it has various additions.
+其中一些与我们之前看到的并没有完全不同，但它有各种各样的补充。
+
+1154
+01:07:20,260 --> 01:07:23,980
+So, there are word embeddings just like we had before,
+所以，就像我们以前一样，有一些嵌入词，
+
+1155
+01:07:23,980 --> 01:07:28,225
+there's a biLSTM running just like what we had before,
+有一个像我们之前一样运行的biLSTM，
+
+1156
+01:07:28,225 --> 01:07:31,435
+and that's being done for both the um,
+那是为了嗯，
+
+1157
+01:07:31,435 --> 01:07:33,865
+passage and the question.
+通过和问题。
+
+1158
+01:07:33,865 --> 01:07:37,210
+Um, but there are some different things that are happening as well.
+嗯，但也有一些不同的事情正在发生。
+
+1159
+01:07:37,210 --> 01:07:40,510
+So one of them is rather than just having word embeddings,
+所以其中一个不仅仅是嵌入词，
+
+1160
+01:07:40,510 --> 01:07:45,085
+it also processes the questions and passages at the character level.
+它还处理角色级别的问题和段落。
+
+1161
+01:07:45,085 --> 01:07:48,730
+And that's something that we're going to talk about coming up ahead in the class.
+这就是我们将要讨论的在课堂上提前做的事情。
+
+1162
+01:07:48,730 --> 01:07:54,204
+There's been a lot of work at doing character level processing in recent neural NLP,
+在最近的神经NLP中进行角色级处理已经做了很多工作，
+
+1163
+01:07:54,204 --> 01:07:56,365
+but I don't want to talk about that now.
+但我现在不想谈论这个问题。
+
+1164
+01:07:56,365 --> 01:08:00,460
+Um, the main technical innovation of the BiDAF model
+嗯，BiDAF模型的主要技术创新
+
+1165
+01:08:00,460 --> 01:08:06,175
+is this attention flow layout because that's in its name bidirectional attention flow.
+是这种注意力流动布局，因为它的名称是双向关注流程。
+
+1166
+01:08:06,175 --> 01:08:10,300
+And so, there was a model of attention flow where you have attention
+因此，有一个注意力流动的模型，你需要注意
+
+1167
+01:08:10,300 --> 01:08:14,740
+flowing in both directions between the query and the passage.
+在查询和段落之间向两个方向流动。
+
+1168
+01:08:14,740 --> 01:08:18,985
+And that was their main innovation and it was quite useful in their model.
+这是他们的主要创新，在他们的模型中非常有用。
+
+1169
+01:08:18,985 --> 01:08:20,575
+Um, but beyond that,
+嗯，但除此之外，
+
+1170
+01:08:20,575 --> 01:08:23,500
+there's you know, sort of more stuff to this model.
+你知道吗，这个模型有更多的东西。
+
+1171
+01:08:23,500 --> 01:08:27,324
+So after the attention flow layer there's again
+所以在关注流层之后又有了
+
+1172
+01:08:27,324 --> 01:08:31,675
+multiple layers of bidirectional LSTMs running.
+运行多层双向LSTM。
+
+1173
+01:08:31,675 --> 01:08:35,770
+And then on top of that their output layer is more
+然后最重要的是他们的输出层更多
+
+1174
+01:08:35,770 --> 01:08:41,230
+complex than the sort of simple attention version that I showed previously.
+比我之前展示的那种简单的注意版复杂。
+
+1175
+01:08:41,230 --> 01:08:45,145
+So let's just look at that in a bit more detail.
+所以让我们再看一下细节。
+
+1176
+01:08:45,145 --> 01:08:47,935
+Um so, for the attention flow layer.
+嗯，对于注意力流层。
+
+1177
+01:08:47,935 --> 01:08:53,905
+So, the motivation here was in the Stanford Attentive Reader,
+所以，这里的动机是在Stanford Attentive Reader，
+
+1178
+01:08:53,905 --> 01:08:57,460
+we used attention to map from
+我们用注意力来映射
+
+1179
+01:08:57,460 --> 01:09:03,175
+the representation of the question onto the words of the passage.
+将问题表达在段落的文字上。
+
+1180
+01:09:03,175 --> 01:09:09,325
+But, you know so as questions are whole mapping onto the words of the passage.
+但是，你知道，因为问题完全映射到段落的文字。
+
+1181
+01:09:09,325 --> 01:09:11,950
+Where their idea was well,
+他们的想法很好，
+
+1182
+01:09:11,950 --> 01:09:18,760
+presumably you could do better by mapping in both directions at the word level.
+大概你可以通过在单词级别的两个方向上进行映射来做得更好。
+
+1183
+01:09:18,760 --> 01:09:23,890
+So you should be sort of finding passage words that you can map onto question words,
+所以你应该找到可以映射到问题单词的段落词，
+
+1184
+01:09:23,890 --> 01:09:26,605
+and question words that you can map onto passage words.
+并质疑你可以映射到段落词的单词。
+
+1185
+01:09:26,605 --> 01:09:29,965
+And if you do that in both directions with attention flowing,
+如果你在注意流动的两个方向上这样做，
+
+1186
+01:09:29,965 --> 01:09:34,315
+and then run another round of sequence models on top of that,
+然后再运行另一轮序列模型，
+
+1187
+01:09:34,315 --> 01:09:38,530
+that you'll just be able to do much better matching between the two of them.
+你可以在两者之间做更好的匹配。
+
+1188
+01:09:38,530 --> 01:09:42,940
+And so the way they do that is, um,
+他们这样做的方式是，嗯，
+
+1189
+01:09:42,940 --> 01:09:46,600
+that they- they've got the bottom- so at
+他们 - 他们已经到了底部 - 所以
+
+1190
+01:09:46,600 --> 01:09:50,800
+the bottom layers they've sort of run these two LSTMs.
+底层他们有点运行这两个LSTM。
+
+1191
+01:09:50,800 --> 01:09:57,480
+So they have representations in the LSTM for each word and um,
+所以他们在LSTM中为每个单词和嗯表示，
+
+1192
+01:09:57,480 --> 01:10:00,480
+word and passage position.
+词和通道的位置。
+
+1193
+01:10:00,480 --> 01:10:04,440
+And at this point I have to put it in a slight apology because I just
+在这一点上，我必须稍微道歉，因为我只是
+
+1194
+01:10:04,440 --> 01:10:08,760
+stole the equations and so the letters that are used change.
+偷走了方程式，因此使用的字母发生了变化。
+
+1195
+01:10:08,760 --> 01:10:12,845
+Sorry. But, so these are the um,
+抱歉。但是，这些是嗯，
+
+1196
+01:10:12,845 --> 01:10:18,505
+question individual words and these are the passage individual words.
+质疑单个词，这些是个别词的段落。
+
+1197
+01:10:18,505 --> 01:10:23,485
+And so, what they're then wanting to do is to say for each passage word,
+所以，他们当时想要做的就是对每个段落来说，
+
+1198
+01:10:23,485 --> 01:10:28,105
+and each question word, I want to work out a similarity score.
+和每个问题词，我想得出相似性得分。
+
+1199
+01:10:28,105 --> 01:10:34,570
+And the way they work out that similarity score is they build a big concatenated vector.
+他们计算相似性得分的方式是他们建立一个大的连接向量。
+
+1200
+01:10:34,570 --> 01:10:40,359
+So there's the LSTM representation of the passage word, the question word,
+所以有通道词的LSTM表示，问题词，
+
+1201
+01:10:40,359 --> 01:10:45,070
+and then they throw in a third thing where they do a Hadamard product,
+然后他们投入第三件事，他们做了Hadamard产品，
+
+1202
+01:10:45,070 --> 01:10:49,855
+so an element-wise product of the question word and the context word.
+所以问题词和上下文词的元素方面的产物。
+
+1203
+01:10:49,855 --> 01:10:53,590
+Um, you know, for a neural net purist, throwing in
+嗯，你知道，对于一个神经网络纯粹主义者，投掷
+
+1204
+01:10:53,590 --> 01:10:57,580
+these kind of Hadamard products is a little bit of a cheat because
+这种Hadamard产品有点像作弊因为
+
+1205
+01:10:57,580 --> 01:11:01,180
+you kind of would hope that a neural net might just learn that
+你会希望神经网络能够学到这一点
+
+1206
+01:11:01,180 --> 01:11:05,635
+this relation between the passage and the question was useful to look at.
+这段经文和问题之间的关系很有用。
+
+1207
+01:11:05,635 --> 01:11:08,380
+But you can find a lot of models that put in
+但你可以找到许多投入的模型
+
+1208
+01:11:08,380 --> 01:11:11,920
+these kind of Hadamard product because it's sort of
+这种Hadamard产品因为它的种类
+
+1209
+01:11:11,920 --> 01:11:18,415
+a very easy way of sort of having a model that knows that matching is a good idea.
+一种非常简单的方法，让模型知道匹配是一个好主意。
+
+1210
+01:11:18,415 --> 01:11:24,790
+Because essentially this is sort of looking for each question and passage word pair.
+因为基本上这是寻找每个问题和通道词对。
+
+1211
+01:11:24,790 --> 01:11:28,810
+You know, do the vectors look similar in various dimensions?
+你知道，矢量在各个方面看起来相似吗？
+
+1212
+01:11:28,810 --> 01:11:32,965
+You can sort of access very well from looking at that Hadamard product.
+通过查看Hadamard产品，您可以很好地访问。
+
+1213
+01:11:32,965 --> 01:11:35,815
+So that- so you take that big vector,
+那么 - 所以你拿那个大矢量，
+
+1214
+01:11:35,815 --> 01:11:40,765
+and you then dot-product that with a learned weight matrix,
+然后你用学到的权重矩阵点积，
+
+1215
+01:11:40,765 --> 01:11:43,389
+and that gives you a similarity score
+这会给你一个相似度
+
+1216
+01:11:43,389 --> 01:11:47,050
+between each position in the question and the context.
+在问题中的每个位置和上下文之间。
+
+1217
+01:11:47,050 --> 01:11:50,395
+And so then what you're gonna do is use that to
+那么你要做的就是用它来做
+
+1218
+01:11:50,395 --> 01:11:55,325
+define attentions that go in both directions. Um-
+定义两个方向的注意力。 UM-
+
+1219
+01:11:55,325 --> 01:11:58,989
+So for the, um, context,
+所以，对于，嗯，上下文，
+
+1220
+01:11:58,989 --> 01:12:02,415
+the question attention, this one's completely straightforward.
+关注的问题，这一点完全是直截了当的。
+
+1221
+01:12:02,415 --> 01:12:08,550
+So, you put these similarity scores through a soft-max.
+所以，你通过soft-max来表示这些相似性得分。
+
+1222
+01:12:08,550 --> 01:12:13,515
+So for each of the i positions in the passage or sort of,
+因此，对于通道中的每个位置或类型，
+
+1223
+01:12:13,515 --> 01:12:17,300
+having a softmax which is giving you a probability distribution,
+有一个softmax给你一个概率分布，
+
+1224
+01:12:17,300 --> 01:12:20,375
+over question words and then you're coming up with
+在问题的话，然后你想出来
+
+1225
+01:12:20,375 --> 01:12:26,750
+a new representation of the i-th position which is then the attention weighted,
+第i个位置的新表示，然后是注意力加权，
+
+1226
+01:12:26,750 --> 01:12:31,350
+um, version, the attention weighted average of those question words.
+嗯，版本，那些问题词的注意加权平均值。
+
+1227
+01:12:31,350 --> 01:12:32,760
+Um, so you're sort of,
+嗯，所以你有点儿，
+
+1228
+01:12:32,760 --> 01:12:38,775
+having attention weighted view of the question mapped onto each position in the passage.
+具有注意力加权视图的问题映射到段落中的每个位置。
+
+1229
+01:12:38,775 --> 01:12:43,860
+Um, you then want to do something in the reverse direction.
+嗯，你想要反向做点什么。
+
+1230
+01:12:43,860 --> 01:12:49,815
+Um, but the one in the reverse direction is done subtly differently.
+嗯，但反方向的那个巧妙地区别对待。
+
+1231
+01:12:49,815 --> 01:12:53,325
+So you're again starting off, um,
+所以你再次开始，嗯，
+
+1232
+01:12:53,325 --> 01:13:00,690
+with the- the same similarity scores but this time they're sort of wanting to, sort of,
+与相同的相似度得分，但这次他们有点想要，有点，
+
+1233
+01:13:00,690 --> 01:13:04,875
+really assign which position,
+真的指定哪个位置，
+
+1234
+01:13:04,875 --> 01:13:12,120
+in which position in the question is the one that's, sort of,
+在问题中的哪个位置是那个，有点像，
+
+1235
+01:13:12,120 --> 01:13:16,980
+aligning the most so that they're finding a max and so that they're finding
+最对齐，以便他们找到最大值，以便他们找到
+
+1236
+01:13:16,980 --> 01:13:22,545
+which is the most aligned one and so then for each of,
+哪个是最对齐的，所以每个，
+
+1237
+01:13:22,545 --> 01:13:24,930
+for each of the i's,
+对于我的每一个，
+
+1238
+01:13:24,930 --> 01:13:27,885
+they're finding the most aligned question word.
+他们找到了最对齐的问题词。
+
+1239
+01:13:27,885 --> 01:13:33,670
+And so then they're doing a softmax over these m scores and then those are being
+然后，他们在这些m分数上做了一个softmax，然后就是那些
+
+1240
+01:13:33,670 --> 01:13:39,900
+used to form a new representation of the passage by,
+用于形成通道的新表示，
+
+1241
+01:13:39,900 --> 01:13:43,110
+sort of, summing over these attention weights.
+对这些注意力进行总结。
+
+1242
+01:13:43,110 --> 01:13:47,310
+Okay. So you build these things up and this then
+好的。所以你建立这些东西然后呢
+
+1243
+01:13:47,310 --> 01:13:51,330
+gives you a new representation where you have,
+给你一个新的代表，你有，
+
+1244
+01:13:51,330 --> 01:13:57,090
+um, your original representations of the passage words.
+嗯，你对段落词的原始陈述。
+
+1245
+01:13:57,090 --> 01:14:00,120
+You'd have a new representation that you've built from
+您将拥有一个新的表示形式
+
+1246
+01:14:00,120 --> 01:14:02,585
+this bidirectional attention flow and you
+这种双向关注流程和你一样
+
+1247
+01:14:02,585 --> 01:14:05,310
+look at these sort of Hadamard products of them and
+看看他们和他们的这些Hadamard产品
+
+1248
+01:14:05,310 --> 01:14:10,110
+that then gives you kind of the output of the BiDAF layer and that output of
+然后，它会为您提供BiDAF层的输出和输出
+
+1249
+01:14:10,110 --> 01:14:12,990
+the BiDAF layer is then what's sort of being fed as
+那么BiDAF层就像被喂食一样
+
+1250
+01:14:12,990 --> 01:14:18,160
+the input into these nick- next sequence of LSTM layers.
+输入到这些缺口的LSTM层序列中。
+
+1251
+01:14:18,350 --> 01:14:22,240
+Okay. Um, and so yeah,
+好的。嗯，是的，是的，
+
+1252
+01:14:22,240 --> 01:14:24,335
+um, so then that's the modeling layer.
+嗯，那就是建模层。
+
+1253
+01:14:24,335 --> 01:14:29,085
+You have another two BiLSTM layers and so the way they do the,
+你有另外两个BiLSTM层，所以他们的方式，
+
+1254
+01:14:29,085 --> 01:14:32,400
+um, suspense selection is a bit more complex as well.
+嗯，悬疑选择也有点复杂。
+
+1255
+01:14:32,400 --> 01:14:35,620
+Um, so that they're then, um,
+嗯，这样他们就这样，嗯，
+
+1256
+01:14:35,620 --> 01:14:40,020
+sort of taking the output of the modeling layer and putting it through a sort of
+获取建模图层的输出并将其放入某种类型
+
+1257
+01:14:40,020 --> 01:14:45,915
+a dense feed-forward neural network layer and then softmaxing over that,
+一个密集的前馈神经网络层然后softmaxing，
+
+1258
+01:14:45,915 --> 01:14:49,020
+um, and that's then getting a distribution of
+嗯，那就是分发了
+
+1259
+01:14:49,020 --> 01:14:53,430
+a start and you're running yet another LSTM kind of a distribution finish.
+一个开始，你正在运行另一个LSTM类型的分发完成。
+
+1260
+01:14:53,430 --> 01:14:58,020
+Um, yeah. So, that gives you some idea of a more complex model.
+嗯，是的因此，这可以让您了解更复杂的模型。
+
+1261
+01:14:58,020 --> 01:15:01,730
+Um, you know, in some sense,
+嗯，你知道，从某种意义上说，
+
+1262
+01:15:01,730 --> 01:15:05,895
+um, the summary if you go further forward than here is that, sort of,
+嗯，如果你比这里更进一步的总结是那样的，
+
+1263
+01:15:05,895 --> 01:15:08,835
+most of the work in the last couple of years,
+过去几年的大部分工作，
+
+1264
+01:15:08,835 --> 01:15:14,220
+people have been producing progressively more complex architectures with
+人们一直在逐步生产更复杂的架构
+
+1265
+01:15:14,220 --> 01:15:19,710
+lots of variants of attention and effectively that has been giving good gains.
+许多变化的注意力和有效的，已经取得了很好的收益。
+
+1266
+01:15:19,710 --> 01:15:23,010
+Um, I think I'll skip since time is running,
+嗯，我想我会跳过时间，
+
+1267
+01:15:23,010 --> 01:15:25,230
+out, showing you that one.
+出来，给你看一个。
+
+1268
+01:15:25,230 --> 01:15:28,980
+But, um, let me just mention this FusionNet model
+但是，嗯，让我提一下这个FusionNet模型
+
+1269
+01:15:28,980 --> 01:15:32,500
+which was done by people at Microsoft because this relates to the answer,
+这是由微软的人做的，因为这与答案有关，
+
+1270
+01:15:32,500 --> 01:15:35,145
+the attention question, right?
+关注的问题，对吧？
+
+1271
+01:15:35,145 --> 01:15:40,740
+So p- so people have definitely used different versions of attention, right?
+所以p-所以人们肯定会使用不同版本的注意力，对吗？
+
+1272
+01:15:40,740 --> 01:15:44,880
+So that in some of the stuff that we've shown we tend to emphasize
+因此，在我们展示的一些内容中，我们倾向于强调
+
+1273
+01:15:44,880 --> 01:15:49,335
+this bi-linear attention where you've got two vectors mediated by a matrix.
+这种双线性关注，你有两个由矩阵介导的向量。
+
+1274
+01:15:49,335 --> 01:15:51,825
+And I guess traditionally at Stanford NLP,
+我猜传统上在斯坦福NLP，
+
+1275
+01:15:51,825 --> 01:15:53,460
+we've liked this, um,
+我们喜欢这个，嗯，
+
+1276
+01:15:53,460 --> 01:15:56,460
+version of attention since it seems to very directly learn
+版本的关注，因为它似乎非常直接的学习
+
+1277
+01:15:56,460 --> 01:16:00,690
+a similarity but other people have used a little neural net.
+相似但其他人使用了一点神经网络。
+
+1278
+01:16:00,690 --> 01:16:03,000
+So this is, sort of, a shallow neural net to
+所以这就是一种浅层的神经网络
+
+1279
+01:16:03,000 --> 01:16:05,340
+work out attention scores and there's, sort of,
+得出注意力得分，有，有点，
+
+1280
+01:16:05,340 --> 01:16:07,740
+no reason why you couldn't say, maybe it would be even better if I
+没理由你不能说，如果我可能会更好
+
+1281
+01:16:07,740 --> 01:16:10,710
+make that a deep neural net and add another layer.
+使那个深度神经网络并添加另一层。
+
+1282
+01:16:10,710 --> 01:16:12,465
+Um, and some of, you know,
+嗯，还有一些，你知道，
+
+1283
+01:16:12,465 --> 01:16:14,920
+to be perfectly honest, um,
+说实话，嗯，
+
+1284
+01:16:14,920 --> 01:16:18,425
+some of the results that have been done by people including Google
+包括谷歌在内的人已经完成了一些结果
+
+1285
+01:16:18,425 --> 01:16:22,520
+argue that actually that NLP version of attention is better.
+认为实际上NLP版本的注意力更好。
+
+1286
+01:16:22,520 --> 01:16:25,700
+Um, so there's something to explore in that direction.
+嗯，所以有朝这个方向探索的东西。
+
+1287
+01:16:25,700 --> 01:16:31,635
+But actually, um, the people in FusionNet didn't head that direction because they said,
+但实际上，嗯，FusionNet的人没有朝那个方向前进，因为他们说，
+
+1288
+01:16:31,635 --> 01:16:34,710
+"Look, we want to use tons and tons of attention.
+“看，我们想要使用吨和吨的注意力。
+
+1289
+01:16:34,710 --> 01:16:37,740
+So we want an attention computation that's pretty
+所以我们想要一个非常好的注意力计算
+
+1290
+01:16:37,740 --> 01:16:41,160
+efficient and so it's bad news if you have to
+高效，所以如果你不得不这样做是坏消息
+
+1291
+01:16:41,160 --> 01:16:44,115
+be evaluating a little dense neural net at
+正在评估一个小密集的神经网络
+
+1292
+01:16:44,115 --> 01:16:47,880
+every position every time that you do attention."
+每次你注意的每一个位置。“
+
+1293
+01:16:47,880 --> 01:16:51,630
+So this bi-linear form is fairly appealing
+所以这种双线性形式非常吸引人
+
+1294
+01:16:51,630 --> 01:16:55,665
+but they then did some playing with it so rather than having a W matrix
+但是他们接着做了一些游戏而不是W矩阵
+
+1295
+01:16:55,665 --> 01:16:59,700
+you can reduce the rank and complexity of
+你可以降低等级和复杂性
+
+1296
+01:16:59,700 --> 01:17:06,135
+your W matrix by dividing it into the product of two lower rank matrices.
+你的W矩阵除以两个低阶矩阵的乘积。
+
+1297
+01:17:06,135 --> 01:17:08,985
+So you can have a U and a V matrix.
+所以你可以有一个U和V矩阵。
+
+1298
+01:17:08,985 --> 01:17:12,689
+And if you make these rectangular matrices that are kind of skinny,
+如果你制作这些细长的矩形矩阵，
+
+1299
+01:17:12,689 --> 01:17:16,455
+you can then have a sort of a lower rank factorization and,
+然后你可以有一种较低等级的因子分解，
+
+1300
+01:17:16,455 --> 01:17:18,420
+that seems a good idea.
+这似乎是一个好主意。
+
+1301
+01:17:18,420 --> 01:17:19,680
+And then they thought well,
+然后他们心想，
+
+1302
+01:17:19,680 --> 01:17:23,265
+maybe really you want your attention distribution to be symmetric.
+也许你真的希望你的注意力分布是对称的。
+
+1303
+01:17:23,265 --> 01:17:26,460
+So we can actually put in the middle here,
+所以我们实际上可以放在这里，
+
+1304
+01:17:26,460 --> 01:17:29,100
+we can have the U and the V, so to speak,
+我们可以拥有U和V，可以这么说
+
+1305
+01:17:29,100 --> 01:17:32,160
+be the same and just have a diagonal matrix in
+是相同的，只有一个对角矩阵
+
+1306
+01:17:32,160 --> 01:17:35,565
+the middle and that might be a useful way to think of it.
+中间，这可能是一个有用的方式来思考它。
+
+1307
+01:17:35,565 --> 01:17:39,555
+And that all makes sense from linear algebra terms but then they thought,
+从线性代数术语来看，这一切都是有道理的，但他们认为，
+
+1308
+01:17:39,555 --> 01:17:43,055
+"Oh, non-linearity is really good in deep learning.
+“哦，非线性在深度学习中确实很好。
+
+1309
+01:17:43,055 --> 01:17:44,640
+So why don't we, sort of,
+那么我们为什么不这样呢？
+
+1310
+01:17:44,640 --> 01:17:48,790
+stick the left and right half through a ReLU and maybe that will help.
+通过ReLU坚持左右两半，也许这会有所帮助。
+
+1311
+01:17:48,790 --> 01:17:52,380
+[LAUGHTER] Which doesn't so much make sense in your linear algebra terms, um,
+[笑声]你的线性代数术语中没有那么有意义，嗯，
+
+1312
+01:17:52,380 --> 01:17:56,850
+but that's actually what they ended up using as their, um, attention forms.
+但这实际上是他们最终用作他们的注意形式。
+
+1313
+01:17:56,850 --> 01:18:00,150
+There are lots of things you can play with when doing your final project.
+在做最后的项目时，你可以玩很多东西。
+
+1314
+01:18:00,150 --> 01:18:02,085
+Um, yeah.
+嗯，是的
+
+1315
+01:18:02,085 --> 01:18:04,740
+And, but, you know, their argument is still, you know,
+而且，但是，你知道，他们的论点仍然是，你知道，
+
+1316
+01:18:04,740 --> 01:18:07,920
+that doing attention this way is actually much much
+以这种方式注意实际上是非常多的
+
+1317
+01:18:07,920 --> 01:18:11,070
+cheaper and so they can use a lot of attention.
+更便宜，所以他们可以使用很多的关注。
+
+1318
+01:18:11,070 --> 01:18:16,640
+And so they build this very complex tons of attention model, um,
+所以他们建立了这个非常复杂的注意力模型，嗯，
+
+1319
+01:18:16,640 --> 01:18:19,155
+which I'm not going to try and explain, um,
+我不打算试着解释一下，嗯，
+
+1320
+01:18:19,155 --> 01:18:21,555
+all of now, um,
+现在，嗯，
+
+1321
+01:18:21,555 --> 01:18:24,750
+but I will show you this picture.
+但我会告诉你这张照片。
+
+1322
+01:18:24,750 --> 01:18:28,295
+Um, so a point that they make is that a lot of
+嗯，他们提出的一点是很多
+
+1323
+01:18:28,295 --> 01:18:32,340
+the different models that people have explored in different years you,
+人们在不同年代探索过的不同模型，
+
+1324
+01:18:32,340 --> 01:18:33,915
+that, you know, they're sort of,
+那，你知道，他们有点像，
+
+1325
+01:18:33,915 --> 01:18:36,305
+doing different kinds of attention.
+做不同的关注。
+
+1326
+01:18:36,305 --> 01:18:39,180
+That you could be doing attention right,
+你可以正确地关注，
+
+1327
+01:18:39,180 --> 01:18:42,240
+lining up with the original LSTM,
+排队原始LSTM，
+
+1328
+01:18:42,240 --> 01:18:46,340
+you could run both sides through some stuff and do attention,
+你可以通过一些东西跑两边并注意，
+
+1329
+01:18:46,340 --> 01:18:49,740
+you can do self attention inside your layer that there are a lot of
+你可以在你的层内自我关注，有很多
+
+1330
+01:18:49,740 --> 01:18:53,300
+different attentions that different models have explored.
+不同模型探索过的不同注意事项。
+
+1331
+01:18:53,300 --> 01:18:55,710
+And essentially what they are wanting to say is,
+基本上他们想说的是，
+
+1332
+01:18:55,710 --> 01:18:59,980
+let's do all of those and let's make it deep and do it all
+让我们做所有这些，让我们深入并做到这一切
+
+1333
+01:18:59,980 --> 01:19:04,210
+five times and the numbers will go up. And to some extent the answer is,
+五次，数字会上升。在某种程度上答案是，
+
+1334
+01:19:04,210 --> 01:19:09,405
+yeah they do and the model ends up scoring very well.
+是的，他们这样做，模特最终得分很好。
+
+1335
+01:19:09,405 --> 01:19:15,585
+Okay, um, so the one last thing I just wanted to mention but not explain is,
+好的，嗯，所以最后一件我想提的但不解释的是，
+
+1336
+01:19:15,585 --> 01:19:18,450
+I mean in the last year there's then been
+我的意思是去年那时候
+
+1337
+01:19:18,450 --> 01:19:22,955
+a further revolution in how well people can do these tasks.
+人们如何完成这些任务的进一步革命。
+
+1338
+01:19:22,955 --> 01:19:29,795
+And so people have developed algorithms which produce contextual word representation.
+因此人们开发了产生上下文单词表示的算法。
+
+1339
+01:19:29,795 --> 01:19:32,790
+So that means that rather than a traditional word vector,
+这意味着，而不是传统的单词向量，
+
+1340
+01:19:32,790 --> 01:19:36,660
+you have a representation for each word in a particular context.
+您可以在特定上下文中对每个单词进行表示。
+
+1341
+01:19:36,660 --> 01:19:41,700
+So here's the word frog in this particular context and the way people build
+所以这里有关于这个特定背景中的青蛙这个词以及人们建立的方式
+
+1342
+01:19:41,700 --> 01:19:44,490
+those representations is using something
+那些陈述正在使用某些东西
+
+1343
+01:19:44,490 --> 01:19:47,580
+like a language modeling tasks like Abby talked about,
+像Abby谈到的语言建模任务，
+
+1344
+01:19:47,580 --> 01:19:50,730
+of saying putting probabilities of words in
+说词的概率
+
+1345
+01:19:50,730 --> 01:19:54,795
+context to learn a context-specific word representation.
+上下文以学习特定于上下文的单词表示。
+
+1346
+01:19:54,795 --> 01:19:57,870
+And ELMo was the first well-known such model.
+ELMo是第一个这样着名的模型。
+
+1347
+01:19:57,870 --> 01:20:00,410
+And then people from Google came up with BERT,
+然后谷歌的人想出了BERT，
+
+1348
+01:20:00,410 --> 01:20:01,830
+which worked even better.
+哪个工作得更好。
+
+1349
+01:20:01,830 --> 01:20:06,490
+Um, and so BERT is really in some sense is
+嗯，所以BERT在某种意义上确实是
+
+1350
+01:20:06,490 --> 01:20:11,235
+super complex attention Architecture doing a language modeling like objective.
+超级复杂的注意力架构做一个像客观的语言建模。
+
+1351
+01:20:11,235 --> 01:20:13,680
+We're going to talk about these later, um,
+我们稍后会讨论这些，嗯，
+
+1352
+01:20:13,680 --> 01:20:16,580
+I'm not going to talk about them now, um,
+我现在不打算谈论他们，嗯，
+
+1353
+01:20:16,580 --> 01:20:22,260
+but if you look at the current SQuAD 2,0 Leaderboard,
+但如果你看看当前的SQuAD 2,0排行榜，
+
+1354
+01:20:22,260 --> 01:20:24,090
+um, you will quickly,
+嗯，你会很快，
+
+1355
+01:20:24,090 --> 01:20:28,485
+um - sorry that's- oh I put the wrong slide and that was the bottom of the leaderboard.
+嗯 - 对不起 - 哦，我放了错误的幻灯片，这是排行榜的底部。
+
+1356
+01:20:28,485 --> 01:20:30,270
+Oops, slipped at the last minute.
+哎呀，在最后一分钟滑倒了。
+
+1357
+01:20:30,270 --> 01:20:34,785
+If you go back to my slide which had the top of the leaderboard, um,
+如果你回到我的幻灯片，它有排行榜的顶部，嗯，
+
+1358
+01:20:34,785 --> 01:20:38,805
+you will have noticed that the top of the leaderboard,
+你会注意到排行榜的顶部，
+
+1359
+01:20:38,805 --> 01:20:42,825
+every single one of the top systems uses BERT.
+每个顶级系统都使用BERT。
+
+1360
+01:20:42,825 --> 01:20:45,240
+So that's something that you may want to
+这就是你可能想要的东西
+
+1361
+01:20:45,240 --> 01:20:47,820
+consider but you may want to consider how you could
+考虑但你可能想考虑如何
+
+1362
+01:20:47,820 --> 01:20:52,800
+use it as a sub-module which you could add other stuff too as many of these systems do.
+使用它作为子模块，您可以添加其他东西，就像许多这些系统一样。
+
+1363
+01:20:52,800 --> 01:20:56,140
+Okay. Done for today.
+好的。今天完成了。
+
+1364
+
+

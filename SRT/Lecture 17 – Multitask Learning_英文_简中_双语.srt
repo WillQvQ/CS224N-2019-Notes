@@ -1,0 +1,7458 @@
+1
+00:00:04,190 --> 00:00:08,790
+So today, we're very pleased to have as our second, um,
+所以今天，我们很高兴有第二个，嗯，
+
+2
+00:00:08,790 --> 00:00:10,980
+invited speaker, Richard Socher,
+特邀发言人Richard Socher，
+
+3
+00:00:10,980 --> 00:00:14,085
+he is the chief scientist at Salesforce.
+他是Salesforce的首席科学家。
+
+4
+00:00:14,085 --> 00:00:18,040
+Um, Richard actually also has a lot more connection to this class,
+嗯，理查德实际上也和这个班级有很多联系，
+
+5
+00:00:18,040 --> 00:00:21,840
+um, because, um, for several years, um,
+嗯，因为，嗯，好几年了，嗯，
+
+6
+00:00:21,840 --> 00:00:24,970
+Richard was involved either as instructor or, um,
+理查德既是教练，也是嗯，
+
+7
+00:00:24,970 --> 00:00:29,110
+co-instructor in teaching this material at Stanford,
+在斯坦福大学教授这些材料的共同指导
+
+8
+00:00:29,110 --> 00:00:32,605
+um, so he sort of knows the course, um, pretty well.
+嗯，所以他有点了解课程，嗯，非常好。
+
+9
+00:00:32,605 --> 00:00:34,030
+Um, and so today,
+嗯，今天，
+
+10
+00:00:34,030 --> 00:00:38,830
+he's going to be talking about some of the challenges and recent work
+他将谈论一些挑战和最近的工作
+
+11
+00:00:38,830 --> 00:00:43,690
+in doing multitask learning in natural language processing. So welcome, Richard.
+在自然语言处理中进行多任务学习。理查德，欢迎你。
+
+12
+00:00:43,690 --> 00:00:46,595
+Thank you. Hello, everybody. I'm excited to be here.
+谢谢。大家好。我很高兴能来到这里。
+
+13
+00:00:46,595 --> 00:00:49,380
+Uh, yeah, I want to talk to you today about what we,
+呃，是的，我想今天和你谈谈我们是什么，
+
+14
+00:00:49,380 --> 00:00:51,280
+in short, called decaNLP.
+简而言之，称为decaNLP。
+
+15
+00:00:51,280 --> 00:00:54,635
+I want to first give a big shout out to Bryan McCann.
+我想首先向Bryan McCann大声喊叫。
+
+16
+00:00:54,635 --> 00:00:56,900
+He's the first author of this, uh, paper,
+他是第一个作者，呃，纸，
+
+17
+00:00:56,900 --> 00:01:00,200
+and I've pitched this idea to a lot of people in the last, like,
+我把这个想法推到了最后的很多人，比如，
+
+18
+00:01:00,200 --> 00:01:01,280
+three to four years,
+三到四年，
+
+19
+00:01:01,280 --> 00:01:02,405
+and most people were like,
+大多数人都喜欢，
+
+20
+00:01:02,405 --> 00:01:04,730
+"This is too much pre-processing because you're trying to
+“这是太多的预处理，因为你正在尝试
+
+21
+00:01:04,730 --> 00:01:07,290
+do 10 different tasks in one model."
+在一个模型中完成10个不同的任务。“
+
+22
+00:01:07,290 --> 00:01:09,510
+That's sort of where the decathlon, uh,
+那就是十项全能比赛，呃，
+
+23
+00:01:09,510 --> 00:01:11,805
+wording comes in, uh, but he,
+措辞进来了，呃，但他，
+
+24
+00:01:11,805 --> 00:01:13,305
+he really stuck to it, uh,
+他真的坚持了，呃，
+
+25
+00:01:13,305 --> 00:01:16,730
+did all the pre-processing and all the things that you now know like tokenization,
+做了所有预处理和你现在知道的所有事情，如标记化，
+
+26
+00:01:16,730 --> 00:01:18,500
+and it turns out a lot of different data sets,
+结果证明了很多不同的数据集，
+
+27
+00:01:18,500 --> 00:01:20,270
+have a different conception of what a word is.
+对一个词的含义有不同的概念。
+
+28
+00:01:20,270 --> 00:01:21,710
+This wasn't two words,
+这不是两个字，
+
+29
+00:01:21,710 --> 00:01:23,480
+uh, or one word,
+呃，或者一个字，
+
+30
+00:01:23,480 --> 00:01:25,355
+and things like that, and that changes how you
+和那样的事情，这会改变你的方式
+
+31
+00:01:25,355 --> 00:01:27,470
+write all your evaluation scripts and all of that.
+写下你所有的评估脚本和所有这些。
+
+32
+00:01:27,470 --> 00:01:29,165
+So Bryan, uh, is,
+所以布莱恩，恩，是，
+
+33
+00:01:29,165 --> 00:01:30,770
+is a really phenomenal researcher,
+是一位真正非凡的研究员，
+
+34
+00:01:30,770 --> 00:01:31,985
+uh, with us in the group,
+呃，和我们在一起，
+
+35
+00:01:31,985 --> 00:01:35,340
+and Nitish has helped us a lot on the optimization side of this,
+而Nitish在优化方面为我们提供了很多帮助，
+
+36
+00:01:35,340 --> 00:01:36,480
+uh, and then Caiming Xiong,
+呃，然后是Caiming Xiong，
+
+37
+00:01:36,480 --> 00:01:38,415
+the Director of Research, has done a lot of, uh,
+研究总监做了很多，呃，
+
+38
+00:01:38,415 --> 00:01:41,735
+really phenomenal work that's kind of helpful in pretty much all our projects.
+非常惊人的工作，对我们所有的项目都很有帮助。
+
+39
+00:01:41,735 --> 00:01:44,830
+So I'm going to tell you a couple of different, uh,
+所以我要告诉你几个不同的，呃，
+
+40
+00:01:44,830 --> 00:01:48,560
+lines of reasoning that led us to,
+引导我们的推理线，
+
+41
+00:01:48,560 --> 00:01:50,525
+uh, this idea of multitask learning.
+呃，这个多任务学习的想法。
+
+42
+00:01:50,525 --> 00:01:54,170
+And the first one was sort of trying to take a step back and looking at the field,
+第一个是试图退后一步，看着田野，
+
+43
+00:01:54,170 --> 00:01:58,955
+and I noticed not like that much of a historical class but basically pre-2010,
+我注意到不像历史课那么多，但基本上在2010年之前，
+
+44
+00:01:58,955 --> 00:02:04,340
+most natural language processing had kind of these very hand-designed features,
+大多数自然语言处理都有这些非常手工设计的功能，
+
+45
+00:02:04,340 --> 00:02:05,660
+and we basically just had,
+而我们基本上只是，
+
+46
+00:02:05,660 --> 00:02:08,710
+uh, machine learning kind of learned weights,
+呃，机器学习一种学到的重量，
+
+47
+00:02:08,710 --> 00:02:12,680
+uh, in the optimization procedure for these human-designed features.
+呃，在这些人为设计的功能的优化过程中。
+
+48
+00:02:12,680 --> 00:02:20,780
+And so in 2010, Chris and I and others sort of started to work in deep learning for feature learning.
+所以在2010年，克里斯和我和其他人开始从事深度学习功能学习。
+
+49
+00:02:20,780 --> 00:02:22,150
+So everything was a word vector and now,
+所以一切都是单词矢量，现在，
+
+50
+00:02:22,150 --> 00:02:25,910
+we can back-propagate into them and actually learn those representations.
+我们可以反向传播到它们中并实际学习这些表示。
+
+51
+00:02:25,910 --> 00:02:27,410
+And I think currently,
+我想现在，
+
+52
+00:02:27,410 --> 00:02:28,880
+we're kind of in a state where we do a lot of
+我们处在一个我们做很多事情的州
+
+53
+00:02:28,880 --> 00:02:31,940
+deep architecture engineering for specific tasks,
+针对特定任务的深层架构工程，
+
+54
+00:02:31,940 --> 00:02:33,110
+and you've seen this already.
+你已经看过了。
+
+55
+00:02:33,110 --> 00:02:34,700
+You have like an NER model,
+你喜欢NER模型，
+
+56
+00:02:34,700 --> 00:02:36,350
+you have a question and answering model,
+你有问题和回答模型，
+
+57
+00:02:36,350 --> 00:02:37,745
+you have a translation model,
+你有翻译模型，
+
+58
+00:02:37,745 --> 00:02:39,110
+and we basically now,
+我们基本上现在，
+
+59
+00:02:39,110 --> 00:02:41,990
+each of these communities has at least, uh,
+这些社区中的每一个都至少有，呃，
+
+60
+00:02:41,990 --> 00:02:44,660
+converged on is probably some kind of neural network,
+融合可能是某种神经网络，
+
+61
+00:02:44,660 --> 00:02:47,570
+but there's still a lot of different kinds of architectures of
+但是仍然有很多不同类型的架构
+
+62
+00:02:47,570 --> 00:02:51,045
+these neural networks that you're working on for each different task.
+这些神经网络，你正在为每个不同的任务工作。
+
+63
+00:02:51,045 --> 00:02:52,590
+And so the question is like, okay,
+所以问题就像，好吧，
+
+64
+00:02:52,590 --> 00:02:54,125
+we're gonna probably do that for
+我们可能会这样做
+
+65
+00:02:54,125 --> 00:02:57,170
+another couple of years because we're making good progress,
+再过几年，因为我们取得了良好的进展，
+
+66
+00:02:57,170 --> 00:02:58,550
+but what's sort of next,
+但是下一步是什么
+
+67
+00:02:58,550 --> 00:02:59,990
+uh, on the research side?
+呃，在研究方面？
+
+68
+00:02:59,990 --> 00:03:02,480
+And what I actually love about this class so much is that
+我真正喜欢这堂课的是那个
+
+69
+00:03:02,480 --> 00:03:05,000
+you go from like maybe not knowing much about NLP at
+你可能不会对NLP了解太多
+
+70
+00:03:05,000 --> 00:03:07,715
+all to you can basically understand
+一切都可以基本了解
+
+71
+00:03:07,715 --> 00:03:10,880
+the state-of-the-art research papers as they come out now,
+他们现在出来的最先进的研究论文，
+
+72
+00:03:10,880 --> 00:03:12,950
+uh, and this, this is one of those.
+呃，这就是其中之一。
+
+73
+00:03:12,950 --> 00:03:15,480
+Uh, so [NOISE] why,
+呃，所以[NOISE]为什么，
+
+74
+00:03:15,480 --> 00:03:17,840
+why not continue to work in this multitask regime?
+为什么不继续在这个多任务机制中工作？
+
+75
+00:03:17,840 --> 00:03:19,280
+In some ways, I feel like, uh,
+在某些方面，我觉得，呃，
+
+76
+00:03:19,280 --> 00:03:20,960
+the community is a little bit, uh,
+社区有点，呃，
+
+77
+00:03:20,960 --> 00:03:22,700
+like this cute dog, where we, kind of,
+像这只可爱的狗，我们在哪里，有点像，
+
+78
+00:03:22,700 --> 00:03:25,960
+randomly restart, uh, after every project.
+在每个项目之后随机重启，呃。
+
+79
+00:03:25,960 --> 00:03:29,840
+And it's kind of clear to me that if you have a lot of training data, uh,
+我很清楚，如果你有很多训练数据，呃，
+
+80
+00:03:29,840 --> 00:03:34,920
+and you define a specific data set and task on that data set,
+并在该数据集上定义特定的数据集和任务，
+
+81
+00:03:34,920 --> 00:03:39,080
+you start to architecture engineer in your model to hill-climb on a particular metric,
+你开始在你的模型中使用建筑工程师来攀爬特定的度量标准，
+
+82
+00:03:39,080 --> 00:03:41,420
+or leaderboard, or publications,
+或排行榜或出版物，
+
+83
+00:03:41,420 --> 00:03:43,655
+or products, or whatever it is, uh,
+或产品，或其他任何东西，呃，
+
+84
+00:03:43,655 --> 00:03:45,710
+then as long as your data set has
+只要你的数据集有
+
+85
+00:03:45,710 --> 00:03:48,090
+roughly a good representative set of
+大致是一个很好的代表性组合
+
+86
+00:03:48,090 --> 00:03:50,875
+1,000 times the number of output classes that you have,
+您拥有的输出类数量的1,000倍，
+
+87
+00:03:50,875 --> 00:03:56,210
+you'll probably get it into a regi- regime where you're in the 80 to 90 percent accuracy,
+你可能会把它变成一个准确率高达80％到90％的区域，
+
+88
+00:03:56,210 --> 00:03:59,360
+or if one, where you're basically doing pretty okay.
+或者如果一个，你基本上做得很好。
+
+89
+00:03:59,360 --> 00:04:02,300
+And of course, now when you look at trends on ImageNet,
+当然，现在当你看看ImageNet的趋势时，
+
+90
+00:04:02,300 --> 00:04:05,000
+you have 1,000 different classes in computer vision,
+你有1000个不同的计算机视觉课程，
+
+91
+00:04:05,000 --> 00:04:08,640
+1,000 different classes, each has 1,000 images.
+1,000个不同的类，每个类有1,000个图像。
+
+92
+00:04:08,640 --> 00:04:11,460
+So if you have roughly a million images, you do pretty well.
+因此，如果您有大约一百万张图像，那么您可以做得非常好。
+
+93
+00:04:11,460 --> 00:04:13,740
+And in machine translation, ideally,
+在机器翻译中，理想情况下，
+
+94
+00:04:13,740 --> 00:04:16,250
+you know, I have many more, I have like hundreds of thousands of words,
+你知道，我还有更多，我有几十万字，
+
+95
+00:04:16,250 --> 00:04:21,725
+so you want many millions of examples of each of the word in their,
+所以你想要他们的每个单词的数百万个例子，
+
+96
+00:04:21,725 --> 00:04:23,090
+uh, words in their context.
+呃，在他们的背景下的话。
+
+97
+00:04:23,090 --> 00:04:24,830
+And of course, you know, that the caveat is
+当然，你知道，这个警告是
+
+98
+00:04:24,830 --> 00:04:27,620
+machine translation doesn't work to the level of humans,
+机器翻译不适用于人类，
+
+99
+00:04:27,620 --> 00:04:30,110
+but it works well enough to have it at least in products,
+但它至少在产品中运行良好，
+
+100
+00:04:30,110 --> 00:04:34,750
+and even the best human translators use it as sort of a pre-translation and then,
+甚至最优秀的人工翻译也会将其用作预翻译，然后，
+
+101
+00:04:34,750 --> 00:04:37,030
+uh, sort of, clean it up.
+呃，有点，清理它。
+
+102
+00:04:37,030 --> 00:04:39,985
+And so it's also clear to me that in this regime,
+所以我也很清楚，在这个政权中，
+
+103
+00:04:39,985 --> 00:04:41,480
+and if we want to get to, sort of,
+如果我们想要，有点，
+
+104
+00:04:41,480 --> 00:04:43,550
+more general AI features, uh,
+更一般的AI功能，呃，
+
+105
+00:04:43,550 --> 00:04:47,360
+we need to have some kind of more continuous learning of a single model.
+我们需要对单一模型进行某种更持续的学习。
+
+106
+00:04:47,360 --> 00:04:49,840
+Because if we keep restarting at every project,
+因为如果我们在每个项目中继续重启，
+
+107
+00:04:49,840 --> 00:04:51,830
+we're never going to get to a single model that, kind of,
+我们永远不会得到一个单一的模型，那种，
+
+108
+00:04:51,830 --> 00:04:55,715
+encompasses more and more of the complexity of natural language.
+包含越来越多的自然语言的复杂性。
+
+109
+00:04:55,715 --> 00:04:59,115
+And, uh, when I say we start from random,
+而且，呃，当我说我们从随机开始时，
+
+110
+00:04:59,115 --> 00:05:01,295
+you of course know that that's not quite true
+你当然知道那不是真的
+
+111
+00:05:01,295 --> 00:05:04,190
+because we do have some things that we pre-train,
+因为我们确实有一些我们预训练的东西，
+
+112
+00:05:04,190 --> 00:05:06,290
+namely word vectors, and in computer vision,
+即词向量，在计算机视觉中，
+
+113
+00:05:06,290 --> 00:05:07,520
+we have even more things.
+我们还有更多的东西。
+
+114
+00:05:07,520 --> 00:05:09,020
+And so in some ways that is, ah,
+所以在某些方面，啊，
+
+115
+00:05:09,020 --> 00:05:11,745
+an aspiring ideal for NLP,
+一个有抱负的NLP理想，
+
+116
+00:05:11,745 --> 00:05:13,860
+because in computer vision, you would be, kind of,
+因为在计算机视觉中，你会是那样的，
+
+117
+00:05:13,860 --> 00:05:15,590
+crazy to not use some kind of
+疯狂不使用某种
+
+118
+00:05:15,590 --> 00:05:19,610
+convolution neural network that has pre-train- has been pre-trained on some kind of
+具有预训练的卷积神经网络已经在某种类型上进行了预训练
+
+119
+00:05:19,610 --> 00:05:22,520
+tasks like ImageNet when you start with your project and
+当你从项目开始时，像ImageNet这样的任务
+
+120
+00:05:22,520 --> 00:05:25,985
+try to classify objects or do object detection and a lot of other things.
+尝试对对象进行分类或进行对象检测以及许多其他事情。
+
+121
+00:05:25,985 --> 00:05:29,750
+And in some ways that the whole community could get behind it very quickly,
+在某些方面，整个社区可以很快得到支持，
+
+122
+00:05:29,750 --> 00:05:32,460
+because I mean, you know, once it worked, uh,
+因为我的意思是，你知道，一旦它奏效了，呃，
+
+123
+00:05:32,460 --> 00:05:34,125
+reasonably well, because there was a, sort of,
+相当好，因为有一种，有点，
+
+124
+00:05:34,125 --> 00:05:35,990
+single blocking task in computer vision.
+计算机视觉中的单一阻塞任务。
+
+125
+00:05:35,990 --> 00:05:38,610
+If you can't even tell apart a dog from a cat from a house,
+如果你甚至不能把狗从房子里分开来，
+
+126
+00:05:38,610 --> 00:05:42,420
+it doesn't really make sense to think of even larger, uh, vision projects.
+想到更大的呃视觉项目真的没有意义。
+
+127
+00:05:42,420 --> 00:05:45,210
+And in NLP, we've had a lot of success with word vectors,
+在NLP中，我们在单词向量方面取得了很大的成功，
+
+128
+00:05:45,210 --> 00:05:46,650
+you know a lot of those now,
+你现在知道很多
+
+129
+00:05:46,650 --> 00:05:48,750
+and it started for, sort of, just a small, uh,
+它开始了，只是一个小的，呃，
+
+130
+00:05:48,750 --> 00:05:51,780
+window-based approach or Word2Vec and GloVe, uh,
+基于窗口的方法或Word2Vec和GloVe，呃，
+
+131
+00:05:51,780 --> 00:05:55,020
+then we had, uh, context vectors that were trained, uh,
+然后我们有，呃，训练过的上下文向量，呃，
+
+132
+00:05:55,020 --> 00:05:57,295
+on machine translation, but basically,
+机器翻译，但基本上，
+
+133
+00:05:57,295 --> 00:06:00,050
+instead of just having a single set of words,
+而不是只有一组单词，
+
+134
+00:06:00,050 --> 00:06:04,455
+we actually pre-trained some of the NLSTMs that came on top of those word vectors,
+我们实际上预先训练了一些基于这些单词向量的NLSTM，
+
+135
+00:06:04,455 --> 00:06:06,925
+and, uh, the way we train that, uh,
+而且，呃，我们训练的方式，呃，
+
+136
+00:06:06,925 --> 00:06:09,050
+was also actually Bryan McCann's paper on
+实际上也是布莱恩麦肯的论文
+
+137
+00:06:09,050 --> 00:06:12,530
+contextual vectors with machine translation and then ELMo,
+带有机器翻译的上下文向量，然后是ELMo，
+
+138
+00:06:12,530 --> 00:06:16,260
+kind of, replaced machine translation with, uh, language modeling,
+用呃，语言建模取代机器翻译，
+
+139
+00:06:16,260 --> 00:06:18,570
+which of course is even better because there's even more training data,
+这当然更好，因为还有更多的训练数据，
+
+140
+00:06:18,570 --> 00:06:20,340
+and it still tells you a lot, uh,
+它仍然告诉你很多，呃，
+
+141
+00:06:20,340 --> 00:06:23,210
+and kind of captures in some ways a more complex version of
+并且在某些方面捕获更复杂的版本
+
+142
+00:06:23,210 --> 00:06:26,900
+distributional sort of hypotheses that we had in simpler word vectors,
+我们在更简单的单词向量中的分布式假设，
+
+143
+00:06:26,900 --> 00:06:29,640
+and BERT, not quite a language model but also, kind of,
+和BERT，不是一个语言模型，但也有点，
+
+144
+00:06:29,640 --> 00:06:31,610
+trying to predict words in their context, uh,
+试图在他们的背景下预测单词，呃，
+
+145
+00:06:31,610 --> 00:06:34,400
+but pre-training a lot more layers and a lot deeper networks.
+但是预先培训了更多层次和更深层次的网络。
+
+146
+00:06:34,400 --> 00:06:39,700
+And so we see the success of pre-training a certain set of weights.
+因此，我们看到预训练一组权重的成功。
+
+147
+00:06:39,700 --> 00:06:41,265
+And so the question is,
+所以问题是，
+
+148
+00:06:41,265 --> 00:06:44,310
+why not try to pre-train the entire model?
+为什么不尝试预先培训整个模型？
+
+149
+00:06:44,310 --> 00:06:46,650
+As in including your output,
+在包括你的输出，
+
+150
+00:06:46,650 --> 00:06:50,145
+your softmax, your pointer mechanisms and everything,
+你的softmax，你的指针机制和一切，
+
+151
+00:06:50,145 --> 00:06:54,240
+and then just taking a completely pre-trained model and trying to do something,
+然后只需要一个完全预先训练好的模型并尝试做某事，
+
+152
+00:06:54,240 --> 00:06:56,895
+and that is, kind of, the goal that we have.
+那就是我们的目标。
+
+153
+00:06:56,895 --> 00:06:58,890
+And so, uh, we, sort of,
+所以，呃，我们，有点像，
+
+154
+00:06:58,890 --> 00:07:00,525
+ask ourselves why hasn't this happened?
+问问自己为什么不发生这种情况？
+
+155
+00:07:00,525 --> 00:07:01,740
+Why are we, you know,
+你知道，为什么我们
+
+156
+00:07:01,740 --> 00:07:03,430
+the first to think about, like,
+第一个想到的，比如，
+
+157
+00:07:03,430 --> 00:07:05,810
+trying to pre-train the entirety of the model,
+试图预先训练整个模型，
+
+158
+00:07:05,810 --> 00:07:07,370
+the encoders, and decoders,
+编码器和解码器，
+
+159
+00:07:07,370 --> 00:07:08,420
+and outputs, and everything.
+和输出，以及一切。
+
+160
+00:07:08,420 --> 00:07:12,740
+Uh, and I think part of it is that NLP requires a lot of different kinds of reasoning.
+呃，我认为部分原因是NLP需要很多不同的推理。
+
+161
+00:07:12,740 --> 00:07:14,420
+You've seen many of them already.
+你已经看过很多了。
+
+162
+00:07:14,420 --> 00:07:18,290
+You have some logical reasoning like 550 people in this room,
+你有一些逻辑推理，像这个房间里的550人，
+
+163
+00:07:18,290 --> 00:07:20,300
+25 leave, are there still people in the room,
+25日离开，房间里还有人，
+
+164
+00:07:20,300 --> 00:07:22,790
+and you logically can answer that question,
+你在逻辑上可以回答这个问题，
+
+165
+00:07:22,790 --> 00:07:25,930
+and you have lots of different kinds of linguistic and emotional reasoning,
+你有很多不同类型的语言和情感推理，
+
+166
+00:07:25,930 --> 00:07:27,470
+sentiment analysis, you know,
+情绪分析，你知道，
+
+167
+00:07:27,470 --> 00:07:30,140
+this is a typical Nicolas Cage movie and then you need to know that that's a
+这是典型的尼古拉斯凯奇电影，然后你需要知道这是一个
+
+168
+00:07:30,140 --> 00:07:33,590
+probably negative review unless you like Nicolas Cage movies.
+除非你喜欢Nicolas Cage的电影，否则可能会出现负面评论。
+
+169
+00:07:33,590 --> 00:07:36,470
+Um, no judgment. And, uh,
+嗯，没有判断力。而且，呃，
+
+170
+00:07:36,470 --> 00:07:38,180
+you know, visual types of reasoning and so on.
+你知道，视觉类型的推理等等。
+
+171
+00:07:38,180 --> 00:07:41,450
+And so I think partly because of that complexity in the beginning to feel,
+所以我认为部分是因为开始时的复杂感，
+
+172
+00:07:41,450 --> 00:07:46,580
+didn't really make much progress and now and then kind of separate it.
+并没有真正取得太大进展，现在又有点分开了。
+
+173
+00:07:46,580 --> 00:07:50,675
+And I think in some cases, kind of artificially separated into all these separate tasks,
+我认为在某些情况下，人为地分成所有这些单独的任务，
+
+174
+00:07:50,675 --> 00:07:52,340
+like you have named entity recognition,
+就像你已经命名实体识别，
+
+175
+00:07:52,340 --> 00:07:55,795
+part of speech tagging, and semantic role labeling and, and so on.
+词性标注，语义角色标注等等。
+
+176
+00:07:55,795 --> 00:07:58,560
+And, and in some ways- and it sounds kind of snarky but,
+并且，在某些方面 - 听起来有些讽刺，但是，
+
+177
+00:07:58,560 --> 00:07:59,990
+you know, it made a lot of sense at the time,
+你知道，它在当时很有意义，
+
+178
+00:07:59,990 --> 00:08:02,540
+and it allowed us to make a lot of progress in the community,
+它让我们在社区上取得了很大的进步，
+
+179
+00:08:02,540 --> 00:08:04,850
+but basically we started chasing these benchmarks,
+但基本上我们开始追逐这些基准，
+
+180
+00:08:04,850 --> 00:08:06,290
+and all these different communities, kind of,
+以及所有这些不同的社区，
+
+181
+00:08:06,290 --> 00:08:08,610
+started going off in their own ways.
+开始以自己的方式走了。
+
+182
+00:08:08,610 --> 00:08:10,320
+And we even have some communities that say,
+我们甚至有一些社区说，
+
+183
+00:08:10,320 --> 00:08:11,950
+"We do general question answering,
+“我们做一般问题回答，
+
+184
+00:08:11,950 --> 00:08:14,990
+and there's literally workshops on general question answering, and when I asked,
+这里有关于一般问答的研讨会，当我问到时，
+
+185
+00:08:14,990 --> 00:08:18,350
+uh, the organizers, "Can I ask your model what the sentiment is of this tweet?"
+呃，组织者，“我可以问你的模特这条推文的情绪是什么吗？”
+
+186
+00:08:18,350 --> 00:08:21,240
+They're like, "No, that's sentiment analysis. Go to that different workshop.
+他们就像是，“不，那是情感分析。去那个不同的工作室。
+
+187
+00:08:21,240 --> 00:08:22,515
+It's down, down the hall."
+它在大厅下面。“
+
+188
+00:08:22,515 --> 00:08:24,270
+But I'm like, "That's a- that's a question.
+但我想，“那是一个 - 这是一个问题。
+
+189
+00:08:24,270 --> 00:08:27,335
+Why can't you answer it in the general question answering workshop?"
+为什么你不能在一般的问答工作坊里回答呢？“
+
+190
+00:08:27,335 --> 00:08:29,940
+Um, and so a lot of people then say,
+嗯，所以很多人说，
+
+191
+00:08:29,940 --> 00:08:31,540
+"Well, if you want to work on more general stuff,
+“好吧，如果你想做更多的一般事情，
+
+192
+00:08:31,540 --> 00:08:33,860
+it has to be an unsupervised, kind of,
+它必须是无人监督的，
+
+193
+00:08:33,860 --> 00:08:36,695
+task and the, the feature will not be supervised."
+任务和，该功能将不受监督。“
+
+194
+00:08:36,695 --> 00:08:40,490
+I don't think NLP will be completely unsupervised,
+我认为NLP不会完全无人监督，
+
+195
+00:08:40,490 --> 00:08:42,830
+and we won't solve it, uh, completely unsupervised,
+我们不会解决它，呃，完全无人监督，
+
+196
+00:08:42,830 --> 00:08:45,410
+because in the end, language has a lot of supervision for people,
+因为最后语言对人有很多监督，
+
+197
+00:08:45,410 --> 00:08:49,020
+uh, and, uh, I think for, for systems also.
+呃，我想，对于系统来说也是如此。
+
+198
+00:08:49,020 --> 00:08:52,620
+Uh, and you won't, you know,
+呃，你不会，你知道，
+
+199
+00:08:52,620 --> 00:08:54,600
+if you have- there's a child and it's in a jungle,
+如果你有一个孩子，它在丛林中，
+
+200
+00:08:54,600 --> 00:08:57,290
+it will probably develop a pretty good visual cortex by itself,
+它本身可能会形成一个非常好的视觉皮层，
+
+201
+00:08:57,290 --> 00:08:59,365
+but it won't develop language by itself.
+但它本身不会发展语言。
+
+202
+00:08:59,365 --> 00:09:01,230
+And then- and then also, like,
+然后 - 然后也像，
+
+203
+00:09:01,230 --> 00:09:03,720
+I think if you'll just allow AI's to talk to one another,
+我想如果你只是允许AI与对方交谈，
+
+204
+00:09:03,720 --> 00:09:06,200
+it makes very little sense for them to try to come up with as
+对他们来说，尝试提出这个问题毫无意义
+
+205
+00:09:06,200 --> 00:09:09,140
+inefficient of a communication protocol as humans have with, you know,
+你知道，人类所拥有的通信协议效率低下
+
+206
+00:09:09,140 --> 00:09:13,970
+sequential processing of language because algorithms and computers could,
+因为算法和计算机可以顺序处理语言，
+
+207
+00:09:13,970 --> 00:09:16,070
+if there's no supervision of human language,
+如果没有人类语言的监督，
+
+208
+00:09:16,070 --> 00:09:19,455
+they could just communicate in much more efficient ways with one another.
+他们可以以更有效的方式彼此沟通。
+
+209
+00:09:19,455 --> 00:09:21,055
+So I think it's fairly clear,
+所以我觉得很清楚，
+
+210
+00:09:21,055 --> 00:09:24,490
+we need a lot of supervision, uh, in NLP.
+在NLP，我们需要很多监督。
+
+211
+00:09:24,490 --> 00:09:27,840
+And so basically, all of this has led us, uh,
+基本上，所有这些都导致了我们，呃，
+
+212
+00:09:27,840 --> 00:09:34,340
+to trying to think about a unified multitask model for a lot of different NLP tasks.
+尝试为许多不同的NLP任务考虑统一的多任务模型。
+
+213
+00:09:34,340 --> 00:09:36,515
+By the way, if you have any questions, just raise your hand.
+顺便说一句，如果您有任何疑问，请举手。
+
+214
+00:09:36,515 --> 00:09:39,110
+Okay, let's make this very interactive.
+好吧，让我们把它变得非常互动。
+
+215
+00:09:39,110 --> 00:09:42,555
+Um, basically, we want this unified model, uh,
+嗯，基本上，我们想要这个统一的模型，呃，
+
+216
+00:09:42,555 --> 00:09:45,570
+to decide how to transfer knowledge,
+决定如何转移知识，
+
+217
+00:09:45,570 --> 00:09:47,885
+uh, and not have it, sort of, be manually assigned.
+呃，没有，有点，手动分配。
+
+218
+00:09:47,885 --> 00:09:49,280
+Like in most cases,
+像在大多数情况下一样
+
+219
+00:09:49,280 --> 00:09:50,870
+when you assign your project you say, "Oh,
+当你分配你的项目时，你说：“哦，
+
+220
+00:09:50,870 --> 00:09:55,030
+well I know that named entity recognition part of speech tagging help each other.
+我知道命名实体识别部分语音标记相互帮助。
+
+221
+00:09:55,030 --> 00:09:56,870
+Because once you know something is a noun,
+因为一旦你知道什么是名词，
+
+222
+00:09:56,870 --> 00:10:00,730
+then it's more likely that it's also a named entity."
+那么它更可能也是一个命名实体。“
+
+223
+00:10:00,730 --> 00:10:05,090
+And in this case, we want to basically allow for the single unified model
+在这种情况下，我们希望基本上允许单一的统一模型
+
+224
+00:10:05,090 --> 00:10:09,890
+to know itself how to do domain adaptation and wha- how to share the weights,
+了解自己如何进行域适应，以及如何分享权重，
+
+225
+00:10:09,890 --> 00:10:12,650
+and that will hopefully then lead to a lot of,
+这将有希望导致很多，
+
+226
+00:10:12,650 --> 00:10:15,935
+uh, transfer learning and zero shot learning capabilities.
+呃，转移学习和零射击学习能力。
+
+227
+00:10:15,935 --> 00:10:19,100
+I also think that if we get to this, sort of,
+我也认为如果我们达到这个目的，
+
+228
+00:10:19,100 --> 00:10:23,265
+hard goal of having a single fa- single unified multitask model,
+拥有单一统一的多任务模型的艰难目标，
+
+229
+00:10:23,265 --> 00:10:27,140
+then we'll easy-  be able to more easily adapt it to
+那么我们将很容易 - 能够更容易地适应它
+
+230
+00:10:27,140 --> 00:10:31,085
+new tasks and we'll be also able to deploy it in production more quickly.
+新任务，我们也能够更快地在生产中部署它。
+
+231
+00:10:31,085 --> 00:10:32,405
+If nowadays you want to build
+如果你现在想要建立
+
+232
+00:10:32,405 --> 00:10:35,570
+a little squirrel detector and connect it to your sprinkler system,
+一个小松鼠探测器并将其连接到您的喷水灭火系统，
+
+233
+00:10:35,570 --> 00:10:37,895
+you can just download some off-the-shelf software,
+你可以下载一些现成的软件，
+
+234
+00:10:37,895 --> 00:10:40,200
+and it will basically, kind of, work.
+它基本上会有点工作。
+
+235
+00:10:40,200 --> 00:10:42,170
+That is not the case if you try to do
+如果你试图这样做，情况并非如此
+
+236
+00:10:42,170 --> 00:10:44,390
+a pretty complex language project where you
+你是一个非常复杂的语言项目
+
+237
+00:10:44,390 --> 00:10:46,955
+want to translate into some completely new language or,
+想翻译成一些全新的语言或者，
+
+238
+00:10:46,955 --> 00:10:50,240
+you know, analyze some website and then do something else afterwards.
+你知道，分析一些网站，然后再做一些其他事情。
+
+239
+00:10:50,240 --> 00:10:51,890
+So, uh, you also,
+所以，呃，你也是，
+
+240
+00:10:51,890 --> 00:10:56,370
+when you actually try to deploy and use these kinds of tools and companies,
+当你真正尝试部署和使用这些工具和公司时，
+
+241
+00:10:56,370 --> 00:10:59,075
+you'll realize that there are a lot of different kinds of groups.
+你会发现有很多种不同的群体。
+
+242
+00:10:59,075 --> 00:11:00,200
+There's the search group,
+有搜索组，
+
+243
+00:11:00,200 --> 00:11:01,310
+and the chatbot team,
+和聊天机器人团队，
+
+244
+00:11:01,310 --> 00:11:02,540
+and the translation team,
+和翻译团队，
+
+245
+00:11:02,540 --> 00:11:05,930
+and, uh, and the social sentiment analysis team,
+而且，呃，社交情绪分析团队，
+
+246
+00:11:05,930 --> 00:11:07,100
+and they all use different models,
+他们都使用不同的模型，
+
+247
+00:11:07,100 --> 00:11:08,390
+and they all deploy different models,
+他们都部署了不同的模型，
+
+248
+00:11:08,390 --> 00:11:10,850
+and they all have to build a lot of overhead into
+他们都必须建立大量的开销
+
+249
+00:11:10,850 --> 00:11:15,150
+the core of the- or around that core of an AI model.
+人工智能模型的核心 - 或围绕其核心。
+
+250
+00:11:15,150 --> 00:11:18,240
+So basically, um, lastly,
+所以基本上，嗯，最后，
+
+251
+00:11:18,240 --> 00:11:20,435
+it was, sort of, what we had with, with this dog.
+有点像我们用这只狗一样的东西。
+
+252
+00:11:20,435 --> 00:11:22,170
+I think that once we have this unified model,
+我想一旦我们拥有这个统一的模型，
+
+253
+00:11:22,170 --> 00:11:24,380
+it will also be a first step to being able to
+这也是能够迈出的第一步
+
+254
+00:11:24,380 --> 00:11:26,870
+then continually learn this and just have a single model that just
+然后不断学习这个，只有一个模型
+
+255
+00:11:26,870 --> 00:11:28,880
+gets better and better over time and starts
+随着时间的推移变得越来越好
+
+256
+00:11:28,880 --> 00:11:32,030
+to capture more and more of the complexity of language.
+捕捉越来越多的语言复杂性。
+
+257
+00:11:32,030 --> 00:11:33,980
+All right, any questions around, sort of,
+好的，任何问题，有点，
+
+258
+00:11:33,980 --> 00:11:37,560
+the motivation high level?
+动机高水平？
+
+259
+00:11:41,700 --> 00:11:44,860
+All right. So then, uh,
+行。那么，呃，
+
+260
+00:11:44,860 --> 00:11:48,370
+it's sort of the question, how do we actually make that happen?
+这是一个问题，我们如何实际实现这一目标？
+
+261
+00:11:48,370 --> 00:11:52,135
+And then we -- I first sort of sat down and looked at, like,
+然后我们 - 我第一次坐下来看着，就像，
+
+262
+00:11:52,135 --> 00:11:56,560
+the general sort of formats of all the tasks that you may experience in
+您可能遇到的所有任务的一般格式
+
+263
+00:11:56,560 --> 00:11:58,510
+this class and that NLP sort of has as a field in
+这个类和那个NLP类似于一个字段
+
+264
+00:11:58,510 --> 00:12:01,000
+general and I think they can broadly classified,
+一般而且我认为它们可以大致分类，
+
+265
+00:12:01,000 --> 00:12:03,100
+be classified into these three different categories.
+分为这三个不同的类别。
+
+266
+00:12:03,100 --> 00:12:04,900
+Sequence tagging, you already know.
+序列标记，你已经知道了。
+
+267
+00:12:04,900 --> 00:12:07,840
+Things like NER or aspect-specific sentiment or in
+像NER或特定方面的情绪或在
+
+268
+00:12:07,840 --> 00:12:12,250
+a specific context we want to classify if a word is positive or negative.
+如果一个词是正面的还是负面的，我们想要分类的特定背景。
+
+269
+00:12:12,250 --> 00:12:14,380
+Uh, and then text classification,
+呃，然后文字分类，
+
+270
+00:12:14,380 --> 00:12:17,290
+just a single label for the entire piece of text
+只是整个文本的一个标签
+
+271
+00:12:17,290 --> 00:12:20,335
+and then sequence the sequence a lot of different, you know,
+然后对序列进行排序很多不同，你知道，
+
+272
+00:12:20,335 --> 00:12:23,575
+problems fall into that and I actually personally love, uh,
+问题属于那个，我个人真的爱，呃，
+
+273
+00:12:23,575 --> 00:12:27,490
+these three particular tasks: machine translation, summarization, question answering.
+这三个特殊任务：机器翻译，摘要，问答。
+
+274
+00:12:27,490 --> 00:12:31,450
+Because they are immediately useful that you don't have to explain to somebody,
+因为它们是立即有用的，你不必向某人解释，
+
+275
+00:12:31,450 --> 00:12:34,195
+"Oh, but why do you need the semantic role labeller or parser? "
+“哦，但你为什么需要语义角色贴标机或解析器呢？”
+
+276
+00:12:34,195 --> 00:12:36,490
+If you're a layman and you, you know,
+如果你是一个外行而你，你知道，
+
+277
+00:12:36,490 --> 00:12:38,620
+on the Internet you understand immediately why it's
+在互联网上，你立即明白为什么会这样
+
+278
+00:12:38,620 --> 00:12:41,140
+useful to do summarization, question answering,
+有用的做摘要，问答，
+
+279
+00:12:41,140 --> 00:12:43,240
+or translation and an improvement in
+或翻译和改进
+
+280
+00:12:43,240 --> 00:12:46,840
+those tasks kind of immediately translates in- into better products,
+那些任务可以立即转化为更好的产品，
+
+281
+00:12:46,840 --> 00:12:51,430
+uh, and people being able to communicate better and more efficiently with language.
+呃，人们能够用语言更好，更有效地沟通。
+
+282
+00:12:51,430 --> 00:12:57,400
+So, that, uh, kind of analysis led us to think,
+所以，呃，那种分析让我们思考，
+
+283
+00:12:57,400 --> 00:13:01,030
+uh, about these what I call three equivalent supertasks of NLP.
+呃，关于这些我称之为NLP的三个等价超级算法。
+
+284
+00:13:01,030 --> 00:13:03,910
+Uh, and basically they are
+呃，基本上他们是
+
+285
+00:13:03,910 --> 00:13:07,780
+language modeling, question answer now- question answering and dialogue systems.
+语言建模，现在问题答案 - 问题回答和对话系统。
+
+286
+00:13:07,780 --> 00:13:11,410
+Uh, language modeling, basically trying to predin- predict the next word,
+呃，语言建模，基本上试图预测下一个词，
+
+287
+00:13:11,410 --> 00:13:12,430
+you've already worked on that.
+你已经做过那个了。
+
+288
+00:13:12,430 --> 00:13:18,775
+Uh, and usually it's only used to rescore or basically to pre-train these days.
+呃，通常它只用于重新训练或基本上用于训练这些天。
+
+289
+00:13:18,775 --> 00:13:22,645
+But really if you ask me a question and then you try to predict the next couple of words,
+但是，如果你问我一个问题，然后你试着预测接下来的几个字，
+
+290
+00:13:22,645 --> 00:13:25,435
+then that is also language modeling
+那也是语言建模
+
+291
+00:13:25,435 --> 00:13:28,810
+and if you're able to predict the next couple of words after a question, like,
+如果你能够在一个问题之后预测下几个单词，比如
+
+292
+00:13:28,810 --> 00:13:32,350
+what were the named entities in the sentence and then you just generate, you know,
+在句子中命名的实体是什么，然后你只是生成，你知道，
+
+293
+00:13:32,350 --> 00:13:34,120
+Dresden was a location,
+德累斯顿是一个位置，
+
+294
+00:13:34,120 --> 00:13:36,430
+Richard was a person and whatnot.
+理查德是个人而不是。
+
+295
+00:13:36,430 --> 00:13:41,140
+Uh, then you can kind of cast almost all of these tasks into language modeling.
+呃，那么你可以将几乎所有这些任务都投入到语言建模中。
+
+296
+00:13:41,140 --> 00:13:42,580
+Uh, similarly question answering,
+呃，同样问题回答，
+
+297
+00:13:42,580 --> 00:13:44,080
+you can ask any kind of question,
+你可以问任何问题，
+
+298
+00:13:44,080 --> 00:13:45,430
+what is the translation,
+什么是翻译，
+
+299
+00:13:45,430 --> 00:13:48,115
+what's the summary, uh, and so on,
+什么是摘要，呃，等等，
+
+300
+00:13:48,115 --> 00:13:50,770
+and then with dialogue right now it's kind of tricky because there are
+然后现在进行对话有点棘手，因为有
+
+301
+00:13:50,770 --> 00:13:55,930
+no really good dialogue datasets out there and a lot of times you want some interaction,
+没有真正好的对话数据集，很多时候你想要一些互动，
+
+302
+00:13:55,930 --> 00:14:00,010
+you have to run user studies and most of the existing NLP task would
+你必须运行用户研究和大多数现有的NLP任务
+
+303
+00:14:00,010 --> 00:14:04,360
+basically be pretty short one-step dialogues like what are the named entity tags,
+基本上是很短的一步对话，比如什么是命名的实体标签，
+
+304
+00:14:04,360 --> 00:14:05,560
+and you give them and that's it.
+你给他们，就是这样。
+
+305
+00:14:05,560 --> 00:14:09,850
+So it's a little bit overkill and because of that we basically converged,
+所以它有点矫枉过正，因为我们基本上融合了，
+
+306
+00:14:09,850 --> 00:14:13,525
+uh, on question answering as our main formalism.
+呃，问题回答是我们的主要形式主义。
+
+307
+00:14:13,525 --> 00:14:18,355
+And here is now an overview of the 10 different tasks that we have,
+现在，我们概述了我们拥有的10项不同任务，
+
+308
+00:14:18,355 --> 00:14:21,610
+uh, and we cast all of them as question answering.
+呃，我们把所有这些作为问题回答。
+
+309
+00:14:21,610 --> 00:14:25,120
+These are literally the tr- the training,
+这些实际上是训练，
+
+310
+00:14:25,120 --> 00:14:27,700
+uh, the format of the training dataset, uh,
+呃，训练数据集的格式，呃，
+
+311
+00:14:27,700 --> 00:14:30,880
+and eventually also the way we formulate
+最终也是我们制定的方式
+
+312
+00:14:30,880 --> 00:14:35,530
+the test set and you'll see basically for every single task,
+测试集，你会看到基本上每一项任务，
+
+313
+00:14:35,530 --> 00:14:38,605
+you have a context as some kind of document.
+你有一个上下文作为某种文档。
+
+314
+00:14:38,605 --> 00:14:39,700
+It could be a Wikipedia article,
+它可能是维基百科的文章，
+
+315
+00:14:39,700 --> 00:14:41,500
+it could be a tweet, it could be a longer document,
+它可能是一条推文，它可能是一个更长的文件，
+
+316
+00:14:41,500 --> 00:14:45,550
+whatever, and you ask a question about it and you want to generate an answer.
+无论如何，你问一个关于它的问题，你想要产生一个答案。
+
+317
+00:14:45,550 --> 00:14:49,090
+And I'm actually -- I'm curious if you can think of any task in NLP
+我实际上 - 如果你能想到NLP中的任何任务，我很好奇
+
+318
+00:14:49,090 --> 00:14:52,795
+that couldn't be formulated in this kind of structure.
+这种结构无法制定。
+
+319
+00:14:52,795 --> 00:14:55,720
+Uh, so, let's go over some of these.
+呃，那么，让我们来看看其中的一些。
+
+320
+00:14:55,720 --> 00:14:57,865
+Uh, the first one is sort of the standard,
+呃，第一个是标准的，
+
+321
+00:14:57,865 --> 00:15:00,145
+uh, task that all- you're all familiar with now.
+呃，任务你们现在都熟悉了。
+
+322
+00:15:00,145 --> 00:15:02,440
+The SQuAD, Stanford Question Answering Dataset.
+SQUAD，斯坦福问题答疑数据集。
+
+323
+00:15:02,440 --> 00:15:06,880
+Uh, where the answer is essentially a phrase somewhere in the context.
+呃，答案基本上是上下文中的一个短语。
+
+324
+00:15:06,880 --> 00:15:12,265
+But then, uh, the second one is something that you would never see in most,
+但是，呃，第二个是大多数人都看不到的东西，
+
+325
+00:15:12,265 --> 00:15:16,900
+uh, generalized, uh, question answering workshops and that is, uh,
+呃，概括的，呃，问答工作坊，也就是说，呃，
+
+326
+00:15:16,900 --> 00:15:20,560
+having a context of the single sentence asking what is the translation from
+有一个单句的上下文询问是什么翻译
+
+327
+00:15:20,560 --> 00:15:25,090
+English into German and the output is again a sequence of words but in this case,
+英语到德语，输出又是一系列单词，但在这种情况下，
+
+328
+00:15:25,090 --> 00:15:26,500
+and we color them differently here.
+我们在这里为它们着色不同
+
+329
+00:15:26,500 --> 00:15:31,870
+Uh, this is blue because all these words are basically not in the context and not in
+呃，这是蓝色的，因为所有这些词基本上都不在上下文中而不在
+
+330
+00:15:31,870 --> 00:15:35,110
+the question and we will just generate them
+问题，我们将生成它们
+
+331
+00:15:35,110 --> 00:15:39,280
+with a standard softmax to basically answer this question.
+用标准的softmax来基本回答这个问题。
+
+332
+00:15:39,280 --> 00:15:43,390
+We can also ask what is the summary and you can see that those
+我们也可以问一下摘要是什么，你可以看到那些
+
+333
+00:15:43,390 --> 00:15:47,290
+two in some ways is artificial to make them into a natural language question.
+在某些方面，两个是人为的，使它们成为一个自然语言问题。
+
+334
+00:15:47,290 --> 00:15:51,250
+You could just say translate or summarize and this is just like
+你可以说翻译或总结，这就像
+
+335
+00:15:51,250 --> 00:15:56,140
+one kind of task token in your network but actually half of these tasks.
+网络中的一种任务令牌，但实际上是这些任务的一半。
+
+336
+00:15:56,140 --> 00:16:02,305
+It makes sense because the question also has ac- is different for every example.
+这是有道理的，因为每个例子的问题也都有所不同。
+
+337
+00:16:02,305 --> 00:16:06,040
+So this one here is natural language inference, NLI, uh,
+所以这里的这个是自然语言推理，NLI，呃，
+
+338
+00:16:06,040 --> 00:16:10,920
+She covered also where we want to ask whether two sentences entail each other,
+她还介绍了我们想问两个句子是否相互衔接的地方，
+
+339
+00:16:10,920 --> 00:16:14,810
+contradict each other or there's some neutral relationship between them.
+相互矛盾或者它们之间存在一些中立的关系。
+
+340
+00:16:14,810 --> 00:16:16,900
+You've seen a lot of sentiment.
+你已经看到了很多情绪。
+
+341
+00:16:16,900 --> 00:16:18,580
+And this here is kind of important.
+这在这里很重要。
+
+342
+00:16:18,580 --> 00:16:22,600
+We actually asked is this sentence positive or negative versus just what is the sentiment
+我们实际上问的是这句话是积极的还是消极的，而不是什么是情绪
+
+343
+00:16:22,600 --> 00:16:27,745
+and what- why that is important is that you see here in green,
+什么 - 为什么重要的是你在这里看到绿色，
+
+344
+00:16:27,745 --> 00:16:30,760
+this answer here actually comes from
+这里的答案实际上来自于
+
+345
+00:16:30,760 --> 00:16:34,380
+a word into question and if we formulate it that way,
+一句话有问题，如果我们这样表达，
+
+346
+00:16:34,380 --> 00:16:39,330
+we can eventually do zero-shot learning where we ask a new question that was
+我们最终可以做零射击学习，我们会问一个新的问题
+
+347
+00:16:39,330 --> 00:16:44,155
+never asked before for a new set of labels and magically, in some cases,
+从来没有问过一套新标签，在某些情况下，神奇地，
+
+348
+00:16:44,155 --> 00:16:46,180
+it still actually works and we'll, you know,
+它仍然有效，我们会，你知道，
+
+349
+00:16:46,180 --> 00:16:50,500
+ask que- we can ask questions like is this story happy or sad and it will still
+问问 - 我们可以提出这样的问题，比如这个故事是幸福的还是悲伤的，它仍然存在
+
+350
+00:16:50,500 --> 00:16:52,120
+give us an answer even though we've never given
+即使我们从未给过，也给我们一个答案
+
+351
+00:16:52,120 --> 00:16:55,195
+it a trained dataset of a bunch of happy and sad stories.
+它是一系列快乐和悲伤故事的训练有素的数据集。
+
+352
+00:16:55,195 --> 00:16:59,740
+So, it's kind of zero-shot classification that you get to in
+所以，这是你所接受的零射击分类
+
+353
+00:16:59,740 --> 00:17:02,230
+some cases if you formulate your questions in a way
+在某些情况下，如果您以某种方式提出问题
+
+354
+00:17:02,230 --> 00:17:05,270
+that the answer is part as a word in the question.
+答案是问题的一部分。
+
+355
+00:17:05,270 --> 00:17:08,340
+Then we have semantic role labeling here.
+然后我们在这里有语义角色标记。
+
+356
+00:17:08,340 --> 00:17:15,540
+So what has something experienced, kind of a random weird question.
+那么有什么经验，一种随机奇怪的问题。
+
+357
+00:17:15,540 --> 00:17:18,450
+Then we have a zero-shot relation extraction who is
+然后我们有一个零射击关系提取
+
+358
+00:17:18,450 --> 00:17:22,255
+the illustrator of Cycle of the Werewolf,
+狼人骑行的插画家，
+
+359
+00:17:22,255 --> 00:17:24,580
+we also have some dialogue state tracking.
+我们还有一些对话状态跟踪。
+
+360
+00:17:24,580 --> 00:17:28,615
+What is the current state in- in a dialogue and the context just keeps on
+对话中的当前状态是什么，上下文一直在继续
+
+361
+00:17:28,615 --> 00:17:33,985
+growing with the dialogue and then we also have SQL,
+与对话一起成长，然后我们也有SQL，
+
+362
+00:17:33,985 --> 00:17:37,690
+Wiki SQL translation tasks but not translating into
+Wiki SQL翻译任务但没有翻译成
+
+363
+00:17:37,690 --> 00:17:42,025
+another natural language translating into a SQL database query.
+另一种自然语言转换为SQL数据库查询。
+
+364
+00:17:42,025 --> 00:17:43,720
+It's actually a super-helpful task.
+这实际上是一项非常有用的任务。
+
+365
+00:17:43,720 --> 00:17:47,830
+There's a, you know, a lot of data out there that is stored in databases.
+你知道，有很多数据存储在数据库中。
+
+366
+00:17:47,830 --> 00:17:50,440
+If you can access it without having to ask
+如果你可以访问它而不必询问
+
+367
+00:17:50,440 --> 00:17:53,380
+somebody who knows how to program SQL it will make
+有人知道如何编程SQL会有所作为
+
+368
+00:17:53,380 --> 00:17:56,200
+that data available to a lot more people so
+这些数据可供更多人使用
+
+369
+00:17:56,200 --> 00:17:59,260
+they can analyze it and like business analytics and so on.
+他们可以分析它，喜欢商业分析等等。
+
+370
+00:17:59,260 --> 00:18:02,740
+And then here, Winograd Schemas and anaphora resolution.
+然后在这里，Winograd Schemas和anaphora决议。
+
+371
+00:18:02,740 --> 00:18:06,100
+Uh, some people call this kind of common sense reasoning but it's kind of,
+呃，有些人称这种常识推理，但它有点像，
+
+372
+00:18:06,100 --> 00:18:10,225
+you know, mostly just anaphora resolution trying to understand in this context.
+你知道，大多数只是在这种情况下试图理解的回指分辨率。
+
+373
+00:18:10,225 --> 00:18:12,385
+Uh, what -- who's, you know,
+呃，什么 - 谁，你知道，
+
+374
+00:18:12,385 --> 00:18:15,550
+uh, the word like who had given help,
+呃，像是谁给了帮助，
+
+375
+00:18:15,550 --> 00:18:19,030
+was it Susan or Joanne, and then based on this context,
+是苏珊还是乔安妮，然后根据这个背景，
+
+376
+00:18:19,030 --> 00:18:22,900
+you can kind of should be able to figure that out and again here,
+你可以在这里一次又一次地想到这一点，
+
+377
+00:18:22,900 --> 00:18:26,860
+the question is different for every single example. All right, yeah?
+每个例子的问题都不同。好的，是吗？
+
+378
+00:18:26,860 --> 00:18:29,890
+When you're testing it -- like when you ask,
+当你测试它时 - 就像你问的那样，
+
+379
+00:18:29,890 --> 00:18:31,795
+is this sentence positive or negative,
+这句话是积极的还是消极的，
+
+380
+00:18:31,795 --> 00:18:35,290
+does it sometimes, like, [inaudible]?
+有时会像[听不清]那样吗？
+
+381
+00:18:35,290 --> 00:18:37,765
+Great question. So, the question is when I ask,
+好问题。所以，问题是我什么时候问，
+
+382
+00:18:37,765 --> 00:18:40,510
+is this sentence positive or negative will it sometimes eventually
+这句话有时候是正面还是负面的
+
+383
+00:18:40,510 --> 00:18:43,915
+accidentally switch to a different one of the task and, uh,
+不小心切换到另一个任务，呃，
+
+384
+00:18:43,915 --> 00:18:47,110
+we actually have a slide on that and the answer is it's surprisingly good at
+我们实际上有一个幻灯片，答案是令人惊讶的擅长
+
+385
+00:18:47,110 --> 00:18:52,780
+knowing how to go about doing the task and where to get the answer where it's from.
+知道如何完成任务以及从哪里获得答案。
+
+386
+00:18:52,780 --> 00:18:56,860
+Um, and yeah, they'll make more sense in a couple of slides once we go over the model.
+嗯，是的，一旦我们越过模型，他们会在几张幻灯片中更有意义。
+
+387
+00:18:56,860 --> 00:18:58,555
+Any other questions about,
+还有其他任何问题，
+
+388
+00:18:58,555 --> 00:19:00,820
+uh, the question answering formalism?
+呃，回答形式主义的问题？
+
+389
+00:19:00,820 --> 00:19:04,930
+Are you able to formulate text generation in the question answer format as well?
+您是否能够以问答形式制定文本生成？
+
+390
+00:19:04,930 --> 00:19:06,685
+Like, tell me a story.
+比如，告诉我一个故事。
+
+391
+00:19:06,685 --> 00:19:10,195
+Good question. So can we do text generation, uh,
+好问题。那么我们可以做文字生成，呃，
+
+392
+00:19:10,195 --> 00:19:11,800
+like tell me a story, uh,
+比如告诉我一个故事，呃，
+
+393
+00:19:11,800 --> 00:19:14,590
+from a random kind of -- or in this kind of formalism.
+从一种随机的 - 或在这种形式主义。
+
+394
+00:19:14,590 --> 00:19:19,450
+Uh, we don't have that as a task because largely it's really hard to evaluate.
+呃，我们没有把它作为一项任务，因为在很大程度上它很难评估。
+
+395
+00:19:19,450 --> 00:19:22,120
+It'll tell you some random stuff and then is that a good story or not,
+它会告诉你一些随机的东西然后是一个好故事，
+
+396
+00:19:22,120 --> 00:19:24,325
+is it grammatical, you have to come up with a lot of,
+这是语法，你必须拿出很多，
+
+397
+00:19:24,325 --> 00:19:25,750
+uh, sort of, uh,
+呃，有点，呃，
+
+398
+00:19:25,750 --> 00:19:28,420
+evaluation metrics which we actually are doing for
+我们实际上正在做的评估指标
+
+399
+00:19:28,420 --> 00:19:31,330
+some of the dialogue systems and in case of dialogue,
+一些对话系统，如果是对话，
+
+400
+00:19:31,330 --> 00:19:33,280
+why does -- why are they equivalent because
+为什么 - 为什么它们相同，因为
+
+401
+00:19:33,280 --> 00:19:36,160
+the context can just keep on growing and every time, uh,
+上下文可以继续增长，每次，呃，
+
+402
+00:19:36,160 --> 00:19:38,395
+the user said something, uh,
+用户说了些什么，呃，
+
+403
+00:19:38,395 --> 00:19:43,525
+you basically try to then predict the next answer in that dialogue.
+你基本上试着预测那个对话中的下一个答案。
+
+404
+00:19:43,525 --> 00:19:48,700
+And so I think you could very easily [NOISE] use this to generate texts.
+所以我认为你很容易[噪音]使用它来生成文本。
+
+405
+00:19:48,700 --> 00:19:51,220
+Uh, you basically just ask -- tell it like what is, you know,
+呃，你基本上只是问 - 告诉它是什么，你知道，
+
+406
+00:19:51,220 --> 00:19:54,490
+what's a good ending of the story and you maybe start the context with like
+什么是故事的好结局，你可能会开始这样的背景
+
+407
+00:19:54,490 --> 00:19:58,420
+two or three words and then you ask the model to generate more and more words,
+两三个单词，然后你要求模型生成越来越多的单词，
+
+408
+00:19:58,420 --> 00:20:01,975
+uh, in the form of this network I'll describe in a second. Yeah?
+呃，在这个网络的形式，我将在一秒钟内描述。是吗？
+
+409
+00:20:01,975 --> 00:20:04,720
+I was wondering like, uh, when you're training
+我想知道，呃，当你训练的时候
+
+410
+00:20:04,720 --> 00:20:07,795
+it and you're trying to research like a new task.
+它和你正在尝试像新任务一样研究。
+
+411
+00:20:07,795 --> 00:20:11,470
+Uh, does it like learn with less data?
+呃，是否喜欢用更少的数据学习？
+
+412
+00:20:11,470 --> 00:20:14,320
+That is an amazingly thoughtful question
+这是一个非常有思想的问题
+
+413
+00:20:14,320 --> 00:20:16,930
+and it's- it's so important we'll have a bunch of slides on it.
+它是如此重要，我们将有一堆幻灯片。
+
+414
+00:20:16,930 --> 00:20:20,980
+So maybe we'll- we'll go -- we'll continue and we'll get to that question, uh,
+所以也许我们 - 我们会去 - 我们会继续，我们会回答这个问题，呃，
+
+415
+00:20:20,980 --> 00:20:25,075
+in a lot of detail because it's sort of why we're doing it and, the short answer is yes.
+在很多细节上，因为这就是为什么我们这样做，简短的回答是肯定的。
+
+416
+00:20:25,075 --> 00:20:27,855
+But we'll get to more details. All right.
+但我们会得到更多细节。行。
+
+417
+00:20:27,855 --> 00:20:30,210
+So these are basically the 10 tasks.
+所以这些基本上就是10个任务。
+
+418
+00:20:30,210 --> 00:20:33,970
+Uh, and again this is the actual format for it.
+呃，这又是它的实际格式。
+
+419
+00:20:33,970 --> 00:20:35,890
+So if you have a problem,
+所以，如果你有问题，
+
+420
+00:20:35,890 --> 00:20:37,810
+and you can cast it in this format, uh,
+你可以用这种格式投射它，呃，
+
+421
+00:20:37,810 --> 00:20:40,630
+you can just take, uh, the open source code and run it and,
+你可以拿开源代码然后运行它，
+
+422
+00:20:40,630 --> 00:20:42,025
+uh, it'll- it'll work.
+呃，它会工作的。
+
+423
+00:20:42,025 --> 00:20:45,010
+And so when you kind of analyze and think about what we've done here.
+所以，当你分析并思考我们在这里所做的事情时。
+
+424
+00:20:45,010 --> 00:20:47,680
+In some ways, we've taken the tasks that
+在某些方面，我们已经完成了任务
+
+425
+00:20:47,680 --> 00:20:50,950
+usually is kind of in your head but it's not given to the model.
+通常是你的头脑，但它没有给模型。
+
+426
+00:20:50,950 --> 00:20:54,730
+The model is just given an input x and an output y in almost all of
+几乎所有的模型都给出了输入x和输出y
+
+427
+00:20:54,730 --> 00:21:00,760
+the supervised systems and instead we're actually including the task in the inputs,
+监督系统而不是我们实际上将任务包括在输入中，
+
+428
+00:21:00,760 --> 00:21:05,950
+uh, in the set of inputs to the model. So you can kind of call this meta-supervised learning.
+呃，在模型的输入集合中。所以你可以称之为元监督学习。
+
+429
+00:21:05,950 --> 00:21:08,260
+So again the question, uh,
+那么问题，呃，
+
+430
+00:21:08,260 --> 00:21:11,140
+is kind of our task definition for each of these different tasks.
+是我们为这些不同任务中的每一个定义的任务。
+
+431
+00:21:11,140 --> 00:21:13,570
+The model has to figure out itself when to ask the question
+该模型必须弄清楚何时提问
+
+432
+00:21:13,570 --> 00:21:16,180
+that way it can also figure out itself when to
+这样它也可以自己搞清楚什么时候
+
+433
+00:21:16,180 --> 00:21:21,565
+transfer knowledge from these other tasks and y is again just the answer.
+从这些其他任务转移知识，y再次只是答案。
+
+434
+00:21:21,565 --> 00:21:25,330
+So, in some ways it's meta-supervised learning and I'm quite excited
+所以，在某种程度上它是元监督学习，我很兴奋
+
+435
+00:21:25,330 --> 00:21:29,560
+because once you allow the task to be given to the model as input,
+因为一旦您允许将任务作为输入提供给模型，
+
+436
+00:21:29,560 --> 00:21:32,170
+it can kind of decide itself how to go about
+它可以决定自己如何去做
+
+437
+00:21:32,170 --> 00:21:35,020
+solving that particular task and now you can learn,
+解决这个特定的任务，现在你可以学习，
+
+438
+00:21:35,020 --> 00:21:36,835
+uh, a lot more powerful models.
+呃，更强大的模特。
+
+439
+00:21:36,835 --> 00:21:39,310
+So once we had the dataset,
+所以，一旦我们有了数据集，
+
+440
+00:21:39,310 --> 00:21:42,265
+we thought "Okay, how do we now solve this problem?"
+我们想“好吧，我们现在如何解决这个问题？”
+
+441
+00:21:42,265 --> 00:21:43,960
+The simplest way is you could just say, "Well,
+最简单的方法是你可以说，“嗯，
+
+442
+00:21:43,960 --> 00:21:45,010
+I have a big if statement,
+我有一个很大的if声明，
+
+443
+00:21:45,010 --> 00:21:47,260
+I have a classifier in the beginning and then I classify.
+我在开始时有一个分类器然后我分类。
+
+444
+00:21:47,260 --> 00:21:49,225
+If this is a machine translation task,
+如果这是机器翻译任务，
+
+445
+00:21:49,225 --> 00:21:51,015
+then run my machine translation model."
+然后运行我的机器翻译模型。“
+
+446
+00:21:51,015 --> 00:21:54,300
+And in general, in Python that would still be just like one big python,
+一般来说，在Python中它仍然就像一个大蟒蛇，
+
+447
+00:21:54,300 --> 00:21:56,430
+uh, model with a bunch of if statements, right?
+呃，带有一堆if语句的模型，对吧？
+
+448
+00:21:56,430 --> 00:21:58,770
+And that's not the goal because then we wouldn't get to any of
+这不是目标，因为那时我们不会达到任何目标
+
+449
+00:21:58,770 --> 00:22:02,195
+the transfer learning and zero-shot capabilities that we're hoping for.
+我们希望的转学和零射击能力。
+
+450
+00:22:02,195 --> 00:22:07,630
+So [NOISE] we want to have the model wanted
+所以[NOISE]我们希望得到所需的模型
+
+451
+00:22:07,630 --> 00:22:10,105
+to have the capability to internally adjust
+有能力进行内部调整
+
+452
+00:22:10,105 --> 00:22:13,880
+to these different tasks and make these decisions itself.
+这些不同的任务，并自己做出这些决定。
+
+453
+00:22:15,360 --> 00:22:18,490
+And basically, all of those considerations and all
+基本上，所有这些考虑因素和所有
+
+454
+00:22:18,490 --> 00:22:20,620
+of those thoughts led us, uh, to this model.
+这些想法引导我们，呃，这个模型。
+
+455
+00:22:20,620 --> 00:22:22,120
+So before I go, uh,
+所以在我走之前，呃，
+
+456
+00:22:22,120 --> 00:22:23,455
+into a little bit more detail.
+更详细一点。
+
+457
+00:22:23,455 --> 00:22:25,825
+I'll just like sort of give you the high-level overview.
+我只想给你一个高级概述。
+
+458
+00:22:25,825 --> 00:22:27,925
+Again, you start with the context.
+再次，您从上下文开始。
+
+459
+00:22:27,925 --> 00:22:30,715
+Um, you start- you ask a question about, uh,
+嗯，你开始 - 你问一个问题，呃，
+
+460
+00:22:30,715 --> 00:22:33,700
+that context document, and then we're going to generate,
+那个上下文文档，然后我们要生成，
+
+461
+00:22:33,700 --> 00:22:38,560
+uh, the answer one word at a time by either pointing to the context,
+呃，通过指向上下文，一次一个字的答案，
+
+462
+00:22:38,560 --> 00:22:40,045
+and you've had pointers already, right?
+你已经有了指针，对吧？
+
+463
+00:22:40,045 --> 00:22:44,035
+Pointer networks, all that? Great. Um, pointing to a question word,
+指针网络，这一切？大。嗯，指着一个问题词，
+
+464
+00:22:44,035 --> 00:22:48,190
+or choosing a word from an external vocabulary with your standard softmax classifier.
+或使用标准softmax分类器从外部词汇表中选择一个单词。
+
+465
+00:22:48,190 --> 00:22:52,630
+Uh, and we'll have a pointer switch mechanism that will kind
+呃，我们将有一个指针切换机制
+
+466
+00:22:52,630 --> 00:22:57,415
+of choose how much to weight [NOISE] each of these three generation mechanisms.
+选择这三种机制中每一种的重量[NOISE]。
+
+467
+00:22:57,415 --> 00:23:00,760
+So, uh, let's dig into a little bit into this model.
+所以，呃，让我们深入了解一下这个模型。
+
+468
+00:23:00,760 --> 00:23:04,600
+Fortunately, uh, in some ways it's kind of just taking the best, uh,
+幸运的是，呃，在某些方面它只是采取最好的，呃，
+
+469
+00:23:04,600 --> 00:23:09,160
+of the current sort of the state of the art techniques and putting them together in a way,
+当前那种最先进的技术并将它们组合在一起，
+
+470
+00:23:09,160 --> 00:23:11,560
+uh, that- that generalize well enough.
+呃，那个 - 足够概括。
+
+471
+00:23:11,560 --> 00:23:14,140
+Uh, you can look at all the code on decanlp.com,
+呃，你可以查看decanlp.com上的所有代码，
+
+472
+00:23:14,140 --> 00:23:16,870
+[NOISE] it has like thousands of, uh,
+[NOISE]它有成千上万的，呃，
+
+473
+00:23:16,870 --> 00:23:20,400
+stars and, uh, and forks and stuff combined, uh,
+明星，呃，叉子和东西结合在一起，呃，
+
+474
+00:23:20,400 --> 00:23:21,795
+and you can, you know,
+你可以，你知道，
+
+475
+00:23:21,795 --> 00:23:24,180
+basically run everything, uh,
+基本上运行一切，呃，
+
+476
+00:23:24,180 --> 00:23:29,755
+in this, uh, on these experiments with just one command.
+在这个，呃，只用一个命令进行这些实验。
+
+477
+00:23:29,755 --> 00:23:33,610
+It'll double, you get all the datasets and everything and- and run everything,
+它会加倍，你得到所有数据集和所有东西 - 并运行一切，
+
+478
+00:23:33,610 --> 00:23:36,340
+you can really explore what it looks like but let's- let's
+你可以真正探索它的样子，但让我们来吧
+
+479
+00:23:36,340 --> 00:23:39,370
+dive a little bit into the details of what this model told us.
+深入了解这个模型告诉我们的细节。
+
+480
+00:23:39,370 --> 00:23:41,065
+In some ways again, it just kind of takes
+在某些方面，它只是需要
+
+481
+00:23:41,065 --> 00:23:43,870
+all the best ingredients from deep learning [NOISE] NLP,
+所有最好的成分来自深度学习[NOISE] NLP，
+
+482
+00:23:43,870 --> 00:23:48,490
+most of which you've already learned about and puts them together in a reasonable way.
+大多数你已经了解并以合理的方式将它们组合在一起。
+
+483
+00:23:48,490 --> 00:23:50,470
+So we start with fixed GloVe embeddings.
+所以我们从固定的GloVe嵌入开始。
+
+484
+00:23:50,470 --> 00:23:52,630
+Eventually, we'll- we updated, uh,
+最后，我们 - 我们更新了，呃，
+
+485
+00:23:52,630 --> 00:23:54,730
+the embeddings to CoVe embeddings, uh,
+嵌入到CoVe嵌入中，呃，
+
+486
+00:23:54,730 --> 00:23:57,715
+and probably it'll work even better if you update them to BERT embeddings.
+如果你把它们更新为BERT嵌入，它可能会更好。
+
+487
+00:23:57,715 --> 00:24:00,820
+Uh, but at some point we kind of have to move on and do other things.
+呃，但在某些时候我们必须继续前进并做其他事情。
+
+488
+00:24:00,820 --> 00:24:03,460
+Uh, but basically, you have a fixed set of word vectors,
+呃，但基本上，你有一套固定的单词向量，
+
+489
+00:24:03,460 --> 00:24:05,860
+and that is kind of important because in some of these,
+这有点重要，因为在其中一些中，
+
+490
+00:24:05,860 --> 00:24:08,545
+uh, data sets, they're much smaller than others.
+呃，数据集，它们比其他人小得多。
+
+491
+00:24:08,545 --> 00:24:10,360
+Uh, and as you know from SQuAD,
+呃，正如你从SQUAD所知，
+
+492
+00:24:10,360 --> 00:24:12,580
+if you actually backpropagate into the word vectors,
+如果你真的反向传播到单词向量，
+
+493
+00:24:12,580 --> 00:24:14,680
+you just do really, really well on your trained dataset,
+你只是在训练有素的数据集上做得非常好，
+
+494
+00:24:14,680 --> 00:24:18,310
+but then you won't generalize because of most of the [NOISE] text,
+但是由于大多数[NOISE]文本，你不会概括，
+
+495
+00:24:18,310 --> 00:24:21,430
+uh, test documents will include words you've never seen before.
+呃，测试文件将包括你以前从未见过的单词。
+
+496
+00:24:21,430 --> 00:24:24,640
+So if you change all the word vectors during training, uh,
+所以如果你在训练期间改变所有的单词向量，呃，
+
+497
+00:24:24,640 --> 00:24:28,300
+it won't- it won't work very well at test time and won't generalize the unseen words.
+它不会 - 它在测试时不会很好地工作，也不会概括看不见的单词。
+
+498
+00:24:28,300 --> 00:24:30,355
+So, uh, fixed GloVe embeddings,
+那么，嗯，固定GloVe嵌入，
+
+499
+00:24:30,355 --> 00:24:31,990
+if you don't have word vectors, uh,
+如果你没有单词向量，呃，
+
+500
+00:24:31,990 --> 00:24:35,140
+for unseen words, we also have character n-gram embeddings.
+对于看不见的单词，我们也有字符n-gram嵌入。
+
+501
+00:24:35,140 --> 00:24:37,870
+Then we pipe them through a simple linear layer,
+然后我们通过一个简单的线性层管道，
+
+502
+00:24:37,870 --> 00:24:39,250
+and then we have a shared, uh,
+然后我们有一个共享的，呃，
+
+503
+00:24:39,250 --> 00:24:42,535
+bidirectional LSTM with skip connections.
+具有跳过连接的双向LSTM。
+
+504
+00:24:42,535 --> 00:24:46,255
+And so, uh, it's a deep- deep one so you skip to higher layers,
+所以，呃，这是一个深刻的，所以你跳到更高层，
+
+505
+00:24:46,255 --> 00:24:49,090
+and it's shared between the context and the questions.
+它在上下文和问题之间共享。
+
+506
+00:24:49,090 --> 00:24:51,850
+So they have basically the same [NOISE] set of weights.
+所以它们基本上具有相同的[NOISE]权重集。
+
+507
+00:24:51,850 --> 00:24:56,440
+[NOISE] Then, uh, we have a co-attention layer.
+[NOISE]然后，呃，我们有一个共同关注层。
+
+508
+00:24:56,440 --> 00:24:58,840
+Uh, where we basically just have outer products, uh,
+呃，我们基本上只有外用产品，呃，
+
+509
+00:24:58,840 --> 00:25:03,400
+between all the hidden states of those two sequences,
+在这两个序列的所有隐藏状态之间，
+
+510
+00:25:03,400 --> 00:25:06,070
+and again, have skip connections, uh,
+再次，跳过连接，呃，
+
+511
+00:25:06,070 --> 00:25:08,050
+to circumvent, uh, those as well.
+那些也是为了规避那些人。
+
+512
+00:25:08,050 --> 00:25:11,200
+So now you have kind of context or question dependent, uh,
+所以现在你有某种背景或问题依赖，呃，
+
+513
+00:25:11,200 --> 00:25:15,460
+contextual representations [NOISE] or- or representations of that context.
+上下文表示[NOISE]或 - 或该上下文的表示。
+
+514
+00:25:15,460 --> 00:25:18,970
+[NOISE] Uh, then we feed those into our transformer layers,
+[NOISE]呃，然后我们将它们送入我们的变压器层，
+
+515
+00:25:18,970 --> 00:25:23,575
+uh, and we actually tried to use transformers for all the things,
+呃，我们实际上试图将变形金刚用于所有事情，
+
+516
+00:25:23,575 --> 00:25:25,765
+with having no LSTMs or any of that.
+没有LSTM或其中任何一个。
+
+517
+00:25:25,765 --> 00:25:28,735
+Uh, unfortunately, transformer layers were still, uh,
+呃，不幸的是，变压器层还在，呃，
+
+518
+00:25:28,735 --> 00:25:32,590
+very, uh, finicky and very hard to optimize,
+非常，呃，挑剔，很难优化，
+
+519
+00:25:32,590 --> 00:25:35,020
+and there's a lot of trickery with- of the learning rates,
+学习率有很多诡计，
+
+520
+00:25:35,020 --> 00:25:38,515
+and we could just not get them to perform really well,
+我们可能无法让他们表现得非常好，
+
+521
+00:25:38,515 --> 00:25:41,755
+uh, on- on these 10 different tasks.
+呃，这10个不同的任务。
+
+522
+00:25:41,755 --> 00:25:45,760
+Uh, [NOISE] sometimes you had one transformer layer, one transformer network,
+呃，[NOISE]有时你有一个变压器层，一个变压器网络，
+
+523
+00:25:45,760 --> 00:25:46,930
+that worked really well in one task,
+在一项任务中表现得非常好，
+
+524
+00:25:46,930 --> 00:25:49,330
+but the only other transformer network that worked well
+但是唯一运行良好的其他变压器网络
+
+525
+00:25:49,330 --> 00:25:51,895
+on the second task had like half the layers.
+在第二个任务就像一半的层。
+
+526
+00:25:51,895 --> 00:25:55,150
+And once you tried to have one network with the same number of layers,
+一旦你试图让一个网络具有相同的层数，
+
+527
+00:25:55,150 --> 00:25:57,715
+it just wouldn't work on either of the two tasks anymore.
+它只是不再适用于这两个任务中的任何一个。
+
+528
+00:25:57,715 --> 00:26:00,640
+Uh, and so- so yeah, unfortunately as nice as they
+呃，所以是的，不幸的是，他们很好
+
+529
+00:26:00,640 --> 00:26:03,579
+are because they're nicely paralyzable in GPUs,
+是因为它们在GPU中很好地瘫痪了，
+
+530
+00:26:03,579 --> 00:26:05,110
+uh, they weren't yet robust enough,
+呃，他们还不够健壮，
+
+531
+00:26:05,110 --> 00:26:06,820
+uh, to- to be used for this.
+呃，为此而使用。
+
+532
+00:26:06,820 --> 00:26:09,280
+[NOISE] So we have to have these LSTMs,
+[NOISE]所以我们必须拥有这些LSTM，
+
+533
+00:26:09,280 --> 00:26:11,200
+uh, before and after the transformer layers.
+呃，在变压器层之前和之后。
+
+534
+00:26:11,200 --> 00:26:15,295
+[NOISE] And then we essentially just have a standard sort of autoregressive, uh,
+[NOISE]然后我们基本上只有一种标准的自回归，呃，
+
+535
+00:26:15,295 --> 00:26:17,770
+decoder where given the last state,
+解码器给出最后一个状态，
+
+536
+00:26:17,770 --> 00:26:19,720
+uh, we generate the next word.
+呃，我们生成下一个单词。
+
+537
+00:26:19,720 --> 00:26:22,090
+And then we have these three pointer mechanisms.
+然后我们有这三个指针机制。
+
+538
+00:26:22,090 --> 00:26:24,460
+Uh, they're very similar to the pointer ne- mechanisms you already know.
+呃，它们与你已经知道的指针机制非常相似。
+
+539
+00:26:24,460 --> 00:26:28,405
+But now on top of these very contextualized representations, uh,
+但是现在除了这些非常情境化的表示之外，呃，
+
+540
+00:26:28,405 --> 00:26:30,580
+at the end of this encoder, uh,
+在这个编码器的末尾，呃，
+
+541
+00:26:30,580 --> 00:26:33,640
+and it basically learns to either point to question words,
+并且它基本上学会了指向提问词，
+
+542
+00:26:33,640 --> 00:26:35,770
+context words based on the hidden states,
+基于隐藏状态的上下文单词，
+
+543
+00:26:35,770 --> 00:26:38,125
+or have also a standard softmax,
+或者还有一个标准的softmax，
+
+544
+00:26:38,125 --> 00:26:41,395
+and then we just basically have a weighted sum,
+然后我们基本上有一个加权和，
+
+545
+00:26:41,395 --> 00:26:45,490
+convex sum, of these three different distributions of output words.
+凸三和，这三种不同的输出词分布。
+
+546
+00:26:45,490 --> 00:26:48,115
+[NOISE] All right.
+[NOISE]好的。
+
+547
+00:26:48,115 --> 00:26:52,690
+So I think these are mostly standard components that you've already saw,
+所以我认为这些都是你已经看过的标准组件，
+
+548
+00:26:52,690 --> 00:26:54,610
+uh, for you- already seen all their details.
+呃，对你来说 - 已经看过他们所有的细节了。
+
+549
+00:26:54,610 --> 00:26:55,944
+But if you have any questions,
+但如果您有任何疑问，
+
+550
+00:26:55,944 --> 00:26:58,690
+um, about how we put it together? Yeah?
+嗯，关于我们如何把它放在一起？是吗？
+
+551
+00:26:58,690 --> 00:27:02,920
+[NOISE] So the output- the output has to be a word.
+[NOISE]所以输出 - 输出必须是一个单词。
+
+552
+00:27:02,920 --> 00:27:06,610
+That's right. The output has to be a word and it's always either a word from the context,
+那就对了。输出必须是一个单词，它始终是上下文中的一个单词，
+
+553
+00:27:06,610 --> 00:27:08,470
+a word from the question or a word from the softmax.
+来自问题的单词或来自softmax的单词。
+
+554
+00:27:08,470 --> 00:27:11,050
+[NOISE]
+[噪声]
+
+555
+00:27:11,050 --> 00:27:15,610
+That's- the data preprocessing I guess it's different with each task.
+那 - 数据预处理我猜它与每个任务不同。
+
+556
+00:27:15,610 --> 00:27:18,220
+So the data preprocessing is different for each task,
+因此，每项任务的数据预处理都是不同的，
+
+557
+00:27:18,220 --> 00:27:20,950
+but we basically had to normalize everything to have
+但我们基本上必须规范化所有东西
+
+558
+00:27:20,950 --> 00:27:23,710
+the same tokenization and- and all of that. [NOISE]
+相同的标记化 - 以及所有这些。 [噪声]
+
+559
+00:27:23,710 --> 00:27:29,770
+Uh, so do the double arrows in the encoding just represent there's a bidirectional?
+呃，编码中的双箭头也表示双向？
+
+560
+00:27:29,770 --> 00:27:30,125
+Yeah.
+是啊。
+
+561
+00:27:30,125 --> 00:27:30,775
+Okay.
+好的。
+
+562
+00:27:30,775 --> 00:27:32,395
+Yeah. But the double arrows,
+是啊。但双箭头，
+
+563
+00:27:32,395 --> 00:27:34,000
+uh, here are just bidirectional.
+呃，这里只是双向的。
+
+564
+00:27:34,000 --> 00:27:38,080
+So left to right and right to left for the LSTMs. All right.
+所以LSTM从左到右依次为左右。行。
+
+565
+00:27:38,080 --> 00:27:41,050
+So what datasets, uh, are we using?
+那么我们使用的数据集是什么？
+
+566
+00:27:41,050 --> 00:27:44,125
+Uh, I mentioned that that was a big headache in the beginning.
+呃，我提到这一开始很头疼。
+
+567
+00:27:44,125 --> 00:27:46,540
+Uh, we definitely wanted to include a lot of the sequence to
+呃，我们肯定想要包含很多序列
+
+568
+00:27:46,540 --> 00:27:49,720
+sequence tasks that we felt like are very,
+我们觉得非常的序列任务，
+
+569
+00:27:49,720 --> 00:27:54,055
+um, sort of high level and I- immediately useful, uh,
+嗯，有点高水平，我 - 立即有用，呃，
+
+570
+00:27:54,055 --> 00:27:57,955
+and in some ways what this also shows you is that
+在某些方面，这也向你展示了这一点
+
+571
+00:27:57,955 --> 00:28:03,310
+nowadays you don't have to work as much on some of the intermediate representations,
+如今你不必在一些中间表示上工作，
+
+572
+00:28:03,310 --> 00:28:05,275
+uh, in NLP anymore.
+呃，在NLP了。
+
+573
+00:28:05,275 --> 00:28:09,490
+Uh, you can just directly go for the end tasks that that real users might care about,
+呃，你可以直接去寻找真实用户可能关心的最终任务，
+
+574
+00:28:09,490 --> 00:28:12,340
+and then have these end-to-end trainable systems,
+然后有这些端到端的可训练系统，
+
+575
+00:28:12,340 --> 00:28:14,695
+uh, that really do quite well.
+呃，真的很好。
+
+576
+00:28:14,695 --> 00:28:17,290
+And, uh, I've myself worked a lot on parsing.
+而且，呃，我自己在解析方面做了很多工作。
+
+577
+00:28:17,290 --> 00:28:18,415
+And so I don't wanna, you know,
+所以我不想，你知道，
+
+578
+00:28:18,415 --> 00:28:19,540
+say we- we don't need it.
+说我们 - 我们不需要它。
+
+579
+00:28:19,540 --> 00:28:21,580
+There's certainly still tasks that you do need it for,
+肯定还有你需要的任务，
+
+580
+00:28:21,580 --> 00:28:26,095
+but it's kind of surprising that you can just go directly to translation or summarization
+但令人惊讶的是，您可以直接进行翻译或摘要
+
+581
+00:28:26,095 --> 00:28:28,870
+without having intermediate representations that
+没有中间表示
+
+582
+00:28:28,870 --> 00:28:32,035
+were sort of very specifically hand-designed.
+有点特别是手工设计的。
+
+583
+00:28:32,035 --> 00:28:36,310
+Um, so we had those three really interesting, uh, and hard tasks.
+嗯，所以我们有三个非常有趣，呃和艰巨的任务。
+
+584
+00:28:36,310 --> 00:28:38,380
+Question answering, machine translation, summarization.
+问答，机器翻译，总结。
+
+585
+00:28:38,380 --> 00:28:41,260
+They actually also have the three biggest datasets,
+他们实际上也有三个最大的数据集，
+
+586
+00:28:41,260 --> 00:28:42,820
+uh, of all of these.
+呃，所有这些。
+
+587
+00:28:42,820 --> 00:28:46,960
+Uh, then we had NLI, and basically, um,
+呃，那我们有NLI，基本上，嗯，
+
+588
+00:28:46,960 --> 00:28:52,195
+all of these, uh, 10 datasets [NOISE] were, uh,
+所有这些，呃，10个数据集[NOISE]，呃，
+
+589
+00:28:52,195 --> 00:28:56,875
+publicly available, uh, and in several cases especially for translation,
+公开，呃，在某些情况下特别是翻译，
+
+590
+00:28:56,875 --> 00:29:01,030
+you could actually find much larger, uh, translation datasets,
+你真的可以找到更大的呃翻译数据集，
+
+591
+00:29:01,030 --> 00:29:03,790
+but we also tried to keep it, uh,
+但我们也试着保留它，呃，
+
+592
+00:29:03,790 --> 00:29:08,530
+to a- to a size where normal people that don't work in gigantic companies with huge, uh,
+到一个普通人不能在巨大的公司工作的规模，呃，
+
+593
+00:29:08,530 --> 00:29:13,540
+GPU infrastructures could still run experiments, [NOISE] uh, themselves.
+GPU基础设施仍然可以进行实验，[NOISE]呃，他们自己。
+
+594
+00:29:13,540 --> 00:29:16,630
+So universities and folks, uh, can still run it on.
+所以大学和民众，呃，仍然可以继续运作。
+
+595
+00:29:16,630 --> 00:29:18,985
+Basically if you have just a single GPU,
+基本上如果你只有一个GPU，
+
+596
+00:29:18,985 --> 00:29:21,385
+it'll probably take about a week or so, uh,
+它可能需要大约一个星期左右，呃，
+
+597
+00:29:21,385 --> 00:29:23,680
+to run an experiment.
+进行实验。
+
+598
+00:29:23,680 --> 00:29:26,635
+If you have multiple GPUs on one large AWS machine,
+如果您在一台大型AWS计算机上有多个GPU，
+
+599
+00:29:26,635 --> 00:29:29,560
+you can kind of run an experiment in a day or two.
+你可以在一两天内进行实验。
+
+600
+00:29:29,560 --> 00:29:31,750
+And so especially for translation, right,
+对于翻译尤其如此，对，
+
+601
+00:29:31,750 --> 00:29:35,605
+you could get a lot more data, uh, than IWSLT.
+你可以获得比IWSLT更多的数据，呃。
+
+602
+00:29:35,605 --> 00:29:38,470
+And each of these, uh,
+而且每一个，呃，
+
+603
+00:29:38,470 --> 00:29:42,100
+communities and datasets and- and tasks has their own metric.
+社区和数据集和任务都有自己的指标。
+
+604
+00:29:42,100 --> 00:29:44,050
+We actually tried to, in the beginning,
+我们实际上试图在开始时
+
+605
+00:29:44,050 --> 00:29:46,330
+we had a lot of discussion about how we should
+我们有很多关于我们应该怎么做的讨论
+
+606
+00:29:46,330 --> 00:29:49,870
+define the measure of success for this project.
+定义该项目的成功衡量标准。
+
+607
+00:29:49,870 --> 00:29:51,565
+Uh, it doesn't make sense, uh,
+呃，这没有意义，呃，
+
+608
+00:29:51,565 --> 00:29:55,300
+to have a normalized F1 score for basically all the different tasks,
+基本上所有不同的任务都有一个标准化的F1分数，
+
+609
+00:29:55,300 --> 00:29:57,310
+but then we basically realized that
+但后来我们基本上意识到了
+
+610
+00:29:57,310 --> 00:30:00,250
+these different communities have different metrics for a reason.
+这些不同的社区有不同的指标是有原因的。
+
+611
+00:30:00,250 --> 00:30:05,005
+Uh, unfortunately at least all of these metrics are from 0-100 in theory.
+呃，不幸的是，至少所有这些指标在理论上都是0-100。
+
+612
+00:30:05,005 --> 00:30:07,405
+Of course, in practice, you rarely ever see, uh,
+当然，在实践中，你很少见到，呃，
+
+613
+00:30:07,405 --> 00:30:10,270
+a translation system of a 100, uh,
+一个100的翻译系统，呃，
+
+614
+00:30:10,270 --> 00:30:12,280
+or even high 90s of a BLEU score,
+甚至高达90分的BLEU分数，
+
+615
+00:30:12,280 --> 00:30:14,935
+uh, or these really, really high ROUGE scores.
+呃，或者这些确实非常高的ROUGE分数。
+
+616
+00:30:14,935 --> 00:30:18,550
+But, you know, in theory they go from 0-100, and so, uh,
+但是，你知道，理论上他们从0到100，所以，呃，
+
+617
+00:30:18,550 --> 00:30:24,039
+we kept basically intact the different evaluation metrics for each of these communities,
+我们基本保持每个社区的不同评估指标，
+
+618
+00:30:24,039 --> 00:30:26,440
+and we just said we're going to sum them up.
+我们只是说我们要总结一下。
+
+619
+00:30:26,440 --> 00:30:29,380
+And, uh, when we first talked about this,
+而且，呃，当我们第一次谈到这个时，
+
+620
+00:30:29,380 --> 00:30:31,150
+we have- had a lot of discussion,
+我们有很多讨论，
+
+621
+00:30:31,150 --> 00:30:32,890
+uh, with- with others also like, oh,
+呃，和其他人一样也喜欢，哦，
+
+622
+00:30:32,890 --> 00:30:35,530
+but translation is so much more important because it's much
+但翻译是如此重要，因为它很多
+
+623
+00:30:35,530 --> 00:30:38,245
+bigger and it's a much more useful task than you still,
+更大，这是一个比你更有用的任务，
+
+624
+00:30:38,245 --> 00:30:40,630
+you know, silly like pronoun resolution Winograd Schemas
+你知道吗，愚蠢的代名词解决Winograd Schemas
+
+625
+00:30:40,630 --> 00:30:43,150
+which only have a couple hundred training samples.
+只有几百个训练样本。
+
+626
+00:30:43,150 --> 00:30:45,730
+And so you should have weighted translation more and
+所以你应该更多地加权翻译
+
+627
+00:30:45,730 --> 00:30:48,310
+then literally five questions later somebody's like,
+那么后来有人提出了五个问题，
+
+628
+00:30:48,310 --> 00:30:50,140
+"Why didn't you weight pronoun resolution more?
+“你为什么不加重代词决议？
+
+629
+00:30:50,140 --> 00:30:54,370
+That is a really hard task that captures sort of common sense reasoning and, you know,
+这是一项非常艰巨的任务，可以捕捉到一些常识推理，你知道，
+
+630
+00:30:54,370 --> 00:30:56,590
+the complexity of language and semantics,
+语言和语义的复杂性，
+
+631
+00:30:56,590 --> 00:31:00,340
+and unlike all this, like, statistical pattern matching [NOISE] that you do in translation."
+并且不像所有这些，比如你在翻译中所做的统计模式匹配[NOISE]。“
+
+632
+00:31:00,340 --> 00:31:03,190
+And I was like, I used to talk to that guy [LAUGHTER] and like,
+而我就像，我曾经和那个人谈过[笑声]并喜欢，
+
+633
+00:31:03,190 --> 00:31:04,510
+uh, hopefully in the end,
+呃，希望最后，
+
+634
+00:31:04,510 --> 00:31:08,050
+we'll just all agree that like it's reasonable to sum them up, uh,
+我们都会同意，总结它们是合理的，呃，
+
+635
+00:31:08,050 --> 00:31:13,645
+and of course, you also have to tackle when you run experiments in this.
+当然，当你在这里进行实验时，你也必须解决这个问题。
+
+636
+00:31:13,645 --> 00:31:17,845
+Uh, a lot of the complexity that you have in machine learning and,
+呃，你在机器学习中有很多复杂性，
+
+637
+00:31:17,845 --> 00:31:21,625
+you know, stuff that very few people talk about like having very skewed distributions.
+你知道的，很少有人谈论的东西，比如非常倾斜的发行版。
+
+638
+00:31:21,625 --> 00:31:24,610
+So you have translation which has, uh,
+所以你有翻译，有，呃，
+
+639
+00:31:24,610 --> 00:31:26,620
+millions or hundreds of thousands of examples,
+数百万或数十万个例子，
+
+640
+00:31:26,620 --> 00:31:27,730
+and you have Winograd Schemas,
+你有Winograd Schemas，
+
+641
+00:31:27,730 --> 00:31:29,920
+uh, that only have a couple hundred.
+呃，那只有几百个。
+
+642
+00:31:29,920 --> 00:31:34,750
+How do you train that such that you don't just completely ignore the smaller dataset.
+你是如何训练的，这样你就不会完全忽略较小的数据集。
+
+643
+00:31:34,750 --> 00:31:38,350
+Uh, so we'll get to some of the optimization trickery,
+呃，所以我们会得到一些优化技巧，
+
+644
+00:31:38,350 --> 00:31:42,010
+uh, that Nitish spent several months on in a bit.
+呃，Nitish花了好几个月的时间。
+
+645
+00:31:42,010 --> 00:31:45,310
+But I first wanna sort of give you the first set of experiments.
+但我首先想给你第一组实验。
+
+646
+00:31:45,310 --> 00:31:46,960
+So as you can see from all the numbers,
+从所有数字中可以看出，
+
+647
+00:31:46,960 --> 00:31:48,565
+there's a lot of experiments, uh,
+有很多实验，呃，
+
+648
+00:31:48,565 --> 00:31:50,695
+that we ran to even get to this,
+我们甚至跑到这里，
+
+649
+00:31:50,695 --> 00:31:52,960
+and so we'll walk through this, uh, quite carefully.
+所以我们会仔细研究这个，呃。
+
+650
+00:31:52,960 --> 00:31:56,110
+I think hopefully you'll get some ideas also for- for ablations,
+我希望你也会得到一些关于消融的想法，
+
+651
+00:31:56,110 --> 00:31:59,800
+or experiments that you might wanna run in your, um,
+或者你可能想要在你的实验中运行的实验，嗯，
+
+652
+00:31:59,800 --> 00:32:01,210
+in your experiments and in your,
+在你的实验和你的，
+
+653
+00:32:01,210 --> 00:32:03,670
+uh, problem- final- final projects.
+呃，问题 ​​- 最终决赛项目。
+
+654
+00:32:03,670 --> 00:32:05,290
+So what are we looking at here?
+那么我们在这看什么呢？
+
+655
+00:32:05,290 --> 00:32:07,405
+So basically, uh, on the left side,
+所以基本上，呃，在左侧，
+
+656
+00:32:07,405 --> 00:32:08,770
+we have single task performance.
+我们有单一的任务表现。
+
+657
+00:32:08,770 --> 00:32:13,475
+So here, each number comes from its different model that was trained,
+所以在这里，每个数字来自其训练的不同模型，
+
+658
+00:32:13,475 --> 00:32:16,330
+um, separately on just one task.
+嗯，单独完成一项任务。
+
+659
+00:32:16,330 --> 00:32:22,540
+Uh, each row- each column here is the same architecture, uh,
+呃，每一行 - 这里的每一列都是相同的架构，呃，
+
+660
+00:32:22,540 --> 00:32:23,935
+and [NOISE] on the right side here,
+和右边的[NOISE]，
+
+661
+00:32:23,935 --> 00:32:25,435
+we basically have, uh,
+我们基本上有，呃，
+
+662
+00:32:25,435 --> 00:32:31,165
+for each column is basically the same architecture and the same exact model.
+对于每列基本上是相同的架构和相同的精确模型。
+
+663
+00:32:31,165 --> 00:32:34,675
+So here, we have four different models and here, uh,
+所以在这里，我们有四种不同的模型，在这里，呃，
+
+664
+00:32:34,675 --> 00:32:37,165
+we have 40 different models,
+我们有40种不同的型号，
+
+665
+00:32:37,165 --> 00:32:40,105
+and each column again is the same architecture.
+并且每列再次是相同的架构。
+
+666
+00:32:40,105 --> 00:32:41,725
+And so the simplest, uh,
+所以最简单的，呃，
+
+667
+00:32:41,725 --> 00:32:44,620
+first column here is just a standard sequence to sequence
+这里的第一列只是序列的标准序列
+
+668
+00:32:44,620 --> 00:32:48,280
+model with very few bells and whistles and some pointers,
+模型很少有铃声和口哨声和一些指针，
+
+669
+00:32:48,280 --> 00:32:49,960
+but nothing sort of major.
+但没什么大不了的。
+
+670
+00:32:49,960 --> 00:32:51,270
+It's pretty deep, you know,
+你知道，这很深
+
+671
+00:32:51,270 --> 00:32:53,550
+stack bidirectional LSTM skip connections,
+堆栈双向LSTM跳过连接，
+
+672
+00:32:53,550 --> 00:32:57,780
+all the standard good well-tuned stuff for sequence to sequence models.
+序列到序列模型的所有标准的良好调整的东西。
+
+673
+00:32:57,780 --> 00:33:00,945
+And, uh, then we added self-attention.
+而且，呃，然后我们增加了自我关注。
+
+674
+00:33:00,945 --> 00:33:03,405
+Um, this- this sort of, uh,
+嗯，这 - 这种，呃，
+
+675
+00:33:03,405 --> 00:33:06,310
+basically, uh, transformer layers.
+基本上，呃，变压器层。
+
+676
+00:33:06,310 --> 00:33:08,110
+[NOISE] Then we have this co-attention layer of
+[NOISE]然后我们有这个共同关注层
+
+677
+00:33:08,110 --> 00:33:10,225
+the outer products that we mentioned in the beginning,
+我们在开始时提到的外部产品，
+
+678
+00:33:10,225 --> 00:33:12,715
+and then we also added the question pointer.
+然后我们还添加了问题指针。
+
+679
+00:33:12,715 --> 00:33:17,060
+So having the ability to point to a word in a question.
+因此有能力指出问题中的单词。
+
+680
+00:33:18,330 --> 00:33:21,670
+All right. Any questions about this table?
+行。有关此表的任何问题吗？
+
+681
+00:33:21,670 --> 00:33:23,320
+We'll dig into some of the details.
+我们将深入研究一些细节。
+
+682
+00:33:23,320 --> 00:33:25,090
+Uh, okay. Well, we'll dig into
+呃，好的。好吧，我们将深入研究
+
+683
+00:33:25,090 --> 00:33:27,760
+the details first and then maybe you can think of some questions.
+首先是细节，然后你可以想到一些问题。
+
+684
+00:33:27,760 --> 00:33:29,830
+So let's analyze, uh,
+那么让我们分析，呃，
+
+685
+00:33:29,830 --> 00:33:32,740
+what's going on in this table because there are a lot of numbers, uh,
+这张桌子上发生了什么，因为有很多数字，呃，
+
+686
+00:33:32,740 --> 00:33:36,510
+and you really want to carefully analyze and sort of distinguish.
+而你真的想仔细分析和区分。
+
+687
+00:33:36,510 --> 00:33:37,890
+I think my first, uh,
+我想我的第一个，呃，
+
+688
+00:33:37,890 --> 00:33:40,590
+observation was, wow, we can have a single architecture.
+观察是，哇，我们可以有一个单一的架构。
+
+689
+00:33:40,590 --> 00:33:43,170
+Like, even, even this is not quite what we want, right?
+就像，甚至，即使这不是我们想要的，对吗？
+
+690
+00:33:43,170 --> 00:33:44,535
+We want a single model.
+我们想要一个单一的模型。
+
+691
+00:33:44,535 --> 00:33:46,140
+But even this kind of showed us, wow,
+但即使是这样的表现我们，哇，
+
+692
+00:33:46,140 --> 00:33:51,429
+you can have a single architecture that actually does really well and somewhat randomly,
+你可以拥有一个实际上非常好并且有点随机的架构
+
+693
+00:33:51,429 --> 00:33:53,920
+in some cases, it actually had gotten state-of-the-art results.
+在某些情况下，它实际上已经获得了最先进的结果。
+
+694
+00:33:53,920 --> 00:33:56,020
+So Wiki SQL, for instance,
+所以维基SQL，例如，
+
+695
+00:33:56,020 --> 00:33:59,200
+this architecture had the best model
+这种架构有最好的模型
+
+696
+00:33:59,200 --> 00:34:02,245
+to translate natural language English questions into SQL queries,
+将自然语言英语问题翻译成SQL查询，
+
+697
+00:34:02,245 --> 00:34:05,530
+which was a surprise to us because it is the ninth dataset.
+这对我们来说是一个惊喜，因为它是第九个数据集。
+
+698
+00:34:05,530 --> 00:34:08,950
+It was really not like a priority for us and when we designed
+对我们来说，当我们设计时，它确实不是优先考虑的事情
+
+699
+00:34:08,950 --> 00:34:12,970
+the model and thought about how to generate words and pointer mechanisms and so on.
+关于如何生成单词和指针机制等的模型和思考。
+
+700
+00:34:12,970 --> 00:34:16,390
+We just kind of had the standard context of SQL words
+我们只是有一些SQL词的标准上下文
+
+701
+00:34:16,390 --> 00:34:19,990
+and we asked the question what's the translation to SQL, and then, uh,
+我们问了什么是SQL的翻译问题，然后，呃，
+
+702
+00:34:19,990 --> 00:34:24,790
+somewhat surprisingly to us this particular architecture had the state-of-the-art, uh,
+有点令人惊讶的是，这个特殊的建筑有最先进的，呃，
+
+703
+00:34:24,790 --> 00:34:27,820
+on SQL generation and bunch of folks in that community kind
+关于SQL生成和那种社区中的一群人
+
+704
+00:34:27,820 --> 00:34:30,865
+of picked it up more quickly because it had state-of-the-art.
+因为它具有最先进的技术，所以能够更快地完成它。
+
+705
+00:34:30,865 --> 00:34:32,590
+And that's- uh, unfortunately,
+而且，不幸的是，
+
+706
+00:34:32,590 --> 00:34:34,915
+it doesn't have that many other state-of-the-art numbers, uh,
+它没有那么多其他最先进的数字，呃，
+
+707
+00:34:34,915 --> 00:34:36,400
+which is why it's harder, uh,
+这就是为什么它更难，呃，
+
+708
+00:34:36,400 --> 00:34:37,750
+it's actually a much harder task.
+这实际上是一项艰巨的任务。
+
+709
+00:34:37,750 --> 00:34:40,195
+And what you also observe is that,
+你还观察到的是，
+
+710
+00:34:40,195 --> 00:34:42,325
+uh, in several of the cases, uh,
+呃，在几个案例中，呃，
+
+711
+00:34:42,325 --> 00:34:44,080
+using the multitask model,
+使用多任务模型，
+
+712
+00:34:44,080 --> 00:34:46,645
+so having a single model for all the 10 tasks,
+所以对所有10个任务都有一个模型，
+
+713
+00:34:46,645 --> 00:34:48,880
+uh, actually hurts performance at first.
+呃，实际上一开始就伤害了表现。
+
+714
+00:34:48,880 --> 00:34:52,120
+And this is also something you rarely read in papers because papers
+这也是你很少在论文中读到的东西，因为论文
+
+715
+00:34:52,120 --> 00:34:55,210
+have a strong selection bias to only publish positive results.
+有强烈的选择偏见，只能发布积极的结果。
+
+716
+00:34:55,210 --> 00:35:00,310
+Uh, and when you look at most transfer learning and multitask learning papers,
+呃，当你看大多数转学和多任务学习论文时，
+
+717
+00:35:00,310 --> 00:35:04,660
+they're sort of an outside of the actual model consideration of like,
+他们有点像实际的模型考虑因素，
+
+718
+00:35:04,660 --> 00:35:09,100
+well, let's only combine tasks that we know will work well with one another.
+好吧，让我们只结合我们知道相互配合良好的任务。
+
+719
+00:35:09,100 --> 00:35:11,050
+And if they don't work and hurt performance,
+如果他们不工作并伤害表现，
+
+720
+00:35:11,050 --> 00:35:13,285
+then we'd just exclude them from our experiments.
+然后我们将它们从我们的实验中排除。
+
+721
+00:35:13,285 --> 00:35:16,615
+And so you don't see many negative task results, uh,
+所以你没有看到很多负面的任务结果，呃，
+
+722
+00:35:16,615 --> 00:35:20,215
+in the literature and there are a few papers here and there that, uh,
+在文献中，这里和那里有一些论文，呃，
+
+723
+00:35:20,215 --> 00:35:24,910
+study basically the opposite side of transfer learning and that is,
+研究基本上是转学习的另一面，也就是说，
+
+724
+00:35:24,910 --> 00:35:28,315
+uh, catastrophic interference and catastrophic forgetting.
+呃，灾难性的干扰和灾难性的遗忘。
+
+725
+00:35:28,315 --> 00:35:32,110
+So interference is when you train two different tasks in the same model,
+因此干扰就是当你在同一个模型中训练两个不同的任务时，
+
+726
+00:35:32,110 --> 00:35:35,155
+and to interfere with one another next, you hurt each other's performance.
+然后彼此干扰，你伤害了彼此的表现。
+
+727
+00:35:35,155 --> 00:35:37,960
+And catastrophic forgetting is if you train continually
+如果你不断训练就会发生灾难性遗忘
+
+728
+00:35:37,960 --> 00:35:41,305
+your first train in one task then you train on a second task,
+你的第一列火车在一项任务中然后你训练第二项任务，
+
+729
+00:35:41,305 --> 00:35:42,895
+people used to think,
+人们曾经认为，
+
+730
+00:35:42,895 --> 00:35:44,080
+"Oh, well, you know,
+“哦，嗯，你知道，
+
+731
+00:35:44,080 --> 00:35:45,790
+basically the first task will be completely
+基本上第一项任务将是完全的
+
+732
+00:35:45,790 --> 00:35:48,970
+forgotten," and you just work well on the second task.
+忘记了，“你只是在第二项任务上工作得很好。
+
+733
+00:35:48,970 --> 00:35:52,750
+If you train neural networks sort of in a sequential way one task and then
+如果你按照顺序的方式训练神经网络，那么就是一个任务
+
+734
+00:35:52,750 --> 00:35:56,850
+another and somewhat surprisingly, uh,
+另一个有点令人惊讶的是，呃，
+
+735
+00:35:56,850 --> 00:35:59,160
+we- we found that things aren't actually
+我们 - 我们发现事实并非如此
+
+736
+00:35:59,160 --> 00:36:01,935
+catastrophically being forgotten in these models,
+在这些模型中灾难性地被遗忘，
+
+737
+00:36:01,935 --> 00:36:04,410
+turns out that if you train them sequentially and
+事实证明，如果你按顺序训练它们
+
+738
+00:36:04,410 --> 00:36:07,065
+you add a little bit of the original to the first task,
+你为第一个任务添加了一点原创，
+
+739
+00:36:07,065 --> 00:36:08,760
+it comes back very, very quickly.
+它非常非常快地回来了。
+
+740
+00:36:08,760 --> 00:36:10,655
+So while the performance is really bad,
+所以虽然表现非常糟糕，
+
+741
+00:36:10,655 --> 00:36:12,910
+you can get to the really good performance very,
+你可以得到非常好的表现，
+
+742
+00:36:12,910 --> 00:36:14,470
+very quickly in very few iterations.
+很快迭代很快。
+
+743
+00:36:14,470 --> 00:36:18,115
+So but it's one of the many interesting sort of tidbits that we found,
+所以，这是我们发现的许多有趣的花絮之一，
+
+744
+00:36:18,115 --> 00:36:20,905
+uh, in the course of this that we haven't even published yet. All right.
+呃，在此期间我们还没有发表。行。
+
+745
+00:36:20,905 --> 00:36:24,055
+So, uh, focusing on, uh,
+所以，呃，专注于，呃，
+
+746
+00:36:24,055 --> 00:36:26,560
+the transformer layers here we basically find transformers
+这里的变压器层我们基本上找到变压器
+
+747
+00:36:26,560 --> 00:36:29,275
+do help the original sequence to sequence model a lot.
+帮助原始序列对序列进行大量排序。
+
+748
+00:36:29,275 --> 00:36:33,415
+So if you tune them carefully and you combine them with, uh,
+所以，如果你仔细调整它们并将它们与它们结合起来，呃，
+
+749
+00:36:33,415 --> 00:36:36,235
+some bidirectional LSTMs and so on, uh,
+一些双向LSTM等等，呃，
+
+750
+00:36:36,235 --> 00:36:38,410
+they were very helpful and improved, uh,
+他们非常有帮助和改进，呃，
+
+751
+00:36:38,410 --> 00:36:41,800
+across a bunch of different datasets, in some cases quite significantly.
+跨越一堆不同的数据集，在某些情况下非常显着。
+
+752
+00:36:41,800 --> 00:36:46,390
+Another observation is question-answering and semantic role labeling,
+另一个观察是问答和语义角色标记，
+
+753
+00:36:46,390 --> 00:36:49,660
+uh, actually can predict each other's performance quite well.
+呃，实际上可以很好地预测对方的表现。
+
+754
+00:36:49,660 --> 00:36:51,670
+If one works well, the other works well,
+如果一个运作良好，另一个运作良好，
+
+755
+00:36:51,670 --> 00:36:53,140
+uh, and- and vice-versa.
+呃，反之亦然。
+
+756
+00:36:53,140 --> 00:36:54,400
+If they don't work well,
+如果它们不能很好地工作，
+
+757
+00:36:54,400 --> 00:36:56,590
+uh, both of them don't work very well.
+呃，他们俩都行不通。
+
+758
+00:36:56,590 --> 00:37:00,849
+Um, and it's also interesting because both of those tasks have different questions for,
+嗯，这也很有趣，因为这两个任务都有不同的问题，
+
+759
+00:37:00,849 --> 00:37:04,075
+uh, every training example.
+呃，每个训练的例子。
+
+760
+00:37:04,075 --> 00:37:07,780
+Pointing. Uh, so the question pointing,
+指点。呃，所以问题指出，
+
+761
+00:37:07,780 --> 00:37:09,520
+uh, is super important.
+呃，非常重要。
+
+762
+00:37:09,520 --> 00:37:11,695
+Uh, we actually have in some cases, uh,
+呃，我们实际上在某些情况下，呃，
+
+763
+00:37:11,695 --> 00:37:13,915
+twice the performance even for,
+性能提高两倍，
+
+764
+00:37:13,915 --> 00:37:15,565
+and this is kind of surprising to us,
+这对我们来说很奇怪，
+
+765
+00:37:15,565 --> 00:37:18,700
+a simple classification task where you could just have a standard Softmax.
+一个简单的分类任务，你可以有一个标准的Softmax。
+
+766
+00:37:18,700 --> 00:37:22,645
+But instead of saying you have a Softmax of entailment, contradiction, and so on,
+但不是说你有一个蕴涵，矛盾等的Softmax，
+
+767
+00:37:22,645 --> 00:37:25,015
+you just basically, uh,
+你基本上，呃，
+
+768
+00:37:25,015 --> 00:37:28,015
+point to the word entailment in the question.
+指出问题中的蕴涵一词。
+
+769
+00:37:28,015 --> 00:37:32,050
+And that was also the case for Winograd Schemas that also benefited a lot,
+对于Winograd Schemas来说，情况也是如此，这也使得受益匪浅，
+
+770
+00:37:32,050 --> 00:37:34,000
+uh, from this pointer mechanism.
+呃，从这个指针机制。
+
+771
+00:37:34,000 --> 00:37:36,190
+[NOISE]
+[噪声]
+
+772
+00:37:36,190 --> 00:37:36,880
+Can you explain that?
+你能解释一下吗？
+
+773
+00:37:36,880 --> 00:37:39,490
+Sure. Um, can we explain it? Why-
+当然。嗯，我们可以解释一下吗？为什么-
+
+774
+00:37:39,490 --> 00:37:41,470
+[inaudible]
+[听不见]
+
+775
+00:37:41,470 --> 00:37:42,760
+Why does it help so much?
+为什么这么有用呢？
+
+776
+00:37:42,760 --> 00:37:44,980
+Um, in some ways,
+嗯，在某些方面，
+
+777
+00:37:44,980 --> 00:37:47,860
+I think partly is the whole architecture
+我认为部分是整个架构
+
+778
+00:37:47,860 --> 00:37:51,160
+has been gotten- has gotten better and better at pointing.
+已经得到了更好，更好的指点。
+
+779
+00:37:51,160 --> 00:37:53,320
+And part of the reason we actually do very,
+部分原因我们实际上做得非常好，
+
+780
+00:37:53,320 --> 00:37:54,730
+very poorly in translation,
+翻译很差，
+
+781
+00:37:54,730 --> 00:37:59,020
+which is the only task that hurt in the- our first experiments a lot, uh,
+这是我们第一次实验中唯一受伤的任务，呃，
+
+782
+00:37:59,020 --> 00:38:02,500
+in the multitask setting is that that is the only task that now has to generate,
+在多任务设置中，这是现在必须生成的唯一任务，
+
+783
+00:38:02,500 --> 00:38:05,440
+uh, results from a completely separate Softmax,
+呃，完全独立的Softmax的结果，
+
+784
+00:38:05,440 --> 00:38:07,660
+whereas the rest of the architecture got really,
+而其他建筑真的，
+
+785
+00:38:07,660 --> 00:38:12,535
+really good at pointing to things to answer questions, any kind of question.
+真的善于指点回答问题的事情，任何一种问题。
+
+786
+00:38:12,535 --> 00:38:15,550
+Uh, and so but in some ways,
+呃，但在某些方面，
+
+787
+00:38:15,550 --> 00:38:17,560
+I think that is one explanation,
+我认为这是一个解释，
+
+788
+00:38:17,560 --> 00:38:19,720
+but I- I don't think it's- it's all of it.
+但我 - 我不认为这就是全部。
+
+789
+00:38:19,720 --> 00:38:29,005
+I think we still need to figure out more why this happens. All right.
+我想我们仍然需要弄清楚为什么会发生这种情况。行。
+
+790
+00:38:29,005 --> 00:38:32,200
+Now, multitask learning is the most
+现在，多任务学习是最多的
+
+791
+00:38:32,200 --> 00:38:35,470
+helpful when it comes to zero-shot and I'm actually very excited about that.
+在零射击方面很有帮助，我其实非常兴奋。
+
+792
+00:38:35,470 --> 00:38:39,835
+So this is a zero-shot relation extraction where you have different kinds of, uh,
+所以这是一个零镜头关系提取，你有不同的类型，呃，
+
+793
+00:38:39,835 --> 00:38:42,430
+relations that you might wanna extract and you might have never
+你可能想要提取的关系，你可能永远不会
+
+794
+00:38:42,430 --> 00:38:45,550
+seen like the student-teacher relationship that you're trying
+看起来像你正在尝试的师生关系
+
+795
+00:38:45,550 --> 00:38:47,860
+to identify in a certain context or
+在某种情况下识别或识别
+
+796
+00:38:47,860 --> 00:38:51,745
+a product company relationship or something like that.
+产品公司的关系或类似的东西。
+
+797
+00:38:51,745 --> 00:38:55,480
+And so, uh, that one actually, uh,
+所以，呃，那个，其实，呃，
+
+798
+00:38:55,480 --> 00:38:58,180
+benefited a lot and almost got twice, uh,
+受益匪浅，几乎得了两次，呃，
+
+799
+00:38:58,180 --> 00:39:00,280
+as high in terms of the accuracy, uh,
+在准确性方面，呃，
+
+800
+00:39:00,280 --> 00:39:02,380
+when you learned it with everything else.
+当你用其他一切来学习它的时候。
+
+801
+00:39:02,380 --> 00:39:04,360
+So these were questions, it's never seen before,
+所以这些都是问题，这是以前从未见过的，
+
+802
+00:39:04,360 --> 00:39:06,265
+relations that it's never seen before,
+以前从未见过的关系，
+
+803
+00:39:06,265 --> 00:39:08,725
+and it got twice as good, uh,
+它有两倍的好，呃，
+
+804
+00:39:08,725 --> 00:39:13,210
+and benefited a lot especially from having seen other kinds of questions.
+并且特别是从看过其他类型的问题中受益匪浅。
+
+805
+00:39:13,210 --> 00:39:16,870
+And in some ways, we have to give a lot of credit to SQuAD too,
+在某些方面，我们也必须给SQUAD很多功劳，
+
+806
+00:39:16,870 --> 00:39:18,895
+uh, because SQuAD as a dataset,
+呃，因为SQuAD是一个数据集，
+
+807
+00:39:18,895 --> 00:39:24,760
+uh, kind of pushed people into thinking about pointers as a mechanism to generate answers.
+呃，有点推动人们将指针作为一种机制来产生答案。
+
+808
+00:39:24,760 --> 00:39:28,750
+And pointers, we kind of see them like as a given and they don't get that much credit,
+和指针，我们看到他们像一个给定的，他们没有得到那么多的功劳，
+
+809
+00:39:28,750 --> 00:39:33,535
+but they allow you to predict answers that you've never seen before at training time.
+但是它们可以让你预测在训练时从未见过的答案。
+
+810
+00:39:33,535 --> 00:39:36,040
+To generate words, you've never seen before at training time,
+为了生成单词，你在训练时从未见过，
+
+811
+00:39:36,040 --> 00:39:39,850
+which is actually quite- quite amazing. All right.
+这实际上相当惊人。行。
+
+812
+00:39:39,850 --> 00:39:43,090
+Now, the main observation though
+现在，主要观察虽然
+
+813
+00:39:43,090 --> 00:39:46,810
+here is that you still if you had an Oracle that would tell you
+如果你有一个可以告诉你的Oracle，那么你仍然可以
+
+814
+00:39:46,810 --> 00:39:50,275
+exactly which task you're currently in
+你目前在哪个任务
+
+815
+00:39:50,275 --> 00:39:54,685
+and you would be perfectly kind of separating these into 10 different models,
+你会完全将它们分成10个不同的模型，
+
+816
+00:39:54,685 --> 00:39:58,945
+maybe they're all the same architecture but there's still 10 different models, then, uh,
+也许他们都是相同的建筑，但仍然有10种不同的模型，那么，呃，
+
+817
+00:39:58,945 --> 00:40:02,410
+you would actually still do slightly better,
+你实际上还会做得稍好一点，
+
+818
+00:40:02,410 --> 00:40:06,535
+uh, than the first version of this multitask learning model.
+呃，比这个多任务学习模型的第一个版本。
+
+819
+00:40:06,535 --> 00:40:09,070
+And that is largely because we
+这主要是因为我们
+
+820
+00:40:09,070 --> 00:40:12,430
+chose to include a bunch of different tasks that have nothing to do
+选择包括一堆无关的任务
+
+821
+00:40:12,430 --> 00:40:15,130
+with one another and we wanted the community to start
+彼此之间，我们希望社区开始
+
+822
+00:40:15,130 --> 00:40:18,310
+thinking about tackling catastrophic interference, right?
+想着解决灾难性的干扰吧？
+
+823
+00:40:18,310 --> 00:40:21,685
+If you learn like a new language or, you know,
+如果你像新语言一样学习，或者你知道，
+
+824
+00:40:21,685 --> 00:40:24,670
+you learn how to understand social media on Twitter,
+你学习如何理解Twitter上的社交媒体，
+
+825
+00:40:24,670 --> 00:40:26,860
+you don't replace all your language,
+你没有替换所有的语言，
+
+826
+00:40:26,860 --> 00:40:28,825
+uh, you know, in- in your brain.
+呃，你知道，在你的脑子里。
+
+827
+00:40:28,825 --> 00:40:30,820
+You have one brain, it keeps getting smarter,
+你有一个大脑，它会越来越聪明，
+
+828
+00:40:30,820 --> 00:40:32,065
+you keep learning new skills,
+你不断学习新技能，
+
+829
+00:40:32,065 --> 00:40:35,140
+even when that skills that are new to you are very,
+即使那些对你不熟悉的技能非常
+
+830
+00:40:35,140 --> 00:40:36,520
+very different from old skills.
+与旧技能截然不同。
+
+831
+00:40:36,520 --> 00:40:40,420
+So in some ways we may have made our lives too hard,
+所以在某些方面我们可能会让我们的生活变得艰难，
+
+832
+00:40:40,420 --> 00:40:41,770
+and now we're actually thinking, okay,
+现在我们真的在想，好吧，
+
+833
+00:40:41,770 --> 00:40:44,620
+maybe if you wanna publish a nicer paper on multitask learning,
+也许如果你想发表关于多任务学习的更好的论文，
+
+834
+00:40:44,620 --> 00:40:46,810
+we'll just look at all the tasks that do help each other,
+我们只看看所有相互帮助的任务，
+
+835
+00:40:46,810 --> 00:40:48,880
+and then we'll just, you know, have groups of tasks,
+然后我们只是，你知道，有一组任务，
+
+836
+00:40:48,880 --> 00:40:51,445
+and then I can very quickly publish,
+然后我可以很快发布，
+
+837
+00:40:51,445 --> 00:40:54,010
+uh, some, some nice state-of-the-art papers.
+呃，有些，一些不错的最新论文。
+
+838
+00:40:54,010 --> 00:40:57,370
+But basically here, uh, we're still, uh,
+但基本上在这里，呃，我们还是，呃，
+
+839
+00:40:57,370 --> 00:41:03,910
+quite significantly away in the decaScore between 10 different models and a single model.
+10个不同模型和单个模型之间的decaScore相当显着。
+
+840
+00:41:03,910 --> 00:41:06,280
+Now, this of course is kind of an oracle score,
+现在，这当然是一种oracle得分，
+
+841
+00:41:06,280 --> 00:41:09,805
+that's why we put it in parentheses because you don't actually have this oracle.
+这就是为什么我们把它放在括号中，因为你实际上没有这个神谕。
+
+842
+00:41:09,805 --> 00:41:11,260
+And in some cases,
+在某些情况下，
+
+843
+00:41:11,260 --> 00:41:13,780
+it's quite easy to build an almost perfect classifier.
+建立一个近乎完美的分类器非常容易。
+
+844
+00:41:13,780 --> 00:41:16,615
+So, you know, separating what is the summary
+所以，你知道，分离什么是摘要
+
+845
+00:41:16,615 --> 00:41:19,810
+based on that question and what is the translation from English to German,
+基于这个问题以及从英语到德语的翻译是什么，
+
+846
+00:41:19,810 --> 00:41:21,610
+you can do with almost 100 percent accuracy.
+你几乎可以100％准确地做到。
+
+847
+00:41:21,610 --> 00:41:25,090
+Uh, but, uh, SQuAD, question-answering,
+呃，但是，呃，SQUAD，问答，
+
+848
+00:41:25,090 --> 00:41:26,665
+and zero-shot relation extraction,
+和零射击关系提取，
+
+849
+00:41:26,665 --> 00:41:29,575
+and question-answering as a semantic role labeling,
+和问答作为语义角色标签，
+
+850
+00:41:29,575 --> 00:41:33,220
+those are actually easily confused in terms of how
+这些实际上很容易混淆
+
+851
+00:41:33,220 --> 00:41:37,330
+to generate the answers and you wouldn't quite know,
+产生答案，你不会知道，
+
+852
+00:41:37,330 --> 00:41:40,870
+uh, which into which model to route, uh, this.
+呃，哪个模型要路由，呃，这个。
+
+853
+00:41:40,870 --> 00:41:44,935
+So in some sense, this is kind of theoretical. All right.
+所以在某种意义上说，这是一种理论。行。
+
+854
+00:41:44,935 --> 00:41:47,710
+Now, I mentioned that we have this prob- this
+现在，我提到我们有这个问题
+
+855
+00:41:47,710 --> 00:41:51,730
+complexity in the optimization strategy and this is one of the many,
+优化策略的复杂性，这是众多的，
+
+856
+00:41:51,730 --> 00:41:55,795
+um, sort of problems that don't get that much, uh, coverage.
+嗯，那些没有那么多的问题，呃，报道。
+
+857
+00:41:55,795 --> 00:41:57,535
+But when you have a very,
+但是，当你有一个，
+
+858
+00:41:57,535 --> 00:41:59,785
+uh, imbalanced or skewed dataset,
+呃，不平衡或偏斜的数据集，
+
+859
+00:41:59,785 --> 00:42:05,005
+it's easy to lose track and basically overpower the smaller dataset tasks.
+很容易失去跟踪并且基本上压倒了较小的数据集任务。
+
+860
+00:42:05,005 --> 00:42:07,510
+And so, uh, the first, uh,
+所以，呃，第一个，呃，
+
+861
+00:42:07,510 --> 00:42:10,780
+simplest training- we actually tried a ton of different training strategies,
+最简单的培训 - 我们实际上尝试了大量不同的培训策略，
+
+862
+00:42:10,780 --> 00:42:13,600
+but in the end, this fully joint one worked quite well.
+但最终，这个完全联合的工作得很好。
+
+863
+00:42:13,600 --> 00:42:18,160
+But actually promised to ask go wait for questions, uh, on this table.
+但实际上答应要求等待问题，呃，在这张桌子上。
+
+864
+00:42:18,160 --> 00:42:20,680
+So any questions on all these results so far? Yeah?
+那么到目前为止对所有这些结果的问题呢？是吗？
+
+865
+00:42:20,680 --> 00:42:24,550
+So, uh, [NOISE] since you mentioned that if you had
+所以，呃，[NOISE]，因为你提到过，如果你有
+
+866
+00:42:24,550 --> 00:42:26,740
+an oracle that will tell you which task it is and
+一个oracle，它会告诉你它是哪个任务
+
+867
+00:42:26,740 --> 00:42:29,215
+you have two better ways having 10 different ones.
+你有两种更好的方法，有10种不同的方法。
+
+868
+00:42:29,215 --> 00:42:32,440
+So really try training a model on
+所以真的尝试训练模型
+
+869
+00:42:32,440 --> 00:42:35,710
+like data meaning what task is interested in this particular version?
+喜欢数据意味着什么任务对这个特定版本感兴趣？
+
+870
+00:42:35,710 --> 00:42:38,310
+We did. And so it- it confused, you know,
+我们做到了。所以它很困惑，你知道，
+
+871
+00:42:38,310 --> 00:42:42,240
+SQuAD and- and those too the quest- the other- basically the other,
+SQUAD和 - 那些太过任务 - 另一个 - 基本上是另一个，
+
+872
+00:42:42,240 --> 00:42:47,265
+uh, two types of problems that were also cast, ask question answering.
+呃，还有两类问题，请问问答。
+
+873
+00:42:47,265 --> 00:42:49,350
+So it confused those.
+所以它混淆了那些。
+
+874
+00:42:49,350 --> 00:42:53,490
+Um, but then a lot of the others, it was able to like, very perfectly do it.
+嗯，但后来很多其他人，它能够非常完美地做到这一点。
+
+875
+00:42:53,490 --> 00:42:56,190
+But then you basically, as soon as you,
+但是你基本上，只要你，
+
+876
+00:42:56,190 --> 00:43:01,105
+uh, were to try to then build a whole model and get a decaScore,
+呃，试着建立一个完整的模型并获得decaScore，
+
+877
+00:43:01,105 --> 00:43:05,395
+if your- if your classifier is even like 90 percent accurate,
+如果您 - 如果您的分类器甚至准确度为90％，
+
+878
+00:43:05,395 --> 00:43:08,530
+you basically multiply this by 0,9 and
+你基本上乘以0,9和
+
+879
+00:43:08,530 --> 00:43:11,680
+you get dinged so hard that it- it's not competitive anymore.
+你得到了很大的努力，以至于它不再具有竞争力了。
+
+880
+00:43:11,680 --> 00:43:14,350
+So it is actually hard if you try to just build
+所以如果你试着建立它实际上很难
+
+881
+00:43:14,350 --> 00:43:17,080
+that whole system and keep adding sort of if-then else statements,
+整个系统并继续添加if-then else语句，
+
+882
+00:43:17,080 --> 00:43:18,880
+uh, to make that, uh,
+呃，做那个，呃，
+
+883
+00:43:18,880 --> 00:43:20,885
+into sort of a single system. Yeah?
+成为一个单一的系统。是吗？
+
+884
+00:43:20,885 --> 00:43:24,090
+Have you tried telling the model what kind of task this it's doing,
+你有没有试过告诉模特它正在做什么样的任务，
+
+885
+00:43:24,090 --> 00:43:27,330
+just giving that indicator of the kind of task quickly?
+只是快速给出那种任务的指标？
+
+886
+00:43:27,330 --> 00:43:29,010
+I mean, in some ways,
+我的意思是，在某些方面，
+
+887
+00:43:29,010 --> 00:43:30,120
+we did in this case,
+我们在这种情况下做了，
+
+888
+00:43:30,120 --> 00:43:33,360
+because we only trained each model separately on it.
+因为我们只分别训练每个模型。
+
+889
+00:43:33,360 --> 00:43:34,280
+[inaudible]
+[听不见]
+
+890
+00:43:34,280 --> 00:43:36,905
+Um, only through the question.
+嗯，只能通过这个问题。
+
+891
+00:43:36,905 --> 00:43:39,185
+Yeah. Because I was thinking the
+是啊。因为我在想
+
+892
+00:43:39,185 --> 00:43:42,760
+um, maybe it's not that important that the model figure out what we want it to
+嗯，也许模型找出我们想要的东西并不重要
+
+893
+00:43:42,760 --> 00:43:44,965
+do in- in a practical [NOISE] application
+进入实际的[NOISE]应用程序
+
+894
+00:43:44,965 --> 00:43:47,560
+if we could just tell it what we want it to do right now?
+如果我们能告诉它我们现在想做什么？
+
+895
+00:43:47,560 --> 00:43:49,420
+In some cases, you could tell.
+在某些情况下，你可以说。
+
+896
+00:43:49,420 --> 00:43:51,430
+Uh, so the question is sort of,
+呃，问题就是这样，
+
+897
+00:43:51,430 --> 00:43:53,260
+uh, and even in the multitask setting,
+呃，甚至在多任务设置中，
+
+898
+00:43:53,260 --> 00:43:56,095
+you could have like an extra kind of token to say,
+你可能想要一种额外的令牌，
+
+899
+00:43:56,095 --> 00:43:58,150
+"Now, you're doing summarization.
+“现在，你正在进行总结。
+
+900
+00:43:58,150 --> 00:43:59,950
+So, and that's another input."
+所以，这是另一个输入。“
+
+901
+00:43:59,950 --> 00:44:01,255
+Uh, in some ways,
+呃，在某些方面，
+
+902
+00:44:01,255 --> 00:44:03,610
+whether you have a summarization token,
+你是否有一个摘要令牌，
+
+903
+00:44:03,610 --> 00:44:05,650
+uh, or you ask what is the summary?
+呃，或者你问一下总结是什么？
+
+904
+00:44:05,650 --> 00:44:08,125
+It actually I don't think makes that big of a difference.
+实际上我并不认为这有很大的不同。
+
+905
+00:44:08,125 --> 00:44:11,190
+It's just now you can query this model in
+现在你可以查询这个模型了
+
+906
+00:44:11,190 --> 00:44:13,140
+very natural language rather than having to know
+非常自然的语言，而不是必须知道
+
+907
+00:44:13,140 --> 00:44:15,600
+kind of a special token to, to query the model.
+查询模型的一种特殊标记。
+
+908
+00:44:15,600 --> 00:44:19,710
+Uh, and we'll see actually in a couple of slides that the model is not confused,
+呃，我们会在几张幻灯片中看到模型没有混淆，
+
+909
+00:44:19,710 --> 00:44:22,860
+uh, when it comes to how to generate the answers.
+呃，谈到如何产生答案。
+
+910
+00:44:22,860 --> 00:44:24,710
+So, for every of the task,
+所以，对于每一项任务，
+
+911
+00:44:24,710 --> 00:44:28,660
+it knows very clearly how to generate the words to get to the right,
+它非常清楚地知道如何生成要到达右边的单词，
+
+912
+00:44:28,660 --> 00:44:30,700
+to get to, you know, a reasonably accurate answer.
+你知道，这是一个相当准确的答案。
+
+913
+00:44:30,700 --> 00:44:36,520
+[NOISE] Um, in the- [inaudible] does the model
+[NOISE]嗯，在 -  [听不清]中做模型
+
+914
+00:44:36,520 --> 00:44:42,580
+see all of the data and then [inaudible] that class or does it only include a [inaudible]?
+看到所有的数据，然后[音​​频不清晰]该类或它只包括[音频不清晰]？
+
+915
+00:44:42,580 --> 00:44:45,400
+Oh, great question. So, how do we train, uh, the single task models?
+哦，很好的问题。那么，我们如何训练，呃，单一任务模型？
+
+916
+00:44:45,400 --> 00:44:47,980
+They're only trained on that dataset.
+他们只接受过该数据集的培训。
+
+917
+00:44:47,980 --> 00:44:51,700
+So, the SQuAD number here is just a single model that has only seen SQuAD training.
+所以，这里的SQuAD数字只是一个只见过SQuAD训练的模型。
+
+918
+00:44:51,700 --> 00:44:57,250
+[NOISE] So, your point about the,
+[NOISE]所以，你的观点是，
+
+919
+00:44:57,250 --> 00:44:59,050
+um, the pointer exception for the, uh,
+嗯，指针异常，呃，
+
+920
+00:44:59,050 --> 00:45:02,310
+[inaudible] generally more helpful than [inaudible]?
+[听不清]通常比[听不清]更有帮助？
+
+921
+00:45:02,310 --> 00:45:04,830
+Somewhat surprisingly, even, ah,
+有点令人惊讶，甚至，啊，
+
+922
+00:45:04,830 --> 00:45:06,315
+in the case here, uh,
+在这种情况下，呃，
+
+923
+00:45:06,315 --> 00:45:09,065
+where we had, um, this is MultiNLI,
+我们在哪里，嗯，这是MultiNLI，
+
+924
+00:45:09,065 --> 00:45:10,690
+this particular model, I mean,
+这个特殊的模型，我的意思是，
+
+925
+00:45:10,690 --> 00:45:12,550
+if you just have the standard sequence to sequence,
+如果你只是有序列的标准序列，
+
+926
+00:45:12,550 --> 00:45:14,035
+it just generates, you know,
+它只会产生，你知道，
+
+927
+00:45:14,035 --> 00:45:16,660
+also with a softmax, uh, that label.
+还有一个softmax，呃，那个标签。
+
+928
+00:45:16,660 --> 00:45:18,640
+So in that sense, it's quite similar.
+所以在这个意义上，它非常相似。
+
+929
+00:45:18,640 --> 00:45:23,650
+Uh, but yeah, it was actually better able to just point, which actually led us, uh,
+呃，但是，它实际上更能指出，这实际上引导了我们，呃，
+
+930
+00:45:23,650 --> 00:45:27,730
+for a while into thinking about maybe we should have a project where we just say point to
+考虑一下我们应该有一个我们只是说点的项目
+
+931
+00:45:27,730 --> 00:45:32,125
+all the things and just get rid of softmax classifiers forever.
+所有的事情，永远摆脱softmax分类器。
+
+932
+00:45:32,125 --> 00:45:35,890
+Um, the problem is when you then try to do translation also,
+嗯，问题是当你尝试做翻译时，
+
+933
+00:45:35,890 --> 00:45:37,210
+it's like okay wow,
+好像哇哇，
+
+934
+00:45:37,210 --> 00:45:38,395
+what do you point to,
+你指的是什么
+
+935
+00:45:38,395 --> 00:45:40,420
+and then you kind of pre-train it and do
+然后你就开始训练它了
+
+936
+00:45:40,420 --> 00:45:43,750
+some alignment and it gets kinda very large and you point to a lot of different like,
+一些对齐，它有点非常大，你指向很多不同的像，
+
+937
+00:45:43,750 --> 00:45:46,360
+you may have like- like tens of thousands of potential candidates.
+你可能喜欢成千上万的潜在候选人。
+
+938
+00:45:46,360 --> 00:45:49,540
+So we kinda discarded it as like a single unifying model for all the things,
+所以我们把它丢弃，就像所有东西的单一统一模型一样，
+
+939
+00:45:49,540 --> 00:45:51,895
+but you could point to a lot of different,
+但你可以指出很多不同的，
+
+940
+00:45:51,895 --> 00:45:52,990
+like a lot of these tasks,
+像很多这些任务，
+
+941
+00:45:52,990 --> 00:45:54,280
+you could actually point to and
+你实际上可以指向和
+
+942
+00:45:54,280 --> 00:45:59,030
+I think it's another interesting side project that could spawn from this, yeah.
+我认为这是另一个有趣的侧面项目，可以从中产生，是的。
+
+943
+00:46:01,440 --> 00:46:03,745
+Just a quick question to how,
+只是一个简单的问题，如何，
+
+944
+00:46:03,745 --> 00:46:06,910
+how sensitive [inaudible] how sensitive, uh,
+多么敏感[听不清]多么敏感，呃，
+
+945
+00:46:06,910 --> 00:46:09,850
+the individual components [inaudible] was when you
+个别组件[听不清]就在你的时候
+
+946
+00:46:09,850 --> 00:46:13,240
+slightly perturb the relative weights of them in the loss function?
+在损失函数中略微干扰它们的相对权重？
+
+947
+00:46:13,240 --> 00:46:16,855
+So, we -- the question is, uh, how, um,
+所以，我们 - 问题是，呃，怎么样，嗯，
+
+948
+00:46:16,855 --> 00:46:19,795
+sensitive were the tasks if we were to,
+敏感是我们的任务，
+
+949
+00:46:19,795 --> 00:46:22,825
+um, add weights to the different tasks?
+嗯，为不同的任务增加权重？
+
+950
+00:46:22,825 --> 00:46:27,490
+We [NOISE] did in the optimization kind of did a lot of trickery on
+我们[NOISE]在优化方面做了很多诡计
+
+951
+00:46:27,490 --> 00:46:32,080
+how to train it but we never said this task only matters like 0,5 or something.
+如何训练它，但我们从来没有说过这个任务只有0,5或类似的事情。
+
+952
+00:46:32,080 --> 00:46:34,930
+So, we didn't do that analysis. Yeah?
+所以，我们没有做那个分析。是吗？
+
+953
+00:46:34,930 --> 00:46:37,990
+Co-attention seems to be a burden a little bit.
+共同关注似乎是一种负担。
+
+954
+00:46:37,990 --> 00:46:39,070
+In some cases, yeah.
+在某些情况下，是的。
+
+955
+00:46:39,070 --> 00:46:44,425
+Is it the [inaudible] co-attention and order but no co-attention or is that kind of like,
+是[听不清]共同关注和秩序，但没有共同关注或是那样的，
+
+956
+00:46:44,425 --> 00:46:47,320
+"Oh, you already saw the test data so, like, you can't use these."
+“哦，你已经看过测试数据了，就像你不能使用它们一样。”
+
+957
+00:46:47,320 --> 00:46:49,045
+I mean, these are all dep sets.
+我的意思是，这些都是dep set。
+
+958
+00:46:49,045 --> 00:46:53,560
+Um, but it's, you could definitely do even more architecture engineering.
+嗯，但是，你绝对可以做更多的建筑工程。
+
+959
+00:46:53,560 --> 00:46:55,900
+In fact, there's this whole field which I don't think
+事实上，我认为这是整个领域
+
+960
+00:46:55,900 --> 00:46:58,690
+you gotten to, right, neural architecture search?
+你得到了，对，神经结构搜索？
+
+961
+00:46:58,690 --> 00:47:02,515
+Yeah. So like you can actually combine your reinforcement learning, um,
+是啊。所以就像你实际上可以结合你的强化学习，嗯，
+
+962
+00:47:02,515 --> 00:47:05,695
+and you say the action space for the reinforcement learning agent
+你说强化学习代理的行动空间
+
+963
+00:47:05,695 --> 00:47:07,360
+are trying to have a couple of
+试图有两个
+
+964
+00:47:07,360 --> 00:47:09,580
+different modules of neural nets like maybe you want to have
+可能你想要的神经网络的不同模块
+
+965
+00:47:09,580 --> 00:47:11,185
+like a CNN layer and then like
+像CNN层然后喜欢
+
+966
+00:47:11,185 --> 00:47:14,320
+a memory layer and then an LSTM layer and maybe it's bidirectional and you
+一个内存层，然后是一个LSTM层，也许它是双向的你
+
+967
+00:47:14,320 --> 00:47:19,465
+basically let a reinforcement learning agent figure out all of these decisions.
+基本上让强化学习代理人弄清楚所有这些决定。
+
+968
+00:47:19,465 --> 00:47:22,855
+Uh, so I think it would be phenomenal to try to apply
+呃，所以我认为尝试申请会是非凡的
+
+969
+00:47:22,855 --> 00:47:25,210
+neural architecture search not to what's
+神经结构搜索不是什么
+
+970
+00:47:25,210 --> 00:47:27,790
+usually being done which is we already know how to do image classification,
+通常做的是我们已经知道如何进行图像分类，
+
+971
+00:47:27,790 --> 00:47:30,715
+we'll just do it slightly better with NAS, neural architecture search.
+我们只是用NAS，神经架构搜索稍微做得更好。
+
+972
+00:47:30,715 --> 00:47:31,930
+But we actually try to find
+但我们实际上试图找到
+
+973
+00:47:31,930 --> 00:47:34,810
+a single architecture for multi-task learning which we don't know.
+我们不知道的多任务学习的单一架构。
+
+974
+00:47:34,810 --> 00:47:38,620
+The problem of course is that already getting to these.
+问题当然是已经到了这些问题。
+
+975
+00:47:38,620 --> 00:47:41,470
+All these numbers took a lot of compute time and a lot of
+所有这些数字都耗费了大量的计算时间
+
+976
+00:47:41,470 --> 00:47:44,875
+fiddling around with stuff and it is, I can,
+摆弄东西，我可以，
+
+977
+00:47:44,875 --> 00:47:48,985
+I can only give you sort of an idea of like how often we'd say,
+我只能给你一个像我们经常说的那样的想法，
+
+978
+00:47:48,985 --> 00:47:50,890
+"Oh man, we got like this really amazing result
+“哦，伙计，我们得到了这个非常惊人的结果
+
+979
+00:47:50,890 --> 00:47:53,110
+in this task but it needed this learning rate."
+在这项任务中，它需要这种学习率。“
+
+980
+00:47:53,110 --> 00:47:55,000
+And it turns out the same model,
+事实证明，同样的模型，
+
+981
+00:47:55,000 --> 00:47:57,100
+same set of hyperparameters everything,
+一套超参数的一切，
+
+982
+00:47:57,100 --> 00:48:01,555
+but this other task to get to good performance needed a much higher learning rate.
+但要获得良好表现的另一项任务需要更高的学习率。
+
+983
+00:48:01,555 --> 00:48:05,650
+And now, you try to combine those two tasks only together and you're like,
+而现在，你试图将这两个任务结合在一起，你就像，
+
+984
+00:48:05,650 --> 00:48:07,345
+"Okay, how do you choose your learning rate now?"
+“好的，你现在如何选择学习率？”
+
+985
+00:48:07,345 --> 00:48:09,070
+You choose the, you know,
+你知道，你选择了
+
+986
+00:48:09,070 --> 00:48:11,650
+if you choose the task, the learning rate from the task that is, you know,
+如果你选择任务，那么任务的学习率就是你知道的
+
+987
+00:48:11,650 --> 00:48:13,780
+bigger than the smaller tasks just doesn't work
+大于小任务只是不起作用
+
+988
+00:48:13,780 --> 00:48:15,970
+well at all because it needed this higher learning rate.
+好吧，因为它需要更高的学习率。
+
+989
+00:48:15,970 --> 00:48:19,405
+If you'd use the higher learning rate that the smaller task and the smaller dataset,
+如果您使用较小任务和较小数据集的较高学习率，
+
+990
+00:48:19,405 --> 00:48:23,995
+uh, did really well on then the large one just overfits and doesn't work well either.
+呃，当时的确很好，那个大的只是套装，也不好用。
+
+991
+00:48:23,995 --> 00:48:25,960
+If you try to do the average, neither of the two work.
+如果你试图做到平均水平，两者都不起作用。
+
+992
+00:48:25,960 --> 00:48:29,560
+Like there's a lot of complexity in trying to do multitask learning.
+就像在尝试进行多任务学习时有很多复杂性。
+
+993
+00:48:29,560 --> 00:48:33,860
+That's why, that's why it's such an interesting I think, uh, research challenge.
+这就是为什么，这就是为什么我认为这是一个有趣的研究挑战。
+
+994
+00:48:35,100 --> 00:48:38,415
+All right, any more questions about this first set of results?
+好的，还有关于第一组结果的问题吗？
+
+995
+00:48:38,415 --> 00:48:39,780
+They get, they will get better.
+他们得到了，他们会变得更好。
+
+996
+00:48:39,780 --> 00:48:42,270
+We, we have, we have had some ideas already,
+我们已经有了一些想法，
+
+997
+00:48:42,270 --> 00:48:45,370
+uh, on, on how to improve them.
+呃，关于如何改进它们。
+
+998
+00:48:47,250 --> 00:48:49,780
+All right. So, uh,
+行。所以，呃，
+
+999
+00:48:49,780 --> 00:48:51,775
+how did we actually train this whole thing?
+我们怎么实际训练这整件事？
+
+1000
+00:48:51,775 --> 00:48:54,895
+Um, we had tried a lot of different things but in the end, uh,
+嗯，我们尝试了很多不同的东西，但最后，呃，
+
+1001
+00:48:54,895 --> 00:48:58,990
+this very simple fully joint training strategy actually worked the best.
+这个非常简单的全联合培训策略实际上是最好的。
+
+1002
+00:48:58,990 --> 00:49:02,800
+Uh, and that is you basically take a mini batch from each of
+呃，那就是你基本上从每个人那里拿一个小批量
+
+1003
+00:49:02,800 --> 00:49:07,540
+the different tasks and you just train on that mini batch from that task.
+不同的任务，你只需要从那个任务上训练那个迷你批次。
+
+1004
+00:49:07,540 --> 00:49:11,470
+So basically just going through all the 10 tasks and then round robin,
+所以基本上只需要完成所有10个任务然后循环，
+
+1005
+00:49:11,470 --> 00:49:13,690
+uh, go through them.
+呃，通过他们。
+
+1006
+00:49:13,690 --> 00:49:16,825
+Um, now it turns out, ah,
+嗯，现在结果啊，
+
+1007
+00:49:16,825 --> 00:49:19,090
+that that does not work,
+那不起作用，
+
+1008
+00:49:19,090 --> 00:49:21,460
+uh, quite as well, uh,
+呃，好吧，呃，
+
+1009
+00:49:21,460 --> 00:49:26,050
+as another training strategy and if you look into optimization,
+作为另一种培训策略，如果你研究优化，
+
+1010
+00:49:26,050 --> 00:49:27,685
+uh, strategies in neural nets, uh,
+呃，神经网络的策略，呃，
+
+1011
+00:49:27,685 --> 00:49:29,170
+there are actually a couple of papers on
+实际上有几篇论文
+
+1012
+00:49:29,170 --> 00:49:31,720
+so-called curriculum learning, where the idea is,
+所谓的课程学习，其理念是，
+
+1013
+00:49:31,720 --> 00:49:36,430
+you start with training your model with simple pro- simple instances of your problems.
+您首先要通过简单的问题简单实例来训练您的模型。
+
+1014
+00:49:36,430 --> 00:49:38,830
+So, in translation, for instance you start training with
+所以，在翻译中，例如你开始训练
+
+1015
+00:49:38,830 --> 00:49:41,995
+very short sentences and then you go to larger and larger,
+非常短的句子，然后你去越来越大，
+
+1016
+00:49:41,995 --> 00:49:44,560
+uh, sentences, uh, or longer and longer sentences.
+呃，句子，呃，或者更长，更长的句子。
+
+1017
+00:49:44,560 --> 00:49:47,545
+Uh, now it turns out for multi-task learning,
+呃，现在结果是多任务学习，
+
+1018
+00:49:47,545 --> 00:49:49,285
+you actually want to do the opposite.
+你真的想要做相反的事情。
+
+1019
+00:49:49,285 --> 00:49:52,045
+You wanna do anti-curriculum learning.
+你想做反课程学习。
+
+1020
+00:49:52,045 --> 00:49:55,330
+Uh, and that is you start with the hardest tasks and you iterate on
+呃，那就是你从最困难的任务开始，然后你继续
+
+1021
+00:49:55,330 --> 00:49:58,930
+those for a while and then you add the simple tasks later on.
+那些有一段时间，然后你稍后添加简单的任务。
+
+1022
+00:49:58,930 --> 00:50:02,050
+And to some degree, I think this is intuitive because when
+在某种程度上，我认为这很直观，因为什么时候
+
+1023
+00:50:02,050 --> 00:50:07,780
+you train this very gigantic and powerful model,
+你训练这个非常强大的模型，
+
+1024
+00:50:07,780 --> 00:50:11,020
+uh, on a very simple task like
+呃，在一个非常简单的任务上
+
+1025
+00:50:11,020 --> 00:50:14,515
+sentiment and you just need to classify everything to be positive or negative.
+情绪，你只需要将一切都归类为正面或负面。
+
+1026
+00:50:14,515 --> 00:50:18,220
+You train all of these weights and you arrive at sort of, uh,
+你训练所有这些重量，你到达那种，呃，
+
+1027
+00:50:18,220 --> 00:50:20,710
+local optima that are quite deep and very
+局部最佳，非常深刻和非常
+
+1028
+00:50:20,710 --> 00:50:24,370
+specific to just generating these two words and if you then try to get out of that,
+特定于生成这两个单词，如果你然后试图摆脱它，
+
+1029
+00:50:24,370 --> 00:50:27,430
+out of this local optimum for that very simple task
+超出这个非常简单的任务的局部最优
+
+1030
+00:50:27,430 --> 00:50:30,655
+and then try to generate all these other kinds of words and point to different,
+然后尝试生成所有这些其他类型的单词并指向不同的，
+
+1031
+00:50:30,655 --> 00:50:33,925
+you know, words it's never seen before then SQuAD,
+你知道吗，那之前从未见过的SQUAD，
+
+1032
+00:50:33,925 --> 00:50:36,940
+it's very very hard to come out of that local optimum.
+从当地的最佳状态中走出来是非常困难的。
+
+1033
+00:50:36,940 --> 00:50:40,975
+And that is sort of my intuition of why it actually makes more sense to say,
+这就是我对为什么说实际上更有意义的直觉，
+
+1034
+00:50:40,975 --> 00:50:44,935
+"Let's start with SQuAD and machine translation and a couple of these harder tasks.
+“让我们从SQuAD和机器翻译开始，以及其中一些更难的任务。
+
+1035
+00:50:44,935 --> 00:50:47,020
+We'll make the model very general purpose.
+我们将使模型非常通用。
+
+1036
+00:50:47,020 --> 00:50:48,910
+It has to generate a lot of different things,
+它必须产生许多不同的东西，
+
+1037
+00:50:48,910 --> 00:50:52,240
+create a softmax, German words,
+创建一个softmax，德语单词，
+
+1038
+00:50:52,240 --> 00:50:54,460
+it has to point to all kinds of
+它必须指向各种各样的
+
+1039
+00:50:54,460 --> 00:50:57,895
+different words and be able to parse all kinds of different Wikipedia paragraphs."
+不同的单词，能够解析各种不同的维基百科段落。“
+
+1040
+00:50:57,895 --> 00:51:01,315
+And you do that a couple of times and then once you've finished,
+你这样做了几次然后一旦你完成，
+
+1041
+00:51:01,315 --> 00:51:03,190
+uh, this sort of pre-training, uh,
+呃，这种预训练，呃，
+
+1042
+00:51:03,190 --> 00:51:09,220
+stage or anti-curriculum, then you move on and add sort of the simpler smaller tasks.
+阶段或反课程，然后你继续前进并添加更简单的小任务。
+
+1043
+00:51:09,220 --> 00:51:11,590
+So [NOISE] with that, uh,
+所以[NOISE]，呃，
+
+1044
+00:51:11,590 --> 00:51:15,085
+relatively simple change that did take us,
+相对简单的改变确实带走了我们，
+
+1045
+00:51:15,085 --> 00:51:17,455
+uh, a lot of different experiments to get to.
+呃，有很多不同的实验要做。
+
+1046
+00:51:17,455 --> 00:51:20,200
+Um, we actually, uh,
+嗯，我们其实，呃，
+
+1047
+00:51:20,200 --> 00:51:22,045
+closed or, uh, um,
+关闭，呃，嗯，
+
+1048
+00:51:22,045 --> 00:51:25,570
+went closer to closing that gap and now, um,
+接近缩小差距，现在，嗯，
+
+1049
+00:51:25,570 --> 00:51:30,330
+we're only sort of, um, 14, uh, away.
+我们只是那种，嗯，14，呃，离开。
+
+1050
+00:51:30,330 --> 00:51:32,780
+Right, yeah, uh, 14 or so.
+对，是的，呃，14岁左右。
+
+1051
+00:51:32,780 --> 00:51:35,180
+Uh, but there's still, uh,
+呃，但是还有，呃，
+
+1052
+00:51:35,180 --> 00:51:37,700
+a big gap and the biggest, uh,
+差距很大，最大，呃，
+
+1053
+00:51:37,700 --> 00:51:40,880
+nuisance and issue that we had was with a translation.
+我们遇到的滋扰和问题是翻译。
+
+1054
+00:51:40,880 --> 00:51:42,845
+Basically, if you look at all of these,
+基本上，如果你看看所有这些，
+
+1055
+00:51:42,845 --> 00:51:44,914
+most things are kind of similar,
+大多数事情都有点类似，
+
+1056
+00:51:44,914 --> 00:51:49,160
+get slightly better, um and it's sort of a toss up but then and,
+得到稍微好一点，嗯，这有点折腾但是然后，
+
+1057
+00:51:49,160 --> 00:51:52,130
+and roughly similar, but translation was really bad.
+和大致相似，但翻译真的很糟糕。
+
+1058
+00:51:52,130 --> 00:51:53,450
+It's almost only half, uh,
+它几乎只有一半，呃，
+
+1059
+00:51:53,450 --> 00:51:56,420
+the performance in the multitask learning setup,
+多任务学习设置中的性能，
+
+1060
+00:51:56,420 --> 00:52:00,110
+and part of that is because translation was the only task that had
+部分原因是因为翻译是唯一的任务
+
+1061
+00:52:00,110 --> 00:52:05,960
+a very large Softmax vocabulary of words that were in no other task.
+一个非常大的Softmax词汇词汇，没有任何其他任务。
+
+1062
+00:52:05,960 --> 00:52:08,075
+And most of the other tasks,
+而且大多数其他任务，
+
+1063
+00:52:08,075 --> 00:52:10,430
+actually were doing really well with pointing.
+实际上指点真的很好。
+
+1064
+00:52:10,430 --> 00:52:14,570
+And so, uh, my interpretation of this was that the intermediate layers,
+所以，呃，我对此的解释是中间层，
+
+1065
+00:52:14,570 --> 00:52:16,550
+all these representations that we learned with
+我们学到的所有这些表述
+
+1066
+00:52:16,550 --> 00:52:19,520
+bi-directional LSTMs and transformers, they got really,
+双向LSTM和变压器，他们真的，
+
+1067
+00:52:19,520 --> 00:52:21,875
+really good at being pointed to,
+非常善于被指出，
+
+1068
+00:52:21,875 --> 00:52:27,560
+like creating hidden representations that the answer module can point to very accurately.
+比如创建应答模块可以非常准确地指出的隐藏表示。
+
+1069
+00:52:27,560 --> 00:52:29,465
+And then you have this one task that is like,
+然后你有这个任务，就像，
+
+1070
+00:52:29,465 --> 00:52:31,085
+I don't point to almost anything,
+我几乎没有指出什么，
+
+1071
+00:52:31,085 --> 00:52:34,235
+I basically just generate other words and then different vocabulary.
+我基本上只生成其他单词然后生成不同的词汇。
+
+1072
+00:52:34,235 --> 00:52:37,610
+And so those hidden representations became less useful for that task.
+因此，这些隐藏的表示对于该任务变得不那么有用。
+
+1073
+00:52:37,610 --> 00:52:41,360
+And so, that was one of the insights and that led
+所以，这是其中一个洞察力和领导力
+
+1074
+00:52:41,360 --> 00:52:45,020
+to one of the ways of trying to improve this.
+试图改善这一点的方法之一。
+
+1075
+00:52:45,020 --> 00:52:47,615
+Now, one of the interesting issues that we had is,
+现在，我们遇到的一个有趣的问题是，
+
+1076
+00:52:47,615 --> 00:52:49,040
+when we improved the model,
+当我们改进模型时，
+
+1077
+00:52:49,040 --> 00:52:51,500
+the multi-single model for all 10 tasks,
+所有10个任务的多单模型，
+
+1078
+00:52:51,500 --> 00:52:53,090
+a lot of times we said, well,
+很多次我们说，好吧，
+
+1079
+00:52:53,090 --> 00:52:55,280
+but now we also have to go back and run
+但现在我们还要回去跑步
+
+1080
+00:52:55,280 --> 00:52:59,060
+10 more experiments on all the single tasks to have a proper comparison, right?
+在所有单个任务上进行10次实验以进行适当的比较，对吧？
+
+1081
+00:52:59,060 --> 00:53:01,280
+Because if you tune the thing you care about,
+因为如果你调整你关心的东西，
+
+1082
+00:53:01,280 --> 00:53:04,790
+and you stop tuning the thing you wanna show you can do better than,
+而你停止调整你想表明你可以做得更好的事情，
+
+1083
+00:53:04,790 --> 00:53:06,275
+then that's not fair.
+那不公平。
+
+1084
+00:53:06,275 --> 00:53:09,470
+Uh, so you always wanna give as much, uh,
+呃，所以你总是想给予多少，呃，
+
+1085
+00:53:09,470 --> 00:53:13,655
+TLC and focus and experiment time to your baselines.
+TLC以及对基准的关注和实验时间。
+
+1086
+00:53:13,655 --> 00:53:17,789
+And so, uh, in some cases we actually,
+所以，呃，在某些情况下我们实际上，
+
+1087
+00:53:18,670 --> 00:53:22,415
+uh, improved some- improved something.
+呃，改进了一些改进的东西。
+
+1088
+00:53:22,415 --> 00:53:26,495
+But then, we improve both the 10 separate models and our model,
+但是，我们改进了10个单独的模型和我们的模型，
+
+1089
+00:53:26,495 --> 00:53:29,090
+and some cases like the 10 separate models improved, even more.
+有些案例比如10个单独的模型改进了，甚至更多。
+
+1090
+00:53:29,090 --> 00:53:30,485
+So the gap got even larger.
+所以差距变得更大了。
+
+1091
+00:53:30,485 --> 00:53:32,720
+It's kind of the opposite of what we wanted to show, but in general,
+这与我们想要表现的相反，但总的来说，
+
+1092
+00:53:32,720 --> 00:53:34,220
+it's better for both tests,
+这两个测试都比较好
+
+1093
+00:53:34,220 --> 00:53:36,530
+uh, for the architecture overall.
+呃，对整个建筑而言。
+
+1094
+00:53:36,530 --> 00:53:37,970
+So basically, we started, uh,
+基本上，我们开始了，呃，
+
+1095
+00:53:37,970 --> 00:53:40,220
+with this fully joint training and we have
+通过这种全面的联合培训，我们有
+
+1096
+00:53:40,220 --> 00:53:42,515
+this sort of set of single models that we could,
+这种单一模型我们可以，
+
+1097
+00:53:42,515 --> 00:53:44,150
+in theory with some oracle,
+理论上与某些神谕，
+
+1098
+00:53:44,150 --> 00:53:45,335
+kind of just sum up, uh,
+总结一下，呃，
+
+1099
+00:53:45,335 --> 00:53:47,015
+in their scores, to get a decaScore.
+在他们的分数，得到decaScore。
+
+1100
+00:53:47,015 --> 00:53:49,115
+So the gap started at 23.
+所以差距从23开始。
+
+1101
+00:53:49,115 --> 00:53:53,030
+And then, uh, we basically did this anti-curriculum training,
+然后，呃，我们基本上做了这个反课程培训，
+
+1102
+00:53:53,030 --> 00:53:55,790
+uh, which, uh, lowered the gap to 15.
+呃，呃，把差距缩小到15。
+
+1103
+00:53:55,790 --> 00:53:57,380
+So we're kind of excited,
+所以我们很兴奋，
+
+1104
+00:53:57,380 --> 00:53:58,760
+uh, making good progress.
+呃，取得了很好的进展。
+
+1105
+00:53:58,760 --> 00:53:59,930
+Then we switched, uh,
+然后我们换了，呃，
+
+1106
+00:53:59,930 --> 00:54:01,880
+from GloVe and use CoVe.
+来自GloVe并使用CoVe。
+
+1107
+00:54:01,880 --> 00:54:04,055
+So contextual vectors, um,
+所以语境向量，嗯，
+
+1108
+00:54:04,055 --> 00:54:06,320
+which actually increased the gap a lot again.
+这实际上又增加了很多差距。
+
+1109
+00:54:06,320 --> 00:54:09,325
+So everything got better, but the 10 separate models got
+所以一切都变得更好，但10个独立的模型得到了
+
+1110
+00:54:09,325 --> 00:54:13,000
+even better than the one single model that does the 10 tasks.
+甚至比执行10项任务的单一模型更好。
+
+1111
+00:54:13,000 --> 00:54:14,650
+Um, so the gap got bigger,
+嗯，差距越大，
+
+1112
+00:54:14,650 --> 00:54:17,140
+but everybody's performance increased.
+但每个人的表现都有所增加。
+
+1113
+00:54:17,140 --> 00:54:19,510
+So it was still overall a good thing.
+所以这仍然是一件好事。
+
+1114
+00:54:19,510 --> 00:54:22,780
+Uh, and then, uh, we basically figured,
+呃，然后，呃，我们基本上认为，
+
+1115
+00:54:22,780 --> 00:54:24,610
+especially with this machine translation issue,
+特别是这个机器翻译问题，
+
+1116
+00:54:24,610 --> 00:54:26,470
+we shouldn't just pre-train on SQuAD,
+我们不应该只对SQuAD进行预训练，
+
+1117
+00:54:26,470 --> 00:54:30,100
+but we also should include machine translation in
+但我们也应该包括机器翻译
+
+1118
+00:54:30,100 --> 00:54:34,845
+this pre-training in the beginning so the model doesn't just start learning to point.
+这个预训练在开始时所以模型不仅仅是开始学习点。
+
+1119
+00:54:34,845 --> 00:54:37,625
+Um, and that helped us, uh,
+嗯，这对我们有帮助，呃，
+
+1120
+00:54:37,625 --> 00:54:40,160
+to reduce the gap between the 10 separate models,
+减少10个独立模型之间的差距，
+
+1121
+00:54:40,160 --> 00:54:43,085
+Oracle, and the single model to about five points.
+甲骨文和单一模式大约五点。
+
+1122
+00:54:43,085 --> 00:54:44,690
+And then, uh, we basically said,
+然后，呃，我们基本上说，
+
+1123
+00:54:44,690 --> 00:54:46,640
+okay, translation is still not that good.
+好吧，翻译还不是那么好。
+
+1124
+00:54:46,640 --> 00:54:47,780
+We just keep oversampling.
+我们只是保持过采样。
+
+1125
+00:54:47,780 --> 00:54:52,760
+So, every time we go through one of these round robin mini-batch sets,
+所以，每次我们通过其中一个循环小批量套装，
+
+1126
+00:54:52,760 --> 00:54:54,740
+we just always include machine translation.
+我们总是包括机器翻译。
+
+1127
+00:54:54,740 --> 00:54:59,270
+And that basically allowed us to then reduce the gap,
+这基本上允许我们缩小差距，
+
+1128
+00:54:59,270 --> 00:55:01,025
+uh, to just a single point.
+呃，只是一点。
+
+1129
+00:55:01,025 --> 00:55:03,590
+So now, uh, we started, uh,
+所以现在，呃，我们开始了，呃，
+
+1130
+00:55:03,590 --> 00:55:06,650
+couple of, several months ago, uh, at 586.
+几个月前的几个，呃，586。
+
+1131
+00:55:06,650 --> 00:55:08,960
+And now the single, uh,
+现在单身，呃，
+
+1132
+00:55:08,960 --> 00:55:11,330
+oracle with 10 different models,
+oracle有10种不同型号，
+
+1133
+00:55:11,330 --> 00:55:12,560
+if you were to sum them up,
+如果你要总结一下，
+
+1134
+00:55:12,560 --> 00:55:16,100
+get 618, uh, and the, you know,
+得到618，呃，你知道，
+
+1135
+00:55:16,100 --> 00:55:19,985
+better contextual vectors and tuning and adding a lot more translation,
+更好的上下文向量和调整，并添加更多的翻译，
+
+1136
+00:55:19,985 --> 00:55:23,210
+and translation is still not as good as we would like it to be, uh,
+翻译仍然不如我们希望的那样好，呃，
+
+1137
+00:55:23,210 --> 00:55:26,525
+but now, several of the other tasks benefited a bunch.
+但现在，其他一些任务受益匪浅。
+
+1138
+00:55:26,525 --> 00:55:30,140
+And now we're basically one decaScore away from
+而现在我们基本上只有一个十分之一的分数
+
+1139
+00:55:30,140 --> 00:55:33,740
+having a single model that does as well as 10 different ones.
+拥有一个与10个不同模型一样的模型。
+
+1140
+00:55:33,740 --> 00:55:36,395
+And you can basically,
+你基本上可以，
+
+1141
+00:55:36,395 --> 00:55:38,525
+you could run even more experiments,
+你可以运行更多的实验，
+
+1142
+00:55:38,525 --> 00:55:41,930
+in some ways you could burn millions of dollars on AWS cost here,
+在某些方面，你可以在这里花费数百万美元的AWS成本，
+
+1143
+00:55:41,930 --> 00:55:47,180
+because most of the time we kept the hyperparameters of these different models the same.
+因为大多数时候我们保持这些不同模型的超参数相同。
+
+1144
+00:55:47,180 --> 00:55:49,385
+Like each of these, you could also say, well,
+像这些中的每一个，你也可以说，嗯，
+
+1145
+00:55:49,385 --> 00:55:52,010
+maybe this multitask model needs to have 50 more layers,
+也许这个多任务模型需要多50个层，
+
+1146
+00:55:52,010 --> 00:55:53,720
+or maybe 19 more layers,
+或者更多19层，
+
+1147
+00:55:53,720 --> 00:55:56,225
+or maybe five more layers and maybe they should be 1000,
+或者可能还有五层，也许它们应该是1000，
+
+1148
+00:55:56,225 --> 00:55:57,860
+you know, wider in their hidden dimensions.
+你知道，隐藏的维度更广。
+
+1149
+00:55:57,860 --> 00:56:01,310
+And you could basically run a lot more experiments.
+你基本上可以进行更多的实验。
+
+1150
+00:56:01,310 --> 00:56:03,830
+Maybe hopefully, eventually, the community jointly does that,
+也许希望最终，社区共同做到这一点，
+
+1151
+00:56:03,830 --> 00:56:06,170
+and then we can kind of move, move towards that.
+然后我们可以采取行动，朝着这一目标迈进。
+
+1152
+00:56:06,170 --> 00:56:08,480
+But we figured, okay, we're pretty close,
+但我们想，好吧，我们非常接近，
+
+1153
+00:56:08,480 --> 00:56:13,850
+so we moved on to some other things which maybe I'll tell you about next year.
+所以我们转到了其他一些我可能会在明年告诉你的事情。
+
+1154
+00:56:13,850 --> 00:56:16,715
+[LAUGHTER] But basically, um,
+[大笑]但基本上，嗯，
+
+1155
+00:56:16,715 --> 00:56:18,980
+let's do some analysis of what happened in this project.
+让我们对这个项目中发生的事情做一些分析。
+
+1156
+00:56:18,980 --> 00:56:22,235
+And this is kind of, I think something that I would encourage you all to do as well.
+这有点像，我想我会鼓励你们所做的一切。
+
+1157
+00:56:22,235 --> 00:56:25,460
+Like you, you can chase the numbers for a while and in some ways,
+和你一样，你可以追逐一段时间的数字，在某些方面，
+
+1158
+00:56:25,460 --> 00:56:28,385
+you should always be skeptical about your evaluations.
+你应该总是对你的评价持怀疑态度。
+
+1159
+00:56:28,385 --> 00:56:29,780
+And in some cases,
+在某些情况下，
+
+1160
+00:56:29,780 --> 00:56:33,230
+you've seen- we've seen in the NLP community people
+你见过 - 我们在NLP社区看过人们
+
+1161
+00:56:33,230 --> 00:56:36,935
+like basically just optimize BLEU scores for translation for years.
+就像基本上只是优化BLEU分数翻译多年。
+
+1162
+00:56:36,935 --> 00:56:38,690
+And then somebody came out with a paper and said, well,
+然后有人拿出一张纸说，好吧，
+
+1163
+00:56:38,690 --> 00:56:44,510
+it turns out BLEU metrics and human evaluations on how good of a translation is this,
+事实证明BLEU指标和人工评估翻译的好坏程度，
+
+1164
+00:56:44,510 --> 00:56:46,175
+aren't actually that correlated.
+实际上并不相关。
+
+1165
+00:56:46,175 --> 00:56:48,320
+And you're like, ah, that that sucks,
+而你就是啊，那太糟糕了，
+
+1166
+00:56:48,320 --> 00:56:53,000
+we just spent years of our lives tuning that metric and publishing a bunch of papers.
+我们只是花了很多年的时间来调整这个指标并发表了大量的论文。
+
+1167
+00:56:53,000 --> 00:56:57,290
+Um, and so in some ways all of these metrics have flaws, uh, you know,
+嗯，所以在某些方面所有这些指标都有缺陷，呃，你知道，
+
+1168
+00:56:57,290 --> 00:57:00,140
+root scores summarization is a super,
+root分数摘要是超级的，
+
+1169
+00:57:00,140 --> 00:57:03,380
+uh, subjective kind of a task.
+呃，主观的一种任务。
+
+1170
+00:57:03,380 --> 00:57:05,465
+And summarization, for instance,
+例如，总结
+
+1171
+00:57:05,465 --> 00:57:07,730
+when you analyze the errors, uh,
+当你分析错误时，呃，
+
+1172
+00:57:07,730 --> 00:57:10,595
+you often realize that word vectors have problems too.
+你经常意识到单词向量也存在问题。
+
+1173
+00:57:10,595 --> 00:57:12,920
+So, for instance, the word vector for Jason, John,
+所以，例如，杰森，约翰，矢量这个词，
+
+1174
+00:57:12,920 --> 00:57:15,290
+and Jeremy are all kind of the same, right?
+和杰里米都是一样的，对吧？
+
+1175
+00:57:15,290 --> 00:57:16,940
+They all have similar, uh,
+他们都有相似的，呃，
+
+1176
+00:57:16,940 --> 00:57:20,045
+distributions, similar contexts, windows, and so on.
+分布，类似的上下文，窗口等。
+
+1177
+00:57:20,045 --> 00:57:22,610
+And so word vectors of names are very similar.
+所以名字的单词向量非常相似。
+
+1178
+00:57:22,610 --> 00:57:25,835
+And so in summarization errors, you realize, oh,
+所以在摘要错误中，你会发现，哦，
+
+1179
+00:57:25,835 --> 00:57:29,300
+well, you know, this article, news article talked about Jeremy being kidnapped.
+好吧，你知道，这篇新闻文章谈到了杰里米被绑架。
+
+1180
+00:57:29,300 --> 00:57:31,160
+But the summary said that Jason was kidnapped.
+但总结说杰森被绑架了。
+
+1181
+00:57:31,160 --> 00:57:33,650
+And you like, well, you know, in the evaluation metric
+而且，您知道，在评估指标中
+
+1182
+00:57:33,650 --> 00:57:36,320
+that's just one word is off and like, all the rest is correct,
+只有一个词是关闭的，所有其余的都是正确的，
+
+1183
+00:57:36,320 --> 00:57:38,000
+but it's a pretty important word.
+但这是一个非常重要的词。
+
+1184
+00:57:38,000 --> 00:57:40,970
+And so, word vectors have like issues
+因此，单词向量有类似的问题
+
+1185
+00:57:40,970 --> 00:57:44,075
+for summarization that are pretty fundamental and I don't think,
+总结是非常基本的，我不认为，
+
+1186
+00:57:44,075 --> 00:57:46,835
+uh, anybody's tackling really well right now.
+呃，现在任何人都很好地解决了问题。
+
+1187
+00:57:46,835 --> 00:57:48,875
+Uh, and so all of these metrics have issues.
+呃，所有这些指标都存在问题。
+
+1188
+00:57:48,875 --> 00:57:51,620
+I would argue though that combining the 10 actually
+我认为虽然实际上结合了10个
+
+1189
+00:57:51,620 --> 00:57:54,440
+makes it less problematic and more meaningful,
+使问题更少，更有意义，
+
+1190
+00:57:54,440 --> 00:57:56,630
+than looking at each one separately.
+而不是分别看每一个。
+
+1191
+00:57:56,630 --> 00:58:00,725
+Uh, because now you can't use the idiosyncrasies of
+呃，因为现在你不能使用它的特质了
+
+1192
+00:58:00,725 --> 00:58:04,970
+one particular evaluation metric to just get like your score a little bit higher.
+一个特定的评估指标，让你的得分更高一些。
+
+1193
+00:58:04,970 --> 00:58:09,740
+Um, because then, if you just tune with that particular thing in mind,
+嗯，因为那样，如果你只是考虑到那个特定的东西，
+
+1194
+00:58:09,740 --> 00:58:13,370
+it will hurt some of the other tasks and you won't get to the sort of general,
+它会伤害其他一些任务，你不会达到那种一般性，
+
+1195
+00:58:13,370 --> 00:58:15,950
+uh, NLP model that much more easily.
+呃，NLP模型更容易。
+
+1196
+00:58:15,950 --> 00:58:18,605
+All right. So now, let's do some analysis uh,
+行。那么现在，让我们做一些分析呃，
+
+1197
+00:58:18,605 --> 00:58:20,645
+of this model and, uh,
+这个模型，呃，
+
+1198
+00:58:20,645 --> 00:58:24,140
+look at, and this is the kinda thing that comes to one of the questions that was asked.
+看看，这是有问题的其中一个问题。
+
+1199
+00:58:24,140 --> 00:58:28,295
+Uh, is this model able to kind of generate the right words for the right tasks?
+呃，这个模型能够为正确的任务生成正确的单词吗？
+
+1200
+00:58:28,295 --> 00:58:31,775
+And here, we basically looked at the distributions of how often, uh,
+在这里，我们基本上看了多久的分布，呃，
+
+1201
+00:58:31,775 --> 00:58:37,100
+the model generated words in these differen- with these three different mechanisms,
+模型在这些不同的机制中产生了这些不同的机制，
+
+1202
+00:58:37,100 --> 00:58:40,370
+Softmax vocabulary, context pointers, or question pointers.
+Softmax词汇表，上下文指针或问题指针。
+
+1203
+00:58:40,370 --> 00:58:42,515
+And, uh, as you can see,
+而且，呃，正如你所看到的，
+
+1204
+00:58:42,515 --> 00:58:45,500
+in the majority of cases it knows exactly how to generate.
+在大多数情况下，它确切知道如何生成。
+
+1205
+00:58:45,500 --> 00:58:47,915
+So, uh, for, uh,
+所以，呃，因为，呃，
+
+1206
+00:58:47,915 --> 00:58:51,110
+question, answering, and semantic role labeling,
+问题，回答和语义角色标签，
+
+1207
+00:58:51,110 --> 00:58:55,355
+and SQuAD and Wiki SQL and,
+和SQuAD和Wiki SQL以及
+
+1208
+00:58:55,355 --> 00:58:59,150
+um, summarization, it basically uses the context pointer.
+嗯，摘要，它基本上使用了上下文指针。
+
+1209
+00:58:59,150 --> 00:59:01,565
+So it just points into the context document.
+所以它只是指向上下文文档。
+
+1210
+00:59:01,565 --> 00:59:02,795
+And we know for SQuAD,
+我们知道SQUAD，
+
+1211
+00:59:02,795 --> 00:59:05,990
+that is basically [NOISE] how the data set was generated.
+这基本上是[NOISE]如何生成数据集。
+
+1212
+00:59:05,990 --> 00:59:08,600
+So that's the only thing that that really makes a lot of sense.
+所以这是唯一真正有意义的东西。
+
+1213
+00:59:08,600 --> 00:59:11,930
+Uh, what's kind of cool is that in some cases like summarization,
+呃，有点酷，在某些情况下，如摘要，
+
+1214
+00:59:11,930 --> 00:59:14,240
+it sometimes creates new words or, you know,
+它有时会创造新词，或者，你知道，
+
+1215
+00:59:14,240 --> 00:59:17,330
+that weren't in the context document wherein pointed to.
+那些不在指向的上下文文档中。
+
+1216
+00:59:17,330 --> 00:59:19,910
+Uh, and for zero-shot relation extraction,
+呃，对于零射击关系提取，
+
+1217
+00:59:19,910 --> 00:59:21,455
+also sometimes uses, uh,
+也有时使用，呃，
+
+1218
+00:59:21,455 --> 00:59:24,050
+this external vocabulary and in some cases the context pointer.
+这个外部词汇表，在某些情况下还有上下文指针。
+
+1219
+00:59:24,050 --> 00:59:26,210
+So for the most part, uh,
+所以在大多数情况下，呃，
+
+1220
+00:59:26,210 --> 00:59:31,970
+this model doesn't- is not confused how to execute on a task given, uh,
+这个模型不会混淆如何执行给定的任务，呃，
+
+1221
+00:59:31,970 --> 00:59:35,180
+this question formalism rather than, uh, the,
+这个问题形式主义而不是呃，
+
+1222
+00:59:35,180 --> 00:59:37,370
+uh, format of sort of this is the task,
+呃，这种格式是任务，
+
+1223
+00:59:37,370 --> 00:59:39,840
+just do this particular test.
+只做这个特别的测试。
+
+1224
+00:59:41,200 --> 00:59:44,030
+Now, um, you might argue,
+嗯，你可能会说，
+
+1225
+00:59:44,030 --> 00:59:45,830
+okay, I'm not that impressed by, you know,
+好吧，我不是那么留下深刻印象，你知道，
+
+1226
+00:59:45,830 --> 00:59:48,500
+having the performance be slightly the same with one model versus
+具有与一个型号相比的性能略有相同
+
+1227
+00:59:48,500 --> 00:59:51,590
+10 separate models even though it's nice if you wanna deploy it right,
+10个独立的模型，即使你想要正确部署也很好，
+
+1228
+00:59:51,590 --> 00:59:53,255
+like, uses less RAM and all of that,
+比如，使用更少的RAM和所有这些，
+
+1229
+00:59:53,255 --> 00:59:54,965
+assuming they're the same size,
+假设它们的大小相同，
+
+1230
+00:59:54,965 --> 00:59:57,080
+uh, while, you know, one-tenth the size.
+呃，虽然，你知道，只有十分之一。
+
+1231
+00:59:57,080 --> 01:00:00,710
+But what I'm excited about is more like the next couple of results.
+但令我兴奋的是更接近下一对结果。
+
+1232
+01:00:00,710 --> 01:00:02,750
+And namely, sort of this transfer learning,
+就是说，这种转移学习，
+
+1233
+01:00:02,750 --> 01:00:04,550
+domain adaptation, and zero-shot,
+域适应和零射击，
+
+1234
+01:00:04,550 --> 01:00:06,020
+uh, these kinds of capabilities.
+呃，这些能力。
+
+1235
+01:00:06,020 --> 01:00:11,630
+So here, uh, we chose two data sets that weren't included in the original 10.
+所以在这里，呃，我们选择了原始10中未包含的两个数据集。
+
+1236
+01:00:11,630 --> 01:00:17,795
+And we basically trained a pre-trained model on this versus a random model.
+我们基本上训练了一个预训练的模型与随机模型。
+
+1237
+01:00:17,795 --> 01:00:20,510
+And, uh, randomly here again,
+而且，呃，再次在这里，
+
+1238
+01:00:20,510 --> 01:00:21,859
+they're the same architecture,
+他们是相同的架构，
+
+1239
+01:00:21,859 --> 01:00:25,295
+and pre-trained means the entirety of the model was pre-trained.
+预训练意味着整个模型都经过预先训练。
+
+1240
+01:00:25,295 --> 01:00:26,945
+All the, you know,
+所有，你知道，
+
+1241
+01:00:26,945 --> 01:00:31,325
+encoders including the decoder in the Softmax and everything, uh,
+编码器包括Softmax中的解码器和一切，呃，
+
+1242
+01:00:31,325 --> 01:00:36,140
+and to two other tasks where another IWSLT language pair namely,
+以及另外两个IWSLT语言对的其他任务，
+
+1243
+01:00:36,140 --> 01:00:37,685
+translating from English to Czech, uh,
+从英语翻译成捷克语，呃，
+
+1244
+01:00:37,685 --> 01:00:40,880
+and named entity recognition tasks that you all know very well.
+和你们都非常了解的命名实体识别任务。
+
+1245
+01:00:40,880 --> 01:00:43,460
+So basically what we found is that,
+基本上我们发现的是，
+
+1246
+01:00:43,460 --> 01:00:45,935
+uh, it converges much more quickly,
+呃，它收敛得更快，
+
+1247
+01:00:45,935 --> 01:00:47,810
+uh, in the beginning, uh, and then,
+呃，一开始，呃，然后，
+
+1248
+01:00:47,810 --> 01:00:51,200
+there's still a significant but not gigantic gap.
+还有一个重要但不是巨大的差距。
+
+1249
+01:00:51,200 --> 01:00:55,595
+So this pre-training on these completely separate kinds of task had helped.
+因此，对这些完全独立的任务进行预训练有所帮助。
+
+1250
+01:00:55,595 --> 01:00:58,745
+And, uh, I think that's,
+而且，呃，我想是的，
+
+1251
+01:00:58,745 --> 01:01:00,365
+that's pretty exciting, um,
+那非常令人兴奋，嗯，
+
+1252
+01:01:00,365 --> 01:01:02,420
+especially sort of the quicker convergence, like,
+特别是更快的收敛，如，
+
+1253
+01:01:02,420 --> 01:01:04,165
+learning more quickly, uh,
+学得更快，呃，
+
+1254
+01:01:04,165 --> 01:01:06,310
+whatever new task you, you come up with,
+无论你做什么新任务，你想出来，
+
+1255
+01:01:06,310 --> 01:01:09,010
+which also means in some cases you can get away with
+这也意味着在某些情况下你可以逃脱
+
+1256
+01:01:09,010 --> 01:01:11,950
+less training data on these new- on these new tasks.
+关于这些新任务的培训数据较少。
+
+1257
+01:01:11,950 --> 01:01:15,970
+Uh, now domain adaptation is kind of the simpler form of transfer learning,
+呃，现在域名改编是一种更简单的转学方式，
+
+1258
+01:01:15,970 --> 01:01:19,280
+where you basically just have a different,
+你基本上只是有一个不同的，
+
+1259
+01:01:19,280 --> 01:01:21,410
+uh, type of, uh,
+呃，类型，呃，
+
+1260
+01:01:21,410 --> 01:01:23,060
+you know, distribution for your words.
+你知道，分发你的话。
+
+1261
+01:01:23,060 --> 01:01:26,750
+Uh, we mentioned we have the Stanford Sentiment Treebank for sentiment analysis.
+呃，我们提到我们有斯坦福情绪树库进行情绪分析。
+
+1262
+01:01:26,750 --> 01:01:29,780
+Uh, and then we analyze this on different,
+呃，然后我们分析不同的，
+
+1263
+01:01:29,780 --> 01:01:31,610
+uh, sentiment data sets,
+呃，情绪数据集，
+
+1264
+01:01:31,610 --> 01:01:34,505
+namely Amazon product reviews and Yelp restaurant reviews,
+即亚马逊产品评论和Yelp餐厅评论，
+
+1265
+01:01:34,505 --> 01:01:36,605
+and out of the box without any training,
+开箱即用，未经任何培训，
+
+1266
+01:01:36,605 --> 01:01:39,965
+the model just got 80% accuracy on both of those data sets.
+该模型在这两个数据集上都获得了80％的准确率。
+
+1267
+01:01:39,965 --> 01:01:42,319
+Uh, and I think for practitioners,
+呃，我认为对于从业者来说，
+
+1268
+01:01:42,319 --> 01:01:45,140
+that is pretty exciting because you basically didn't have to train anything,
+这非常令人兴奋，因为你基本上不需要训练任何东西，
+
+1269
+01:01:45,140 --> 01:01:46,610
+it just kind of worked out of the box,
+它只是一种开箱即用的方式，
+
+1270
+01:01:46,610 --> 01:01:48,830
+download it from GitHub, and run it.
+从GitHub下载并运行它。
+
+1271
+01:01:48,830 --> 01:01:51,620
+Uh, SNLI, that was slightly different.
+呃，SNLI，略有不同。
+
+1272
+01:01:51,620 --> 01:01:53,330
+It didn't quite work as well.
+它并没有那么好用。
+
+1273
+01:01:53,330 --> 01:01:55,280
+It's another natural language inference data set,
+这是另一种自然语言推理数据集，
+
+1274
+01:01:55,280 --> 01:01:59,135
+but has very different- a very different distribution, different, uh,
+但是有很大的不同 - 一个非常不同的分布，不同，呃，
+
+1275
+01:01:59,135 --> 01:02:01,040
+kinds of domains, uh, that,
+各种领域，呃，那，
+
+1276
+01:02:01,040 --> 01:02:03,290
+uh, these entailment questions are asked over.
+呃，这些蕴涵问题都被问到了。
+
+1277
+01:02:03,290 --> 01:02:06,980
+Uh, and here, out of the box it achieved 62.
+呃，在这里，开箱即可达到62。
+
+1278
+01:02:06,980 --> 01:02:10,200
+Uh, but then, uh, once you fine tuned it and
+呃，但是，呃，一旦你对它进行了很好的调整
+
+1279
+01:02:10,200 --> 01:02:14,230
+similar to these experiments here continue to actually train on this data set,
+类似于这些实验，这里继续实际训练这个数据集，
+
+1280
+01:02:14,230 --> 01:02:17,680
+it quickly uh, converged to 87 which was
+很快，呃，收敛到了87
+
+1281
+01:02:17,680 --> 01:02:21,625
+still two percent gain over a randomlyor initialized McCann model. Yeah.
+与随机或初始化的McCann模型相比仍有2％的收益。是啊。
+
+1282
+01:02:21,625 --> 01:02:29,075
+In that experiment, did you evaluate how much less data you can get away with?
+在那个实验中，您是否评估了可以获得的数据少得多？
+
+1283
+01:02:29,075 --> 01:02:32,900
+Did we evaluate how much less data we can get away with? We didn't.
+我们是否评估了我们可以获得的数据少得多？我们没有。
+
+1284
+01:02:32,900 --> 01:02:35,510
+And in some ways, whenever you would run this experiment,
+在某些方面，每当你运行这个实验，
+
+1285
+01:02:35,510 --> 01:02:38,000
+you'd basically be like, you'd still not do as well.
+你基本上就是这样，你仍然没有做得那么好。
+
+1286
+01:02:38,000 --> 01:02:41,555
+Like, everything- all these models will still do better with more training data.
+就像，一切 - 所有这些模型仍然可以用更多的训练数据做得更好。
+
+1287
+01:02:41,555 --> 01:02:43,640
+So you just kind of, it would be a fuzzy kind of say,
+所以你只是那种，这将是一种模糊的说法，
+
+1288
+01:02:43,640 --> 01:02:46,220
+like, cut- fuzzy sort of result, right?
+比如，削减模糊的结果吧？
+
+1289
+01:02:46,220 --> 01:02:48,140
+Where you say, well, with one-tenth we might get
+你说的地方，我们可能会得到十分之一
+
+1290
+01:02:48,140 --> 01:02:50,885
+to 50 and the other model might get only to 40,
+到50，而另一个模型可能只有40，
+
+1291
+01:02:50,885 --> 01:02:52,160
+doing something like that.
+做那样的事情。
+
+1292
+01:02:52,160 --> 01:02:54,830
+Um, we don't- I don't have those numbers.
+嗯，我们不 - 我没有这些数字。
+
+1293
+01:02:54,830 --> 01:02:57,380
+It would be kind of actually also a neat, neat, uh,
+它实际上也是一种整洁，整洁，呃，
+
+1294
+01:02:57,380 --> 01:02:59,750
+analysis to do. Yeah.
+做分析。是啊。
+
+1295
+01:02:59,750 --> 01:03:06,835
+So if you wanted to like train on a new task [inaudible].
+所以如果你想在新任务上训练[音频不清晰]。
+
+1296
+01:03:06,835 --> 01:03:07,935
+Yeah.
+是啊。
+
+1297
+01:03:07,935 --> 01:03:10,165
+[inaudible] .
+[听不清]。
+
+1298
+01:03:10,165 --> 01:03:13,105
+So, do we have the code to train a new task? Yes, we do.
+那么，我们是否有代码来训练一项新任务？是的，我们这样做。
+
+1299
+01:03:13,105 --> 01:03:14,695
+Um, you can just, uh, edit,
+嗯，你可以，呃，编辑，
+
+1300
+01:03:14,695 --> 01:03:16,795
+make it into this format using context.
+使用上下文使其成为这种格式。
+
+1301
+01:03:16,795 --> 01:03:19,465
+Here's a question, simple like CSV type format,
+这是一个简单的问题，比如CSV格式，
+
+1302
+01:03:19,465 --> 01:03:24,160
+and then you add it and you can both like train the pre-trained model yourself.
+然后你添加它，你们都可以自己训练预训练的模型。
+
+1303
+01:03:24,160 --> 01:03:28,690
+You can download a pre-trained model and just add it. So I'll look it up, yeah.
+您可以下载预先训练的模型并添加它。所以我会查一查，是的。
+
+1304
+01:03:28,690 --> 01:03:34,795
+Do you know how this compares to using other kinds of pre-trained representations like, say BERT?
+您是否知道如何使用其他类型的预训练表示，例如BERT？
+
+1305
+01:03:34,795 --> 01:03:37,330
+So, um, it's a great question.
+所以，嗯，这是一个很好的问题。
+
+1306
+01:03:37,330 --> 01:03:40,120
+So how does this compare to other pre-trained representations like BERT?
+那么这与BERT等其他预先训练的表现相比如何？
+
+1307
+01:03:40,120 --> 01:03:41,935
+So, in some ways,
+所以，在某些方面，
+
+1308
+01:03:41,935 --> 01:03:44,200
+people say BERT is kind of this model that does everything,
+人们说BERT就是这种做所有事情的模型，
+
+1309
+01:03:44,200 --> 01:03:46,690
+but when you actually read the paper, you realize, well,
+但是当你真正阅读这篇论文时，你会意识到，
+
+1310
+01:03:46,690 --> 01:03:49,930
+it's a separate model for these different tasks, right?
+它是这些不同任务的独立模型，对吧？
+
+1311
+01:03:49,930 --> 01:03:52,375
+If you wanted to have a classification task,
+如果您想要分类任务，
+
+1312
+01:03:52,375 --> 01:03:54,070
+you have a little token in the beginning,
+你在开始时有一点标记，
+
+1313
+01:03:54,070 --> 01:03:55,330
+and you have a different top layer.
+你有一个不同的顶层。
+
+1314
+01:03:55,330 --> 01:03:57,400
+If you wanna do a sequence labeling task,
+如果你想做一个序列标签任务，
+
+1315
+01:03:57,400 --> 01:03:58,450
+you have a different top layer.
+你有一个不同的顶层。
+
+1316
+01:03:58,450 --> 01:04:00,400
+If you wanted to do a sequence extraction task,
+如果你想做一个序列提取任务，
+
+1317
+01:04:00,400 --> 01:04:01,765
+you have a different top layer.
+你有一个不同的顶层。
+
+1318
+01:04:01,765 --> 01:04:06,220
+So, BERT isn't actually a single model for all of these different tasks.
+因此，BERT实际上并不是所有这些不同任务的单一模型。
+
+1319
+01:04:06,220 --> 01:04:08,410
+Ah, and then, on all the results,
+啊，然后，在所有的结果，
+
+1320
+01:04:08,410 --> 01:04:11,800
+there's a lot of extra tuning for each of the data sets,
+每个数据集都有很多额外的调整，
+
+1321
+01:04:11,800 --> 01:04:13,765
+and tasks, uh, that, you know,
+和任务，呃，你知道，
+
+1322
+01:04:13,765 --> 01:04:16,030
+different learning rate for this task, uh,
+这项任务的学习率不同，呃，
+
+1323
+01:04:16,030 --> 01:04:19,120
+different size, or different sets of BERT, and so on.
+不同大小，或不同的BERT集等。
+
+1324
+01:04:19,120 --> 01:04:21,670
+So, we're also super excited, we're like maybe this is it,
+所以，我们也非常兴奋，我们也许就是这样，
+
+1325
+01:04:21,670 --> 01:04:23,590
+we'll just run everything on BERT,
+我们只需在BERT上运行一切，
+
+1326
+01:04:23,590 --> 01:04:25,180
+and then we looked into all the details,
+然后我们调查了所有的细节，
+
+1327
+01:04:25,180 --> 01:04:26,920
+and there's so much excitement in the beginning.
+一开始就有这么多的兴奋。
+
+1328
+01:04:26,920 --> 01:04:29,020
+And then the more we dug through the details,
+然后我们越是挖掘细节，
+
+1329
+01:04:29,020 --> 01:04:31,795
+the less excited we became as this being like sort of the answer,
+我们变得越不兴奋，因为这就像答案一样，
+
+1330
+01:04:31,795 --> 01:04:33,580
+because it is not a single model.
+因为它不是单一的模型。
+
+1331
+01:04:33,580 --> 01:04:36,880
+Uh, in some ways, it's probably better to- for pre-training.
+呃，在某些方面，对于预训练来说可能更好。
+
+1332
+01:04:36,880 --> 01:04:38,290
+So instead of CoVe,
+而不是CoVe，
+
+1333
+01:04:38,290 --> 01:04:41,140
+you can have kind of BERT at the very beginning,
+你可以在一开始就有一种BERT，
+
+1334
+01:04:41,140 --> 01:04:43,450
+and my hunch is everything will get slightly better,
+我的预感是一切都会变得更好，
+
+1335
+01:04:43,450 --> 01:04:46,075
+but you still need to have, um,
+但你仍然需要，嗯，
+
+1336
+01:04:46,075 --> 01:04:52,120
+a lot of the- a lot of the other sort of modeling architecture on top of it.
+很多其他类型的建模体系结构。
+
+1337
+01:04:52,120 --> 01:04:56,050
+Uh, and then the sad thing is to really get the state of the art results,
+呃，然后可悲的是要真正获得最先进的结果，
+
+1338
+01:04:56,050 --> 01:05:00,355
+there's a lot of very spec- task-specific tuning of those last top layers.
+这些最后的顶层有很多特定于特定任务的调整。
+
+1339
+01:05:00,355 --> 01:05:04,525
+So, if you try to unify that task-specific tuning,
+因此，如果您尝试统一特定于任务的调整，
+
+1340
+01:05:04,525 --> 01:05:06,700
+you lose a lot of the good performance of BERT.
+你失去了很多BERT的优秀表现。
+
+1341
+01:05:06,700 --> 01:05:10,495
+Um, so, unfortunately, it's not quite the sort of,
+嗯，不幸的是，它不是那种，
+
+1342
+01:05:10,495 --> 01:05:12,175
+"Oh, just use BERT for it,
+“哦，只需使用BERT，
+
+1343
+01:05:12,175 --> 01:05:15,220
+and you'll just have state-of-the-art numbers and all the things."
+而且你将拥有最先进的数字和所有的东西。“
+
+1344
+01:05:15,220 --> 01:05:18,565
+Um, I could probably go like talk about it a lot more, but, uh,
+嗯，我可能会更喜欢谈论它，但是，呃，
+
+1345
+01:05:18,565 --> 01:05:21,295
+I think it still makes sense to think about, um,
+我觉得考虑一下还是有意义的，嗯，
+
+1346
+01:05:21,295 --> 01:05:23,065
+some of the ideas from BERT,
+BERT的一些想法，
+
+1347
+01:05:23,065 --> 01:05:26,355
+like basically, add as one of the tasks language modeling.
+像基本上一样，添加为语言建模任务之一。
+
+1348
+01:05:26,355 --> 01:05:30,990
+That would be very likely the task  that helps the most for all the other tasks,
+这很可能是帮助所有其他任务最多的任务，
+
+1349
+01:05:30,990 --> 01:05:33,480
+and we should include that, uh,
+我们应该包括那个，呃，
+
+1350
+01:05:33,480 --> 01:05:37,535
+it also would be nice to have a faster model right now.
+现在拥有一个更快的模型也会很高兴。
+
+1351
+01:05:37,535 --> 01:05:40,270
+Um, it's hard to do language modeling is very, very large,
+嗯，语言建模很难，非常非常大，
+
+1352
+01:05:40,270 --> 01:05:41,740
+it benefits even more from,
+它从中获益更多
+
+1353
+01:05:41,740 --> 01:05:43,840
+you know, billions and billions of words.
+你知道，数十亿和数十亿字。
+
+1354
+01:05:43,840 --> 01:05:45,670
+It's hard to train the McCann model,
+训练McCann模型很难，
+
+1355
+01:05:45,670 --> 01:05:48,940
+this current question answering model of the co-attention mechanism of the question
+这个问题的共同关注机制的当前问题回答模型
+
+1356
+01:05:48,940 --> 01:05:52,029
+with like an increasingly large context.
+与越来越大的背景。
+
+1357
+01:05:52,029 --> 01:05:54,970
+So you'd have to kind of split it also like BERT,
+所以你必须把它分开，就像BERT一样
+
+1358
+01:05:54,970 --> 01:05:59,020
+works also reasonably well only for like at most I think 500 words or so,
+工作也相当不错只是为了最多我认为500字左右，
+
+1359
+01:05:59,020 --> 01:06:02,050
+and if you wanted to do summarization you'd basically have to cut
+如果你想做总结，你基本上必须削减
+
+1360
+01:06:02,050 --> 01:06:06,490
+the original document to only 500 words, and then try to summarize it.
+原始文件只有500字，然后尝试总结一下。
+
+1361
+01:06:06,490 --> 01:06:09,820
+So, there are a lot of like devil in the details that they didn't have to figure out,
+所以，细节中有很多像魔鬼一样，他们没有弄清楚，
+
+1362
+01:06:09,820 --> 01:06:12,520
+because they said, "Well, we'll just sort of just like word vectors,
+因为他们说，“好吧，我们就像文字向量一样，
+
+1363
+01:06:12,520 --> 01:06:16,420
+we can take them in, and then we do a lot of other stuff that is task-specific,
+我们可以接受他们，然后我们做了很多其他任务，特定于任务，
+
+1364
+01:06:16,420 --> 01:06:18,775
+um, with those- those word vectors,
+嗯，那些 - 那些单词向量，
+
+1365
+01:06:18,775 --> 01:06:20,350
+or with the BERT architecture."
+或者采用BERT架构。“
+
+1366
+01:06:20,350 --> 01:06:22,720
+I still- I don't want to- this BERT is obviously amazing,
+我仍然 - 我不想 - 这个BERT显然是惊人的，
+
+1367
+01:06:22,720 --> 01:06:25,120
+and we are looking into trying to use ideas from it.
+我们正在考虑尝试使用它的想法。
+
+1368
+01:06:25,120 --> 01:06:27,400
+But unfortunately, it wasn't just sort of a silver bullet to
+但不幸的是，它不仅仅是一颗银弹
+
+1369
+01:06:27,400 --> 01:06:33,355
+solve multi-task learning. Mm-hmm?
+解决多任务学习问题。 MM-嗯？
+
+1370
+01:06:33,355 --> 01:06:35,515
+Pre-training process to be considered, uh,
+培训前的过程需要考虑，呃，
+
+1371
+01:06:35,515 --> 01:06:40,990
+prioritized sampling based off of how much fewer group, how much loss there is?
+优先抽样基于多少少组，有多少损失？
+
+1372
+01:06:40,990 --> 01:06:42,670
+Sorry, did we- say again?
+对不起，我们再说一次吗？
+
+1373
+01:06:42,670 --> 01:06:46,390
+Would you consider prioritizing sampling [inaudible]?
+您会考虑优先采样[听不清]吗？
+
+1374
+01:06:46,390 --> 01:06:48,370
+So, did we consider prioritizing the sampling?
+那么，我们是否考虑优先考虑抽样？
+
+1375
+01:06:48,370 --> 01:06:51,760
+So in some ways with this pre-trained strategy here, um,
+所以在这里采用这种预先训练的策略，嗯，
+
+1376
+01:06:51,760 --> 01:06:56,500
+that's kind of what we did by basically focusing on these really hard tasks.
+这就是我们基本上专注于这些非常艰巨的任务所做的事情。
+
+1377
+01:06:56,500 --> 01:07:02,140
+And, uh, a lot of like the gap in the end was improved by really waiting for,
+而且，呃，很多像最后的差距通过真正的等待改善了，
+
+1378
+01:07:02,140 --> 01:07:04,555
+like four of the tasks at the very end,
+像最后的四个任务，
+
+1379
+01:07:04,555 --> 01:07:05,995
+uh, bef- unti- you know, uh,
+呃，bef- unti-你知道吗，呃，
+
+1380
+01:07:05,995 --> 01:07:08,560
+until after you're gone through, uh,
+直到你经历过，呃，
+
+1381
+01:07:08,560 --> 01:07:10,750
+sort of oversampling all of these,
+对所有这些进行过采样，
+
+1382
+01:07:10,750 --> 01:07:11,800
+uh, really hard tasks.
+呃，真的很难完成任务。
+
+1383
+01:07:11,800 --> 01:07:16,375
+In the last 10 minutes, uh, basically, uh,
+在最后10分钟，呃，基本上，呃，
+
+1384
+01:07:16,375 --> 01:07:18,400
+th- the most exciting thing, uh,
+最令人兴奋的事，呃，
+
+1385
+01:07:18,400 --> 01:07:22,540
+for- for last though I think you could also do a lot more work in this direction.
+因为最后我认为你也可以在这方面做更多的工作。
+
+1386
+01:07:22,540 --> 01:07:24,460
+Uh, I mentioned the sole question pointer
+呃，我提到了唯一的问题指针
+
+1387
+01:07:24,460 --> 01:07:26,380
+and zero short learning in the beginning, and, uh,
+一开始就没有短暂的学习，呃，
+
+1388
+01:07:26,380 --> 01:07:29,965
+we basically just tried to play around with that a little bit, um,
+我们基本上只是想尝试一下，嗯，
+
+1389
+01:07:29,965 --> 01:07:32,185
+and found that in some cases,
+并发现在某些情况下，
+
+1390
+01:07:32,185 --> 01:07:35,080
+it actually kind of magically works.
+它实际上有点神奇。
+
+1391
+01:07:35,080 --> 01:07:37,060
+Uh, so here, we tried, uh,
+呃，所以在这里，我们试过，呃，
+
+1392
+01:07:37,060 --> 01:07:38,725
+a sentence John had a party,
+约翰参加一个派对，
+
+1393
+01:07:38,725 --> 01:07:40,855
+but no one came, and he was all alone.
+但没有人来，他一个人。
+
+1394
+01:07:40,855 --> 01:07:43,960
+And then we asked, "Is this story sad, or happy?"
+然后我们问道：“这个故事难过，还是开心？”
+
+1395
+01:07:43,960 --> 01:07:46,120
+And while the model could've, you know,
+虽然模型可以，但你知道，
+
+1396
+01:07:46,120 --> 01:07:47,920
+generate some random German words,
+生成一些随机的德语单词，
+
+1397
+01:07:47,920 --> 01:07:49,570
+or some random SQL words,
+或者一些随机的SQL词，
+
+1398
+01:07:49,570 --> 01:07:51,235
+or it's just said whatever,
+或者只是说什么，
+
+1399
+01:07:51,235 --> 01:07:54,490
+it actually pointed to, of all the words,
+它实际上指出了所有的话，
+
+1400
+01:07:54,490 --> 01:07:56,440
+you could've pointed to in the context or the question that
+你可以在上下文或问题中指出
+
+1401
+01:07:56,440 --> 01:07:58,825
+pointed to "Sad", which is pretty cool.
+指着“悲伤”，这很酷。
+
+1402
+01:07:58,825 --> 01:08:01,750
+Like- and it's just one small sample,
+喜欢 - 它只是一个小样本，
+
+1403
+01:08:01,750 --> 01:08:03,580
+and, you know, you could do a lot more,
+而且，你知道，你可以做更多，
+
+1404
+01:08:03,580 --> 01:08:08,905
+you could try to come up with a very large zero-shot kind of classification data set,
+你可以试着想出一个非常大的零镜头分类数据集，
+
+1405
+01:08:08,905 --> 01:08:10,300
+which is actually kind of hard too.
+这实际上也很难。
+
+1406
+01:08:10,300 --> 01:08:12,550
+You have to be quite creative, it's not like you can just say, "Oh,
+你必须非常有创意，这不像你只能说，“哦，
+
+1407
+01:08:12,550 --> 01:08:13,750
+it would just take all these reviews,
+它会采取所有这些评论，
+
+1408
+01:08:13,750 --> 01:08:15,700
+and label them as these, you know, positive negative.
+并将它们标记为这些，你知道，正面否定。
+
+1409
+01:08:15,700 --> 01:08:19,810
+Ah, but so, I think we- we need to do more work in that direction.
+啊，但是，我认为我们 - 我们需要在这方面做更多的工作。
+
+1410
+01:08:19,810 --> 01:08:23,230
+Somebody will hopefully create a zero-shot kind of task data set,
+有人希望创建一个零镜头的任务数据集，
+
+1411
+01:08:23,230 --> 01:08:25,570
+that is not just zero-shot for, you know,
+这不仅仅是零射击，你知道，
+
+1412
+01:08:25,570 --> 01:08:29,050
+kind of new distributions or something with completely different, uh, outputs.
+一种新的发行版或具有完全不同的呃输出的东西。
+
+1413
+01:08:29,050 --> 01:08:31,810
+Uh, but we- we tried a couple,
+呃，但是我们 - 我们尝了几个，
+
+1414
+01:08:31,810 --> 01:08:32,950
+and it doesn't always work, right.
+它并不总是有效，对吧。
+
+1415
+01:08:32,950 --> 01:08:34,510
+You can be adversarial about it,
+你可以对抗它，
+
+1416
+01:08:34,510 --> 01:08:38,470
+you can make this basically looks most similar to,
+你可以使这看起来基本上看起来最相似，
+
+1417
+01:08:38,470 --> 01:08:40,510
+is the sentiment positive or negative?
+情绪是积极的还是消极的？
+
+1418
+01:08:40,510 --> 01:08:42,805
+Uh, is this sen- is this sentence positive or negative?
+呃，这句话是正面还是负面？
+
+1419
+01:08:42,805 --> 01:08:45,955
+That was the formalism we had for sentiment analysis.
+这就是我们对情绪分析的形式主义。
+
+1420
+01:08:45,955 --> 01:08:47,665
+And so you could,
+所以你可以，
+
+1421
+01:08:47,665 --> 01:08:50,380
+if you make the question more and more different,
+如果你提出的问题越来越不同，
+
+1422
+01:08:50,380 --> 01:08:52,000
+eventually, it'll kinda get tripped up.
+最终，它会被绊倒。
+
+1423
+01:08:52,000 --> 01:08:55,015
+Ah, and it's clear that it's benefited, uh,
+啊，很明显它受益了，呃，
+
+1424
+01:08:55,015 --> 01:08:57,010
+from the word vectors,
+从单词向量，
+
+1425
+01:08:57,010 --> 01:08:59,020
+of sad being closer to negative,
+悲伤接近消极，
+
+1426
+01:08:59,020 --> 01:09:01,360
+and then understanding sort of through all these,
+然后了解所有这些，
+
+1427
+01:09:01,360 --> 01:09:03,715
+uh, correlations, and- and, uh,
+呃，相关性，和 - 呃，
+
+1428
+01:09:03,715 --> 01:09:08,920
+deep representations that there are other sort of sad words in this context,
+深刻的表示在这种情况下还有其他类型的悲伤词，
+
+1429
+01:09:08,920 --> 01:09:10,120
+or- or whatever it is.
+或 - 或者不管它是什么。
+
+1430
+01:09:10,120 --> 01:09:12,370
+Uh, and so, it was able to point to this.
+呃，等等，它能够指出这一点。
+
+1431
+01:09:12,370 --> 01:09:14,740
+But you can be adversarial, it doesn't always work.
+但你可以是对抗性的，它并不总是有效。
+
+1432
+01:09:14,740 --> 01:09:16,780
+But even the fact that, uh,
+但即便是这样的事实，呃，
+
+1433
+01:09:16,780 --> 01:09:20,335
+it was sort of zero-shot classification based on word vectors, uh,
+它是基于单词向量的零射击分类，呃，
+
+1434
+01:09:20,335 --> 01:09:22,150
+for new kinds of questions,
+对于新的问题，
+
+1435
+01:09:22,150 --> 01:09:24,070
+uh, personally, it was very exciting to me.
+呃，就个人而言，这对我来说非常令人兴奋。
+
+1436
+01:09:24,070 --> 01:09:26,170
+And we tried a couple of other things like,
+我们尝试了其他一些事情，比如
+
+1437
+01:09:26,170 --> 01:09:28,615
+uh, Bryan gave a talk and nobody clapped.
+呃，布莱恩发表了讲话，没有人鼓掌。
+
+1438
+01:09:28,615 --> 01:09:29,650
+Was Bryan happy, or sad?
+布莱恩高兴，还是难过？
+
+1439
+01:09:29,650 --> 01:09:30,670
+And it also got it right.
+它也做对了。
+
+1440
+01:09:30,670 --> 01:09:33,295
+So, um, there are a couple- a couple of the,
+所以，嗯，还有几个 - 几个，
+
+1441
+01:09:33,295 --> 01:09:36,190
+the examples were, were at least as happy or sad thing worked.
+这些例子至少是令人高兴或悲伤的事情。
+
+1442
+01:09:36,190 --> 01:09:39,295
+And then, uh, a couple of other sort of adjective questions that we,
+然后，呃，我们还有其他一些形容词问题，
+
+1443
+01:09:39,295 --> 01:09:40,780
+we tried but, um,
+我们试过但是，嗯，
+
+1444
+01:09:40,780 --> 01:09:43,690
+what I'm- what I would be most excited about is eventually actually
+我最让我兴奋的是最终
+
+1445
+01:09:43,690 --> 01:09:47,755
+trying to have a zero-shot classification task,
+试图进行零射击分类任务，
+
+1446
+01:09:47,755 --> 01:09:49,675
+uh, that combines the different tasks too.
+呃，它也结合了不同的任务。
+
+1447
+01:09:49,675 --> 01:09:52,540
+So, uh, unfortunately, there's no data set for that,
+所以，呃，不幸的是，没有数据集，
+
+1448
+01:09:52,540 --> 01:09:54,460
+so we didn't train it, so it doesn't happen with the model.
+所以我们没有对它进行训练，因此模型不会发生这种情况。
+
+1449
+01:09:54,460 --> 01:09:57,729
+But in theory, if you ask what is the sum- you can summarize,
+但从理论上讲，如果你问什么是总和 - 你可以总结一下，
+
+1450
+01:09:57,729 --> 01:09:59,995
+and you can translate from English into German,
+你可以把英文翻译成德文，
+
+1451
+01:09:59,995 --> 01:10:02,515
+why couldn't you ask the model for a German summary?
+为什么你不能问模特德国总结？
+
+1452
+01:10:02,515 --> 01:10:04,240
+And if that worked, eventually,
+如果这有效，最终，
+
+1453
+01:10:04,240 --> 01:10:05,650
+that would be even more amazing,
+那将更加惊人，
+
+1454
+01:10:05,650 --> 01:10:07,390
+but it, it doesn't work right now,
+但是，它现在不起作用，
+
+1455
+01:10:07,390 --> 01:10:09,190
+because we never ask it sort of for these
+因为我们从来没有问过这些
+
+1456
+01:10:09,190 --> 01:10:12,310
+compositional task- these compositional task questions.
+组成任务 - 这些组成任务问题。
+
+1457
+01:10:12,310 --> 01:10:15,490
+But is yet another interesting line of research that I think could spawn from this.
+但是，我认为可以从中产生另一个有趣的研究方向。
+
+1458
+01:10:15,490 --> 01:10:16,675
+Uh, all right.
+呃，好的。
+
+1459
+01:10:16,675 --> 01:10:19,150
+So, I hope I could show you that this sort of
+所以，我希望我能告诉你这种情况
+
+1460
+01:10:19,150 --> 01:10:24,130
+decaNLP framework is an interesting new benchmark for generalized NLP.
+decaNLP框架是广义NLP的一个有趣的新基准。
+
+1461
+01:10:24,130 --> 01:10:27,160
+Uh, I do think it's a reasonably good framework
+呃，我认为这是一个相当不错的框架
+
+1462
+01:10:27,160 --> 01:10:30,310
+for tackling a bunch of the really hard questions in the field.
+解决一堆真正难以解决的问题。
+
+1463
+01:10:30,310 --> 01:10:32,259
+Uh, more general language understanding,
+呃，更一般的语言理解，
+
+1464
+01:10:32,259 --> 01:10:33,550
+and question answering of course,
+和问题回答当然，
+
+1465
+01:10:33,550 --> 01:10:37,180
+uh, multitask learning, domain adaptation, uh,
+呃，多任务学习，领域适应，呃，
+
+1466
+01:10:37,180 --> 01:10:39,790
+which we sort of analyzed a little bit with the sentiment,
+我们对这种情绪进行了一点分析，
+
+1467
+01:10:39,790 --> 01:10:41,815
+and SNLI versus multi NLI,
+和SNLI与多NLI，
+
+1468
+01:10:41,815 --> 01:10:44,710
+um, transfer learning, and then weight sharing.
+嗯，转学，然后分享体重。
+
+1469
+01:10:44,710 --> 01:10:46,780
+I think it's clear, everybody loves weight sharing,
+我觉得很明显，每个人都喜欢分享体重，
+
+1470
+01:10:46,780 --> 01:10:48,850
+you wanna share as many weights as possible.
+你想分享尽可能多的重量。
+
+1471
+01:10:48,850 --> 01:10:52,375
+Uh, word vector started at, uh, ELMo,
+呃，字矢量开始于，呃，ELMo，
+
+1472
+01:10:52,375 --> 01:10:55,300
+CoVe, and now BERT basically share more and more,
+CoVe，现在BERT基本上分享越来越多，
+
+1473
+01:10:55,300 --> 01:10:56,545
+deeper and deeper layers.
+越来越深的层次。
+
+1474
+01:10:56,545 --> 01:10:59,560
+It would be great if we can unify that last bit also, uh,
+如果我们能够统一最后一点，那将是很好的，呃，
+
+1475
+01:10:59,560 --> 01:11:02,575
+and then share basically the entirety of the networks,
+然后基本上分享整个网络，
+
+1476
+01:11:02,575 --> 01:11:05,200
+and then eventually hopefully get to zero-shot learning.
+然后最终希望得到零射击学习。
+
+1477
+01:11:05,200 --> 01:11:07,330
+Now, there's a bunch of related work.
+现在，有一堆相关的工作。
+
+1478
+01:11:07,330 --> 01:11:09,220
+The original paper has over 100,
+原始论文超过100篇，
+
+1479
+01:11:09,220 --> 01:11:11,725
+um, citations in it, uh, of,
+嗯，引用，呃，的，
+
+1480
+01:11:11,725 --> 01:11:13,525
+of, you know, papers to other,
+，你知道，给其他人的文件，
+
+1481
+01:11:13,525 --> 01:11:16,405
+other, um, lines of, uh, work.
+其他，嗯，行，呃，工作。
+
+1482
+01:11:16,405 --> 01:11:18,490
+But, uh, this is actually zero- at least some of
+但是，呃，这实际上是零 - 至少是一些
+
+1483
+01:11:18,490 --> 01:11:21,670
+the models and papers that influenced us the most,
+影响我们的模特和论文，
+
+1484
+01:11:21,670 --> 01:11:23,920
+uh, in, in our thinking and modelling.
+呃，在我们的思考和建模中。
+
+1485
+01:11:23,920 --> 01:11:25,465
+Uh, one of them actually comes from,
+呃，其中一个真的来自，
+
+1486
+01:11:25,465 --> 01:11:27,550
+uh, the two instructors of the class.
+呃，班上的两位导师。
+
+1487
+01:11:27,550 --> 01:11:31,165
+And so, um, hopefully, uh, we can,
+所以，嗯，希望，呃，我们可以，
+
+1488
+01:11:31,165 --> 01:11:35,050
+you know, sort of think about what- what's next after all this architecture engineering.
+你知道，在所有这些架构工程之后考虑下一步是什么。
+
+1489
+01:11:35,050 --> 01:11:38,125
+And, uh, I think one potential answer to that, uh,
+而且，呃，我认为一个可能的答案，呃，
+
+1490
+01:11:38,125 --> 01:11:42,400
+is single multitask learning for more generalized NLP models.
+是针对更广义的NLP模型的单一多任务学习。
+
+1491
+01:11:42,400 --> 01:11:53,620
+[NOISE] All right. Thank you. [APPLAUSE]
+[NOISE]好的。谢谢。 [掌声]
+
+1492
+
+

@@ -1,0 +1,6513 @@
+1
+00:00:04,280 --> 00:00:07,620
+The plan for today is what I am gonna talk about
+今天的计划就是我要谈的内容
+
+2
+00:00:07,620 --> 00:00:10,710
+is the topic of convolutional neural networks.
+是卷积神经网络的主题。
+
+3
+00:00:10,710 --> 00:00:13,920
+So essentially, um, there's actually quite a lot of
+所以基本上，嗯，实际上有很多
+
+4
+00:00:13,920 --> 00:00:17,700
+content in this lecture of different things that's good to know about,
+本讲座中有关不同事物的内容，有待了解，
+
+5
+00:00:17,700 --> 00:00:20,760
+since essentially this is going to be learn about
+因为基本上这将是要学习的
+
+6
+00:00:20,760 --> 00:00:24,840
+convolutional neural networks in one large bite for NLP.
+卷积神经网络在一个大的咬合NLP。
+
+7
+00:00:24,840 --> 00:00:27,465
+So, um, bit on announcements,
+那么，嗯，咬一下公告，
+
+8
+00:00:27,465 --> 00:00:30,945
+explain the general idea of convolutional neural networks,
+解释卷积神经网络的一般思想，
+
+9
+00:00:30,945 --> 00:00:33,270
+and then for quite a bit of it,
+然后相当一点，
+
+10
+00:00:33,270 --> 00:00:38,490
+I want to go through in sort of some detail to particular papers that made
+我想详细介绍一下特定的论文
+
+11
+00:00:38,490 --> 00:00:40,950
+use of convolutional neural networks for
+卷积神经网络的应用
+
+12
+00:00:40,950 --> 00:00:44,235
+text classification, sentence classification tasks.
+文本分类，句子分类任务。
+
+13
+00:00:44,235 --> 00:00:47,040
+Um, the first is a sort of a pretty simple,
+嗯，第一个是非常简单的，
+
+14
+00:00:47,040 --> 00:00:50,370
+um, CNN that was done in 2014,
+嗯，CNN在2014年完成，
+
+15
+00:00:50,370 --> 00:00:52,365
+and then the second one is a
+然后第二个是
+
+16
+00:00:52,365 --> 00:00:58,435
+way more complex CNN that was done much more recently in 2017.
+更复杂的CNN，最近在2017年完成了更多。
+
+17
+00:00:58,435 --> 00:01:01,275
+Okay. But first, a couple of announcements.
+好的。但首先是几个公告。
+
+18
+00:01:01,275 --> 00:01:06,360
+Um, firstly, the last reminder on the mid-quarter feedback survey.
+嗯，首先是关于季度中期反馈调查的最后一次提醒。
+
+19
+00:01:06,360 --> 00:01:08,700
+So tons of you have done the- this already.
+所以你们已经做了很多 - 这个。
+
+20
+00:01:08,700 --> 00:01:10,470
+Thank you, thank you very much.
+谢谢，非常感谢。
+
+21
+00:01:10,470 --> 00:01:14,340
+Um, but if you'd still be putting it off till the very last minute, um,
+嗯，但如果你还要把它推迟到最后一分钟，嗯，
+
+22
+00:01:14,340 --> 00:01:17,330
+tonight at midnight is your last chance, um,
+今晚午夜是你的最后一次机会，嗯，
+
+23
+00:01:17,330 --> 00:01:20,045
+to fill in the mid-quarter survey to get your,
+填写季度中期调查，以获得你的，
+
+24
+00:01:20,045 --> 00:01:23,275
+um, to give us feedback and to get your half-a-point.
+嗯，给我们反馈并得到你的半点。
+
+25
+00:01:23,275 --> 00:01:26,990
+Um, okay. And then the other thing that you should be thinking about,
+嗯，好的。然后你要考虑的另一件事，
+
+26
+00:01:26,990 --> 00:01:29,510
+and I know lots of you are thinking about
+而且我知道很多你在考虑
+
+27
+00:01:29,510 --> 00:01:32,495
+since I spent three hours talking to people yesterday,
+因为我昨天花了三个小时与人交谈，
+
+28
+00:01:32,495 --> 00:01:35,195
+um, is about final projects.
+嗯，是关于最终的项目。
+
+29
+00:01:35,195 --> 00:01:39,060
+Um, and so make sure you've got some plans from that, um,
+嗯，所以请确保你有一些计划，嗯，
+
+30
+00:01:39,060 --> 00:01:40,725
+in place for, um,
+嗯，嗯，
+
+31
+00:01:40,725 --> 00:01:44,640
+04:00 p.m, uh, 04:30 p.m. Thursday.
+星期四下午4点，呃，04：30
+
+32
+00:01:44,640 --> 00:01:47,535
+I mean, in particular as we've discussed, um,
+我的意思是，特别是我们已经讨论过，嗯，
+
+33
+00:01:47,535 --> 00:01:52,745
+your- part of what you're meant to do this year is to have found some research paper,
+你今年要做的部分就是找到一些研究论文，
+
+34
+00:01:52,745 --> 00:01:57,730
+have read it, and have a summary and thoughts as to how it can inform your work.
+已经阅读过，并总结和思考如何为您的工作提供信息。
+
+35
+00:01:57,730 --> 00:02:01,550
+Um, and then just make sure you have in your calendars, um,
+嗯，然后确保你的日历中有，嗯，
+
+36
+00:02:01,550 --> 00:02:05,735
+the final project poster session for CS224n,
+CS224n的最终项目海报会议，
+
+37
+00:02:05,735 --> 00:02:09,320
+which is gonna be in the evening of Wednesday March 20th,
+这将是3月20日星期三晚上，
+
+38
+00:02:09,320 --> 00:02:12,480
+and we're holding it at the Alumni Center.
+我们在校友中心举办。
+
+39
+00:02:12,640 --> 00:02:19,940
+Okay. Um, one more sort of announcement or just general stuff to cogitate.
+好的。嗯，还有一种声明，或者只是一般性的东西。
+
+40
+00:02:19,940 --> 00:02:23,060
+Um, so we're now officially in the second half of the class.
+嗯，所以我们现在正式上半年级。
+
+41
+00:02:23,060 --> 00:02:24,545
+Congratulations.
+恭喜。
+
+42
+00:02:24,545 --> 00:02:26,630
+Um, and, you know,
+嗯，你知道，
+
+43
+00:02:26,630 --> 00:02:31,880
+there's sort of still a few things that we want to teach you that are sort of basic,
+还有一些我们想要教给你的东西是基本的，
+
+44
+00:02:31,880 --> 00:02:34,700
+and actually convolutional neural networks is one of them.
+实际上卷积神经网络就是其中之一。
+
+45
+00:02:34,700 --> 00:02:39,950
+But, I mean, nevertheless in the second half of the class, I mean,
+但是，我的意思是，尽管如此，在课程的后半部分，我的意思是，
+
+46
+00:02:39,950 --> 00:02:44,480
+things start to change and we're hoping to much more, um,
+事情开始改变，我们希望更多，嗯，
+
+47
+00:02:44,480 --> 00:02:49,970
+prepare you for being real deep learning NLP researchers or practitioners.
+让您真正深入学习NLP研究人员或从业人员。
+
+48
+00:02:49,970 --> 00:02:52,395
+And so what does that mean concretely?
+那具体是什么意思呢？
+
+49
+00:02:52,395 --> 00:02:55,745
+Well, the lectures start to be less
+嗯，讲座开始少了
+
+50
+00:02:55,745 --> 00:02:59,660
+giving every detail of how to build a very basic thing,
+详细介绍如何构建一个非常基本的东西，
+
+51
+00:02:59,660 --> 00:03:02,629
+and more giving you some ideas
+还有更多给你一些想法
+
+52
+00:03:02,629 --> 00:03:05,880
+to sort of some of the work that's been done in different areas.
+分类在不同领域完成的一些工作。
+
+53
+00:03:05,880 --> 00:03:08,510
+And so to the extent that there's something of interest or
+所以，在某种程度上，有一些感兴趣或
+
+54
+00:03:08,510 --> 00:03:11,375
+rele- relevant to a project or things like that.
+与项目或类似事物相关。
+
+55
+00:03:11,375 --> 00:03:14,360
+Um, the hope is that while you can take some initiative to
+嗯，希望是你可以采取一些主动
+
+56
+00:03:14,360 --> 00:03:17,915
+find out more about some of the things that are being talked about.
+了解有关正在谈论的一些事情的更多信息。
+
+57
+00:03:17,915 --> 00:03:22,100
+Um, also would really welcome any questions about things that people,
+嗯，也非常欢迎任何有关人们的事情的问题，
+
+58
+00:03:22,100 --> 00:03:24,440
+um, would want to know more about.
+嗯，想要了解更多。
+
+59
+00:03:24,440 --> 00:03:26,420
+And the other thing that you should know about
+还有你应该知道的另一件事
+
+60
+00:03:26,420 --> 00:03:30,440
+deep learning is that once we get past the fundamentals,
+深刻的学习是，一旦我们超越基本面，
+
+61
+00:03:30,440 --> 00:03:33,350
+a lot of the stuff we teach just isn't
+我们教的很多东西都不是
+
+62
+00:03:33,350 --> 00:03:38,120
+really known science or things that people are sure of that,
+真正知名的科学或人们确定的东西，
+
+63
+00:03:38,120 --> 00:03:41,870
+you know, most of what I'm teaching in the second half of the course is pretty
+你知道，我在课程后半部分教授的大部分内容都很漂亮
+
+64
+00:03:41,870 --> 00:03:46,175
+much what people think is good practice in 2019.
+人们认为2019年的良好做法。
+
+65
+00:03:46,175 --> 00:03:49,370
+But, you know, the fact of the matter is what people think is
+但是，你知道，事情就是人们的想法
+
+66
+00:03:49,370 --> 00:03:53,390
+good practice in deep learning has been changing really rapidly.
+深度学习的良好实践一直在迅速变化。
+
+67
+00:03:53,390 --> 00:03:58,330
+So if you go back even two years or definitely if you go back four years, right?
+所以，如果你回去两年，或者如果你回去四年，那么对吗？
+
+68
+00:03:58,330 --> 00:04:01,640
+There's just a lot of different things that people used to believe,
+人们过去常常相信很多不同的东西，
+
+69
+00:04:01,640 --> 00:04:04,850
+and now people have some different ideas as to what works best.
+现在人们对于最有效的方法有不同的看法。
+
+70
+00:04:04,850 --> 00:04:09,530
+And it's perfectly clear that come 2021 or 2023,
+2021年或2023年，非常清楚
+
+71
+00:04:09,530 --> 00:04:12,350
+there will be some different ideas again as to what,
+对于什么，会有一些不同的想法，
+
+72
+00:04:12,350 --> 00:04:14,090
+um, people think is best.
+嗯，人们认为最好。
+
+73
+00:04:14,090 --> 00:04:17,750
+So you sort of just have to accept that this is, um,
+所以你只需要接受这是，嗯，
+
+74
+00:04:17,750 --> 00:04:20,630
+a nascent rapidly emerging field
+一个新兴的新兴领域
+
+75
+00:04:20,630 --> 00:04:24,125
+and it's good to understand the fundamentals and how things fit together.
+了解基本面和事物如何融合在一起是很好的。
+
+76
+00:04:24,125 --> 00:04:27,740
+But after that, quite a bit of the knowledge is this is what people
+但在那之后，相当多的知识就是人们
+
+77
+00:04:27,740 --> 00:04:31,280
+think is good at the moment and it keeps evolving over time.
+现在认为很好，并且随着时间的推移不断发展。
+
+78
+00:04:31,280 --> 00:04:34,745
+And if you want to stay in the field, or doing things with deep learning,
+如果你想留在现场，或深入学习，
+
+79
+00:04:34,745 --> 00:04:37,505
+you kind of still have to keep up with how it changes.
+你仍然需要跟上它的变化。
+
+80
+00:04:37,505 --> 00:04:39,710
+It's called lifelong learning these days.
+这些天被称为终身学习。
+
+81
+00:04:39,710 --> 00:04:41,810
+It's a very trendy concept.
+这是一个非常时髦的概念。
+
+82
+00:04:41,810 --> 00:04:45,200
+Um, and so as well as the lectures,
+嗯，还有讲座，
+
+83
+00:04:45,200 --> 00:04:49,735
+this is also true for the assignments.
+作业也是如此。
+
+84
+00:04:49,735 --> 00:04:51,720
+Um, and, you know,
+嗯，你知道，
+
+85
+00:04:51,720 --> 00:04:57,050
+we've been trying to make the assignments so that they started off very introductory,
+我们一直在努力完成任务，以便他们开始非常介绍，
+
+86
+00:04:57,050 --> 00:05:01,340
+and gradually started to use less scaffolding,
+并逐渐开始使用较少的脚手架，
+
+87
+00:05:01,340 --> 00:05:03,395
+and we're going to hope to, um,
+我们希望，嗯，
+
+88
+00:05:03,395 --> 00:05:10,530
+continue that, um, with the sort of less hand holding in assignment five.
+继续说，嗯，在任务五中少拿手。
+
+89
+00:05:10,530 --> 00:05:13,910
+And, you know, I guess what we're hoping to do is prepare you
+而且，你知道，我想我们希望做的就是为你做好准备
+
+90
+00:05:13,910 --> 00:05:17,495
+both for the final project and for real life.
+无论是最终项目还是现实生活。
+
+91
+00:05:17,495 --> 00:05:21,005
+I guess I was making an analogy this morning,
+我想我今天早上做了个比喻，
+
+92
+00:05:21,005 --> 00:05:25,370
+um, comparing this to the sort of intro CS sequence,
+嗯，将其与介绍CS序列进行比较，
+
+93
+00:05:25,370 --> 00:05:29,135
+so when there's CS106A and B that have tons of scaffolding,
+所以当CS106A和B有大量的脚手架时，
+
+94
+00:05:29,135 --> 00:05:31,025
+and then in CS107,
+然后在CS107中，
+
+95
+00:05:31,025 --> 00:05:34,850
+you're meant to learn how to diagnose and solve problems
+你的目的是学习如何诊断和解决问题
+
+96
+00:05:34,850 --> 00:05:38,910
+for yourself in a debugger that is kind of the same,
+对于你自己在一个类似的调试器，
+
+97
+00:05:38,910 --> 00:05:41,010
+um, for neural networks that, you know,
+嗯，对于神经网络，你知道，
+
+98
+00:05:41,010 --> 00:05:43,770
+for the early assignments, um, you know,
+对于早期任务，嗯，你知道，
+
+99
+00:05:43,770 --> 00:05:46,610
+we've given you every bit of handholding here, all of
+我们已经在这里给你提供了所有的支持
+
+100
+00:05:46,610 --> 00:05:49,490
+these tests to make sure every little bit of it is okay,
+这些测试确保每一点都没关系，
+
+101
+00:05:49,490 --> 00:05:51,815
+and here's exactly how to structure things.
+而这正是如何构建事物的。
+
+102
+00:05:51,815 --> 00:05:54,305
+But, you know, in the real world,
+但是，你知道，在现实世界中，
+
+103
+00:05:54,305 --> 00:05:57,695
+um, you're only going to be able to build and use neural networks.
+嗯，你只能建立和使用神经网络。
+
+104
+00:05:57,695 --> 00:06:00,259
+If you can figure out why they're not working
+如果你能弄明白他们为什么不工作
+
+105
+00:06:00,259 --> 00:06:02,990
+and what you have to change to make them work.
+你需要改变什么来使它们发挥作用。
+
+106
+00:06:02,990 --> 00:06:06,785
+And, you know, the truth is as I talked a bit about last week, you know,
+而且，你知道，事实就是我上周谈了一下，你知道，
+
+107
+00:06:06,785 --> 00:06:11,210
+that's often well more than half of the job that it seems easy enough to stick down.
+这通常超过工作的一半，似乎很容易坚持下去。
+
+108
+00:06:11,210 --> 00:06:14,270
+Here's my neural net and the pieces that make sense to me,
+这是我的神经网络和对我有意义的碎片，
+
+109
+00:06:14,270 --> 00:06:17,660
+and then you can spend the remaining 80 percent of the time
+然后你可以花费剩下的80％的时间
+
+110
+00:06:17,660 --> 00:06:21,230
+scratching your head wondering why it doesn't actually work well,
+挠挠脑袋想知道为什么它实际上不能很好地工作，
+
+111
+00:06:21,230 --> 00:06:24,335
+and how you could change it to make it to work well.
+以及如何改变它以使其运作良好。
+
+112
+00:06:24,335 --> 00:06:29,810
+Um, so, um, I confess that debugging neural nets can often be hard, but, you know,
+嗯，所以，嗯，我承认调试神经网络往往很难，但是，你知道，
+
+113
+00:06:29,810 --> 00:06:34,190
+the goal is that you should actually learn something about doing it,
+目标是你应该真正学到一些关于这样做的东西，
+
+114
+00:06:34,190 --> 00:06:38,600
+and that's kind of one of the learning goals of the course when it comes down to it.
+当谈到它时，这就是课程的学习目标之一。
+
+115
+00:06:38,600 --> 00:06:41,045
+Um, final little advertisement.
+嗯，最后的小广告。
+
+116
+00:06:41,045 --> 00:06:43,370
+If you feel like you'd like to read a book,
+如果您觉得自己想读书，
+
+117
+00:06:43,370 --> 00:06:45,155
+um, just out this week,
+嗯，本周刚出来，
+
+118
+00:06:45,155 --> 00:06:48,305
+there's a new book on natural language processing with PyTorch
+有一本关于PyTorch自然语言处理的新书
+
+119
+00:06:48,305 --> 00:06:51,575
+by Delip Rao and Brian McMahan.
+作者：Delip Rao和Brian McMahan。
+
+120
+00:06:51,575 --> 00:06:53,990
+Delip actually lives in San Francisco.
+Delip实际上住在旧金山。
+
+121
+00:06:53,990 --> 00:06:56,660
+Um, so, um, if you want to,
+恩，嗯，如果你愿意，
+
+122
+00:06:56,660 --> 00:06:58,310
+you can buy a copy of this, of course.
+当然，你可以买一份。
+
+123
+00:06:58,310 --> 00:07:00,230
+But if you don't want to, um,
+但如果你不想，嗯，
+
+124
+00:07:00,230 --> 00:07:03,230
+buy it and you feel like having a bit of a look through it, um,
+买它，你觉得有点看看它，嗯，
+
+125
+00:07:03,230 --> 00:07:09,110
+the Stanford library is actually has a license to the O'Reilly's Safari Books collection.
+斯坦福图书馆实际上拥有O'Reilly的Safari Books系列的许可证。
+
+126
+00:07:09,110 --> 00:07:14,945
+So you can start off at library.stanford.edu and read it for free.
+所以你可以从library.stanford.edu开始并免费阅读。
+
+127
+00:07:14,945 --> 00:07:18,230
+There's one catch to this which is the library only has
+这是图书馆唯一的一个问题
+
+128
+00:07:18,230 --> 00:07:21,710
+16 simultaneous licenses to Safari Books.
+同时获得Safari Books的16个许可。
+
+129
+00:07:21,710 --> 00:07:25,450
+So if you'd also like your classmates to be able to read it for free,
+所以，如果你也想让你的同学能够免费阅读，
+
+130
+00:07:25,450 --> 00:07:29,944
+it really helps if you remember to log out of Safari Books Online,
+如果您记得退出Safari Books Online，这确实很有帮助，
+
+131
+00:07:29,944 --> 00:07:32,270
+um, when you're done looking at it.
+嗯，当你看完它的时候。
+
+132
+00:07:32,270 --> 00:07:34,785
+Um, yes, so this is sort of a,
+嗯，是的，所以这有点像，
+
+133
+00:07:34,785 --> 00:07:36,420
+I mean, in some sense,
+我的意思是，从某种意义上说，
+
+134
+00:07:36,420 --> 00:07:39,025
+I hope you will feel if you look at this book,
+我希望你能看到这本书，
+
+135
+00:07:39,025 --> 00:07:41,610
+"Boy, I already know most of that stuff already.
+“男孩，我已经知道了大部分内容。
+
+136
+00:07:41,610 --> 00:07:43,740
+It's not a super advanced book.
+这不是一本超级高级的书。
+
+137
+00:07:43,740 --> 00:07:49,780
+But it's a good well-written tutorial of how to do things with PyTorch and NLP."
+但它是如何用PyTorch和NLP做好的精心编写的教程。“
+
+138
+00:07:49,780 --> 00:07:52,620
+If you don't feel like you know most of the stuff in this book,
+如果您不想知道本书中的大部分内容，
+
+139
+00:07:52,620 --> 00:07:56,250
+you can let me know but I will be a little sad.
+你可以让我知道，但我会有点难过。
+
+140
+00:07:56,250 --> 00:08:01,030
+Um, okay, um, yeah.
+嗯，好的，恩，是的。
+
+141
+00:08:01,030 --> 00:08:03,760
+So, let, so starting into today.
+所以，让我们开始吧。
+
+142
+00:08:03,760 --> 00:08:06,430
+Um, so, we spent a lot of time on
+嗯，所以，我们花了很多时间
+
+143
+00:08:06,430 --> 00:08:10,630
+recurrent neural networks and they are great for many things.
+循环神经网络，它们对很多东西都很好。
+
+144
+00:08:10,630 --> 00:08:15,670
+Um, but there's sort of some things that they're not so good at.
+嗯，但有些事情他们并不擅长。
+
+145
+00:08:15,670 --> 00:08:21,280
+So, you know, we kind of might like to know about a phrase like my birth,
+所以，你知道，我们可能想知道像我出生这样的短语，
+
+146
+00:08:21,280 --> 00:08:23,800
+or a bigger phrase like of my birth,
+或者像我出生的更大的短语，
+
+147
+00:08:23,800 --> 00:08:27,550
+and there's sort of no independent, um,
+并且有点没有独立，嗯，
+
+148
+00:08:27,550 --> 00:08:31,480
+representation of those spans in a recurrent neural network.
+在递归神经网络中表示这些跨度。
+
+149
+00:08:31,480 --> 00:08:35,365
+We kind of get sort of prefixes of a whole sentence.
+我们得到一整句的前缀。
+
+150
+00:08:35,365 --> 00:08:38,815
+And while we did, um, bidirectional, um,
+虽然我们做了，嗯，双向，嗯，
+
+151
+00:08:38,815 --> 00:08:42,100
+recurrent neural networks, and you could say, 'Well,
+反复神经网络，你可以说，'嗯，
+
+152
+00:08:42,100 --> 00:08:45,670
+wait a minute you could use it in both directions' and to some extent that's true.
+等一下你可以在两个方向上使用它，并且在某种程度上这是真的。
+
+153
+00:08:45,670 --> 00:08:49,120
+We can get stuff from this direction and stuff from this direction,
+我们可以从这个方向得到东西，从这个方向来看，
+
+154
+00:08:49,120 --> 00:08:51,265
+but we still kind of have sort of
+但我们仍然有点像
+
+155
+00:08:51,265 --> 00:08:54,730
+whole sequences that go to one end of the sentence or another.
+整个序列，直到句子的一端或另一端。
+
+156
+00:08:54,730 --> 00:08:57,790
+We don't just have pieces of sentences.
+我们不只是有句子。
+
+157
+00:08:57,790 --> 00:09:03,595
+And often, we'd like to sort of work out meanings of pieces of sentences,
+通常，我们想要解决一些句子的含义，
+
+158
+00:09:03,595 --> 00:09:06,280
+and so, we sort of have two problems here.
+所以，我们在这里有两个问题。
+
+159
+00:09:06,280 --> 00:09:09,835
+We only have sort of initial and final sub-sequences.
+我们只有一些初始和最终的子序列。
+
+160
+00:09:09,835 --> 00:09:14,230
+And also, if you look at these representations, like if you say,
+而且，如果你看一下这些陈述，就像你说的那样，
+
+161
+00:09:14,230 --> 00:09:18,820
+take this last state as the representation of the meaning of this text.
+把这个最后的状态作为本文意义的表示。
+
+162
+00:09:18,820 --> 00:09:20,080
+What you find out,
+你发现了什么，
+
+163
+00:09:20,080 --> 00:09:22,360
+is it's very dominated by the meaning of
+它是否被它的意义所支配
+
+164
+00:09:22,360 --> 00:09:27,640
+the most recent words and what they are trying to predict as to what comes after them,
+最近的单词以及他们想要预测的内容是什么，
+
+165
+00:09:27,640 --> 00:09:30,085
+and that's part of the reason why I mentioned
+这就是我提到的原因之一
+
+166
+00:09:30,085 --> 00:09:33,280
+last time in the question answering, um, lecture,
+上一次回​​答问题，嗯，讲座，
+
+167
+00:09:33,280 --> 00:09:37,060
+the idea that well you can do better by having a sentinel and training
+通过哨兵和训练你可以做得更好的想法
+
+168
+00:09:37,060 --> 00:09:41,755
+something that has attention over the whole, um, LSTM structure.
+关注整个，嗯，LSTM结构的东西。
+
+169
+00:09:41,755 --> 00:09:44,560
+Okay. But today we're going to look at
+好的。但今天我们要看一下
+
+170
+00:09:44,560 --> 00:09:48,565
+a different alternative which is convolutional neural nets,
+一种不同的替代方案，即卷积神经网络，
+
+171
+00:09:48,565 --> 00:09:53,485
+which are often abbreviated as either CNN's or ConvNets.
+它们通常缩写为CNN或ConvNets。
+
+172
+00:09:53,485 --> 00:09:57,385
+Um, and the idea of these is, well,
+嗯，这些的想法是，嗯，
+
+173
+00:09:57,385 --> 00:09:59,920
+look maybe we could just take
+看起来也许我们可以采取
+
+174
+00:09:59,920 --> 00:10:06,910
+every sub-sequence of a certain length and calculate a representation for it, um,
+一定长度的每个子序列并计算它的表示，嗯，
+
+175
+00:10:06,910 --> 00:10:10,090
+so that, you know, if we have some piece of text like,
+所以，你知道，如果我们有一些文字，比如
+
+176
+00:10:10,090 --> 00:10:12,684
+tentative deal reached to keep government open,
+为保持政府开放达成初步协议
+
+177
+00:10:12,684 --> 00:10:14,320
+and we could sort of just say, well,
+我们可以说，好吧，
+
+178
+00:10:14,320 --> 00:10:17,110
+let's just take all three words sequences,
+让我们把所有三个单词序列，
+
+179
+00:10:17,110 --> 00:10:19,765
+tentative deal reached, deal reached to,
+已达成暂定协议，达成协议，
+
+180
+00:10:19,765 --> 00:10:21,385
+reached to keep et cetera,
+达到了保持等待，
+
+181
+00:10:21,385 --> 00:10:26,470
+and we're going to calculate some kind of representation for each of those sequences.
+我们将为每个序列计算某种表示形式。
+
+182
+00:10:26,470 --> 00:10:30,250
+So, this is an- isn't a strongly linguistic idea.
+所以，这不是一个强烈的语言观念。
+
+183
+00:10:30,250 --> 00:10:33,430
+Right? We're not worrying about whether it's a coherent phrase,
+对？我们不担心它是否是一个连贯的短语，
+
+184
+00:10:33,430 --> 00:10:36,310
+that's grammatical linguistically valid,
+这在语法上是有效的，
+
+185
+00:10:36,310 --> 00:10:41,125
+cognitively plausible, we're just taking every sub-sequence of a certain length.
+在认知上看似合理，我们只是采取一定长度的每个子序列。
+
+186
+00:10:41,125 --> 00:10:45,370
+And then, once we've calculated representations of those,
+然后，一旦我们计算了那些的表示，
+
+187
+00:10:45,370 --> 00:10:48,025
+we're going to look at how to group them.
+我们将看看如何对它们进行分组。
+
+188
+00:10:48,025 --> 00:10:55,900
+Okay. So, let's get into more detail as to what CNN's are and how they work.
+好的。那么，让我们详细了解CNN是什么以及它们是如何工作的。
+
+189
+00:10:55,900 --> 00:11:01,900
+Um, yeah, so, there's this general idea of a convolution which you may or may
+嗯，是的，所以，你可能会或可能会有这种卷积的概念
+
+190
+00:11:01,900 --> 00:11:07,855
+not have seen in some math or electrical engineering class.
+在某些数学或电气工程课上没见过。
+
+191
+00:11:07,855 --> 00:11:12,010
+And then, there's the particular version of convolutions,
+然后，有特定版本的卷积，
+
+192
+00:11:12,010 --> 00:11:15,310
+the discrete convolutions, which you can means that
+离散卷积，你可以这意味着
+
+193
+00:11:15,310 --> 00:11:18,910
+you can use the friendly summation symbol rather than an integral.
+你可以使用友好的求和符号而不是积分符号。
+
+194
+00:11:18,910 --> 00:11:20,905
+Um, and that's a,
+嗯，那是一个，
+
+195
+00:11:20,905 --> 00:11:22,480
+that's a discrete convolution.
+那是一个离散的卷积。
+
+196
+00:11:22,480 --> 00:11:25,495
+I find that that notation as completely unhelpful.
+我发现那种符号完全没有用。
+
+197
+00:11:25,495 --> 00:11:27,040
+So, I won't even try and explain it.
+所以，我甚至不会尝试解释它。
+
+198
+00:11:27,040 --> 00:11:28,690
+But I've got lots of examples,
+但我有很多例子，
+
+199
+00:11:28,690 --> 00:11:34,075
+and convolutions are really easy for neural nets in terms of what they do for examples.
+就例子而言，神经网络和卷积非常容易。
+
+200
+00:11:34,075 --> 00:11:38,590
+All right, so the classic case of where convolutional neural networks are used,
+好吧，所以使用卷积神经网络的经典案例，
+
+201
+00:11:38,590 --> 00:11:40,270
+is in vision applications.
+在视觉应用中。
+
+202
+00:11:40,270 --> 00:11:44,605
+So, if you do CS231N next quarter,
+所以，如果你下个季度做CS231N，
+
+203
+00:11:44,605 --> 00:11:47,770
+essentially you know,  the first four weeks is just all doing
+基本上你知道，前四周就是全部
+
+204
+00:11:47,770 --> 00:11:51,715
+convolutional neural networks in all their variants and glory.
+卷积神经网络的所有变体和荣耀。
+
+205
+00:11:51,715 --> 00:11:55,540
+Um, and the sort of essential idea of, um,
+嗯，还有那种基本的想法，嗯，
+
+206
+00:11:55,540 --> 00:11:57,894
+convolutions for a vision,
+有远见的卷积，
+
+207
+00:11:57,894 --> 00:12:02,410
+is that you want to recognize things no matter where they appear in an image.
+是你想要识别的东西，无论它们出现在图像中的哪个位置。
+
+208
+00:12:02,410 --> 00:12:05,620
+So, you have a sort of property of translation and variance,
+所以，你有一种翻译和变异的属性，
+
+209
+00:12:05,620 --> 00:12:08,230
+and the idea of a convolution as a way
+以及卷积作为一种方式的想法
+
+210
+00:12:08,230 --> 00:12:10,810
+of finding something in different places in the image,
+在图像中的不同位置找到某些东西，
+
+211
+00:12:10,810 --> 00:12:12,670
+regardless of where it appears.
+无论它出现在哪里。
+
+212
+00:12:12,670 --> 00:12:19,360
+Um, so this is the vision example which I stole from Andrew Ng's UFLDL website.
+嗯，所以这是我从Andrew Ng的UFLDL网站上偷走的视觉范例。
+
+213
+00:12:19,360 --> 00:12:21,925
+And so, what a convolution is,
+那么，卷积是什么，
+
+214
+00:12:21,925 --> 00:12:24,130
+is it's here a patch,
+它在这里是一个补丁，
+
+215
+00:12:24,130 --> 00:12:26,815
+but you can think of it as just as a vector,
+但你可以把它想象成一个矢量，
+
+216
+00:12:26,815 --> 00:12:31,450
+and the patch has weights which are these little numbers in red,
+补丁的重量是这些红色的小数字，
+
+217
+00:12:31,450 --> 00:12:32,995
+and what you're gonna do,
+你要做什么
+
+218
+00:12:32,995 --> 00:12:40,345
+is slide that patch over the image as this as this animation does.
+就像这个动画一样，在图像上滑动补丁。
+
+219
+00:12:40,345 --> 00:12:43,075
+Um, and so at each position,
+嗯，在每个位置，
+
+220
+00:12:43,075 --> 00:12:47,905
+you're going to multiply each of the red numbers by the black number in that position,
+你要将每个红色数字乘以该位置的黑色数字，
+
+221
+00:12:47,905 --> 00:12:50,080
+and then you're just going to sum them up.
+然后你就是要总结它们。
+
+222
+00:12:50,080 --> 00:12:53,245
+So, that's what a discrete convolution does,
+那么，这就是离散卷积的作用，
+
+223
+00:12:53,245 --> 00:12:55,180
+which is what that notation at the top is saying,
+这是顶部的符号所说的，
+
+224
+00:12:55,180 --> 00:12:58,495
+right? You're multiplying things together and then you're summing them up,
+对？你把事物放在一起，然后你就把它们相加，
+
+225
+00:12:58,495 --> 00:13:00,235
+and so you're doing this,
+所以你这样做，
+
+226
+00:13:00,235 --> 00:13:04,240
+and then you're filling in the pink with the products,
+然后你用产品填充粉红色，
+
+227
+00:13:04,240 --> 00:13:05,710
+um, the sum products.
+嗯，和产品。
+
+228
+00:13:05,710 --> 00:13:07,855
+So, it's sort of like, you're taking these sort of
+所以，有点像，你正在采取这种方式
+
+229
+00:13:07,855 --> 00:13:12,400
+patch dot products and putting them into the pink matrix,
+补丁点产品并将它们放入粉红色矩阵中，
+
+230
+00:13:12,400 --> 00:13:14,815
+and that's then your convolved feature.
+那就是你的卷积特征。
+
+231
+00:13:14,815 --> 00:13:17,350
+So, that's a 2D convolution,
+那么，这是一个2D卷积，
+
+232
+00:13:17,350 --> 00:13:18,760
+which for the rest of today,
+对于今天剩下的时间，
+
+233
+00:13:18,760 --> 00:13:20,470
+we're not going to look at anymore.
+我们不会再看了。
+
+234
+00:13:20,470 --> 00:13:23,215
+So, this is all you're learning about vision.
+所以，这就是你对视觉的了解。
+
+235
+00:13:23,215 --> 00:13:28,390
+Um, and so we're now going to go back and look at 1D convolutions,
+嗯，所以我们现在要回去查看1D卷积，
+
+236
+00:13:28,390 --> 00:13:32,995
+which is what people use when they're using convolutional neural networks for text.
+这是人们在使用卷积神经网络进行文本时使用的。
+
+237
+00:13:32,995 --> 00:13:36,610
+So, the starting point of a convolutional neural network for text,
+那么，文本的卷积神经网络的起点，
+
+238
+00:13:36,610 --> 00:13:38,410
+is we have an input.
+我们有一个输入。
+
+239
+00:13:38,410 --> 00:13:42,190
+So, here's my sentence and for each word
+所以，这是我的句子和每个单词
+
+240
+00:13:42,190 --> 00:13:45,970
+in the sentence I have here got a dense word vector,
+在这句话中我有一个密集的单词向量，
+
+241
+00:13:45,970 --> 00:13:51,325
+I made it a 4D, want to keep it small in my example but usually as you know, it's more.
+我把它做成4D，想在我的例子中保持小，但通常如你所知，它更多。
+
+242
+00:13:51,325 --> 00:13:54,580
+So, our starting point is we have some input, you know,
+所以，我们的出发点是我们有一些意见，你知道，
+
+243
+00:13:54,580 --> 00:13:58,060
+input could just be a one-hot encoding that's not forbidden here,
+输入可能只是一个热门编码，这里不禁止，
+
+244
+00:13:58,060 --> 00:14:01,795
+but normally we'll have these kind of dense word vectors.
+但通常我们会有这些密集的单词向量。
+
+245
+00:14:01,795 --> 00:14:06,310
+And so, then it's sort of the same as the 3D as the 2D one,
+那么，它就像3D一样，与2D相同，
+
+246
+00:14:06,310 --> 00:14:08,185
+apart from we've only got one dimension.
+除了我们只有一个维度。
+
+247
+00:14:08,185 --> 00:14:10,510
+So, we have a filter.
+所以，我们有一个过滤器。
+
+248
+00:14:10,510 --> 00:14:14,410
+Um, so here is our filter,
+嗯，这是我们的过滤器，
+
+249
+00:14:14,410 --> 00:14:21,680
+and so our filter is gonna do three steps and time, three words.
+所以我们的过滤器会做三个步骤和时间，三个字。
+
+250
+00:14:21,750 --> 00:14:25,930
+And that's going to work across the dimensions.
+这将跨越各个方面。
+
+251
+00:14:25,930 --> 00:14:28,240
+So, these different dimensions in
+所以，这些不同的维度
+
+252
+00:14:28,240 --> 00:14:32,500
+the convolutional neural network often get referred to as channels.
+卷积神经网络通常被称为信道。
+
+253
+00:14:32,500 --> 00:14:35,665
+So, we're kind of working across the input channels,
+所以，我们在输入渠道上工作，
+
+254
+00:14:35,665 --> 00:14:37,990
+and so we have a patch like this.
+所以我们有这样的补丁。
+
+255
+00:14:37,990 --> 00:14:45,430
+And we're going to take this patch and put it on top of the first three words.
+我们将采用这个补丁并将其放在前三个单词之上。
+
+256
+00:14:45,430 --> 00:14:47,980
+I don't have as good an animation as the previous slide.
+我没有上一张幻灯片那么好的动画。
+
+257
+00:14:47,980 --> 00:14:51,610
+Sorry. And we're going to work out the dot product,
+抱歉。我们要研究点积，
+
+258
+00:14:51,610 --> 00:14:56,410
+um, between those, and I did that at home by putting this into Excel.
+嗯，介于两者之间，我把它放在Excel中就是在家里做的。
+
+259
+00:14:56,410 --> 00:14:58,015
+And the answer [LAUGHTER] to that,
+答案是[笑声]，
+
+260
+00:14:58,015 --> 00:15:01,255
+is that the product is minus 1,0.
+是产品是负1,0。
+
+261
+00:15:01,255 --> 00:15:05,495
+And then at that point, we slide our,
+然后在那一点上，我们滑动我们的，
+
+262
+00:15:05,495 --> 00:15:08,345
+We slide this, um,
+我们滑了这个，嗯，
+
+263
+00:15:08,345 --> 00:15:11,410
+matrix which gets referred to as a kernel or
+矩阵被称为内核或
+
+264
+00:15:11,410 --> 00:15:16,305
+a filter which is the patch that we're using for our convolutional neural network.
+一个过滤器，它是我们用于卷积神经网络的补丁。
+
+265
+00:15:16,305 --> 00:15:21,520
+We slide it down one and do the dot product of those terms again.
+我们将其向下滑动一次并再次执行这些术语的点积。
+
+266
+00:15:21,520 --> 00:15:28,955
+And that comes out as minus a half and we keep on sliding that down and we get what,
+这个减半，我们继续向下滑动，我们得到了什么，
+
+267
+00:15:28,955 --> 00:15:33,095
+um, gets what's shown on the right as our output.
+嗯，得到右边显示的输出。
+
+268
+00:15:33,095 --> 00:15:34,265
+So at this point,
+所以在这一点上，
+
+269
+00:15:34,265 --> 00:15:36,690
+we've just reduced the sentence,
+我们刚刚减刑，
+
+270
+00:15:36,690 --> 00:15:39,105
+um, to a single vector.
+嗯，到一个向量。
+
+271
+00:15:39,105 --> 00:15:44,740
+Um, and that seems like we might want to do more than that.
+嗯，这似乎我们可能想要做更多的事情。
+
+272
+00:15:44,740 --> 00:15:48,455
+Um, but the other thing that you will have noticed is that
+嗯，但你会注意到的另一件事是
+
+273
+00:15:48,455 --> 00:15:52,500
+our sentence is sort of shrunk because before, you know,
+我们的句子有点缩小，因为之前，你知道，
+
+274
+00:15:52,500 --> 00:15:57,710
+we had a seven word sentence but because I've just sort of slid this three word,
+我们有七个字的句子，但因为我只是滑了这三个字，
+
+275
+00:15:57,710 --> 00:15:59,615
+um, kernel down here,
+嗯，内核在这里，
+
+276
+00:15:59,615 --> 00:16:03,015
+I ended up with only five positions to put it in.
+我最终只有五个职位才能投入。
+
+277
+00:16:03,015 --> 00:16:05,825
+So it's become a five word thing.
+所以这成了一个五字的事情。
+
+278
+00:16:05,825 --> 00:16:08,960
+Um, so to first of all address that problem,
+嗯，首先要解决这个问题，
+
+279
+00:16:08,960 --> 00:16:14,030
+commonly when people do convolutional neural networks, they add padding.
+通常当人们进行卷积神经网络时，他们会添加填充。
+
+280
+00:16:14,030 --> 00:16:18,790
+Um, so what I can do is I can add zero padding at
+嗯，所以我能做的就是我可以添加零填充
+
+281
+00:16:18,790 --> 00:16:25,805
+both ends and then sort of do the same trick and say run a convolution on that.
+两端，然后做同样的伎俩，然后对此进行卷积。
+
+282
+00:16:25,805 --> 00:16:31,355
+And now, I'll be able to put my size three filter in seven different places as I
+而现在，我将能够将我的尺寸三滤镜放在七个不同的地方
+
+283
+00:16:31,355 --> 00:16:37,835
+slide it down and so I'm getting out a vector that's the same length of my input.
+向下滑动，所以我得到一个与我的输入长度相同的向量。
+
+284
+00:16:37,835 --> 00:16:40,650
+Um, that, you know, there are different way,
+嗯，你知道，有不同的方式，
+
+285
+00:16:40,650 --> 00:16:43,200
+so this is the most common way of doing things.
+所以这是最常见的做事方式。
+
+286
+00:16:43,200 --> 00:16:46,765
+And it's kind of seems logical because it maintains size.
+这似乎是合乎逻辑的，因为它保持了规模。
+
+287
+00:16:46,765 --> 00:16:50,460
+I mean, you know, there's always more than one way to do it.
+我的意思是，你知道，总有不止一种方法可以做到这一点。
+
+288
+00:16:50,460 --> 00:16:52,310
+Um, if you really wanted to,
+嗯，如果你真的想，
+
+289
+00:16:52,310 --> 00:16:54,390
+you, oops, I don't want you, yeah,
+你，哎呀，我不要你，是的，
+
+290
+00:16:54,390 --> 00:16:59,560
+there, oops, I made, uh,
+在那里，哎呀，我做了，呃，
+
+291
+00:16:59,560 --> 00:17:05,855
+I made a slight mistake on my slide because this
+我在幻灯片上犯了一个小错误，因为这个
+
+292
+00:17:05,855 --> 00:17:08,405
+turns out which I was about to get to in a minute
+事实证明我将在一分钟内到达
+
+293
+00:17:08,405 --> 00:17:12,790
+but I'll just explain this bit here anyway [LAUGHTER].
+但无论如何我都会在这里解释一下[笑声]。
+
+294
+00:17:12,790 --> 00:17:15,450
+Um, you know, if you wanted to,
+嗯，你知道，如果你愿意，
+
+295
+00:17:15,450 --> 00:17:19,740
+you could have two steps of padding on both ends here.
+你可以在这里两端填充两个步骤。
+
+296
+00:17:19,740 --> 00:17:24,290
+So that your first convolution we'll be looking at zero, zero,
+所以你的第一个卷积我们将看零，零，
+
+297
+00:17:24,290 --> 00:17:30,585
+10 to the of and then the convolution would actually grow the size of your input.
+然后卷积实际上会增加你输入的大小。
+
+298
+00:17:30,585 --> 00:17:35,915
+Yeah. But, yes. So I mean,
+是啊。但是，是的。所以我的意思是，
+
+299
+00:17:35,915 --> 00:17:38,565
+so what we've done so far,
+那么到目前为止我们做了什么，
+
+300
+00:17:38,565 --> 00:17:41,380
+we've started with these word vectors which in
+我们已经开始使用这些单词向量
+
+301
+00:17:41,380 --> 00:17:46,335
+convolutional neural networks terms were of length four.
+卷积神经网络术语长度为四。
+
+302
+00:17:46,335 --> 00:17:49,475
+So our kind of input had four channels.
+所以我们的输入有四个渠道。
+
+303
+00:17:49,475 --> 00:17:53,030
+But when we were back here, um,
+但是当我们回到这里时，嗯，
+
+304
+00:17:53,030 --> 00:17:56,515
+we were just producing from this, um,
+我们刚从这里生产，嗯，
+
+305
+00:17:56,515 --> 00:17:59,690
+kernel, one column of output.
+内核，一列输出。
+
+306
+00:17:59,690 --> 00:18:02,560
+So our output has only a single channel.
+所以我们的输出只有一个通道。
+
+307
+00:18:02,560 --> 00:18:08,690
+So we've sort of shrunk things in the columns direction from four to one.
+所以我们在列方向上从四个变为一个缩小的东西。
+
+308
+00:18:08,690 --> 00:18:11,490
+And that might seem bad.
+这可能看起来很糟糕。
+
+309
+00:18:11,490 --> 00:18:14,105
+And for many purposes, it is bad.
+而且出于许多目的，这很糟糕。
+
+310
+00:18:14,105 --> 00:18:16,714
+Um, and so, a lot of the time,
+嗯，很多时候，
+
+311
+00:18:16,714 --> 00:18:21,164
+what you want to do is to say,
+你想要做的是说，
+
+312
+00:18:21,164 --> 00:18:25,325
+well, rather than have only one filter,
+好吧，而不是只有一个过滤器，
+
+313
+00:18:25,325 --> 00:18:29,260
+instead of that, why don't I have several filters?
+而不是那个，为什么我没有几个过滤器？
+
+314
+00:18:29,260 --> 00:18:32,680
+So here I've got three different filters and each of
+所以在这里我有三个不同的过滤器和每个
+
+315
+00:18:32,680 --> 00:18:36,620
+these filters is just sort of the same size three,
+这些过滤器只是大小相同，
+
+316
+00:18:36,620 --> 00:18:41,825
+three the size, the kernel size times the input,
+三个大小，内核大小乘以输入，
+
+317
+00:18:41,825 --> 00:18:46,145
+number of channels for the matrix.
+矩阵的通道数。
+
+318
+00:18:46,145 --> 00:18:49,550
+So I have three different filters and I'm going to run
+所以我有三个不同的过滤器，我将要运行
+
+319
+00:18:49,550 --> 00:18:53,380
+each one down the text and get a column here.
+文本中的每一个都在这里得到一个列。
+
+320
+00:18:53,380 --> 00:18:56,510
+So now, I'm ending up with three columns of output.
+所以现在，我最终得到了三列输出。
+
+321
+00:18:56,510 --> 00:18:59,675
+And so I have this sort of a three channel output.
+所以我有这种三通道输出。
+
+322
+00:18:59,675 --> 00:19:04,940
+And the way to intuitively think of this is for these filters,
+直观地考虑这个问题的方法是针对这些过滤器，
+
+323
+00:19:04,940 --> 00:19:07,505
+well, you know, for what we do in neural networks,
+嗯，你知道，我们在神经网络中做了什么，
+
+324
+00:19:07,505 --> 00:19:11,040
+we're going to learn them by backpropagation like everything else.
+我们将像其他一切一样通过反向传播来学习它们。
+
+325
+00:19:11,040 --> 00:19:16,760
+But our hope is that these filters could somehow specialize in different things.
+但我们希望这些过滤器能以某种方式专注于不同的事物。
+
+326
+00:19:16,760 --> 00:19:20,480
+So maybe this filter could specialize on,
+所以也许这个过滤器可以专注于，
+
+327
+00:19:20,480 --> 00:19:22,355
+is this language polite?
+这种语言有礼貌吗？
+
+328
+00:19:22,355 --> 00:19:26,725
+And it will produce a high value whenever it sees polite words.
+只要看到礼貌用语，它就会产生很高的价值。
+
+329
+00:19:26,725 --> 00:19:29,850
+And maybe, um, this, um,
+也许，嗯，这个，嗯，
+
+330
+00:19:29,850 --> 00:19:35,605
+filter could specialize on, I don't know,
+过滤器可以专攻，我不知道，
+
+331
+00:19:35,605 --> 00:19:38,795
+eating and it will have a high value whenever it sees words
+吃东西，只要看到文字就会有很高的价值
+
+332
+00:19:38,795 --> 00:19:42,430
+about food and you know this filter will do a third thing.
+关于食物，你知道这个过滤器会做第三件事。
+
+333
+00:19:42,430 --> 00:19:49,235
+And so that's the sense in which people sometimes talk about, um, the, um,
+所以这就是人们有时会谈论的感觉，嗯，嗯，
+
+334
+00:19:49,235 --> 00:19:53,075
+what you're getting is output of different features because your hope is that
+你得到的是不同功能的输出，因为你的希望就是这样
+
+335
+00:19:53,075 --> 00:19:57,515
+you'll kind of gain different latent features coming out of the text.
+你会从文本中获得不同的潜在特征。
+
+336
+00:19:57,515 --> 00:20:02,555
+Okay. So that gives us a representation and that's sort of
+好的。所以这给了我们一个代表，那就是那种
+
+337
+00:20:02,555 --> 00:20:07,540
+a useful sort of having found learn features in our text.
+在我们的文本中找到学习功能的有用方法。
+
+338
+00:20:07,540 --> 00:20:11,290
+That quite often though, what we'll want to do is just
+但这经常是我们想做的事情
+
+339
+00:20:11,290 --> 00:20:15,610
+summarize the text with re- with respect to those features.
+关于这些特征重新总结文本。
+
+340
+00:20:15,610 --> 00:20:18,030
+So you might just have the question of, well,
+所以你可能只是有一个问题，好吧，
+
+341
+00:20:18,030 --> 00:20:20,045
+in this piece of text, um,
+在这篇文章中，嗯，
+
+342
+00:20:20,045 --> 00:20:23,435
+is it polite and does it talk about food?
+它有礼貌吗？它谈论食物吗？
+
+343
+00:20:23,435 --> 00:20:26,555
+So another operation that we'll quite often
+所以我们经常会进行另一项操作
+
+344
+00:20:26,555 --> 00:20:30,410
+do is wanna summarize the output of a convolutional network.
+我想总结一个卷积网络的输出。
+
+345
+00:20:30,410 --> 00:20:32,750
+And the simplest way to do that,
+最简单的方法，
+
+346
+00:20:32,750 --> 00:20:35,110
+is for 1D convolutions,
+适用于1D卷积，
+
+347
+00:20:35,110 --> 00:20:37,635
+is called max pooling over time.
+被称为最大池化随着时间的推移。
+
+348
+00:20:37,635 --> 00:20:40,080
+So if we max pool over time,
+所以，如果我们最大化时间池，
+
+349
+00:20:40,080 --> 00:20:43,935
+that each of the channels or otherwise known as features,
+每个频道或其他已知的功能，
+
+350
+00:20:43,935 --> 00:20:53,865
+we're just simply going to look down and see what is its maximum value, 0,3, 1,6, 1,4.
+我们只是简单地向下看，看看它的最大值是什么，0,3,1,6,1,4。
+
+351
+00:20:53,865 --> 00:20:55,775
+Um, and so, you know,
+嗯，你知道，
+
+352
+00:20:55,775 --> 00:20:58,730
+if I use my story about the first two, um,
+如果我用我关于前两个的故事，嗯，
+
+353
+00:20:58,730 --> 00:21:00,700
+filters, it's sort of saying, well,
+过滤器，有点说，好吧，
+
+354
+00:21:00,700 --> 00:21:04,600
+it's not very polite text but it's really about food, right?
+这不是很有礼貌的文字，但它真的是关于食物，对吗？
+
+355
+00:21:04,600 --> 00:21:06,300
+That we're sort of summarizing,
+我们总结一下，
+
+356
+00:21:06,300 --> 00:21:08,460
+um, what we've detected there.
+嗯，我们在那里发现了什么。
+
+357
+00:21:08,460 --> 00:21:14,400
+Um, so the concept of max pooling in some sense captures,
+嗯，所以在某种意义上捕获的最大池的概念，
+
+358
+00:21:14,400 --> 00:21:18,640
+does, is this thing being activated anywhere, right?
+是的，这件事在任何地方都被激活了吗？
+
+359
+00:21:18,640 --> 00:21:22,180
+So if we have things like politeness and about food,
+所以，如果我们有礼貌和食物，
+
+360
+00:21:22,180 --> 00:21:25,510
+that the output of max pooling will have a high value.
+最大池的输出将具有高值。
+
+361
+00:21:25,510 --> 00:21:28,600
+If somewhere in the sentence there was a clear marker of
+如果在句子的某个地方有明确的标记
+
+362
+00:21:28,600 --> 00:21:32,035
+politeness or something clearly about food.
+关于食物的礼貌或清楚的事情。
+
+363
+00:21:32,035 --> 00:21:37,210
+And that's often a useful notion because often what you want to know is,
+这通常是一个有用的概念，因为通常你想知道的是，
+
+364
+00:21:37,210 --> 00:21:42,260
+you know, is there some discussion of food in this sentence or is there not?
+你知道吗，在这句话中是否有一些关于食物的讨论还是没有？
+
+365
+00:21:42,260 --> 00:21:46,150
+There's another thing, there are other things that you could do.
+还有一件事，你还可以做其他事情。
+
+366
+00:21:46,150 --> 00:21:48,635
+Instead of, ah, max pooling,
+而不是，啊，最大池，
+
+367
+00:21:48,635 --> 00:21:51,210
+you can instead do average pooling.
+你可以改为平均合并。
+
+368
+00:21:51,210 --> 00:21:55,405
+So here you just take these numbers and find the average of them.
+所以在这里你只需要取这些数字并找到它们的平均值。
+
+369
+00:21:55,405 --> 00:21:58,910
+That then has the different semantics which is sort of
+那就有了不同的语义
+
+370
+00:21:58,910 --> 00:22:02,595
+what's the average amount of politeness of this, um,
+这是什么礼貌的平均数，嗯，
+
+371
+00:22:02,595 --> 00:22:05,855
+text or on average how much, you know, how,
+文字或平均多少，你知道，如何，
+
+372
+00:22:05,855 --> 00:22:10,265
+what percent of the sentence is about food or something like that.
+这个句子的百分之几是关于食物或类似的东西。
+
+373
+00:22:10,265 --> 00:22:12,190
+Um, for some purposes,
+嗯，出于某些目的，
+
+374
+00:22:12,190 --> 00:22:13,680
+this is better because, you know,
+这更好，因为，你知道，
+
+375
+00:22:13,680 --> 00:22:16,960
+it takes in all of the important builds to an average.
+它将所有重要的构建都纳入平均值。
+
+376
+00:22:16,960 --> 00:22:18,900
+I mean, a lot of the time,
+我的意思是，很多时候，
+
+377
+00:22:18,900 --> 00:22:22,890
+people have found that actually max pooling is better because,
+人们发现实际上最大池化更好，因为，
+
+378
+00:22:22,890 --> 00:22:27,490
+you know, a lot of signals in natural language are sparse.
+你知道，很多自然语言的信号很稀疏。
+
+379
+00:22:27,490 --> 00:22:30,630
+You know, no matter how polite you are trying to be,
+你知道，无论你多么有礼貌，
+
+380
+00:22:30,630 --> 00:22:32,940
+you're not going to be being polite in every word.
+你不会在每个字中都礼貌。
+
+381
+00:22:32,940 --> 00:22:37,430
+You're going to say nouns and articles like that and a,
+你会说那样的名词和文章，和
+
+382
+00:22:37,430 --> 00:22:40,390
+and prepositions and conjunctions,
+和介词和连词，
+
+383
+00:22:40,390 --> 00:22:42,635
+none of which are inherently polite, right?
+这些都不是礼貌的，对吧？
+
+384
+00:22:42,635 --> 00:22:46,325
+Um, so that if there's some politeness showing up prominently,
+嗯，如果有一些礼貌出现突出，
+
+385
+00:22:46,325 --> 00:22:51,470
+then the sentence becomes polite and max pooling is actually better for capturing that.
+然后句子变得有礼貌，而最大池化实际上更适合捕获它。
+
+386
+00:22:51,470 --> 00:22:54,430
+Um, of course the one other kind of thing that you can do as
+嗯，当然是你能做的另一件事
+
+387
+00:22:54,430 --> 00:22:58,115
+min pooling and find the least [LAUGHTER] active thing.
+min pooling并找到最少[LUGHTER]活跃的东西。
+
+388
+00:22:58,115 --> 00:23:01,135
+Um, it doesn't get used much but you could do that as well.
+嗯，它没有得到很多使用，但你也可以这样做。
+
+389
+00:23:01,135 --> 00:23:04,380
+Okay. So, um, so if you're in PyTorch,
+好的。所以，嗯，如果你在PyTorch，
+
+390
+00:23:04,380 --> 00:23:07,365
+this is all pretty easy stuff to do.
+这都是非常容易的事情。
+
+391
+00:23:07,365 --> 00:23:10,005
+So there's a handy dandy Conv1d.
+所以有一个方便的花花公子Conv1d。
+
+392
+00:23:10,005 --> 00:23:13,025
+There's also a Conv2d as you might guess for vision.
+还有一个Conv2d，你可能会猜测它的愿景。
+
+393
+00:23:13,025 --> 00:23:15,005
+But there's a Conv1d, um,
+但是有一个Conv1d，嗯，
+
+394
+00:23:15,005 --> 00:23:18,790
+where you're specifying how many input channels there are.
+你在哪里指定有多少输入通道。
+
+395
+00:23:18,790 --> 00:23:20,725
+That was our word embedding size.
+这就是我们的嵌入大小。
+
+396
+00:23:20,725 --> 00:23:22,735
+How many output channels there are?
+有多少输出通道？
+
+397
+00:23:22,735 --> 00:23:24,365
+We have three.
+我们有三个。
+
+398
+00:23:24,365 --> 00:23:27,820
+What the size of the convolutional kernel is?
+卷积内核的大小是多少？
+
+399
+00:23:27,820 --> 00:23:29,525
+So the ones that we were showing were also
+所以我们展示的那些也是
+
+400
+00:23:29,525 --> 00:23:32,380
+three and then there are various other parameters you can have.
+三，然后你可以有各种其他参数。
+
+401
+00:23:32,380 --> 00:23:35,990
+Like you can say that you want a padding of one and things like that.
+就像你可以说你想要一个填充和类似的东西。
+
+402
+00:23:35,990 --> 00:23:38,075
+And then once you've got one of those,
+一旦你有其中一个，
+
+403
+00:23:38,075 --> 00:23:39,695
+you can just sort of run
+你可以尝试一下
+
+404
+00:23:39,695 --> 00:23:44,355
+your convolutional filter on the input to get a new hidden state.
+您对输入的卷积过滤器以获得新的隐藏状态。
+
+405
+00:23:44,355 --> 00:23:46,220
+And then if you wanna max pool,
+然后，如果你想最大的游泳池，
+
+406
+00:23:46,220 --> 00:23:47,570
+you can just max,
+你可以最多，
+
+407
+00:23:47,570 --> 00:23:51,750
+um, through the output of that and then you've got a max pooled output.
+嗯，通过输出，然后你有一个最大池输出。
+
+408
+00:23:51,750 --> 00:23:58,869
+Okay. So that gives us the basics of building a kind of a convolutional neural network,
+好的。这样就为我们提供了构建一种卷积神经网络的基础知识，
+
+409
+00:23:58,869 --> 00:24:01,150
+um, for, um, NLP.
+嗯，因为，嗯，NLP。
+
+410
+00:24:01,150 --> 00:24:04,280
+Does that sort of makes sense up until there?
+这有什么意义，直到那里？
+
+411
+00:24:06,000 --> 00:24:10,570
+Yeah. Okay. So next bit is to sort of show
+是啊。好的。所以下一步就是要表现出来
+
+412
+00:24:10,570 --> 00:24:15,265
+you three or four other things that you can do.
+你可以做三到四件其他事情。
+
+413
+00:24:15,265 --> 00:24:18,325
+Um, I started off typing these slides
+嗯，我开始输入这些幻灯片
+
+414
+00:24:18,325 --> 00:24:20,920
+other less useful notions because I
+其他不太有用的概念，因为我
+
+415
+00:24:20,920 --> 00:24:23,590
+kinda thought, oh, at least they don't really come up much in NLP.
+有点想，哦，至少他们并没有真正在NLP中出现太多。
+
+416
+00:24:23,590 --> 00:24:28,090
+But, you know, actually it turned out when I got on to that second paper,
+但是，你知道，实际上当我接到第二篇论文时，
+
+417
+00:24:28,090 --> 00:24:32,740
+when I say the complex convolutional neural network, actually,
+当我说复杂的卷积神经网络时，实际上，
+
+418
+00:24:32,740 --> 00:24:37,750
+in that paper they try out just about all of these things that I say no one uses.
+在那篇论文中，他们尝试了我说的没有人使用过的所有这些东西。
+
+419
+00:24:37,750 --> 00:24:42,145
+So it's sort of good to know what they are for looking at various papers.
+因此，了解它们对于查看各种论文有什么好处。
+
+420
+00:24:42,145 --> 00:24:49,795
+So here, when we did things so far then we were calculating these convolutions,
+所以在这里，当我们做到目前为止，我们正在计算这些卷积，
+
+421
+00:24:49,795 --> 00:24:52,660
+that we're sort of trying them out at every position.
+我们在各个位置尝试它们。
+
+422
+00:24:52,660 --> 00:24:55,285
+So we had one for zero, tentative deal.
+所以我们有一个零暂时的交易。
+
+423
+00:24:55,285 --> 00:24:58,420
+Then for tentative deal reached then deal reached to.
+然后达成暂定交易，然后交易达成。
+
+424
+00:24:58,420 --> 00:25:00,970
+And so we were just walking down one step at
+所以我们只是走了一步
+
+425
+00:25:00,970 --> 00:25:04,765
+a time which is referred to as a stride as, of one.
+一个被称为步幅的时间。
+
+426
+00:25:04,765 --> 00:25:08,095
+And that's by far the most common thing to do.
+这是迄今为止最常见的事情。
+
+427
+00:25:08,095 --> 00:25:09,595
+But you could observe,
+但你可以观察到，
+
+428
+00:25:09,595 --> 00:25:10,825
+look wait a minute,
+看一下，
+
+429
+00:25:10,825 --> 00:25:15,655
+since the first convolution concerns zero tentative deal.
+因为第一次卷积涉及零暂定交易。
+
+430
+00:25:15,655 --> 00:25:18,085
+I've got all those three words in there.
+我在那里得到了所有这三个字。
+
+431
+00:25:18,085 --> 00:25:25,225
+Even if I skip down to a next did, deal reach to and then I did to keep government,
+即使我跳到下一个做了，交易到达，然后我做了保持政府，
+
+432
+00:25:25,225 --> 00:25:30,460
+I'd still have in one or other of the convolutions every word of the sentence
+我仍然会在句子的每个单词中包含一个或另一个单词
+
+433
+00:25:30,460 --> 00:25:32,950
+so I can do half as much computation and I've
+所以我可以做一半的计算而且我已经
+
+434
+00:25:32,950 --> 00:25:35,635
+still got everything in there in some sense.
+在某种意义上，仍然有一切都在那里。
+
+435
+00:25:35,635 --> 00:25:38,425
+And so that's referred to as using a stride of two.
+因此，这被称为使用两个步幅。
+
+436
+00:25:38,425 --> 00:25:42,130
+And so then I get something with half as many rows out.
+然后我得到了一半的行数。
+
+437
+00:25:42,130 --> 00:25:46,840
+So it's one way to sort of compactify your representation and produce
+因此，这是一种使你的表现和产生变得紧凑的方法
+
+438
+00:25:46,840 --> 00:25:52,855
+something shorter from a longer sentence and we'll see that use of it coming up later.
+从较长的句子缩短的东西，我们会看到它的使用会在以后出现。
+
+439
+00:25:52,855 --> 00:25:59,890
+There's other ways to compactify what cut representation that comes out of your sentence.
+还有其他方法可以减少从句子中删除表示的内容。
+
+440
+00:25:59,890 --> 00:26:05,710
+And so there's a different notion of pooling which is local pooling.
+因此，有一种不同的汇集概念，即本地汇集。
+
+441
+00:26:05,710 --> 00:26:09,640
+Now, if if you've seen any of
+现在，如果你看过任何一个
+
+442
+00:26:09,640 --> 00:26:13,510
+the vision world when people talk about max pooling and vision,
+人们谈论最大汇集和视觉时的愿景世界，
+
+443
+00:26:13,510 --> 00:26:16,960
+they normally mean local pooling as opposed to
+它们通常意味着本地汇集而不是
+
+444
+00:26:16,960 --> 00:26:21,400
+the max pooling through time that I showed you first.
+我最初向你展示的最大汇集时间。
+
+445
+00:26:21,400 --> 00:26:27,070
+So here we're sort of back to where we started and we've done
+所以在这里，我们回到了我们开始的地方，我们已经完成了
+
+446
+00:26:27,070 --> 00:26:33,535
+our size three stride one convolution which is producing output as before.
+我们的规模是三步一个卷积，正如以前一样产生输出。
+
+447
+00:26:33,535 --> 00:26:39,310
+But now, what I'm gonna do is local pool with a stride of two.
+但是现在，我要做的是本地游泳池，两步之遥。
+
+448
+00:26:39,310 --> 00:26:44,650
+Which means I'm gonna take each two rows and I'm gonna pool them together into
+这意味着我要分两排，我要将它们组合在一起
+
+449
+00:26:44,650 --> 00:26:47,110
+one row and I could do that again by
+一排，我可以再做一次
+
+450
+00:26:47,110 --> 00:26:50,680
+either maxing or averaging or whatever appeals to me.
+无论是最大化还是平均或对我有什么吸引力。
+
+451
+00:26:50,680 --> 00:26:53,200
+So I take the first two rows,
+所以我采取前两行，
+
+452
+00:26:53,200 --> 00:26:54,970
+I max pool them I get this.
+我最大限度地利用它们我得到了这个
+
+453
+00:26:54,970 --> 00:26:56,800
+I take the next two rows,
+接下两行，
+
+454
+00:26:56,800 --> 00:26:58,555
+I max pool them I get this.
+我最大限度地利用它们我得到了这个
+
+455
+00:26:58,555 --> 00:27:01,420
+Next two, next two and I sort of pad it
+接下来的两个，接下来的两个和我一样填补它
+
+456
+00:27:01,420 --> 00:27:04,285
+on the bottom so I have two rows at the bottom.
+在底部，所以我底部有两排。
+
+457
+00:27:04,285 --> 00:27:09,415
+And so that's then give me a local max pooling of a stride of two.
+所以那就是给我一个局部最大池的两个步幅。
+
+458
+00:27:09,415 --> 00:27:13,300
+And that sort of had exactly the same effect in the sense but
+从某种意义上讲，这种效果完全相同
+
+459
+00:27:13,300 --> 00:27:16,990
+with a different result as using a stride of two in
+使用两个步幅的结果不同
+
+460
+00:27:16,990 --> 00:27:20,530
+my convolution because I have again reduced it to
+我的卷积因为我再次减少它
+
+461
+00:27:20,530 --> 00:27:26,090
+something of four rows that used to be eight rows.
+曾经是八行的四行。
+
+462
+00:27:26,970 --> 00:27:29,935
+Yeah, picture that.
+是的，想象一下。
+
+463
+00:27:29,935 --> 00:27:33,640
+Okay so that's that one.
+好吧那就是那一个。
+
+464
+00:27:33,640 --> 00:27:35,410
+What else can you do.
+你还能做什么。
+
+465
+00:27:35,410 --> 00:27:38,080
+There are more things you can do to make it complex.
+你可以做更多的事情来使它变得复杂。
+
+466
+00:27:38,080 --> 00:27:43,765
+Another thing that people have sometimes done is k-max pooling.
+人们有时做的另一件事是k-max汇集。
+
+467
+00:27:43,765 --> 00:27:49,510
+And so this is a more complex thing and it's sort of saying well,
+所以这是一个更复杂的事情，它有点说得好，
+
+468
+00:27:49,510 --> 00:27:53,530
+rather than just keeping the max over time,
+而不仅仅是保持最大值，
+
+469
+00:27:53,530 --> 00:28:00,325
+if a feature is being kind of activated two or three times in the sentence,
+如果某个功能在句子中被激活了两三次，
+
+470
+00:28:00,325 --> 00:28:03,640
+maybe it'd be good to record all the times that it's
+也许记录它的所有时间都是好的
+
+471
+00:28:03,640 --> 00:28:07,375
+activated in the sentence while throwing away the rest.
+在抛弃其余部分的同时激活了句子。
+
+472
+00:28:07,375 --> 00:28:09,070
+So in k-max pooling,
+所以在k-max汇集中，
+
+473
+00:28:09,070 --> 00:28:10,870
+and I'm doing two max here,
+而我在这里做两个最大值，
+
+474
+00:28:10,870 --> 00:28:17,335
+you look down this column and you find the two highest values for that column.
+你向下看这个列，你会发现该列的两个最高值。
+
+475
+00:28:17,335 --> 00:28:23,665
+But then you put the two highest values not in the order of highest to lowest,
+但是你把两个最高值放在最高到最低的顺序，
+
+476
+00:28:23,665 --> 00:28:26,620
+but in the order in which they are in these columns.
+但按照它们在这些列中的顺序排列。
+
+477
+00:28:26,620 --> 00:28:28,840
+So it's minus 0,2,
+所以它是负0,2，
+
+478
+00:28:28,840 --> 00:28:32,230
+0,3 for this one and it's 1,6,
+0,3这个，它是1,6，
+
+479
+00:28:32,230 --> 00:28:38,065
+0,6 for this one because it reflects the orders of the columns up above.
+0,6这个因为它反映了上面列的顺序。
+
+480
+00:28:38,065 --> 00:28:43,210
+Okay. Almost done, one more concept.
+好的。几乎完成了，还有一个概念。
+
+481
+00:28:43,210 --> 00:28:52,285
+This is another way of compressing data which is a dilated convolution.
+这是另一种压缩数据的方法，这是一种扩张的卷积。
+
+482
+00:28:52,285 --> 00:28:55,315
+So if you have a dilated convolution,
+所以，如果你有一个扩张的卷积，
+
+483
+00:28:55,315 --> 00:29:01,870
+so dilated convolution doing it over here doesn't really make sense but where you can use
+因此在这里进行扩张卷积并不是真的有意义，而是你可以使用的地方
+
+484
+00:29:01,870 --> 00:29:08,440
+a dilated convolution is if I take this and put it through another convolutional layer,
+如果我把它放到另一个卷积层，扩散的卷积是，
+
+485
+00:29:08,440 --> 00:29:13,540
+we can kind of have deep convolutional networks that have multiple convolutional layers.
+我们可以拥有具有多个卷积层的深度卷积网络。
+
+486
+00:29:13,540 --> 00:29:20,560
+So the idea of a dilated convolution issue is you're gonna skip some of the rows.
+所以扩张卷积问题的想法是你要跳过一些行。
+
+487
+00:29:20,560 --> 00:29:24,295
+So if you use a dilation of two starting at the top,
+所以，如果你从顶部开始使用两个扩张，
+
+488
+00:29:24,295 --> 00:29:27,460
+you're going to take the first, third,
+你要拿第一个，第三个，
+
+489
+00:29:27,460 --> 00:29:31,870
+and the fifth row and multiply them by my fil- sorry,
+和第五行并将它们乘以我的过滤对不起，
+
+490
+00:29:31,870 --> 00:29:32,980
+I have different filters.
+我有不同的过滤器。
+
+491
+00:29:32,980 --> 00:29:38,305
+Multiply them by my filters and then get the values that appear here.
+将它们乘以我的过滤器，然后获取此处显示的值。
+
+492
+00:29:38,305 --> 00:29:40,480
+And then if stride as one,
+然后如果迈出一步，
+
+493
+00:29:40,480 --> 00:29:46,900
+you'd then use, you would go on and sort of do the next spread out rows.
+然后你会使用，你会继续做下一个展开的行。
+
+494
+00:29:46,900 --> 00:29:51,025
+And so this allows you to have convolutions that see
+因此，这允许您有看到的卷积
+
+495
+00:29:51,025 --> 00:29:56,680
+a bigger spread of the sentence without having many parameters.
+没有很多参数的句子扩大。
+
+496
+00:29:56,680 --> 00:29:59,065
+So you don't have to do things this way.
+所以你不必这样做。
+
+497
+00:29:59,065 --> 00:30:00,670
+You could have said, look,
+你可以说，看，
+
+498
+00:30:00,670 --> 00:30:07,015
+I could just instead have convolutions with a kernel size of five.
+我可以改为使用内核大小为5的卷积。
+
+499
+00:30:07,015 --> 00:30:08,470
+And then they'd say five,
+然后他们会说五个，
+
+500
+00:30:08,470 --> 00:30:11,500
+see five words in a row but then I'd be having
+连续看五个字然后我会有
+
+501
+00:30:11,500 --> 00:30:17,230
+sort of bigger matrices to specify my feature.
+一些更大的矩阵来指定我的功能。
+
+502
+00:30:17,230 --> 00:30:20,770
+Whereas, this way I can keep the matrices small but still
+然而，这样我可以保持矩阵小但仍然
+
+503
+00:30:20,770 --> 00:30:25,105
+see a bigger range of the sentence in one operation.
+在一次手术中看到更大范围的句子。
+
+504
+00:30:25,105 --> 00:30:30,670
+Yeah and that concept of how much of a sentence you
+是的，那个概念你的判刑多少
+
+505
+00:30:30,670 --> 00:30:36,490
+see is kind of an important notion in convolutional neural networks.
+在卷积神经网络中看到的是一种重要的概念。
+
+506
+00:30:36,490 --> 00:30:39,940
+Because, you know, if you start at the beginning of a sentence
+因为，你知道，如果你从一个句子的开头开始
+
+507
+00:30:39,940 --> 00:30:43,780
+and you're just running three-by-three convolutions, um,
+而你刚刚运行三乘三圈，嗯，
+
+508
+00:30:43,780 --> 00:30:47,995
+you're sort of seeing these three word patches of the sentence.
+你有点看到这句话的三个单词补丁。
+
+509
+00:30:47,995 --> 00:30:50,350
+And it turns out in natural language that's
+结果用自然语言证明了这一点
+
+510
+00:30:50,350 --> 00:30:53,305
+already actually quite a useful representation.
+实际上已经非常有用了。
+
+511
+00:30:53,305 --> 00:30:56,920
+Because sort of having those kind of n-grams as features is
+因为有那种n-gram作为特征是
+
+512
+00:30:56,920 --> 00:31:01,165
+just good for many purposes including text classification.
+适用于包括文本分类在内的多种用途。
+
+513
+00:31:01,165 --> 00:31:05,680
+But if you want to sort of understand more of the semantics of a sentence,
+但是如果你想要更多地理解一个句子的语义，
+
+514
+00:31:05,680 --> 00:31:08,575
+somehow you wanna see more of that at once.
+不知何故，你想要立刻看到更多。
+
+515
+00:31:08,575 --> 00:31:13,780
+And you've sort of got several tools you can use to see more of it once,
+而且你有一些工具可以用来看一次，
+
+516
+00:31:13,780 --> 00:31:15,730
+you can use bigger filters,
+你可以使用更大的过滤器，
+
+517
+00:31:15,730 --> 00:31:16,870
+you could use, uh,
+你可以用，呃，
+
+518
+00:31:16,870 --> 00:31:18,460
+kernel size five, seven,
+内核大小五，七，
+
+519
+00:31:18,460 --> 00:31:20,650
+nine or something convolution.
+九或其他卷积。
+
+520
+00:31:20,650 --> 00:31:25,585
+You could do something like dilated convolution so you can see spread out pictures.
+你可以做一些像扩张卷积的事情，这样你就可以看到展开的图片。
+
+521
+00:31:25,585 --> 00:31:28,120
+And the third thing that you can do is you
+你能做的第三件事就是你
+
+522
+00:31:28,120 --> 00:31:30,835
+can have depth of a convolutional neural network.
+可以有卷积神经网络的深度。
+
+523
+00:31:30,835 --> 00:31:35,605
+Because as you have greater depth of a convolutional neural network, you see more.
+因为你有更大的卷积神经网络深度，你会看到更多。
+
+524
+00:31:35,605 --> 00:31:37,690
+So at this first layer,
+所以在第一层，
+
+525
+00:31:37,690 --> 00:31:43,150
+the rows now have sort of info about three words in them.
+这些行现在有关于其中三个单词的信息。
+
+526
+00:31:43,150 --> 00:31:46,630
+And if you sort of just stuck a second layer of
+如果你只是坚持第二层
+
+527
+00:31:46,630 --> 00:31:48,280
+convolutional neural network with
+卷积神经网络
+
+528
+00:31:48,280 --> 00:31:51,670
+the same general nature on top of it and you sort of take
+在它之上的相同的一般性质，你有点采取
+
+529
+00:31:51,670 --> 00:31:55,450
+the first three rows and convolve it again then and
+前三行然后再次卷积它
+
+530
+00:31:55,450 --> 00:32:00,940
+then the next ones that those then know about five words of your original input sentence.
+然后接下来那些那些知道原始输入句子的五个单词的人。
+
+531
+00:32:00,940 --> 00:32:03,700
+So as you kind of have a deeper ConvNet stack you
+所以当你有更深层次的ConvNet堆栈时
+
+532
+00:32:03,700 --> 00:32:07,495
+start to know about bigger and bigger patches of the sentence.
+开始了解句子越来越大的补丁。
+
+533
+00:32:07,495 --> 00:32:09,970
+Okay. All good?
+好的。都好？
+
+534
+00:32:09,970 --> 00:32:12,530
+Any questions?
+任何问题？
+
+535
+00:32:14,760 --> 00:32:22,899
+No, that's good, okay. So, um, the next piece is essentially shows you this stuff again,
+不，那很好，没关系。所以，嗯，下一篇文章基本上再次向你展示这个东西，
+
+536
+00:32:22,899 --> 00:32:26,560
+um, in the context of a particular paper.
+嗯，在特定论文的背景下。
+
+537
+00:32:26,560 --> 00:32:27,850
+So this was, um,
+所以这是，嗯，
+
+538
+00:32:27,850 --> 00:32:32,125
+a paper by Yoon Kim who was a Harvard student,
+Yoon Kim的一篇论文，是哈佛大学的学生，
+
+539
+00:32:32,125 --> 00:32:36,460
+maybe still is a Harvard student, um, in 2014.
+也许在2014年仍然是哈佛大学的学生。
+
+540
+00:32:36,460 --> 00:32:39,790
+So this was sort of a fairly early paper.
+所以这是一篇相当早期的论文。
+
+541
+00:32:39,790 --> 00:32:45,520
+Um, and he wanted to show that you could use convolutional neural networks to do
+嗯，他想表明你可以使用卷积神经网络来做
+
+542
+00:32:45,520 --> 00:32:47,500
+a good job for doing
+干得好
+
+543
+00:32:47,500 --> 00:32:52,240
+text classification when what you want to classify is a single sentence.
+当您要分类的内容是单个句子时的文本分类。
+
+544
+00:32:52,240 --> 00:32:55,750
+So, the kind of thing you might want to do is look at the kind of
+所以，你可能想做的事情就是看那种
+
+545
+00:32:55,750 --> 00:33:00,400
+snippets of movie reviews that you see on the Rotten Tomatoes site and say,
+您在Rotten Tomatoes网站上看到的电影评论片段，并说，
+
+546
+00:33:00,400 --> 00:33:04,900
+"Is this a positive or is this a negative sentence description?"
+“这是一个积极的还是一个负面的句子描述？”
+
+547
+00:33:04,900 --> 00:33:08,155
+And the model he built is actually kind of similar
+他建造的模型实际上有点类似
+
+548
+00:33:08,155 --> 00:33:11,695
+to the convolutional neural networks that Collobert and Weston,
+到Collobert和Weston的卷积神经网络，
+
+549
+00:33:11,695 --> 00:33:14,980
+um, introduced in their 2011 paper that we
+嗯，在2011年的论文中介绍了我们
+
+550
+00:33:14,980 --> 00:33:18,100
+mentioned before when we were talking about window-based classifiers.
+之前提到的当我们谈论基于窗口的分类器时。
+
+551
+00:33:18,100 --> 00:33:20,500
+So, in their paper they actually use
+因此，在他们的论文中他们实际使用
+
+552
+00:33:20,500 --> 00:33:25,600
+both window-based classifiers and the convolutional classifier.
+基于窗口的分类器和卷积分类器。
+
+553
+00:33:25,600 --> 00:33:28,570
+Okay. Um, so yeah,
+好的。嗯，是的，
+
+554
+00:33:28,570 --> 00:33:29,800
+I sort of already said this.
+我已经说过了。
+
+555
+00:33:29,800 --> 00:33:34,210
+So their tasks are sentence classification, could be sentiment.
+所以他们的任务是句子分类，可能是情绪。
+
+556
+00:33:34,210 --> 00:33:35,875
+It could be other things like,
+它可能是其他的东西，如，
+
+557
+00:33:35,875 --> 00:33:39,100
+is this sentence subjective or objective?
+这句话主观还是客观？
+
+558
+00:33:39,100 --> 00:33:42,040
+So objective is what the main news articles are meant
+所以客观是主要新闻文章的意思
+
+559
+00:33:42,040 --> 00:33:45,295
+to be and subjective is what the opinion pieces are meant to be.
+是和主观的是意见的意图。
+
+560
+00:33:45,295 --> 00:33:48,970
+Um, and then other things like question classification.
+嗯，然后其他的东西，如问题分类。
+
+561
+00:33:48,970 --> 00:33:51,220
+Is this a question asking about a person,
+这是一个询问一个人的问题，
+
+562
+00:33:51,220 --> 00:33:53,200
+location, number, or whatever?
+位置，数量或其他什么？
+
+563
+00:33:53,200 --> 00:33:57,400
+Okay, so here is what he did.
+好的，所以这就是他所做的。
+
+564
+00:33:57,400 --> 00:34:01,495
+And it's sort of the- these slides sort of, um,
+这有点像 - 这些幻灯片，嗯，
+
+565
+00:34:01,495 --> 00:34:06,880
+use the notation of his paper which is sort of a little bit different the
+使用他的论文的符号，这有点不同
+
+566
+00:34:06,880 --> 00:34:09,310
+way the math gets written down to what I just showed
+将数学写入我刚刚展示的内容的方式
+
+567
+00:34:09,310 --> 00:34:12,160
+you, that it's really doing exactly the same thing.
+你，它确实在做同样的事情。
+
+568
+00:34:12,160 --> 00:34:16,930
+So we start with word vectors of length k. Um,
+所以我们从长度为k的单词向量开始。嗯，
+
+569
+00:34:16,930 --> 00:34:24,610
+the sentence is made by just concatenating all of those word vectors together and then,
+通过将所有这些单词向量连接在一起来制作句子，然后，
+
+570
+00:34:24,610 --> 00:34:27,280
+when we- so we have a range of words,
+当我们 - 所以我们有一系列的话，
+
+571
+00:34:27,280 --> 00:34:30,190
+it's a subpart of that sentence vector.
+它是该句子向量的子部分。
+
+572
+00:34:30,190 --> 00:34:36,310
+And so, the convolutional filter is just being represented as a vector because
+因此，卷积滤波器只是表示为向量，因为
+
+573
+00:34:36,310 --> 00:34:42,100
+here he's flattened everything out into one long vector for the entire sentence,
+在这里，他把一切都变成了整个句子的一个长向量，
+
+574
+00:34:42,100 --> 00:34:44,515
+whereas I'd sort of stepped into a matrix.
+而我有点步入矩阵。
+
+575
+00:34:44,515 --> 00:34:51,070
+Um, so a size three convolution is just a real vector of length hk,
+嗯，所以三个卷积只是一个长度为hk的真实矢量，
+
+576
+00:34:51,070 --> 00:34:56,350
+the size of the convolutional filter times the dimensionality of the words.
+卷积滤波器的大小乘以单词的维数。
+
+577
+00:34:56,350 --> 00:35:01,210
+Um, and so, what he's gonna do to build
+嗯，等等，他要做什么来建立
+
+578
+00:35:01,210 --> 00:35:07,450
+his text classifier is use convolutions made out of different sizes.
+他的文本分类器是使用不同大小的卷积。
+
+579
+00:35:07,450 --> 00:35:10,765
+So you can have size two convolutions,
+所以你可以有两个卷积，
+
+580
+00:35:10,765 --> 00:35:16,000
+size three convolutions as shown here, and bigger convolutions.
+如此处所示的三个卷积，以及更大的卷积。
+
+581
+00:35:16,000 --> 00:35:23,140
+And so, um, so to compute a feature one channel for our CNN, we're
+所以，嗯，所以为我们的CNN计算一个频道的功能，我们是
+
+582
+00:35:23,140 --> 00:35:26,620
+then doing a dot product between the weight vector of
+然后在重量矢量之间做一个点积
+
+583
+00:35:26,620 --> 00:35:30,415
+the feature times this sub-sequence of the same terms,
+该特征乘以相同术语的子序列，
+
+584
+00:35:30,415 --> 00:35:35,035
+and he sort of also put in a bias which I sort of omitted.
+而且他也有点偏见，我有点遗漏。
+
+585
+00:35:35,035 --> 00:35:41,110
+Um, and then putting it through a non-linearity,
+嗯，然后通过非线性，
+
+586
+00:35:41,110 --> 00:35:43,390
+um, which I wasn't doing either.
+嗯，我也没做过。
+
+587
+00:35:43,390 --> 00:35:46,045
+Um, but as sort of we've seen a ton of.
+嗯，但就像我们看到的那样。
+
+588
+00:35:46,045 --> 00:35:49,810
+Um, and so, what we're wanting to do is that's our,
+嗯，等等，我们想要做的就是我们的，
+
+589
+00:35:49,810 --> 00:35:53,410
+um, feature and we want to, um,
+嗯，功能，我们想，嗯，
+
+590
+00:35:53,410 --> 00:35:58,150
+do it through all this- for a feature of kernel size three,
+通过这一切来实现 - 对于内核大小为3的特性，
+
+591
+00:35:58,150 --> 00:36:00,880
+we're gonna go all the way through the sentence.
+我们要一路走完这句话。
+
+592
+00:36:00,880 --> 00:36:04,735
+The other thing he did though was slightly funnel funny is,
+他做的另一件事虽然有点漏斗有趣，
+
+593
+00:36:04,735 --> 00:36:08,920
+his windows were sort of lopsided in the notation, right.
+对，他的窗户在符号中有点不平衡。
+
+594
+00:36:08,920 --> 00:36:11,695
+There's a word and th- the,
+有一个字，而且，
+
+595
+00:36:11,695 --> 00:36:15,355
+um, h minus 1 words to the right of it.
+嗯，h减去它右边的1个单词。
+
+596
+00:36:15,355 --> 00:36:20,095
+So he has padding here just on the right end whereas
+所以他在右边那边填充，而
+
+597
+00:36:20,095 --> 00:36:25,810
+most people do their convolutions symmetrically in both directions around things.
+大多数人围绕事物在两个方向上对称地进行卷积。
+
+598
+00:36:25,810 --> 00:36:31,630
+Okay. And so, we're going to do that for a bunch of features or
+好的。所以，我们将为一堆功能或者这样做
+
+599
+00:36:31,630 --> 00:36:34,480
+channels Ci and therefore compute
+通道Ci因此计算
+
+600
+00:36:34,480 --> 00:36:38,680
+our convolved representations just as we've talked about.
+正如我们所讨论的那样，我们一致的表达。
+
+601
+00:36:38,680 --> 00:36:43,435
+Okay. Um, then he does just what we talked about.
+好的。嗯，那他就是我们所说的。
+
+602
+00:36:43,435 --> 00:36:48,370
+Um, there's max over time pooling in the pooling layer to capture
+嗯，在池化层中有最大限度的时间汇集来捕获
+
+603
+00:36:48,370 --> 00:36:53,650
+the most relevant things and is giving us a single number for each channel.
+最相关的事情，并为每个频道提供一个号码。
+
+604
+00:36:53,650 --> 00:37:01,465
+Um, and we have features that look at different that have different kernel sizes.
+嗯，我们的功能可以看到具有不同内核大小的不同内容。
+
+605
+00:37:01,465 --> 00:37:08,230
+Um, here's one other idea he used which is possibly a neat idea.
+嗯，这是他用过的另一个想法，这可能是一个很好的想法。
+
+606
+00:37:08,230 --> 00:37:13,659
+Um, he knows one of the things that you could even think about in various ways,
+嗯，他知道你可以用各种方式思考的事情之一，
+
+607
+00:37:13,659 --> 00:37:17,350
+um, for say a question answering system among other things.
+嗯，比如说回答系统等问题。
+
+608
+00:37:17,350 --> 00:37:21,605
+Um, and so he used pre-trained word vectors.
+嗯，所以他使用预先训练过的单词向量。
+
+609
+00:37:21,605 --> 00:37:28,980
+Um, but what he did was he actually kind of doubled the word vectors.
+嗯，但他所做的是他实际上有点加倍了矢量这个词。
+
+610
+00:37:28,980 --> 00:37:32,475
+So, for each word he had two copies of the word vector,
+所以，对于每个单词，他都有两个单词vector，
+
+611
+00:37:32,475 --> 00:37:37,290
+and so you have sort of two channel sets and one set he
+所以你有两个通道组和一组他
+
+612
+00:37:37,290 --> 00:37:42,375
+froze and the other one he fine tuned as he trained.
+冻结了，另一个他在训练时很好地调整了。
+
+613
+00:37:42,375 --> 00:37:46,590
+So it's sort of he tried to get the best of both worlds of sort of fine tuning
+因此，他试图充分利用这两种微调的世界
+
+614
+00:37:46,590 --> 00:37:51,770
+and not fine tuning and all that went into the max pooling operation.
+并没有微调和所有进入最大池操作。
+
+615
+00:37:51,770 --> 00:38:01,614
+Okay. Um, so, after the max pooling we get out one number for each channel and so,
+好的。嗯，所以，在最大池之后，我们为每个通道输出一个数字，所以，
+
+616
+00:38:01,614 --> 00:38:06,760
+um, he has something of three size convolutions, three,
+嗯，他有三个大小的卷积，三个，
+
+617
+00:38:06,760 --> 00:38:10,390
+four, five, 100 features for each size.
+每种尺寸有四个，五个，100个功能。
+
+618
+00:38:10,390 --> 00:38:13,435
+So we're getting out a vector of size,
+所以我们得出一个大小的矢量，
+
+619
+00:38:13,435 --> 00:38:15,670
+um, 300 at that point,
+嗯，那时300，
+
+620
+00:38:15,670 --> 00:38:19,810
+and at that point you're taking that final vector and just sticking it
+那时候你正在拿最后的矢量并坚持下去
+
+621
+00:38:19,810 --> 00:38:24,595
+through a softmax and that's then giving your classification of the classes.
+通过softmax，然后给出你的课程分类。
+
+622
+00:38:24,595 --> 00:38:31,495
+Um, so all of that can be summarized in this picture if it's big enough to sort of read.
+嗯，如果它足够大，可以在这张图片中总结所有这些。
+
+623
+00:38:31,495 --> 00:38:32,800
+So, here's our sentence.
+所以，这是我们的判决。
+
+624
+00:38:32,800 --> 00:38:34,855
+I like this movie very much,
+我非常喜欢这部电影，
+
+625
+00:38:34,855 --> 00:38:39,310
+which has you know, our word embedding dimension is five,
+你知道吗，我们的单词嵌入维度是五，
+
+626
+00:38:39,310 --> 00:38:42,265
+and so then doing it in this example,
+然后在这个例子中做，
+
+627
+00:38:42,265 --> 00:38:46,930
+we are having two channels for each kernel size and
+我们每个内核大小都有两个通道
+
+628
+00:38:46,930 --> 00:38:52,030
+we consider kernels of size two, three, and four.
+我们考虑大小为2,3和4的内核。
+
+629
+00:38:52,030 --> 00:38:57,205
+Um, and so and then we are getting two different ones.
+嗯，等等我们得到两个不同的。
+
+630
+00:38:57,205 --> 00:39:01,615
+Um, so we're getting, um, six.
+嗯，所以我们得到了，嗯，六岁。
+
+631
+00:39:01,615 --> 00:39:04,405
+This is showing six of our filters.
+这显示了我们的六个过滤器。
+
+632
+00:39:04,405 --> 00:39:07,180
+Um, so we apply those.
+嗯，我们应用那些。
+
+633
+00:39:07,180 --> 00:39:10,975
+When we- when we apply those filters without any padding,
+当我们 - 当我们应用这些过滤器而没有任何填充时，
+
+634
+00:39:10,975 --> 00:39:15,880
+we are then getting out these outputs of the filters which are of sizes four,
+然后我们将这些尺寸为4的滤波器的输出输出，
+
+635
+00:39:15,880 --> 00:39:18,985
+five, and six respectively.
+五，六分别。
+
+636
+00:39:18,985 --> 00:39:23,065
+Um, and so then once we've got these
+嗯，等我们有了这些
+
+637
+00:39:23,065 --> 00:39:27,265
+for each of these sets of numbers we're doing one max pooling.
+对于这些数字中的每一组，我们都在进行一次最大池化。
+
+638
+00:39:27,265 --> 00:39:30,880
+So, we're just taking the max of each of these,
+所以，我们只是采取其中的每一个，
+
+639
+00:39:30,880 --> 00:39:36,715
+um, output features which gives us these six numbers.
+嗯，输出功能给我们这六个数字。
+
+640
+00:39:36,715 --> 00:39:43,060
+Um, we can concatenate them all together into one vector which we feed into,
+嗯，我们可以将它们连接成一个载入的载体，
+
+641
+00:39:43,060 --> 00:39:50,120
+um, a softmax over two classes as to whether sentiment is positive or negative.
+嗯，关于情绪是积极的还是消极的两个类别的softmax。
+
+642
+00:39:52,580 --> 00:39:55,590
+Um, so that's basically the model.
+嗯，这基本上就是模特。
+
+643
+00:39:55,590 --> 00:40:01,200
+So something- so this is sort of really actually a very simple,
+所以有点 - 所以这实际上非常简单，
+
+644
+00:40:01,200 --> 00:40:03,630
+very computationally efficient, uh,
+计算效率很高，呃，
+
+645
+00:40:03,630 --> 00:40:06,780
+model as to how to build a text classifier.
+关于如何构建文本分类器的模型。
+
+646
+00:40:06,780 --> 00:40:13,155
+[NOISE] Um, yeah, just a couple more things to get through,
+[NOISE]嗯，是的，还有几件事可以通过，
+
+647
+00:40:13,155 --> 00:40:15,210
+um, so in one of the assignments,
+嗯，所以在其中一个任务中，
+
+648
+00:40:15,210 --> 00:40:17,700
+we talked about Dropout [NOISE] and you used it.
+我们谈到Dropout [NOISE]并且你使用它。
+
+649
+00:40:17,700 --> 00:40:19,065
+So, um, you know,
+所以，嗯，你知道，
+
+650
+00:40:19,065 --> 00:40:21,705
+hopefully you're all masters of Dropout at this point.
+希望你在这一点上都是Dropout的主人。
+
+651
+00:40:21,705 --> 00:40:24,720
+Um, so he was using Dropout, um,
+嗯，所以他正在使用Dropout，嗯，
+
+652
+00:40:24,720 --> 00:40:28,185
+and this being 2014 and the,
+这是2014年和
+
+653
+00:40:28,185 --> 00:40:31,820
+um, Dropout paper only coming out in 2014.
+嗯，Dropout论文仅在2014年问世。
+
+654
+00:40:31,820 --> 00:40:34,895
+I guess, there'd been an earlier version that came out a couple of years earlier.
+我想，早在两年前出现的早期版本。
+
+655
+00:40:34,895 --> 00:40:37,160
+This was sort of still fairly early,
+这还有点早，
+
+656
+00:40:37,160 --> 00:40:39,425
+um, to be taking advantage of Dropout.
+嗯，要利用Dropout。
+
+657
+00:40:39,425 --> 00:40:41,135
+So that while training,
+所以在训练时，
+
+658
+00:40:41,135 --> 00:40:44,105
+you've got this sort of Dropout vector, um,
+你有这种Dropout矢量，嗯，
+
+659
+00:40:44,105 --> 00:40:49,010
+where you sample your Bernoulli random variables and you're, sort of,
+你在哪里采样你的伯努利随机变量，你有点像，
+
+660
+00:40:49,010 --> 00:40:54,825
+um, sort of, designed to drop out some of the features each time you are doing things.
+嗯，有点像，每次你做事时都会删掉一些功能。
+
+661
+00:40:54,825 --> 00:40:58,200
+At testing time, you don't do the dropout,
+在测试时，你不做辍学，
+
+662
+00:40:58,200 --> 00:41:02,130
+but because before you were sort of dropping out a lot of stuff,
+但是因为在你贬低很多东西之前，
+
+663
+00:41:02,130 --> 00:41:07,455
+you're scaling your weight matrix by the same probability that you use for dropping out,
+你按照与辍学相同的概率缩放你的体重矩阵，
+
+664
+00:41:07,455 --> 00:41:09,000
+so that you get, sort of,
+所以，你得到，有点，
+
+665
+00:41:09,000 --> 00:41:12,000
+vectors of the same scale as before.
+与之前相同比例的向量。
+
+666
+00:41:12,000 --> 00:41:15,075
+Um, so as we sort of discussed in the assignment,
+嗯，正如我们在作业中讨论的那样，
+
+667
+00:41:15,075 --> 00:41:18,420
+Dropout is a really effective form of regularization,
+辍学是一种非常有效的正规化形式，
+
+668
+00:41:18,420 --> 00:41:20,580
+widely used in neural networks.
+广泛用于神经网络。
+
+669
+00:41:20,580 --> 00:41:23,700
+Um, he didn't only do that, he actually did,
+嗯，他不仅这样做，他实际上做到了，
+
+670
+00:41:23,700 --> 00:41:27,600
+a kind of another sort of funky form of regularization.
+一种另类的时髦形式的正规化。
+
+671
+00:41:27,600 --> 00:41:31,425
+So that's for the softmax weight vector,
+这就是softmax权重向量，
+
+672
+00:41:31,425 --> 00:41:35,280
+he constrained the L2 norms,
+他限制了L2规范，
+
+673
+00:41:35,280 --> 00:41:41,100
+so the squared norms of the weight vectors and the softmax, [NOISE] um,
+所以权重向量的平方范数和softmax，[NOISE]嗯，
+
+674
+00:41:41,100 --> 00:41:45,405
+matrix, um, to a fixed number S,
+矩阵，嗯，到一个固定的数字S，
+
+675
+00:41:45,405 --> 00:41:47,460
+which was sort of set of the hyper-parameters,
+这是一组超参数，
+
+676
+00:41:47,460 --> 00:41:49,515
+actually set to the value three.
+实际上设置为值三。
+
+677
+00:41:49,515 --> 00:41:53,055
+Um, and if your weights were getting too large,
+嗯，如果你的体重太大，
+
+678
+00:41:53,055 --> 00:41:55,590
+they were being rescaled,
+他们正在重新调整，
+
+679
+00:41:55,590 --> 00:41:57,345
+um, so they didn't blow up.
+嗯，所以他们没有爆炸。
+
+680
+00:41:57,345 --> 00:42:00,210
+Um, this isn't a very common thing to do.
+嗯，这不是很常见的事情。
+
+681
+00:42:00,210 --> 00:42:03,690
+I'm not sure it's very necessary, um, but, um,
+我不确定这是非常必要的，嗯，但是，嗯，
+
+682
+00:42:03,690 --> 00:42:05,850
+I guess it gives you some- I mean,
+我猜它会给你一些 - 我的意思是，
+
+683
+00:42:05,850 --> 00:42:09,045
+I guess by showing you a few of the details of this one,
+我想通过向您展示这一个的一些细节，
+
+684
+00:42:09,045 --> 00:42:10,590
+my hope is, sort of,
+我希望，有点像，
+
+685
+00:42:10,590 --> 00:42:13,680
+gives you some ideas about how there are lots of things you can play
+给你一些关于你可以玩很多东西的想法
+
+686
+00:42:13,680 --> 00:42:17,025
+around with and muck with if you wanna try different things,
+如果你想尝试不同的东西，周围和粪便，
+
+687
+00:42:17,025 --> 00:42:19,020
+um, for your final projects.
+嗯，对于你的最终项目。
+
+688
+00:42:19,020 --> 00:42:21,000
+Um, okay.
+嗯，好的。
+
+689
+00:42:21,000 --> 00:42:24,120
+So here are some of his final hyperparameters.
+所以这里是他最后的一些超参数。
+
+690
+00:42:24,120 --> 00:42:27,360
+So he's using ReLU nonlinearities,
+所以他正在使用ReLU非线性，
+
+691
+00:42:27,360 --> 00:42:30,765
+um, window sizes of three, four, and five,
+嗯，窗户大小有三个，四个和五个，
+
+692
+00:42:30,765 --> 00:42:35,790
+the convolutions, hundred features or channels for each size,
+每种尺寸的卷积，百种特征或通道，
+
+693
+00:42:35,790 --> 00:42:38,535
+um, Dropout of a half as usual.
+嗯，像往常一样辍学一半。
+
+694
+00:42:38,535 --> 00:42:41,865
+Um, you get several percentage improvements from dropout,
+嗯，你从辍学中获得了几个百分点的改进，
+
+695
+00:42:41,865 --> 00:42:43,860
+which is quite common actually.
+这实际上很常见。
+
+696
+00:42:43,860 --> 00:42:47,835
+Um, the sort of L2 constraint, s equals three,
+嗯，这种L2约束，s等于三，
+
+697
+00:42:47,835 --> 00:42:50,175
+mini batch of 50,
+迷你批次50，
+
+698
+00:42:50,175 --> 00:42:52,635
+300 dimensional word vectors,
+300维词向量，
+
+699
+00:42:52,635 --> 00:42:55,755
+train to maximize dev set performance.
+训练以最大化开发设置性能。
+
+700
+00:42:55,755 --> 00:42:58,830
+Okay. And here is the big table,
+好的。这是大桌子，
+
+701
+00:42:58,830 --> 00:43:00,690
+you know, I was too lazy, um,
+你知道，我太懒了，嗯，
+
+702
+00:43:00,690 --> 00:43:06,570
+to redo of performance on these different text classification data sets.
+重做这些不同文本分类数据集的性能。
+
+703
+00:43:06,570 --> 00:43:08,460
+Um, there are lots of different ones.
+嗯，有很多不同的。
+
+704
+00:43:08,460 --> 00:43:11,820
+So these two are both Stanford Sentiment Treebank.
+所以这两个都是Stanford Sentiment Treebank。
+
+705
+00:43:11,820 --> 00:43:14,565
+This is the Subjective Objective Language.
+这是主观客观语言。
+
+706
+00:43:14,565 --> 00:43:19,650
+This is the Question Classification, of is it asking for a person name and location,
+这是问题分类，是要求人名和位置，
+
+707
+00:43:19,650 --> 00:43:20,790
+a company or whatever.
+公司或其他什么。
+
+708
+00:43:20,790 --> 00:43:24,150
+Um, this is, um,
+嗯，这是，嗯，
+
+709
+00:43:24,150 --> 00:43:26,280
+talking about, sort of, a perspective,
+谈论，某种，一种观点，
+
+710
+00:43:26,280 --> 00:43:28,335
+which is another classification thing.
+这是另一个分类的事情。
+
+711
+00:43:28,335 --> 00:43:30,885
+Consumer Reports is another sentiment one.
+消费者报告是另一种观点。
+
+712
+00:43:30,885 --> 00:43:36,210
+Um, so lots of data sets and then here are lots of models.
+嗯，所以有很多数据集，然后是很多模型。
+
+713
+00:43:36,210 --> 00:43:41,580
+So the model- some of the models down here or here,
+所以模型 - 这里或这里的一些模型，
+
+714
+00:43:41,580 --> 00:43:46,020
+are traditional feature-based, um, classifiers.
+是传统的基于特征的，嗯，分类器。
+
+715
+00:43:46,020 --> 00:43:48,000
+Um, so in particular,
+嗯，特别是，
+
+716
+00:43:48,000 --> 00:43:52,230
+um, sort of Wang and me back in 2012,
+嗯，有点像王和我回到2012年，
+
+717
+00:43:52,230 --> 00:43:56,025
+had sort of pointed out that by taking certain steps
+有点指出通过采取某些步骤
+
+718
+00:43:56,025 --> 00:44:00,720
+with n-gram features and other forms of normalization,
+具有n-gram特征和其他形式的规范化，
+
+719
+00:44:00,720 --> 00:44:03,420
+that you could actually get quite good results with
+你实际上可以获得相当不错的结果
+
+720
+00:44:03,420 --> 00:44:06,960
+just the traditional feature, um, based classifiers.
+只是传统的功能，嗯，基于分类器。
+
+721
+00:44:06,960 --> 00:44:12,045
+So many people use that as a baseline for showing that you can do better things.
+很多人用它作为表明你可以做得更好的基线。
+
+722
+00:44:12,045 --> 00:44:14,360
+Um, the ones up here,
+嗯，那里的人，
+
+723
+00:44:14,360 --> 00:44:18,200
+were tree structured neural networks that my group was very fond
+是我的小组非常喜欢的树状结构神经网络
+
+724
+00:44:18,200 --> 00:44:22,805
+of in the early 2010s and then up at the very top,
+在2010年初，然后在最顶端，
+
+725
+00:44:22,805 --> 00:44:24,695
+uh, his CNN models.
+呃，他的CNN模特。
+
+726
+00:44:24,695 --> 00:44:26,510
+And as you can see,
+正如你所看到的，
+
+727
+00:44:26,510 --> 00:44:27,875
+it's sort of a mix.
+这是一种混合。
+
+728
+00:44:27,875 --> 00:44:30,870
+Sometimes the CNN model wins,
+有时CNN模型获胜，
+
+729
+00:44:30,870 --> 00:44:33,015
+like in this column and this column,
+就像在本专栏和本专栏中一样，
+
+730
+00:44:33,015 --> 00:44:36,015
+sometimes it doesn't win like in these columns.
+有时它不像在这些专栏中那样获胜。
+
+731
+00:44:36,015 --> 00:44:38,010
+Um, but in general, um,
+嗯，但总的来说，嗯，
+
+732
+00:44:38,010 --> 00:44:40,260
+what you didn't see from this is that, you know,
+从这里你没有看到的是，你知道，
+
+733
+00:44:40,260 --> 00:44:43,140
+this is an extremely simple, um,
+这是一个非常简单的，嗯，
+
+734
+00:44:43,140 --> 00:44:46,335
+convolutional neural network model and it actually does,
+卷积神经网络模型，它实际上，
+
+735
+00:44:46,335 --> 00:44:48,720
+um, kind of well on this system.
+嗯，在这个系统上很好。
+
+736
+00:44:48,720 --> 00:44:54,720
+Um, you can quibble with this results table,
+嗯，你可以用这个结果表狡辩，
+
+737
+00:44:54,720 --> 00:45:01,285
+and again in terms of like writing your propos- project proposal, um,
+再次就像写你的提案 - 项目提案一样，嗯，
+
+738
+00:45:01,285 --> 00:45:07,250
+one thing that you should do is kind of think about what you're reading, um,
+你应该做的一件事就是想想你正在读什么，嗯，
+
+739
+00:45:07,250 --> 00:45:10,100
+because, you know, a lot of papers aren't perfect
+因为，你知道，很多论文并不完美
+
+740
+00:45:10,100 --> 00:45:13,130
+and there are reasons to quibble with what they claim.
+并且有理由对他们声称的东西嗤之以鼻。
+
+741
+00:45:13,130 --> 00:45:17,785
+And sometimes if you think about what they're claiming and whether it's reasonable, um,
+有时如果你想到他们所声称的东西以及它是否合理，嗯，
+
+742
+00:45:17,785 --> 00:45:20,895
+there are reasons why it's not or there are ideas
+有理由说它没有或有想法
+
+743
+00:45:20,895 --> 00:45:24,405
+of how you could do things differently or show something different.
+如何以不同的方式做事或展示不同的东西。
+
+744
+00:45:24,405 --> 00:45:27,315
+I mean, the main reason why you could quibble with,
+我的意思是，你可以狡辩的主要原因，
+
+745
+00:45:27,315 --> 00:45:31,365
+um, Yoon Kim's results table is, well,
+嗯，Yoon Kim的结果表是，好吧，
+
+746
+00:45:31,365 --> 00:45:35,385
+he already said, as I had a couple of slides back, um,
+他已经说过，因为我有几张幻灯片，嗯，
+
+747
+00:45:35,385 --> 00:45:37,980
+that the statement that Dropout gives you
+Dropout给你的声明
+
+748
+00:45:37,980 --> 00:45:41,220
+two to four percent accuracy improvement in this neural nets.
+这种神经网络的准确度提高了2％到4％。
+
+749
+00:45:41,220 --> 00:45:45,210
+[NOISE] Um, but most of these systems because they
+[NOISE]嗯，但这些系统大部分都是因为它们
+
+750
+00:45:45,210 --> 00:45:49,365
+are older and were done before Dropout was invented,
+在Dropout发明之前就已经过时了，
+
+751
+00:45:49,365 --> 00:45:51,390
+um, didn't make use of Dropout.
+嗯，没有使用Dropout。
+
+752
+00:45:51,390 --> 00:45:55,170
+But, you know, any of these sort of neural net systems up here
+但是，你知道，这里有任何一种神经网络系统
+
+753
+00:45:55,170 --> 00:45:59,445
+could have used Dropout and presumably it would have given them a couple of,
+本来可以使用Dropout，可能会给他们一些，
+
+754
+00:45:59,445 --> 00:46:01,140
+um, percent gain as well.
+嗯，百分比增益。
+
+755
+00:46:01,140 --> 00:46:05,385
+So arguably, this is sort of a biased, unfair comparison.
+可以说，这是一种偏颇的，不公平的比较。
+
+756
+00:46:05,385 --> 00:46:10,635
+And the right thing would have been to be comparing all the systems, um, using Dropout.
+正确的做法是使用Dropout比较所有系统。
+
+757
+00:46:10,635 --> 00:46:12,120
+Um, but, you know,
+嗯，但是，你知道，
+
+758
+00:46:12,120 --> 00:46:13,890
+despite that, you know,
+尽管如此，你知道，
+
+759
+00:46:13,890 --> 00:46:16,980
+this was still a prett- a lot of people noticed
+这仍然是一个很多人注意到的
+
+760
+00:46:16,980 --> 00:46:20,820
+this paper because it showed that using this sort of very simple,
+本文因为它表明使用这种非常简单，
+
+761
+00:46:20,820 --> 00:46:23,190
+very fast convolutional architecture,
+非常快速的卷积架构，
+
+762
+00:46:23,190 --> 00:46:27,070
+could give you strong results for text classification.
+可以为您提供强大的文本分类结果。
+
+763
+00:46:28,250 --> 00:46:31,005
+Um, that's that.
+嗯，就是这样。
+
+764
+00:46:31,005 --> 00:46:33,765
+Yes. So in summary,
+是。总而言之，
+
+765
+00:46:33,765 --> 00:46:38,475
+you know, something that you should be thinking about for projects and otherwise,
+你知道，你应该考虑的项目和其他方面，
+
+766
+00:46:38,475 --> 00:46:44,370
+we're effectively building up a bigger toolkit of different tools you could be using,
+我们正在有效地构建一个更大的工具包，可以使用不同的工具，
+
+767
+00:46:44,370 --> 00:46:48,135
+um, for projects or future work or whatever it is.
+嗯，对于项目或未来的工作或其他任何工作。
+
+768
+00:46:48,135 --> 00:46:49,635
+So starting off with,
+所以从开始，
+
+769
+00:46:49,635 --> 00:46:53,250
+we had word vectors and then we could build bag of
+我们有单词向量，然后我们可以建立袋子
+
+770
+00:46:53,250 --> 00:46:57,105
+vector models by just taking the word vectors and averaging them.
+矢量模型只需采用单词向量并对它们求平均值。
+
+771
+00:46:57,105 --> 00:47:01,080
+And, you know, that's actually a surprisingly good baseline to start with.
+而且，你知道，这实际上是一个令人惊讶的良好基线。
+
+772
+00:47:01,080 --> 00:47:03,960
+We suggest to you in many cases for things like projects,
+在很多情况下，我们建议你做项目，
+
+773
+00:47:03,960 --> 00:47:05,085
+you should use that.
+你应该使用它。
+
+774
+00:47:05,085 --> 00:47:06,270
+See how well it does,
+看它有多好，
+
+775
+00:47:06,270 --> 00:47:07,965
+make sure you're working better.
+确保你的工作做得更好。
+
+776
+00:47:07,965 --> 00:47:10,605
+I mean particularly, you can do even better with that,
+我的意思是，你可以做得更好，
+
+777
+00:47:10,605 --> 00:47:14,490
+if you sort of add some extra ReLU layers on top,
+如果你在顶部添加一些额外的ReLU层，
+
+778
+00:47:14,490 --> 00:47:18,015
+which is an idea that's been explored in deep averaging networks.
+这是一个在深度平均网络中探索过的想法。
+
+779
+00:47:18,015 --> 00:47:22,290
+Um, then we looked at window models which were very simple.
+嗯，然后我们看了很简单的窗口模型。
+
+780
+00:47:22,290 --> 00:47:23,850
+You're just taking these sort of
+你只是采取这种方式
+
+781
+00:47:23,850 --> 00:47:27,585
+five word windows and computing a feed-forward network on them,
+五个字窗口并计算它们的前馈网络，
+
+782
+00:47:27,585 --> 00:47:32,835
+and they work very well for word classification problems that only need local context.
+它们非常适用于只需要本地环境的单词分类问题。
+
+783
+00:47:32,835 --> 00:47:36,045
+Things like, part of speech tagging or NER.
+比如，词性标注或NER。
+
+784
+00:47:36,045 --> 00:47:39,390
+But then we've gone ahead and looked at some other models.
+但后来我们继续前进并研究了其他一些模型。
+
+785
+00:47:39,390 --> 00:47:45,405
+And so, um, CNN's are very good for text classification, um,
+所以，嗯，CNN非常适合文本分类，嗯，
+
+786
+00:47:45,405 --> 00:47:49,590
+and they're very good because they parallelize really well on GPUs,
+它们非常好，因为它们在GPU上非常好地并行化，
+
+787
+00:47:49,590 --> 00:47:51,840
+which is something I'll come back to again later.
+这是我稍后会再回来的。
+
+788
+00:47:51,840 --> 00:47:57,510
+So they, they just sort- the general sort of representing sentence meaning.
+所以他们，他们只是排序 - 代表句子意义的一般类型。
+
+789
+00:47:57,510 --> 00:47:59,099
+They're actually a efficient,
+他们实际上是一个有效的，
+
+790
+00:47:59,099 --> 00:48:02,295
+versatile, good method, which has been used quite a bit.
+多功能，好方法，已经使用了很多。
+
+791
+00:48:02,295 --> 00:48:05,460
+And then they sort of contrast with recurrent neural networks.
+然后它们与递归神经网络形成鲜明对比。
+
+792
+00:48:05,460 --> 00:48:07,800
+Recurrent neural networks have some advantages.
+递归神经网络具有一些优点。
+
+793
+00:48:07,800 --> 00:48:10,080
+They're sort of more cognitively plausible,
+它们在认知上更合理，
+
+794
+00:48:10,080 --> 00:48:12,120
+because you're sort of reading through the text and,
+因为你有点阅读文字，
+
+795
+00:48:12,120 --> 00:48:14,145
+um, getting its meaning.
+嗯，得到它的意义。
+
+796
+00:48:14,145 --> 00:48:16,830
+Um, recurrent neural networks are good for
+嗯，反复神经网络是有益的
+
+797
+00:48:16,830 --> 00:48:19,800
+things like sequence tagging and classification,
+序列标记和分类之类的东西，
+
+798
+00:48:19,800 --> 00:48:23,385
+building language models to predict what's coming next.
+建立语言模型来预测接下来会发生什么。
+
+799
+00:48:23,385 --> 00:48:26,910
+Um, they can do really well when combined with attention.
+嗯，结合注意力，他们可以做得很好。
+
+800
+00:48:26,910 --> 00:48:29,565
+Um, but they also have some disadvantages.
+嗯，但他们也有一些缺点。
+
+801
+00:48:29,565 --> 00:48:33,870
+They're way slower than convolutional neural networks and if what you wanna
+它们比卷积神经网络慢，如果你想要的话
+
+802
+00:48:33,870 --> 00:48:38,300
+do is get out some kind of overall meaning representation of a sentence,
+做出某种句子的整体意义表示，
+
+803
+00:48:38,300 --> 00:48:39,845
+you know, "What does this mean?
+你知道吗，“这是什么意思？
+
+804
+00:48:39,845 --> 00:48:41,375
+Are these two, um,
+这两个，嗯，
+
+805
+00:48:41,375 --> 00:48:43,850
+phrases paraphrases with each other?"
+短语相互解释？“
+
+806
+00:48:43,850 --> 00:48:46,730
+There are now many results that show that people
+现在有很多结果表明人
+
+807
+00:48:46,730 --> 00:48:49,805
+don't get better results with recurrent neural networks.
+使用递归神经网络不会得到更好的结果。
+
+808
+00:48:49,805 --> 00:48:55,440
+They can get better results using techniques like convolutional neural networks.
+使用卷积神经网络等技术可以获得更好的结果。
+
+809
+00:48:55,550 --> 00:49:05,010
+Okay. [NOISE] So in the next step then [NOISE] is to,
+好的。 [NOISE]所以在下一步，[NOISE]是，
+
+810
+00:49:05,010 --> 00:49:09,675
+sort of, head towards our com- our complex,
+走向我们的复杂，
+
+811
+00:49:09,675 --> 00:49:12,375
+um, convolutional architecture example.
+嗯，卷积架构的例子。
+
+812
+00:49:12,375 --> 00:49:14,010
+So before getting to that,
+所以在开始之前，
+
+813
+00:49:14,010 --> 00:49:18,525
+I just wanna sort of introduce a few concepts that we haven't seen,
+我只是想介绍一些我们没见过的概念，
+
+814
+00:49:18,525 --> 00:49:22,625
+all of which, um, start to turn up when we do this.
+当我们这样做时，所有这些，嗯，开始出现。
+
+815
+00:49:22,625 --> 00:49:26,360
+So we spent a lot of time in the sequence models part,
+所以我们在序列模型部分花了很多时间，
+
+816
+00:49:26,360 --> 00:49:32,345
+talking about gated models or the gated recurrent units and the LSTM units.
+谈论门控模型或门控循环单元和LSTM单元。
+
+817
+00:49:32,345 --> 00:49:36,080
+But the idea of a gate is general that we can
+但是门的概念是我们可以做到的
+
+818
+00:49:36,080 --> 00:49:40,130
+sort of have this idea that we can calculate something,
+我有这个想法，我们可以计算一些东西，
+
+819
+00:49:40,130 --> 00:49:42,175
+put it through, um,
+把它穿过，嗯，
+
+820
+00:49:42,175 --> 00:49:47,370
+a sigmoid nonlinearity and gets a value between zero and one,
+一个sigmoid非线性并得到一个介于0和1之间的值，
+
+821
+00:49:47,370 --> 00:49:50,385
+um, or a vector of values between zero and one.
+嗯，或者介于0和1之间的值向量。
+
+822
+00:49:50,385 --> 00:49:52,980
+And then do a Hadamard product with a vector
+然后用矢量做一个Hadamard产品
+
+823
+00:49:52,980 --> 00:49:55,860
+and sort of gate it between its value and zero.
+并在它的值和零之间对它进行排序。
+
+824
+00:49:55,860 --> 00:49:59,490
+So that suggests the idea that you could also apply
+所以这表明你也可以申请
+
+825
+00:49:59,490 --> 00:50:04,110
+gates vertically when you're building multilayer networks.
+在构建多层网络时垂直关闭。
+
+826
+00:50:04,110 --> 00:50:07,845
+And after the successive LSTMs had been proven,
+在连续的LSTM被证实之后，
+
+827
+00:50:07,845 --> 00:50:11,780
+that was, um, an idea that really took off,
+那是，嗯，一个真正起飞的想法，
+
+828
+00:50:11,780 --> 00:50:13,730
+was people start exploring,
+人们开始探索，
+
+829
+00:50:13,730 --> 00:50:19,445
+how can we have, use these ideas of skip connections and gating in a,
+我们怎样才能使用跳过连接和门控的这些想法，
+
+830
+00:50:19,445 --> 00:50:21,425
+in a vertical direction?
+在垂直方向？
+
+831
+00:50:21,425 --> 00:50:23,480
+And here are two versions of it.
+以下是它的两个版本。
+
+832
+00:50:23,480 --> 00:50:26,450
+This one is a very simple one,
+这是一个非常简单的，
+
+833
+00:50:26,450 --> 00:50:30,965
+but a very successful one that's basically just about a skip connection.
+但是一个非常成功的，基本上只是跳过连接。
+
+834
+00:50:30,965 --> 00:50:36,890
+So and this is referred to as a residual block and- which is used in residual networks,
+所以，这被称为残差块，用于剩余网络，
+
+835
+00:50:36,890 --> 00:50:38,690
+otherwise known as ResNets.
+也称为ResNets。
+
+836
+00:50:38,690 --> 00:50:42,470
+Um, so in a residual block, for each block,
+嗯，所以在剩余的区块中，每个区块，
+
+837
+00:50:42,470 --> 00:50:48,440
+you allow a value just to skip ahead to the next, um, layer.
+你允许一个值只是跳到下一个，嗯，图层。
+
+838
+00:50:48,440 --> 00:50:52,535
+Or you can stick it through a conv block,
+或者你可以把它粘在一个转子块上，
+
+839
+00:50:52,535 --> 00:50:56,825
+and the typical conv block is you go through a convolutional layer,
+典型的转换块是你通过卷积层，
+
+840
+00:50:56,825 --> 00:50:59,600
+you then go through a ReLU nonlinearity,
+然后你会经历ReLU非线性，
+
+841
+00:50:59,600 --> 00:51:03,250
+another convolutional layer, and then when you come out,
+另一个卷积层，然后当你出来时，
+
+842
+00:51:03,250 --> 00:51:05,430
+you just sum these two values.
+你只需将这两个值相加。
+
+843
+00:51:05,430 --> 00:51:07,710
+So this is the same idea that sort of
+所以这就是那种想法
+
+844
+00:51:07,710 --> 00:51:11,820
+summing values is magical in the same way as an LSTM.
+求和值与LSTM一样神奇。
+
+845
+00:51:11,820 --> 00:51:15,165
+And then you put the output of that through another ReLU,
+然后你把它的输出通过另一个ReLU，
+
+846
+00:51:15,165 --> 00:51:18,705
+and this thing here is called a residual block
+这件事叫做残余块
+
+847
+00:51:18,705 --> 00:51:22,950
+and then commonly you'll stack residual blocks on top of each other.
+然后通常你会将剩余的块堆叠在一起。
+
+848
+00:51:22,950 --> 00:51:25,230
+Um, there's one little trick here,
+嗯，这里有一个小技巧，
+
+849
+00:51:25,230 --> 00:51:28,320
+um, which is you need to use padding, right?
+嗯，你需要使用填充，对吗？
+
+850
+00:51:28,320 --> 00:51:33,000
+Um, because at the end of the day since you want to sum these two pathways,
+嗯，因为在你想要总结这两条路径的那一天结束时，
+
+851
+00:51:33,000 --> 00:51:35,355
+you want them to be the same size.
+你希望它们的大小相同。
+
+852
+00:51:35,355 --> 00:51:36,585
+And if you, sort of,
+如果你，那种，
+
+853
+00:51:36,585 --> 00:51:40,200
+have them shrinking in the conv blocks you wouldn't be able to sum them.
+让它们在转换块中缩小，你将无法对它们求和。
+
+854
+00:51:40,200 --> 00:51:45,120
+So you want to, sort of, have a padding at each stage so they stay the same size here,
+所以你想要，在每个阶段都有一个填充，所以它们在这里保持相同的大小，
+
+855
+00:51:45,120 --> 00:51:47,437
+and so that you can add them together.
+这样你就可以把它们加在一起了。
+
+856
+00:51:47,437 --> 00:51:54,500
+Um, here's, um, a different version of a block which is
+嗯，这是，嗯，是一个不同版本的块
+
+857
+00:51:54,500 --> 00:51:57,470
+sort of more LSTM-ish and indeed
+更多LSTM-ish确实如此
+
+858
+00:51:57,470 --> 00:52:01,710
+this block was developed by Jürgen Schmidhuber and students,
+这个街区是由JürgenSchmidhuber和学生们开发的，
+
+859
+00:52:01,710 --> 00:52:06,000
+who's the same guy who's behind LSTMs and you can see the same thinking.
+谁是LSTM背后的同一个人，你可以看到同样的想法。
+
+860
+00:52:06,000 --> 00:52:08,150
+It's called a highway block.
+它被称为高速公路街区。
+
+861
+00:52:08,150 --> 00:52:10,800
+So in a way it's sort of similar.
+所以在某种程度上它有点类似。
+
+862
+00:52:10,800 --> 00:52:16,080
+You've got, you know, kind of thinking of moving an identity x that skips
+你知道，你已经开始考虑移动跳过的身份x了
+
+863
+00:52:16,080 --> 00:52:23,085
+a nonlinear block or you can have it go through exactly the same stuff conv, relu, conv.
+一个非线性块或者你可以让它通过完全相同的东西conv，relu，conv。
+
+864
+00:52:23,085 --> 00:52:26,480
+The difference is that unlike this one,
+与众不同的是，
+
+865
+00:52:26,480 --> 00:52:29,165
+this time there's explicit gates so there's,
+这次有明确的门，所以有，
+
+866
+00:52:29,165 --> 00:52:33,290
+um, and this T-gate and the C-gate.
+嗯，这个T门和C门。
+
+867
+00:52:33,290 --> 00:52:39,230
+And so you're multiplying both of the path through here and the path through here
+所以你将这里的路径和通过这里的路径相乘
+
+868
+00:52:39,230 --> 00:52:42,280
+by a gate just kinda like the sort of
+通过一个门就像那种
+
+869
+00:52:42,280 --> 00:52:47,130
+the get input gates that we saw before and then summing them together.
+我们之前看到的获取输入门然后将它们加在一起。
+
+870
+00:52:47,130 --> 00:52:50,670
+So that sort of feels more
+所以那种感觉更多
+
+871
+00:52:50,670 --> 00:52:56,285
+powerful but it's not actually clear that it is more powerful.
+功能强大，但实际上并不清楚它是否更强大。
+
+872
+00:52:56,285 --> 00:52:59,460
+I mean, this one actually has a very simple
+我的意思是，这一个实际上非常简单
+
+873
+00:52:59,460 --> 00:53:03,070
+semantic because if you think of the semantics of this one
+语义，因为如果你想到这个语义
+
+874
+00:53:03,070 --> 00:53:05,930
+is the default is just you walk
+是默认只是你走
+
+875
+00:53:05,930 --> 00:53:11,015
+this way and you just sort of carry forward your value and do nothing.
+通过这种方式，你只需要发扬自己的价值，什么都不做。
+
+876
+00:53:11,015 --> 00:53:14,900
+Um, so, what this block's job to- is to do,
+嗯，这个街区的工作要做什么，
+
+877
+00:53:14,900 --> 00:53:18,155
+is to learn a delta that is meant to learn
+是学习一个有待学习的三角洲
+
+878
+00:53:18,155 --> 00:53:21,750
+what kind of deviation you have from doing nothing.
+什么样的偏离你什么都不做。
+
+879
+00:53:21,750 --> 00:53:25,210
+Um, so that's a nice simple semantic which, um,
+嗯，这是一个很好的简单语义，嗯，
+
+880
+00:53:25,210 --> 00:53:28,680
+seems to work well in neural networks to learn things.
+似乎在神经网络中很好地学习东西。
+
+881
+00:53:28,680 --> 00:53:31,390
+Um, this sort of has
+嗯，这种有
+
+882
+00:53:31,390 --> 00:53:36,500
+more complicated apparent semantics because you're taking, you know,
+更复杂的表观语义，因为你正在服用，你知道，
+
+883
+00:53:36,500 --> 00:53:43,005
+some parts of the identity multiplying by this sort of gate in a Hadamard product
+身份的某些部分乘以Hadamard产品中的这种门
+
+884
+00:53:43,005 --> 00:53:49,880
+and some parts of this conv block multiplied by this other gate T in a Hadamard product.
+这个转子块的某些部分乘以Hadamard产品中的另一个门T.
+
+885
+00:53:49,880 --> 00:53:53,980
+So that sort of feels more powerful as that
+所以那种感觉更强大
+
+886
+00:53:53,980 --> 00:53:58,325
+gives me a lot more control because I can take pieces of the different ones and so on.
+给了我更多的控制权，因为我可以采取不同的部分，等等。
+
+887
+00:53:58,325 --> 00:54:01,620
+If you think about it for a bit longer, I mean,
+如果你再考虑一下，我的意思是，
+
+888
+00:54:01,620 --> 00:54:05,380
+mathematically it's actually not any more powerful that you
+从数学上讲，它实际上并不比你更强大
+
+889
+00:54:05,380 --> 00:54:09,500
+can represent anything you can do with this one with that one.
+可以代表任何你可以用这个做的事情。
+
+890
+00:54:09,500 --> 00:54:13,530
+And the way to think about that is well, um,
+思考这个问题的方法很好，嗯，
+
+891
+00:54:13,530 --> 00:54:19,410
+you know, here you're kind of keeping only part of the identity,
+你知道，在这里你只保留一部分身份，
+
+892
+00:54:19,410 --> 00:54:26,840
+um, but what you could do is keep the whole of the identity and see it as your job
+嗯，但你能做的就是保持整个身份并将其视为你的工作
+
+893
+00:54:26,840 --> 00:54:30,095
+to subtract off the bits that this one isn't keeping
+减去这个没有保留的位
+
+894
+00:54:30,095 --> 00:54:34,440
+over here in the conv block which you can do theoretically.
+在这里你可以理论上做的转换块。
+
+895
+00:54:34,440 --> 00:54:39,480
+Um, and so, you can sort of anything you can compute with this as a function,
+嗯，等等，你可以用它作为一个函数计算你可以计算的任何东西，
+
+896
+00:54:39,480 --> 00:54:42,830
+you can actually compute with a, um, ResNet block.
+你可以用一个，嗯，ResNet块实际计算。
+
+897
+00:54:42,830 --> 00:54:47,185
+Um, and so then as quite often in neural network land,
+嗯，然后经常在神经网络领域，
+
+898
+00:54:47,185 --> 00:54:49,330
+the question isn't sort of, um,
+问题不是那种，嗯，
+
+899
+00:54:49,330 --> 00:54:53,190
+some kind of proof of compute- can be computed or not.
+某种计算证明 - 可以计算或不计算。
+
+900
+00:54:53,190 --> 00:54:58,455
+It sort of comes down to learning and regularization questions as to
+这有点归结为学习和正规化问题
+
+901
+00:54:58,455 --> 00:55:01,345
+whether one or the other of these actually proves
+这些中的一个或另一个是否真正得到证实
+
+902
+00:55:01,345 --> 00:55:05,270
+better as something to use in a learning architecture.
+更好地作为学习架构中使用的东西。
+
+903
+00:55:06,430 --> 00:55:09,680
+Okay. Second concept.
+好的。第二个概念。
+
+904
+00:55:09,680 --> 00:55:11,860
+Um, batch normalization.
+嗯，批量标准化。
+
+905
+00:55:11,860 --> 00:55:17,405
+So when people are building deep convolutional neural networks,
+所以当人们建立深度卷积神经网络时，
+
+906
+00:55:17,405 --> 00:55:21,680
+um, in the 2015 pluses,
+嗯，在2015年的时候，
+
+907
+00:55:21,680 --> 00:55:27,065
+um, they almost always use batch normalization layers because
+嗯，他们几乎总是使用批量标准化层，因为
+
+908
+00:55:27,065 --> 00:55:32,685
+this makes your life a lot better and if they're not using batch normalization layers,
+这会让你的生活变得更好，如果他们不使用批量标准化层，
+
+909
+00:55:32,685 --> 00:55:37,070
+they're normally using one of the other variant ideas that people have suggested
+他们通常使用人们建议的其他变体想法之一
+
+910
+00:55:37,070 --> 00:55:42,165
+such as layer normalization which is sort of meant to do about the same thing.
+例如层标准化，这有点意味着做同样的事情。
+
+911
+00:55:42,165 --> 00:55:46,090
+Um, so what batch normalization does?
+嗯，那批量标准化呢？
+
+912
+00:55:46,090 --> 00:55:50,650
+I mean, I think many of you will have seen somewhere in steps or
+我的意思是，我想你们中的许多人会看到某个地方或者步骤
+
+913
+00:55:50,650 --> 00:55:56,305
+otherwise the idea of doing a Z-transform which means you take your data,
+否则做Z变换的想法意味着你拿走你的数据，
+
+914
+00:55:56,305 --> 00:55:59,100
+you work out its mean and you work out its
+你弄清楚它的意思，你就可以解决它的问题
+
+915
+00:55:59,100 --> 00:56:03,970
+standard deviation and then you rescale by subtraction and
+标准偏差然后通过减法和重新缩放
+
+916
+00:56:03,970 --> 00:56:07,710
+multiplication so that you have a set of data which
+乘法使你有一组数据
+
+917
+00:56:07,710 --> 00:56:12,360
+has a mean of zero and a standard deviation of one.
+平均值为零，标准差为1。
+
+918
+00:56:12,360 --> 00:56:14,680
+Most people see that, right?
+大多数人都看到了，对吗？
+
+919
+00:56:14,680 --> 00:56:23,500
+Yeah? Um, so batch normalization is effectively doing exactly that but in a weird way.
+是吗？嗯，所以批量标准化实际上正是这样做的，但是以一种奇怪的方式。
+
+920
+00:56:23,500 --> 00:56:27,770
+So what you're doing is that you're taking each mini batch.
+所以你正在做的是你正在服用每一个小批量。
+
+921
+00:56:27,770 --> 00:56:31,875
+So whatever just random 32 examples you've stuck in a mini batch,
+所以无论是随机的32个例子，你都陷入了迷你批次，
+
+922
+00:56:31,875 --> 00:56:34,040
+you're running them through a layer of
+你正在通过一层运行它们
+
+923
+00:56:34,040 --> 00:56:37,355
+your neural network like a ConvBlock that we saw before
+你的神经网络就像我们之前看到的ConvBlock一样
+
+924
+00:56:37,355 --> 00:56:43,190
+and you take the output of that mini batch and then you do a Z-transform on it.
+并获取该迷你批次的输出，然后对其进行Z变换。
+
+925
+00:56:43,190 --> 00:56:47,295
+Um, and then it goes forward into the next ConvBlock or whatever,
+嗯，然后它进入下一个ConvBlock或其他什么，
+
+926
+00:56:47,295 --> 00:56:49,410
+and the next time you have a different mini batch,
+并且下次你有一个不同的迷你批次，
+
+927
+00:56:49,410 --> 00:56:50,990
+you just Z-transform it.
+你只是对它进行Z变换。
+
+928
+00:56:50,990 --> 00:56:52,290
+So it seems a little bit weird.
+所以看起来有点奇怪。
+
+929
+00:56:52,290 --> 00:56:56,600
+You're just doing it on the output of these mini batches.
+你只是在这些迷你批次的输出上做这件事。
+
+930
+00:56:56,600 --> 00:57:01,680
+Um, but that's proven to be a very effective thing to do.
+嗯，但事实证明这是一件非常有效的事情。
+
+931
+00:57:01,680 --> 00:57:05,980
+So that it sort of means that what comes out of
+所以它有点意味着什么出来的
+
+932
+00:57:05,980 --> 00:57:09,890
+a ConvBlock sort of always has the same kind of scale.
+ConvBlock总是具有相同的规模。
+
+933
+00:57:09,890 --> 00:57:13,720
+So it doesn't sort of fluctuate a lot and mess things up and it tends to
+所以它并没有那么多波动并且搞砸了，而且往往会
+
+934
+00:57:13,720 --> 00:57:18,225
+make the models just much more reliably trainable because,
+使模型更可靠地训练，因为，
+
+935
+00:57:18,225 --> 00:57:22,860
+you know, you just have to be much less fussy about a lot of things.
+你知道，你必须对很多事情不那么挑剔。
+
+936
+00:57:22,860 --> 00:57:25,505
+Because, you know, a lot of the things we've talked about,
+因为，你知道，很多我们谈过的事情，
+
+937
+00:57:25,505 --> 00:57:28,180
+about initializing your parameters and
+关于初始化你的参数和
+
+938
+00:57:28,180 --> 00:57:31,130
+setting your learning rates is sort of about, well,
+设定你的学习率有点嘛，好吧，
+
+939
+00:57:31,130 --> 00:57:34,310
+you have to keep the scale of things about right so they don't get
+你必须把事情的规模保持正确，这样他们才能得到
+
+940
+00:57:34,310 --> 00:57:37,810
+too big or too small and things like that.
+太大或太小等等。
+
+941
+00:57:37,810 --> 00:57:40,280
+Whereas, if you're doing this batch normalization,
+然而，如果你正在进行这种批量标准化，
+
+942
+00:57:40,280 --> 00:57:42,490
+you're sort of forcing scale,
+你有点强迫规模，
+
+943
+00:57:42,490 --> 00:57:45,705
+um, to being the same size each time.
+嗯，每次都是相同的大小。
+
+944
+00:57:45,705 --> 00:57:48,370
+And s o therefore, you kind of don't have to do
+因此，你有点不必做
+
+945
+00:57:48,370 --> 00:57:51,200
+the other stuff as well and it still tends to,
+其他的东西，它仍然倾向于，
+
+946
+00:57:51,200 --> 00:57:52,710
+um, work pretty well.
+嗯，工作得很好。
+
+947
+00:57:52,710 --> 00:57:55,650
+So that's a good technique to know about.
+所以这是一个很好的技术来了解。
+
+948
+00:57:55,690 --> 00:57:59,800
+Okay. Um, one last thing to learn about.
+好的。嗯，最后要了解的一件事。
+
+949
+00:57:59,800 --> 00:58:02,070
+Um, there's a concept of,
+嗯，有一个概念，
+
+950
+00:58:02,070 --> 00:58:07,015
+um, size one convolutions.
+嗯，一个卷积。
+
+951
+00:58:07,015 --> 00:58:11,240
+Um, and actually, I guess I really sort of, um,
+嗯，实际上，我想我真的那样，嗯，
+
+952
+00:58:11,240 --> 00:58:14,680
+renamed it- I named this wrong because I wrote down
+重命名它 - 我把它命名为错，因为我写下了
+
+953
+00:58:14,680 --> 00:58:18,240
+one by one convolutions because that's the term you normally see.
+一个接一个的卷积，因为这是你通常看到的术语。
+
+954
+00:58:18,240 --> 00:58:22,530
+But that's, um, the vision world where you have 2D convolutions.
+但那是，嗯，你有二维卷积的视觉世界。
+
+955
+00:58:22,530 --> 00:58:26,135
+So I guess I should have just called this one convolutions.
+所以我想我应该把这个卷绕成一个。
+
+956
+00:58:26,135 --> 00:58:28,890
+So you can have convolutions, um,
+所以你可以有卷积，嗯，
+
+957
+00:58:28,890 --> 00:58:33,070
+with a kernel size of one and when you first see that,
+内核大小为1，当你第一次看到它时，
+
+958
+00:58:33,070 --> 00:58:37,840
+it seems like that makes no sense whatsoever because the whole idea
+似乎完全没有任何意义，因为整个想法
+
+959
+00:58:37,840 --> 00:58:43,305
+of a convolution was I was taking this patch and calculating something from it.
+卷积的是我正在接受这个补丁并从中计算一些东西。
+
+960
+00:58:43,305 --> 00:58:48,330
+If I'm not looking at any other words,
+如果我不看任何其他的话，
+
+961
+00:58:48,330 --> 00:58:50,510
+surely I'm calculating nothing.
+我当然没有计算任何东西。
+
+962
+00:58:50,510 --> 00:58:54,975
+But what actually happens in the size one convolution,
+但实际上在一个卷积中发生了什么，
+
+963
+00:58:54,975 --> 00:58:59,160
+is if you have a number of channels that
+如果你有多个频道
+
+964
+00:58:59,160 --> 00:59:03,850
+sort of in a previous layer if you'd calculated whatever it was,
+如果你计算它是什么，在前一层中排序，
+
+965
+00:59:03,850 --> 00:59:06,605
+32 channels or something like that.
+32个频道或类似的东西。
+
+966
+00:59:06,605 --> 00:59:11,070
+What the one by one convolution is doing is acting as
+一个接一个的卷积所做的就是充当
+
+967
+00:59:11,070 --> 00:59:16,625
+a tiny little embedded fully-connected network over those channels.
+这些通道上的一个小型嵌入式全连接网络。
+
+968
+00:59:16,625 --> 00:59:18,910
+And so you're sort of doing a
+所以你有点做
+
+969
+00:59:18,910 --> 00:59:22,280
+position specific fully-connected network,
+位置特定的全连接网络，
+
+970
+00:59:22,280 --> 00:59:26,385
+um, in- for each row of your data.
+嗯，in-为您的每一行数据。
+
+971
+00:59:26,385 --> 00:59:28,050
+And so you can do that,
+所以你可以这样做，
+
+972
+00:59:28,050 --> 00:59:29,590
+um, for various reasons.
+嗯，出于各种原因。
+
+973
+00:59:29,590 --> 00:59:31,920
+You can do it because you want to map down from having
+你可以这样做，因为你想要从中映射下来
+
+974
+00:59:31,920 --> 00:59:34,870
+a lot of channels to having fewer channels or
+很多频道或频道较少的渠道
+
+975
+00:59:34,870 --> 00:59:37,460
+you can do it just because you think another non-linearity
+你可以做到这一点只是因为你认为另一种非线性
+
+976
+00:59:37,460 --> 00:59:40,345
+will help and this is a really cheap way to do it.
+会有所帮助，这是一种非常便宜的方式。
+
+977
+00:59:40,345 --> 00:59:44,150
+Because the crucial thing to notice is that if you sort
+因为要注意的关键是如果你排序
+
+978
+00:59:44,150 --> 00:59:47,990
+of put fully-connected layers over everything,
+将完全连接的层放在所有东西上，
+
+979
+00:59:47,990 --> 00:59:52,930
+they involve a lot of parameters whereas putting in these size
+它们涉及很多参数，而是放入这些尺寸
+
+980
+00:59:52,930 --> 00:59:56,650
+one convolutions involve very few parameters
+一个卷积涉及很少的参数
+
+981
+00:59:56,650 --> 01:00:00,310
+because you're just doing it at the level of a single word.
+因为你只是在一个单词的水平上做。
+
+982
+01:00:00,670 --> 01:00:03,765
+Um, okay.
+嗯，好的。
+
+983
+01:00:03,765 --> 01:00:08,585
+Um, two random things and then I'll go onto my complex model.
+嗯，两个随机的东西，然后我会进入我的复杂模型。
+
+984
+01:00:08,585 --> 01:00:10,540
+Um, this is just a sort of
+嗯，这只是一种
+
+985
+01:00:10,540 --> 01:00:13,660
+almost a bias- aside but it just shows
+几乎是偏见，但它只是显示
+
+986
+01:00:13,660 --> 01:00:17,110
+something different that you could do and it's something that you could play with.
+你可以做的不同的东西，这是你可以玩的东西。
+
+987
+01:00:17,110 --> 01:00:20,065
+I mean, when we talked about machine translation,
+我的意思是，当我们谈到机器翻译时，
+
+988
+01:00:20,065 --> 01:00:24,500
+we talk about the SIC to SIC architecture that was introduced in
+我们讨论了SIC到SIC架构的介绍
+
+989
+01:00:24,500 --> 01:00:29,930
+2014 and has been very successful for machine translation.
+2014年，机器翻译非常成功。
+
+990
+01:00:29,930 --> 01:00:32,680
+But actually, the year before that came out,
+但事实上，在那之前的一年，
+
+991
+01:00:32,680 --> 01:00:34,855
+um, there was a paper, um,
+嗯，有一篇论文，嗯，
+
+992
+01:00:34,855 --> 01:00:41,255
+doing neural machine translation by Nal Kalchbrenner and Phil Blunsom in the UK.
+由Nal Kalchbrenner和Phil Blunsom在英国进行神经机器翻译。
+
+993
+01:00:41,255 --> 01:00:44,015
+And this sort of was actually essentially
+而这种实际上基本上就是这样
+
+994
+01:00:44,015 --> 01:00:48,840
+the first neural machine translation paper of the modern era.
+现代第一个神经机器翻译论文。
+
+995
+01:00:48,840 --> 01:00:50,400
+If you dig back far enough,
+如果你挖得足够远，
+
+996
+01:00:50,400 --> 01:00:52,130
+there are actually a couple of people that tried to use
+实际上有几个人试图使用
+
+997
+01:00:52,130 --> 01:00:54,135
+neural networks for machine translation
+用于机器翻译的神经网络
+
+998
+01:00:54,135 --> 01:00:58,445
+in the '80s and '90s but this was sort of the first one that restarted it,
+在80年代和90年代，但这是第一个重新启动它，
+
+999
+01:00:58,445 --> 01:01:02,205
+and they didn't actually use a SIC to SIC architecture.
+他们实际上并没有将SIC用于SIC架构。
+
+1000
+01:01:02,205 --> 01:01:05,690
+So what they used was for the encoder,
+所以他们使用的是编码器，
+
+1001
+01:01:05,690 --> 01:01:08,490
+they used the convolutional neural networks.
+他们使用卷积神经网络。
+
+1002
+01:01:08,490 --> 01:01:13,430
+And so that they had a stack of convolutional neural networks that progressively shrunk
+因此他们有一堆逐渐缩小的卷积神经网络
+
+1003
+01:01:13,430 --> 01:01:18,760
+down the input and then finally pulled it to get a sentence representation,
+按下输入然后最后拉它以获得句子表示，
+
+1004
+01:01:18,760 --> 01:01:22,960
+and then they used a sequence model as the decoder.
+然后他们使用序列模型作为解码器。
+
+1005
+01:01:22,960 --> 01:01:26,880
+Um, so, um, that's sort of something that you could
+嗯，那么，嗯，那是你能做到的
+
+1006
+01:01:26,880 --> 01:01:30,520
+try in some other applications that for encoders,
+尝试编码器的其他一些应用，
+
+1007
+01:01:30,520 --> 01:01:33,800
+it's really easy to use convolutional neural networks.
+使用卷积神经网络真的很容易。
+
+1008
+01:01:33,800 --> 01:01:39,175
+There has been work on using convolutional neural networks as decoders as well,
+已经有使用卷积神经网络作为解码器的工作，
+
+1009
+01:01:39,175 --> 01:01:44,415
+though that's a little bit harder to get your brain around and isn't used nearly as much.
+虽然这让你的大脑变得有点困难并且几乎没有被使用。
+
+1010
+01:01:44,415 --> 01:01:50,960
+Then the second thing I want to mention because we'll turn to it in just a minute is so,
+那么我想提到的第二件事是因为我们将在一分钟内转向它是如此，
+
+1011
+01:01:50,960 --> 01:01:57,305
+so far we've done Convolutional models over words so that
+到目前为止，我们已经完成了对文字的卷积模型
+
+1012
+01:01:57,305 --> 01:02:00,890
+our kernels are effectively picking up
+我们的内核正在有效地提升
+
+1013
+01:02:00,890 --> 01:02:06,050
+these word n-gram units of two-word or three word sub-sequences.
+这些单字n-gram单位的双字或三字子序列。
+
+1014
+01:02:06,050 --> 01:02:10,190
+And the idea that then developed fairly soon was well maybe
+那个很快就开发出来的想法也许很好
+
+1015
+01:02:10,190 --> 01:02:14,705
+it would also be useful to use convolutions over characters.
+对字符使用卷积也很有用。
+
+1016
+01:02:14,705 --> 01:02:17,105
+So, you could run a convolutional neural network
+所以，你可以运行一个卷积神经网络
+
+1017
+01:02:17,105 --> 01:02:19,970
+over the characters of the word to try and,
+试试这个词的字符，
+
+1018
+01:02:19,970 --> 01:02:22,640
+um, generate a word embedding, um,
+嗯，生成一个单词嵌入，嗯，
+
+1019
+01:02:22,640 --> 01:02:25,760
+and this idea has been explored quite a lot, um,
+这个想法已被探索了很多，嗯，
+
+1020
+01:02:25,760 --> 01:02:28,505
+it's part of what you guys are gonna do for assignment
+这是你们要为任务做的事情的一部分
+
+1021
+01:02:28,505 --> 01:02:31,715
+five is build a character level ConvNet,
+五是建立一个人物级别的ConvNet，
+
+1022
+01:02:31,715 --> 01:02:35,180
+um, for your improved machine translation system.
+嗯，为您改进的机器翻译系统。
+
+1023
+01:02:35,180 --> 01:02:40,250
+I'm not going to say sort of a huge amount about the foundations of this today, um,
+我今天不打算说这个基础很多，嗯，
+
+1024
+01:02:40,250 --> 01:02:44,270
+because Thursday's lecture is then talking about subword models
+因为星期四的讲座正在讨论子词模型
+
+1025
+01:02:44,270 --> 01:02:49,055
+and we'll go through all the details of different subword models.
+我们将详细介绍不同子字模型的所有细节。
+
+1026
+01:02:49,055 --> 01:02:53,300
+But, I wanted to show you a con- a complex
+但是，我想告诉你一个复杂的问题
+
+1027
+01:02:53,300 --> 01:02:58,010
+convolutional neural network which is also used for text classification.
+卷积神经网络，也用于文本分类。
+
+1028
+01:02:58,010 --> 01:03:01,685
+So, essentially, the same task as Yoon Kim's model
+所以，基本上和Yoon Kim的模型一样
+
+1029
+01:03:01,685 --> 01:03:06,230
+and this model actually is built on characters,
+而这个模型实际上建立在角色上，
+
+1030
+01:03:06,230 --> 01:03:07,700
+it's not built on words.
+它不是建立在文字之上的。
+
+1031
+01:03:07,700 --> 01:03:10,640
+So, we are at the foundation of it,
+所以，我们是它的基础，
+
+1032
+01:03:10,640 --> 01:03:13,145
+um, having a word-like model.
+嗯，有一个像字样的模型。
+
+1033
+01:03:13,145 --> 01:03:16,775
+Um, so, this is a paper from 2017,
+嗯，这是2017年的一篇论文，
+
+1034
+01:03:16,775 --> 01:03:21,350
+um, by, um, the four authors shown here, um,
+嗯，嗯，这里显示的四位作者，嗯，
+
+1035
+01:03:21,350 --> 01:03:24,170
+people working at Facebook AI Research,
+在Facebook AI Research工作的人，
+
+1036
+01:03:24,170 --> 01:03:27,635
+um, in France, um, and so,
+嗯，在法国，嗯，等等，
+
+1037
+01:03:27,635 --> 01:03:30,320
+they kind of had an interesting hypothesis for
+他们有一个有趣的假设
+
+1038
+01:03:30,320 --> 01:03:34,205
+this paper which was essentially to say, that, you know,
+本文主要是说，你知道，
+
+1039
+01:03:34,205 --> 01:03:42,530
+by 2017 people who are using deep learning for vision were building really,
+到2017年，正在使用深度学习视力的人正在建设，
+
+1040
+01:03:42,530 --> 01:03:47,600
+really deep networks and fi- finding that they work much,
+非常深入的网络和fi发现他们工作得很多，
+
+1041
+01:03:47,600 --> 01:03:49,790
+much better for vision tasks.
+视觉任务要好得多。
+
+1042
+01:03:49,790 --> 01:03:52,205
+So, essentially to some extend,
+所以，基本上在某种程度上，
+
+1043
+01:03:52,205 --> 01:03:58,490
+the breakthrough was these guys that once these ideas that emerged,
+突破是这些家伙，一旦出现这些想法，
+
+1044
+01:03:58,490 --> 01:04:04,445
+it then proved that it wasn't just that you could build a six layer or an eight layer,
+然后它证明了你不仅可以构建一个六层或八层，
+
+1045
+01:04:04,445 --> 01:04:07,580
+um, Convolutional Neural Network for vision tasks.
+嗯，用于视觉任务的卷积神经网络。
+
+1046
+01:04:07,580 --> 01:04:09,200
+You could start building really,
+你真的可以开始建设，
+
+1047
+01:04:09,200 --> 01:04:14,270
+really deep networks for vision tasks which had tens or even hundreds of
+真正深入的视觉任务网络，有几十甚至几百个
+
+1048
+01:04:14,270 --> 01:04:21,090
+layers and that those models when trained on a lot of data proved to work even better.
+这些模型在经过大量数据培训后证明工作得更好。
+
+1049
+01:04:21,210 --> 01:04:27,115
+So, um, if that's what's in your head and you then looked,
+所以，嗯，如果这就是你头脑中的东西然后你看了，
+
+1050
+01:04:27,115 --> 01:04:33,970
+look at what was and indeed is happening in natural language processing,
+看看自然语言处理中发生了什么，实际上发生了什么，
+
+1051
+01:04:33,970 --> 01:04:36,410
+the observation is, you know,
+你知道，观察是
+
+1052
+01:04:36,410 --> 01:04:38,390
+these NLP people are kind of pathetic,
+这些NLP人有点可怜，
+
+1053
+01:04:38,390 --> 01:04:43,550
+they claim they're doing deep learning but they're still working with three layer LSTMs.
+他们声称他们正在深入学习，但他们仍在使用三层LSTM。
+
+1054
+01:04:43,550 --> 01:04:46,475
+Surely, we can make some progress, um,
+当然，我们可以取得一些进展，嗯，
+
+1055
+01:04:46,475 --> 01:04:53,735
+by building really deep networks that kinda look like vision networks and using them,
+通过构建看起来像视觉网络并使用它们的真正深度网络，
+
+1056
+01:04:53,735 --> 01:04:57,035
+um, for natural language processing goals.
+嗯，用于自然语言处理目标。
+
+1057
+01:04:57,035 --> 01:05:01,415
+And so, that is precisely what they said about doing.
+所以，这正是他们所说的。
+
+1058
+01:05:01,415 --> 01:05:08,930
+So, that they designed and built really deep network which sort of looks like a vision stack,
+所以，他们设计并构建了一个非常深的网络，看起来像一个视觉堆栈，
+
+1059
+01:05:08,930 --> 01:05:14,900
+um, as a convolutional neural network that is built over characters.
+嗯，作为一个基于角色构建的卷积神经网络。
+
+1060
+01:05:14,900 --> 01:05:20,660
+Um, so, I've got the picture of it here but sufficiently deep that it's fitting it on
+嗯，所以，我已经在这里得到了它的图片，但足够深，以至于它适合它
+
+1061
+01:05:20,660 --> 01:05:23,390
+the slide and making it readable [LAUGHTER] is a little bit
+幻灯片并使其可读[大笑]是一点点
+
+1062
+01:05:23,390 --> 01:05:26,150
+of a challenge but we can try and look at this.
+挑战，但我们可以尝试看看这个。
+
+1063
+01:05:26,150 --> 01:05:27,260
+So, at the bottom,
+所以，在底部，
+
+1064
+01:05:27,260 --> 01:05:29,240
+we have the text, um,
+我们有文字，嗯，
+
+1065
+01:05:29,240 --> 01:05:33,965
+which is a sequence of characters and so, um,
+这是一系列人物，所以，嗯，
+
+1066
+01:05:33,965 --> 01:05:36,980
+for the text, um, so,
+对于文本，嗯，所以，
+
+1067
+01:05:36,980 --> 01:05:40,640
+when people do vision object recognition on
+当人们做视觉对象识别时
+
+1068
+01:05:40,640 --> 01:05:44,930
+pictures normally all the pictures are made the same size.
+图片通常所有图片都是相同的大小。
+
+1069
+01:05:44,930 --> 01:05:50,225
+Right. You make every picture 300 pixels by 300 pixels or something like that.
+对。您可以将每张图片设置为300像素乘300像素或类似的图像。
+
+1070
+01:05:50,225 --> 01:05:53,375
+So, they do exactly the same for NLP, um,
+所以，他们对NLP完全一样，嗯，
+
+1071
+01:05:53,375 --> 01:05:55,490
+they have a size, um,
+他们有一个大小，嗯，
+
+1072
+01:05:55,490 --> 01:05:59,690
+for their document which is 1024 characters.
+他们的文件是1024个字符。
+
+1073
+01:05:59,690 --> 01:06:03,710
+If it's longer than that they truncate it and keep the first part.
+如果它比它长，它们会截断它并保留第一部分。
+
+1074
+01:06:03,710 --> 01:06:06,470
+If it's shorter than that they pad it until it's of
+如果它比它短，那么它们会填充它直到它
+
+1075
+01:06:06,470 --> 01:06:11,315
+size 1024 and then they're gonna stick it into their stack.
+大小1024然后他们会把它粘在他们的堆栈中。
+
+1076
+01:06:11,315 --> 01:06:15,440
+So, the first part is that for each character,
+所以，第一部分是每个角色，
+
+1077
+01:06:15,440 --> 01:06:18,200
+they're going to learn a character embedding now and
+他们现在要学习一个人物嵌入
+
+1078
+01:06:18,200 --> 01:06:22,145
+their character embeddings are of dimensionality 16.
+他们的角色嵌入具有维度16。
+
+1079
+01:06:22,145 --> 01:06:29,540
+So, that the piece of text is now 16 by 1024, um, so,
+那么，那段文字现在是16乘1024，嗯，所以，
+
+1080
+01:06:29,540 --> 01:06:33,770
+they're going to stick that through a convolutional layer where
+他们会通过卷积层来坚持下去
+
+1081
+01:06:33,770 --> 01:06:38,210
+you've got kernel size of three and 64 output channels.
+你有三个和64个输出通道的内核大小。
+
+1082
+01:06:38,210 --> 01:06:44,150
+So you now have something that's 64 times of 1024 in size.
+所以你现在拥有的是64倍大小的64倍。
+
+1083
+01:06:44,150 --> 01:06:47,900
+You now stick this through a convolutional block.
+你现在通过卷积块来解决这个问题。
+
+1084
+01:06:47,900 --> 01:06:52,085
+I'll explain the details of that convolutional block on the next slide but,
+我将在下一张幻灯片中解释卷积块的细节，但是，
+
+1085
+01:06:52,085 --> 01:06:56,360
+you should be thinking of that ResNet picture I showed earlier where you
+你应该想到我之前在你所展示的ResNet图片
+
+1086
+01:06:56,360 --> 01:07:01,310
+can either be going through some convolutions or taking this optional shortcut.
+可以通过一些卷积或采取这个可选的快捷方式。
+
+1087
+01:07:01,310 --> 01:07:05,180
+Another ResNet, another residual block
+另一个ResNet，另一个残留块
+
+1088
+01:07:05,180 --> 01:07:08,765
+where you can be going through convolutions are an optional shortcut,
+您可以通过卷积进行选择的快捷方式，
+
+1089
+01:07:08,765 --> 01:07:15,020
+um, they're then doing local pooling in the same way people typically do envision.
+嗯，他们正在按照人们通常设想的方式进行本地汇集。
+
+1090
+01:07:15,020 --> 01:07:17,990
+So, commonly what people do in vision systems
+所以，通常是人们在视觉系统中所做的事情
+
+1091
+01:07:17,990 --> 01:07:21,530
+is you are sort of shrinking the size of the images, um,
+你有点缩小图像的大小，嗯，
+
+1092
+01:07:21,530 --> 01:07:25,820
+by doing pooling that halves the dimensions in each direction.
+通过汇集将每个方向的尺寸减半。
+
+1093
+01:07:25,820 --> 01:07:27,020
+But, at the same time,
+但是，与此同时，
+
+1094
+01:07:27,020 --> 01:07:29,014
+you do that in your neural network,
+你在你的神经网络中做到这一点，
+
+1095
+01:07:29,014 --> 01:07:31,715
+you expand the number of channels,
+你扩展了频道数​​量，
+
+1096
+01:07:31,715 --> 01:07:34,130
+and so you make it deeper in terms of the number of
+所以你在数量方面做得更深
+
+1097
+01:07:34,130 --> 01:07:38,105
+channels at the same time as you make it smaller in the x,
+在x中缩小通道的同时，
+
+1098
+01:07:38,105 --> 01:07:39,710
+y size of the image.
+y图像的大小。
+
+1099
+01:07:39,710 --> 01:07:44,120
+So, they do exactly the same apart from these one-dimensional convolutions.
+因此，除了这些一维卷积之外，它们完全相同。
+
+1100
+01:07:44,120 --> 01:07:49,760
+So, before we had 64 channels in our 1024 character,
+所以，在我们的1024个字符中有64个通道之前，
+
+1101
+01:07:49,760 --> 01:07:54,425
+um, embedding, um, document.
+嗯，嵌入，嗯，文件。
+
+1102
+01:07:54,425 --> 01:07:57,110
+So, now we pool it, um, so,
+那么，现在我们汇集它，嗯，所以，
+
+1103
+01:07:57,110 --> 01:08:03,605
+we're going to have 512 positions which are sort of like pairs of characters,
+我们将有512个位置，有点像一对字符，
+
+1104
+01:08:03,605 --> 01:08:06,440
+um, but we now have 128 channels
+嗯，但我们现在有128个频道
+
+1105
+01:08:06,440 --> 01:08:09,380
+and then they kind of repeat that over and over again, right?
+然后他们一遍又一遍地重复一遍，对吧？
+
+1106
+01:08:09,380 --> 01:08:11,690
+So, there are two more convolutional blocks which I'll
+所以，我还有两个卷积块
+
+1107
+01:08:11,690 --> 01:08:14,285
+explain more but they're sort of residual blocks.
+解释更多，但它们是残留块。
+
+1108
+01:08:14,285 --> 01:08:17,960
+They pool it again and they do exactly the same thing.
+他们再次汇集它们，它们完全相同。
+
+1109
+01:08:17,960 --> 01:08:21,305
+So, now there are 256, um,
+那么，现在有256个，嗯，
+
+1110
+01:08:21,305 --> 01:08:26,900
+positions which are like four character blocks and they have 256 channels,
+像四个字符块一样的位置，它们有256个通道，
+
+1111
+01:08:26,900 --> 01:08:31,460
+um, I can't point high enough but they repeat that again and they pool again.
+嗯，我不能说得够高，但他们又重复了一遍，然后他们再次聚集。
+
+1112
+01:08:31,460 --> 01:08:33,590
+So, now they've got, um,
+那么，现在他们已经拥有了，嗯，
+
+1113
+01:08:33,590 --> 01:08:36,710
+128 positions which are about eight characters
+128个位置，大约8个字符
+
+1114
+01:08:36,710 --> 01:08:40,775
+each and they have 512 channels representing that.
+每个，他们有512个通道代表。
+
+1115
+01:08:40,775 --> 01:08:45,080
+They pool again, they have convolutional blocks again, um,
+他们再次聚集，他们再次卷积，嗯，
+
+1116
+01:08:45,080 --> 01:08:47,570
+then lo and behold because I said that even the
+然后，因为我说甚至是
+
+1117
+01:08:47,570 --> 01:08:50,060
+weird ideas are going to turn up, right up there,
+奇怪的想法会出现，就在那里，
+
+1118
+01:08:50,060 --> 01:08:55,325
+they're doing k max pooling and they're keeping the eight strongest values,
+他们正在进行k max汇集，他们保持着八个最强的值，
+
+1119
+01:08:55,325 --> 01:08:57,290
+um, in each channel.
+嗯，在每个频道。
+
+1120
+01:08:57,290 --> 01:08:59,300
+Um, and so at that point,
+嗯，等等，
+
+1121
+01:08:59,300 --> 01:09:05,195
+they've got something of size 512 by eight, um, so,
+它们的尺寸是512×8，嗯，所以，
+
+1122
+01:09:05,195 --> 01:09:08,510
+sort of like eight of the eight character sequences
+有点像八个字符序列中的八个
+
+1123
+01:09:08,510 --> 01:09:11,705
+have been deemed important to the classification and they're
+被认为对分类很重要，他们是
+
+1124
+01:09:11,705 --> 01:09:15,455
+kept but they sort per channel and there are 512 of them
+保持，但他们按通道排序，其中有512个
+
+1125
+01:09:15,455 --> 01:09:19,475
+you're then putting that through three fully connected layers.
+然后你将它穿过三个完全连接的层。
+
+1126
+01:09:19,475 --> 01:09:22,190
+So, typically vision systems at the top
+因此，通常顶部的视觉系统
+
+1127
+01:09:22,190 --> 01:09:25,355
+have a couple of fully connected layers at the end,
+最后有几个完全连接的层，
+
+1128
+01:09:25,355 --> 01:09:28,055
+um, and the very last one of those,
+嗯，最后一个，
+
+1129
+01:09:28,055 --> 01:09:31,835
+is effectively sort of feeding into your Softmax.
+实际上有点像喂你的Softmax。
+
+1130
+01:09:31,835 --> 01:09:36,080
+So, it's size 2,048 times the number of
+所以，它的大小是数量的2,048倍
+
+1131
+01:09:36,080 --> 01:09:41,330
+classes which might just be positive negative two class unlike the topical classes.
+与主题类不同的类可能只是正面的两个类。
+
+1132
+01:09:41,330 --> 01:09:44,000
+Um, so, yeah, so it's essentially like
+嗯，是的，是的，所以它基本上就像
+
+1133
+01:09:44,000 --> 01:09:47,180
+a vision stack but they're going to use it for language.
+视觉堆栈，但他们将把它用于语言。
+
+1134
+01:09:47,180 --> 01:09:48,890
+Um, okay.
+嗯，好的。
+
+1135
+01:09:48,890 --> 01:09:52,340
+So, the bit that I hand quite explained was
+所以，我用手解释的那一点是
+
+1136
+01:09:52,340 --> 01:09:57,515
+these convolutional blocks but it sort of looks like the picture that we had before or,
+这些卷积块但它看起来像我们之前的图片或者，
+
+1137
+01:09:57,515 --> 01:09:59,975
+um, departments slightly more complicated.
+嗯，部门稍微复杂一些。
+
+1138
+01:09:59,975 --> 01:10:02,420
+So you're doing, um,
+所以你在做，恩，
+
+1139
+01:10:02,420 --> 01:10:05,840
+a convolutional block of size three
+三个卷积块
+
+1140
+01:10:05,840 --> 01:10:10,430
+convolutions some number of channels depending on where you are in the sequence.
+根据您在序列中的位置，对一些通道进行卷积。
+
+1141
+01:10:10,430 --> 01:10:13,490
+You're then putting it through a batch norm as we just
+然后你就像我们一样，通过一个批量规范
+
+1142
+01:10:13,490 --> 01:10:17,075
+talked about putting it through a ReLu non-linearity,
+谈到通过ReLu非线性，
+
+1143
+01:10:17,075 --> 01:10:21,320
+repeating all those three things again or remember there
+再次重复所有这三件事或记住那里
+
+1144
+01:10:21,320 --> 01:10:25,550
+was this sort of skipped connection that went right around the outside of this block.
+是这种跳过的连接，就在这个街区的外面。
+
+1145
+01:10:25,550 --> 01:10:31,190
+And so this is sort of a residual style block, um, so,
+所以这是一种残余的样式块，嗯，所以，
+
+1146
+01:10:31,190 --> 01:10:34,550
+that's the kind of complex architecture you can put together and
+这是你可以组合在一起的那种复杂的架构
+
+1147
+01:10:34,550 --> 01:10:38,675
+try in your final projects if you dare in PyTorch.
+如果你敢在PyTorch中尝试你的最终项目。
+
+1148
+01:10:38,675 --> 01:10:42,775
+Um, yeah, um, so,
+嗯，是的，嗯，所以，
+
+1149
+01:10:42,775 --> 01:10:46,090
+for experiments so- so one of
+对于实验，所以其中一个
+
+1150
+01:10:46,090 --> 01:10:52,570
+the things that they were interested in and wanted to make a point of is well some
+他们感兴趣的东西，并希望提出一些观点
+
+1151
+01:10:52,570 --> 01:10:55,670
+of these traditional sentence and
+这些传统句子和
+
+1152
+01:10:55,670 --> 01:10:58,970
+text classification datasets have been used in other papers
+文本分类数据集已用于其他论文
+
+1153
+01:10:58,970 --> 01:11:02,465
+like Yoon Kim's paper are effectively quite small.
+像Yoon Kim的论文实际上非常小。
+
+1154
+01:11:02,465 --> 01:11:10,550
+So, something like that Rotten Tomatoes dataset is actually only 10,000 examples, 5,000,
+那么，Rotten Tomatoes数据集实际上只有10,000个例子，5,000个，
+
+1155
+01:11:10,550 --> 01:11:13,550
+positive 5,000 negative and they sort of have
+积极的5000负，他们有点
+
+1156
+01:11:13,550 --> 01:11:17,180
+the idea that just like ImageNet was needed for
+需要像ImageNet一样的想法
+
+1157
+01:11:17,180 --> 01:11:20,435
+deep learning models to really show their worth and vision
+深入学习模式，真正展现自己的价值和愿景
+
+1158
+01:11:20,435 --> 01:11:24,155
+that probably does show the value of a huge model like that.
+这可能确实显示了像这样的巨大模型的价值。
+
+1159
+01:11:24,155 --> 01:11:28,070
+Um, you need to have really big datasets.
+嗯，你需要拥有非常大的数据集。
+
+1160
+01:11:28,070 --> 01:11:29,855
+So, they get some much bigger,
+所以，他们会变得更大，
+
+1161
+01:11:29,855 --> 01:11:32,000
+um, text classification datasets.
+嗯，文本分类数据集。
+
+1162
+01:11:32,000 --> 01:11:36,065
+So, here's an Amazon review positive-negative dataset, um,
+那么，这是亚马逊评论的正负数据集，嗯，
+
+1163
+01:11:36,065 --> 01:11:39,500
+with which they have sort of 3,6 million documents,
+他们有360万份文件，
+
+1164
+01:11:39,500 --> 01:11:43,030
+um, Yelp reviews 650,000 documents.
+嗯，Yelp评论了650,000份文件。
+
+1165
+01:11:43,030 --> 01:11:45,100
+So much bigger datasets,
+这么大的数据集，
+
+1166
+01:11:45,100 --> 01:11:48,230
+um, and here are their experiments.
+嗯，这是他们的实验。
+
+1167
+01:11:48,230 --> 01:11:50,930
+Okay. So, the numbers at the top, uh,
+好的。那么，顶部的数字，呃，
+
+1168
+01:11:50,930 --> 01:11:55,940
+for the different datasets of the best previous result printed in the literature,
+对于文献中印刷的最佳结果的不同数据集，
+
+1169
+01:11:55,940 --> 01:11:58,640
+and then if you read the, um,
+如果你读了，嗯，
+
+1170
+01:11:58,640 --> 01:12:03,200
+footnotes, um, there are a few things that they want to sort of star.
+脚注，嗯，有一些他们想要的东西是明星。
+
+1171
+01:12:03,200 --> 01:12:07,040
+So, the ones that have a star next to them use
+那么，那些旁边有星星的人就会使用它们
+
+1172
+01:12:07,040 --> 01:12:13,225
+an external thesaurus which they don't use. [NOISE]
+他们不使用的外部词库。 [噪声]
+
+1173
+01:12:13,225 --> 01:12:15,640
+And the Yang method, um,
+杨方法，嗯，
+
+1174
+01:12:15,640 --> 01:12:18,610
+use some special techniques as well that I cut off.
+使用一些我切断的特殊技术。
+
+1175
+01:12:18,610 --> 01:12:21,580
+Um, and the other thing to mention is these numbers,
+嗯，另外要提的是这些数字，
+
+1176
+01:12:21,580 --> 01:12:24,175
+they're error rates, so low is good.
+他们是错误率，所以低是好的。
+
+1177
+01:12:24,175 --> 01:12:26,410
+Um, so the lower you get them, the better.
+嗯，你得到的越低越好。
+
+1178
+01:12:26,410 --> 01:12:30,940
+And so then these are all of their results.
+所以这些都是他们的结果。
+
+1179
+01:12:30,940 --> 01:12:34,770
+Um, and so what can you get out of these results?
+嗯，那么你能从这些结果中得到什么呢？
+
+1180
+01:12:34,770 --> 01:12:39,545
+Um, well, the first thing that you can notice is basically with these results,
+嗯，你能注意到的第一件事就是这些结果，
+
+1181
+01:12:39,545 --> 01:12:42,100
+the deeper networks are working better, right?
+更深层的网络工作得更好，对吧？
+
+1182
+01:12:42,100 --> 01:12:44,845
+So, the one I showed you,
+所以，我给你看的那个，
+
+1183
+01:12:44,845 --> 01:12:48,490
+uh, well, no, I think the one that I have the picture of this isn't the full thing.
+呃，好吧，不，我认为我对此有所了解的那个并不完整。
+
+1184
+01:12:48,490 --> 01:12:52,720
+Um, but they have ones with depth 9, 17,
+嗯，但他们有深度为9,17的那个，
+
+1185
+01:12:52,720 --> 01:12:56,680
+and 29 in terms of the number of convolutional layers,
+卷积层数为29，
+
+1186
+01:12:56,680 --> 01:13:01,150
+and the deepest one is always the one that's working best.
+而最深的一个总是最好的。
+
+1187
+01:13:01,150 --> 01:13:04,255
+So, that's a proof of deep networks.
+所以，这是深度网络的证明。
+
+1188
+01:13:04,255 --> 01:13:07,570
+Um, that didn't keep on working, um,
+嗯，没有继续工作，嗯，
+
+1189
+01:13:07,570 --> 01:13:10,690
+so an interesting footnote here is,
+所以这里有一个有趣的脚注是，
+
+1190
+01:13:10,690 --> 01:13:11,935
+um, I guess they thought,
+嗯，我猜他们想，
+
+1191
+01:13:11,935 --> 01:13:13,225
+oh, this is cool.
+哦，这很酷。
+
+1192
+01:13:13,225 --> 01:13:19,315
+Why don't we try an even deeper one that has 47 layers and see how well that works?
+为什么我们不尝试更深层次的47层，看看它有多好？
+
+1193
+01:13:19,315 --> 01:13:23,635
+And, I mean, the results were sort of interesting for that.
+而且，我的意思是，结果对此很有意思。
+
+1194
+01:13:23,635 --> 01:13:26,125
+So, for the 47 layer one,
+那么，对于47层一，
+
+1195
+01:13:26,125 --> 01:13:28,855
+it worked a fraction worse than this one.
+它的工作比这个差一点。
+
+1196
+01:13:28,855 --> 01:13:32,050
+Um, so in one sense you,
+嗯，从某种意义上说，你，
+
+1197
+01:13:32,050 --> 01:13:37,900
+they showed the result of sort of residual layers work really well.
+他们表明残留层的结果非常好。
+
+1198
+01:13:37,900 --> 01:13:40,705
+So, they did an experiment of let's try to train
+所以，他们做了一个让我们尝试训练的实验
+
+1199
+01:13:40,705 --> 01:13:45,325
+a 47-layer network without using residual connections.
+47层网络，不使用剩余连接。
+
+1200
+01:13:45,325 --> 01:13:47,455
+And, well, it was a lot worse.
+而且，情况要糟糕得多。
+
+1201
+01:13:47,455 --> 01:13:49,870
+The numbers went down about two percent.
+这个数字下降了大约2％。
+
+1202
+01:13:49,870 --> 01:13:52,825
+And they trained one with residual connections,
+他们训练了一个残余连接，
+
+1203
+01:13:52,825 --> 01:13:58,870
+and the fact of the matter is the numbers were just a teeny weeny bit worse.
+事实上这个数字只是一个小小的变弱。
+
+1204
+01:13:58,870 --> 01:14:02,485
+They were sort of 0,1 of a percent worse.
+他们有点差0,1％。
+
+1205
+01:14:02,485 --> 01:14:05,515
+So, you know, they sort of work just about as well.
+所以，你知道，他们的工作也差不多。
+
+1206
+01:14:05,515 --> 01:14:10,300
+But, nevertheless, that's kind of different to the situation in vision,
+但是，尽管如此，这与视力状况有所不同，
+
+1207
+01:14:10,300 --> 01:14:15,145
+because for the sort of residual networks that people are using in vision,
+因为对于人们在视觉中使用的那种残余网络，
+
+1208
+01:14:15,145 --> 01:14:19,990
+this is sort of like the very minimum depth that people use.
+这有点像人们使用的最小深度。
+
+1209
+01:14:19,990 --> 01:14:23,485
+So, if you're using residual networks in vision typically,
+所以，如果你通常在视觉中使用剩余网络，
+
+1210
+01:14:23,485 --> 01:14:25,915
+you might use ResNet-34.
+你可以使用ResNet-34。
+
+1211
+01:14:25,915 --> 01:14:29,215
+If you're really short on memory and want to have a small model,
+如果你真的缺乏记忆力并希望拥有一个小型号，
+
+1212
+01:14:29,215 --> 01:14:32,980
+but you just know you'd get better results if you used ResNet-50,
+但是如果你使用ResNet-50，你只知道你会得到更好的结果，
+
+1213
+01:14:32,980 --> 01:14:36,730
+and in fact, if you used ResNet-101 it'd work even better again.
+事实上，如果你使用ResNet-101，它的工作效果会更好。
+
+1214
+01:14:36,730 --> 01:14:39,625
+Um, and so that somehow, you know,
+嗯，不知何故，你知道，
+
+1215
+01:14:39,625 --> 01:14:41,410
+whether it's got to do with the different nature of
+是否与它的不同性质有关
+
+1216
+01:14:41,410 --> 01:14:44,350
+language or the amounts of data or something,
+语言或数据或其他东西，
+
+1217
+01:14:44,350 --> 01:14:47,915
+you haven't yet gone to the same depth that you can in vision.
+你还没有达到你在视觉中所能达到的同样深度。
+
+1218
+01:14:47,915 --> 01:14:50,620
+Um, but other results, um,
+嗯，但其他结果，嗯，
+
+1219
+01:14:50,620 --> 01:14:54,190
+so the other thing they're comparing here is that they're comparing
+所以他们在这里比较的另一件事就是他们在比较
+
+1220
+01:14:54,190 --> 01:14:59,245
+three different ways of sort of stringing things down.
+三种截然不同的方式。
+
+1221
+01:14:59,245 --> 01:15:02,950
+So, you could be using, um,
+所以，你可以使用，嗯，
+
+1222
+01:15:02,950 --> 01:15:06,715
+the stride in the Convolution,
+卷积中的步伐，
+
+1223
+01:15:06,715 --> 01:15:09,745
+you can be using local MaxPooling,
+你可以使用本地MaxPooling，
+
+1224
+01:15:09,745 --> 01:15:12,805
+and you could be using KMaxPooling.
+你可以使用KMaxPooling。
+
+1225
+01:15:12,805 --> 01:15:14,350
+Um, and they're general,
+嗯，他们是一般的，
+
+1226
+01:15:14,350 --> 01:15:16,945
+they're slightly different numbers as you can see.
+你可以看到他们的数字略有不同。
+
+1227
+01:15:16,945 --> 01:15:19,990
+Each one, um, wins and one, uh,
+每一个，嗯，赢一个，呃，
+
+1228
+01:15:19,990 --> 01:15:23,890
+at least one of these datasets or actually at least two of these datasets.
+这些数据集中的至少一个或实际上至少两个这些数据集。
+
+1229
+01:15:23,890 --> 01:15:27,430
+But not only does MaxPooling win for four of the datasets,
+但MaxPooling不仅赢得了四个数据集，
+
+1230
+01:15:27,430 --> 01:15:29,890
+if you sort of look at the numbers,
+如果你看看数字，
+
+1231
+01:15:29,890 --> 01:15:32,245
+MaxPooling always does pretty well.
+MaxPooling总是做得很好。
+
+1232
+01:15:32,245 --> 01:15:34,495
+Because MaxPooling does pretty well here,
+因为MaxPooling在这里做得很好，
+
+1233
+01:15:34,495 --> 01:15:38,140
+whereas the convolutional stride works badly,
+卷积的步幅很糟糕，
+
+1234
+01:15:38,140 --> 01:15:41,605
+and over here MaxPooling works pretty well,
+在这里MaxPooling工作得很好，
+
+1235
+01:15:41,605 --> 01:15:45,685
+and the, um, KMaxPooling works kind of badly.
+而且，嗯，KMaxPooling的工作有点糟糕。
+
+1236
+01:15:45,685 --> 01:15:50,890
+So, their recommendation at the end of the day is you should always use, um,
+所以，他们在一天结束时的推荐是你应该总是使用，嗯，
+
+1237
+01:15:50,890 --> 01:15:53,680
+just MaxPooling of a simple kind,
+只是一个简单的MaxPooling，
+
+1238
+01:15:53,680 --> 01:15:55,389
+that that seems to be fine,
+这看起来很好，
+
+1239
+01:15:55,389 --> 01:15:57,340
+um, and nothing else.
+嗯，没别的。
+
+1240
+01:15:57,340 --> 01:16:01,315
+Um, it's actually worth the trouble of thinking about doing.
+嗯，实际上值得考虑做的事情。
+
+1241
+01:16:01,315 --> 01:16:10,540
+Okay. Um, was there any other conclusions I wanted to say?
+好的。嗯，我想说的还有其他任何结论吗？
+
+1242
+01:16:10,540 --> 01:16:13,285
+Okay. Um, I think that was most of that.
+好的。嗯，我认为那是其中的大部分内容。
+
+1243
+01:16:13,285 --> 01:16:17,440
+I guess their overall message is you can build super good, um,
+我猜他们的整体信息是你可以建立超级好，嗯，
+
+1244
+01:16:17,440 --> 01:16:20,470
+text classification systems using ConvNets,
+使用ConvNets的文本分类系统，
+
+1245
+01:16:20,470 --> 01:16:22,630
+and you should take away that message.
+你应该带走那条信息。
+
+1246
+01:16:22,630 --> 01:16:26,170
+Okay. So, there are just a couple of minutes left.
+好的。所以，还剩下几分钟。
+
+1247
+01:16:26,170 --> 01:16:30,145
+There was sort of one other thing that I wanted to mention,
+还有一件我想提到的事情，
+
+1248
+01:16:30,145 --> 01:16:33,505
+but I think I'll just sort of mention it very quickly,
+但我想我会很快提到它，
+
+1249
+01:16:33,505 --> 01:16:36,505
+and you can look in more detail if you want to.
+如果你愿意，你可以查看更详细的信息。
+
+1250
+01:16:36,505 --> 01:16:38,785
+So, we sort of have this situation
+所以，我们有这种情况
+
+1251
+01:16:38,785 --> 01:16:44,065
+that re- recurrent neural networks are a very standard building block for NLP,
+反复神经网络是NLP非常标准的构建块，
+
+1252
+01:16:44,065 --> 01:16:49,405
+but they have this big problem that they just don't parallelize well.
+但他们有一个很大的问题，他们只是不能很好地并行化。
+
+1253
+01:16:49,405 --> 01:16:53,800
+And the way we get fast computation deep learning is we find
+我们发现，我们获得快速计算深度学习的方式
+
+1254
+01:16:53,800 --> 01:16:58,180
+things that parallelize well so that we can stick them on GPUs.
+并行化的东西，以便我们可以将它们粘贴在GPU上。
+
+1255
+01:16:58,180 --> 01:17:05,425
+GPUs only are fast if they can be simultaneously doing the same computation many times,
+如果GPU可以同时多次执行相同的计算，则它们很快，
+
+1256
+01:17:05,425 --> 01:17:08,440
+which is sort of trivial for a convolutional neural network,
+这对于卷积神经网络来说是微不足道的，
+
+1257
+01:17:08,440 --> 01:17:13,225
+because precisely, you're doing the same comput- computation every position.
+因为确切地说，你在每个位置都进行相同的计算。
+
+1258
+01:17:13,225 --> 01:17:17,740
+But that's not what's happening in the recurrent neural network because you have to
+但这不是在递归神经网络中发生的事情，因为你必须这样做
+
+1259
+01:17:17,740 --> 01:17:19,990
+work out the value of position one
+弄清楚第一位的价值
+
+1260
+01:17:19,990 --> 01:17:22,930
+before you can start to calculate the value of position two,
+在你开始计算位置二的值之前，
+
+1261
+01:17:22,930 --> 01:17:26,320
+which is used for the value of position three.
+用于第三位的值。
+
+1262
+01:17:26,320 --> 01:17:28,975
+Um, so this was a piece of work, um,
+嗯，所以这是一件工作，嗯，
+
+1263
+01:17:28,975 --> 01:17:33,030
+done by sometimes CS224N co-instructor
+有时是CS224N共同指导员完成的
+
+1264
+01:17:33,030 --> 01:17:37,620
+Richard Socher and some of his people at Salesforce Research
+Richard Socher和他在Salesforce Research的一些人
+
+1265
+01:17:37,620 --> 01:17:40,110
+on saying, how can we get the best of both worlds?
+说，我们怎样才能充分利用这两个世界？
+
+1266
+01:17:40,110 --> 01:17:43,485
+How can we get something that's kind of like a
+我们怎样才能得到类似于某种东西的东西
+
+1267
+01:17:43,485 --> 01:17:49,650
+recurrent neural network, but doesn't have the bad computational properties?
+递归神经网络，但没有糟糕的计算属性？
+
+1268
+01:17:49,650 --> 01:17:53,160
+And so the idea that they had was, well,
+所以他们的想法是，嗯，
+
+1269
+01:17:53,160 --> 01:18:00,550
+rather than doing the standard LSTM style thing where you're calculating, you know,
+你知道，而不是做你正在计算的标准LSTM风格的东西，
+
+1270
+01:18:00,550 --> 01:18:07,090
+an updated candidate value and your gates in terms of the preceding time slice,
+更新的候选值和前一时间片的门，
+
+1271
+01:18:07,090 --> 01:18:13,510
+maybe what instead we could do is we could stick a relation between time
+或许我们可以做的是我们可以在时间之间建立关系
+
+1272
+01:18:13,510 --> 01:18:20,155
+minus 1 and time into the MaxPooling layer of a convolutional neural network.
+减去1并进入卷积神经网络的MaxPooling层的时间。
+
+1273
+01:18:20,155 --> 01:18:26,260
+So, we're sort of calculating a candidate and a forget gate and an output gate.
+所以，我们有点计算候选人，忘记门和输出门。
+
+1274
+01:18:26,260 --> 01:18:30,700
+But these, these candidate and the, um,
+但是这些，这些候选人和嗯，
+
+1275
+01:18:30,700 --> 01:18:38,500
+gated values are done inside the pooling layer via compute,
+门控值通过compute在池化层内完成，
+
+1276
+01:18:38,500 --> 01:18:44,350
+um, via, um, uh, uh, convolutional operation.
+嗯，通过，嗯，呃，卷积操作。
+
+1277
+01:18:44,350 --> 01:18:46,150
+So, it sort of get,
+所以，它有点得到，
+
+1278
+01:18:46,150 --> 01:18:47,650
+it doesn't, it, you know,
+它没有，它，你知道，
+
+1279
+01:18:47,650 --> 01:18:53,065
+if there's no free lunch you can't get true recurrence and not pay the penalty.
+如果没有免费的午餐，你就无法获得真正的复发，也不会支付罚金。
+
+1280
+01:18:53,065 --> 01:18:56,764
+This is giving you sort of a pseudo-recurrence because you are
+这会给你一些伪复发，因为你是
+
+1281
+01:18:56,764 --> 01:19:02,244
+modeling an association between adjacent elements at each time slice,
+在每个时间片对相邻元素之间的关联建模，
+
+1282
+01:19:02,244 --> 01:19:06,310
+but it's sort of just worked out locally rather than being carried forward,
+但它只是在当地制定而不是继续推进，
+
+1283
+01:19:06,310 --> 01:19:08,200
+um, in one layer.
+嗯，在一层。
+
+1284
+01:19:08,200 --> 01:19:10,240
+But sort of what they found is,
+但他们发现的是，
+
+1285
+01:19:10,240 --> 01:19:14,320
+if you made your networks deeper using this idea,
+如果你使用这个想法让你的网络更深入，
+
+1286
+01:19:14,320 --> 01:19:15,970
+well then, you sort of start to, again,
+那么，你又开始了，
+
+1287
+01:19:15,970 --> 01:19:18,010
+expand your window of influence.
+扩大你的影响力窗口。
+
+1288
+01:19:18,010 --> 01:19:22,090
+So, you got a certain amount of information being carried forward.
+所以，你得到了一定数量的信息。
+
+1289
+01:19:22,090 --> 01:19:25,330
+Um, so, their conclusions was that you could sort of
+嗯，所以，他们的结论是你可以那样
+
+1290
+01:19:25,330 --> 01:19:28,870
+build these kind of models and get them to work,
+构建这些模型并让它们工作，
+
+1291
+01:19:28,870 --> 01:19:32,050
+you know, not necessarily better actually on this slide,
+你知道，在这张幻灯片上实际上并不一定更好，
+
+1292
+01:19:32,050 --> 01:19:33,625
+um, it says often better.
+嗯，它说通常更好。
+
+1293
+01:19:33,625 --> 01:19:37,540
+Um, you can get them to work kind of as well as an LSTM does,
+嗯，你可以让他们和LSTM一样工作，
+
+1294
+01:19:37,540 --> 01:19:41,650
+but you could get them to work much faster because you're avoiding
+但你可以让他们更快地工作，因为你正在避免
+
+1295
+01:19:41,650 --> 01:19:46,555
+the standard recurrent operation and keeping it as something that you can parallelize,
+标准的循环操作并将其保存为可以并行化的东西，
+
+1296
+01:19:46,555 --> 01:19:49,945
+um, in the MaxPooling operations.
+嗯，在MaxPooling操作中。
+
+1297
+01:19:49,945 --> 01:19:53,035
+Um, yes, so that was a kind of
+嗯，是的，所以这是一种
+
+1298
+01:19:53,035 --> 01:19:57,250
+an interesting alternative way of sort of trying to get some of the benefits.
+一种有趣的替代方式，试图获得一些好处。
+
+1299
+01:19:57,250 --> 01:20:01,825
+I think long-term this isn't the idea that's going to end up winning out.
+我认为长期来看，这不是最终会赢得胜利的想法。
+
+1300
+01:20:01,825 --> 01:20:05,740
+And so next week we're going to talk about transformer networks,
+下周我们将讨论变压器网络，
+
+1301
+01:20:05,740 --> 01:20:09,655
+which actually seems to be the idea that's gained the most steam at the moment.
+这实际上似乎是目前获得最多蒸汽的想法。
+
+1302
+01:20:09,655 --> 01:20:12,830
+Okay. I'll stop there for today. Thanks a lot.
+好的。我今天就到此为止。非常感谢。
+
+1303
+
+

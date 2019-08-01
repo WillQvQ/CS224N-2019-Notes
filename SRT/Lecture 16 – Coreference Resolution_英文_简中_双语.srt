@@ -1,0 +1,6938 @@
+1
+00:00:04,790 --> 00:00:09,660
+Hi everybody, time to get started.
+大家好，是时候开始了。
+
+2
+00:00:09,660 --> 00:00:18,755
+Okay. Um, so, so today what we're gonna talk about is a topic that's, um,
+好的。嗯，所以今天我们要谈的是一个话题，嗯，
+
+3
+00:00:18,755 --> 00:00:23,745
+coreference resolution and I'll explain in just a minute what that is,
+共同决议，我会在一分钟内解释这是什么，
+
+4
+00:00:23,745 --> 00:00:27,060
+um, but before getting on to that just a,
+嗯，但在开始之前只是一个，
+
+5
+00:00:27,060 --> 00:00:29,565
+uh, couple of words on the announcements.
+呃，关于公告的几句话。
+
+6
+00:00:29,565 --> 00:00:35,770
+Um, so the TAs are feverishly working on getting homework five grades worked out,
+嗯，所以技术顾问正在疯狂地努力完成五年级的作业，
+
+7
+00:00:35,770 --> 00:00:39,170
+so we hope that we can deliver those to you, um,
+所以我们希望我们可以把它们交给你，嗯，
+
+8
+00:00:39,170 --> 00:00:41,600
+tomorrow just in case you're anxious to know
+明天以防万一你急于知道
+
+9
+00:00:41,600 --> 00:00:44,750
+them before you make your final decisions about things.
+在你做出关于事情的最终决定之前。
+
+10
+00:00:44,750 --> 00:00:48,290
+And then, the other thing that you should be remembering
+然后，你应该记住的另一件事
+
+11
+00:00:48,290 --> 00:00:52,580
+is that the milestone for the final project is this Tuesday.
+是最终项目的里程碑是本周二。
+
+12
+00:00:52,580 --> 00:00:55,780
+Now, I will confess that even to me it seems like,
+现在，我会承认即使对我来说，似乎，
+
+13
+00:00:55,780 --> 00:00:58,925
+"Boy, boy this milestone came around really quickly."
+“男孩，男孩这个里程碑很快就来了。”
+
+14
+00:00:58,925 --> 00:01:01,680
+So you probably feel that doubly, I realize.
+我意识到，你可能会感到倍加。
+
+15
+00:01:01,680 --> 00:01:06,530
+And so you know, I do apologize for that a little bit,
+所以你知道，我为此道歉一点，
+
+16
+00:01:06,530 --> 00:01:11,435
+but you know, really our hope was that we could actually use this to be helpful,
+但是你知道，我们真的希望我们能够真正使用它来提供帮助，
+
+17
+00:01:11,435 --> 00:01:15,050
+and to give you feedback on what you're doing and suggestions,
+并就你正在做什么和建议给你反馈，
+
+18
+00:01:15,050 --> 00:01:17,120
+and it just really seemed like, well,
+它真的好像，好吧，
+
+19
+00:01:17,120 --> 00:01:19,880
+the only chance in which we can kind of, um,
+我们唯一有机会，嗯，
+
+20
+00:01:19,880 --> 00:01:23,900
+turn around giving more feedback on the projects, um,
+转过身来对项目提供更多反馈，嗯，
+
+21
+00:01:23,900 --> 00:01:28,825
+before it goes into the final week of the quarter is if we can kind of get stuff,
+在它进入季度的最后一周之前，如果我们可以得到东西，
+
+22
+00:01:28,825 --> 00:01:30,710
+um, Tuesday, and hope to be then,
+嗯，星期二，希望到那时，
+
+23
+00:01:30,710 --> 00:01:32,810
+sort of turning it around again by the end of the week.
+在本周结束时再次转过身来。
+
+24
+00:01:32,810 --> 00:01:36,040
+So the hope is to help you not to just,
+所以希望是帮助你不要只是，
+
+25
+00:01:36,040 --> 00:01:39,685
+um, create obstacles and roadblocks in your life.
+嗯，在你的生活中制造障碍和障碍。
+
+26
+00:01:39,685 --> 00:01:44,420
+Okay. So today what we're gonna do, um, is, uh,
+好的。那么今天我们要做什么，嗯，呃，
+
+27
+00:01:44,420 --> 00:01:47,750
+learn more about a linguistic topic for a change and learn
+了解有关变革和学习的语言主题的更多信息
+
+28
+00:01:47,750 --> 00:01:51,920
+some more stuff about what goes on in coreference resolution.
+关于共同参照解决方案中发生了什么的更多内容。
+
+29
+00:01:51,920 --> 00:01:54,185
+So first of all, I'm gonna talk about the task,
+首先，我要谈谈这项任务，
+
+30
+00:01:54,185 --> 00:01:57,380
+and then go on to some of the kinds of models that people,
+然后继续一些人们的模型，
+
+31
+00:01:57,380 --> 00:01:59,990
+um, do for coreference resolution.
+嗯，做共参考解决方案。
+
+32
+00:01:59,990 --> 00:02:03,035
+So first of all, what is it?
+首先，它是什么？
+
+33
+00:02:03,035 --> 00:02:08,850
+Um, so the idea of coreference resolution is what we do, which we have a text,
+嗯，因此我们所做的是共同解决的想法，我们有一个文本，
+
+34
+00:02:08,850 --> 00:02:13,175
+"Barack Obama nominated Hillary Rodham Clinton as his Secretary of State on
+“巴拉克奥巴马提名希拉里罗德姆克林顿为他的国务卿
+
+35
+00:02:13,175 --> 00:02:18,230
+Monday," and this text like most texts are about entities,
+星期一，“和大多数文本一样，这个文本是关于实体的，
+
+36
+00:02:18,230 --> 00:02:21,200
+where entities are commonly human beings,
+实体通常是人类，
+
+37
+00:02:21,200 --> 00:02:26,000
+but they can be other things like God saw talking giraffes or whatever it is.
+但他们可以是其他东西，如上帝看到长颈鹿或其他任何东西。
+
+38
+00:02:26,000 --> 00:02:28,580
+So it seems like we want to make,
+所以看起来我们想做，
+
+39
+00:02:28,580 --> 00:02:32,225
+find where entities are mentioned.
+找到提到实体的地方。
+
+40
+00:02:32,225 --> 00:02:34,040
+So my entities are mentioned,
+所以提到了我的实体，
+
+41
+00:02:34,040 --> 00:02:35,990
+they're referred to as mentions.
+他们被称为提及。
+
+42
+00:02:35,990 --> 00:02:39,500
+So things like Barack Obama and Secretary of State,
+巴拉克奥巴马和国务卿等事情，
+
+43
+00:02:39,500 --> 00:02:43,265
+he, her, they are mentions of entities.
+他，她，他们是实体的提及。
+
+44
+00:02:43,265 --> 00:02:46,990
+And then, when we talk about coreference resolution,
+然后，当我们谈论共指消解时，
+
+45
+00:02:46,990 --> 00:02:50,270
+the task that we're wanting to do is say,
+我们想要做的任务就是说，
+
+46
+00:02:50,270 --> 00:02:54,680
+which of these mentions refer to the same entity,
+这些提及中的哪一个提到同一个实体，
+
+47
+00:02:54,680 --> 00:02:57,170
+the same real thing in the world.
+世界上同样真实的东西。
+
+48
+00:02:57,170 --> 00:03:02,330
+So well, one entity that's mentioned in this text is Barack Obama,
+那么，本文中提到的一个实体是巴拉克奥巴马，
+
+49
+00:03:02,330 --> 00:03:06,919
+and then he's referred to later in the text as his and he,
+然后他在文中稍后提到他和他，
+
+50
+00:03:06,919 --> 00:03:12,425
+and so these three red noun phrases are all coreferent to each other.
+所以这三个红色名词短语都是相互指责的。
+
+51
+00:03:12,425 --> 00:03:17,270
+And that then, refers to this real-world entity.
+然后，指的是这个现实世界的实体。
+
+52
+00:03:17,270 --> 00:03:21,110
+Um, and then, we have these references Hillary Rodham Clinton,
+嗯，然后，我们有这些参考希拉里罗德姆克林顿，
+
+53
+00:03:21,110 --> 00:03:22,700
+Secretary of State, her,
+国务卿，她，
+
+54
+00:03:22,700 --> 00:03:28,445
+she, First Lady, they're all references to a different entity.
+她，第一夫人，他们都是对不同实体的引用。
+
+55
+00:03:28,445 --> 00:03:31,520
+And so they all refer to this person.
+所以他们都提到了这个人。
+
+56
+00:03:31,520 --> 00:03:34,390
+And so those are examples of our coreference.
+所以这些是我们共同参与的例子。
+
+57
+00:03:34,390 --> 00:03:40,745
+Um, in a way this is triv- sort of seems obvious to a human being,
+嗯，在某种程度上，这似乎对人类来说是显而易见的，
+
+58
+00:03:40,745 --> 00:03:42,635
+um, looking at things, um,
+嗯，看着东西，嗯，
+
+59
+00:03:42,635 --> 00:03:45,590
+but it can actually be kind of tricky and hard.
+但它实际上可能有点棘手和困难。
+
+60
+00:03:45,590 --> 00:03:50,480
+Um, so, um, I thought we could spend a few minutes doing
+嗯，嗯，我想我们可以花几分钟做
+
+61
+00:03:50,480 --> 00:03:55,655
+interactive working out coreferents together so that you guys can,
+交互式制定共同使用，以便你们可以，
+
+62
+00:03:55,655 --> 00:03:57,980
+um, think about it all for a few minutes.
+嗯，想想几分钟。
+
+63
+00:03:57,980 --> 00:04:01,010
+Um, so here's part of a little story.
+嗯，所以这是一个小故事的一部分。
+
+64
+00:04:01,010 --> 00:04:04,270
+Um, it's a story by Shruthi Rao called The Star.
+嗯，这是Shruthi Rao所说的The Star的故事。
+
+65
+00:04:04,270 --> 00:04:08,089
+Um, now, I confess that since this is a CS class,
+嗯，现在，我承认，因为这是一个CS类，
+
+66
+00:04:08,089 --> 00:04:10,250
+um, not a literature class,
+嗯，不是文学课，
+
+67
+00:04:10,250 --> 00:04:11,840
+I did a little bit of, um,
+我做了一点，嗯，
+
+68
+00:04:11,840 --> 00:04:15,049
+helpful editing of this text to make it shorter,
+有用的编辑此文本，使其更短，
+
+69
+00:04:15,049 --> 00:04:16,630
+so I could fit more of,
+所以我可以适应更多，
+
+70
+00:04:16,630 --> 00:04:18,800
+what was going on, um,
+发生了什么事，嗯，
+
+71
+00:04:18,800 --> 00:04:22,145
+onto the page, um, but, um,
+在页面上，嗯，但是，嗯，
+
+72
+00:04:22,145 --> 00:04:24,439
+everything that is a sort of a linguistic
+一切都是语言学的
+
+73
+00:04:24,439 --> 00:04:27,300
+[inaudible] is something that comes from the original text.
+[听不清]是来自原始文本的内容。
+
+74
+00:04:27,300 --> 00:04:31,605
+Okay. So, um, in this text,
+好的。所以，嗯，在这篇文章中，
+
+75
+00:04:31,605 --> 00:04:36,400
+um, who is the first entity that's mentioned?
+嗯，谁是第一个提到的实体？
+
+76
+00:04:37,970 --> 00:04:41,100
+Vanaja, okay.
+Vanaja，好的。
+
+77
+00:04:41,100 --> 00:04:42,570
+Okay. So it's Vanaja.
+好的。所以这是Vanaja。
+
+78
+00:04:42,570 --> 00:04:45,255
+Now, where, let's do it forward.
+现在，在哪里，让我们前进吧。
+
+79
+00:04:45,255 --> 00:04:51,040
+Where else is Vanaja mentioned in this text?
+Vanaja还有哪些内容在本文中提到过？
+
+80
+00:04:52,580 --> 00:04:54,720
+Her son, right?
+她的儿子吧？
+
+81
+00:04:54,720 --> 00:04:56,460
+So this her not the son,
+所以这不是儿子，
+
+82
+00:04:56,460 --> 00:05:00,400
+but this her is a reference of Vanaja, right?
+但她这是Vanaja的参考，对吧？
+
+83
+00:05:05,120 --> 00:05:08,520
+Um, she resigned.
+嗯，她辞职了。
+
+84
+00:05:08,520 --> 00:05:12,090
+Okay. After that?
+好的。之后？
+
+85
+00:05:12,090 --> 00:05:15,810
+She bought.
+她买了。
+
+86
+00:05:15,810 --> 00:05:17,535
+Okay. So there's another she.
+好的。所以还有另一个她。
+
+87
+00:05:17,535 --> 00:05:20,205
+Was there another reference before that?
+之前还有另一个参考吗？
+
+88
+00:05:20,205 --> 00:05:24,750
+Herself, right? So herself is also a reference to Vanaja.
+她自己，对吗？所以她自己也是Vanaja的参考。
+
+89
+00:05:25,280 --> 00:05:27,770
+Um, okay. So then, it's again,
+嗯，好的。那么，它又一次，
+
+90
+00:05:27,770 --> 00:05:32,750
+she made this, she, okay.
+她做了这个，她，好吧。
+
+91
+00:05:32,750 --> 00:05:33,980
+So we've done Vanaja.
+所以我们做了Vanaja。
+
+92
+00:05:33,980 --> 00:05:36,140
+Okay, that's a good start.
+好的，这是一个好的开始。
+
+93
+00:05:36,140 --> 00:05:40,270
+Okay. So then, um, we've got Akhila.
+好的。那么，嗯，我们有Akhila。
+
+94
+00:05:40,270 --> 00:05:45,495
+Okay. Um, where's Akhila next referred to?
+好的。嗯，Akhila接下来提到的地方？
+
+95
+00:05:45,495 --> 00:05:48,450
+As Akhila. Okay, there we go.
+作为阿希拉。好的，我们去吧。
+
+96
+00:05:48,450 --> 00:05:54,940
+Um, are there other references, um, to Akhila?
+嗯，还有其他的参考，嗯，给Akhila？
+
+97
+00:05:58,280 --> 00:06:04,390
+Maybe not. Okay. What's the next entity that's mentioned?
+也许不吧。好的。提到的下一个实体是什么？
+
+98
+00:06:07,820 --> 00:06:10,200
+Prajwal.
+Prajwal。
+
+99
+00:06:10,200 --> 00:06:15,150
+Okay. So what other references are there to Prajwal?
+好的。那么Prajwal有哪些其他参考资料？
+
+100
+00:06:19,060 --> 00:06:20,180
+They.
+他们。
+
+101
+00:06:20,180 --> 00:06:24,330
+They? Okay. So here's a tricky one, right?
+他们？好的。所以这是一个棘手的问题，对吗？
+
+102
+00:06:24,330 --> 00:06:26,430
+So this they, I mean,
+所以他们，我的意思是，
+
+103
+00:06:26,430 --> 00:06:29,020
+who does that refer to?
+这是指谁？
+
+104
+00:06:30,440 --> 00:06:35,790
+It occ- refers to Prajwal and Akash.
+它指的是Prajwal和Akash。
+
+105
+00:06:35,790 --> 00:06:40,500
+Yeah, so this they refers both to Prajwal and this Akash.
+是的，所以他们指的是Prajwal和这个Akash。
+
+106
+00:06:40,500 --> 00:06:44,180
+So that's, that's something that happens in human languages.
+那就是，这是人类语言中发生的事情。
+
+107
+00:06:44,180 --> 00:06:46,790
+This is referred to as split antecedents,
+这被称为分裂前因，
+
+108
+00:06:46,790 --> 00:06:49,220
+where you have one thing that they,
+你有一件事，他们，
+
+109
+00:06:49,220 --> 00:06:54,245
+that's sort of referring to two distributed things that came before it.
+这是指在它之前发生的两个分布式事物。
+
+110
+00:06:54,245 --> 00:07:01,085
+Um, so here's one of my first sad admissions of natural language processing technology.
+嗯，所以这是我第一次对自然语言处理技术感到悲伤。
+
+111
+00:07:01,085 --> 00:07:04,940
+None of the NLP systems that we're gonna talk about later
+我们之后将讨论的NLP系统都没有
+
+112
+00:07:04,940 --> 00:07:09,920
+today or in general that have been built deal with split antecedents.
+今天或者一般来说，已经建立的处理分裂前因。
+
+113
+00:07:09,920 --> 00:07:13,790
+They automatically lose as soon as there's split antecedents.
+一旦分裂前因，它们就会自动丢失。
+
+114
+00:07:13,790 --> 00:07:15,435
+Um, so that's a bit sad,
+嗯，这有点难过，
+
+115
+00:07:15,435 --> 00:07:17,300
+um, but that's the state of technology.
+嗯，但那是技术状态。
+
+116
+00:07:17,300 --> 00:07:18,710
+So it's something, um,
+所以这是某种东西，嗯，
+
+117
+00:07:18,710 --> 00:07:20,390
+we could still work to improve,
+我们仍然可以改进，
+
+118
+00:07:20,390 --> 00:07:26,030
+but okay there's this sort of they that's kind of half Prajwal. Um, okay.
+但是没关系，他们就是那种半普拉瓦尔。嗯，好的。
+
+119
+00:07:26,030 --> 00:07:29,195
+So there's directly Prajwal here,
+所以这里有直接的Prajwal，
+
+120
+00:07:29,195 --> 00:07:36,580
+but was there another place early in the text that Prajwal is effectively mentioned?
+但在文本的早期还有另一个地方有效地提到了Prajwal吗？
+
+121
+00:07:40,190 --> 00:07:46,565
+Yeah. So Akhila's son is really another mention of Prajwal, right?
+是啊。所以Akhila的儿子真的是另一个提到Prajwal，对吧？
+
+122
+00:07:46,565 --> 00:07:52,590
+Okay. Um, okay.
+好的。嗯，好的。
+
+123
+00:07:52,590 --> 00:07:56,130
+Um, any other mentions of Prajwal? Maybe not.
+嗯，其他任何提到的Prajwal？也许不吧。
+
+124
+00:07:56,130 --> 00:07:57,765
+Okay. Then we go on.
+好的。然后我们继续。
+
+125
+00:07:57,765 --> 00:08:00,315
+Okay. Who's the next entity?
+好的。谁是下一个实体？
+
+126
+00:08:00,315 --> 00:08:04,305
+Akash. So we have Akash here,
+阿卡什。所以我们这里有阿卡什，
+
+127
+00:08:04,305 --> 00:08:05,700
+and that then again,
+那又一次，
+
+128
+00:08:05,700 --> 00:08:09,150
+we have that her son referring to Akash.
+我们有她的儿子提到阿卡什。
+
+129
+00:08:09,150 --> 00:08:12,435
+Um, and here was Akash.
+嗯，这里是阿卡什。
+
+130
+00:08:12,435 --> 00:08:17,530
+Okay. What other, what other mentions of Akash are there?
+好的。还有什么，还有其他提到的阿卡什？
+
+131
+00:08:20,450 --> 00:08:29,010
+Okay so there's another Akash here, um, fourth him.
+好的，这里还有另一个阿卡什，嗯，第四个他。
+
+132
+00:08:29,010 --> 00:08:35,340
+Okay. Uh, there's another Akash.
+好的。呃，还有另一个阿卡什。
+
+133
+00:08:35,340 --> 00:08:42,555
+Okay, um, but, so, um, here.
+好的，嗯，但是，嗯，这里。
+
+134
+00:08:42,555 --> 00:08:45,330
+Okay. So are the obvious Akash's.
+好的。明显的阿卡什也是如此。
+
+135
+00:08:45,330 --> 00:08:47,760
+There's sort of a tricky case here which
+这里有一个棘手的案例
+
+136
+00:08:47,760 --> 00:08:50,280
+you could wonder what the right treatment of this, right?
+你可能想知道对这个有什么正确的对待，对吧？
+
+137
+00:08:50,280 --> 00:08:55,800
+You know, it's sort of says Akash was to be a tree, all right.
+你知道，有点像阿卡什是一棵树，好吧。
+
+138
+00:08:55,800 --> 00:09:00,195
+So in some sense the tree is Akash.
+所以在某种意义上，树是阿卡什。
+
+139
+00:09:00,195 --> 00:09:05,430
+Um, so really in terms of reference in this story,
+嗯，这个故事的参考真的如此，
+
+140
+00:09:05,430 --> 00:09:09,990
+the reference of the tree is the same as Akash.
+树的引用与Akash相同。
+
+141
+00:09:09,990 --> 00:09:12,795
+And you could think, um,
+你可以想，嗯，
+
+142
+00:09:12,795 --> 00:09:16,440
+that means you should treat the instances of,
+这意味着你应该对待实例，
+
+143
+00:09:16,440 --> 00:09:18,645
+um, the tree, the,
+嗯，树，the，
+
+144
+00:09:18,645 --> 00:09:20,925
+the instances here of the tree,
+树的实例，
+
+145
+00:09:20,925 --> 00:09:25,500
+and later on when the nicest tree right that really,
+后来当最好的树真的，
+
+146
+00:09:25,500 --> 00:09:28,215
+that's sort of this Akash as well.
+这也是阿卡什的一种。
+
+147
+00:09:28,215 --> 00:09:30,255
+That doesn't quite feel right,
+那感觉不对，
+
+148
+00:09:30,255 --> 00:09:33,030
+but this is something that comes up in coreference, right?
+但这是在共识中出现的，对吧？
+
+149
+00:09:33,030 --> 00:09:38,145
+So here we have a sort of a predictive construction um,
+所以这里我们有一种预测结构，
+
+150
+00:09:38,145 --> 00:09:39,770
+with, you know, B.
+有，你知道，B.
+
+151
+00:09:39,770 --> 00:09:41,810
+And when you set,
+当你设置，
+
+152
+00:09:41,810 --> 00:09:46,760
+when you have sentences such as like, um, you know,
+当你有像呃这样的句子时，你知道，
+
+153
+00:09:46,760 --> 00:09:52,270
+my child is the smartest kid in the class or something like that, in some sense,
+在某种意义上，我的孩子是班上最聪明的孩子或类似的东西，
+
+154
+00:09:52,270 --> 00:09:54,960
+you're sort of saying that the smartest kid in
+你是说那个最聪明的孩子
+
+155
+00:09:54,960 --> 00:09:58,560
+the class has the same reference as my child.
+该班与我的孩子有相同的参考。
+
+156
+00:09:58,560 --> 00:10:04,635
+And some systems count links over that kind of predication,
+有些系统会计算这种预测的链接，
+
+157
+00:10:04,635 --> 00:10:07,215
+and say that is coreference whereas
+并说这是共同参与
+
+158
+00:10:07,215 --> 00:10:10,890
+other ones don't and think that that's not quite reasonable.
+其他人不这样做，并认为这不太合理。
+
+159
+00:10:10,890 --> 00:10:12,780
+So different things go on.
+所以不同的事情继续下去。
+
+160
+00:10:12,780 --> 00:10:14,985
+Okay. So, um, those,
+好的。所以，嗯，那些，
+
+161
+00:10:14,985 --> 00:10:17,925
+those are fair number of entities.
+这些是相当数量的实体。
+
+162
+00:10:17,925 --> 00:10:23,025
+I mean, so there are obviously lots of other things that are mentioned,
+我的意思是，所以很明显还有很多其他的东西，
+
+163
+00:10:23,025 --> 00:10:25,440
+um that sort of, um, right?
+那是那种，对吧？
+
+164
+00:10:25,440 --> 00:10:27,660
+So there's the local park, right,
+所以有当地的公园，对，
+
+165
+00:10:27,660 --> 00:10:30,450
+that's a mention of some entity.
+这是一个实体的提及。
+
+166
+00:10:30,450 --> 00:10:36,360
+Um, there's, um, the school, um right?
+嗯，那是，嗯，学校，对吗？
+
+167
+00:10:36,360 --> 00:10:44,475
+So there's this school here and so that the school is coreferent with pre,
+所以这里有这所学校，所以学校与pre，
+
+168
+00:10:44,475 --> 00:10:47,370
+the preschool right here, right?
+幼儿园就在这里，对吗？
+
+169
+00:10:47,370 --> 00:10:49,380
+Um, and then there's,
+嗯，然后就是，
+
+170
+00:10:49,380 --> 00:10:52,155
+um, again this sort of tricky one,
+嗯，再次这种棘手的，
+
+171
+00:10:52,155 --> 00:10:56,090
+of how to treat the naughty child Lord Krishna because,
+如何对待顽皮的孩子克里希纳勋爵，因为，
+
+172
+00:10:56,090 --> 00:10:59,525
+you know, in some sense Prajwal is representing that.
+你知道，在某种意义上，Prajwal代表了这一点。
+
+173
+00:10:59,525 --> 00:11:02,510
+And then there are lots of other entities that are mentioned, right?
+然后提到了很多其他实体，对吧？
+
+174
+00:11:02,510 --> 00:11:05,195
+There's a t-shirt, and there's trousers,
+有一件T恤，还有裤子，
+
+175
+00:11:05,195 --> 00:11:08,355
+um, and, um, things like that.
+嗯，嗯，这样的事情。
+
+176
+00:11:08,355 --> 00:11:12,060
+Another tricky thing that turns up here when you get later on into
+当你稍后进入时，另一个棘手的事情就会出现在这里
+
+177
+00:11:12,060 --> 00:11:16,950
+the story is you can have entities that have parts.
+故事是你可以拥有有部分的实体。
+
+178
+00:11:16,950 --> 00:11:19,425
+So we not only have a tree,
+所以我们不仅有一棵树，
+
+179
+00:11:19,425 --> 00:11:21,840
+but that tree then has a lot of parts, right?
+但那棵树有很多部分，对吧？
+
+180
+00:11:21,840 --> 00:11:23,370
+So the tree has a trunk,
+所以树有一个树干，
+
+181
+00:11:23,370 --> 00:11:25,169
+and the tree has foliage,
+树上有树叶，
+
+182
+00:11:25,169 --> 00:11:28,275
+um, and things like that.
+嗯，等等。
+
+183
+00:11:28,275 --> 00:11:31,170
+And there are these red balls that are representing fruits, right?
+这些红球代表水果，对吧？
+
+184
+00:11:31,170 --> 00:11:35,400
+So there's a lot of stuff that's somehow connected together and somehow separate.
+所以有很多东西以某种方式连接在一起，并以某种方式分开。
+
+185
+00:11:35,400 --> 00:11:39,330
+And that sort of, that doesn't fit terribly well with the kind of models we
+而那种，与我们的那种模型不太匹配
+
+186
+00:11:39,330 --> 00:11:43,425
+use with coreference either because really we make our coreference,
+与coreference一起使用要么是因为我们真正做了我们的共同参与，
+
+187
+00:11:43,425 --> 00:11:48,015
+um, reference models basically out of this notion of entities.
+嗯，参考模型基本上是出于这种实体的概念。
+
+188
+00:11:48,015 --> 00:11:50,325
+Um, but somehow there's this complexity that,
+嗯，但不知何故有这种复杂性，
+
+189
+00:11:50,325 --> 00:11:52,290
+you know, human beings have parts too, right?
+你知道，人类也有部分，对吧？
+
+190
+00:11:52,290 --> 00:11:53,744
+We have hands and faces,
+我们有手和脸，
+
+191
+00:11:53,744 --> 00:11:56,145
+and we can't say, oh, that's a separate entity,
+我们不能说，哦，那是一个单独的实体，
+
+192
+00:11:56,145 --> 00:11:59,895
+but they're somehow in, um, involved with the other entity.
+但他们在某种程度上与另一个实体有关。
+
+193
+00:11:59,895 --> 00:12:04,740
+Okay. Um, hope that's sort of useful to give some idea.
+好的。嗯，希望能给出一些想法是有用的。
+
+194
+00:12:04,740 --> 00:12:07,665
+Why is coreference resolution useful?
+为什么共参考分辨率有用？
+
+195
+00:12:07,665 --> 00:12:11,895
+Um, so there are all kinds of things that we'd like to do well
+嗯，所以我们都想做好各种各样的事情
+
+196
+00:12:11,895 --> 00:12:16,379
+in natural language processing that you really can't do well unless,
+在自然语言处理中你真的不能做得好，除非，
+
+197
+00:12:16,379 --> 00:12:19,845
+uh, you know how to do coreference resolution.
+呃，你知道如何做共识解析。
+
+198
+00:12:19,845 --> 00:12:25,410
+So anything that we want to do in terms of question-answering, summarization,
+所以我们想要做的任何问题，总结，
+
+199
+00:12:25,410 --> 00:12:28,500
+extracting facts from texts or anything like that,
+从文本或类似的东西中提取事实，
+
+200
+00:12:28,500 --> 00:12:32,985
+there are places we are gonna fail unless we can do coreference resolution.
+除非我们能够做出共识解决方案，否则我们会失败的地方。
+
+201
+00:12:32,985 --> 00:12:35,025
+Because if we're reading a piece of text,
+因为如果我们正在阅读一段文字，
+
+202
+00:12:35,025 --> 00:12:38,640
+and it says he was born in 1961, um,
+它说它出生于1961年，嗯，
+
+203
+00:12:38,640 --> 00:12:41,610
+we can get a fact out or answer a question,
+我们可以得出一个事实或回答一个问题，
+
+204
+00:12:41,610 --> 00:12:43,845
+if we can work out who he was,
+如果我们能弄清楚他是谁，
+
+205
+00:12:43,845 --> 00:12:46,780
+but we probably can't otherwise.
+但我们可能不会这样。
+
+206
+00:12:49,040 --> 00:12:53,580
+Um, there are, there's sort of another place that where
+嗯，还有，那里有另一个地方
+
+207
+00:12:53,580 --> 00:12:57,480
+this is very useful is in machine translation,
+这在机器翻译中非常有用，
+
+208
+00:12:57,480 --> 00:13:02,130
+so that lots of languages drop pronouns.
+这样许多语言都会掉落代词。
+
+209
+00:13:02,130 --> 00:13:04,935
+So you don't have to give explicit pronouns,
+所以你不必给出明确的代词，
+
+210
+00:13:04,935 --> 00:13:09,105
+but you need to be able to work out how to fill them in.
+但你需要能够弄清楚如何填写它们。
+
+211
+00:13:09,105 --> 00:13:12,765
+And this is making coreference decisions about,
+这是关于做出共识的决定，
+
+212
+00:13:12,765 --> 00:13:15,075
+um, arguments of verbs.
+嗯，动词的论点。
+
+213
+00:13:15,075 --> 00:13:18,030
+And so here are a couple of examples,
+所以这里有几个例子，
+
+214
+00:13:18,030 --> 00:13:22,545
+um, that, um, covering from Spanish to English.
+嗯，那，嗯，从西班牙语到英语。
+
+215
+00:13:22,545 --> 00:13:27,660
+So in Spanish, you can freely drop the subjects of verbs and in these sentences,
+所以在西班牙语中，你可以自由地删除动词的主语，并在这些句子中，
+
+216
+00:13:27,660 --> 00:13:29,520
+in the because clause,
+在因子句中，
+
+217
+00:13:29,520 --> 00:13:31,725
+there's no overt subject.
+没有明显的主题。
+
+218
+00:13:31,725 --> 00:13:35,625
+And so he gets Alicia likes Juan because he's smart.
+所以他让Alicia喜欢Juan，因为他很聪明。
+
+219
+00:13:35,625 --> 00:13:40,620
+And so Google Translate is stuck in a he and that is right.
+所以谷歌翻译陷入困境，这是正确的。
+
+220
+00:13:40,620 --> 00:13:42,600
+And to stick in that he,
+并坚持他，
+
+221
+00:13:42,600 --> 00:13:47,700
+it's implicitly making a coreference decision and saying, "Okay well,
+它暗中做出了一个共识决定并说：“好吧，
+
+222
+00:13:47,700 --> 00:13:49,605
+the subject of this, um,
+这个主题，嗯，
+
+223
+00:13:49,605 --> 00:13:54,224
+adjective smart should be Juan who's male,
+形容词聪明应该是胡安谁的男性，
+
+224
+00:13:54,224 --> 00:13:56,985
+and therefore, I should say he."
+因此，我应该说他。“
+
+225
+00:13:56,985 --> 00:14:00,060
+But, you know, the reality is Google Translate knows
+但是，你知道，现实是谷歌翻译知道
+
+226
+00:14:00,060 --> 00:14:03,615
+nothing about coreference and making these coreference decisions.
+没有关于共同参与和做出这些共同决策的决定。
+
+227
+00:14:03,615 --> 00:14:05,280
+And as has been um,
+就像那样，
+
+228
+00:14:05,280 --> 00:14:10,365
+covered quite a bit in the media now and I think came up earlier in an earlier class,
+现在媒体报道了很多，我想早些时候在早期的课程中出现了，
+
+229
+00:14:10,365 --> 00:14:15,240
+that, um, Google Translate mainly just defaults to male default.
+那，嗯，谷歌翻译主要是默认为男性默认。
+
+230
+00:14:15,240 --> 00:14:18,075
+Um, so if you sort of swap- sweep it, uh,
+嗯，如果你换掉它，呃，
+
+231
+00:14:18,075 --> 00:14:19,770
+if you flip it around and say,
+如果你翻转并说，
+
+232
+00:14:19,770 --> 00:14:23,370
+Juan likes Alicia, it also says because he's smart.
+胡安喜欢艾丽西亚，也说因为他很聪明。
+
+233
+00:14:23,370 --> 00:14:28,005
+Uh, whereas probably it should be because she's smart in that case.
+呃，可能应该是因为她在那种情况下很聪明。
+
+234
+00:14:28,005 --> 00:14:31,755
+And indeed you notice the bad effects of that everywhere.
+事实上，你注意到了各地的不良影响。
+
+235
+00:14:31,755 --> 00:14:36,225
+So many languages, um, Turkish, Indonesian, um,
+这么多语言，嗯，土耳其语，印度尼西亚语，嗯，
+
+236
+00:14:36,225 --> 00:14:38,070
+don't actually have gender,
+实际上没有性别，
+
+237
+00:14:38,070 --> 00:14:41,910
+so that they're much less sexist languages than English,
+这样他们的性别语言比英语少得多，
+
+238
+00:14:41,910 --> 00:14:43,350
+French or Germany is.
+法国人或德国人。
+
+239
+00:14:43,350 --> 00:14:45,495
+But what happens, um,
+但是会发生什么，嗯，
+
+240
+00:14:45,495 --> 00:14:48,060
+when you then translate where you just have
+当你然后翻译你所拥有的
+
+241
+00:14:48,060 --> 00:14:52,275
+a generic pronoun that means third person pronoun, um,
+一个通用代词，意思是第三人称代词，嗯，
+
+242
+00:14:52,275 --> 00:14:56,460
+that Google Translate is essentially using its language model,
+谷歌翻译基本上使用其语言模型，
+
+243
+00:14:56,460 --> 00:14:59,055
+which means that reconstructs, um,
+这意味着重建，嗯，
+
+244
+00:14:59,055 --> 00:15:01,635
+the worst of stereotypes of she is a cook,
+最糟糕的刻板印象是她是一名厨师，
+
+245
+00:15:01,635 --> 00:15:03,855
+and he is an engineer, he is a doctor.
+他是一名工程师，他是一名医生。
+
+246
+00:15:03,855 --> 00:15:07,500
+And well, in a connected piece of this course,
+好吧，在本课程的相关部分中，
+
+247
+00:15:07,500 --> 00:15:10,905
+if you'd like Google Translate to be able to do better than that,
+如果你想谷歌翻译能够做得更好，
+
+248
+00:15:10,905 --> 00:15:14,160
+well again, what would be required is that you could actually do
+再说一遍，需要的是你实际可以做到的
+
+249
+00:15:14,160 --> 00:15:19,755
+coreference resolution and track along the actors in the text as you go along.
+随时随地解决和跟踪文本中的演员。
+
+250
+00:15:19,755 --> 00:15:23,970
+Um, one final example we haven't really talked about yet,
+嗯，我们还没有真正谈过的最后一个例子，
+
+251
+00:15:23,970 --> 00:15:27,480
+but we'll get back to soon now because the class is almost over
+但我们现在很快就会回来，因为课程已经快结束了
+
+252
+00:15:27,480 --> 00:15:31,440
+is doing things with dialogue agents or chat systems.
+正在与对话代理或聊天系统做事。
+
+253
+00:15:31,440 --> 00:15:36,240
+That, as soon as you are going to do anything more than a single turn,
+那，只要你打算做一个以上的转弯，
+
+254
+00:15:36,240 --> 00:15:39,840
+um, dialog, that you need to start dealing with reference.
+对话框，你需要开始处理参考。
+
+255
+00:15:39,840 --> 00:15:41,655
+So if you've got something like, um,
+所以，如果你有类似的东西，嗯，
+
+256
+00:15:41,655 --> 00:15:44,115
+booked tickets to see James Bond,
+预订门票，看詹姆斯邦德，
+
+257
+00:15:44,115 --> 00:15:46,200
+um, then you want to say something like,
+嗯，那你想说点什么，
+
+258
+00:15:46,200 --> 00:15:49,050
+"Spectre is playing near you at 2:00 and 3:00 today.
+“幽灵今天凌晨2点到3点在你附近玩耍。
+
+259
+00:15:49,050 --> 00:15:51,030
+How many tickets would you like?"
+你想要多少张票？”
+
+260
+00:15:51,030 --> 00:15:54,270
+Um, two tickets for the showing at three.
+嗯，三张票的两张票。
+
+261
+00:15:54,270 --> 00:15:56,265
+That as shown in the color,
+如图所示，
+
+262
+00:15:56,265 --> 00:16:02,340
+there are various kinds of reference going on here where things have related reference,
+这里有各种各样的参考，其中有相关的参考，
+
+263
+00:16:02,340 --> 00:16:04,680
+but it's kind of complicated here.
+但这里有点复杂。
+
+264
+00:16:04,680 --> 00:16:07,470
+And this is something that we'll come back to in a moment.
+这是我们马上回过头来的。
+
+265
+00:16:07,470 --> 00:16:13,035
+So James Bond and Spectre aren't obviously the same thing,
+所以James Bond和Spectre显然不是一回事，
+
+266
+00:16:13,035 --> 00:16:16,530
+but in a context like, um, booking movies,
+但在这样的情况下，嗯，预订电影，
+
+267
+00:16:16,530 --> 00:16:23,460
+they are the same thing because one is the name of a character in a movie series,
+它们是同一个东西，因为一个是电影系列中角色的名字，
+
+268
+00:16:23,460 --> 00:16:28,530
+and the other is the name of a movie that's currently showing that belongs to that,
+另一个是当前显示属于那个的电影的名称，
+
+269
+00:16:28,530 --> 00:16:30,960
+so that they're sort of associated, um,
+所以他们有点联系，嗯，
+
+270
+00:16:30,960 --> 00:16:33,900
+in a sort of subtle way that isn't exact identity,
+以某种微妙的方式，不是确切的身份，
+
+271
+00:16:33,900 --> 00:16:37,125
+but is relevant to a lot of the things that we want to do.
+但与我们想要做的很多事情有关。
+
+272
+00:16:37,125 --> 00:16:39,480
+I'll come back to that in a little bit when we
+我们稍后会回到那一点
+
+273
+00:16:39,480 --> 00:16:41,655
+talk a bit more about the linguistics of this.
+再谈谈这个语言学。
+
+274
+00:16:41,655 --> 00:16:45,760
+Okay. So if we want to do the task of coreference resolution,
+好的。所以，如果我们想完成共参考解决的任务，
+
+275
+00:16:45,760 --> 00:16:47,660
+there are essentially two steps.
+基本上有两个步骤。
+
+276
+00:16:47,660 --> 00:16:51,425
+So the first step is gee, we want to work out
+所以第一步是gee，我们想要解决
+
+277
+00:16:51,425 --> 00:16:55,835
+what mentions there are in the text that we should be doing something with.
+文中提到我们应该做些什么。
+
+278
+00:16:55,835 --> 00:16:58,640
+And this one is effectively pretty easy,
+这个很容易，
+
+279
+00:16:58,640 --> 00:17:01,430
+but I'll have just a few slides on that immediately.
+但我马上就会有几张幻灯片。
+
+280
+00:17:01,430 --> 00:17:04,835
+And then what the bulk of the class is gonna be on is,
+然后，课程的大部分内容是，
+
+281
+00:17:04,835 --> 00:17:08,810
+um, working out coreference between mentions.
+嗯，在提及之间制定共识。
+
+282
+00:17:08,810 --> 00:17:10,400
+And if you think about this,
+如果你考虑这个，
+
+283
+00:17:10,400 --> 00:17:13,355
+coreference is essentially a clustering task.
+coreference本质上是一个集群任务。
+
+284
+00:17:13,355 --> 00:17:15,275
+Because if you do the first task,
+因为如果你做第一个任务，
+
+285
+00:17:15,275 --> 00:17:18,770
+you have a set of mentions and then you want to be saying well,
+你有一套提及，然后你想说得好，
+
+286
+00:17:18,770 --> 00:17:22,710
+how can I group these into clusters that have the same reference?
+如何将这些组合成具有相同引用的簇？
+
+287
+00:17:22,710 --> 00:17:25,750
+And so that's what we're going to look more at doing.
+这就是我们将要做的更多。
+
+288
+00:17:25,750 --> 00:17:28,080
+So quickly on mention detection.
+如此迅速提及检测。
+
+289
+00:17:28,080 --> 00:17:29,730
+So, um, for mention,
+那么，嗯，提一下，
+
+290
+00:17:29,730 --> 00:17:34,085
+we wanna find all the spans that are candidates for,
+我们想要找到所有候选的跨度，
+
+291
+00:17:34,085 --> 00:17:36,110
+um, referring to some entity.
+嗯，指某个实体。
+
+292
+00:17:36,110 --> 00:17:38,725
+And the answer to what these, um,
+这些的答案，嗯，
+
+293
+00:17:38,725 --> 00:17:43,620
+candidates are is basically they're all the noun phrases in the text.
+候选人基本上都是文本中的所有名词短语。
+
+294
+00:17:43,620 --> 00:17:48,125
+And so normally people think of there being three types of mentions that we identify.
+因此，通常人们会想到我们确定有三种类型的提及。
+
+295
+00:17:48,125 --> 00:17:49,730
+There are pronouns, I,
+有代词，我，
+
+296
+00:17:49,730 --> 00:17:50,990
+you, he, she, it,
+你，他，她，它，
+
+297
+00:17:50,990 --> 00:17:52,790
+etc., that are, um,
+等等，嗯，
+
+298
+00:17:52,790 --> 00:17:54,605
+referring to different entities.
+指的是不同的实体。
+
+299
+00:17:54,605 --> 00:17:57,170
+They're explicit names of people like that was
+他们是这样的人的明确名字
+
+300
+00:17:57,170 --> 00:17:59,960
+that Barack Obama and Hillary Clinton examples.
+巴拉克奥巴马和希拉里克林顿的例子。
+
+301
+00:17:59,960 --> 00:18:02,210
+And then many of the tricky examples,
+然后是许多棘手的例子，
+
+302
+00:18:02,210 --> 00:18:04,685
+and then when we have common noun phrases
+然后当我们有共同的名词短语
+
+303
+00:18:04,685 --> 00:18:07,670
+like a dog or the big fluffy cat stuck in the tree.
+像一只狗或被困在树上的大毛茸茸的猫。
+
+304
+00:18:07,670 --> 00:18:11,690
+That the big fluffy cat stuck in the tree is a mention.
+那个大蓬松的猫卡在树上是一个提及。
+
+305
+00:18:11,690 --> 00:18:14,405
+Um, it's actually a complex mention because it
+嗯，这实际上是一个复杂的提及，因为它
+
+306
+00:18:14,405 --> 00:18:17,975
+also has embedded inside it other mentions.
+其他提到也嵌入其中。
+
+307
+00:18:17,975 --> 00:18:22,230
+Um, so the tree is also a mention.
+嗯，树也是一提。
+
+308
+00:18:22,500 --> 00:18:26,560
+Okay. So how can we detect mentions?
+好的。那么我们怎样才能发现提及？
+
+309
+00:18:26,560 --> 00:18:28,180
+Well, one answer is to say,
+嗯，一个答案就是说，
+
+310
+00:18:28,180 --> 00:18:30,055
+well we've looked at, um,
+好吧，我们看了，嗯，
+
+311
+00:18:30,055 --> 00:18:32,740
+various other NLP systems on and off.
+各种其他NLP系统开启和关闭。
+
+312
+00:18:32,740 --> 00:18:39,250
+And we can just use those NLP systems as preprocessing systems to find mentions.
+我们可以使用这些NLP系统作为预处理系统来查找提及。
+
+313
+00:18:39,250 --> 00:18:43,900
+So for pronouns, they're part of speech taggers that say what's a noun,
+所以对于代词而言，它们是言语标记的一部分，它们说什么是名词，
+
+314
+00:18:43,900 --> 00:18:45,475
+or a verb, or a pronoun,
+或动词或代名词
+
+315
+00:18:45,475 --> 00:18:48,910
+and so we can run those and find all the pronouns and we're done.
+所以我们可以运行那些并找到所有的代词，我们就完成了。
+
+316
+00:18:48,910 --> 00:18:52,180
+From- for, um, the names of things like Barack Obama.
+从那以后，嗯，像巴拉克奥巴马这样的东西的名字。
+
+317
+00:18:52,180 --> 00:18:54,970
+We've talked a couple of times about named entity recognizers,
+我们已经谈了几次关于命名实体识别器的事情，
+
+318
+00:18:54,970 --> 00:18:57,730
+so we can run those and find all the named entities.
+所以我们可以运行它们并找到所有命名的实体。
+
+319
+00:18:57,730 --> 00:19:00,475
+Um, then for common noun phrases,
+嗯，然后是普通名词短语，
+
+320
+00:19:00,475 --> 00:19:03,400
+that's sort of where we need parsers to find
+这就是我们需要解析器找到的地方
+
+321
+00:19:03,400 --> 00:19:06,925
+the structure of the sentence and find where the noun phrases are.
+句子的结构，并找到名词短语的位置。
+
+322
+00:19:06,925 --> 00:19:09,745
+And we have talked about dependency parsers and well,
+我们已经讨论过依赖解析器了，
+
+323
+00:19:09,745 --> 00:19:14,380
+one choice is you can use a dependency parser to find the sort of nominal arguments,
+一个选择是你可以使用依赖解析器来找到名义参数的类型，
+
+324
+00:19:14,380 --> 00:19:15,670
+and work with them.
+并与他们合作。
+
+325
+00:19:15,670 --> 00:19:19,180
+That's sort of actually a little bit subtler than just sort of wanting to pick
+这有点像一些想要挑选的东西
+
+326
+00:19:19,180 --> 00:19:22,525
+out spans that refer to common noun phrases.
+指出常用名词短语的跨度。
+
+327
+00:19:22,525 --> 00:19:25,855
+So the other notion of parsing which we come back to,
+所以解析我们回到的另一个概念，
+
+328
+00:19:25,855 --> 00:19:28,150
+um, next week is constituency parsing.
+嗯，下周是选区解析。
+
+329
+00:19:28,150 --> 00:19:30,280
+In some sense, constituency parsers are
+在某种意义上，选区解析器是
+
+330
+00:19:30,280 --> 00:19:34,465
+the simplest way to find mentions for this process.
+查找此过程的最简单方法。
+
+331
+00:19:34,465 --> 00:19:39,310
+Um, most of it seems and is easy,
+嗯，大部分看似简单，
+
+332
+00:19:39,310 --> 00:19:44,200
+um, there are sort of tricky cases as to what counts as a mention or not.
+嗯，有一些棘手的案例，无论是否提及。
+
+333
+00:19:44,200 --> 00:19:47,785
+So, um, if it's kind of it is sunny,
+所以，嗯，如果有点阳光，
+
+334
+00:19:47,785 --> 00:19:49,975
+I mean, is it a mention of something?
+我的意思是，它提到了什么吗？
+
+335
+00:19:49,975 --> 00:19:51,880
+It's sort of seems like it's not really,
+这有点像是不是真的，
+
+336
+00:19:51,880 --> 00:19:55,870
+it's just it seems like it's an it that you stick at the start of the sentence,
+只是它似乎是你坚持在句子的开头，
+
+337
+00:19:55,870 --> 00:19:57,340
+um, that doesn't mean anything.
+嗯，这并不意味着什么。
+
+338
+00:19:57,340 --> 00:19:59,215
+So that's maybe not a mention.
+所以这可能不是一个提及。
+
+339
+00:19:59,215 --> 00:20:00,730
+Um, every student.
+嗯，每个学生。
+
+340
+00:20:00,730 --> 00:20:02,695
+Is every student a mention?
+每个学生都被提及吗？
+
+341
+00:20:02,695 --> 00:20:07,810
+I mean, it's certainly, at best it's some kind of collective,
+我的意思是，这当然是充其量的集体，
+
+342
+00:20:07,810 --> 00:20:11,965
+um, but it's not sort of a very clear concrete reference, um.
+嗯，但这不是一个非常明确的具体参考，嗯。
+
+343
+00:20:11,965 --> 00:20:15,520
+That goes further, if I sort of use different quantifiers,
+更进一步，如果我使用不同的量词，
+
+344
+00:20:15,520 --> 00:20:17,920
+so if it was like, every and no are called quantifiers.
+所以，如果是这样的话，每一个都不称为量词。
+
+345
+00:20:17,920 --> 00:20:21,070
+I mean no student definitely doesn't have reference,
+我的意思是没有学生肯定没有参考，
+
+346
+00:20:21,070 --> 00:20:23,560
+because it's not pointing at anything, right?
+因为它没有指向任何东西，对吗？
+
+347
+00:20:23,560 --> 00:20:25,990
+It's asserting a claim of nonexistence.
+它声称不存在。
+
+348
+00:20:25,990 --> 00:20:28,015
+So that there's definitely, um,
+所以，肯定，嗯，
+
+349
+00:20:28,015 --> 00:20:31,090
+no- it isn't a mention of anything.
+不，它没有任何提及。
+
+350
+00:20:31,090 --> 00:20:34,420
+Um, yeah, the best donut in the world.
+嗯，是的，世界上最好的甜甜圈。
+
+351
+00:20:34,420 --> 00:20:37,675
+Um, does that have reference?
+嗯，那有参考吗？
+
+352
+00:20:37,675 --> 00:20:40,125
+Um, that's unclear.
+嗯，那还不清楚。
+
+353
+00:20:40,125 --> 00:20:44,460
+This is the kind of thing that actual philosophers of language debate over, right?
+这是语言辩论的实际哲学家的事情，对吧？
+
+354
+00:20:44,460 --> 00:20:48,315
+So if there was agreement on what the best donut in the world is,
+因此，如果就世界上最好的甜甜圈达成一致意见，
+
+355
+00:20:48,315 --> 00:20:50,535
+then maybe it has reference, um,
+也许它有参考，嗯，
+
+356
+00:20:50,535 --> 00:20:52,815
+but I can say sentences like,
+但我可以说句话，
+
+357
+00:20:52,815 --> 00:20:56,130
+I'm searching everywhere to find the best donut in the world.
+我到处寻找世界上最好的甜甜圈。
+
+358
+00:20:56,130 --> 00:20:57,960
+And then in that sentence,
+然后在那句话中，
+
+359
+00:20:57,960 --> 00:20:59,340
+it doesn't have any reference, right?
+它没有任何参考，对吧？
+
+360
+00:20:59,340 --> 00:21:03,975
+It's sort of an intentional description of what I'm hoping to find,
+这是对我希望找到的有意描述，
+
+361
+00:21:03,975 --> 00:21:06,995
+that there's no concrete thing it refers to.
+它指的是没有具体的东西。
+
+362
+00:21:06,995 --> 00:21:11,605
+Um, things like quantities, 100 miles.
+嗯，数量之类的东西，100英里。
+
+363
+00:21:11,605 --> 00:21:14,170
+That sort of behaves like a noun phrase,
+那种行为就像一个名词短语，
+
+364
+00:21:14,170 --> 00:21:17,995
+but it is in- it's sort of really a quantity that doesn't really have reference.
+但它实际上是一个真正没有参考的数量。
+
+365
+00:21:17,995 --> 00:21:23,200
+Um, and so then there's the question of how can you deal with this stuff?
+嗯，那么问题是你如何处理这些东西？
+
+366
+00:21:23,200 --> 00:21:27,355
+Um, well, um, our tool whenever we want to deal with stuff,
+嗯，嗯，嗯，我们的工具，只要我们想要处理的东西，
+
+367
+00:21:27,355 --> 00:21:30,265
+is we train classifiers,
+我们训练分类器，
+
+368
+00:21:30,265 --> 00:21:34,150
+as in they pick out things that are mentioned and things that aren't.
+就像他们挑选出提到的东西和不提到的东西一样。
+
+369
+00:21:34,150 --> 00:21:38,800
+And so that's something that you could do is write a classifier that filters out,
+所以你可以做的就是写一个过滤掉的分类器，
+
+370
+00:21:38,800 --> 00:21:42,940
+um, these spurious things that you want to say aren't really mentions.
+嗯，你想说的这些虚假的东西并不是真正提到的。
+
+371
+00:21:42,940 --> 00:21:44,980
+And people absolutely have done that.
+人们绝对做到了。
+
+372
+00:21:44,980 --> 00:21:47,650
+But commonly actually people skip that step,
+但通常人们会跳过这一步，
+
+373
+00:21:47,650 --> 00:21:54,295
+and you just sort of instead have your mention detector find all candidate mentions.
+而你只是让你的提及探测器找到所有候选人提及。
+
+374
+00:21:54,295 --> 00:21:57,610
+Because it turns out that that tends to work pretty well.
+因为事实证明它往往效果很好。
+
+375
+00:21:57,610 --> 00:22:01,510
+Because after we found all of our mentions, um,
+因为我们发现了所有的提及之后，嗯，
+
+376
+00:22:01,510 --> 00:22:05,815
+we're then going to be doing this clustering process to find coreferent mentions.
+然后我们将进行这种聚类过程以找到相关的提及。
+
+377
+00:22:05,815 --> 00:22:08,440
+And if there are just a few stray mentions like
+如果只有一些流浪提及像
+
+378
+00:22:08,440 --> 00:22:12,655
+no student and we don't cluster them wrongly with anything else,
+没有学生，我们不会错误地将他们与其他任何东西聚集在一起，
+
+379
+00:22:12,655 --> 00:22:18,490
+it kind of doesn't do any harm because we are mainly involved in this clustering process.
+它有点不会造成任何伤害，因为我们主要参与这个聚类过程。
+
+380
+00:22:18,490 --> 00:22:23,440
+Okay. Um, something you might be wondering is,
+好的。嗯，你可能想知道的是，
+
+381
+00:22:23,440 --> 00:22:25,090
+well I've sort of implied now,
+我现在有点暗示，
+
+382
+00:22:25,090 --> 00:22:26,605
+we have a pipeline.
+我们有一条管道。
+
+383
+00:22:26,605 --> 00:22:29,770
+I'm saying we're going to run a part of speech tagger,
+我说我们要运行一个词性标记器，
+
+384
+00:22:29,770 --> 00:22:31,810
+and we're going to run a named entity recognizer,
+我们要运行一个命名实体识别器，
+
+385
+00:22:31,810 --> 00:22:33,265
+and we're going to run a parser.
+我们要运行一个解析器。
+
+386
+00:22:33,265 --> 00:22:35,455
+And we're going to run a, um,
+我们要跑一个，嗯，
+
+387
+00:22:35,455 --> 00:22:38,185
+a named mention detector.
+一个名为提及探测器。
+
+388
+00:22:38,185 --> 00:22:41,530
+And then eventually, we're going to run this coref clustering system,
+最后，我们将运行这个coref集群系统，
+
+389
+00:22:41,530 --> 00:22:44,290
+so we have a sort of a five-step pipeline.
+所以我们有一个五步管道。
+
+390
+00:22:44,290 --> 00:22:50,950
+Um, is that the only way you can do, um, coreference resolution?
+嗯，这是你可以做的唯一方法，嗯，共识解决方案？
+
+391
+00:22:50,950 --> 00:22:53,020
+And the traditional answer was yup,
+而传统的答案是，
+
+392
+00:22:53,020 --> 00:22:55,030
+that's the way you did coreference resolution.
+这就是你进行共识解析的方式。
+
+393
+00:22:55,030 --> 00:22:59,275
+That essentially, all systems for coreference resolution,
+基本上，所有用于共同参考解决的系统，
+
+394
+00:22:59,275 --> 00:23:05,800
+until approximately 2016 where a pipeline that went through about those stages.
+直到大约2016年，管道经历了这些阶段。
+
+395
+00:23:05,800 --> 00:23:09,735
+Um, but just recently and I will dico- cover one such system,
+嗯，但就在最近，我将覆盖一个这样的系统，
+
+396
+00:23:09,735 --> 00:23:12,180
+um, later in the class, um,
+嗯，后来在课堂上，嗯，
+
+397
+00:23:12,180 --> 00:23:15,570
+that people in the neural world have started doing what's been
+神经世界的人们已经开始做了什么
+
+398
+00:23:15,570 --> 00:23:19,560
+effective in a lot of places in the neural network world of saying,
+在神经网络世界的许多地方有效说，
+
+399
+00:23:19,560 --> 00:23:22,815
+can we just build an end-to-end coreference system
+我们可以建立一个端到端的共同参与系统吗？
+
+400
+00:23:22,815 --> 00:23:26,385
+that starts with just plain text of a paragraph,
+从段落的纯文本开始，
+
+401
+00:23:26,385 --> 00:23:33,685
+and feeds out coreference clusters without there being any intervening pipeline steps?
+并且在没有任何干预管道步骤的情况下输出共享集群？
+
+402
+00:23:33,685 --> 00:23:36,625
+And I'll show you a bit more about how that works.
+我会告诉你更多关于它是如何工作的。
+
+403
+00:23:36,625 --> 00:23:40,090
+Um, but before we get into systems,
+嗯，但在我们进入系统之前，
+
+404
+00:23:40,090 --> 00:23:45,220
+I just wanted to say a little bit more about the linguistics of coreference.
+我只想更多地谈谈共识的语言学。
+
+405
+00:23:45,220 --> 00:23:49,570
+Um, there's actually quite a lot of interesting stuff here,
+嗯，这里有很多有趣的东西，
+
+406
+00:23:49,570 --> 00:23:52,360
+and to a fair degree,
+在相当程度上，
+
+407
+00:23:52,360 --> 00:23:55,810
+it's not actually stuff that's been thought about
+它实际上并不是人们所想的
+
+408
+00:23:55,810 --> 00:23:59,065
+very much by people who build NLP systems, right?
+很多人建立NLP系统，对吧？
+
+409
+00:23:59,065 --> 00:24:01,150
+I already mentioned, um,
+我已经提过了，嗯，
+
+410
+00:24:01,150 --> 00:24:03,505
+from the Shruthi Rao story, um,
+来自Shruthi Rao的故事，嗯，
+
+411
+00:24:03,505 --> 00:24:06,250
+the example of split antecedents, right?
+拆分前因的例子，对吧？
+
+412
+00:24:06,250 --> 00:24:09,969
+That that's just a clear linguistic phenomenon that happens,
+这只是一个明显的语言现象，
+
+413
+00:24:09,969 --> 00:24:12,160
+and it's not even incredibly rare, right?
+它甚至不是非常罕见，对吧？
+
+414
+00:24:12,160 --> 00:24:14,095
+Um, that, you know, um,
+嗯，那个，你知道，嗯，
+
+415
+00:24:14,095 --> 00:24:19,585
+people build these simple machine learning models that just can't deal with that.
+人们构建了这些简单的机器学习模型，但却无法解决这个问题。
+
+416
+00:24:19,585 --> 00:24:22,630
+And there's really quite a bit more structure
+而且结构确实相当多
+
+417
+00:24:22,630 --> 00:24:25,750
+to what happens in the linguistics of coreference,
+在共同语言学中发生的事情，
+
+418
+00:24:25,750 --> 00:24:30,280
+it isn't really being exploited in most of the systems people bui- build.
+在人们建立的大多数系统中，它并没有真正被利用。
+
+419
+00:24:30,280 --> 00:24:33,145
+So I just wanted to show people a bit more of that.
+所以我只是想向人们展示一点。
+
+420
+00:24:33,145 --> 00:24:38,200
+And essentially, to sort of understanding, um,
+基本上，为了理解，嗯，
+
+421
+00:24:38,200 --> 00:24:41,095
+more about how people see things linguistically,
+更多关于人们如何在语言上看待事物，
+
+422
+00:24:41,095 --> 00:24:46,945
+there are two concepts that are related and commonly confused,
+有两个相关且常常混淆的概念，
+
+423
+00:24:46,945 --> 00:24:48,370
+that are really different.
+真的不一样。
+
+424
+00:24:48,370 --> 00:24:50,635
+So one is coreference.
+所以一个是共同参与。
+
+425
+00:24:50,635 --> 00:24:54,700
+So we say that things are coreferent when there are
+所以我们说事情是有目共睹的
+
+426
+00:24:54,700 --> 00:24:59,230
+two mentions and they refer to the same entity in the world.
+两个提及，他们指的是世界上的同一个实体。
+
+427
+00:24:59,230 --> 00:25:00,970
+So if it's sort of,
+所以，如果它是那种，
+
+428
+00:25:00,970 --> 00:25:05,140
+um, Donald Trump and the current president, right?
+嗯，唐纳德特朗普和现任总统，对吧？
+
+429
+00:25:05,140 --> 00:25:09,205
+They're two mentions and they refer to the same person in the world.
+他们是两个提及，他们指的是世界上的同一个人。
+
+430
+00:25:09,205 --> 00:25:12,190
+And so that is a relationship of coreference.
+这就是共同参与的关系。
+
+431
+00:25:12,190 --> 00:25:16,345
+Um, and that's then contrasted, um, with anaphora.
+嗯，然后那个与anaphora对比了。
+
+432
+00:25:16,345 --> 00:25:24,595
+And so the idea of anaphora is some terms in text don't have independent reference,
+所以回指的想法是文中的一些术语没有独立的参考，
+
+433
+00:25:24,595 --> 00:25:30,835
+and you work out their reference by relating them back to another thing in the text.
+并通过将它们与文本中的另一个内容联系起来来确定它们的参考。
+
+434
+00:25:30,835 --> 00:25:32,800
+So if we have the sentence,
+所以，如果我们有句子，
+
+435
+00:25:32,800 --> 00:25:35,500
+Barack Obama said he would sign the bill.
+巴拉克奥巴马表示他将签署该法案。
+
+436
+00:25:35,500 --> 00:25:37,225
+He is an anaphor.
+他是一个照应者。
+
+437
+00:25:37,225 --> 00:25:39,430
+And if I just say, he,
+如果我只是说，他，
+
+438
+00:25:39,430 --> 00:25:41,905
+what does he refer to in the abstract?
+他在摘要中提到了什么？
+
+439
+00:25:41,905 --> 00:25:45,775
+Well, you know, apart from saying something male, right?
+嗯，你知道，除了说一些男性，对吧？
+
+440
+00:25:45,775 --> 00:25:47,050
+You've got no idea, right?
+你不知道，对吧？
+
+441
+00:25:47,050 --> 00:25:50,110
+Because you can't work out what he means just by knowing he.
+因为只要知道他就无法弄清楚他的意思。
+
+442
+00:25:50,110 --> 00:25:54,370
+You have to be looking at a text and interpreting it relative to the text.
+您必须查看文本并相对于文本进行解释。
+
+443
+00:25:54,370 --> 00:25:56,515
+And then if you're interpreting it,
+如果你在解释它，
+
+444
+00:25:56,515 --> 00:25:58,795
+um, relative to the text,
+嗯，相对于文字，
+
+445
+00:25:58,795 --> 00:26:00,370
+you're then in this situation of,
+你是在这种情况下，
+
+446
+00:26:00,370 --> 00:26:03,880
+okay I see, this refers back to Barack Obama.
+好吧，我知道，这可以追溯到巴拉克奥巴马。
+
+447
+00:26:03,880 --> 00:26:07,600
+So he is another mention of Barack Obama,
+所以他又提到了巴拉克奥巴马，
+
+448
+00:26:07,600 --> 00:26:10,915
+then- and this then is this concept of anaphora.
+然后 - 这就是这个回指的概念。
+
+449
+00:26:10,915 --> 00:26:13,615
+So the picture we have is sort of like this,
+所以我们的图片有点像这样，
+
+450
+00:26:13,615 --> 00:26:17,635
+that you can either have these independent mentions,
+你可以有这些独立的提及，
+
+451
+00:26:17,635 --> 00:26:19,690
+which do refer, um,
+这是指，嗯，
+
+452
+00:26:19,690 --> 00:26:21,310
+to the same thing in the world.
+在世界上同样的事情。
+
+453
+00:26:21,310 --> 00:26:22,765
+They're coreferent.
+他们是共同的。
+
+454
+00:26:22,765 --> 00:26:24,580
+But in many cases,
+但在很多情况下，
+
+455
+00:26:24,580 --> 00:26:27,969
+such as when they're full mentions like President Obama,
+比如他们像奥巴马总统那样全面提到，
+
+456
+00:26:27,969 --> 00:26:31,990
+versus Barack Obama, they don't have any textual relationship.
+与巴拉克奥巴马相比，他们没有任何文字关系。
+
+457
+00:26:31,990 --> 00:26:35,455
+It's just they happen to refer to the same thing in the world.
+只是他们恰好引用了世界上同样的事情。
+
+458
+00:26:35,455 --> 00:26:40,825
+And that then contrast with cases like Barack Obama said he would do something,
+然后，与巴拉克奥巴马这样的案件形成对比，他说他会做点什么，
+
+459
+00:26:40,825 --> 00:26:45,265
+where the he has a textual relationship back to Barack Obama.
+他与巴拉克奥巴马有文本关系。
+
+460
+00:26:45,265 --> 00:26:47,530
+And that's an example of anaphora.
+这是回指的一个例子。
+
+461
+00:26:47,530 --> 00:26:54,985
+Um, this might up until now feel like an almost meaningless distinction.
+嗯，这可能到现在为止几乎是毫无意义的区别。
+
+462
+00:26:54,985 --> 00:26:59,425
+But something that maybe gives you more of a sense that there's something useful here is,
+但是有些东西可能会让你更加意识到这里有一些有用的东西，
+
+463
+00:26:59,425 --> 00:27:04,420
+um, these textual relationships exist even when there isn't coreference.
+嗯，即使没有共同参与，这些文本关系也存在。
+
+464
+00:27:04,420 --> 00:27:06,790
+So we sort of mentioned before,
+所以我们之前提到过，
+
+465
+00:27:06,790 --> 00:27:09,430
+these cases like no dancer, right?
+这些情况就像没有舞者一样吧？
+
+466
+00:27:09,430 --> 00:27:12,610
+So no dancer doesn't have reference, right?
+所以没有舞者没有参考，对吧？
+
+467
+00:27:12,610 --> 00:27:14,305
+It refers to nothing.
+它什么都没说。
+
+468
+00:27:14,305 --> 00:27:16,810
+Um, but if you have a sentence like,
+嗯，但如果你有句话，
+
+469
+00:27:16,810 --> 00:27:22,615
+"no dancer twisted her knee," well we have an anaphor here.
+“没有舞者扭曲她的膝盖，”我们在这里有一个照应。
+
+470
+00:27:22,615 --> 00:27:26,260
+And that anaphor is referring back to "no
+那个照应是指“不
+
+471
+00:27:26,260 --> 00:27:30,520
+dancer" despite the fact that "no dancer" doesn't have reference.
+舞者“尽管”没有舞者“没有参考。
+
+472
+00:27:30,520 --> 00:27:34,150
+So we can still have the anaphoric textual relationship.
+所以我们仍然可以有照应的文本关系。
+
+473
+00:27:34,150 --> 00:27:36,070
+And indeed, you know,
+事实上，你知道，
+
+474
+00:27:36,070 --> 00:27:39,280
+her knee is then a part of her.
+她的膝盖是她的一部分。
+
+475
+00:27:39,280 --> 00:27:42,040
+And so these are the sort of part relationships again.
+所以这些又是那种部分关系。
+
+476
+00:27:42,040 --> 00:27:45,370
+But her knee, in a sense that I'll just come back to,
+但她的膝盖，在某种意义上我会回来，
+
+477
+00:27:45,370 --> 00:27:51,325
+is also an anaphor which is interpreted with respect, um, to the dancer.
+也是一个对舞者有尊重的解释。
+
+478
+00:27:51,325 --> 00:27:54,370
+So we have two anaphoric relationships here,
+所以我们这里有两个照应关系，
+
+479
+00:27:54,370 --> 00:27:57,250
+even though we have no reference.
+即使我们没有参考。
+
+480
+00:27:57,250 --> 00:28:00,865
+There's another interesting case of
+还有一个有趣的案例
+
+481
+00:28:00,865 --> 00:28:04,795
+anaphoric relationships which aren't the same as reference,
+与照参考不同的照应关系，
+
+482
+00:28:04,795 --> 00:28:08,380
+which is you could have looser forms of anaphoric relationships.
+你可以拥有更宽松的照应关系形式。
+
+483
+00:28:08,380 --> 00:28:10,810
+So you get lots of sentences like this.
+所以你会得到很多像这样的句子。
+
+484
+00:28:10,810 --> 00:28:13,135
+"We went to see a concert last night,
+“昨晚我们去看了一场音乐会，
+
+485
+00:28:13,135 --> 00:28:15,250
+the tickets were really expensive."
+门票很贵。“
+
+486
+00:28:15,250 --> 00:28:18,925
+So we have this mentioned here of the tickets.
+所以我们在这里提到了门票。
+
+487
+00:28:18,925 --> 00:28:22,465
+Um, but really to interpret the tickets,
+嗯，但真的要解释门票，
+
+488
+00:28:22,465 --> 00:28:26,995
+we have to interpret them with respect to this,
+我们必须解释它们，
+
+489
+00:28:26,995 --> 00:28:28,735
+um, mention back here,
+嗯，请回到这里，
+
+490
+00:28:28,735 --> 00:28:31,465
+a concept, because really what this is saying,
+一个概念，因为这真的是这样说的，
+
+491
+00:28:31,465 --> 00:28:35,095
+the tickets for the concert were really expensive.
+音乐会的门票非常昂贵。
+
+492
+00:28:35,095 --> 00:28:39,205
+So this is also referred to as an anaphoric relationship,
+所以这也被称为照应关系，
+
+493
+00:28:39,205 --> 00:28:42,190
+where the meaning of the tickets has to be interpreted
+必须解释门票的含义
+
+494
+00:28:42,190 --> 00:28:46,600
+textually based on another, um, noun phrase.
+文本地基于另一个，嗯，名词短语。
+
+495
+00:28:46,600 --> 00:28:49,690
+But it's not a coreference relationship that
+但它不是一种共同参与关系
+
+496
+00:28:49,690 --> 00:28:53,335
+the concert and the tickets are clearly two different entities.
+音乐会和门票显然是两个不同的实体。
+
+497
+00:28:53,335 --> 00:28:56,979
+So these kinda looser cases are referred to as bridging anaphora,
+所以这些宽松的案件被称为桥接回指，
+
+498
+00:28:56,979 --> 00:29:00,805
+because you sort of have to supply for yourself the bridge,
+因为你有点必须为自己供应桥梁，
+
+499
+00:29:00,805 --> 00:29:07,105
+the relation that connects together the antecedent and the anaphor.
+将先行者和回忆者联系在一起的关系。
+
+500
+00:29:07,105 --> 00:29:10,780
+Okay. So that's how- we then have these pictures,
+好的。这就是我们如何拥有这些图片，
+
+501
+00:29:10,780 --> 00:29:14,890
+that we have this sort of not in- not complete crossovers
+我们有这种并非完全交叉
+
+502
+00:29:14,890 --> 00:29:19,510
+between coreference and anaphora that we've sort of talked about.
+在我们讨论过的共识和回指之间。
+
+503
+00:29:19,510 --> 00:29:24,200
+Um, I have one other note on anaphora. Um,
+嗯，我还有另外一个关于回指的说明。嗯，
+
+504
+00:29:24,200 --> 00:29:28,825
+Who- has anyone here ever done any Ancient Greek?
+谁 - 这里有人做过任何古希腊人吗？
+
+505
+00:29:28,825 --> 00:29:34,020
+Any Ancient Greek? [LAUGHTER] Yes.
+任何古希腊人？ [大笑]是的。
+
+506
+00:29:34,020 --> 00:29:36,035
+Okay. Um, so, um,
+好的。嗯，恩，嗯，
+
+507
+00:29:36,035 --> 00:29:40,745
+from- from the origins of the words anaphora,
+来自 - 回指的起源，
+
+508
+00:29:40,745 --> 00:29:47,135
+anaphora is meant to be that you're finding your textual reference before you.
+回指是指你在找到自己的文本参考之前。
+
+509
+00:29:47,135 --> 00:29:53,300
+Um, and so there's actually a- a complementary, um,
+嗯，所以实际上是一个互补的，嗯，
+
+510
+00:29:53,300 --> 00:29:56,940
+term of art which is referred to as
+被称为的艺术术语
+
+511
+00:29:56,940 --> 00:30:02,140
+cataphora where you're finding your reference after you.
+cataphora你在哪里找到你的参考。
+
+512
+00:30:02,140 --> 00:30:05,700
+Um, so here is a beautiful example of cataphora.
+嗯，所以这里是cataphora的一个美丽的例子。
+
+513
+00:30:05,700 --> 00:30:07,380
+So this is from Oscar Wilde's,
+所以这是来自奥斯卡王尔德的，
+
+514
+00:30:07,380 --> 00:30:09,330
+The Picture of Dorian Gray.
+多利安格雷的图片。
+
+515
+00:30:09,330 --> 00:30:14,339
+"From the corner of the divan of Persian saddle-bags on which he was lying,
+“从他撒谎的波斯马鞍袋的角落里，
+
+516
+00:30:14,339 --> 00:30:16,620
+smoking, as was his custom,
+吸烟，就像他的风俗一样，
+
+517
+00:30:16,620 --> 00:30:20,690
+innumerable cigarettes, Lord Henry Wotton could just catch
+无数的香烟，亨利沃顿勋爵可以抓住
+
+518
+00:30:20,690 --> 00:30:25,470
+the gleam of the honey-sweet and honey-colored blossoms of a laburnum."
+金莲花的蜂蜜甜蜜和蜂蜜色的花朵。“
+
+519
+00:30:25,470 --> 00:30:28,865
+Um, right. So here we have this, um, mentioned,
+嗯，对。所以在这里，我们有这个，嗯，提到，
+
+520
+00:30:28,865 --> 00:30:33,060
+Lord Henry Wotton and there are two anaphors,
+亨利沃顿勋爵和两个有点，
+
+521
+00:30:33,060 --> 00:30:35,940
+um, that refer to Lord Henry Wotton.
+嗯，指亨利沃顿勋爵。
+
+522
+00:30:35,940 --> 00:30:39,300
+Um, he and his,
+嗯，他和他的，
+
+523
+00:30:39,300 --> 00:30:41,730
+and that they both come before,
+并且他们都来过，
+
+524
+00:30:41,730 --> 00:30:43,995
+um, Lord Henry Wotton.
+嗯，亨利沃顿勋爵。
+
+525
+00:30:43,995 --> 00:30:47,010
+And so these are referred to, um,
+所以这些都是指的，嗯，
+
+526
+00:30:47,010 --> 00:30:53,670
+as instances of cataphora among a certain kind of classical scholar.
+作为某种古典学者中的cataphora的例子。
+
+527
+00:30:53,670 --> 00:30:56,460
+Um, and in case you don't know what a laburnum is,
+嗯，如果你不知道什么是金链花，
+
+528
+00:30:56,460 --> 00:30:58,680
+um, this is a laburnum.
+嗯，这是一个金链花。
+
+529
+00:30:58,680 --> 00:31:01,890
+[LAUGHTER] Right. But, yeah,
+[大笑]对。但是，是的，
+
+530
+00:31:01,890 --> 00:31:03,365
+so thi- this is cataphora.
+所以这是cataphora。
+
+531
+00:31:03,365 --> 00:31:05,940
+Now- now there are two sad things to say.
+现在 - 现在有两件令人伤心的事情要说。
+
+532
+00:31:05,940 --> 00:31:09,630
+Um, the first sad thing is in modern linguistics,
+嗯，第一件令人伤心的事是现代语言学，
+
+533
+00:31:09,630 --> 00:31:12,375
+the term cataphora is completely disused.
+cataphora一词完全被废弃了。
+
+534
+00:31:12,375 --> 00:31:18,185
+And we mean- we just used the word um, anaphors everywhere as meaning
+我们的意思是 - 我们只是用um这个词，无处不在的意思
+
+535
+00:31:18,185 --> 00:31:21,300
+a word that gets referenced from some other mention in
+从其他一些提及引用的词
+
+536
+00:31:21,300 --> 00:31:24,525
+the text and it doesn't matter what side it's on.
+文本和它在哪一方并不重要。
+
+537
+00:31:24,525 --> 00:31:28,560
+Um, so, um, that we go downhill one stage to
+嗯，所以，嗯，我们走下坡去一个阶段
+
+538
+00:31:28,560 --> 00:31:34,055
+linguistics but then we get to NLP and we go downhill a second stage.
+语言学然后我们到达NLP，我们走下坡路第二阶段。
+
+539
+00:31:34,055 --> 00:31:38,160
+Because what you'll see is that in general,
+因为你会看到的是一般的，
+
+540
+00:31:38,160 --> 00:31:40,485
+the systems that people are building for,
+人们正在建设的系统，
+
+541
+00:31:40,485 --> 00:31:47,355
+um, reference resolution, they don't make any distinction of direction at all.
+嗯，参考分辨率，他们根本没有任何方向的区别。
+
+542
+00:31:47,355 --> 00:31:49,155
+That once you find a mention,
+一旦你找到提及，
+
+543
+00:31:49,155 --> 00:31:52,230
+you're always looking backwards for its reference.
+你总是在寻找它的参考。
+
+544
+00:31:52,230 --> 00:31:54,875
+Um, and you've got no idea that,
+嗯，你不知道，
+
+545
+00:31:54,875 --> 00:31:57,630
+well, maybe sometimes you could look forwards.
+好吧，也许有时候你可以向前看。
+
+546
+00:31:57,630 --> 00:31:59,280
+So effectively, what it means,
+如此有效，意味着什么，
+
+547
+00:31:59,280 --> 00:32:01,370
+that the systems end up doing is saying,
+系统最终做的是说，
+
+548
+00:32:01,370 --> 00:32:02,930
+well, there's a he here,
+好吧，他在这里，
+
+549
+00:32:02,930 --> 00:32:05,955
+there are various other things, there's a his, etc.,
+还有其他各种各样的东西，还有他的等等，
+
+550
+00:32:05,955 --> 00:32:09,650
+and you'll eventually get to Lord Henry Wotton and you'll be able to
+你最终会得到亨利沃顿勋爵，你将能够
+
+551
+00:32:09,650 --> 00:32:13,995
+be trying to find its reference by looking backwards,
+试图通过向后看，找到它的参考，
+
+552
+00:32:13,995 --> 00:32:17,760
+even though that's sort of ill-formed from any kind of linguistic sense
+尽管从任何一种语言意义上来说都是不正确的
+
+553
+00:32:17,760 --> 00:32:22,305
+whereas really he and his that should have been looking for their reference forward.
+真的，他和他应该一直在寻找他们的参考。
+
+554
+00:32:22,305 --> 00:32:29,140
+Okay. Um, is everyone good up to there, any questions?
+好的。嗯，大家都很擅长，有什么问题吗？
+
+555
+00:32:29,840 --> 00:32:34,110
+Okay. We'll move ahead and, um,
+好的。我们会继续前进，嗯，
+
+556
+00:32:34,110 --> 00:32:38,610
+try and move on to kinds of coreference, um, models.
+尝试继续使用各种共识，嗯，模型。
+
+557
+00:32:38,610 --> 00:32:41,715
+So I wanted to, um, tell you, um,
+所以我想，嗯，告诉你，嗯，
+
+558
+00:32:41,715 --> 00:32:45,300
+as much as I can and I have 45 minutes, um,
+尽我所能，我有45分钟，嗯，
+
+559
+00:32:45,300 --> 00:32:49,055
+left about, so the kinda models people build with coreference.
+离开了，所以人们用共同构建的模型。
+
+560
+00:32:49,055 --> 00:32:53,670
+And I hope to mention quickly four different ways that people have looked at coreference.
+我希望能够迅速提到人们看待共识的四种不同方式。
+
+561
+00:32:53,670 --> 00:32:57,800
+I wanna tell you a teeny bit about classical rule-based coreference.
+我想告诉你一些关于经典的基于规则的共识。
+
+562
+00:32:57,800 --> 00:33:02,010
+Um, then, um, mention- mention pair coreference.
+嗯，那么，嗯，提一下 - 提及对共识。
+
+563
+00:33:02,010 --> 00:33:04,930
+Spend the most time on mention ranking systems which have
+花费大部分时间在提及排名系统上
+
+564
+00:33:04,930 --> 00:33:07,995
+tended to be the easiest simple systems.
+往往是最简单的简单系统。
+
+565
+00:33:07,995 --> 00:33:09,580
+And then just say a little bit about
+然后再说一点
+
+566
+00:33:09,580 --> 00:33:12,780
+clustering systems which should be the right way to do
+集群系统应该是正确的方法
+
+567
+00:33:12,780 --> 00:33:18,150
+it but in practice has been a way that's been hard to get the best performance from.
+它实际上是一种难以从中获得最佳性能的方法。
+
+568
+00:33:18,150 --> 00:33:20,900
+Okay. So here's a bit of history.
+好的。所以这里有一段历史。
+
+569
+00:33:20,900 --> 00:33:22,980
+Um, this guy here is Jerry Hobbs.
+嗯，这家伙是Jerry Hobbs。
+
+570
+00:33:22,980 --> 00:33:28,320
+He just had his retirement party from University of Southern California last month.
+他上个月刚刚从南加州大学参加退休派对。
+
+571
+00:33:28,320 --> 00:33:29,670
+Um, so Jerry Hobbs,
+嗯，杰里霍布斯，
+
+572
+00:33:29,670 --> 00:33:31,815
+way back when, um,
+回来的时候，嗯，
+
+573
+00:33:31,815 --> 00:33:33,660
+wrote a famous paper,
+写了一篇名言，
+
+574
+00:33:33,660 --> 00:33:37,905
+it was in 1976 on coreference resolution.
+它是在1976年的共识解决方案。
+
+575
+00:33:37,905 --> 00:33:41,520
+And in that paper, um, he proposed,
+在那篇论文中，嗯，他提出，
+
+576
+00:33:41,520 --> 00:33:45,600
+um, what's normally now referred to as the Hobbs Algorithm.
+嗯，现在通常被称为Hobbs算法。
+
+577
+00:33:45,600 --> 00:33:47,895
+But actually, um, in his paper,
+但实际上，嗯，在他的论文中，
+
+578
+00:33:47,895 --> 00:33:51,180
+he refers to it as a naive algorithm.
+他称之为天真的算法。
+
+579
+00:33:51,180 --> 00:33:54,680
+Um, and I'll come back to that distinction in just a moment.
+嗯，我马上就会回到那个区别。
+
+580
+00:33:54,680 --> 00:33:57,630
+Um, but what the Hobbs algorithm was,
+嗯，但Hobbs算法是什么，
+
+581
+00:33:57,630 --> 00:34:01,980
+is if you have a sentence- so actually I should say this,
+如果你有一个句子 - 所以实际上我应该这样说，
+
+582
+00:34:01,980 --> 00:34:05,430
+this algorithm is just for finding the reference of pronouns.
+该算法仅用于寻找代词的参考。
+
+583
+00:34:05,430 --> 00:34:08,500
+So one can extend out to other cases but the part I'm gonna show
+所以我可以延伸到其他案例，但我要展示的部分
+
+584
+00:34:08,500 --> 00:34:11,760
+you is just the part for doing the reference of pronouns.
+你只是做代词参考的部分。
+
+585
+00:34:11,760 --> 00:34:12,935
+So when you find out,
+所以当你发现时，
+
+586
+00:34:12,935 --> 00:34:17,925
+find a pronoun and you wanna say what is it, um, coreferent with?
+找到一个代名词，你想说的是什么，嗯，与...相关？
+
+587
+00:34:17,925 --> 00:34:22,700
+What you're going to do is run this mechanical algorithm
+你要做的是运行这种机械算法
+
+588
+00:34:22,700 --> 00:34:27,945
+that's looking at a parse of a sentence and is working out what to do with it.
+那是在查看一个句子的解析，并正在研究如何处理它。
+
+589
+00:34:27,945 --> 00:34:30,824
+Begin at the NP immediately dominating the pronoun,
+从NP开始直接支配代词，
+
+590
+00:34:30,824 --> 00:34:35,325
+go up the trees or the first NP or S. Call this X and the path p,
+上去树或第一个NP或S.叫这个X和路径p，
+
+591
+00:34:35,325 --> 00:34:37,760
+traverse along, ah, it goes on and on.
+穿过，啊，它继续下去。
+
+592
+00:34:37,760 --> 00:34:39,015
+Um, there's more of it.
+嗯，还有更多。
+
+593
+00:34:39,015 --> 00:34:40,110
+That was only the beginning of it.
+那只是它的开始。
+
+594
+00:34:40,110 --> 00:34:41,475
+There are a lot more stages.
+还有很多阶段。
+
+595
+00:34:41,475 --> 00:34:43,230
+Um, but, you know,
+嗯，但是，你知道，
+
+596
+00:34:43,230 --> 00:34:46,890
+I'm not- I don't really wanna go into the details of this.
+我不是 - 我真的不想详细介绍这一点。
+
+597
+00:34:46,890 --> 00:34:50,070
+Um, but, you know, to try and explain the flavor of it,
+嗯，但是，你知道，试着解释它的味道，
+
+598
+00:34:50,070 --> 00:34:51,665
+here's a piece of text.
+这是一段文字。
+
+599
+00:34:51,665 --> 00:34:53,980
+"Niall Ferguson is prolific,
+“Niall Ferguson是多产的，
+
+600
+00:34:53,980 --> 00:34:56,220
+well-paid, and a snappy dresser.
+高薪，和一个活泼的梳妆台。
+
+601
+00:34:56,220 --> 00:34:58,395
+Stephen Moss hated him."
+斯蒂芬莫斯恨他。“
+
+602
+00:34:58,395 --> 00:35:02,854
+Um, and so if you can remember any of the steps of that algorithm,
+嗯，如果你能记住那个算法的任何步骤，
+
+603
+00:35:02,854 --> 00:35:06,275
+here's our, um, pronoun him.
+这是我们的，嗯，代名他。
+
+604
+00:35:06,275 --> 00:35:11,535
+Um, and then, what it said to do was begin at the NP,
+嗯，然后，它所说的是从NP开始，
+
+605
+00:35:11,535 --> 00:35:14,210
+the noun phrase above the pronoun.
+代词上方的名词短语。
+
+606
+00:35:14,210 --> 00:35:19,010
+And then it said, to go up to the first noun phrase or S above that,
+然后它说，要达到上面的第一个名词短语或S，
+
+607
+00:35:19,010 --> 00:35:21,370
+um, here is the S above that.
+嗯，这是上面的S.
+
+608
+00:35:21,370 --> 00:35:24,765
+Um, and then what you're meant to do is, from there,
+嗯，然后你打算做的是，从那里，
+
+609
+00:35:24,765 --> 00:35:30,185
+you're meant to go left to right through stuff that came before that.
+你打算通过之前的东西从左到右。
+
+610
+00:35:30,185 --> 00:35:32,980
+So there's a lot of cleverness in this handwritten algorithm.
+所以这个手写算法有很多聪明之处。
+
+611
+00:35:32,980 --> 00:35:36,440
+You know, this is in the space of clever handwritten algorithms.
+你知道，这是在聪明的手写算法的空间。
+
+612
+00:35:36,440 --> 00:35:40,140
+And so what this is reflecting is that you might just think you
+所以这反映出你可能会想到你
+
+613
+00:35:40,140 --> 00:35:44,045
+should go to the closest thing to find reference,
+应该去最接近的东西找到参考，
+
+614
+00:35:44,045 --> 00:35:48,735
+but actually if you have reference within the same sentence,
+但实际上如果你在同一个句子中有引用，
+
+615
+00:35:48,735 --> 00:35:51,730
+it's much more common for the sort of
+这种情况更为常见
+
+616
+00:35:51,730 --> 00:35:56,085
+highest syntactic roles to be what you're coreferent with.
+最高的句法角色是你的共同作用。
+
+617
+00:35:56,085 --> 00:35:59,780
+So you're more likely to be coreferent with a subject than an object,
+所以你更有可能成为一个主题而不是一个对象，
+
+618
+00:35:59,780 --> 00:36:03,760
+and you're more likely to be coreferent with an object than something like
+并且你更有可能成为一个对象而不是类似的东西
+
+619
+00:36:03,760 --> 00:36:08,935
+a noun phrase and that's inside a prepositional phrase that follows the object.
+一个名词短语，它位于跟随该对象的介词短语中。
+
+620
+00:36:08,935 --> 00:36:11,855
+So we're gonna start from the left here and we're gonna
+所以我们要从左边开始，我们要去
+
+621
+00:36:11,855 --> 00:36:14,710
+say here's a noun phrase, Stephen Moss.
+这里是一个名词短语，斯蒂芬莫斯。
+
+622
+00:36:14,710 --> 00:36:16,520
+That's the first one we come to.
+这是我们第一次来到这里。
+
+623
+00:36:16,520 --> 00:36:20,265
+And then there's this clever bit of text that says,
+然后有这个聪明的文字说，
+
+624
+00:36:20,265 --> 00:36:24,820
+um, traversal branches, um, below X,
+嗯，遍历分支，嗯，在X下面，
+
+625
+00:36:24,820 --> 00:36:27,080
+that are to the left- left to right,
+这是从左到右，
+
+626
+00:36:27,080 --> 00:36:31,040
+propose as antecedent and noun phrase, um,
+提出作为先行词和名词短语，嗯，
+
+627
+00:36:31,040 --> 00:36:37,220
+that has a noun phrase or sentence between it's an ec- in the S. So it was saying,
+在它之间有一个名词短语或句子，它是一个ec-在S.所以它说，
+
+628
+00:36:37,220 --> 00:36:38,990
+this will be a candidate,
+这将是一个候选人，
+
+629
+00:36:38,990 --> 00:36:40,520
+if and only if,
+当且仅当，
+
+630
+00:36:40,520 --> 00:36:44,345
+there's some other noun phrase or S in-between.
+还有一些其他名词短语或中间的S.
+
+631
+00:36:44,345 --> 00:36:48,870
+Um, and so what that's saying is Stephen Moss hated him.
+嗯，所以说斯蒂芬莫斯恨他。
+
+632
+00:36:48,870 --> 00:36:52,210
+It- this him cannot refer back to
+它 - 这是他无法回头的
+
+633
+00:36:52,210 --> 00:36:55,830
+Stephen Moss and that sort of pretty much a fact of English syntax.
+斯蒂芬·莫斯（Stephen Moss），这几乎是英语句法的一个事实。
+
+634
+00:36:55,830 --> 00:37:00,090
+But what it's wanting to do is distinguish between,
+但它想要做的是区分，
+
+635
+00:37:00,090 --> 00:37:02,940
+another thing that we could have had here was
+我们本可以做的另一件事是
+
+636
+00:37:02,940 --> 00:37:09,100
+a noun phrase that had another possessive noun phrase inside it.
+一个名词短语，里面有另一个所有格名词短语。
+
+637
+00:37:09,100 --> 00:37:17,595
+Um, so if we had something like Stephen Moss's mother hated him, right?
+嗯，所以如果我们有像斯蒂芬莫斯的母亲那样恨他，对吗？
+
+638
+00:37:17,595 --> 00:37:22,620
+Then the Stephen mother- Moss's mother hated him, then that would,
+然后，斯蒂芬母亲 - 莫斯的母亲恨他，那就是，
+
+639
+00:37:22,620 --> 00:37:28,055
+in that case, it would be perfectly okay for him to be coreferent with Stephen Moss.
+在那种情况下，他完全可以与斯蒂芬莫斯共同参与。
+
+640
+00:37:28,055 --> 00:37:31,120
+And the algorithm allows that because relative to
+并且算法允许因为相对于
+
+641
+00:37:31,120 --> 00:37:35,760
+this noun phrase is another noun phrase above it and between.
+这个名词短语是它上面和之间的另一个名词短语。
+
+642
+00:37:35,760 --> 00:37:38,205
+Okay. So that didn't work, um,
+好的。那不起作用，嗯，
+
+643
+00:37:38,205 --> 00:37:40,740
+as an antece- as an antecedent,
+作为一个先行者 - 作为先行者，
+
+644
+00:37:40,740 --> 00:37:43,415
+so then we go onto the next step of the algorithm.
+那么我们进入算法的下一步。
+
+645
+00:37:43,415 --> 00:37:44,920
+And then, the next step says,
+然后，下一步说，
+
+646
+00:37:44,920 --> 00:37:49,095
+we should proceed backwards through preceding sentences,
+我们应该通过前面的句子倒退，
+
+647
+00:37:49,095 --> 00:37:50,595
+um, right to left.
+嗯，从右到左。
+
+648
+00:37:50,595 --> 00:37:55,085
+And so that captures an important heuristic that proximity is actually
+因此，它捕获了实际接近的重要启发式
+
+649
+00:37:55,085 --> 00:37:58,085
+a good heuristic to find coreference
+找到共识的良好启发式方法
+
+650
+00:37:58,085 --> 00:38:02,115
+because coreference for pronouns is usually close by overall.
+因为代词的共鸣通常是整体的。
+
+651
+00:38:02,115 --> 00:38:05,055
+And so we go to the first sentence back.
+所以我们回到第一句话。
+
+652
+00:38:05,055 --> 00:38:07,885
+And then in this sentence, again,
+然后在这句话中，
+
+653
+00:38:07,885 --> 00:38:09,610
+we go into within the sentence,
+我们进入句子，
+
+654
+00:38:09,610 --> 00:38:13,335
+go left to right because there's the same kind of subject prominence role.
+从左到右，因为有同样的主题突出角色。
+
+655
+00:38:13,335 --> 00:38:15,685
+And so we're gonna start in this sentence,
+所以我们要从这句话开始，
+
+656
+00:38:15,685 --> 00:38:16,990
+and we're gonna say okay,
+我们会说好的，
+
+657
+00:38:16,990 --> 00:38:18,710
+here's a noun phrase.
+这是一个名词短语。
+
+658
+00:38:18,710 --> 00:38:21,315
+And now because we're in a different sentence,
+而现在因为我们的句子不同，
+
+659
+00:38:21,315 --> 00:38:23,360
+there's nothing wrong with this one.
+这个没什么不对。
+
+660
+00:38:23,360 --> 00:38:24,725
+So we say, aha,
+所以我们说，啊哈，
+
+661
+00:38:24,725 --> 00:38:27,340
+we have a candidate, Niall Ferguson,
+我们有一个候选人，Niall Ferguson，
+
+662
+00:38:27,340 --> 00:38:32,385
+um, is a possible antecedent and it's the first one we found.
+嗯，是一个可能的前因，这是我们发现的第一个。
+
+663
+00:38:32,385 --> 00:38:35,700
+And therefore, we say that him refers back to Niall Ferguson.
+因此，我们说他回到了Niall Ferguson。
+
+664
+00:38:35,700 --> 00:38:38,640
+And this algorithm actually gives the right answer,
+而这个算法实际上给出了正确的答案，
+
+665
+00:38:38,640 --> 00:38:40,750
+if you could follow along all of that.
+如果你能跟上这一切。
+
+666
+00:38:40,750 --> 00:38:43,320
+Um, though that sounds like, um,
+嗯，虽然这听起来像，嗯，
+
+667
+00:38:43,320 --> 00:38:47,020
+horrible handwritten stuff.
+可怕的手写的东西。
+
+668
+00:38:47,020 --> 00:38:56,810
+But, um, so Jerry Hobbs was aware of that this was horrible handwritten stuff,
+但是，嗯，所以Jerry Hobbs意识到这是可怕的手写内容，
+
+669
+00:38:56,810 --> 00:39:01,805
+but he was interested in this algorithm for a couple of reasons.
+但出于几个原因，他对这个算法很感兴趣。
+
+670
+00:39:01,805 --> 00:39:04,970
+I mean, reason one is, you know,
+我的意思是，理由是，你知道，
+
+671
+00:39:04,970 --> 00:39:09,980
+this is actually one of the first places in natural language processing,
+这实际上是自然语言处理的第一个地方，
+
+672
+00:39:09,980 --> 00:39:12,740
+that someone produced the baseline, right.
+对，有人产生了基线，对。
+
+673
+00:39:12,740 --> 00:39:15,620
+In for final projects and elsewhere,
+在最终项目和其他地方，
+
+674
+00:39:15,620 --> 00:39:17,750
+um, and stuff we gave you, right,
+嗯，我们给你的东西，对，
+
+675
+00:39:17,750 --> 00:39:21,260
+it's seen now in NLP and other areas,
+它现在在NLP和其他领域看到，
+
+676
+00:39:21,260 --> 00:39:22,490
+that anything you are doing,
+那你在做什么，
+
+677
+00:39:22,490 --> 00:39:24,620
+the first thing you should do is have a baseline,
+你应该做的第一件事是有一个基线，
+
+678
+00:39:24,620 --> 00:39:27,440
+a simple system and see how well it works.
+一个简单的系统，看看它的工作情况。
+
+679
+00:39:27,440 --> 00:39:31,955
+And this was his simple rule-based system for doing coreference,
+这是他基于规则的简单系统，用于进行共指，
+
+680
+00:39:31,955 --> 00:39:36,575
+um, and he wanted to observe that actually this baseline was pretty good.
+嗯，他想观察到实际上这个基线非常好。
+
+681
+00:39:36,575 --> 00:39:40,925
+It actually gave the right answer a lot of the time.
+它实际上在很多时候给出了正确答案。
+
+682
+00:39:40,925 --> 00:39:47,360
+And so the challenge was how to build a system that did better than this baseline.
+因此，挑战在于如何建立一个比这个基线更好的系统。
+
+683
+00:39:47,360 --> 00:39:49,220
+And so he was well aware of it,
+所以他很清楚这一点，
+
+684
+00:39:49,220 --> 00:39:50,780
+you know, it was a dumb algorithm,
+你知道，这是一个愚蠢的算法，
+
+685
+00:39:50,780 --> 00:39:55,580
+but he proposed that as a good baseline for doing coreference resolution.
+但他提出这是做共指消解的良好基线。
+
+686
+00:39:55,580 --> 00:39:57,920
+So what he was interested in,
+所以他感兴趣的是，
+
+687
+00:39:57,920 --> 00:40:00,980
+um, remember that we're back in the 1970s here,
+嗯，记得我们回到了20世纪70年代，
+
+688
+00:40:00,980 --> 00:40:06,860
+was how to do knowledge-based pronominal coreference resolution.
+是如何做基于知识的代词共指解决。
+
+689
+00:40:06,860 --> 00:40:12,250
+And so, um, essentially what he was noticing is well,
+所以，嗯，基本上他注意到的是，
+
+690
+00:40:12,250 --> 00:40:16,360
+these kinds of syntactic factors that I was mentioning prefer subjects,
+我提到的这些句法因素更喜欢科目，
+
+691
+00:40:16,360 --> 00:40:18,430
+prefer close by, etc,
+喜欢附近等等，
+
+692
+00:40:18,430 --> 00:40:20,785
+they're all useful predictors.
+他们都是有用的预测者。
+
+693
+00:40:20,785 --> 00:40:23,830
+But there are lots of cases where they don't give the right answer,
+但是很多情况下他们没有给出正确答案，
+
+694
+00:40:23,830 --> 00:40:25,750
+and to know when they give, when,
+并知道他们什么时候给，
+
+695
+00:40:25,750 --> 00:40:29,005
+to know what's really the coreferent thing,
+知道什么是真正的共同点，
+
+696
+00:40:29,005 --> 00:40:33,000
+you have to actually understand what's being described in the world.
+你必须真正了解世界上正在描述的内容。
+
+697
+00:40:33,000 --> 00:40:35,105
+So if I have this sentence,
+所以，如果我有这句话，
+
+698
+00:40:35,105 --> 00:40:39,005
+she poured water from the pitcher into the cup until it was full.
+她把水从投手里倒进杯子里，直到它满了。
+
+699
+00:40:39,005 --> 00:40:41,700
+What is it coreferent with?
+什么是共同的？
+
+700
+00:40:44,530 --> 00:40:45,740
+Cup.
+杯子。
+
+701
+00:40:45,740 --> 00:40:46,700
+[NOISE] The cup.
+[NOISE]杯子。
+
+702
+00:40:46,700 --> 00:40:48,350
+Thank you. [LAUGHTER] Okay.
+谢谢。 [大笑]好的。
+
+703
+00:40:48,350 --> 00:40:50,870
+So that, it refers to the cup.
+所以，它指的是杯子。
+
+704
+00:40:50,870 --> 00:40:53,225
+But then let's look at this example.
+但接下来让我们来看看这个例子。
+
+705
+00:40:53,225 --> 00:40:57,530
+She poured water from the pitcher into the cup until it was empty.
+她将水从投手倒入杯中，直到它空了。
+
+706
+00:40:57,530 --> 00:40:59,375
+What does it refer to?
+它指的是什么？
+
+707
+00:40:59,375 --> 00:40:59,900
+The [OVERLAPPING].
+[OVERLAPPING]。
+
+708
+00:40:59,900 --> 00:41:01,775
+The pitcher. [LAUGHTER] Okay.
+投手。 [大笑]好的。
+
+709
+00:41:01,775 --> 00:41:06,125
+So the crucial thing to notice in these two sentences is,
+所以在这两句话中要注意的关键是，
+
+710
+00:41:06,125 --> 00:41:10,940
+these sentences have identical syntactic structure, right.
+这些句子具有相同的句法结构，对。
+
+711
+00:41:10,940 --> 00:41:15,695
+So Jerry Hobbs's algorithm can't possibly work,
+所以Jerry Hobbs的算法不可行，
+
+712
+00:41:15,695 --> 00:41:18,365
+um, for both of these sentences.
+嗯，对于这两个句子。
+
+713
+00:41:18,365 --> 00:41:20,615
+It's gonna work for one of them,
+它会为其中一个工作，
+
+714
+00:41:20,615 --> 00:41:22,550
+but not the other one.
+但不是另一个。
+
+715
+00:41:22,550 --> 00:41:26,030
+Um, since it's working from left to right within a sentence,
+嗯，因为它在句子中从左到右工作，
+
+716
+00:41:26,030 --> 00:41:28,865
+it's gonna say the pitcher both times actually, right.
+它实际上会说投手两次。
+
+717
+00:41:28,865 --> 00:41:35,360
+So you can't get the answer right by Jerry Hobbs' algorithm and Jerry believed,
+因此，你无法通过Jerry Hobbs的算法得到正确答案，Jerry相信，
+
+718
+00:41:35,360 --> 00:41:37,415
+and still believes, um,
+仍然相信，嗯，
+
+719
+00:41:37,415 --> 00:41:40,475
+that the only way to get these kind of examples right,
+这是让这些例子正确的唯一方法，
+
+720
+00:41:40,475 --> 00:41:43,415
+is actually if you understand the world,
+实际上，如果你了解这个世界，
+
+721
+00:41:43,415 --> 00:41:46,640
+and you actually know what's going on in the world,
+你真的知道世界上发生了什么，
+
+722
+00:41:46,640 --> 00:41:49,040
+so you can see what, what this is talking about.
+所以你可以看到这是什么，这是在谈论什么。
+
+723
+00:41:49,040 --> 00:41:51,020
+And there are lots of examples like this.
+还有很多像这样的例子。
+
+724
+00:41:51,020 --> 00:41:53,765
+Um, this is another very famous example.
+嗯，这是另一个非常着名的例子。
+
+725
+00:41:53,765 --> 00:41:58,310
+The city council refused the women a permit because they feared violence.
+市议会拒绝给予妇女许可，因为她们害怕暴力。
+
+726
+00:41:58,310 --> 00:42:00,140
+Um, who does that they refer to?
+嗯，他们指的是谁？
+
+727
+00:42:00,140 --> 00:42:01,550
+[inaudible].
+[听不见的。
+
+728
+00:42:01,550 --> 00:42:03,125
+The city councilors.
+市议员。
+
+729
+00:42:03,125 --> 00:42:05,360
+Um, but here's another sentence.
+嗯，但这是另一句话。
+
+730
+00:42:05,360 --> 00:42:10,415
+The city council refused the women a permit because they advocated violence.
+市议会拒绝给予妇女许可，因为她们主张暴力。
+
+731
+00:42:10,415 --> 00:42:12,785
+Who does that they refer to?
+他们指的是谁？
+
+732
+00:42:12,785 --> 00:42:14,000
+The women.
+女人。
+
+733
+00:42:14,000 --> 00:42:16,340
+The women. Okay. So this time it refers to the women.
+女人。好的。所以这次是指女性。
+
+734
+00:42:16,340 --> 00:42:18,245
+Um, and again, you know,
+嗯，你知道，
+
+735
+00:42:18,245 --> 00:42:24,185
+identical syntactic structure, it couldn't possibly be done right by the Hobbs algorithm.
+相同的句法结构，不可能通过Hobbs算法完成。
+
+736
+00:42:24,185 --> 00:42:27,365
+Um, so this particular pair of examples,
+嗯，所以这一对特例，
+
+737
+00:42:27,365 --> 00:42:29,270
+um, comes from Terry Winograd.
+嗯，来自Terry Winograd。
+
+738
+00:42:29,270 --> 00:42:31,610
+Um, how long ti- uh,
+嗯，多久了，
+
+739
+00:42:31,610 --> 00:42:35,150
+so Terry Winograd was originally an NLP faculty, um,
+所以Terry Winograd最初是一名NLP教员，嗯，
+
+740
+00:42:35,150 --> 00:42:39,410
+he sort of got disillusioned with NLP because there wasn't making much progress, um,
+他对NLP感到失望，因为没有取得多大进展，嗯，
+
+741
+00:42:39,410 --> 00:42:42,065
+and ventured off into the land of HCI,
+并冒险进入HCI之地，
+
+742
+00:42:42,065 --> 00:42:43,880
+um, that became his career.
+嗯，这成了他的职业生涯。
+
+743
+00:42:43,880 --> 00:42:46,250
+Um, but in his early work, um,
+嗯，但在他早期的工作中，嗯，
+
+744
+00:42:46,250 --> 00:42:48,109
+he was interested in these phenomena,
+他对这些现象感兴趣，
+
+745
+00:42:48,109 --> 00:42:50,150
+and came up with this example.
+并想出了这个例子。
+
+746
+00:42:50,150 --> 00:42:52,955
+And so this example really stuck with people.
+所以这个例子真的让人感到困惑。
+
+747
+00:42:52,955 --> 00:42:56,030
+And so these kind of contrasts are referred to by
+所以这些对比被提及
+
+748
+00:42:56,030 --> 00:42:59,615
+other people as Winograd sentences or Winograd schema.
+其他人作为Winograd句子或Winograd架构。
+
+749
+00:42:59,615 --> 00:43:04,505
+And so this is actually something that's interesting that's revived recently.
+所以这实际上是有趣的，最近复活了。
+
+750
+00:43:04,505 --> 00:43:07,190
+Um, so Hector Le- Levesque, um,
+嗯，所以Hector Le- Levesque，嗯，
+
+751
+00:43:07,190 --> 00:43:09,875
+wrote a paper, I guess five years ago now,
+写了一篇论文，我猜五年前，
+
+752
+00:43:09,875 --> 00:43:14,030
+where he was trying to advocate for return to doing
+在那里他试图倡导回归
+
+753
+00:43:14,030 --> 00:43:18,515
+more in the way of knowledge and world modeling and artificial intelligence,
+更多的是知识和世界建模以及人工智能，
+
+754
+00:43:18,515 --> 00:43:21,710
+and arguing that there are lots of problems that you just
+并且认为你有很多问题
+
+755
+00:43:21,710 --> 00:43:25,595
+can't solve by the kind of crude statistical methods,
+用粗略的统计方法无法解决，
+
+756
+00:43:25,595 --> 00:43:28,250
+that our machine learning systems are using.
+我们的机器学习系统正在使用。
+
+757
+00:43:28,250 --> 00:43:31,370
+And that you really needed to do more world understanding.
+而且你真的需要做更多的世界理解。
+
+758
+00:43:31,370 --> 00:43:33,080
+And so he proposed that
+所以他提出了这个建议
+
+759
+00:43:33,080 --> 00:43:38,240
+these Winograd schema would be a good te- alternative to the Turing test,
+这些Winograd架构将是图灵测试的一个很好的替代品，
+
+760
+00:43:38,240 --> 00:43:40,760
+as a way of measuring intelligence.
+作为衡量智力的一种方式。
+
+761
+00:43:40,760 --> 00:43:43,850
+And actually they're just coreference decisions, right.
+实际上，它们只是共同决策，对吧。
+
+762
+00:43:43,850 --> 00:43:47,165
+So, um, so there's sort of a claim here that,
+那么，嗯，所以这里有一种说法，
+
+763
+00:43:47,165 --> 00:43:50,675
+if you can do a coreference right 100 percent of the time,
+如果你可以100％的时间做一个共识，
+
+764
+00:43:50,675 --> 00:43:54,110
+you've solved artificial intelligence in that you're, sort of you can,
+你已经解决了人工智能，你可以，
+
+765
+00:43:54,110 --> 00:43:58,745
+can code knowledge of the world into coreference problems.
+可以将世界知识编码成共识问题。
+
+766
+00:43:58,745 --> 00:44:04,010
+Um, yes so people have then tried to work on these Winograd schemas,
+嗯，是的，所以人们试图研究这些Winograd模式，
+
+767
+00:44:04,010 --> 00:44:07,070
+and Levesque's feeling was, you know,
+你知道，Levesque的感觉是，
+
+768
+00:44:07,070 --> 00:44:09,664
+you just couldn't do these,
+你就是做不到这些，
+
+769
+00:44:09,664 --> 00:44:11,240
+um, using kind of,
+嗯，使用的，
+
+770
+00:44:11,240 --> 00:44:14,360
+the kind of statistical factors, um,
+那种统计因素，嗯，
+
+771
+00:44:14,360 --> 00:44:17,870
+that people put into their machine learning systems.
+人们投入他们的机器学习系统。
+
+772
+00:44:17,870 --> 00:44:22,520
+He was partly wrong about that because subsequent work, um,
+他对此有些不对，因为后来的工作，嗯，
+
+773
+00:44:22,520 --> 00:44:27,050
+both neural systems and otherwise has shown that actually you can
+两个神经系统和其他已经表明，实际上你可以
+
+774
+00:44:27,050 --> 00:44:32,165
+get f- a nontrivial distance with these kind of problems because, you know,
+得到f-这些问题的一个非常重要的距离，因为，你知道，
+
+775
+00:44:32,165 --> 00:44:33,709
+if it is the case,
+如果是这样的话，
+
+776
+00:44:33,709 --> 00:44:35,270
+um, that, you know,
+嗯，你知道，
+
+777
+00:44:35,270 --> 00:44:38,120
+you can somehow see enough examples,
+你可以看到足够的例子，
+
+778
+00:44:38,120 --> 00:44:41,120
+where the city council refuses permits,
+市议会拒绝许可，
+
+779
+00:44:41,120 --> 00:44:42,755
+fearing violence, you know.
+害怕暴力，你知道。
+
+780
+00:44:42,755 --> 00:44:44,390
+If you've go- if you're collecting
+如果你去，如果你正在收集
+
+781
+00:44:44,390 --> 00:44:48,560
+your neural language model over tens of billions of words,
+你的神经语言模型超过数百亿字，
+
+782
+00:44:48,560 --> 00:44:51,530
+you might have seen some instances of things like that,
+你可能已经看到过类似的事情，
+
+783
+00:44:51,530 --> 00:44:54,845
+and you could sort of predict it just on statistical patterning.
+你可以根据统计模式预测它。
+
+784
+00:44:54,845 --> 00:44:56,015
+But the question is, you know,
+但问题是，你知道，
+
+785
+00:44:56,015 --> 00:44:58,340
+how far can you actually get doing that,
+你能在多大程度上做到这一点，
+
+786
+00:44:58,340 --> 00:45:00,605
+without having a bit more of a world model?
+没有更多的世界模型？
+
+787
+00:45:00,605 --> 00:45:02,030
+And so that was, you know,
+那就是，你知道，
+
+788
+00:45:02,030 --> 00:45:05,705
+what Hobbs was interested in way back in 1978.
+霍布斯在1978年对此感兴趣。
+
+789
+00:45:05,705 --> 00:45:10,010
+So he wrote, the naive approach is quite good,
+所以他写道，天真的做法非常好，
+
+790
+00:45:10,010 --> 00:45:14,809
+computationally speaking it will be a long time before a semantically based algorithm,
+从计算上讲，在基于语义的算法之前需要很长时间，
+
+791
+00:45:14,809 --> 00:45:17,585
+is sophisticated enough to perform as well.
+非常复杂，也可以表现得很好。
+
+792
+00:45:17,585 --> 00:45:21,650
+And these results set a very high standard for any other approach to aim for.
+这些结果为任何其他目标方法设定了很高的标准。
+
+793
+00:45:21,650 --> 00:45:23,990
+He was totally right about that, um,
+他是完全正确的，嗯，
+
+794
+00:45:23,990 --> 00:45:28,655
+that it really wasn't until the 2010s that anybody
+它确实直到2010年才有人
+
+795
+00:45:28,655 --> 00:45:33,830
+managed to produce an algorithm for pronominal anaphora resolution,
+设法产生代词回指分辨率的算法，
+
+796
+00:45:33,830 --> 00:45:35,900
+that outperformed the Hobbs algorithm.
+其表现优于Hobbs算法。
+
+797
+00:45:35,900 --> 00:45:38,420
+Even though it was just, uh,
+虽然只是，呃，
+
+798
+00:45:38,420 --> 00:45:40,535
+what he called a naive algorithm,
+他称之为天真算法，
+
+799
+00:45:40,535 --> 00:45:44,000
+or he might call a crude set of linguistic rules.
+或者他可以称之为粗略的语言规则。
+
+800
+00:45:44,000 --> 00:45:46,325
+Um, but he says,
+嗯，但他说，
+
+801
+00:45:46,325 --> 00:45:50,090
+yet there is every reason to pursue a semantically based approach,
+但是有充分理由采用基于语义的方法，
+
+802
+00:45:50,090 --> 00:45:52,325
+the naive algorithm does not work.
+天真的算法不起作用。
+
+803
+00:45:52,325 --> 00:45:55,055
+Anyone can think of examples where it fails.
+任何人都可以想到失败的例子。
+
+804
+00:45:55,055 --> 00:45:57,409
+In these cases it not only fails,
+在这些情况下，它不仅失败，
+
+805
+00:45:57,409 --> 00:45:59,660
+it gives no indication that it has failed,
+它没有表明它已经失败，
+
+806
+00:45:59,660 --> 00:46:03,170
+and offers no help in finding the real antecedent.
+并没有帮助找到真正的先行者。
+
+807
+00:46:03,170 --> 00:46:05,510
+Um, so food for thought there.
+嗯，那里有点值得思考。
+
+808
+00:46:05,510 --> 00:46:08,135
+Um, but, um, notwithstanding that,
+嗯，但是，嗯，尽管如此，
+
+809
+00:46:08,135 --> 00:46:10,400
+I'm gonna just rush ahead at this point,
+我现在要赶紧前进，
+
+810
+00:46:10,400 --> 00:46:12,350
+and tell you about some of the, um,
+并告诉你一些，嗯，
+
+811
+00:46:12,350 --> 00:46:14,450
+statistical and neural algorithms,
+统计和神经算法，
+
+812
+00:46:14,450 --> 00:46:17,120
+um, that have been used for coreference resolution.
+嗯，已被用于共指消解。
+
+813
+00:46:17,120 --> 00:46:20,945
+So the simplest form of algorithm that's commonly used,
+所以常用的最简单的算法形式，
+
+814
+00:46:20,945 --> 00:46:24,215
+is what is called mention pair models.
+就是所谓的提对模型。
+
+815
+00:46:24,215 --> 00:46:29,135
+So what we mean by mention pair models is, um,
+所以提到对模型我们的意思是，嗯，
+
+816
+00:46:29,135 --> 00:46:32,030
+we are gonna take pairs of mentions,
+我们要采取一对提及，
+
+817
+00:46:32,030 --> 00:46:36,110
+and we're gonna train a binary classifier that says,
+我们要训练一个二进制分类器说，
+
+818
+00:46:36,110 --> 00:46:39,230
+is coreferent or isn't coreferent.
+是共同的或不是共同的。
+
+819
+00:46:39,230 --> 00:46:44,105
+And so then we're gonna proceed left to right through the text.
+然后我们将从文本中左右移动。
+
+820
+00:46:44,105 --> 00:46:49,325
+And every time we get to a new mention,
+每当我们重新提到时，
+
+821
+00:46:49,325 --> 00:46:55,895
+we're gonna then evaluate our classifier with respect to every preceding mention,
+然后，我们将根据之前的每一个提及来评估我们的分类器，
+
+822
+00:46:55,895 --> 00:46:58,835
+and we're gonna say, are they coreferent?
+我们会说，他们是否具有共识？
+
+823
+00:46:58,835 --> 00:47:01,235
+And it's gonna say yes or no.
+它会说是或否。
+
+824
+00:47:01,235 --> 00:47:03,500
+And we're gonna find out that some of them.
+而且我们会发现其中的一些。
+
+825
+00:47:03,500 --> 00:47:06,155
+It says yes for, um,
+它是的，是的，嗯，
+
+826
+00:47:06,155 --> 00:47:10,160
+I voted for Nader because he was like, most aligned with my value.
+我投票支持Nader，因为他很喜欢，与我的价值最相符。
+
+827
+00:47:10,160 --> 00:47:13,100
+She said, if we have a good classifier,
+她说，如果我们有一个好的分类器，
+
+828
+00:47:13,100 --> 00:47:18,470
+it will say yes to the two bu- blue ones and not to the rest of them.
+它会对两个蓝色的那个说“是”而不是其他的。
+
+829
+00:47:18,470 --> 00:47:22,190
+Um, and so then we'll have at training time,
+嗯，那么我们将在训练时间，
+
+830
+00:47:22,190 --> 00:47:26,540
+negative examples that Nader and he are negative examples.
+纳德和他是负面例子的负面例子。
+
+831
+00:47:26,540 --> 00:47:30,860
+[NOISE] So if you have data marked for coreference,
+[NOISE]因此，如果您有标记为共参照的数据，
+
+832
+00:47:30,860 --> 00:47:33,530
+we have the sort of positive and negative examples,
+我们有一些积极和消极的例子，
+
+833
+00:47:33,530 --> 00:47:35,120
+and we can train a model.
+我们可以训练一个模型。
+
+834
+00:47:35,120 --> 00:47:36,980
+And so for training a model,
+因此，对于训练模型，
+
+835
+00:47:36,980 --> 00:47:42,230
+we have a sort of the classifier outcome is one or zero,
+我们有一种分类器结果是一个或零，
+
+836
+00:47:42,230 --> 00:47:45,665
+based on whether two mentions are coreferent.
+基于两个提及是否具有共识性。
+
+837
+00:47:45,665 --> 00:47:47,960
+We're gonna have a coreference model that
+我们将有一个共同参与模型
+
+838
+00:47:47,960 --> 00:47:50,960
+predicts the probability of them being coreferent.
+预测他们被提出的概率。
+
+839
+00:47:50,960 --> 00:47:54,350
+And we're gonna train it with the same kind of cross entropy loss,
+而且我们将用同样的交叉熵损失训练它，
+
+840
+00:47:54,350 --> 00:47:57,275
+we've used other places and, um,
+我们用过其他地方了，嗯，
+
+841
+00:47:57,275 --> 00:48:01,160
+try and learn a model that predicts coreference.
+尝试学习预测共识的模型。
+
+842
+00:48:01,160 --> 00:48:04,550
+And so then when we get to test time, um,
+那么当我们开始测试时，嗯，
+
+843
+00:48:04,550 --> 00:48:08,495
+and we have a piece of text with mentions, um,
+我们有一段文字提及，嗯，
+
+844
+00:48:08,495 --> 00:48:12,230
+we're gonna run this classifier and it's gonna say,
+我们要运行这个分类器，它会说，
+
+845
+00:48:12,230 --> 00:48:16,400
+um, yes or no, with some probability.
+嗯，是或否，有一定概率。
+
+846
+00:48:16,400 --> 00:48:19,205
+And if we pick a threshold like 0,5,
+如果我们选择像0,5这样的阈值，
+
+847
+00:48:19,205 --> 00:48:22,565
+we'll add certain coreference links.
+我们将添加某些共享链接。
+
+848
+00:48:22,565 --> 00:48:25,490
+And that sort of looks pretty good.
+而那种看起来很不错。
+
+849
+00:48:25,490 --> 00:48:29,480
+Um, but we're gonna sort of complete it off by saying well,
+嗯，但是我们可以通过说得好来完成它，
+
+850
+00:48:29,480 --> 00:48:34,280
+if A is coreferent to B and B is K coreferent to C. Then really
+如果A对B是共同的，那么B就是K对C的贡献。那么真的
+
+851
+00:48:34,280 --> 00:48:40,040
+also A is coreferent to C. So we're gonna do a transitive closure,
+A也是C的共同点。所以我们要做一个传递闭包，
+
+852
+00:48:40,040 --> 00:48:42,410
+and that will give us our clustering.
+这将为我们提供聚类。
+
+853
+00:48:42,410 --> 00:48:46,160
+Um, note here that there's a certain danger in this.
+嗯，请注意这里有一定的危险。
+
+854
+00:48:46,160 --> 00:48:48,650
+Because this means, if we make,
+因为这意味着，如果我们这样做，
+
+855
+00:48:48,650 --> 00:48:51,755
+since we're sor- with the transitive closure,
+既然我们是传统的封闭，
+
+856
+00:48:51,755 --> 00:48:54,425
+that's always adding clustering links.
+这总是添加群集链接。
+
+857
+00:48:54,425 --> 00:48:58,310
+And so that means the danger is that we're gonna over cluster,
+所以这意味着危险就是我们要过度集群，
+
+858
+00:48:58,310 --> 00:49:04,400
+because if we make a single mistake and we link things that should be kept separate.
+因为如果我们犯了一个错误，我们将应该保持分开的事物联系起来。
+
+859
+00:49:04,400 --> 00:49:06,920
+So for example, if we wrongly said,
+例如，如果我们错误地说，
+
+860
+00:49:06,920 --> 00:49:08,870
+he and my are coreferent,
+他和我是共同的，
+
+861
+00:49:08,870 --> 00:49:10,565
+then everything of this, um,
+那么这一切，嗯，
+
+862
+00:49:10,565 --> 00:49:13,774
+discourse would collapse together into one cluster,
+话语会一起聚集成一个群集，
+
+863
+00:49:13,774 --> 00:49:16,920
+and everything would be deemed coreferent.
+一切都将被视为共同的。
+
+864
+00:49:16,920 --> 00:49:20,995
+Okay, um, and this,
+好的，嗯，这个，
+
+865
+00:49:20,995 --> 00:49:25,480
+something that I haven't really emphasized, but comes up,
+我没有真正强调的东西，但是出现了，
+
+866
+00:49:25,480 --> 00:49:30,070
+is well, there's some mentions that are coreferent to nothing, right.
+是的，有一些提及对任何事都没有，对吧。
+
+867
+00:49:30,070 --> 00:49:32,890
+In the Shruthi Rao story, there was a park,
+在Shruthi Rao故事中，有一个公园，
+
+868
+00:49:32,890 --> 00:49:35,875
+which was just mentioned once in the text, and so on,
+在文中刚刚提到过一次，等等，
+
+869
+00:49:35,875 --> 00:49:38,190
+in this form of algorithm,
+在这种形式的算法中，
+
+870
+00:49:38,190 --> 00:49:41,540
+what we'd like the classifier to say is, no,
+我们希望分类器说的是，不，
+
+871
+00:49:41,540 --> 00:49:42,755
+no, no, no, no,
+不不不不，
+
+872
+00:49:42,755 --> 00:49:44,615
+for all of the decisions.
+对于所有的决定。
+
+873
+00:49:44,615 --> 00:49:46,970
+And so it's deemed coreferent to nothing.
+所以它被视为无所谓。
+
+874
+00:49:46,970 --> 00:49:49,915
+And then it's just a singleton mention.
+然后它只是一个单身人士提到。
+
+875
+00:49:49,915 --> 00:49:52,360
+This sort of works,
+这种作品，
+
+876
+00:49:52,360 --> 00:49:58,660
+but it hasn't proven to be the best way of doing coreference.
+但它并没有被证明是做共识的最佳方式。
+
+877
+00:49:58,660 --> 00:50:03,585
+And a lot of the reason why it's not the best way to do coreference
+并且很多原因导致它不是做共识的最佳方式
+
+878
+00:50:03,585 --> 00:50:09,410
+is because we have this phenomenon of anaphora where we have textural dependence.
+是因为我们有这种回指现象，我们有纹理依赖。
+
+879
+00:50:09,410 --> 00:50:11,065
+A lot of the time,
+很多时候，
+
+880
+00:50:11,065 --> 00:50:14,535
+it seems that we're not really,
+好像我们不是真的，
+
+881
+00:50:14,535 --> 00:50:19,815
+um, what- sort of wanting to make this all coreference decisions.
+嗯，什么样的想要做出所有的共同决策。
+
+882
+00:50:19,815 --> 00:50:24,185
+We'd like to make the anaphora decisions of textural dependence.
+我们想做出关于纹理依赖的回指决定。
+
+883
+00:50:24,185 --> 00:50:27,410
+So we'd like to say that he is,
+所以我们想说他是，
+
+884
+00:50:27,410 --> 00:50:33,140
+um, dependent on Nader and my is dependent on I.
+嗯，依赖于纳德而我依赖于我。
+
+885
+00:50:33,140 --> 00:50:35,115
+These are anaphora relationships.
+这些是回指关系。
+
+886
+00:50:35,115 --> 00:50:41,285
+So we'd like to just choose one example of what is this anaphora relationship.
+所以我们只想选择一个这个回指关系的例子。
+
+887
+00:50:41,285 --> 00:50:44,870
+And so that's led to people then looking at what is called,
+所以这导致人们看到所谓的，
+
+888
+00:50:44,870 --> 00:50:47,475
+um, Mention Pair Models, right?
+嗯，提到对模型，对吧？
+
+889
+00:50:47,475 --> 00:50:52,100
+That the problem is that if we have a long document with lots of mentions,
+问题是，如果我们有一个很长的文件提到很多，
+
+890
+00:50:52,100 --> 00:50:57,050
+um, that we want to not be saying- trying to find all of them and say, yes.
+嗯，我们不想说 - 试图找到所有这些并说，是的。
+
+891
+00:50:57,050 --> 00:51:00,160
+We just want to be saying there's a particular- we
+我们只想说有一个特别的 - 我们
+
+892
+00:51:00,160 --> 00:51:03,695
+just want to be saying that there's a particular one.
+只是想说有一个特定的。
+
+893
+00:51:03,695 --> 00:51:05,770
+So for the he at the end here,
+所以对他来说，
+
+894
+00:51:05,770 --> 00:51:11,350
+its anaphor relationship is back to Nader and you don't wanna be trying to say this
+它的回指关系又回到了纳德，你不想试图这样说
+
+895
+00:51:11,350 --> 00:51:17,600
+he is also coreferent back to all of these other things that are earlier in the text.
+他还回顾了本文前面提到的所有其他事情。
+
+896
+00:51:17,600 --> 00:51:22,355
+So it's not something that's been explored much.
+所以这不是一个被探索过的东西。
+
+897
+00:51:22,355 --> 00:51:24,940
+But arguably, this is a case again,
+但可以说，这又是一个案例，
+
+898
+00:51:24,940 --> 00:51:30,905
+where you should be separating coreference from anaphors because for anaphors it seems like
+在哪里你应该将共鸣从分析中分离出来，因为它似乎就像是一样
+
+899
+00:51:30,905 --> 00:51:32,980
+the right way to think is that they have
+正确的思考方式是他们有
+
+900
+00:51:32,980 --> 00:51:37,630
+one prior thing in the text that they're textually dependent on.
+文本中的一个先例是它们在文本上依赖于它们。
+
+901
+00:51:37,630 --> 00:51:43,345
+Whereas true coreferents, when you just have various mentions in the text of Ralph Nader,
+而真正的共同主义者，当你在拉尔夫纳德的文本中有各种各样的提及时，
+
+902
+00:51:43,345 --> 00:51:44,650
+this Ralph Nader that,
+这个Ralph Nader那个，
+
+903
+00:51:44,650 --> 00:51:48,050
+Nader did that, those aren't textually dependent
+纳德这样做了，那些不依赖于文本
+
+904
+00:51:48,050 --> 00:51:52,070
+and they should all be being grouped together as coreferents.
+他们都应该被归为一个共同的人。
+
+905
+00:51:52,070 --> 00:51:58,520
+Um, but our models sort of don't normally try and do some one way and some the other way,
+嗯，但我们的模型通常不会尝试做某种方式，而另一种方式，
+
+906
+00:51:58,520 --> 00:52:00,725
+but you choose one of the models.
+但你选择其中一个型号。
+
+907
+00:52:00,725 --> 00:52:02,815
+So in the other one,
+所以在另一个，
+
+908
+00:52:02,815 --> 00:52:06,010
+we do it for- to do the other way,
+我们这样做是为了做另一种方式，
+
+909
+00:52:06,010 --> 00:52:08,160
+you do what's mention rankings.
+你做什么提到排名。
+
+910
+00:52:08,160 --> 00:52:09,695
+So for mention ranking,
+所以提到排名，
+
+911
+00:52:09,695 --> 00:52:13,400
+the idea is for each mention,
+每个提到的想法，
+
+912
+00:52:13,400 --> 00:52:15,545
+we're going to find- try and find it
+我们将找到并找到它
+
+913
+00:52:15,545 --> 00:52:20,640
+an antecedent that comes before- before it in the text,
+在文本之前出现的先行词，
+
+914
+00:52:20,640 --> 00:52:22,650
+that is- that it is, um,
+就是这样，嗯，
+
+915
+00:52:22,650 --> 00:52:26,810
+coreferent with, and we're going to make a one of N decision.
+与...相关，我们将做出N决定之一。
+
+916
+00:52:26,810 --> 00:52:29,509
+So that when we see she here,
+所以，当我们看到她在这里，
+
+917
+00:52:29,509 --> 00:52:30,815
+we're going to say,
+我们要说，
+
+918
+00:52:30,815 --> 00:52:35,400
+"Okay, um, what is this coreferent with?"
+“好吧，嗯，这个共同点是什么？”
+
+919
+00:52:35,400 --> 00:52:37,660
+And we're going to pick one thing that it's coreferent
+而且我们要选择一个它是共同的东西
+
+920
+00:52:37,660 --> 00:52:41,130
+with even though there might be others in the text.
+尽管文中可能还有其他人。
+
+921
+00:52:41,130 --> 00:52:44,155
+Um, so if we're doing that,
+嗯，如果我们这样做，
+
+922
+00:52:44,155 --> 00:52:47,490
+we then have a problem with singleton mentions because if
+然后我们遇到单例提及的问题，因为如果
+
+923
+00:52:47,490 --> 00:52:51,160
+we're trying to- for every mention we find say,
+我们试图 - 我们发现每一次提到，
+
+924
+00:52:51,160 --> 00:52:55,430
+choose the thing that came before it in the text with which it's coreferent,
+选择它所依据的文本中出现的东西，
+
+925
+00:52:55,430 --> 00:52:58,575
+the right answer might be that there's no such thing.
+正确的答案可能是没有这样的事情。
+
+926
+00:52:58,575 --> 00:53:00,580
+So what we do is we add
+所以我们要做的就是添加
+
+927
+00:53:00,580 --> 00:53:06,410
+one additional dummy mention right at the front here, the NA mention.
+NA提到的另一个虚拟提及就在前面。
+
+928
+00:53:06,410 --> 00:53:11,340
+So one choice is you're gonna say there isn't anything preceding.
+所以一个选择是你会说没有任何事情在前面。
+
+929
+00:53:11,340 --> 00:53:13,935
+So effectively, when you get to I,
+如此有效，当你到达我的时候，
+
+930
+00:53:13,935 --> 00:53:17,525
+since this is, um, the first, um,
+因为这是，嗯，第一个，嗯，
+
+931
+00:53:17,525 --> 00:53:19,265
+real mention in the text,
+在文中真实提到，
+
+932
+00:53:19,265 --> 00:53:21,775
+you're necessarily gonna choose as,
+你一定会选择的，
+
+933
+00:53:21,775 --> 00:53:24,260
+um, its antecedent NA.
+嗯，它的前身NA。
+
+934
+00:53:24,260 --> 00:53:27,815
+You then go on to Nader and you have two choices.
+然后你继续前往Nader，你有两个选择。
+
+935
+00:53:27,815 --> 00:53:34,110
+You can either say it's coreferent to I or it's coreferent to NA.
+你可以说它对我来说是共同的，或者它对NA来说是共同的。
+
+936
+00:53:34,110 --> 00:53:38,410
+I, it's a new mention- a new entity that's being mentioned in the text and
+我，这是一个新的提及 - 一个新的实体，正在文中提到和
+
+937
+00:53:38,410 --> 00:53:43,280
+the right answer is it's a new mention in- a new entity being mentioned in the text.
+正确的答案是在文中提到的新实体中的新提及。
+
+938
+00:53:43,280 --> 00:53:46,935
+Then you get to he and now you have three choices,
+然后你到了他，现在你有三个选择，
+
+939
+00:53:46,935 --> 00:53:51,100
+and the right thing is to say that it's coreferent to Nader.
+而正确的说法是它对纳德来说是共同的。
+
+940
+00:53:51,110 --> 00:53:55,199
+Okay. Um, so this time,
+好的。嗯，这次，
+
+941
+00:53:55,199 --> 00:53:57,640
+it's- for training our models,
+它 - 用于训练我们的模型，
+
+942
+00:53:57,640 --> 00:54:00,525
+it's sort of the same, um,
+它有点相同，嗯，
+
+943
+00:54:00,525 --> 00:54:04,510
+apart from this, sort of this different one of semantics.
+除此之外，还有一种不同的语义。
+
+944
+00:54:04,510 --> 00:54:09,820
+So now- previously, we wanted to say that for our, um,
+所以现在 - 以前，我们想对我们说，嗯，
+
+945
+00:54:09,820 --> 00:54:15,030
+mention pair classifier that is going to try and classify I and she,
+提及对我和她进行分类的对分类器，
+
+946
+00:54:15,030 --> 00:54:16,355
+and my and she,
+而我和她，
+
+947
+00:54:16,355 --> 00:54:19,220
+and both of them had to get a high score,
+他们俩都得分高，
+
+948
+00:54:19,220 --> 00:54:22,030
+where now it's sufficient that just one of them gets
+现在只需其中一个就可以了
+
+949
+00:54:22,030 --> 00:54:26,150
+a high score because that's sort of enough for us to do.
+高分，因为这对我们来说足够了。
+
+950
+00:54:26,150 --> 00:54:30,605
+So what we're gonna use is our good old softmax and so for she,
+所以我们要使用的是我们的老式softmax，所以对她来说，
+
+951
+00:54:30,605 --> 00:54:34,550
+we're gonna put a softmax over the antecedents.
+我们要在这些前因上加上softmax。
+
+952
+00:54:34,550 --> 00:54:39,660
+And our hope is simply that we get a high probability with one of the antecedents,
+而我们的希望很简单，就是我们很有可能获得一个前因，
+
+953
+00:54:39,660 --> 00:54:43,700
+if it has an antecedent or a high score with NA,
+如果它有NA的前因或高分，
+
+954
+00:54:43,700 --> 00:54:46,755
+if it doesn't have any prior referents.
+如果它没有任何先前的指示物。
+
+955
+00:54:46,755 --> 00:54:51,365
+And so then when we're doing classification at run-time,
+那么当我们在运行时进行分类时，
+
+956
+00:54:51,365 --> 00:54:56,355
+we're going to sort of add only the highest scoring coreference link.
+我们将只添加得分最高的共同参考链接。
+
+957
+00:54:56,355 --> 00:54:58,990
+So that means we train it just slightly
+所以这意味着我们只是略微训练它
+
+958
+00:54:58,990 --> 00:55:03,180
+differently because now what we're going to do is that,
+不同，因为现在我们要做的是，
+
+959
+00:55:03,180 --> 00:55:06,200
+when we're- what we're wanting to say is,
+当我们 - 我们想要说的是，
+
+960
+00:55:06,200 --> 00:55:13,025
+we want a high score of coreference between at least one of the antecedents.
+我们希望至少有一个前因之间有很高的共识。
+
+961
+00:55:13,025 --> 00:55:15,010
+And so one possible model is,
+一个可能的模型是，
+
+962
+00:55:15,010 --> 00:55:17,300
+we can maximize this probability.
+我们可以最大化这个概率。
+
+963
+00:55:17,300 --> 00:55:21,105
+So for the ones that are coreferent in the gold standard data,
+那么对于那些在黄金标准数据中具有共同意义的数据，
+
+964
+00:55:21,105 --> 00:55:24,885
+we want the sum of their assigned probabilities to be high.
+我们希望它们指定概率的总和很高。
+
+965
+00:55:24,885 --> 00:55:31,135
+And so what that means is that it's sort of sufficient if we have,
+所以这意味着，如果我们拥有，那就足够了，
+
+966
+00:55:31,135 --> 00:55:34,300
+um, one of them giving
+嗯，其中一个给予
+
+967
+00:55:34,300 --> 00:55:38,375
+a high probability and they don't all have to give a high probability.
+概率很高，并不是所有人都必须给出高概率。
+
+968
+00:55:38,375 --> 00:55:41,219
+So providing it's giving 0,9 probability,
+因此，它提供0,9概率，
+
+969
+00:55:41,219 --> 00:55:43,535
+say it a one of the correct antecedents,
+说这是一个正确的前因，
+
+970
+00:55:43,535 --> 00:55:45,695
+we're getting a high score.
+我们获得了高分。
+
+971
+00:55:45,695 --> 00:55:49,660
+Okay. So we're gonna turn that into a loss function in the kind of
+好的。因此，我们将把它变成一种损失函数
+
+972
+00:55:49,660 --> 00:55:53,585
+standard way we do in which we take log probabilities,
+我们采用标准方式记录日志概率，
+
+973
+00:55:53,585 --> 00:55:56,260
+um, and then we want to, um,
+嗯，然后我们想，嗯，
+
+974
+00:55:56,260 --> 00:55:58,590
+or negative log probabilities to give us
+或负日志概率给我们
+
+975
+00:55:58,590 --> 00:56:02,150
+a loss and then we're wanting to minimize that loss.
+损失然后我们想要减少损失。
+
+976
+00:56:02,150 --> 00:56:05,909
+So with the mention ranking model,
+所以提到排名模型，
+
+977
+00:56:05,909 --> 00:56:07,870
+um, at test time,
+嗯，在考试时间，
+
+978
+00:56:07,870 --> 00:56:09,360
+it's pretty much the same,
+它几乎一样，
+
+979
+00:56:09,360 --> 00:56:16,280
+but our softmax classifier is just going to assign one antecedent for each mention.
+但是我们的softmax分类器只是为每次提及分配一个前提。
+
+980
+00:56:16,280 --> 00:56:20,470
+And so we're then gonna hope that those sort of give us the kind
+所以我们希望那些给我们的那种
+
+981
+00:56:20,470 --> 00:56:25,640
+of clusters that we want and there's no subsequent clustering phase.
+我们想要的集群，没有后续的集群阶段。
+
+982
+00:56:25,820 --> 00:56:30,875
+So there's a big part of this that I left out which was,
+所以我遗漏的很大一部分是，
+
+983
+00:56:30,875 --> 00:56:32,510
+I've just said, "Okay,
+我刚才说，“好的，
+
+984
+00:56:32,510 --> 00:56:38,590
+we have this probability of MI and MJ as the- are they coreferent?"
+我们有MI和MJ的概率 - 他们是共同的吗？“
+
+985
+00:56:38,590 --> 00:56:41,050
+But I've sort of said, zero as to
+但我有点说，零
+
+986
+00:56:41,050 --> 00:56:43,760
+how you can determine whether they're coreferent or not.
+你如何确定他们是否是共同的。
+
+987
+00:56:43,760 --> 00:56:46,640
+Um, so briefly, um,
+嗯，简单地说，嗯，
+
+988
+00:56:46,640 --> 00:56:49,775
+here- here's the classical way of doing it.
+这里 - 这是经典的做法。
+
+989
+00:56:49,775 --> 00:56:51,895
+The classical way of doing it is,
+经典的做法是，
+
+990
+00:56:51,895 --> 00:56:56,090
+you had a whole bunch of features and you had
+你拥有一大堆功能
+
+991
+00:56:56,090 --> 00:57:00,480
+a feature based statistical classifier which gave a score.
+基于特征的统计分类器，给出了分数。
+
+992
+00:57:00,480 --> 00:57:02,650
+And these are the kind of features you could use.
+这些是您可以使用的功能。
+
+993
+00:57:02,650 --> 00:57:06,490
+So there are sort of strong features of person, number, gender agreement.
+因此，人，数量，性别协议有一些强大的特征。
+
+994
+00:57:06,490 --> 00:57:09,720
+So if you have a masculine or feminine pronoun,
+所以，如果你有男性或女性代名词，
+
+995
+00:57:09,720 --> 00:57:12,290
+you wanna find an appropriate antecedent for it.
+你想找到一个合适的先行者。
+
+996
+00:57:12,290 --> 00:57:16,630
+There are weaker, um, semantic compatibility features.
+有较弱的，嗯，语义兼容性功能。
+
+997
+00:57:16,630 --> 00:57:18,980
+So the mining conglomerate, the company,
+那么矿业集团，公司，
+
+998
+00:57:18,980 --> 00:57:21,755
+the conglomerate might be sort of similar to a company.
+该集团可能有点类似于公司。
+
+999
+00:57:21,755 --> 00:57:25,700
+You could use something like word2vec similarity and assess that.
+你可以使用像word2vec相似的东西并评估它。
+
+1000
+00:57:25,700 --> 00:57:28,120
+There are syntactic constraints.
+有句法约束。
+
+1001
+00:57:28,120 --> 00:57:30,730
+So this is then kind of like, um,
+所以这就像是，嗯，
+
+1002
+00:57:30,730 --> 00:57:34,570
+what Hobbs's algorithm was all about us working out
+Hobbs的算法是关于我们锻炼的
+
+1003
+00:57:34,570 --> 00:57:38,700
+how likely different syntactic configurations are gonna mean coreference.
+不同的句法配置有多大可能意味着共同参与。
+
+1004
+00:57:38,700 --> 00:57:40,950
+And indeed it is the case, you know,
+事实确实如此，你知道，
+
+1005
+00:57:40,950 --> 00:57:46,150
+that a lot of these feature-based systems used Hobbs' algorithm as a feature inside
+很多这些基于特征的系统都使用Hobbs的算法作为内部特征
+
+1006
+00:57:46,150 --> 00:57:51,860
+the system that was weighted and was normally a very strong feature to decide coreference.
+加权的系统通常是决定共同参与的一个非常强大的功能。
+
+1007
+00:57:51,860 --> 00:57:55,425
+Um, there are lots of other things you can put in as features.
+嗯，还有很多其他东西你可以作为功能。
+
+1008
+00:57:55,425 --> 00:57:56,860
+Um, recency.
+嗯，新近。
+
+1009
+00:57:56,860 --> 00:57:58,240
+So John went to a movie,
+约翰去看电影，
+
+1010
+00:57:58,240 --> 00:57:59,290
+Jack went as well,
+杰克去了，
+
+1011
+00:57:59,290 --> 00:58:00,600
+he was not busy.
+他不忙。
+
+1012
+00:58:00,600 --> 00:58:05,180
+The most likely referent for he is the closer candidate Jack.
+他最有可能的参考对象是杰克。
+
+1013
+00:58:05,180 --> 00:58:10,120
+Um, I've mentioned subjects are more likely to be, um, the antecedent.
+嗯，我提到的主题更有可能是，嗯，先行者。
+
+1014
+00:58:10,120 --> 00:58:11,550
+John went to a movie with Jack,
+约翰和杰克一起去看电影，
+
+1015
+00:58:11,550 --> 00:58:12,930
+he was not busy.
+他不忙。
+
+1016
+00:58:12,930 --> 00:58:15,990
+Um, John seems a more likely antecedent.
+嗯，约翰似乎更有可能是先行者。
+
+1017
+00:58:15,990 --> 00:58:18,155
+So that's the sort of subject preference.
+这就是主题偏好。
+
+1018
+00:58:18,155 --> 00:58:20,395
+There's also a parallelism preference.
+还存在并行性偏好。
+
+1019
+00:58:20,395 --> 00:58:22,295
+So John went with Jack to a movie,
+所以约翰和杰克一起去看电影，
+
+1020
+00:58:22,295 --> 00:58:24,170
+Joe went with him to a bar.
+乔和他一起去了一家酒吧。
+
+1021
+00:58:24,170 --> 00:58:28,405
+I think it's sort of reasonable to think that him there is probably Jack,
+我觉得有可能认为他可能是杰克，
+
+1022
+00:58:28,405 --> 00:58:32,825
+and that's sort of for parallelism reasons as opposed to going with the subject.
+这与并行主义的原因相反，而不是与主题相关。
+
+1023
+00:58:32,825 --> 00:58:36,480
+So there are various kind of linguistic features and constraints and so on,
+所以有各种语言特征和约束等等，
+
+1024
+00:58:36,480 --> 00:58:39,970
+and you can throw these all into a statistical classifier and that's
+你可以将这些全部投入到统计分类器中
+
+1025
+00:58:39,970 --> 00:58:44,910
+sort of 2000s decade coref systems as to how they're built.
+关于它们如何构建的2000年代十年核心系统。
+
+1026
+00:58:44,910 --> 00:58:49,350
+Um, more recently, people have built neural systems.
+嗯，最近，人们建立了神经系统。
+
+1027
+00:58:49,350 --> 00:58:50,560
+And so for these,
+对于这些，
+
+1028
+00:58:50,560 --> 00:58:53,810
+we are kind of normally using the same kind of embeddings.
+我们通常使用相同类型的嵌入。
+
+1029
+00:58:53,810 --> 00:58:58,250
+So we'll have a candidate antecedent that will have embeddings,
+所以我们将有一个候选先行者，将有嵌入，
+
+1030
+00:58:58,250 --> 00:59:00,510
+we'll have a mention that has embeddings.
+我们会提到嵌入式。
+
+1031
+00:59:00,510 --> 00:59:01,785
+And this will be something like
+这将是类似的东西
+
+1032
+00:59:01,785 --> 00:59:05,595
+average word vectors or something like that for the mention.
+平均单词向量或类似的东西。
+
+1033
+00:59:05,595 --> 00:59:09,935
+And we're gonna feed these into a neural network that will give us our score.
+我们将把它们送入一个能给我们分数的神经网络。
+
+1034
+00:59:09,935 --> 00:59:13,070
+But what you find is that
+但你发现的是
+
+1035
+00:59:13,070 --> 00:59:16,995
+most of these systems as well as having something like word vectors,
+大多数这些系统以及像word vector这样的东西，
+
+1036
+00:59:16,995 --> 00:59:20,610
+they also have additional features, um,
+他们还有其他功能，嗯，
+
+1037
+00:59:20,610 --> 00:59:23,910
+and these features still capture some of
+而这些功能仍然捕获了一些
+
+1038
+00:59:23,910 --> 00:59:28,265
+the things that were in the feature-based statistical classifiers.
+基于特征的统计分类器中的内容。
+
+1039
+00:59:28,265 --> 00:59:31,865
+So there will be often features that reflect things like,
+因此，通常会有一些功能可以反映出像
+
+1040
+00:59:31,865 --> 00:59:37,270
+what grammatical relation does this mention have? Is it a subject?
+这提到了什么语法关系？这是一个主题吗？
+
+1041
+00:59:37,270 --> 00:59:38,515
+Is it an object?
+它是一个对象吗？
+
+1042
+00:59:38,515 --> 00:59:42,825
+That's something you could put into the features of a mention.
+这是你可以提到的功能。
+
+1043
+00:59:42,825 --> 00:59:46,565
+But then, closer things are more likely to be coreferent.
+但是，更接近的事情更有可能是共同的。
+
+1044
+00:59:46,565 --> 00:59:51,270
+So you might have additional features here which record how far apart dimensions are,
+所以你可能在这里有额外的功能记录了相距多远的尺寸，
+
+1045
+00:59:51,270 --> 00:59:54,180
+and those things get thrown in as well.
+那些东西也被抛入其中。
+
+1046
+00:59:54,180 --> 01:00:00,935
+Um, and so these kind of features are still important even in neural systems.
+嗯，所以即使在神经系统中，这些特征仍然很重要。
+
+1047
+01:00:00,935 --> 01:00:07,165
+And so I'll skip ahead now and show you a bit about, um,
+所以我现在就跳过去向你展示一下，嗯，
+
+1048
+01:00:07,165 --> 01:00:11,450
+what is the kind of current state of the art for coreference resolution,
+什么是当前的共参考分辨率技术，
+
+1049
+01:00:11,450 --> 01:00:14,950
+and this was a system that was done at the University of Washington in
+这是一个在华盛顿大学完成的系统
+
+1050
+01:00:14,950 --> 01:00:20,495
+2017 by Kenton Lee and assorted other, um, authors.
+2017年作者：Kenton Lee和其他作者。
+
+1051
+01:00:20,495 --> 01:00:26,910
+Um, so the goal here was to produce an end-to-end coreference system that it was text in,
+嗯，所以这里的目标是生成一个端到端的共享系统，它是文本，
+
+1052
+01:00:26,910 --> 01:00:30,715
+um, mention clusters that are coreferent out.
+嗯，提一下共同提出的集群。
+
+1053
+01:00:30,715 --> 01:00:35,335
+Um, and so they're wanting to use sort of a more complex
+嗯，所以他们想要使用更复杂的东西
+
+1054
+01:00:35,335 --> 01:00:40,420
+neural network that can do the whole thing end-to-end. So I'll go through,
+神经网络，可以做到端到端的整个事情。所以我会通过，
+
+1055
+01:00:40,420 --> 01:00:41,730
+um, the steps of that.
+嗯，其中的步骤。
+
+1056
+01:00:41,730 --> 01:00:45,985
+So the first step is we just start off with words.
+所以第一步是我们从言语开始。
+
+1057
+01:00:45,985 --> 01:00:47,705
+And so for each word,
+对于每个单词，
+
+1058
+01:00:47,705 --> 01:00:53,020
+we're going to look up a word embedding for it and that's in other stuff we've seen.
+我们要查找一个嵌入它的单词，这是我们见过的其他内容。
+
+1059
+01:00:53,020 --> 01:00:55,795
+We're also going to put in a character level CNN,
+我们还将加入CNN的角色级别，
+
+1060
+01:00:55,795 --> 01:01:00,885
+and the two of those concatenated are going to give the representation of each token.
+并且这两个连接的将给出每个标记的表示。
+
+1061
+01:01:00,885 --> 01:01:02,600
+That much should look familiar.
+这应该看起来很熟悉。
+
+1062
+01:01:02,600 --> 01:01:05,065
+Okay. Then after that,
+好的。然后，
+
+1063
+01:01:05,065 --> 01:01:11,255
+we're going to run a deep bidirectional LSTM back and forth across the sentence.
+我们将在整个句子中来回运行深度双向LSTM。
+
+1064
+01:01:11,255 --> 01:01:15,440
+Again, that should look familiar from stuff that we've seen before.
+再说一遍，我们以前见过的东西看起来应该很熟悉。
+
+1065
+01:01:15,440 --> 01:01:21,700
+Um, the next step gets us a bit into doing something more special, um,
+嗯，下一步让我们做一些更特别的事情，嗯，
+
+1066
+01:01:21,700 --> 01:01:24,115
+For coreference.
+对于共同参与。
+
+1067
+01:01:24,115 --> 01:01:30,790
+So what they wanted to do after that is have a representation for spans.
+所以他们想要做的就是有跨度的代表。
+
+1068
+01:01:30,790 --> 01:01:32,635
+And so by span,
+因此，跨度，
+
+1069
+01:01:32,635 --> 01:01:38,050
+we mean any contiguous subphrase of the word, of the sentence.
+我们指的是句子中任何单词的连续子句。
+
+1070
+01:01:38,050 --> 01:01:40,030
+So this is a span.
+所以这是一个跨度。
+
+1071
+01:01:40,030 --> 01:01:41,380
+This is a span.
+这是一个跨度。
+
+1072
+01:01:41,380 --> 01:01:42,670
+This is a span.
+这是一个跨度。
+
+1073
+01:01:42,670 --> 01:01:46,315
+Electric said the postal is a span, every sub-sequence.
+电力称邮政是一个跨度，每个子序列。
+
+1074
+01:01:46,315 --> 01:01:48,250
+Um, so I'll come back to that.
+嗯，我会回来的。
+
+1075
+01:01:48,250 --> 01:01:50,215
+But, you know, they'll- in principle,
+但是，你知道，他们原则上会
+
+1076
+01:01:50,215 --> 01:01:53,155
+you're working this out for every sub-sequence.
+你正在为每个子序列工作。
+
+1077
+01:01:53,155 --> 01:01:55,360
+So for every sub-sequence,
+所以对于每个子序列，
+
+1078
+01:01:55,360 --> 01:01:58,675
+they want to come up with a span representation.
+他们想要提出跨度表示。
+
+1079
+01:01:58,675 --> 01:02:04,975
+And so this span representation is going to be in three parts,
+所以这个跨度表示将分为三个部分，
+
+1080
+01:02:04,975 --> 01:02:09,325
+um, that represent one of these sub-sequences.
+嗯，代表这些子序列之一。
+
+1081
+01:02:09,325 --> 01:02:13,660
+Um, so each of these will get its own representation.
+嗯，所以每个人都会得到自己的代表。
+
+1082
+01:02:13,660 --> 01:02:15,640
+And so the question is, what?
+所以问题是，什么？
+
+1083
+01:02:15,640 --> 01:02:18,910
+And so we have this span representation,
+所以我们有这个跨度表示，
+
+1084
+01:02:18,910 --> 01:02:22,375
+and it's gonna be in these three parts here.
+这将是这三个部分。
+
+1085
+01:02:22,375 --> 01:02:26,770
+Um, so what these parts are is,
+嗯，这些部分是什么，
+
+1086
+01:02:26,770 --> 01:02:28,420
+well, first of all,
+好吧，首先，
+
+1087
+01:02:28,420 --> 01:02:31,450
+we're going to have a representation, um,
+我们要有一个代表，嗯，
+
+1088
+01:02:31,450 --> 01:02:35,035
+which is just looking at the first word of
+这只是看第一个字
+
+1089
+01:02:35,035 --> 01:02:40,450
+the span and the last word of the span according to the BiLSTM.
+根据BiLSTM，跨度和跨度的最后一个字。
+
+1090
+01:02:40,450 --> 01:02:43,135
+So if we're looking at the span, the postal service,
+所以，如果我们正在考虑跨度，邮政服务，
+
+1091
+01:02:43,135 --> 01:02:45,670
+we're going to take this BiLSTM and
+我们将采用这种BiLSTM和
+
+1092
+01:02:45,670 --> 01:02:50,245
+this BiLSTM and use them as part of the representation of the span.
+这个BiLSTM并将它们用作跨度表示的一部分。
+
+1093
+01:02:50,245 --> 01:02:52,225
+Um, that's a good start,
+嗯，这是一个好的开始，
+
+1094
+01:02:52,225 --> 01:02:54,730
+but then they actually do something a little tricky.
+但他们实际上做了一些有点棘手的事情。
+
+1095
+01:02:54,730 --> 01:02:59,710
+So kind of like when we're doing dependency parsing, the idea was,
+有点像我们在进行依赖解析时，这个想法是，
+
+1096
+01:02:59,710 --> 01:03:02,815
+well, phrases are going to have a headword,
+好吧，短语会有一个标题，
+
+1097
+01:03:02,815 --> 01:03:05,050
+um, so that if it's,
+嗯，如果是的话，
+
+1098
+01:03:05,050 --> 01:03:10,420
+um, you know, my younger sister that the headword of that is sister,
+嗯，你知道，我的妹妹，那个标题是妹妹，
+
+1099
+01:03:10,420 --> 01:03:14,905
+and there- if it's something like the goat in the corner of the field,
+而且 - 如果它像田野角落里的山羊，
+
+1100
+01:03:14,905 --> 01:03:16,960
+the headword of that is going to be goat.
+这个词的标题是山羊。
+
+1101
+01:03:16,960 --> 01:03:21,520
+So they want to find a way of capturing headwords out of the text.
+因此，他们希望找到一种从文本中捕获词条的方法。
+
+1102
+01:03:21,520 --> 01:03:26,200
+Um, and so what they're going to do for that is use attention.
+嗯，所以他们要为此做的是使用注意力。
+
+1103
+01:03:26,200 --> 01:03:30,820
+So they're going to say we have this span, the postal service,
+所以他们会说我们有这个跨度，邮政服务，
+
+1104
+01:03:30,820 --> 01:03:33,640
+and we're going to use attention as
+我们将把注意力作为
+
+1105
+01:03:33,640 --> 01:03:38,050
+a span internal mechanism to sort of approximate a head.
+一个跨度内部机制来排序近似一个头。
+
+1106
+01:03:38,050 --> 01:03:42,205
+So what we're going to do, uh, here,
+那么我们要做什么，呃，在这里，
+
+1107
+01:03:42,205 --> 01:03:45,520
+what we're going to do is we're going to want to
+我们要做的就是我们想要的
+
+1108
+01:03:45,520 --> 01:03:50,020
+learn attention weights, I'm just gonna, yeah.
+学习注意力量，我会，是的。
+
+1109
+01:03:50,020 --> 01:03:54,220
+Um, what we're gonna do is for this span, um,
+嗯，我们要做的就是这个跨度，嗯，
+
+1110
+01:03:54,220 --> 01:03:58,810
+we're going to be learning based on the hope,
+我们将基于希望学习，
+
+1111
+01:03:58,810 --> 01:04:03,250
+the ends of the span which words to pay how much attention to.
+跨度的两端要支付多少注意力。
+
+1112
+01:04:03,250 --> 01:04:06,970
+So we're gonna put attention weights on the different words,
+所以我们要把注意力放在不同的词上，
+
+1113
+01:04:06,970 --> 01:04:09,730
+and then we're going to, in the usual attention way,
+然后我们将以通常的注意方式，
+
+1114
+01:04:09,730 --> 01:04:15,220
+make this weighted sum of having put the word pair-
+把这个单词对的加权总和 -
+
+1115
+01:04:15,220 --> 01:04:19,360
+the bidirectional LSTM pairs through a feed-forward network and end
+双向LSTM通过前馈网络对结束
+
+1116
+01:04:19,360 --> 01:04:23,695
+up with this new representation of a weighted representation.
+这种加权表示的新表示。
+
+1117
+01:04:23,695 --> 01:04:25,450
+And the hope is that in this case,
+希望是在这种情况下，
+
+1118
+01:04:25,450 --> 01:04:28,630
+most of the weight will go on this final servers,
+大部分的重量将放在最终的服务器上，
+
+1119
+01:04:28,630 --> 01:04:30,445
+which will be the headword.
+这将是标题。
+
+1120
+01:04:30,445 --> 01:04:32,755
+But there'll be sort of distributed across it.
+但是它会有分布。
+
+1121
+01:04:32,755 --> 01:04:36,055
+And so that gives them a model of
+所以这给了他们一个模型
+
+1122
+01:04:36,055 --> 01:04:41,875
+sort of mentions that use both ends and hope to find the key word of the mention.
+提到使用两端并希望找到提及的关键词。
+
+1123
+01:04:41,875 --> 01:04:46,015
+Okay. Um, so, um,
+好的。嗯，恩，嗯，
+
+1124
+01:04:46,015 --> 01:04:48,010
+that's two-thirds of the span,
+这是跨度的三分之二，
+
+1125
+01:04:48,010 --> 01:04:51,235
+but they still have over here these additional features.
+但他们仍然有这些额外的功能。
+
+1126
+01:04:51,235 --> 01:04:54,235
+And so they still have some additional features.
+因此他们仍然有一些额外的功能。
+
+1127
+01:04:54,235 --> 01:04:58,195
+They want to be able to mark speakers and addressees.
+他们希望能够标记扬声器和收件人。
+
+1128
+01:04:58,195 --> 01:05:02,200
+Um, they want to mark other things like the grammatical role.
+嗯，他们想要标记其他东西，比如语法角色。
+
+1129
+01:05:02,200 --> 01:05:03,970
+But if things occur, you know,
+但是如果事情发生了，你知道，
+
+1130
+01:05:03,970 --> 01:05:07,240
+it is still useful to have some additional features.
+拥有一些额外的功能仍然很有用。
+
+1131
+01:05:07,240 --> 01:05:08,620
+And so what they do is,
+所以他们做的是，
+
+1132
+01:05:08,620 --> 01:05:11,860
+this is a representation of each span,
+这是每个跨度的表示，
+
+1133
+01:05:11,860 --> 01:05:16,390
+and then they're going to want to say are two spans coreferent.
+然后他们想要说的是两个跨度的共同点。
+
+1134
+01:05:16,390 --> 01:05:22,120
+And so they're going to have one score for the two, two split, each of two spans,
+因此，他们将获得两个分数，两个分裂，每个两个跨度，
+
+1135
+01:05:22,120 --> 01:05:23,365
+which is essentially saying,
+这基本上是说，
+
+1136
+01:05:23,365 --> 01:05:24,850
+is that a good mention?
+这是一个很好的提及？
+
+1137
+01:05:24,850 --> 01:05:26,920
+And then you're going to have scores of,
+然后你会得到几十分，
+
+1138
+01:05:26,920 --> 01:05:29,170
+do they look coreferent?
+他们看起来很干净吗？
+
+1139
+01:05:29,170 --> 01:05:34,870
+And so having calculated these representations for each span,
+因此计算了每个跨度的这些表示，
+
+1140
+01:05:34,870 --> 01:05:39,220
+you're running three- through things through a fully connected feed-forward network,
+你通过一个完全连接的前馈网络运行三个东西，
+
+1141
+01:05:39,220 --> 01:05:41,245
+multiplying by a weight factor,
+乘以权重因子，
+
+1142
+01:05:41,245 --> 01:05:42,490
+and that's giving you, uh,
+那是给你的，呃，
+
+1143
+01:05:42,490 --> 01:05:44,635
+is that a good mention score?
+这是一个很好的提分吗？
+
+1144
+01:05:44,635 --> 01:05:46,960
+And then for are they coreferent,
+然后是因为他们是共同的，
+
+1145
+01:05:46,960 --> 01:05:49,330
+you're taking two spans,
+你需要两个跨度，
+
+1146
+01:05:49,330 --> 01:05:53,650
+the pointwise Hadamard product of two spans and
+两个跨度和点的Hadamard积分
+
+1147
+01:05:53,650 --> 01:05:56,140
+some extra features like distance apart in
+一些额外的功能，如距离分开
+
+1148
+01:05:56,140 --> 01:05:59,469
+the text and putting them through another neural network,
+文本并通过另一个神经网络，
+
+1149
+01:05:59,469 --> 01:06:01,285
+and that's then giving you, are
+那是给你的，是的
+
+1150
+01:06:01,285 --> 01:06:03,475
+these two spans coreferent?
+这两个跨度有何结合？
+
+1151
+01:06:03,475 --> 01:06:05,590
+But all of these pieces,
+但所有这些，
+
+1152
+01:06:05,590 --> 01:06:10,480
+um, give you an overall loss function.
+嗯，给你一个整体的损失功能。
+
+1153
+01:06:10,480 --> 01:06:14,815
+So you can say that your model is, um, okay.
+所以你可以说你的模型是，好吧。
+
+1154
+01:06:14,815 --> 01:06:16,885
+We're going to run these LSTMs,
+我们要运行这些LSTM，
+
+1155
+01:06:16,885 --> 01:06:18,880
+we're going to take all spans,
+我们要采取所有跨度，
+
+1156
+01:06:18,880 --> 01:06:20,829
+we're going to score this,
+我们打算得分，
+
+1157
+01:06:20,829 --> 01:06:24,370
+and we know the gold answer for our coreference system.
+我们知道我们的共同参与系统的黄金答案。
+
+1158
+01:06:24,370 --> 01:06:29,200
+And so we want to be predicting things that are coreferent and have
+所以我们想要预测那些具有共同意义的东西
+
+1159
+01:06:29,200 --> 01:06:34,375
+a loss based on the probability that we calculate with these scores,
+基于我们用这些分数计算的概率的损失，
+
+1160
+01:06:34,375 --> 01:06:35,770
+um, as I had mentioned,
+嗯，正如我所提到的，
+
+1161
+01:06:35,770 --> 01:06:39,205
+ranking model using a softmax loss like before.
+使用像之前一样的softmax损失的排名模型。
+
+1162
+01:06:39,205 --> 01:06:42,775
+So if you put all of this together and train it end to end,
+所以，如果你将所有这些放在一起并进行端到端的训练，
+
+1163
+01:06:42,775 --> 01:06:48,685
+you've got a whole coreference system that goes from words to coreference decisions.
+你有一个完整的共享系统，从单词到共同决策。
+
+1164
+01:06:48,685 --> 01:06:52,045
+Um, there's a huge problem with that,
+嗯，这有一个很大的问题，
+
+1165
+01:06:52,045 --> 01:06:55,810
+um, which is if you actually applied this naively, well,
+嗯，如果你真的应用这个天真，那么，
+
+1166
+01:06:55,810 --> 01:06:58,930
+the problem is the number of spans in a piece of
+问题是一块中的跨度数量
+
+1167
+01:06:58,930 --> 01:07:03,055
+text is the square of the length of the text in words.
+text是文字长度的平方。
+
+1168
+01:07:03,055 --> 01:07:06,400
+And so therefore, if you're making coreference decisions,
+因此，如果您正在制定共识决策，
+
+1169
+01:07:06,400 --> 01:07:10,060
+which are between, um, pairs of spans,
+介于两个跨度之间，
+
+1170
+01:07:10,060 --> 01:07:13,060
+you've then got an algorithm that's, um,
+你有一个算法，嗯，
+
+1171
+01:07:13,060 --> 01:07:15,415
+O- OT to the fourth,
+O- OT到第四，
+
+1172
+01:07:15,415 --> 01:07:18,025
+where the length of the text is T words.
+其中文本的长度是T字。
+
+1173
+01:07:18,025 --> 01:07:22,375
+So that's sort of really, really computationally impractical.
+所以这真的，在计算上是不切实际的。
+
+1174
+01:07:22,375 --> 01:07:23,515
+So at this point,
+所以在这一点上，
+
+1175
+01:07:23,515 --> 01:07:26,350
+they sort of say, well, actually,
+他们有点说，其实，
+
+1176
+01:07:26,350 --> 01:07:29,905
+we do want to use our mouths a little and we want to work out
+我们确实想要用一点口气，我们想要锻炼身体
+
+1177
+01:07:29,905 --> 01:07:34,090
+how likely different things are to be mentions.
+提到不同的东西的可能性有多大。
+
+1178
+01:07:34,090 --> 01:07:38,650
+So effectively, um, then they're putting in a lot of pruning to
+如此有效，嗯，然后他们正在进行大量的修剪
+
+1179
+01:07:38,650 --> 01:07:43,765
+decide which spans are actually things that they want to consider in their model.
+确定哪些跨度实际上是他们想要在模型中考虑的事情。
+
+1180
+01:07:43,765 --> 01:07:45,730
+And so at this point, in some sense,
+所以在这一点上，从某种意义上说，
+
+1181
+01:07:45,730 --> 01:07:47,170
+it's a little bit of a cheat, right?
+这有点像作弊，对吧？
+
+1182
+01:07:47,170 --> 01:07:50,440
+Because really this pruning step here is okay,
+因为这里的修剪步骤真的没问题，
+
+1183
+01:07:50,440 --> 01:07:51,760
+we're going to stick in
+我们要坚持下去
+
+1184
+01:07:51,760 --> 01:07:54,205
+a mention detection module,
+提及检测模块，
+
+1185
+01:07:54,205 --> 01:07:57,040
+um, just like a conventional system.
+嗯，就像传统的系统一样。
+
+1186
+01:07:57,040 --> 01:08:01,225
+Um, but the prettiness of it is in terms of
+嗯，但它的漂亮就是
+
+1187
+01:08:01,225 --> 01:08:05,440
+the algor- in terms of the loss function that's defined.
+关于定义的损失函数的算法。
+
+1188
+01:08:05,440 --> 01:08:09,730
+The loss function is really defined end to end from just a sequence of
+损失函数实际上是从一系列的端到端端到端定义的
+
+1189
+01:08:09,730 --> 01:08:14,380
+tokens through to the mention ranking decisions.
+标记到提及排名决定。
+
+1190
+01:08:14,380 --> 01:08:18,204
+And so it is an end-to-end model,
+所以这是一个端到端的模型，
+
+1191
+01:08:18,204 --> 01:08:20,320
+even though in practice to make it practical,
+即使在实践中使其变得实用，
+
+1192
+01:08:20,320 --> 01:08:24,680
+you have to have something like a mention detector to get it to work.
+你必须有类似提及探测器的东西让它工作。
+
+1193
+01:08:26,100 --> 01:08:30,520
+Okay. Pause for breath. Um, yeah,
+好的。暂停呼吸。嗯，是的，
+
+1194
+01:08:30,520 --> 01:08:34,510
+so there's one last.
+所以还有最后一个。
+
+1195
+01:08:34,510 --> 01:08:40,180
+So we've done sort of mention pair model and mention ranking model.
+所以我们已经提到了一对提模型和提及排名模型。
+
+1196
+01:08:40,180 --> 01:08:42,370
+Um, and so for both of those,
+嗯，对于这两个人，
+
+1197
+01:08:42,370 --> 01:08:44,830
+you're just taking individual mentions and saying,
+你只是个别提及说，
+
+1198
+01:08:44,830 --> 01:08:46,870
+here's another mention, what,
+这是另一个提及，什么，
+
+1199
+01:08:46,870 --> 01:08:48,550
+what shall I do with it?
+我该怎么办？
+
+1200
+01:08:48,550 --> 01:08:53,125
+Let's look at mentions and see if we're coreferent to each other.
+让我们看看提及，看看我们是否相互依存。
+
+1201
+01:08:53,125 --> 01:09:00,280
+And that there's no real concept of entities which are clusters of mentions.
+并且没有真正的实体概念是提及的集群。
+
+1202
+01:09:00,280 --> 01:09:02,680
+You're just making these sort of one-off decisions
+你只是在做这些一次性的决定
+
+1203
+01:09:02,680 --> 01:09:06,040
+between pairs of mentions, and somehow,
+提到之间，不知何故，
+
+1204
+01:09:06,040 --> 01:09:09,610
+sort of the entities as clusters just
+将实体排序为集群
+
+1205
+01:09:09,610 --> 01:09:14,050
+emerge as a consequence of those mention pair decisions.
+由于那些提及配对决定而出现。
+
+1206
+01:09:14,050 --> 01:09:19,555
+So there's been this sort of long-standing feeling that,
+所以有这种长期存在的感觉，
+
+1207
+01:09:19,555 --> 01:09:22,570
+oh that can't really be right,
+哦，这真的不对，
+
+1208
+01:09:22,570 --> 01:09:28,060
+the right way to do coreference must be really to do it as a clustering task,
+做共识的正确方法必须真正作为一个集群任务，
+
+1209
+01:09:28,060 --> 01:09:30,040
+and people often refer to this as saying,
+人们经常提到这一点，
+
+1210
+01:09:30,040 --> 01:09:33,235
+we want entities as first-class citizens.
+我们希望实体成为一等公民。
+
+1211
+01:09:33,235 --> 01:09:34,600
+So we want to be,
+所以我们想要，
+
+1212
+01:09:34,600 --> 01:09:40,300
+sort of putting together mentions into clusters that represent the entities.
+将提及组合成代表实体的集群。
+
+1213
+01:09:40,300 --> 01:09:45,010
+And the obvious way to do that is to do a kind of bottom-up agglomerative clustering.
+显而易见的方法是做一种自下而上的凝聚聚类。
+
+1214
+01:09:45,010 --> 01:09:46,900
+So you start off by saying,
+所以你先说，
+
+1215
+01:09:46,900 --> 01:09:49,855
+each mention is its own singleton cluster,
+每次提到都是自己的单身人群
+
+1216
+01:09:49,855 --> 01:09:55,585
+and then you're making decisions to merge clu- clusters which is initially,
+然后你决定合并最初的clu-clusters
+
+1217
+01:09:55,585 --> 01:09:58,150
+um, saying two mentions are coreferent.
+嗯，说两个提及是共同的。
+
+1218
+01:09:58,150 --> 01:09:59,695
+But as you go on with it,
+但随着你的继续，
+
+1219
+01:09:59,695 --> 01:10:04,285
+you're then making decisions that two clusters are coreferent or not.
+然后你决定两个集群是否是共同的。
+
+1220
+01:10:04,285 --> 01:10:07,120
+So the idea here is you'll have a piece of text,
+所以这里的想法是你会有一段文字，
+
+1221
+01:10:07,120 --> 01:10:09,265
+Google recently blah blah blah blah,
+谷歌最近等等等等等等等等，
+
+1222
+01:10:09,265 --> 01:10:12,055
+the company announced Google Plus, blah blah blah blah,
+该公司宣布推出Google Plus，等等等等等等等等。
+
+1223
+01:10:12,055 --> 01:10:14,380
+the product features blah blah blah blah.
+产品功能等等等等等等。
+
+1224
+01:10:14,380 --> 01:10:17,170
+And so you have here some mentions.
+所以你在这里有一些提及。
+
+1225
+01:10:17,170 --> 01:10:20,950
+And so what you're going to do is start off saying that okay,
+所以你要做的就是开始说那没关系，
+
+1226
+01:10:20,950 --> 01:10:24,445
+there are these four mentions that each their own cluster.
+有四个提到每个他们自己的集群。
+
+1227
+01:10:24,445 --> 01:10:26,170
+And then what we're gonna do,
+那么我们要做什么，
+
+1228
+01:10:26,170 --> 01:10:28,525
+is we're going to make some decisions.
+我们要做出一些决定吗？
+
+1229
+01:10:28,525 --> 01:10:32,740
+Um, so we might decide that these two clusters
+嗯，所以我们可能会决定这两个集群
+
+1230
+01:10:32,740 --> 01:10:37,375
+are coreferent and merge them into one cluster.
+是共同的，并将它们合并为一个集群。
+
+1231
+01:10:37,375 --> 01:10:41,965
+And then we might decide that these two,
+然后我们可能决定这两个，
+
+1232
+01:10:41,965 --> 01:10:48,095
+um, clusters are coreferent and merge them into one cluster.
+嗯，集群是共同的，并将它们合并为一个集群。
+
+1233
+01:10:48,095 --> 01:10:51,255
+And so we're progressively clustering.
+所以我们逐步聚类。
+
+1234
+01:10:51,255 --> 01:10:54,030
+And so then, we're going to look at these two clusters,
+那么，我们将看看这两个集群，
+
+1235
+01:10:54,030 --> 01:10:56,835
+cluster one and cluster two, and say,
+集群一和集群二，并说，
+
+1236
+01:10:56,835 --> 01:11:00,585
+no we don't think those ones are coreferent,
+不，我们不认为那些是共同的，
+
+1237
+01:11:00,585 --> 01:11:03,030
+and therefore we're going to keep them apart.
+因此我们要将它们分开。
+
+1238
+01:11:03,030 --> 01:11:10,645
+And so your, your coreference algorithm stops when there's nothing left to merge.
+因此，当没有任何东西要合并时，你的共参数算法会停止。
+
+1239
+01:11:10,645 --> 01:11:15,430
+And the reason why people think that this is the right thing to do is,
+人们认为这是正确的事情的原因是，
+
+1240
+01:11:15,430 --> 01:11:19,930
+the feeling is that if we sort of build partial clusters like this,
+感觉是，如果我们构建像这样的部分集群，
+
+1241
+01:11:19,930 --> 01:11:22,405
+that you'll be able to do a better job.
+你将能够做得更好。
+
+1242
+01:11:22,405 --> 01:11:24,040
+Because if I just sort of say,
+因为如果我只是说，
+
+1243
+01:11:24,040 --> 01:11:25,615
+well here are two mentions,
+这里有两个提及，
+
+1244
+01:11:25,615 --> 01:11:27,459
+Google and Google Plus,
+Google和Google Plus，
+
+1245
+01:11:27,459 --> 01:11:32,020
+should they be regarded as co- coreferent or not?
+他们应该被视为共同参与吗？
+
+1246
+01:11:32,020 --> 01:11:34,450
+Um, well, since you're smart human beings,
+嗯，既然你是聪明的人，
+
+1247
+01:11:34,450 --> 01:11:36,640
+and know what Google is and know what Google Plus is,
+并了解Google是什么，知道Google Plus是什么，
+
+1248
+01:11:36,640 --> 01:11:39,070
+of course you'll answer no, of course not.
+当然你不会回答不，当然不是。
+
+1249
+01:11:39,070 --> 01:11:40,495
+Um, but, you know,
+嗯，但是，你知道，
+
+1250
+01:11:40,495 --> 01:11:43,180
+if you're just a computer trying to make a decision,
+如果你只是一台试图做出决定的电脑，
+
+1251
+01:11:43,180 --> 01:11:45,325
+it's sort of hard to know the right answer,
+很难知道正确的答案，
+
+1252
+01:11:45,325 --> 01:11:49,240
+because there are lots of other cases when there are shortenings,
+因为有很多其他的情况，当有缩短时，
+
+1253
+01:11:49,240 --> 01:11:52,030
+where the right answer is that they're coreferent, right.
+正确的答案是，他们是共同的，对。
+
+1254
+01:11:52,030 --> 01:11:56,199
+Because if this is being Google and Google Corp,
+因为如果这是谷歌和谷歌公司，
+
+1255
+01:11:56,199 --> 01:11:59,200
+then it would have been right to regard them as coreferent.
+那么将它们视为共同的是正确的。
+
+1256
+01:11:59,200 --> 01:12:01,435
+Or if it was sort of, um,
+或者，如果它是那种，嗯，
+
+1257
+01:12:01,435 --> 01:12:04,210
+something like Hillary Clinton and Hillary,
+像希拉里克林顿和希拉里这样的东西，
+
+1258
+01:12:04,210 --> 01:12:06,610
+it would have been right to regard them as coreferent.
+将它们视为共识是正确的。
+
+1259
+01:12:06,610 --> 01:12:09,895
+So it can often be kind of hard to tell what's coreferent.
+因此，通常很难分辨出什么是共同的。
+
+1260
+01:12:09,895 --> 01:12:11,830
+Um, but the hope is that,
+嗯，但希望是，
+
+1261
+01:12:11,830 --> 01:12:14,980
+if you've made some of the easy decisions first,
+如果你先做了一些简单的决定，
+
+1262
+01:12:14,980 --> 01:12:17,830
+so if you decide Google and the company are coreferent
+所以如果你决定谷歌和公司是共同的
+
+1263
+01:12:17,830 --> 01:12:20,950
+and Google Plus and the product are coreferent,
+和谷歌Plus和产品是共同的，
+
+1264
+01:12:20,950 --> 01:12:24,580
+then it should be much easier to tell and to say,
+然后它应该更容易分辨和说，
+
+1265
+01:12:24,580 --> 01:12:25,990
+well product and company,
+好产品和公司，
+
+1266
+01:12:25,990 --> 01:12:27,865
+they're definitely different things.
+他们肯定是不同的东西。
+
+1267
+01:12:27,865 --> 01:12:31,510
+And therefore we should keep these things separate.
+因此我们应该将这些事情分开。
+
+1268
+01:12:31,510 --> 01:12:34,405
+Um, and so that is the goal,
+嗯，这就是目标，
+
+1269
+01:12:34,405 --> 01:12:36,955
+and so to follow that goal,
+所以要遵循这个目标，
+
+1270
+01:12:36,955 --> 01:12:39,160
+the kind of models people build.
+人们建立的模型。
+
+1271
+01:12:39,160 --> 01:12:43,675
+And this was actually a model that Kevin Clark is one of the PhD students here,
+这实际上是Kevin Clark是这里的博士生之一，
+
+1272
+01:12:43,675 --> 01:12:46,080
+um, and we did a couple of years ago.
+嗯，我们几年前做过。
+
+1273
+01:12:46,080 --> 01:12:47,415
+The idea was well,
+这个想法很好，
+
+1274
+01:12:47,415 --> 01:12:49,350
+what we're going to do is,
+我们要做的是，
+
+1275
+01:12:49,350 --> 01:12:52,860
+we're initially going to consider mentioned pairs,
+我们最初会考虑提到的对，
+
+1276
+01:12:52,860 --> 01:12:57,180
+and build some kind of distributed, mention pair representation,
+并构建某种分布式提及对表示，
+
+1277
+01:12:57,180 --> 01:13:01,815
+which is kind of similar to what we were doing previously with the previous models.
+这与我们之前使用之前的型号所做的类似。
+
+1278
+01:13:01,815 --> 01:13:07,900
+But we're then going to go beyond that and come up with cluster representations.
+但是我们将超越它并提出集群表示。
+
+1279
+01:13:07,900 --> 01:13:11,095
+And then we can look at cluster pair representations.
+然后我们可以看一下集群对表示。
+
+1280
+01:13:11,095 --> 01:13:16,045
+And we would hope that by looking at these cluster representations,
+我们希望通过查看这些集群表示，
+
+1281
+01:13:16,045 --> 01:13:21,760
+we'll be able to make better decisions of what to merge or what next to merge.
+我们将能够更好地决定合并的内容或合并的内容。
+
+1282
+01:13:21,760 --> 01:13:27,760
+Um, I have a few more slides that go through the Clark and Manning algorithm.
+嗯，我还有一些幻灯片通过了Clark和Manning算法。
+
+1283
+01:13:27,760 --> 01:13:30,490
+Um, but I also have just a few minutes left.
+嗯，但我还有几分钟的时间。
+
+1284
+01:13:30,490 --> 01:13:33,680
+And so I think I'll skip the details.
+所以我想我会跳过细节。
+
+1285
+01:13:33,680 --> 01:13:37,120
+Um, I think the main thing that's interesting here,
+嗯，我认为这里有趣的主要事情，
+
+1286
+01:13:37,120 --> 01:13:41,740
+is the idea of clustering based coreference algorithms,
+是基于聚类的共参数算法的想法，
+
+1287
+01:13:41,740 --> 01:13:43,465
+and why in principle,
+为什么原则上
+
+1288
+01:13:43,465 --> 01:13:45,490
+it should give you extra oomph.
+它应该给你额外的魅力。
+
+1289
+01:13:45,490 --> 01:13:49,135
+Um, and that's sort of the main useful thing to get through.
+嗯，这是通过的主要有用的东西。
+
+1290
+01:13:49,135 --> 01:13:51,280
+Because what I want to make sure we have covered in
+因为我想确保我们已经涵盖了什么
+
+1291
+01:13:51,280 --> 01:13:54,115
+the last few minutes that I've said nothing at all about,
+最后几分钟，我什么都没说，
+
+1292
+01:13:54,115 --> 01:13:58,630
+is how do you evaluate coreference resolution and how well does it work?
+你是如何评估共指解决方案以及它的工作情况的？
+
+1293
+01:13:58,630 --> 01:14:01,330
+So let me skip ahead to that.
+所以让我跳过这个。
+
+1294
+01:14:01,330 --> 01:14:07,120
+Um, so if you look at coreference resolution papers,
+嗯，所以如果你看一下共识决议论文，
+
+1295
+01:14:07,120 --> 01:14:08,680
+or something like that,
+或类似的东西，
+
+1296
+01:14:08,680 --> 01:14:15,250
+um, there are many metrics that people have used to evaluate coreference,
+嗯，有很多人用来评估共指的指标，
+
+1297
+01:14:15,250 --> 01:14:17,680
+and they have a long alphabet soup of names.
+他们有一个很长的字母汤。
+
+1298
+01:14:17,680 --> 01:14:20,140
+So there's MUC, and CEAF, and LEA,
+所以有MUC，CEAF和LEA，
+
+1299
+01:14:20,140 --> 01:14:22,510
+and B- CUBED, and BLANC and,
+和B-CUBED，以及BLANC和，
+
+1300
+01:14:22,510 --> 01:14:24,010
+um, things like that.
+嗯，这样的事情。
+
+1301
+01:14:24,010 --> 01:14:29,080
+Um, so effectively part of it is that if you look in the clustering literature,
+嗯，如此有效的一部分是，如果你看一下聚类文献，
+
+1302
+01:14:29,080 --> 01:14:32,215
+there are lots of ways that people try and evaluate clustering,
+有很多方法可以让人们尝试和评估聚类，
+
+1303
+01:14:32,215 --> 01:14:36,610
+and essentially any of those metrics and some other ones, you can, um,
+基本上任何这些指标和其他指标，你可以，嗯，
+
+1304
+01:14:36,610 --> 01:14:41,590
+port over, um, to, um, coreference evaluation.
+移动，嗯，嗯，共同评估。
+
+1305
+01:14:41,590 --> 01:14:45,895
+I mean, why it's kind of difficult is the situation you have,
+我的意思是，为什么你遇到的情况有点困难，
+
+1306
+01:14:45,895 --> 01:14:49,900
+is that you have a gold standard which picks out certain clusters,
+是你有一个黄金标准，挑选出某些集群，
+
+1307
+01:14:49,900 --> 01:14:52,885
+and the system picks out certain clusters,
+并且系统挑出某些集群，
+
+1308
+01:14:52,885 --> 01:14:58,000
+and you get some result like this and you have to decide how good it is.
+你得到一些像这样的结果，你必须决定它有多好。
+
+1309
+01:14:58,000 --> 01:15:01,375
+So I'm going to show you just quickly one particular algorithm.
+所以我将快速向您展示一个特定的算法。
+
+1310
+01:15:01,375 --> 01:15:04,630
+So the B-CUBED algorithm uses
+所以B-CUBED算法使用
+
+1311
+01:15:04,630 --> 01:15:08,725
+precision and recall and F-measure like we thought of before.
+像我们之前想到的那样精确，召回和F-measure。
+
+1312
+01:15:08,725 --> 01:15:11,290
+So it looks at, uh,
+所以它看，呃，
+
+1313
+01:15:11,290 --> 01:15:13,870
+cluster identified by the system.
+由系统识别的集群。
+
+1314
+01:15:13,870 --> 01:15:19,105
+And it says, well this cluster is four-fifths,
+它说，这个集群是五分之四，
+
+1315
+01:15:19,105 --> 01:15:20,890
+um, gold cluster one,
+嗯，黄金集群一，
+
+1316
+01:15:20,890 --> 01:15:23,470
+so the precision is four-fifths.
+所以精度是五分之四。
+
+1317
+01:15:23,470 --> 01:15:28,240
+But actually, um, there are six things in gold cluster one.
+但实际上，嗯，黄金集群中有六件事情。
+
+1318
+01:15:28,240 --> 01:15:33,760
+So it only has a recall of four-sixth of that cluster.
+所以它只召回了该集群的四分之六。
+
+1319
+01:15:33,760 --> 01:15:36,985
+And then it similarly does for the other one,
+然后它同样适用于另一个，
+
+1320
+01:15:36,985 --> 01:15:39,445
+the same kind of calculation.
+同样的计算。
+
+1321
+01:15:39,445 --> 01:15:43,990
+And then it's going to average across the precisions and recalls,
+然后它将在精确度和回忆中平均，
+
+1322
+01:15:43,990 --> 01:15:49,045
+um, and it's going to come up with an overall, um, B-CUBED score.
+嗯，它会得出一个整体的，嗯，B-CUBED分数。
+
+1323
+01:15:49,045 --> 01:15:54,400
+Um, in- if you think about this from an algorithm's perspective,
+嗯，如果你从算法的角度思考这个问题，
+
+1324
+01:15:54,400 --> 01:15:57,205
+this is actually tricky because I sort of said,
+这实际上很棘手，因为我有点说，
+
+1325
+01:15:57,205 --> 01:16:00,460
+um, okay, this cluster is mainly gold cluster one.
+嗯，好吧，这个集群主要是黄金集群。
+
+1326
+01:16:00,460 --> 01:16:03,730
+So use that as its reference,
+所以用它作为参考，
+
+1327
+01:16:03,730 --> 01:16:06,820
+but that means you have to do a bipartite graph alignment
+但这意味着你必须进行二分图对齐
+
+1328
+01:16:06,820 --> 01:16:09,520
+between system clusters, and gold clusters.
+系统集群和黄金集群之间。
+
+1329
+01:16:09,520 --> 01:16:12,955
+So hidden in- hidden inside this evaluation,
+所以隐藏在这个评估中，
+
+1330
+01:16:12,955 --> 01:16:16,210
+um, system is actually an NP-complete problem.
+嗯，系统实际上是NP完全问题。
+
+1331
+01:16:16,210 --> 01:16:19,525
+But in practice you can normally do it heuristically well enough,
+但在实践中你通常可以启发式地做到这一点，
+
+1332
+01:16:19,525 --> 01:16:21,610
+that the evaluation method, um,
+评价方法，嗯，
+
+1333
+01:16:21,610 --> 01:16:23,245
+runs and works.
+跑步和工作。
+
+1334
+01:16:23,245 --> 01:16:25,435
+Um, okay.
+嗯，好的。
+
+1335
+01:16:25,435 --> 01:16:28,210
+And so the kind of thing to notice is that,
+所以需要注意的是，
+
+1336
+01:16:28,210 --> 01:16:29,965
+if you under cluster,
+如果你在群集下，
+
+1337
+01:16:29,965 --> 01:16:32,350
+you automatically get great precision,
+你会自动获得很高的精确度
+
+1338
+01:16:32,350 --> 01:16:34,135
+but you get bad recall.
+但你回忆起来很糟糕。
+
+1339
+01:16:34,135 --> 01:16:35,815
+And if you over cluster,
+如果你超过集群，
+
+1340
+01:16:35,815 --> 01:16:40,405
+you get- get great recall because everything that should be in the same cluster is,
+你得到了很好的回忆，因为应该在同一个集群中的一切都是，
+
+1341
+01:16:40,405 --> 01:16:42,910
+um, but you get terrible precision.
+嗯，但你精确度很差。
+
+1342
+01:16:42,910 --> 01:16:48,175
+And so what you want to be doing is balancing those two things.
+所以你想要做的就是平衡这两件事。
+
+1343
+01:16:48,175 --> 01:16:51,280
+Okay. Last two minutes,
+好的。最后两分钟，
+
+1344
+01:16:51,280 --> 01:16:53,380
+just to give you some idea of performance.
+只是为了让你对性能有所了解。
+
+1345
+01:16:53,380 --> 01:16:58,285
+So these are results from the OntoNotes dataset which is about 3,000 documents.
+所以这些是OntoNotes数据集的结果，大约有3,000个文档。
+
+1346
+01:16:58,285 --> 01:17:01,495
+Chinese, English, labeled for coreference.
+中文，英文，标注为共识。
+
+1347
+01:17:01,495 --> 01:17:05,980
+Um, the scores I'm reporting is actually an average over three metrics.
+嗯，我报告的分数实际上是三个指标的平均值。
+
+1348
+01:17:05,980 --> 01:17:09,295
+One of which is the one I just showed you for B-CUBED,
+其中一个是我刚给你看的B-CUBED，
+
+1349
+01:17:09,295 --> 01:17:11,965
+um, here are some numbers.
+嗯，这里有一些数字。
+
+1350
+01:17:11,965 --> 01:17:17,245
+Um, so Lee et al 2010 was the Stanford system.
+嗯，所以Lee等人2010年是斯坦福大学的系统。
+
+1351
+01:17:17,245 --> 01:17:21,400
+So there- there was this shared task evaluation of coreference systems.
+所以有共同任务评估共参照系统。
+
+1352
+01:17:21,400 --> 01:17:24,265
+And we believe that Jerry Hobbs, um,
+我们相信Jerry Hobbs，嗯，
+
+1353
+01:17:24,265 --> 01:17:28,885
+was still right, and you could do fine with rule-based coreference.
+仍然是对的，你可以通过基于规则的共指做得很好。
+
+1354
+01:17:28,885 --> 01:17:30,890
+And so in 2010,
+所以在2010年，
+
+1355
+01:17:30,890 --> 01:17:36,030
+we managed to beat all machine learning systems with a rule-based coreference system,
+我们设法通过基于规则的共享系统击败所有机器学习系统，
+
+1356
+01:17:36,030 --> 01:17:37,725
+and we were proud of it.
+我们为此感到自豪。
+
+1357
+01:17:37,725 --> 01:17:40,455
+Um, and that's its performance right here.
+嗯，这就是它的表现。
+
+1358
+01:17:40,455 --> 01:17:42,240
+Um, in subsequent years,
+嗯，在随后的几年里，
+
+1359
+01:17:42,240 --> 01:17:45,150
+people did start to do a bit better, um,
+人们确实开始做得更好，嗯，
+
+1360
+01:17:45,150 --> 01:17:50,110
+with, um, with, uh, machine learning systems.
+和嗯，机器学习系统。
+
+1361
+01:17:50,110 --> 01:17:51,820
+But as you see, not very much,
+但正如你所看到的，不是很多，
+
+1362
+01:17:51,820 --> 01:17:57,040
+right for these 2012 systems that this one's somewhat,
+这些2012系统的权利，这个有点，
+
+1363
+01:17:57,040 --> 01:17:58,930
+better this one really wasn't better,
+更好的这个真的不是更好，
+
+1364
+01:17:58,930 --> 01:18:02,335
+um, this, um, but making a bit of progress.
+嗯，这个，嗯，但是取得了一些进展。
+
+1365
+01:18:02,335 --> 01:18:07,975
+Starting in 2015, there started to be neural systems.
+从2015年开始，开始出现神经系统。
+
+1366
+01:18:07,975 --> 01:18:11,200
+Um, so Wiseman et al was sort of the first neural system,
+嗯，所以Wiseman等人是第一个神经系统，
+
+1367
+01:18:11,200 --> 01:18:14,245
+I vaguely mentioned this Clark &amp; Manning system,
+我含糊地提到了这个Clark＆Manning系统，
+
+1368
+01:18:14,245 --> 01:18:16,945
+and the numbers are going up into the mid-sixties.
+这些数字正在上升到六十年代中期。
+
+1369
+01:18:16,945 --> 01:18:21,355
+And this is the Kenton Lee system that has the end-to-end neural coreference,
+这是具有端到端神经干预的Kenton Lee系统，
+
+1370
+01:18:21,355 --> 01:18:23,815
+and on English is getting about 67.
+在英语上大约有67个。
+
+1371
+01:18:23,815 --> 01:18:25,795
+So something you'll notice from this,
+所以你会注意到这一点，
+
+1372
+01:18:25,795 --> 01:18:28,075
+is the numbers aren't great.
+是数字不是很好。
+
+1373
+01:18:28,075 --> 01:18:31,420
+So coreference is still far from a solved problem.
+因此，共识仍远未解决问题。
+
+1374
+01:18:31,420 --> 01:18:33,790
+Um, so if you want to have a bit of fun, um,
+嗯，如果你想要有点乐趣，嗯，
+
+1375
+01:18:33,790 --> 01:18:37,450
+you can go out and try coreference systems for yourself.
+你可以出去为自己尝试共享系统。
+
+1376
+01:18:37,450 --> 01:18:41,470
+Um, there's a Stanford one on the first link or the one from Hugging Face
+嗯，第一个链接上有一个Stanford，或者来自Hugging Face
+
+1377
+01:18:41,470 --> 01:18:44,965
+is a good modern coreference system as well.
+是一个很好的现代共同参照系统。
+
+1378
+01:18:44,965 --> 01:18:47,740
+And if you just try these out with some pieces of text,
+如果你只是用一些文字来试试这些，
+
+1379
+01:18:47,740 --> 01:18:50,380
+you'll notice they still get lots of things wrong.
+你会发现他们仍然有很多错误。
+
+1380
+01:18:50,380 --> 01:18:52,480
+Um, so there's still more work to do,
+嗯，还有更多工作要做，
+
+1381
+01:18:52,480 --> 01:18:55,270
+because this is just a harder language understanding task,
+因为这只是一个更难理解语言的任务，
+
+1382
+01:18:55,270 --> 01:18:57,535
+[NOISE] which is just kind of like, um,
+[NOISE]这有点像，嗯，
+
+1383
+01:18:57,535 --> 01:19:01,270
+Jerry Hobbs and Terry- Terry Winograd earlier observed.
+Jerry Hobbs和Terry-Terry Winograd早些时候观察过。
+
+1384
+01:19:01,270 --> 01:19:04,675
+Okay, um, but I'll stop there for now. Thanks a lot.
+好的，嗯，但我现在就到此为止。非常感谢。
+
+1385
+01:19:04,675 --> 01:19:09,745
+Um, oh yeah, I should have a reminder, invited speaker next Tuesday.
+嗯，是的，我应该提醒，下周二邀请发言人。
+
+1386
+01:19:09,745 --> 01:19:11,575
+Um, so I'll be taking,
+嗯，所以我要带，
+
+1387
+01:19:11,575 --> 01:19:14,720
+um, attendance for invited speakers.
+嗯，特邀演讲者的出席情况。
+
+1388
+
+

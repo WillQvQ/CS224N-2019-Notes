@@ -1,0 +1,5433 @@
+1
+00:00:04,460 --> 00:00:07,800
+Okay. Hi everyone, uh, let's get started.
+好的。大家好，呃，让我们开始吧。
+
+2
+00:00:07,800 --> 00:00:10,935
+Um, so Chris is traveling this week so he's not here.
+嗯，所以克里斯本周旅行，所以他不在这里。
+
+3
+00:00:10,935 --> 00:00:13,320
+But I'm very excited to say that today we've got
+但我很高兴地说今天我们有了
+
+4
+00:00:13,320 --> 00:00:17,640
+Margaret Mitchell who is a Senior Research Scientist at Google AI.
+Margaret Mitchell是Google AI的高级研究科学家。
+
+5
+00:00:17,640 --> 00:00:20,435
+She's going to tell us about, uh, the latest
+她会告诉我们，呃，最新消息
+
+6
+00:00:20,435 --> 00:00:23,625
+work defining and understanding and improving
+工作定义，理解和改进
+
+7
+00:00:23,625 --> 00:00:27,255
+the situation with bias in artificial intelligence.
+人工智能偏见的情况。
+
+8
+00:00:27,255 --> 00:00:30,395
+Uh, Margaret has a background working in NLP and deep learning,
+呃，玛格丽特有一个从事NLP和深度学习的背景，
+
+9
+00:00:30,395 --> 00:00:33,440
+so I'm really interested to hear what she has to say today. Take it away.
+所以我真的很想知道她今天要说些什么。把它拿开。
+
+10
+00:00:33,440 --> 00:00:36,620
+Great, thank you. Um, can you guys hear me okay?
+太好了谢谢。嗯，你们能听见我吗？
+
+11
+00:00:36,620 --> 00:00:39,230
+I'm not sure if this mic is exactly picking up my voice,
+我不确定这个麦克风是不是正在拾起我的声音，
+
+12
+00:00:39,230 --> 00:00:41,300
+everything's cool? Okay, cool.
+一切都很酷？好的，很酷。
+
+13
+00:00:41,300 --> 00:00:44,285
+Um, so this work is, uh,
+嗯，所以这项工作是，呃，
+
+14
+00:00:44,285 --> 00:00:46,250
+the product of a ton of different people and
+大量不同的人和产品
+
+15
+00:00:46,250 --> 00:00:48,520
+collaborators that I've tried to put up here.
+我试图在这里提出的合作者。
+
+16
+00:00:48,520 --> 00:00:53,330
+Um, some students at Stanford also Johns Hopkins, Google,
+嗯，斯坦福大学的一些学生也是约翰霍普金斯大学，谷歌，
+
+17
+00:00:53,330 --> 00:00:58,820
+Facebook and Microsoft are all represented, cool.
+Facebook和微软都代表着酷炫。
+
+18
+00:00:58,820 --> 00:01:05,915
+So, um, for those of you who haven't seen the set of slides before,
+所以，嗯，对于那些之前没有看过幻灯片的人，
+
+19
+00:01:05,915 --> 00:01:08,480
+what do you see here? Just shout it out.
+你在这看到什么？只是喊出来。
+
+20
+00:01:08,480 --> 00:01:10,130
+Bananas.
+香蕉。
+
+21
+00:01:10,130 --> 00:01:12,130
+Bananas. Okay what else?
+香蕉。好的还有什么？
+
+22
+00:01:12,130 --> 00:01:13,345
+Stickers.
+贴纸。
+
+23
+00:01:13,345 --> 00:01:14,570
+Stickers. What else?
+贴纸。还有什么？
+
+24
+00:01:14,570 --> 00:01:20,810
+[NOISE] Shelves. What else?
+[NOISE]货架。还有什么？
+
+25
+00:01:20,810 --> 00:01:21,995
+Bunches of bananas.
+一束香蕉。
+
+26
+00:01:21,995 --> 00:01:24,540
+Bunches of bananas. What else?
+一束香蕉。还有什么？
+
+27
+00:01:24,580 --> 00:01:28,025
+Yellow, ripe bananas.
+黄色，成熟的香蕉。
+
+28
+00:01:28,025 --> 00:01:30,500
+You said ripe bananas, good.
+你说成熟的香蕉，好。
+
+29
+00:01:30,500 --> 00:01:34,730
+So you can add [LAUGHTER] bananas with stickers on them.
+所以你可以添加[笑声]香蕉贴上它们。
+
+30
+00:01:34,730 --> 00:01:37,400
+You can start doing, like, embedded clauses, you know,
+你可以开始做，比如，嵌入式条款，你知道，
+
+31
+00:01:37,400 --> 00:01:41,180
+bunches of bananas with stickers on them on shelves in the store to get, kinda, crazy.
+一堆香蕉贴在他们在商店的货架上得到，有点，疯狂。
+
+32
+00:01:41,180 --> 00:01:44,875
+But we don't tend to say yellow bananas, right?
+但我们不倾向于说黄香蕉，对吗？
+
+33
+00:01:44,875 --> 00:01:47,160
+So given something like this,
+所以给出这样的东西，
+
+34
+00:01:47,160 --> 00:01:51,455
+we might say green bananas or we might say unripe bananas.
+我们可能会说绿色香蕉或者我们可能会说未成熟的香蕉。
+
+35
+00:01:51,455 --> 00:01:55,130
+Given an image like this we might say ripe bananas or,
+鉴于这样的图像我们可能会说成熟的香蕉，或者，
+
+36
+00:01:55,130 --> 00:01:57,340
+uh, bananas with spots on them.
+呃，香蕉上有斑点。
+
+37
+00:01:57,340 --> 00:02:00,935
+Uh, if you're me, you might say bananas that are good for banana bread.
+呃，如果你是我，你可能会说香蕉对香蕉面包有好处。
+
+38
+00:02:00,935 --> 00:02:05,240
+Um, but given an image like this or something like this in the real world,
+嗯，但在现实世界中给出了像这样或类似的图像，
+
+39
+00:02:05,240 --> 00:02:07,955
+we tend not to mention the yellowness.
+我们倾向于不提黄色。
+
+40
+00:02:07,955 --> 00:02:12,710
+And the reason for this is because yellow is prototypical for bananas.
+其原因在于黄色是香蕉的原型。
+
+41
+00:02:12,710 --> 00:02:15,545
+So the idea of prototypes, uh,
+所以原型的想法，呃，
+
+42
+00:02:15,545 --> 00:02:18,620
+stems from prototype theory which goes back to the early '70s,
+源于原型理论，可追溯到70年代初，
+
+43
+00:02:18,620 --> 00:02:21,795
+uh, coming out of the work of Eleanor Rosch and colleagues.
+呃，从埃莉诺罗什及其同事的工作中走出来。
+
+44
+00:02:21,795 --> 00:02:23,750
+Um, and it's this idea that there are
+嗯，这就是这个想法
+
+45
+00:02:23,750 --> 00:02:28,335
+some stored central prototypical notions of objects,
+一些存储的中心原型对象概念，
+
+46
+00:02:28,335 --> 00:02:31,559
+um, that we access as we're operating,
+嗯，我们在操作时访问，
+
+47
+00:02:31,559 --> 00:02:33,065
+uh, throughout the world.
+呃，遍布全世界。
+
+48
+00:02:33,065 --> 00:02:36,950
+There's some disagreement about whether these prototypes are
+关于这些原型是否存在，存在一些分歧
+
+49
+00:02:36,950 --> 00:02:42,320
+actual exemplars of objects or something like a distribution over what's likely,
+对象的实际样本或类似于可能的分布的东西，
+
+50
+00:02:42,320 --> 00:02:45,440
+but there is general agreement that we do have some, sort of,
+但人们普遍认为我们确实有一些，
+
+51
+00:02:45,440 --> 00:02:49,340
+sense of what's typical and what's a typical of the things in
+什么是典型的，什么是典型的东西
+
+52
+00:02:49,340 --> 00:02:55,200
+the world and we tend to notice and talk about the things that are atypical.
+世界，我们倾向于注意和谈论非典型的事物。
+
+53
+00:02:55,400 --> 00:02:59,330
+Um, so this is a riddle that I
+嗯，所以这是我的谜语
+
+54
+00:02:59,330 --> 00:03:02,710
+heard in middle school that worked a little bit more at that time,
+在中学听说当时工作多了一点，
+
+55
+00:03:02,710 --> 00:03:04,895
+um, some of you might have heard it before.
+嗯，有些人可能以前听过。
+
+56
+00:03:04,895 --> 00:03:06,350
+A man and his son are in
+一个男人和他的儿子在
+
+57
+00:03:06,350 --> 00:03:09,875
+a terrible accident and are rushed to the hospital in critical care.
+一场可怕的事故，被送往医院接受重症监护。
+
+58
+00:03:09,875 --> 00:03:12,245
+The doctor looks at the boy and exclaims,
+医生看着那个男孩惊呼，
+
+59
+00:03:12,245 --> 00:03:13,775
+"I can't operate on this boy,
+“我不能操这个男孩，
+
+60
+00:03:13,775 --> 00:03:17,070
+he's my son," How could this be? [NOISE].
+他是我的儿子，“这怎么可能？[NOISE]。
+
+61
+00:03:17,070 --> 00:03:19,190
+Two dads?
+两个爸爸？
+
+62
+00:03:19,190 --> 00:03:22,905
+Two dads or he has a mum who's a doctor, right.
+两个爸爸或者他妈妈是医生，对吧。
+
+63
+00:03:22,905 --> 00:03:25,920
+Otherwise known as a female doctor,
+否则称为女医生，
+
+64
+00:03:25,920 --> 00:03:29,090
+which might be contracted- contrasted with doctor.
+可能与医生形成对比。
+
+65
+00:03:29,090 --> 00:03:31,920
+Um, in a study they did,
+嗯，在他们做的一项研究中，
+
+66
+00:03:31,920 --> 00:03:33,120
+uh, when they first, sort of,
+呃，当他们第一次，有点
+
+67
+00:03:33,120 --> 00:03:36,450
+put forward this riddle at Boston University,
+在波士顿大学提出这个谜题，
+
+68
+00:03:36,450 --> 00:03:38,375
+they found that the majority of test subjects
+他们发现大多数考试科目
+
+69
+00:03:38,375 --> 00:03:41,510
+overlooked the possibility that the doctor could be a she.
+忽视了医生可能成为她的可能性。
+
+70
+00:03:41,510 --> 00:03:45,695
+And that included men, women and self-described feminists.
+其中包括男人，女人和自我描述的女权主义者。
+
+71
+00:03:45,695 --> 00:03:46,940
+So the point is that,
+所以重点是，
+
+72
+00:03:46,940 --> 00:03:49,100
+these, kinds of, uh,
+这些，各种，呃，
+
+73
+00:03:49,100 --> 00:03:52,880
+ways of talking about things and assumptions that we make,
+谈论我们做的事情和假设的方式，
+
+74
+00:03:52,880 --> 00:03:58,070
+aren't necessarily something that speaks to a negative intent,
+不一定是负面意图，
+
+75
+00:03:58,070 --> 00:04:01,670
+but something that speaks to how we actually store representations in
+但是有些东西可以说明我们如何实际存储表示
+
+76
+00:04:01,670 --> 00:04:05,600
+our minds and how we access those representations as we interact,
+我们的思想以及我们在互动时如何访问这些表示，
+
+77
+00:04:05,600 --> 00:04:07,285
+uh, in the world.
+呃，在这个世界上。
+
+78
+00:04:07,285 --> 00:04:11,825
+So this, uh, this affects what we can learn when we're learning from text.
+所以这，呃，这影响了我们从文本中学习时可以学到的东西。
+
+79
+00:04:11,825 --> 00:04:15,395
+So, um, this is work from 2013,
+所以，嗯，这是2013年的工作，
+
+80
+00:04:15,395 --> 00:04:17,300
+where they took a look at what was, sort of,
+他们在哪里看看是什么，有点像，
+
+81
+00:04:17,300 --> 00:04:21,355
+most likely, what would you learn if you were just learning from raw text,
+最有可能的是，如果你只是从原始文本中学习，你会学到什么，
+
+82
+00:04:21,355 --> 00:04:24,440
+um, what were some things that were common in the world?
+嗯，这世界上常见的事情是什么？
+
+83
+00:04:24,440 --> 00:04:28,070
+Um, they found that in this setup
+嗯，他们发现在这个设置中
+
+84
+00:04:28,070 --> 00:04:32,090
+something like murdering was ten times more likely than blinking.
+像谋杀这样的东西比眨眼的可能性高十倍。
+
+85
+00:04:32,090 --> 00:04:34,850
+And the reason for this is because people tend
+其原因在于人们倾向于此
+
+86
+00:04:34,850 --> 00:04:38,150
+not to mention these typical things that go without saying.
+更不用说这些不言而喻的典型事物了。
+
+87
+00:04:38,150 --> 00:04:42,500
+We don't tend to mention things like blinking and breathing,
+我们不倾向于提及眨眼和呼吸等事情，
+
+88
+00:04:42,500 --> 00:04:47,250
+but we do mention atypical events like murder and that affects the, kind of,
+但是我们确实提到了像谋杀这样的非典型事件，这会影响到，
+
+89
+00:04:47,250 --> 00:04:50,960
+things a machine can learn from texts that we put out in the world,
+机器可以从我们在世界上发布的文本中学到的东西，
+
+90
+00:04:50,960 --> 00:04:52,490
+because it's been subject to all of
+因为它受到了所有人的影响
+
+91
+00:04:52,490 --> 00:04:57,135
+these filtering processes that we have as humans before we, uh, communicate.
+在我们之前，我们作为人类进行的这些过滤过程，呃，沟通。
+
+92
+00:04:57,135 --> 00:05:01,690
+Um, this issue in particular is known as Human Reporting Bias.
+嗯，这个问题特别被称为人类报告偏见。
+
+93
+00:05:01,690 --> 00:05:04,010
+Which is that the frequency with which people write
+这就是人们写作的频率
+
+94
+00:05:04,010 --> 00:05:06,650
+about actions, outcomes or properties,
+关于行动，结果或财产，
+
+95
+00:05:06,650 --> 00:05:09,470
+is not a reflection of real-world frequencies or
+不是现实世界频率的反映
+
+96
+00:05:09,470 --> 00:05:13,010
+the degree to which a property is characteristic of a class of individuals,
+财产是一类人的特征的程度，
+
+97
+00:05:13,010 --> 00:05:14,990
+but says a lot more about how we're actually
+但更多关于我们的实际情况
+
+98
+00:05:14,990 --> 00:05:18,205
+processing the world and what we think is remarkable.
+处理世界和我们认为非凡的东西。
+
+99
+00:05:18,205 --> 00:05:22,350
+So this affects everything a system can learn.
+所以这会影响系统可以学习的一切。
+
+100
+00:05:22,350 --> 00:05:24,620
+Um, in a typical machine learning paradigm,
+嗯，在一个典型的机器学习范例中，
+
+101
+00:05:24,620 --> 00:05:29,210
+one of the first steps is to collect and potentially annotate training data.
+最初的步骤之一是收集并可能注释培训数据。
+
+102
+00:05:29,210 --> 00:05:32,230
+From there a model can be trained,
+从那里可以训练模型，
+
+103
+00:05:32,230 --> 00:05:34,965
+uh, from there, uh,
+呃，从那里，呃，
+
+104
+00:05:34,965 --> 00:05:38,340
+media can be filtered rank- ranked, aggregated,
+媒体可以过滤排名，汇总，
+
+105
+00:05:38,340 --> 00:05:39,900
+generated in some way,
+以某种方式产生，
+
+106
+00:05:39,900 --> 00:05:42,985
+um, and from there people see the output.
+嗯，从那里人们看到输出。
+
+107
+00:05:42,985 --> 00:05:46,699
+And we like to think of this as a relatively straightforward pipeline,
+我们认为这是一个相对简单的管道，
+
+108
+00:05:46,699 --> 00:05:49,100
+um, but at the very start, uh,
+嗯，但是从一开始，呃，
+
+109
+00:05:49,100 --> 00:05:51,080
+even before we're collecting the data,
+甚至在我们收集数据之前
+
+110
+00:05:51,080 --> 00:05:52,895
+actually within the data itself,
+实际上在数据本身内，
+
+111
+00:05:52,895 --> 00:05:55,940
+are a host of different kinds of human biases.
+是一系列不同类型的人类偏见。
+
+112
+00:05:55,940 --> 00:05:58,580
+So things like stereotyping, things like prejudice,
+所以像陈规定型观念，偏见之类的东西，
+
+113
+00:05:58,580 --> 00:06:03,080
+things like racism and that's embedded within the data before we collect it.
+像种族主义之类的东西，在我们收集之前嵌入数据中。
+
+114
+00:06:03,080 --> 00:06:05,600
+Then as we collect and annotate data,
+然后，当我们收集和注释数据时，
+
+115
+00:06:05,600 --> 00:06:07,745
+further biases become introduced.
+进一步的偏见被引入。
+
+116
+00:06:07,745 --> 00:06:11,815
+So things like sampling errors, confirmation bias, um,
+所以像抽样错误，确认偏见，嗯，
+
+117
+00:06:11,815 --> 00:06:15,050
+uh, in-group bias and out-group bias and I'll talk about these,
+呃，群内偏见和外群体偏见，我会谈论这些，
+
+118
+00:06:15,050 --> 00:06:16,070
+um, a little bit.
+嗯，一点点。
+
+119
+00:06:16,070 --> 00:06:19,625
+Oh, and I should mention feel free to ask questions as I go,
+哦，我应该提一下，随时随地提出问题，
+
+120
+00:06:19,625 --> 00:06:21,380
+um, totally fine to just,
+嗯，完全没问题，
+
+121
+00:06:21,380 --> 00:06:23,825
+kind of, interact, uh, throughout.
+有点，互动，呃，贯穿始终。
+
+122
+00:06:23,825 --> 00:06:27,290
+So here are some of the biases that I think are
+所以这里有一些我认为的偏见
+
+123
+00:06:27,290 --> 00:06:30,320
+relatively important for work in AI and machine learning.
+对人工智能和机器学习工作相对重要。
+
+124
+00:06:30,320 --> 00:06:32,570
+There's hundreds you can go into,
+你可以进入数百种，
+
+125
+00:06:32,570 --> 00:06:34,370
+um, but some of the ones that I've, sort of,
+嗯，但是有些我喜欢的，
+
+126
+00:06:34,370 --> 00:06:36,750
+become the most aware of working in this space,
+成为最熟悉在这个领域工作的人，
+
+127
+00:06:36,750 --> 00:06:39,680
+um, are these sets and I'll go through each of these a bit.
+嗯，这些是这些，我会仔细阅读这些内容。
+
+128
+00:06:39,680 --> 00:06:42,140
+Um, so I talked about reporting bias earlier,
+嗯，所以我早些时候谈过报告偏见，
+
+129
+00:06:42,140 --> 00:06:45,470
+which is, uh, which affects what we can learn from text.
+也就是说，这会影响我们从文本中学到什么。
+
+130
+00:06:45,470 --> 00:06:48,890
+Um, another example of a kind
+嗯，另一个例子
+
+131
+00:06:48,890 --> 00:06:52,135
+of bias that really affects what we can learn from text is selection bias.
+真正影响我们可以从文本中学到的东西的偏见是选择偏差。
+
+132
+00:06:52,135 --> 00:06:54,835
+So, uh, a lot of times that we,
+所以，呃，我们很多次，
+
+133
+00:06:54,835 --> 00:06:57,440
+a lot of times when we get data annotated we'd use something
+很多时候，当我们获得数据注释时，我们会使用一些东西
+
+134
+00:06:57,440 --> 00:07:00,230
+like Amazon's Mechanical Turk, um,
+像亚马逊的机械土耳其人，嗯，
+
+135
+00:07:00,230 --> 00:07:03,890
+and the distribution of workers across the world is not even, sort of,
+并且世界各地的工人分布都不均匀，
+
+136
+00:07:03,890 --> 00:07:06,485
+uniform distribution, it's actually, um,
+均匀分布，实际上，嗯，
+
+137
+00:07:06,485 --> 00:07:09,920
+concentrated in India, the US and then some in Europe.
+集中在印度，美国，然后一些在欧洲。
+
+138
+00:07:09,920 --> 00:07:12,065
+So this leaves out South America,
+所以这留下了南美，
+
+139
+00:07:12,065 --> 00:07:13,250
+this leaves out Africa,
+这离开了非洲，
+
+140
+00:07:13,250 --> 00:07:16,220
+this leaves out a lot of China and that affects the, kind of,
+这留下了很多中国，这影响了，有点，
+
+141
+00:07:16,220 --> 00:07:20,640
+things that we'll be able to learn about the world when we have things annotated.
+当我们注释事物时，我们将能够了解世界。
+
+142
+00:07:20,920 --> 00:07:25,250
+Um, another kind of bias is Out-group Homogeneity Bias,
+嗯，另一种偏见是Out-group Homogeneity Bias，
+
+143
+00:07:25,250 --> 00:07:29,405
+which is the tendency to see out-group members as more alike than in-group members.
+这种倾向会让群体成员看起来比群体内成员更相似。
+
+144
+00:07:29,405 --> 00:07:32,420
+And this is gonna affect what people are able to describe
+这会影响人们能够描述的内容
+
+145
+00:07:32,420 --> 00:07:35,575
+and talk about when they're annotating things such as emotion.
+并谈论他们何时注释情感等事物。
+
+146
+00:07:35,575 --> 00:07:38,565
+So, uh, so for example we have these two, like,
+所以，呃，所以我们有这两个，比如，
+
+147
+00:07:38,565 --> 00:07:42,265
+adorable puppies on the left here and they're looking at these four cats.
+左边的可爱的小狗，他们正在看这四只猫。
+
+148
+00:07:42,265 --> 00:07:44,715
+Um, these are all different black cats,
+嗯，这些都是不同的黑猫，
+
+149
+00:07:44,715 --> 00:07:46,200
+very different in different ways,
+在不同方面有很大不同，
+
+150
+00:07:46,200 --> 00:07:50,825
+but the two puppies look at the cats and they see four cats basically the same.
+但两只小狗看着猫，他们看到四只猫基本相同。
+
+151
+00:07:50,825 --> 00:07:53,720
+And it's kind of trivial to understand how that also extends to
+理解它是如何延伸到这一点也是微不足道的
+
+152
+00:07:53,720 --> 00:07:56,795
+human cognition and how we also process people.
+人类的认知以及我们如何处理人。
+
+153
+00:07:56,795 --> 00:07:59,869
+Um, it's this- it's the sense we have that the,
+嗯，就是这个 - 这是我们的意义，
+
+154
+00:07:59,869 --> 00:08:01,915
+the cohort that we're in,
+我们所在的队列，
+
+155
+00:08:01,915 --> 00:08:03,560
+the people that we interact with,
+我们互动的人，
+
+156
+00:08:03,560 --> 00:08:06,230
+those are the kinds of people that are nuanced and
+那些是细微差别的人
+
+157
+00:08:06,230 --> 00:08:08,930
+everybody else is somehow less nuanced,
+其他人在某种程度上不那么细微差别，
+
+158
+00:08:08,930 --> 00:08:10,715
+has less detail to them.
+他们的细节较少。
+
+159
+00:08:10,715 --> 00:08:14,870
+It's a trick our minds play on us in order to help us process the world,
+为了帮助我们处理世界，我们的思想在我们身上发挥作用，
+
+160
+00:08:14,870 --> 00:08:19,380
+but it affects how we talk about it and it affects further how we annotate it.
+但它影响我们如何谈论它，它进一步影响我们如何注释它。
+
+161
+00:08:19,930 --> 00:08:24,055
+Um, this leads to stuff like biased data representations.
+嗯，这导致了有偏见的数据表示之类的东西。
+
+162
+00:08:24,055 --> 00:08:27,170
+So it's possible that you have an appropriate amount of data for
+因此，您可能拥有适当数量的数据
+
+163
+00:08:27,170 --> 00:08:30,710
+every possible human group you can think of in your data,
+您可以在数据中考虑的每个可能的人类群体，
+
+164
+00:08:30,710 --> 00:08:32,945
+um, but it might be the case that some groups
+嗯，但可能是某些团体的情况
+
+165
+00:08:32,945 --> 00:08:35,090
+are represented less positively than others.
+表现得比其他人少。
+
+166
+00:08:35,090 --> 00:08:37,190
+And if we have time I'll go into, uh,
+如果我们有时间，我会进去，呃，
+
+167
+00:08:37,190 --> 00:08:39,970
+a long- a longer example of that.
+这是一个很长的例子。
+
+168
+00:08:39,970 --> 00:08:43,045
+Um, it also leads to things like biased labels.
+嗯，它也会导致像有偏见的标签之类的东西。
+
+169
+00:08:43,045 --> 00:08:46,160
+So, um, this is an issue that came up when we were
+所以，嗯，这是我们遇到的问题
+
+170
+00:08:46,160 --> 00:08:49,580
+getting some annotations for Inclusive Images competition,
+获得包容性图像竞赛的一些注释，
+
+171
+00:08:49,580 --> 00:08:54,605
+asking people to annotate things like bride and wedding and groom.
+要求人们注释诸如新娘，婚礼和新郎之类的东西。
+
+172
+00:08:54,605 --> 00:08:57,100
+And we found that given three different kinds of bride,
+我们发现给了三种不同的新娘，
+
+173
+00:08:57,100 --> 00:08:58,685
+wedding and groom images,
+婚礼和新郎图像，
+
+174
+00:08:58,685 --> 00:09:03,465
+um, ones that were more Western, European American, uh,
+嗯，那些更西方的，欧洲的美国人，呃，
+
+175
+00:09:03,465 --> 00:09:06,985
+got the appropriate labels and ones that weren't,
+得到了合适的标签和不合适的标签，
+
+176
+00:09:06,985 --> 00:09:09,190
+just got, sort of, more generic person,
+刚才，有点，更通用的人，
+
+177
+00:09:09,190 --> 00:09:11,235
+kinds of, labels, uh,
+种类，标签，呃，
+
+178
+00:09:11,235 --> 00:09:17,960
+not able to actually tease out what's actually happening in these images.
+无法真正弄清楚这些图像中实际发生了什么。
+
+179
+00:09:17,960 --> 00:09:21,160
+Compounding this issue are biases in interpretation
+使这个问题更加复杂的是解释上的偏见
+
+180
+00:09:21,160 --> 00:09:24,145
+when the model outputs, uh, its decisions.
+当模型输出时，呃，它的决定。
+
+181
+00:09:24,145 --> 00:09:27,820
+So, um, one, one issue is confirmation bias,
+所以，嗯，一个问题是确认偏见，
+
+182
+00:09:27,820 --> 00:09:30,820
+which is the tendency to search for, interpret, favor,
+这是倾向于寻找，解释，支持，
+
+183
+00:09:30,820 --> 00:09:34,180
+recall information in a way that confirms preexisting beliefs.
+以确认先前存在的信念的方式回忆信息。
+
+184
+00:09:34,180 --> 00:09:36,520
+And so a lot of times when we, uh,
+很多时候我们，呃，
+
+185
+00:09:36,520 --> 00:09:40,120
+build end-to-end systems and try and test our hypotheses,
+构建端到端系统并尝试测试我们的假设，
+
+186
+00:09:40,120 --> 00:09:42,325
+we're kind of just testing it towards, uh,
+我们只是测试它，呃，
+
+187
+00:09:42,325 --> 00:09:46,525
+things that we want to be true and analyzing the results in a way that will,
+我们想要成真的事情，并以一种方式分析结果，
+
+188
+00:09:46,525 --> 00:09:49,000
+uh, help confirm what we want to be true.
+呃，帮助确认我们想要的是什么。
+
+189
+00:09:49,000 --> 00:09:52,120
+Um, overgeneralization, which is coming to
+嗯，过度概括，即将到来
+
+190
+00:09:52,120 --> 00:09:55,765
+a conclusion based on information that's too general or not specific enough.
+基于过于笼统或不够具体的信息得出的结论。
+
+191
+00:09:55,765 --> 00:09:58,165
+Um, this is an issue that happens a lot of times
+嗯，这是一个很多次发生的问题
+
+192
+00:09:58,165 --> 00:10:01,555
+in the analysis of deep learning model results um,
+在深度学习模型结果分析中，
+
+193
+00:10:01,555 --> 00:10:03,760
+where it's assumed that there's,
+在哪里假设有，
+
+194
+00:10:03,760 --> 00:10:05,470
+there's some kind of general, uh,
+有某种一般的，呃，
+
+195
+00:10:05,470 --> 00:10:08,515
+conclusion that can be taken away when really it's actually just,
+结论可以带走，当它真的只是，
+
+196
+00:10:08,515 --> 00:10:10,615
+uh, an effect of really skewed data.
+呃，真正扭曲数据的影响。
+
+197
+00:10:10,615 --> 00:10:13,900
+Um, this is also closely related to overfitting which
+嗯，这也与过度拟合密切相关
+
+198
+00:10:13,900 --> 00:10:17,275
+is kind of the machine learning version of overgeneralization,
+是一种过度概括的机器学习版本，
+
+199
+00:10:17,275 --> 00:10:20,050
+which is where you're still making predictions and outcomes,
+这是你仍然在做预测和结果的地方，
+
+200
+00:10:20,050 --> 00:10:23,965
+but it's based on a small set of possible features, um,
+但它基于一小部分可能的功能，嗯，
+
+201
+00:10:23,965 --> 00:10:28,600
+so it's not actually capturing the space of the correct features for the outcome,
+所以它实际上并没有为结果捕获正确特征的空间，
+
+202
+00:10:28,600 --> 00:10:31,795
+uh, the desired output prediction correctly.
+呃，正确的所需输出预测。
+
+203
+00:10:31,795 --> 00:10:35,320
+Um, there's also a correlation fallacy,
+嗯，还有一个相关性谬误，
+
+204
+00:10:35,320 --> 00:10:37,975
+which is confusing correlation with causation.
+这与因果关系混淆相关。
+
+205
+00:10:37,975 --> 00:10:40,510
+And this happens a lot again in talking about what
+在谈论什么时，这又发生了很多
+
+206
+00:10:40,510 --> 00:10:41,920
+machine learning models are learning and
+机器学习模型正在学习和
+
+207
+00:10:41,920 --> 00:10:44,575
+deep learning models are learning in particular, um,
+深度学习模型正在特别学习，嗯，
+
+208
+00:10:44,575 --> 00:10:47,095
+where just because things happen together,
+只是因为事情发生在一起，
+
+209
+00:10:47,095 --> 00:10:49,240
+doesn't mean that one is causing the other,
+并不意味着一个人造成另一个，
+
+210
+00:10:49,240 --> 00:10:50,770
+but, uh, models don't tell you
+但是，呃，模特不告诉你
+
+211
+00:10:50,770 --> 00:10:52,900
+anything- deep learning models directly don't
+任何东西 - 深度学习模型都不直接
+
+212
+00:10:52,900 --> 00:10:55,150
+tell you anything about the causal relations.
+告诉你关于因果关系的任何事情。
+
+213
+00:10:55,150 --> 00:10:58,030
+And so it's easy to think that some output that is predicted
+因此很容易认为某些输出是预测的
+
+214
+00:10:58,030 --> 00:11:01,195
+based on a correlation is actually something that's causal,
+基于相关性实际上是因果关系，
+
+215
+00:11:01,195 --> 00:11:03,310
+and I'll talk about some examples of this too.
+我也会谈谈这方面的一些例子。
+
+216
+00:11:03,310 --> 00:11:07,120
+Um, a further issue is automation bias,
+嗯，另一个问题是自动化偏差，
+
+217
+00:11:07,120 --> 00:11:10,870
+and this really affects the machine learning models we put out there in the world that
+这真的影响了我们在世界上推出的机器学习模型
+
+218
+00:11:10,870 --> 00:11:15,010
+then get used by people in systems like justice systems.
+然后被司法系统等系统中的人使用。
+
+219
+00:11:15,010 --> 00:11:17,215
+Um, so that's the tendency to, um,
+嗯，这是倾向于，嗯，
+
+220
+00:11:17,215 --> 00:11:19,750
+favor the suggestions of
+赞成的建议
+
+221
+00:11:19,750 --> 00:11:24,535
+automatic predictions of models that output predictions over the,
+自动预测输出预测的模型，
+
+222
+00:11:24,535 --> 00:11:27,880
+um, uh, over the different kinds of um,
+嗯，呃，对不同种类的嗯，
+
+223
+00:11:27,880 --> 00:11:29,740
+suggestions of another human.
+另一个人的建议。
+
+224
+00:11:29,740 --> 00:11:33,070
+Um, and this happens even in the face of contradictory evidence.
+嗯，即使面对相互矛盾的证据，也会发生这种情况。
+
+225
+00:11:33,070 --> 00:11:36,085
+So, if a system is telling you, you know, "This,
+所以，如果系统告诉你，你知道，“这个，
+
+226
+00:11:36,085 --> 00:11:40,810
+this is the score or this is the risk of this individual",
+这是分数，或者这是这个人的风险“，
+
+227
+00:11:40,810 --> 00:11:45,970
+then we're more likely to think it's true because it came out of a mathematical system,
+然后我们更有可能认为它是真的，因为它来自一个数学系统，
+
+228
+00:11:45,970 --> 00:11:48,850
+and we automatically sort of see this as something more objective,
+我们自动将这看作是更客观的东西，
+
+229
+00:11:48,850 --> 00:11:50,860
+something more mathematical, that something's going to
+更具数学性的东西，即某种东西
+
+230
+00:11:50,860 --> 00:11:53,440
+be more true than humans some- somehow.
+某种程度上比人类更真实。
+
+231
+00:11:53,440 --> 00:11:56,155
+Um, and that's automation bias.
+嗯，这是自动化偏见。
+
+232
+00:11:56,155 --> 00:11:58,915
+So, um, rather than this kind of
+所以，嗯，而不是这种
+
+233
+00:11:58,915 --> 00:12:02,215
+clean straightforward pipeline that we have in machine learning,
+我们在机器学习中干净直接的管道，
+
+234
+00:12:02,215 --> 00:12:06,430
+um, we have human bias coming in at the very start in the data, um,
+嗯，我们在数据的最开始就有人为的偏见，嗯，
+
+235
+00:12:06,430 --> 00:12:10,570
+and then human bias coming in in data collection, annotation,
+然后人类偏见进入数据收集，注释，
+
+236
+00:12:10,570 --> 00:12:14,290
+and then further getting propagated through the system as we train on that data,
+然后在我们训练数据时进一步传播通过系统，
+
+237
+00:12:14,290 --> 00:12:17,605
+um, as we start putting outputs based on that data,
+嗯，当我们开始根据这些数据输出时，
+
+238
+00:12:17,605 --> 00:12:19,195
+as people act on that data.
+当人们对这些数据采取行动时。
+
+239
+00:12:19,195 --> 00:12:21,385
+And this creates a feedback loop where
+这会创建一个反馈循环
+
+240
+00:12:21,385 --> 00:12:25,555
+the kinds of things that we output for people to act on,
+我们输出的各种事物，人们可以采取行动，
+
+241
+00:12:25,555 --> 00:12:27,520
+um, are then, are then,
+嗯，那么，那么，
+
+242
+00:12:27,520 --> 00:12:31,345
+then serves as further training data for input into your system,
+然后作为进一步的培训数据输入到您的系统，
+
+243
+00:12:31,345 --> 00:12:36,640
+so you end up amplifying even further these different kinds of implicit biases.
+所以你最终会进一步扩大这些不同类型的隐含偏见。
+
+244
+00:12:36,640 --> 00:12:41,935
+This is known as a Bias Network Effect or Bias "Laundering", I like to call it.
+这被称为偏置网络效应或偏见“洗涤”，我喜欢称之为。
+
+245
+00:12:41,935 --> 00:12:47,530
+And so, the message is that human data perpetuates human biases.
+因此，信息是人类数据使人类的偏见永久化。
+
+246
+00:12:47,530 --> 00:12:51,400
+And then as as machine learning or deep learning learns from human data,
+然后就像机器学习或深度学习从人类数据中学习一样，
+
+247
+00:12:51,400 --> 00:12:54,025
+the results is a bias network effect.
+结果是偏见网络效应。
+
+248
+00:12:54,025 --> 00:13:01,210
+So, I want to steer clear of the idea that if I say bias or someone says bias that equals bad,
+所以，我想避开这样的想法：如果我说偏见或有人说偏见等于坏，
+
+249
+00:13:01,210 --> 00:13:03,130
+it's a little bit more nuanced than that.
+它比那更微妙。
+
+250
+00:13:03,130 --> 00:13:05,650
+Um, so there are all kinds of things that people
+嗯，所以人们都有各种各样的东西
+
+251
+00:13:05,650 --> 00:13:08,155
+mean when they're talking about bias, um,
+当他们谈论偏见时，这意味着，嗯，
+
+252
+00:13:08,155 --> 00:13:12,415
+and even the same bias can be good in some situations and bad in some situations,
+甚至同样的偏见在某些情况下可能会很好，在某些情况下会很糟糕，
+
+253
+00:13:12,415 --> 00:13:14,590
+so bias in statistics and ML.
+所以偏见统计和ML。
+
+254
+00:13:14,590 --> 00:13:17,410
+Um, we, we talk about the bias of an estimator which is
+嗯，我们，我们谈论估计的偏见
+
+255
+00:13:17,410 --> 00:13:20,980
+the difference between the predictions and the truth, the ground truth.
+预测和事实之间的区别，基本事实。
+
+256
+00:13:20,980 --> 00:13:24,085
+Uh, we talk about the bias term in linear regression.
+呃，我们谈论线性回归中的偏差项。
+
+257
+00:13:24,085 --> 00:13:26,649
+Um, we also have cognitive biases,
+嗯，我们也有认知偏见，
+
+258
+00:13:26,649 --> 00:13:28,210
+and I talked about that in the beginning,
+我在开始时谈到了这一点，
+
+259
+00:13:28,210 --> 00:13:30,220
+and not all of those are negative or,
+并非所有这些都是消极的，或
+
+260
+00:13:30,220 --> 00:13:31,675
+or have to be, uh,
+或者必须是，呃，
+
+261
+00:13:31,675 --> 00:13:33,400
+or have to be seen as negative.
+或者必须被视为消极的。
+
+262
+00:13:33,400 --> 00:13:36,430
+So optimism is another kind of bias that we can
+所以乐观是我们能够做到的另一种偏见
+
+263
+00:13:36,430 --> 00:13:39,640
+have that affects our worldview and the way we sort of process things.
+这会影响我们的世界观和我们处理事物的方式。
+
+264
+00:13:39,640 --> 00:13:42,250
+Um, and even things like recency bias and
+嗯，甚至是新近偏见和
+
+265
+00:13:42,250 --> 00:13:45,760
+confirmation bias are just ways that our minds can like, um,
+确认偏见是我们的思想可以喜欢的方式，嗯，
+
+266
+00:13:45,760 --> 00:13:50,080
+handle the combinatorial explosion of all the different things that can be
+处理所有不同事物的组合爆炸
+
+267
+00:13:50,080 --> 00:13:52,030
+true in the world and put it down to something
+在世界上是真实的，并把它归结为某种东西
+
+268
+00:13:52,030 --> 00:13:55,060
+tractable that we can sort of operate with in the real world.
+我们可以在现实世界中进行操作。
+
+269
+00:13:55,060 --> 00:13:58,345
+Um, so algorithmic bias is what a lot
+嗯，所以算法偏差是很多的
+
+270
+00:13:58,345 --> 00:14:01,645
+of people mean in headlines and whatnot when we're talking about bias,
+当我们谈论偏见时，人们的意思是头条新闻
+
+271
+00:14:01,645 --> 00:14:03,790
+which is, uh, more about unjust,
+这是，呃，更多关于不公正，
+
+272
+00:14:03,790 --> 00:14:07,510
+unfair or prejudicial treatment of people that's an output of,
+对作为其产出的人的不公平或偏见的对待，
+
+273
+00:14:07,510 --> 00:14:09,610
+a automated decision system.
+自动决策系统。
+
+274
+00:14:09,610 --> 00:14:12,505
+Um, and the focus here is really on, uh,
+嗯，这里的重点是真的，呃，
+
+275
+00:14:12,505 --> 00:14:15,460
+unjust, unfair or prejudicial treatment of people.
+对人不公正，不公平或有偏见的待遇。
+
+276
+00:14:15,460 --> 00:14:19,315
+So, a lot of the work in this space right now is focusing on trying to understand,
+所以，现在这个领域的很多工作都集中在试图理解，
+
+277
+00:14:19,315 --> 00:14:22,480
+what does it mean to be unjust from an algorithm,
+从算法中不公正是什么意思，
+
+278
+00:14:22,480 --> 00:14:25,570
+what does it mean to be unfair from an algorithm,
+什么意思从算法不公平，
+
+279
+00:14:25,570 --> 00:14:27,190
+and how can we handle this,
+我们该怎么办呢
+
+280
+00:14:27,190 --> 00:14:30,490
+how can we sort of mitigate these issues in order to be able to keep
+我们怎样才能减轻这些问题，以便能够保持下去
+
+281
+00:14:30,490 --> 00:14:34,675
+developing technology that's useful for people without worsening social divides.
+开发对人们有用而不会恶化社会分歧的技术。
+
+282
+00:14:34,675 --> 00:14:41,170
+Um, and I felt the Guardian put it really well a few years ago.
+嗯，我觉得卫报几年前说得很好。
+
+283
+00:14:41,170 --> 00:14:45,295
+Um, they said, "Although neural networks might be said to write their own programs,
+嗯，他们说，“虽然可以说神经网络可以编写自己的程序，
+
+284
+00:14:45,295 --> 00:14:50,125
+they do so towards goals set by humans using data collected for human purposes.
+他们使用为人类目的收集的数据来实现人类设定的目标。
+
+285
+00:14:50,125 --> 00:14:52,420
+If the data is skewed, even by accident,
+如果数据是倾斜的，即使是偶然的，
+
+286
+00:14:52,420 --> 00:14:54,865
+the computers will amplify injustice."
+计算机将放大不公正。“
+
+287
+00:14:54,865 --> 00:14:58,540
+And it really keyed in on this amplify injustice idea.
+它真正关键在于放大不公正的想法。
+
+288
+00:14:58,540 --> 00:15:01,555
+Um, and let's talk about what that can mean.
+嗯，让我们来谈谈这意味着什么。
+
+289
+00:15:01,555 --> 00:15:05,680
+So, one of the avenues of deep learning research that's
+因此，深度学习研究的途径之一就是
+
+290
+00:15:05,680 --> 00:15:09,415
+taken off in the past few years is predicting criminal behavior.
+在过去几年中起飞是预测犯罪行为。
+
+291
+00:15:09,415 --> 00:15:14,020
+Um, so, um, how many of you are familiar with Predictive Policing?
+嗯，那么，嗯，你们中有多少人熟悉预测性警务？
+
+292
+00:15:14,020 --> 00:15:17,995
+[NOISE] Okay, like, half of the class.
+[NOISE]好的，就像，班级的一半。
+
+293
+00:15:17,995 --> 00:15:22,345
+Okay. So, in predictive policing, algorithms, um,
+好的。所以，在预测性警务，算法，嗯，
+
+294
+00:15:22,345 --> 00:15:28,675
+predict areas to deploy officers where crime is considered to be likely to occur.
+预测在可能发生犯罪的地方部署军官的区域。
+
+295
+00:15:28,675 --> 00:15:33,520
+But the data that the- the- the models are trained off
+但是模型被训练的数据
+
+296
+00:15:33,520 --> 00:15:38,935
+of is based on where police officers have already gone and made arrests.
+这取决于警察已经离开并逮捕的地方。
+
+297
+00:15:38,935 --> 00:15:42,520
+So, the systems are simply learning the patterns of bias that
+因此，系统只是简单地学习偏见的模式
+
+298
+00:15:42,520 --> 00:15:46,900
+humans have and where do they go and where they are trying to decide to def- uh,
+人类有，他们去哪里以及他们试图决定去哪里，
+
+299
+00:15:46,900 --> 00:15:48,820
+to find crime, um,
+找到犯罪，嗯，
+
+300
+00:15:48,820 --> 00:15:50,425
+and then reflecting them back.
+然后将它们反射回来。
+
+301
+00:15:50,425 --> 00:15:52,930
+So, because this system hones in on some of
+所以，因为这个系统在某些方面闯入了
+
+302
+00:15:52,930 --> 00:15:56,125
+the top spots where people have been arrested,
+人们被捕的最佳地点，
+
+303
+00:15:56,125 --> 00:15:57,940
+notice that's not the same of- that's
+注意那不是那个 - 那个
+
+304
+00:15:57,940 --> 00:16:00,490
+the same thing as where crimes have been committed, right?
+与犯罪的地方一样，对吧？
+
+305
+00:16:00,490 --> 00:16:02,440
+It's where arrests have been made.
+这是逮捕的地方。
+
+306
+00:16:02,440 --> 00:16:04,720
+Um, it means that the other areas that
+嗯，这意味着其他领域
+
+307
+00:16:04,720 --> 00:16:07,240
+might be explored for crime don't get explored at all.
+可能被探索犯罪根本没有被探索。
+
+308
+00:16:07,240 --> 00:16:09,175
+That worsens the situation.
+这使局势恶化。
+
+309
+00:16:09,175 --> 00:16:10,795
+Um, some neighborhoods, uh,
+嗯，有些街区，呃，
+
+310
+00:16:10,795 --> 00:16:14,080
+get really acutely focused attention on them,
+得到真正敏锐的关注他们，
+
+311
+00:16:14,080 --> 00:16:16,810
+and that heightens the chances of serious repercussions for
+这增加了严重影响的可能性
+
+312
+00:16:16,810 --> 00:16:19,735
+even minor infractions, that means arrests.
+即使是轻微的违规行为，也就是逮捕行为。
+
+313
+00:16:19,735 --> 00:16:22,060
+And that means a feedback loop of data that
+这意味着数据的反馈循环
+
+314
+00:16:22,060 --> 00:16:25,400
+you will get an arrest in this place if you go there.
+如果你去那里，你会在这个地方被捕。
+
+315
+00:16:25,470 --> 00:16:33,085
+Um, another, uh, sort of related issue in this space is, uh, predictive sentencing.
+嗯，另一个，呃，这个领域的相关问题是，呃，预测量刑。
+
+316
+00:16:33,085 --> 00:16:36,100
+Um, so there was a really nice article that came out
+嗯，所以有一篇非常好的文章出来了
+
+317
+00:16:36,100 --> 00:16:39,280
+from Pro- ProPublica a few years ago discussing this.
+几年前Pro-ProPublica对此进行了讨论。
+
+318
+00:16:39,280 --> 00:16:41,950
+Um, but when most defendants are booked in jail,
+嗯，但当大多数被告在监狱里被预定时，
+
+319
+00:16:41,950 --> 00:16:44,320
+they respond to a questionnaire called COMPAS.
+他们回复了一份名为COMPAS的调查问卷。
+
+320
+00:16:44,320 --> 00:16:47,920
+Um, and their answers are fed into this software system that
+嗯，他们的答案被输入到这个软件系统中
+
+321
+00:16:47,920 --> 00:16:51,640
+generates scores that correspond to the risk of recidivism,
+产生与累犯风险相对应的分数，
+
+322
+00:16:51,640 --> 00:16:53,500
+that's the risk of um,
+这是嗯的风险，
+
+323
+00:16:53,500 --> 00:16:55,330
+er, making a crime again.
+呃，又犯了罪。
+
+324
+00:16:55,330 --> 00:16:57,970
+Um, and the questions are used to gather data
+嗯，这些问题用于收集数据
+
+325
+00:16:57,970 --> 00:17:00,565
+on the defendant's socio-economic status,
+关于被告的社会经济地位，
+
+326
+00:17:00,565 --> 00:17:03,070
+family background, neighborhood crime,
+家庭背景，邻里犯罪，
+
+327
+00:17:03,070 --> 00:17:05,830
+employment status, and other factors in order to reach
+就业状况，以及其他因素，以达到
+
+328
+00:17:05,830 --> 00:17:11,785
+some predictim- prediction of an individual's crime or criminal risk.
+对个人犯罪或犯罪风险的预测。
+
+329
+00:17:11,785 --> 00:17:17,470
+Um, but what ends up happening is that it ends up focusing on the key bias issues
+嗯，但最终发生的事情是它最终关注的是关键的偏见问题
+
+330
+00:17:17,470 --> 00:17:19,600
+that humans have and propagating it
+人类拥有并传播它
+
+331
+00:17:19,600 --> 00:17:23,215
+back with something that looks like an objective score.
+回来的东西看起来像客观分数。
+
+332
+00:17:23,215 --> 00:17:26,065
+So, you're a lot more likely um,
+所以，你更有可能，嗯，
+
+333
+00:17:26,065 --> 00:17:28,315
+to be convicted of a crime, um,
+被定罪的嗯，嗯，
+
+334
+00:17:28,315 --> 00:17:30,055
+if you're black than if you're white,
+如果你是黑人而不是你是白人，
+
+335
+00:17:30,055 --> 00:17:31,975
+even if you've made the exact same crime.
+即使你犯了同样的罪行。
+
+336
+00:17:31,975 --> 00:17:34,330
+And the system will pick up on this,
+系统会接受这个，
+
+337
+00:17:34,330 --> 00:17:36,790
+and will reflect this back to say that people who are
+并会反映这一点，说是那些人
+
+338
+00:17:36,790 --> 00:17:39,580
+black are more likely to have reci- like recidivism,
+黑人更有可能重新接受累犯，
+
+339
+00:17:39,580 --> 00:17:41,020
+more likely to convict a,
+更有可能定罪，
+
+340
+00:17:41,020 --> 00:17:43,165
+uh, to make a crime again.
+呃，再犯一次罪。
+
+341
+00:17:43,165 --> 00:17:49,885
+Um, so this is an example of automation bias, preferring the output of a system, uh,
+嗯，所以这是自动化偏差的一个例子，更喜欢系统的输出，呃，
+
+342
+00:17:49,885 --> 00:17:54,085
+in the face of overgeneralization, feedback loops,
+面对过度概括，反馈循环，
+
+343
+00:17:54,085 --> 00:17:55,795
+and correlation fallacy,
+和相关性谬误，
+
+344
+00:17:55,795 --> 00:18:00,620
+confusing things that are occurring together as being somehow causal.
+令人困惑的事情在一起发生，因为某种程度上是因果关系。
+
+345
+00:18:02,520 --> 00:18:06,985
+There's another, uh, sort of area of research and, uh,
+还有另一种呃，研究领域，呃，
+
+346
+00:18:06,985 --> 00:18:12,010
+startups looking at predicting criminality in particular from things like face images.
+初创公司正在研究预测犯罪行为，尤其是面部图像等。
+
+347
+00:18:12,010 --> 00:18:14,890
+So there's a company out there, uh, called Faception.
+所以那里有一家公司，呃，名为Faception。
+
+348
+00:18:14,890 --> 00:18:18,520
+They are based in Israel and they claim to be able to,
+他们的总部设在以色列，他们声称能够，
+
+349
+00:18:18,520 --> 00:18:21,625
+um, use individual images, uh,
+嗯，使用个人形象，呃，
+
+350
+00:18:21,625 --> 00:18:25,150
+with computer vision and machine learning technology for profiling people
+用计算机视觉和机器学习技术来描绘人
+
+351
+00:18:25,150 --> 00:18:28,855
+and revealing their personality based only on their facial image,
+并仅根据他们的面部形象揭示他们的个性，
+
+352
+00:18:28,855 --> 00:18:32,395
+um, recognizing things like high IQ,
+嗯，认识到高智商，
+
+353
+00:18:32,395 --> 00:18:35,575
+white-collar offender, pedophile, and terrorist.
+白领罪犯，恋童癖者和恐怖分子。
+
+354
+00:18:35,575 --> 00:18:38,350
+Um, and their main clients are Homeland Security,
+嗯，他们的主要客户是国土安全部，
+
+355
+00:18:38,350 --> 00:18:39,550
+lots of other, uh,
+很多其他的，呃，
+
+356
+00:18:39,550 --> 00:18:42,985
+lots of other countries dealing with sort of public safety issues.
+处理各种公共安全问题的许多其他国家。
+
+357
+00:18:42,985 --> 00:18:45,760
+They've not published any details about their methods,
+他们没有公布任何关于他们方法的细节，
+
+358
+00:18:45,760 --> 00:18:47,425
+their sources of training data,
+他们的培训数据来源，
+
+359
+00:18:47,425 --> 00:18:49,090
+or their quantitative results.
+或他们的定量结果。
+
+360
+00:18:49,090 --> 00:18:50,980
+We know that in light of automation bias,
+我们知道，鉴于自动化偏见，
+
+361
+00:18:50,980 --> 00:18:54,535
+people will tend to think it just works even when it doesn't work well.
+人们会倾向于认为它只是在它不能正常工作时才有效。
+
+362
+00:18:54,535 --> 00:18:57,700
+Um, but there was a paper that came out wi- in
+嗯，但有一篇文章出现了
+
+363
+00:18:57,700 --> 00:19:01,765
+a similar line predicting criminal, criminality,
+类似的预测犯罪，犯罪，
+
+364
+00:19:01,765 --> 00:19:05,890
+or purporting to predict criminality from individual face images,
+或旨在预测个人脸部图像的犯罪行为，
+
+365
+00:19:05,890 --> 00:19:08,110
+and that one had some results and,
+那个人有一些结果，
+
+366
+00:19:08,110 --> 00:19:11,350
+uh, some more details about the data that we could kinda dig
+呃，关于我们可以挖掘的数据的更多细节
+
+367
+00:19:11,350 --> 00:19:15,100
+into to understand where are these kinds of claims coming from.
+了解这些类型的索赔来自何处。
+
+368
+00:19:15,100 --> 00:19:19,880
+Um, so this was an article that was posted on Archive near the end of 2016.
+嗯，所以这篇文章于2016年底发布在Archive上。
+
+369
+00:19:19,880 --> 00:19:26,230
+Um, and they said they were using less than 2,000 closely cropped images of faces, um,
+嗯，他们说他们使用了不到2000张紧密裁剪的面孔图像，嗯，
+
+370
+00:19:26,230 --> 00:19:30,415
+including wanted suspect ID pictures from specific regions,
+包括来自特定地区的想要的可疑身份证照片，
+
+371
+00:19:30,415 --> 00:19:35,035
+and they claimed that even based on this very small training dataset, um,
+他们声称即使是基于这个非常小的训练数据集，嗯，
+
+372
+00:19:35,035 --> 00:19:37,540
+that they were able to predict, uh,
+他们能够预测，呃，
+
+373
+00:19:37,540 --> 00:19:40,240
+whether or not someone was likely to be a criminal,
+是否有人可能是罪犯，
+
+374
+00:19:40,240 --> 00:19:42,640
+uh, greater than 90 percent accuracy.
+呃，准确率超过90％。
+
+375
+00:19:42,640 --> 00:19:45,235
+Um, and they got so lost in this,
+嗯，他们在这里迷路了，
+
+376
+00:19:45,235 --> 00:19:47,020
+this idea that, uh,
+这个想法，呃，
+
+377
+00:19:47,020 --> 00:19:49,150
+it's sort of funny to read to just take
+读起来很有趣
+
+378
+00:19:49,150 --> 00:19:51,640
+a step back and realize what's actually happening.
+退后一步，意识到实际发生了什么。
+
+379
+00:19:51,640 --> 00:19:52,840
+So for example, one of
+例如，其中之一
+
+380
+00:19:52,840 --> 00:19:57,640
+their really great exciting claims was that the angle Theta from nose tip to
+他们真正令人兴奋的主张是从鼻尖到角尖的角度Theta
+
+381
+00:19:57,640 --> 00:19:59,770
+two mouth corners is on average
+两个嘴角平均
+
+382
+00:19:59,770 --> 00:20:03,640
+19,6 percent smaller for criminals than for non-criminals.
+犯罪分子比非犯罪分子少19,6％。
+
+383
+00:20:03,640 --> 00:20:05,980
+This is otherwise known as smiling. [LAUGHTER]
+这被称为微笑。 [笑声]
+
+384
+00:20:05,980 --> 00:20:09,070
+Uh, and [LAUGHTER] you know,
+呃，[大笑]你知道吗，
+
+385
+00:20:09,070 --> 00:20:11,170
+exactly the kind of images people would
+正是人们想要的那种形象
+
+386
+00:20:11,170 --> 00:20:13,780
+use when trying to put out wanted criminal pictures,
+在试图推出想要的犯罪照片时使用
+
+387
+00:20:13,780 --> 00:20:15,655
+probably not really happy pictures.
+可能不是很开心的照片。
+
+388
+00:20:15,655 --> 00:20:18,265
+But you get so lost in the confirmation bias.
+但你在确认偏见中迷失了方向。
+
+389
+00:20:18,265 --> 00:20:20,230
+You get so lost in the correlation and the
+你在相关性和迷失中迷失了
+
+390
+00:20:20,230 --> 00:20:22,930
+feedback loops that you end up overlooking these
+反馈循环，你最终忽略了这些
+
+391
+00:20:22,930 --> 00:20:25,945
+really obvious kinds of things.
+真的很明显的东西。
+
+392
+00:20:25,945 --> 00:20:29,010
+Um, so that's an example of selection bias,
+嗯，这是选择偏差的一个例子，
+
+393
+00:20:29,010 --> 00:20:32,880
+experimenter's bias, confirmation bias, correlation fallacy,
+实验者的偏见，确认偏差，相关性谬误，
+
+394
+00:20:32,880 --> 00:20:36,090
+and feedback loops all coming together to create
+和反馈循环一起创建
+
+395
+00:20:36,090 --> 00:20:37,950
+a deep learning system that people think is
+一个人们认为的深度学习系统
+
+396
+00:20:37,950 --> 00:20:40,730
+scary and can do things that it can't actually do.
+可怕而且可以做一些它实际上无法做到的事情。
+
+397
+00:20:40,730 --> 00:20:44,485
+Um, one of the issues with this was that the media loved it.
+嗯，其中一个问题是媒体喜欢它。
+
+398
+00:20:44,485 --> 00:20:46,180
+Like it was all over the news,
+喜欢这个全新闻，
+
+399
+00:20:46,180 --> 00:20:49,060
+and there's been similar kinds of things happening again and again.
+并且一直有类似的事情一次又一次地发生。
+
+400
+00:20:49,060 --> 00:20:51,175
+Media wants to sell the story,
+媒体想要出售这个故事，
+
+401
+00:20:51,175 --> 00:20:53,830
+and so it's part of our job as researchers,
+所以这是我们作为研究人员的工作的一部分，
+
+402
+00:20:53,830 --> 00:20:55,315
+that people who work on this stuff,
+从事这项工作的人，
+
+403
+00:20:55,315 --> 00:20:58,615
+to be very clear about what the technology is actually doing,
+要非常清楚技术实际在做什么，
+
+404
+00:20:58,615 --> 00:21:00,760
+uh, and make a distinction between what you
+呃，并区分你
+
+405
+00:21:00,760 --> 00:21:03,520
+might think it's doing and what it's actually doing.
+可能会认为它正在做，它实际上在做什么。
+
+406
+00:21:03,520 --> 00:21:07,930
+Um, so another issue that has come up recently, um,
+嗯，最近又出现了另一个问题，嗯，
+
+407
+00:21:07,930 --> 00:21:09,490
+it's claiming to be able to predict
+它声称能够预测
+
+408
+00:21:09,490 --> 00:21:13,660
+internal qualities but specifically ones that are subject to discrimination,
+内部品质，但特别是受歧视的品质，
+
+409
+00:21:13,660 --> 00:21:15,535
+um, and loss of opportunity.
+嗯，失去机会。
+
+410
+00:21:15,535 --> 00:21:18,610
+So in particular, there was this work that came out that claimed
+所以特别是，声称有这项工作
+
+411
+00:21:18,610 --> 00:21:21,565
+to be able to predict whether or not someone was homosexual,
+能够预测某人是否是同性恋，
+
+412
+00:21:21,565 --> 00:21:23,905
+just based on single face images.
+只是基于单面图像。
+
+413
+00:21:23,905 --> 00:21:28,390
+Um, now, it's important to know that the images that they used in the study included
+嗯，现在，知道他们在研究中使用的图像包括在内是很重要的
+
+414
+00:21:28,390 --> 00:21:33,400
+images that were from dating websites where people self-identified as straight or gay,
+来自约会网站的图片，人们自认为是直接或同性恋，
+
+415
+00:21:33,400 --> 00:21:37,045
+and identified as whether they were looking for a partner who was straight or gay,
+并确定他们是在寻找直接或同性恋的伴侣，
+
+416
+00:21:37,045 --> 00:21:40,015
+and these became the sources of the training data,
+这些成为培训数据的来源，
+
+417
+00:21:40,015 --> 00:21:41,890
+and still from this, uh.
+还是从这个，呃。
+
+418
+00:21:41,890 --> 00:21:44,470
+Oh! Before I go on, can you guys just understand
+哦!在我继续之前，你们可以理解
+
+419
+00:21:44,470 --> 00:21:47,500
+just from that what the issue might have been?
+只是从那个问题可能是什么？
+
+420
+00:21:47,500 --> 00:21:48,640
+Rainbows.
+彩虹。
+
+421
+00:21:48,640 --> 00:21:54,250
+[LAUGHTER] I don't think that there was actually anything about rainbows,
+[笑声]我认为实际上并没有关于彩虹的事情，
+
+422
+00:21:54,250 --> 00:21:55,390
+but that's really unfortunate.
+但这真的很不幸。
+
+423
+00:21:55,390 --> 00:21:59,980
+[LAUGHTER].
+[笑声]。
+
+424
+00:21:59,980 --> 00:22:00,280
+[inaudible]
+[听不见]
+
+425
+00:22:00,280 --> 00:22:03,475
+Right. Yeah. So this has more to do with the presentation of the self,
+对。是啊。所以这更多地与自我的呈现有关，
+
+426
+00:22:03,475 --> 00:22:07,030
+the presentation of the social self when you're trying to for example,
+例如，当您尝试时，社交自我的呈现，
+
+427
+00:22:07,030 --> 00:22:08,784
+attract a partner on a website,
+吸引网站上的合作伙伴，
+
+428
+00:22:08,784 --> 00:22:11,695
+and less to do with how you look day to day.
+而且与你日常生活的方式关系不大。
+
+429
+00:22:11,695 --> 00:22:14,800
+Um, and yet they kind of went to
+嗯，但他们有点过去了
+
+430
+00:22:14,800 --> 00:22:19,660
+these large conclusions that aren't supported at all by the data or by their study,
+这些大的结论完全没有得到数据或他们的研究的支持，
+
+431
+00:22:19,660 --> 00:22:24,595
+um, but things like consistent with a prenatal hormone theory of sexual orientation.
+嗯，但事情就像产前激素性取向理论一致。
+
+432
+00:22:24,595 --> 00:22:28,630
+Gay men and women tended to have gender atypical facial morphology.
+同性恋男性和女性往往具有性别非典型的面部形态。
+
+433
+00:22:28,630 --> 00:22:34,420
+Now, none of the authors actually were prenatal hormone theory specialists, you know.
+现在，没有一个作者真的是产前激素理论专家，你知道。
+
+434
+00:22:34,420 --> 00:22:37,120
+They have doctor in their name so maybe that's a thing.
+他们的名字中有医生，所以也许这就是事情。
+
+435
+00:22:37,120 --> 00:22:39,865
+Um, this was a Stanford professor and like I've,
+嗯，这是斯坦福大学教授，就像我一样，
+
+436
+00:22:39,865 --> 00:22:42,160
+I've presented this a few times at Stanford and gotten into
+我在斯坦福大学曾多次介绍过这本书
+
+437
+00:22:42,160 --> 00:22:44,680
+some like pretty harsh fights about this.
+有些人喜欢非常严厉的打架。
+
+438
+00:22:44,680 --> 00:22:46,570
+So I'm ready if anyone wants to take me on.
+所以如果有人想带我，我准备好了。
+
+439
+00:22:46,570 --> 00:22:50,410
+[LAUGHTER] But uh, me and my uh,
+[大笑]但是，呃，我和我，呃，
+
+440
+00:22:50,410 --> 00:22:52,495
+some of my colleagues decided we'd,
+我的一些同事决定我们，
+
+441
+00:22:52,495 --> 00:22:54,025
+we'd play around with this a bit,
+我们会玩这个，
+
+442
+00:22:54,025 --> 00:22:56,755
+and what we found was that a simple decision tree.
+我们发现的是一个简单的决策树。
+
+443
+00:22:56,755 --> 00:22:59,580
+Um, so I'm kind of assuming you guys know what a decision tree is.
+嗯，所以我假设你们知道决策树是什么。
+
+444
+00:22:59,580 --> 00:23:01,090
+So, okay.
+好吧，好吧。
+
+445
+00:23:01,090 --> 00:23:04,270
+Cool. So based on wearing makeup or wearing glasses,
+凉。所以基于化妆或戴眼镜，
+
+446
+00:23:04,270 --> 00:23:06,790
+got us pretty close to the accuracy reported in
+让我们非常接近报告的准确性
+
+447
+00:23:06,790 --> 00:23:09,670
+the paper. That says nothing about internal hormones,
+论文。这对内部激素没有任何意义，
+
+448
+00:23:09,670 --> 00:23:11,200
+that says nothing about any of that,
+什么都没说
+
+449
+00:23:11,200 --> 00:23:13,795
+and it says a lot about the physical presentation,
+它说了很多关于物理演示的内容，
+
+450
+00:23:13,795 --> 00:23:15,535
+the things that are on the surface.
+表面上的东西。
+
+451
+00:23:15,535 --> 00:23:17,830
+Um, it says a lot more about how people are
+嗯，它更多地讲述了人们的情况
+
+452
+00:23:17,830 --> 00:23:20,515
+presenting themselves than what is happening internally.
+展示自己而不是内部发生的事情。
+
+453
+00:23:20,515 --> 00:23:23,530
+Um, so the key thing that's recently kind of
+嗯，这是最近的关键
+
+454
+00:23:23,530 --> 00:23:26,695
+been overlooked is that deep learning is somehow,
+被忽视的是深度学习是某种方式，
+
+455
+00:23:26,695 --> 00:23:30,940
+i- it's sort of considered that it's somehow magically going beyond surface level.
+我认为它在某种程度上神奇地超越了表面层面。
+
+456
+00:23:30,940 --> 00:23:34,420
+But the point is that it's working on the surface level and working well.
+但关键是它在表面层面上工作并且运行良好。
+
+457
+00:23:34,420 --> 00:23:38,260
+And in the face of confirmation bias and other kinds of bias factors,
+面对确认偏见和其他种类的偏见因素，
+
+458
+00:23:38,260 --> 00:23:41,455
+it's easy to assume that something else is happening that's not.
+很容易假设其他事情正在发生，但事实并非如此。
+
+459
+00:23:41,455 --> 00:23:43,720
+Without critical examination, uh,
+没有批判性的检查，呃，
+
+460
+00:23:43,720 --> 00:23:46,660
+for example simple baselines, uh,
+例如简单的基线，呃，
+
+461
+00:23:46,660 --> 00:23:50,635
+simple sanity checks, these kinds of things can just be ignored and,
+简单的理智检查，这些事情可以忽略不计，
+
+462
+00:23:50,635 --> 00:23:52,705
+and not noticed at all.
+并没有注意到。
+
+463
+00:23:52,705 --> 00:23:56,620
+Um, so that's example of selection bias,
+嗯，这是选择偏差的例子，
+
+464
+00:23:56,620 --> 00:24:00,530
+um, experimenter's bias, and correlation fallacy.
+嗯，实验者的偏见和相关性谬误。
+
+465
+00:24:00,780 --> 00:24:03,655
+Okay. So now I'm going to talk to,
+好的。所以现在我要和他说话，
+
+466
+00:24:03,655 --> 00:24:05,680
+talk about measuring algorithmic bias.
+谈论测量算法偏差。
+
+467
+00:24:05,680 --> 00:24:10,690
+So I just said a lot about different kinds of biases that come in in the data,
+所以我只是说了很多关于数据中出现的各种偏见，
+
+468
+00:24:10,690 --> 00:24:13,870
+in the collection, in the interpretation of the results.
+在集合中，在结果的解释中。
+
+469
+00:24:13,870 --> 00:24:18,265
+[NOISE] Let's talk about actually quantitatively measuring different kinds of biases.
+[NOISE]让我们谈谈实际上定量测量不同类型的偏差。
+
+470
+00:24:18,265 --> 00:24:22,045
+Um, so one of the key things that's, uh,
+嗯，所以关键的事情之一，呃，
+
+471
+00:24:22,045 --> 00:24:25,750
+emerged in a few different works and really ties nicely to a lot
+出现在一些不同的作品中，真的很好地联系了很多
+
+472
+00:24:25,750 --> 00:24:29,650
+of fairness work is this idea of disaggregated evaluation.
+公平工作是这种分解评价的想法。
+
+473
+00:24:29,650 --> 00:24:31,855
+So in disaggregated evaluation,
+所以在分类评估中，
+
+474
+00:24:31,855 --> 00:24:35,230
+you evaluate across different subgroups as opposed to
+你评估不同的子群而不是
+
+475
+00:24:35,230 --> 00:24:39,280
+looking at one single score for your overall testing data set.
+查看整个测试数据集的单个分数。
+
+476
+00:24:39,280 --> 00:24:41,620
+Um, so, okay.
+嗯，好吧。
+
+477
+00:24:41,620 --> 00:24:44,200
+You guys are probably familiar with the training testing data split.
+你们可能熟悉训练测试数据分割。
+
+478
+00:24:44,200 --> 00:24:45,505
+You kind of train on there,
+你在那里训练，
+
+479
+00:24:45,505 --> 00:24:47,320
+on your given training data,
+根据您提供的培训数据，
+
+480
+00:24:47,320 --> 00:24:51,565
+you test on your given testing data and then you repo- you report like precision,
+你测试你给定的测试数据，然后你回复报告像精度，
+
+481
+00:24:51,565 --> 00:24:53,875
+recall, F-score, things like that.
+回忆，F-score，这样的事情。
+
+482
+00:24:53,875 --> 00:24:57,280
+Um, but what that masks is how well the system is actually
+嗯，但是掩盖的是系统实际上的表现
+
+483
+00:24:57,280 --> 00:25:01,315
+working across different kinds of individuals and across different, different subgroups.
+在不同类型的个人和不同的不同子群体中工作。
+
+484
+00:25:01,315 --> 00:25:04,660
+Um, and so one just straightforward way to handle
+嗯，所以一个只是直截了当的处理方式
+
+485
+00:25:04,660 --> 00:25:08,320
+this is to actually evaluate with respect to those different subgroups.
+这是为了对这些不同的子群进行实际评估。
+
+486
+00:25:08,320 --> 00:25:11,650
+So creating for each sort of subgroup prediction pair.
+因此，为每种子组预测对创建。
+
+487
+00:25:11,650 --> 00:25:13,450
+Um, so for an example,
+嗯，举个例子，
+
+488
+00:25:13,450 --> 00:25:15,535
+you might look at women face detection,
+你可能会看一下女性面部检测，
+
+489
+00:25:15,535 --> 00:25:18,205
+men face detection, and look at how the,
+男人面对检测，看看怎么样，
+
+490
+00:25:18,205 --> 00:25:19,600
+the error rates are,
+错误率是，
+
+491
+00:25:19,600 --> 00:25:22,375
+are different or are um, similar.
+是不同的或是嗯，相似。
+
+492
+00:25:22,375 --> 00:25:27,145
+Um, another important part of this is to look at things intersectionally,
+嗯，另一个重要的部分是交叉地看待事物，
+
+493
+00:25:27,145 --> 00:25:29,530
+um, combining things, um,
+嗯，把事情结合起来，嗯，
+
+494
+00:25:29,530 --> 00:25:34,000
+like gender and race at the same time and seeing how those, uh,
+喜欢性别和种族同时看到那些，呃，
+
+495
+00:25:34,000 --> 00:25:36,370
+how the error rates on those sorts of things
+这些事情的错误率如何
+
+496
+00:25:36,370 --> 00:25:39,700
+change and how they're different across uh, different intersections.
+变化以及它们在不同的交叉点之间的差异。
+
+497
+00:25:39,700 --> 00:25:42,445
+Um, and this is inspired by Kimberle Crenshaw.
+嗯，这是受到Kimberle Crenshaw的启发。
+
+498
+00:25:42,445 --> 00:25:45,879
+Um, who she, she pioneered intersectional research,
+嗯，她，她开创了交叉研究，
+
+499
+00:25:45,879 --> 00:25:48,175
+uh, in critical race theory.
+呃，在批判种族理论中。
+
+500
+00:25:48,175 --> 00:25:51,805
+Um, and she discussed the story of Emma DeGraffenreid, uh,
+嗯，她讨论了Emma DeGraffenreid的故事，呃，
+
+501
+00:25:51,805 --> 00:25:55,585
+who was a woman at General Motors, um,
+谁是通用汽车的女人，嗯，
+
+502
+00:25:55,585 --> 00:25:59,770
+and she claimed that the company's hiring practices discriminated against black women.
+她声称该公司的招聘做法歧视黑人妇女。
+
+503
+00:25:59,770 --> 00:26:01,780
+Um, but in her court opinion,
+嗯，但在她的法庭意见中，
+
+504
+00:26:01,780 --> 00:26:04,795
+the judges ruled that General Motors hired, um,
+法官裁定通用汽车聘请，嗯，
+
+505
+00:26:04,795 --> 00:26:10,255
+many women for secretarial positions and many black people for factory roles,
+许多妇女担任秘书职位，许多黑人担任工厂职务，
+
+506
+00:26:10,255 --> 00:26:14,050
+and thus they could not have discriminated against black women.
+因此他们不能歧视黑人妇女。
+
+507
+00:26:14,050 --> 00:26:16,690
+What they failed to do was look at the intersection of
+他们没有做的是看看交叉点
+
+508
+00:26:16,690 --> 00:26:19,270
+the two and understand that the experience there might be
+两者并了解可能存在的经验
+
+509
+00:26:19,270 --> 00:26:21,160
+fundamentally different than any of
+从根本上不同于任何一个
+
+510
+00:26:21,160 --> 00:26:25,840
+the experiences of either of these sort of subgroups in isolation.
+这些子群中任何一个的经验都是孤立的。
+
+511
+00:26:25,840 --> 00:26:29,290
+Um, and the same becomes true when you start looking
+嗯，当你开始寻找时也是如此
+
+512
+00:26:29,290 --> 00:26:32,590
+at errors that are regularly made in deep learning systems.
+在深度学习系统中经常出现的错误。
+
+513
+00:26:32,590 --> 00:26:34,630
+Um, so we've been able to uncover a lot of
+嗯，所以我们已经能够发现很多
+
+514
+00:26:34,630 --> 00:26:37,360
+different kinds of unintended errors by looking not only at
+不仅仅是在寻找不同类型的意外错误
+
+515
+00:26:37,360 --> 00:26:43,475
+the disaggregated evaluation but also at intersectional disaggregated evaluation.
+分类评估，但也在交叉分解评估。
+
+516
+00:26:43,475 --> 00:26:46,645
+Um, so I'm going to walk through a bit how this works.
+嗯，所以我将详细介绍一下这是如何工作的。
+
+517
+00:26:46,645 --> 00:26:49,660
+This is probably going to be review for most of you,
+这可能是大多数人的评论，
+
+518
+00:26:49,660 --> 00:26:52,330
+but I think it's really important to understand this because it also
+但我认为理解这一点非常重要，因为它也是如此
+
+519
+00:26:52,330 --> 00:26:55,645
+ties to how we measure fairness and when we say like,
+与我们衡量公平的方式有关，当我们说出来时，
+
+520
+00:26:55,645 --> 00:26:58,690
+uh, algorithmic fairness, what we're talking about.
+呃，算法公平，我们在谈论什么。
+
+521
+00:26:58,690 --> 00:27:02,740
+So um, the confusion matrix is a way, you guys.
+嗯，混淆矩阵是一种方式，你们。
+
+522
+00:27:02,740 --> 00:27:04,750
+Okay. Are you guys familiar with the confusion matrix?
+好的。你们熟悉混淆矩阵吗？
+
+523
+00:27:04,750 --> 00:27:06,250
+[LAUGHTER]. I just want want to know where.
+[笑声]。我只是想知道在哪里。
+
+524
+00:27:06,250 --> 00:27:09,085
+Okay. Awesome. Cool. So you're familiar with the confusion matrix, right.
+好的。真棒。凉。所以你对混淆矩阵很熟悉吧。
+
+525
+00:27:09,085 --> 00:27:11,425
+So you have model predictions and references.
+所以你有模型预测和参考。
+
+526
+00:27:11,425 --> 00:27:14,470
+Um, and you can kind of look at these as negative and positive,
+嗯，你可以把这些视为消极和积极的，
+
+527
+00:27:14,470 --> 00:27:17,110
+uh, binary classification, uh,
+呃，二元分类，呃，
+
+528
+00:27:17,110 --> 00:27:19,495
+kind of approach here where if
+这种方法在哪里如果
+
+529
+00:27:19,495 --> 00:27:23,200
+the ground truth says something is true and the model predicts it's true,
+事实说明事情是真的，模型预测它是真的，
+
+530
+00:27:23,200 --> 00:27:24,385
+it's a true positive.
+这是一个真正的积极因素。
+
+531
+00:27:24,385 --> 00:27:25,780
+If the ground truth says, uh,
+如果说实话，呃，
+
+532
+00:27:25,780 --> 00:27:27,520
+it's, it's, it's false,
+它是，它是，它是假的，
+
+533
+00:27:27,520 --> 00:27:31,045
+um, and the model predicts it's false, it's true negative.
+嗯，模型预测它是假的，这是真的消极。
+
+534
+00:27:31,045 --> 00:27:33,670
+Um, and the errors that the kind of different issues that
+嗯，那种错误就是那种不同的问题
+
+535
+00:27:33,670 --> 00:27:36,400
+arise are false negatives and false positives.
+出现的是假阴性和误报。
+
+536
+00:27:36,400 --> 00:27:39,670
+Um, so in false positives the, um,
+嗯，所以在误报中，嗯，
+
+537
+00:27:39,670 --> 00:27:44,290
+the ground truth says something is negative but the model predicts that it's positive.
+事实证明某些事情是消极的，但该模型预测它是积极的。
+
+538
+00:27:44,290 --> 00:27:47,560
+Uh, and then in false negatives, vice versa.
+呃，然后是假阴性，反之亦然。
+
+539
+00:27:47,560 --> 00:27:49,765
+Um, from these, you know,
+嗯，从这些，你知道，
+
+540
+00:27:49,765 --> 00:27:51,250
+uh, basic kind of, uh,
+呃，基本的，呃，
+
+541
+00:27:51,250 --> 00:27:53,290
+these basic breakdown of errors,
+这些错误的基本细分，
+
+542
+00:27:53,290 --> 00:27:55,330
+you can get a few different metrics.
+你可以得到一些不同的指标。
+
+543
+00:27:55,330 --> 00:28:01,105
+Um, these metrics actually trivially map to a lot of different fairness criteria.
+嗯，这些指标实际上很容易映射到很多不同的公平标准。
+
+544
+00:28:01,105 --> 00:28:02,965
+So um, for example,
+所以，嗯，例如，
+
+545
+00:28:02,965 --> 00:28:04,720
+if we're looking at something like
+如果我们正在寻找类似的东西
+
+546
+00:28:04,720 --> 00:28:09,880
+a female versus male patient results and figuring out things like precision and recall,
+女性与男性患者的结果，并找出精确和召回等事情，
+
+547
+00:28:09,880 --> 00:28:12,670
+which is relatively common in NLP, um,
+这在NLP中比较常见，嗯，
+
+548
+00:28:12,670 --> 00:28:16,405
+if you have equal recall across your subgroups
+如果你的子组中有相同的召回率
+
+549
+00:28:16,405 --> 00:28:20,875
+that's the same as the fairness criteria of equality of opportunity,
+这与机会均等的公平标准相同，
+
+550
+00:28:20,875 --> 00:28:23,440
+um, I could work through the math.
+嗯，我可以通过数学计算。
+
+551
+00:28:23,440 --> 00:28:24,805
+But I mean, this is basically just,
+但我的意思是，这基本上就是，
+
+552
+00:28:24,805 --> 00:28:27,475
+just the main point that, that, uh,
+只是主要的一点，呃，
+
+553
+00:28:27,475 --> 00:28:32,200
+it says that given that something is true in the ground truth,
+它说，鉴于事实真相，
+
+554
+00:28:32,200 --> 00:28:35,365
+the model should predict that it's true,
+模型应该预测它是真的，
+
+555
+00:28:35,365 --> 00:28:37,660
+uh, at equal rates across different subgroups.
+呃，不同小组的费率相同。
+
+556
+00:28:37,660 --> 00:28:41,965
+So this ends up being equivalent to having the same recall across different subgroups.
+因此，这最终相当于在不同的子组中进行相同的召回。
+
+557
+00:28:41,965 --> 00:28:45,730
+Similarly, um, having the same precision across
+同样，嗯，具有相同的精度
+
+558
+00:28:45,730 --> 00:28:50,800
+different subgroups is equivalent to a fairness criterion called predictive parity.
+不同的子群等同于称为预测奇偶性的公平性标准。
+
+559
+00:28:50,800 --> 00:28:55,285
+And so as fairness has been defined again and again, um,
+因此，公平性一再被定义，嗯，
+
+560
+00:28:55,285 --> 00:28:58,960
+it was originally some of these definitions came in
+它最初是其中一些定义的来源
+
+561
+00:28:58,960 --> 00:29:02,980
+1966 following the Civil Rights Act of 1964.
+1966年遵循1964年民权法案。
+
+562
+00:29:02,980 --> 00:29:05,875
+Um, they were reinvented a few times, uh,
+嗯，他们被重新发明了几次，呃，
+
+563
+00:29:05,875 --> 00:29:09,895
+and most recently reinvented in, uh, 2016.
+并且最近在2016年重新发明了。
+
+564
+00:29:09,895 --> 00:29:12,790
+Um, but they all sort of boiled down to
+嗯，但他们都有点归结为
+
+565
+00:29:12,790 --> 00:29:16,540
+this disaggregated comparison across subgroups and the math,
+这是分组和数学的分类比较，
+
+566
+00:29:16,540 --> 00:29:20,770
+the metrics end being roughly equivalent to what we get from the confusion matrix,
+度量结束大致相当于我们从混淆矩阵得到的，
+
+567
+00:29:20,770 --> 00:29:24,560
+specifically in classification systems.
+特别是在分类系统中。
+
+568
+00:29:25,980 --> 00:29:29,530
+So which kind of fairness metric do you use,
+那么你使用哪种公平度量，
+
+569
+00:29:29,530 --> 00:29:31,870
+what are the different criteria you want
+你想要的标准是什么？
+
+570
+00:29:31,870 --> 00:29:35,020
+to use to look at the differences across different subgroups,
+用来看看不同子群体之间的差异，
+
+571
+00:29:35,020 --> 00:29:37,780
+that really comes down to the trade-offs
+这真的归结为权衡
+
+572
+00:29:37,780 --> 00:29:39,925
+between false positives and false negatives.
+假阳性和假阴性之间。
+
+573
+00:29:39,925 --> 00:29:42,025
+So this is the same problem that you are dealing with
+所以这与您正在处理的问题相同
+
+574
+00:29:42,025 --> 00:29:44,515
+when you're just figuring out how to evaluate generally.
+当你只想弄清楚如何评估时。
+
+575
+00:29:44,515 --> 00:29:46,900
+Um, there's no one fairness criteria and that is
+嗯，没有一个公平标准，那就是
+
+576
+00:29:46,900 --> 00:29:49,960
+the fairness criteria and to rule them all, um,
+公平标准，并统治他们所有，嗯，
+
+577
+00:29:49,960 --> 00:29:52,630
+deciding which one is better than the other is the same as
+决定哪一个优于另一个是相同的
+
+578
+00:29:52,630 --> 00:29:55,480
+kind of trying to decide which is better, precision or recall, right?
+有点试图决定哪个更好，更准确或召回，对吧？
+
+579
+00:29:55,480 --> 00:29:58,630
+It depends on what the problem is and what you're interested in measuring.
+这取决于问题是什么以及您对测量感兴趣。
+
+580
+00:29:58,630 --> 00:30:03,100
+Um, so a case where false positives might be better than
+嗯，假阳性可能比好的情况好
+
+581
+00:30:03,100 --> 00:30:07,780
+false negatives and so you want to prioritize something like a false positive rate,
+假阴性，所以你想优先考虑假阳性率，
+
+582
+00:30:07,780 --> 00:30:10,630
+ah, across subgroups is privacy and images.
+啊，跨子组是隐私和图像。
+
+583
+00:30:10,630 --> 00:30:15,370
+So here a false positive is something that doesn't need to be blurred gets blurred.
+所以这里的假阳性是不需要模糊的东西变得模糊。
+
+584
+00:30:15,370 --> 00:30:16,780
+That's just kind of a bummer.
+那只是一种无赖。
+
+585
+00:30:16,780 --> 00:30:19,540
+Um, but a false negative would be something that needs to be
+嗯，但是假阴性将是需要的东西
+
+586
+00:30:19,540 --> 00:30:22,405
+blurred is not blurred and that can be identity theft.
+模糊不模糊，可以是身份盗窃。
+
+587
+00:30:22,405 --> 00:30:24,295
+It's a much more serious issue.
+这是一个更严重的问题。
+
+588
+00:30:24,295 --> 00:30:26,110
+And so it's important to prioritize
+因此优先考虑是非常重要的
+
+589
+00:30:26,110 --> 00:30:29,440
+the evaluation metrics that stress the false negative rates.
+强调假阴性率的评估指标。
+
+590
+00:30:29,440 --> 00:30:32,650
+Um, an example where false negatives
+嗯，假阴性的例子
+
+591
+00:30:32,650 --> 00:30:35,335
+might be better than false positives is in spam filtering.
+垃圾邮件过滤可能比误报更好。
+
+592
+00:30:35,335 --> 00:30:41,635
+So a false-negative could be an e-mail that's spam not caught so you see it in your inbox,
+因此，假阴性可能是一封垃圾邮件未被捕获的电子邮件，因此您可以在收件箱中看到它，
+
+593
+00:30:41,635 --> 00:30:44,350
+that's usually just annoying, it's not a big deal.
+这通常很烦人，这不是什么大不了的事。
+
+594
+00:30:44,350 --> 00:30:47,170
+Um, but a false positive here would be e-mail flagged as
+嗯，但这里的误报将被标记为电子邮件
+
+595
+00:30:47,170 --> 00:30:50,245
+spam and then removed from your inbox, which,
+垃圾邮件然后从您的收件箱中删除，
+
+596
+00:30:50,245 --> 00:30:52,780
+you know, if its from a friend or a loved one,
+你知道，如果它来自朋友或亲人，
+
+597
+00:30:52,780 --> 00:30:54,535
+it can be, it can be a loss,
+它可以，它可能是一种损失，
+
+598
+00:30:54,535 --> 00:30:56,620
+maybe a job offer something like that.
+也许一份工作提供类似的东西。
+
+599
+00:30:56,620 --> 00:30:58,360
+All right.
+行。
+
+600
+00:30:58,360 --> 00:31:02,560
+So, um, I just kind of covered how AI can unintentionally lead to
+所以，嗯，我只是介绍了AI如何无意中导致的问题
+
+601
+00:31:02,560 --> 00:31:05,050
+unjust outcomes and some of the things to do
+不公正的结果和一些要做的事情
+
+602
+00:31:05,050 --> 00:31:07,045
+or some of the things to be aware of here,
+或者这里要注意的一些事情，
+
+603
+00:31:07,045 --> 00:31:11,590
+are the lack of insight into sources of bias in the data, in the model,
+在模型中，缺乏对数据偏差来源的洞察力，
+
+604
+00:31:11,590 --> 00:31:16,690
+lack of insight into the feedback loops from the original data that's collected
+缺乏对收集的原始数据的反馈循环的深入了解
+
+605
+00:31:16,690 --> 00:31:21,519
+as an example of what humans do to the data that's then repurposed,
+作为人类对随后改变用途的数据所做的事情的一个例子，
+
+606
+00:31:21,519 --> 00:31:24,475
+re-used, acted on, and then further fed in.
+重复使用，行动，然后进一步喂养。
+
+607
+00:31:24,475 --> 00:31:28,060
+Um, a lack of careful disaggregated evaluation,
+嗯，缺乏仔细的分类评估，
+
+608
+00:31:28,060 --> 00:31:29,560
+looking at the disparities,
+看着差距，
+
+609
+00:31:29,560 --> 00:31:33,730
+the differences between different subgroups in order to understand this bias,
+不同亚组之间的差异，以了解这种偏见，
+
+610
+00:31:33,730 --> 00:31:35,605
+this difference across the subgroups.
+这种差异在各个小组之间。
+
+611
+00:31:35,605 --> 00:31:38,949
+Um, and then human biases in interpreting, and accepting,
+嗯，然后人类在解释和接受时的偏见，
+
+612
+00:31:38,949 --> 00:31:40,525
+and talking about the results,
+并谈论结果，
+
+613
+00:31:40,525 --> 00:31:45,950
+which then kind of further the media cycles and the hype around AI right now.
+然后进一步的媒体循环和围绕AI的炒作现在。
+
+614
+00:31:46,080 --> 00:31:50,875
+Um, but it's up to us to influence how AI evolves.
+嗯，但是我们应该影响人工智能的演变。
+
+615
+00:31:50,875 --> 00:31:55,330
+So I like to think of this in terms of short term,
+所以我想从短期来看这个，
+
+616
+00:31:55,330 --> 00:31:57,295
+middle term, and long-term objectives.
+中期和长期目标。
+
+617
+00:31:57,295 --> 00:32:00,355
+So short term today,
+如此短暂的今天，
+
+618
+00:32:00,355 --> 00:32:05,170
+we might be working on some specific model where we're trying to find some local optimum,
+我们可能正在研究一些特定的模型，我们试图找到一些局部最优，
+
+619
+00:32:05,170 --> 00:32:07,705
+we have a task, we have data, something like that.
+我们有一个任务，我们有数据，类似的东西。
+
+620
+00:32:07,705 --> 00:32:09,880
+And that's sort of short-term objectives.
+这就是短期目标。
+
+621
+00:32:09,880 --> 00:32:14,590
+Um, we might have a slightly longer-term objective of getting a paper published,
+嗯，我们可能会有一个稍微长期的目标来发表一篇论文，
+
+622
+00:32:14,590 --> 00:32:16,990
+or if you're an industry like getting a product launched,
+或者如果你是一个像推出产品这样的行业，
+
+623
+00:32:16,990 --> 00:32:18,505
+whatever it might be.
+无论它是什么。
+
+624
+00:32:18,505 --> 00:32:23,440
+Um, from there we might see our next endpoint is getting an award or,
+嗯，从那里我们可能会看到我们的下一个终点是获得奖励，或者
+
+625
+00:32:23,440 --> 00:32:25,870
+you know, maybe become sort of famous for something for
+你知道，也许会成为一些着名的东西
+
+626
+00:32:25,870 --> 00:32:28,600
+a few minutes, something like that and that's cool.
+几分钟，类似的东西，这很酷。
+
+627
+00:32:28,600 --> 00:32:31,300
+Um, but there's a longer-term objective that we
+嗯，但我们有一个长期目标
+
+628
+00:32:31,300 --> 00:32:34,165
+can work towards as well at the same time.
+也可以同时努力。
+
+629
+00:32:34,165 --> 00:32:38,110
+And that's something like a positive outcome for humans in their environment.
+这就像人类在环境中的积极结果。
+
+630
+00:32:38,110 --> 00:32:42,130
+So instead of just kind of focusing on these local decisions,
+因此，不要只关注这些本地决策，
+
+631
+00:32:42,130 --> 00:32:43,555
+these local optima and these
+这些局部最优和这些
+
+632
+00:32:43,555 --> 00:32:48,370
+sort of local paper by paper-based approaches to solving problems,
+通过基于纸张的方法来解决问题，
+
+633
+00:32:48,370 --> 00:32:51,400
+you can also kind of think about what's the long-term objective.
+你也可以考虑什么是长期目标。
+
+634
+00:32:51,400 --> 00:32:56,739
+Where does this get me as I trace out an evolutionary path for artificial intelligence,
+当我找到人工智能的进化路径时，这会让我感到满意，
+
+635
+00:32:56,739 --> 00:32:58,555
+down the line in 10 years,
+在10年内下线，
+
+636
+00:32:58,555 --> 00:33:01,210
+15 years, 20 years.
+15年，20年。
+
+637
+00:33:01,210 --> 00:33:06,220
+Um, and one of the ways you can address this is by thinking,
+嗯，你可以解决这个问题的方法之一就是思考，
+
+638
+00:33:06,220 --> 00:33:10,405
+now how can the work I'm interested in now be best focused to help others?
+现在，我现在感兴趣的工作如何才能最好地专注于帮助他人？
+
+639
+00:33:10,405 --> 00:33:12,235
+And that involves talking to experts,
+这涉及与专家交谈，
+
+640
+00:33:12,235 --> 00:33:14,125
+um, and kind of going outside your bubble,
+嗯，有点走出你的泡沫，
+
+641
+00:33:14,125 --> 00:33:16,540
+speaking across interdisciplinary fields like
+跨越跨学科领域，如
+
+642
+00:33:16,540 --> 00:33:19,660
+cognitive science which I've just talked a bit about.
+我刚才谈到的认知科学。
+
+643
+00:33:19,660 --> 00:33:23,410
+Um, so let's talk about some things we can do.
+嗯，让我们谈谈我们可以做的一些事情。
+
+644
+00:33:23,410 --> 00:33:25,825
+So first off is data.
+首先是数据。
+
+645
+00:33:25,825 --> 00:33:32,095
+Um, so a lot of the issues of bias and fairness,
+嗯，所以有很多偏见和公平的问题，
+
+646
+00:33:32,095 --> 00:33:36,220
+ah, in machine learning models really come down to the data.
+啊，在机器学习模型中真的归结为数据。
+
+647
+00:33:36,220 --> 00:33:39,580
+Unfortunately in machine learning and deep learning,
+不幸的是机器学习和深度学习，
+
+648
+00:33:39,580 --> 00:33:42,670
+working on data is really not seen as sexy.
+处理数据真的不像性感。
+
+649
+00:33:42,670 --> 00:33:45,085
+Ah, there's a few datasets, ah,
+啊，有几个数据集，啊，
+
+650
+00:33:45,085 --> 00:33:47,350
+that people use that are out there,
+人们使用那里，
+
+651
+00:33:47,350 --> 00:33:48,580
+that's what people use,
+那就是人们用的东西，
+
+652
+00:33:48,580 --> 00:33:50,710
+and there's not a lot of analysis done on,
+而且没有做过很多分析，
+
+653
+00:33:50,710 --> 00:33:55,000
+on how well these datasets capture different truths about the world,
+这些数据集如何捕获有关世界的不同真理，
+
+654
+00:33:55,000 --> 00:33:56,740
+how problematic they might be,
+他们可能有多大问题，
+
+655
+00:33:56,740 --> 00:34:01,945
+[NOISE] um, but it's a pretty wide area that needs a lot of future,
+[NOISE]嗯，但这是一个非常广阔的领域，需要很多未来，
+
+656
+00:34:01,945 --> 00:34:04,885
+like lea- needs a lot of future additional work.
+像lea需要很多未来的额外工作。
+
+657
+00:34:04,885 --> 00:34:08,740
+Um, [NOISE] so we're going to understanding the data skews and the correlations.
+嗯，[NOISE]所以我们要了解数据偏差和相关性。
+
+658
+00:34:08,740 --> 00:34:10,900
+If you understand your data skews and the,
+如果你了解你的数据偏差和，
+
+659
+00:34:10,900 --> 00:34:13,960
+ah, correlations that might be problematic in your data,
+啊，你的数据可能有问题的相关性，
+
+660
+00:34:13,960 --> 00:34:17,305
+then you can start working on either models that address those,
+然后你可以开始处理那些解决这些问题的模型，
+
+661
+00:34:17,305 --> 00:34:20,980
+or data augmentation approaches in order to sort of make
+或数据增加方法，以便进行排序
+
+662
+00:34:20,980 --> 00:34:24,115
+the dataset a little bit better or a little bit more representative
+数据集更好一点或更具代表性
+
+663
+00:34:24,115 --> 00:34:25,990
+of how you want the world to be.
+你想要世界的方式。
+
+664
+00:34:25,990 --> 00:34:30,280
+Um, it's also important to abandon the single training set- testing
+嗯，放弃单一训练集测试也很重要
+
+665
+00:34:30,280 --> 00:34:34,420
+set from similar distribution approach to advancing deep learning.
+从类似的分配方法来推进深度学习。
+
+666
+00:34:34,420 --> 00:34:37,975
+So um, when we do projects in deep learning,
+那么，当我们进行深度学习项目时，
+
+667
+00:34:37,975 --> 00:34:39,610
+you know, we tend to have the training set,
+你知道，我们倾向于有训练集，
+
+668
+00:34:39,610 --> 00:34:43,330
+and the testing set and then that's what we sort of benchmark on and prioritize,
+和测试集，然后这就是我们的基准和优先级，
+
+669
+00:34:43,330 --> 00:34:46,060
+but the point is, as you move around different testing sets,
+但关键是，当您在不同的测试集周围移动时，
+
+670
+00:34:46,060 --> 00:34:48,160
+you're gonna get vastly different results.
+你会得到截然不同的结果。
+
+671
+00:34:48,160 --> 00:34:50,440
+Um, and so by keeping in
+嗯，等等
+
+672
+00:34:50,440 --> 00:34:55,810
+this just sort of one training testing dat- training testing dataset paradigm,
+这只是一种训练测试数据训练测试数据集范例，
+
+673
+00:34:55,810 --> 00:35:00,265
+you're really likely to not notice issues that might otherwise be there.
+你真的可能不会注意到可能存在的问题。
+
+674
+00:35:00,265 --> 00:35:02,140
+And one way to really focus in on them,
+还有一种真正专注于它们的方法，
+
+675
+00:35:02,140 --> 00:35:05,155
+is having a hard set of,
+有一套硬盘，
+
+676
+00:35:05,155 --> 00:35:09,070
+of test cases, that you really wanna make sure the model does well on.
+测试用例，你真的想确保模型做得好。
+
+677
+00:35:09,070 --> 00:35:12,055
+So these are things that are particularly problematic.
+所以这些都是特别成问题的。
+
+678
+00:35:12,055 --> 00:35:14,905
+Things that would be really harmful to individuals,
+对个人有害的事情，
+
+679
+00:35:14,905 --> 00:35:17,545
+um, If they were to experience the output.
+嗯，如果他们要体验输出。
+
+680
+00:35:17,545 --> 00:35:21,730
+Um, and you kinda collect those in a small test set and then it's really easy
+嗯，你有点收集那些小测试集，然后它真的很容易
+
+681
+00:35:21,730 --> 00:35:26,140
+to evaluate on that test set as you benchmark improvements on your model,
+在您对模型进行基准测试时评估该测试集，
+
+682
+00:35:26,140 --> 00:35:28,330
+as you add different kinds of things to your model,
+当你为模型添加不同类型的东西时，
+
+683
+00:35:28,330 --> 00:35:30,025
+in order to see, um,
+为了看，嗯，
+
+684
+00:35:30,025 --> 00:35:32,215
+not just how your model is doing overall,
+不仅仅是你的模型如何做到整体，
+
+685
+00:35:32,215 --> 00:35:33,940
+in terms of your testing dataset,
+就您的测试数据集而言，
+
+686
+00:35:33,940 --> 00:35:36,700
+but how well you're doing in terms of these examples,
+但是你在这些例子方面的表现如何，
+
+687
+00:35:36,700 --> 00:35:38,590
+you really want it to do well on.
+你真的希望它做得好。
+
+688
+00:35:38,590 --> 00:35:41,950
+That you know that is going to be a problem if it doesn't do well on,
+你知道如果它不能很好地成为一个问题，
+
+689
+00:35:41,950 --> 00:35:43,900
+and any sort of degradation in that,
+以及任何类型的退化，
+
+690
+00:35:43,900 --> 00:35:46,210
+you might want to prioritize, um,
+你可能想要优先考虑，嗯，
+
+691
+00:35:46,210 --> 00:35:50,815
+to fix above degragaish- degradation and overall accuracy.
+修复以上降解 - 降解和整体准确性。
+
+692
+00:35:50,815 --> 00:35:53,530
+Um, and it's also important to talk to experts
+嗯，和专家交谈也很重要
+
+693
+00:35:53,530 --> 00:35:56,335
+about the additional signals that you can incorporate.
+关于您可以合并的其他信号。
+
+694
+00:35:56,335 --> 00:36:00,490
+Um, so we've put out a tool to help with this,
+嗯，所以我们推出了一个工具来帮助解决这个问题，
+
+695
+00:36:00,490 --> 00:36:03,220
+ah, understanding data skews called facets,
+嗯，理解称为facets的数据偏差，
+
+696
+00:36:03,220 --> 00:36:04,855
+um, it's just available there.
+嗯，它只在那里可用。
+
+697
+00:36:04,855 --> 00:36:10,075
+Um, and it's a really handy kinda visualizer for slicing, ah, understanding,
+嗯，它是一个非常方便的切片可视化器啊，理解，
+
+698
+00:36:10,075 --> 00:36:13,330
+um, you know, what some of the differences are between different subgroups
+嗯，你知道，不同子组之间存在一些差异
+
+699
+00:36:13,330 --> 00:36:16,630
+and different representations and you can sort of dig in and explore a bit more.
+和不同的表示，你可以挖掘和探索更多。
+
+700
+00:36:16,630 --> 00:36:18,685
+So this is just to sort of help people, ah,
+所以这只是为了帮助人啊，
+
+701
+00:36:18,685 --> 00:36:21,430
+come to terms with the data that they're actually using and,
+与他们实际使用的数据达成协议，
+
+702
+00:36:21,430 --> 00:36:23,050
+and where there might be, um,
+那里可能有，嗯，
+
+703
+00:36:23,050 --> 00:36:25,795
+unwanted associations or, or missing,
+不想要的关联或缺失，
+
+704
+00:36:25,795 --> 00:36:26,920
+missing kind of features.
+缺少一些功能。
+
+705
+00:36:26,920 --> 00:36:33,220
+[NOISE] Um, another approach that's been put forward recently,
+[NOISE]嗯，这是最近提出的另一种方法，
+
+706
+00:36:33,220 --> 00:36:36,565
+ah, specifically on the data side is this data,
+啊，具体在数据方面是这个数据，
+
+707
+00:36:36,565 --> 00:36:38,725
+datasheets for datasets approach.
+数据集方法的数据表。
+
+708
+00:36:38,725 --> 00:36:42,040
+Um, so this is this idea that when you release a dataset,
+嗯，所以这个想法是当你发布一个数据集时，
+
+709
+00:36:42,040 --> 00:36:44,770
+it's not enough to just release the dataset with like
+仅仅发布数据集是不够的
+
+710
+00:36:44,770 --> 00:36:48,880
+some pretty graphs and like talking about basic distributional information,
+一些漂亮的图表，比如谈论基本的分布信息，
+
+711
+00:36:48,880 --> 00:36:52,330
+you need to talk about who the annotators were, where they were,
+你需要谈谈注释者是谁，他们在哪里，
+
+712
+00:36:52,330 --> 00:36:54,400
+what the inter-annotator agreement was,
+注释器间协议是什么，
+
+713
+00:36:54,400 --> 00:36:56,500
+what their background information was,
+他们的背景信息是什么，
+
+714
+00:36:56,500 --> 00:36:59,005
+um, motivation for the dataset.
+嗯，数据集的动机。
+
+715
+00:36:59,005 --> 00:37:00,550
+All these other kinds of details.
+所有这些其他类型的细节。
+
+716
+00:37:00,550 --> 00:37:03,625
+So now you actually know that this isn't just a dataset,
+所以现在你实际上知道这不仅仅是一个数据集，
+
+717
+00:37:03,625 --> 00:37:06,700
+this is a dataset that has these specific biases.
+这是一个具有这些特定偏差的数据集。
+
+718
+00:37:06,700 --> 00:37:10,300
+There's no such thing as a dataset that isn't biased in some way.
+没有数据集不会以某种方式存在偏差。
+
+719
+00:37:10,300 --> 00:37:14,905
+A dataset by virtue of the fact that it's collected from the world as a subset,
+一个数据集，因为它是从世界收集的一个子集，
+
+720
+00:37:14,905 --> 00:37:18,415
+is a, is a biased set of the world in some way.
+是一个，在某种程度上是一个有偏见的世界。
+
+721
+00:37:18,415 --> 00:37:20,440
+The point is to make it clear what it is,
+关键是要清楚它是什么，
+
+722
+00:37:20,440 --> 00:37:22,015
+how it is biased, what are the,
+它是如何有偏见的，是什么，
+
+723
+00:37:22,015 --> 00:37:23,545
+what are the various biases,
+什么是各种偏见，
+
+724
+00:37:23,545 --> 00:37:25,675
+ah, that are important to know about in the dataset.
+啊，在数据集中了解很重要。
+
+725
+00:37:25,675 --> 00:37:29,410
+So that's one of these ideas between- behind datasheets for datasets,
+这就是数据集数据表之间的这些想法之一，
+
+726
+00:37:29,410 --> 00:37:32,185
+releasing its datasets publicly.
+公开发布其数据集。
+
+727
+00:37:32,185 --> 00:37:35,815
+All right. Now let's switch a little bit to machine learning.
+行。现在让我们切换一下机器学习。
+
+728
+00:37:35,815 --> 00:37:40,375
+Um, so there are a couple of techniques that I like to use. Um, I'll talk about two.
+嗯，所以我喜欢使用几种技术。嗯，我会谈两个。
+
+729
+00:37:40,375 --> 00:37:42,835
+One, ah, is bias mitigation,
+一个啊，是偏见缓解，
+
+730
+00:37:42,835 --> 00:37:45,850
+which is removing the signal for a problematic output.
+这是为有问题的输出删除信号。
+
+731
+00:37:45,850 --> 00:37:48,760
+Um, so removing, ah, stereotyping,
+嗯，所以删除，啊，刻板印象，
+
+732
+00:37:48,760 --> 00:37:52,390
+sexism, racism, trying to remove these kind of effects from the model.
+性别歧视，种族主义，试图从模型中消除这些影响。
+
+733
+00:37:52,390 --> 00:37:56,530
+Um, this is also sometimes called de-biasing or unbiasing,
+嗯，这有时也被称为去偏置或不偏不倚，
+
+734
+00:37:56,530 --> 00:38:00,520
+but that's a little bit of a misnomer because you're- you're generally just kind of
+但这有点用词不当，因为你 - 你通常只是一种
+
+735
+00:38:00,520 --> 00:38:04,690
+moving around bias based on a specific set of words for example,
+例如，根据一组特定的单词移动偏见
+
+736
+00:38:04,690 --> 00:38:07,795
+um, so to say it's unbiased is is not true.
+嗯，所以说它没有偏见是不正确的。
+
+737
+00:38:07,795 --> 00:38:10,330
+Um, but you are kind of mitigating bias with respect to
+嗯，但你有点减轻偏见
+
+738
+00:38:10,330 --> 00:38:13,675
+some certain kinds of information that you provide it with.
+您提供的某些特定信息。
+
+739
+00:38:13,675 --> 00:38:18,910
+Um, and there's inclusion which is then adding signal for desired variables.
+嗯，然后包含然后为所需变量添加信号。
+
+740
+00:38:18,910 --> 00:38:22,105
+So that's kind of the opposite side of bias mitigation.
+这就是偏见缓解的另一面。
+
+741
+00:38:22,105 --> 00:38:24,610
+So increasing model performance with attention to
+因此，注意增加模型性能
+
+742
+00:38:24,610 --> 00:38:28,075
+subgroups or data slices with the worst performance.
+性能最差的子组或数据切片。
+
+743
+00:38:28,075 --> 00:38:31,825
+Um, so, ah, in order to,
+嗯，啊，为了，
+
+744
+00:38:31,825 --> 00:38:33,475
+er, address inclusion, ah,
+呃，地址包含啊，
+
+745
+00:38:33,475 --> 00:38:36,865
+kind of adding signal for under-represented sub-groups,
+为代表性不足的子群添加信号，
+
+746
+00:38:36,865 --> 00:38:39,910
+one technique that's worked relatively well is multi-task learning.
+一种工作相对较好的技术是多任务学习。
+
+747
+00:38:39,910 --> 00:38:43,990
+Um, so I've heard that you guys have studied multi-task learning which is great,
+嗯，所以我听说你们学过多任务学习很棒，
+
+748
+00:38:43,990 --> 00:38:46,390
+um, so I'll tell you a bit about a case study here.
+嗯，所以我会在这里告诉你一个案例研究。
+
+749
+00:38:46,390 --> 00:38:48,235
+Um, so this is work I did, ah,
+嗯，这是我做的工作啊，
+
+750
+00:38:48,235 --> 00:38:52,390
+in collaboration with a UPenn World Well-being Project, ah,
+与UPenn世界福祉项目合作啊，
+
+751
+00:38:52,390 --> 00:38:54,190
+working directly with clinicians,
+直接与临床医生合作，
+
+752
+00:38:54,190 --> 00:38:56,530
+and the goal was to create a system that could alert
+目标是创建一个可以提醒的系统
+
+753
+00:38:56,530 --> 00:38:59,560
+clinicians if there was a suicide attempt that was imminent.
+临床医生是否有即将发生的自杀企图。
+
+754
+00:38:59,560 --> 00:39:02,320
+Um, and they wanted to understand the feasibility of
+嗯，他们想了解的可行性
+
+755
+00:39:02,320 --> 00:39:05,650
+these kinds of diagnoses when there were very few training,
+当训练很少时，这些诊断，
+
+756
+00:39:05,650 --> 00:39:07,690
+ah, training instances available.
+啊，训练实例可用。
+
+757
+00:39:07,690 --> 00:39:11,230
+So that's similar to kind of the minority problem in datasets.
+这类似于数据集中的少数问题。
+
+758
+00:39:11,230 --> 00:39:14,125
+Um, [NOISE]
+嗯，[NOISE]
+
+759
+00:39:14,125 --> 00:39:17,290
+And, uh, in this work,
+而且，呃，在这项工作中，
+
+760
+00:39:17,290 --> 00:39:19,015
+we had two kinds of data.
+我们有两种数据。
+
+761
+00:39:19,015 --> 00:39:22,960
+One was the internal data which was the electronic health records, um,
+一个是内部数据，即电子健康记录，嗯，
+
+762
+00:39:22,960 --> 00:39:27,190
+with the- that was either provided by the patient or from the family.
+与 - 由患者或家人提供。
+
+763
+00:39:27,190 --> 00:39:30,070
+Um, it included mental health diagnoses,
+嗯，它包括心理健康诊断，
+
+764
+00:39:30,070 --> 00:39:32,380
+uh, suicide attempts or completions, um,
+呃，自杀未遂或完成，嗯，
+
+765
+00:39:32,380 --> 00:39:34,750
+if, if, if that were the case along with,
+如果，如果，如果是这样的话，
+
+766
+00:39:34,750 --> 00:39:36,175
+uh, the user's, uh,
+呃，用户，呃，
+
+767
+00:39:36,175 --> 00:39:37,915
+the person's social media data.
+该人的社交媒体数据。
+
+768
+00:39:37,915 --> 00:39:40,690
+And that was the internal data that we did not publish on,
+那是我们没有发布的内部数据，
+
+769
+00:39:40,690 --> 00:39:43,000
+but that we were able to work with clinicians on in
+但我们能够与临床医生合作
+
+770
+00:39:43,000 --> 00:39:45,685
+order to understand if our methods were actually working.
+以了解我们的方法是否真正有效。
+
+771
+00:39:45,685 --> 00:39:48,385
+Um, the external data, the proxy data,
+嗯，外部数据，代理数据，
+
+772
+00:39:48,385 --> 00:39:50,845
+the stuff that we could kinda publish on and talk about,
+我们可以发表和谈论的东西，
+
+773
+00:39:50,845 --> 00:39:52,045
+was based on Twitter.
+是基于Twitter的。
+
+774
+00:39:52,045 --> 00:39:53,910
+Um, and this was, uh,
+嗯，这是，恩，
+
+775
+00:39:53,910 --> 00:39:57,810
+using regular expressions in order to extract, uh,
+使用正则表达式来提取，呃，
+
+776
+00:39:57,810 --> 00:40:02,315
+phases in Twitter feeds that had something that was kind of like diagnoses.
+Twitter提要中的某些阶段，这些阶段有点像诊断。
+
+777
+00:40:02,315 --> 00:40:04,960
+So something like, I've been diagnosed with X,
+所以，我被诊断出患有X，
+
+778
+00:40:04,960 --> 00:40:06,820
+or I've tried to commit suicide.
+或者我试图自杀。
+
+779
+00:40:06,820 --> 00:40:08,425
+And that became kind of the,
+这成了一种，
+
+780
+00:40:08,425 --> 00:40:12,325
+the proxy dataset and the corresponding social media feeds for,
+代理数据集和相应的社交媒体提要，
+
+781
+00:40:12,325 --> 00:40:13,735
+for those individuals, uh,
+对那些人来说，呃，
+
+782
+00:40:13,735 --> 00:40:16,270
+for the actual diagnoses.
+用于实际诊断。
+
+783
+00:40:16,270 --> 00:40:22,840
+Um, and the state-of-the-art in clinical medicine, uh,
+嗯，以及临床医学的最新技术，呃，
+
+784
+00:40:22,840 --> 00:40:24,100
+kind of until this work,
+直到这项工作，
+
+785
+00:40:24,100 --> 00:40:26,425
+there's been more recently but, uh, it's,
+最近有，但是，呃，是的，
+
+786
+00:40:26,425 --> 00:40:30,595
+it's sort of this single task logistic regress- lo- lo- logistic regression setup.
+它就是这种单任务逻辑回归 - 逻辑回归设置。
+
+787
+00:40:30,595 --> 00:40:32,080
+Where you have some input features,
+你有一些输入功能，
+
+788
+00:40:32,080 --> 00:40:35,185
+and then you're making some output predictions like true or false.
+然后你做了一些输出预测，如真或假。
+
+789
+00:40:35,185 --> 00:40:41,260
+Um, you can add some layers and start making it deep learning which is much fancier.
+嗯，你可以添加一些图层并开始深入学习，这更加美观。
+
+790
+00:40:41,260 --> 00:40:45,340
+Um, you can have a bunch of tasks in order to
+嗯，你可以拥有一堆任务
+
+791
+00:40:45,340 --> 00:40:49,420
+do a bunch of logistic regression tasks for a clinical environment.
+为临床环境做一堆逻辑回归任务。
+
+792
+00:40:49,420 --> 00:40:51,850
+Um, or you can use multitask learning, uh,
+嗯，或者你可以使用多任务学习，呃，
+
+793
+00:40:51,850 --> 00:40:55,900
+which is taking the basic deep learning model and adding a bunch of heads to it,
+这是采用基本的深度学习模型并添加一堆头，
+
+794
+00:40:55,900 --> 00:40:58,150
+uh, predicted jointly at the same time.
+呃，同时联合预测。
+
+795
+00:40:58,150 --> 00:41:01,660
+Um, and here we had a bunch of diagnosis data.
+嗯，这里我们有一堆诊断数据。
+
+796
+00:41:01,660 --> 00:41:04,420
+So, um, we predicted things like depression,
+那么，嗯，我们预测了抑郁症这样的事情，
+
+797
+00:41:04,420 --> 00:41:07,585
+anxiety, uh, post-traumatic stress disorder.
+焦虑，呃，创伤后应激障碍。
+
+798
+00:41:07,585 --> 00:41:10,900
+Um, we also added in gender because this is
+嗯，我们还添加了性别，因为这是
+
+799
+00:41:10,900 --> 00:41:13,900
+something that the clinicians told us actually, uh,
+临床医生告诉我们的事情，呃，
+
+800
+00:41:13,900 --> 00:41:16,180
+had some correlation with some of these conditions,
+与某些条件有某些相关性，
+
+801
+00:41:16,180 --> 00:41:18,970
+and that they actually used it in making decisions themselves,
+并且他们实际上用它来自己做决定，
+
+802
+00:41:18,970 --> 00:41:21,535
+for whether or not someone was likely to,
+无论是否有人，
+
+803
+00:41:21,535 --> 00:41:24,010
+uh, attempt, uh, suicide or not.
+呃，尝试，呃，自杀与否。
+
+804
+00:41:24,010 --> 00:41:27,310
+Um, and this also used this idea of comorbidity.
+嗯，这也使用了这种合并症的想法。
+
+805
+00:41:27,310 --> 00:41:32,935
+So multi-task learning is actually kind of perfect for comorbidity in clinical domains.
+因此，多任务学习实际上对于临床领域的合并症来说是完美的。
+
+806
+00:41:32,935 --> 00:41:34,870
+So comorbidity is, um,
+所以合并症是，嗯，
+
+807
+00:41:34,870 --> 00:41:36,220
+when you have one condition,
+当你有一个条件时，
+
+808
+00:41:36,220 --> 00:41:38,185
+you're a lot more likely to have another.
+你更有可能拥有另一个。
+
+809
+00:41:38,185 --> 00:41:39,820
+Um, so people who have
+嗯，所以有的人
+
+810
+00:41:39,820 --> 00:41:43,630
+post-traumatic stress disorder are much more likely to have depression and anxiety.
+创伤后应激障碍更容易出现抑郁和焦虑。
+
+811
+00:41:43,630 --> 00:41:46,359
+Um, and depression and anxiety tend to be cormorbid,
+嗯，抑郁和焦虑往往是鸬鹚，
+
+812
+00:41:46,359 --> 00:41:48,695
+so people who have one often have the other.
+所以有一个人经常拥有另一个人。
+
+813
+00:41:48,695 --> 00:41:52,320
+So this points to the fact- this points to the idea that perhaps there's
+所以这指向了这个事实 - 这指向了可能存在的想法
+
+814
+00:41:52,320 --> 00:41:55,680
+some underlying representation that is similar across them,
+一些相似的底层表示，
+
+815
+00:41:55,680 --> 00:41:57,990
+that can be leveraged in a deep learning model,
+可以在深度学习模型中使用，
+
+816
+00:41:57,990 --> 00:42:00,885
+with individual heads further specifying,
+个别负责人进一步指明，
+
+817
+00:42:00,885 --> 00:42:04,170
+uh, each of the different kinds of conditions.
+呃，每种不同的条件。
+
+818
+00:42:04,170 --> 00:42:07,960
+Um, and so what we found was that as we moved from
+嗯，我们发现的是，当我们离开时
+
+819
+00:42:07,960 --> 00:42:12,160
+logistic regression to the single task deep learning to the multi-task deep learning,
+逻辑回归到单任务深度学习到多任务深度学习，
+
+820
+00:42:12,160 --> 00:42:14,605
+we were able to get significantly better results.
+我们得到了明显更好的结果。
+
+821
+00:42:14,605 --> 00:42:17,725
+And this was true both in the suicide risk case where we had a,
+在自杀风险案例中，我们有一个，
+
+822
+00:42:17,725 --> 00:42:19,510
+a lot of data, as well as
+很多数据，以及
+
+823
+00:42:19,510 --> 00:42:22,960
+the post-traumatic stress disorder case where we had very little data.
+创伤后应激障碍的情况，我们的数据非常少。
+
+824
+00:42:22,960 --> 00:42:25,270
+Um, the behavior here was a little bit different.
+嗯，这里的行为有点不同。
+
+825
+00:42:25,270 --> 00:42:28,660
+So going from logistic regression to,
+所以从逻辑回归到
+
+826
+00:42:28,660 --> 00:42:30,490
+um, single task deep learning,
+嗯，单一任务深度学习，
+
+827
+00:42:30,490 --> 00:42:32,065
+when we had, um,
+当我们有，嗯，
+
+828
+00:42:32,065 --> 00:42:33,685
+a lot of data, uh,
+很多数据，呃，
+
+829
+00:42:33,685 --> 00:42:36,295
+as we did with the suicide risk, um,
+正如我们对自杀风险所做的那样，嗯，
+
+830
+00:42:36,295 --> 00:42:38,230
+had the single task deep learning model
+有单一任务深度学习模型
+
+831
+00:42:38,230 --> 00:42:40,690
+working better than the logistic regression model.
+比逻辑回归模型更好地工作。
+
+832
+00:42:40,690 --> 00:42:43,105
+Um, but when we have very few instances, uh,
+嗯，但是当我们的实例很少时，呃，
+
+833
+00:42:43,105 --> 00:42:46,270
+this is where the deep learning models really struggled a lot more.
+这是深度学习模式真正挣扎的地方。
+
+834
+00:42:46,270 --> 00:42:50,320
+Um, and so the logistic regression models were actually much better.
+嗯，因此逻辑回归模型实际上要好得多。
+
+835
+00:42:50,320 --> 00:42:54,130
+But once we started adding heads for the cormorbid different kinds of conditions,
+但是，一旦我们开始为不同种类的条件添加头部，
+
+836
+00:42:54,130 --> 00:42:55,780
+the different kinds of tasks, um,
+不同的任务，嗯，
+
+837
+00:42:55,780 --> 00:42:57,400
+that related to, you know,
+那个与你有关的，
+
+838
+00:42:57,400 --> 00:42:59,845
+whether or not the person might be committing suicide, um,
+该人是否可能自杀，嗯，
+
+839
+00:42:59,845 --> 00:43:01,210
+we were able to, uh,
+我们能够，呃，
+
+840
+00:43:01,210 --> 00:43:03,145
+bump the accuracy way back up again.
+再次提高准确度。
+
+841
+00:43:03,145 --> 00:43:05,485
+Um, and, it, you know,
+嗯，而且，你知道，
+
+842
+00:43:05,485 --> 00:43:09,235
+it's roughly 120 at-risk individuals that we were able to collect, uh,
+这是我们能够收集的大约120个有风险的人，呃，
+
+843
+00:43:09,235 --> 00:43:12,250
+in the suicide case that we wouldn't have otherwise been able to,
+在我们原本无法做到的自杀案中，
+
+844
+00:43:12,250 --> 00:43:15,110
+to notice as being at risk.
+注意到有风险。
+
+845
+00:43:16,110 --> 00:43:20,050
+Um, one of the approaches we took in this was to
+嗯，我们采取的方法之一是
+
+846
+00:43:20,050 --> 00:43:24,670
+contextualize and consider the ethical dimensions of releasing this kind of technology.
+语境化和考虑发布这种技术的道德维度。
+
+847
+00:43:24,670 --> 00:43:28,900
+So, um, it's really common in NLP papers to give examples.
+所以，嗯，在NLP论文中提供例子非常普遍。
+
+848
+00:43:28,900 --> 00:43:31,030
+Um, but this was an area where we decided that
+嗯，但这是我们决定的地方
+
+849
+00:43:31,030 --> 00:43:33,475
+giving examples of like depressed language,
+举出类似沮丧语言的例子，
+
+850
+00:43:33,475 --> 00:43:35,860
+could be used to discriminate against people,
+可以用来歧视人，
+
+851
+00:43:35,860 --> 00:43:37,480
+like at, you know, job,
+就像，你知道，工作，
+
+852
+00:43:37,480 --> 00:43:39,565
+interviews, or something like that, you know,
+面试，或类似的东西，你知道，
+
+853
+00:43:39,565 --> 00:43:42,085
+the sort of armchair psychology approach.
+那种扶手椅心理学方法。
+
+854
+00:43:42,085 --> 00:43:45,240
+So we decided that while it was important to talk about the technique,
+所以我们决定虽然谈论这项技术很重要，
+
+855
+00:43:45,240 --> 00:43:47,190
+and the utility of multitask learning in
+多任务学习的实用性
+
+856
+00:43:47,190 --> 00:43:51,840
+a clinical domain and for bringing in inclusion of underrepresented subgroups,
+临床领域并纳入代表性不足的亚组，
+
+857
+00:43:51,840 --> 00:43:54,210
+it had to be balanced with the fact that there was a lot of
+它必须与有很多事实相平衡
+
+858
+00:43:54,210 --> 00:43:57,030
+risk in talking about depression,
+谈论抑郁症的风险，
+
+859
+00:43:57,030 --> 00:44:00,270
+and anxiety, and how those kinds of things could be predicted.
+和焦虑，以及如何预测这些事情。
+
+860
+00:44:00,270 --> 00:44:03,435
+Um, so we tried to take a more balanced approach here, um,
+嗯，所以我们试着在这里采取更平衡的方法，嗯，
+
+861
+00:44:03,435 --> 00:44:07,020
+and since then I've been putting ethical considerations in all of my papers.
+从那以后，我一直在所有论文中考虑道德问题。
+
+862
+00:44:07,020 --> 00:44:10,420
+Um, it's becoming more and more common actually.
+嗯，它实际上变得越来越普遍。
+
+863
+00:44:10,790 --> 00:44:15,565
+Um, so another kind of approach that's now turning this on its head,
+嗯，所以另一种方法现在正在转变它的头，
+
+864
+00:44:15,565 --> 00:44:18,535
+where you're trying to remove some effect, um,
+在那里你想要消除一些效果，嗯，
+
+865
+00:44:18,535 --> 00:44:20,230
+mitigate bias in some way,
+以某种方式减轻偏见，
+
+866
+00:44:20,230 --> 00:44:22,390
+is adversarial multi-task learning.
+是对抗性的多任务学习。
+
+867
+00:44:22,390 --> 00:44:24,010
+So I just talked about multi-task learning,
+所以我刚才谈到了多任务学习，
+
+868
+00:44:24,010 --> 00:44:26,065
+and I'll talk about the adversarial case.
+我将谈论对抗性案例。
+
+869
+00:44:26,065 --> 00:44:30,205
+Um, and the idea in the adversarial case is that you have a few heads.
+嗯，在对抗案例中的想法是你有几个头。
+
+870
+00:44:30,205 --> 00:44:32,470
+Um, one is predicting the main task,
+嗯，一个人正在预测主要任务，
+
+871
+00:44:32,470 --> 00:44:35,200
+and the other one is predicting the thing that you don't
+另一个是预测你没有的东西
+
+872
+00:44:35,200 --> 00:44:38,290
+want to be affecting your model's predictions.
+想要影响你的模型的预测。
+
+873
+00:44:38,290 --> 00:44:42,670
+So for example, something like whether or not someone should be promoted based on,
+因此，例如，某人是否应该在某人的基础上晋升，
+
+874
+00:44:42,670 --> 00:44:44,650
+uh, you know, their performance reviews,
+呃，你知道，他们的表现评论，
+
+875
+00:44:44,650 --> 00:44:46,285
+and things like that.
+和那样的事情。
+
+876
+00:44:46,285 --> 00:44:49,555
+Um, you don't want that to be affected by their gender.
+嗯，你不希望它受到性别的影响。
+
+877
+00:44:49,555 --> 00:44:53,260
+Ideally, gender is independent of a promotion decision.
+理想情况下，性别与促销决策无关。
+
+878
+00:44:53,260 --> 00:44:54,805
+And so you can, uh,
+所以你可以，呃，
+
+879
+00:44:54,805 --> 00:44:57,385
+you can create a model for this that actually,
+你可以为此创建一个模型，实际上，
+
+880
+00:44:57,385 --> 00:44:59,620
+uh, puts that independence, um,
+呃，把那个独立，嗯，
+
+881
+00:44:59,620 --> 00:45:02,365
+criteria in place by saying, uh,
+说标准，呃，
+
+882
+00:45:02,365 --> 00:45:05,485
+I want to minimize my loss on the promotion,
+我想尽量减少我在促销上的损失，
+
+883
+00:45:05,485 --> 00:45:07,885
+while maximizing my loss on the gender.
+同时最大限度地减少我对性别的损失。
+
+884
+00:45:07,885 --> 00:45:10,390
+And so how we're doing that is just predicting gender,
+所以我们这样做只是预测性别，
+
+885
+00:45:10,390 --> 00:45:12,250
+and then negating the gradient.
+然后否定渐变。
+
+886
+00:45:12,250 --> 00:45:15,010
+So removing the effect of that signal.
+所以消除那个信号的影响。
+
+887
+00:45:15,010 --> 00:45:17,920
+Um, this is another adversarial approach.
+嗯，这是另一种对抗方式。
+
+888
+00:45:17,920 --> 00:45:20,950
+So you might have been familiar with like generative adversarial networks.
+所以你可能已经熟悉了生成对抗网络。
+
+889
+00:45:20,950 --> 00:45:23,470
+So this is like two discriminators, uh,
+所以这就像两个鉴别者，呃，
+
+890
+00:45:23,470 --> 00:45:25,435
+two different task heads, uh,
+两个不同的任务负责人，呃，
+
+891
+00:45:25,435 --> 00:45:28,270
+where one is trying to do the task that we care about,
+一个人试图完成我们关心的任务，
+
+892
+00:45:28,270 --> 00:45:30,745
+and the other one is removing the signal, uh,
+另一个是移除信号，呃，
+
+893
+00:45:30,745 --> 00:45:32,320
+that we really don't want to,
+我们真的不想要，
+
+894
+00:45:32,320 --> 00:45:35,890
+um, uh, be coming into play in our downstream predictions.
+嗯，呃，在我们的下游预测中发挥作用。
+
+895
+00:45:35,890 --> 00:45:37,900
+Um, so this is a way of,
+嗯，所以这是一种方式，
+
+896
+00:45:37,900 --> 00:45:39,670
+uh, kind of putting this into practice.
+呃，有点把它付诸实践。
+
+897
+00:45:39,670 --> 00:45:41,410
+So the probability of your output,
+所以输出的概率，
+
+898
+00:45:41,410 --> 00:45:43,030
+uh, predicted output given the,
+呃，给出的预测输出，
+
+899
+00:45:43,030 --> 00:45:46,540
+the ground truth and your sensitive attribute like gender, um,
+基本事实和你的敏感属性，如性别，嗯，
+
+900
+00:45:46,540 --> 00:45:48,835
+is equal across all the different, uh,
+在所有不同的地方是平等的，呃，
+
+901
+00:45:48,835 --> 00:45:52,060
+sensitive attributes or equal across all the different genders.
+敏感属性或所有不同性别的平等。
+
+902
+00:45:52,060 --> 00:45:56,410
+Um, and that's an example of equality of opportunity in supervised learning,
+嗯，这是监督学习中机会均等的一个例子，
+
+903
+00:45:56,410 --> 00:45:57,775
+being put into practice.
+正在付诸实践。
+
+904
+00:45:57,775 --> 00:46:00,220
+So this is one of the key fairness definitions.
+所以这是关键的公平定义之一。
+
+905
+00:46:00,220 --> 00:46:01,750
+It's equivalent to, uh,
+它相当于，呃，
+
+906
+00:46:01,750 --> 00:46:05,320
+equal recall across different subgroups as I mentioned earlier.
+正如我前面提到的，在不同的小组中进行相等的召回。
+
+907
+00:46:05,320 --> 00:46:07,495
+Um, and that's a model that will actually,
+嗯，这是一个实际的模型，
+
+908
+00:46:07,495 --> 00:46:10,270
+uh, implement that or help you achieve that.
+呃，实现它或帮助你实现这一目标。
+
+909
+00:46:10,270 --> 00:46:13,375
+Um, where you're saying that a classifier's output decisions should be the same
+嗯，你说的是分类器的输出决定应该是相同的
+
+910
+00:46:13,375 --> 00:46:16,480
+across sensitive characteristics given what the,
+跨越敏感特征给出了什么，
+
+911
+00:46:16,480 --> 00:46:19,070
+what the correct decision should be.
+应该做出正确的决定。
+
+912
+00:46:20,190 --> 00:46:23,365
+Okay, so how are we on time?
+好的，我们怎么准时？
+
+913
+00:46:23,365 --> 00:46:30,265
+Cool. Are there any questions so far? Are we good?
+凉。到目前为止有任何问题吗？我们好吗？
+
+914
+00:46:30,265 --> 00:46:35,350
+Okay, cool. So I'm gonna go into a little bit of a case study now, an end-to-end, uh,
+好的，很酷。所以我现在要进行一个案例研究，端到端，呃，
+
+915
+00:46:35,350 --> 00:46:37,780
+system that Google has been working on, uh,
+谷歌一直在努力的系统，呃，
+
+916
+00:46:37,780 --> 00:46:39,325
+my colleagues have been working on, uh,
+我的同事一直在努力，呃，
+
+917
+00:46:39,325 --> 00:46:42,790
+that is in NLP domain and deals with some of these bias issues.
+这是在NLP域中并处理其中一些偏差问题。
+
+918
+00:46:42,790 --> 00:46:46,675
+Um, so you can find out more about this work, um,
+嗯，所以你可以找到更多关于这项工作的信息，嗯，
+
+919
+00:46:46,675 --> 00:46:51,745
+in papers at AIES in 2018 and FAT* tutorial 2019,
+在2018年的AIES和FAT * 2019年的教学论文中，
+
+920
+00:46:51,745 --> 00:46:56,410
+um, called Measuring and Mitigating Unintended Bias in Text Classification.
+嗯，称为测量和减轻文本分类中的意外偏差。
+
+921
+00:46:56,410 --> 00:47:01,345
+Um, and this came out of Conversation-AI which is a, uh,
+嗯，这来自Conversation-AI，这是一个，呃，
+
+922
+00:47:01,345 --> 00:47:03,505
+which is a product that's, um,
+这是一种产品，嗯，
+
+923
+00:47:03,505 --> 00:47:07,720
+like it's part of this- it's called a bet at Google.
+喜欢它的一部分 - 它被称为谷歌赌注。
+
+924
+00:47:07,720 --> 00:47:10,810
+It's a kind of spin-off company called Jigsaw that
+它是一种名为Jigsaw的衍生公司
+
+925
+00:47:10,810 --> 00:47:14,245
+focuses on trying to like combat abuse online.
+专注于尝试在线滥用战斗滥用。
+
+926
+00:47:14,245 --> 00:47:16,225
+Um, and the Conversation-AI, uh,
+嗯，对话-AI，呃，
+
+927
+00:47:16,225 --> 00:47:20,065
+team is trying to use deep learning to improve online conversations.
+团队正在尝试使用深度学习来改善在线对话。
+
+928
+00:47:20,065 --> 00:47:23,320
+Um, and collaborate with a ton of different,
+嗯，和很多不同的人合作，
+
+929
+00:47:23,320 --> 00:47:25,375
+uh, different people to do that.
+呃，不同的人这样做。
+
+930
+00:47:25,375 --> 00:47:27,805
+Um, so how this works is,
+嗯，这是如何工作的，
+
+931
+00:47:27,805 --> 00:47:30,460
+oh you can try it out too, on perspectiveapi.com.
+哦，你也可以尝试一下，在perspectiveapi.com上。
+
+932
+00:47:30,460 --> 00:47:33,970
+So given some phrase like you're a dork, uh,
+所以给出一些像你是笨蛋的短语，呃，
+
+933
+00:47:33,970 --> 00:47:41,358
+it puts out a toxicity score associated to that like 0,91. [NOISE]
+它得出与0,91相关的毒性评分。 [噪声]
+
+934
+00:47:41,358 --> 00:47:44,140
+Um, and the model starts sort of falsely associating
+嗯，模型开始有点虚假关联
+
+935
+00:47:44,140 --> 00:47:47,305
+frequently attacked identities with toxicity.
+经常攻击具有毒性的身份。
+
+936
+00:47:47,305 --> 00:47:50,245
+So this is a kind of false positive bias.
+所以这是一种误报的偏见。
+
+937
+00:47:50,245 --> 00:47:53,080
+So I'm a proud tall person gets a model,
+所以我是一个自豪的高个子得到一个模特，
+
+938
+00:47:53,080 --> 00:47:55,360
+uh, toxicity score of 0,18.
+呃，毒性评分为0,18。
+
+939
+00:47:55,360 --> 00:47:56,995
+I'm a proud, uh,
+我很自豪，呃，
+
+940
+00:47:56,995 --> 00:48:00,925
+gay person gets a toxicity model score of 0,69.
+同性恋者的毒性模型得分为0,69。
+
+941
+00:48:00,925 --> 00:48:06,805
+And this is because these- the term gay tends to be used in really toxic situations.
+这是因为这些 - 同性恋这个词往往被用于真正有毒的情况。
+
+942
+00:48:06,805 --> 00:48:10,960
+And so the model starts to learn that gay itself is toxic.
+因此模型开始了解同性恋本身是有毒的。
+
+943
+00:48:10,960 --> 00:48:12,730
+But that's not actually what we want,
+但那实际上并不是我们想要的，
+
+944
+00:48:12,730 --> 00:48:15,865
+and we don't want these kinds of predictions coming out of the model.
+我们不希望这种类型的预测来自模型。
+
+945
+00:48:15,865 --> 00:48:22,705
+Um, so, uh, the bias is largely caused here by the dataset imbalance.
+嗯，呃，这种偏差很大程度上是由数据集失衡导致的。
+
+946
+00:48:22,705 --> 00:48:25,765
+Again, this is data kinda coming and wearing its hat again.
+再一次，这是数据有点再次戴上帽子。
+
+947
+00:48:25,765 --> 00:48:28,000
+Um, so frequently attacked, uh,
+嗯，经常受到攻击，呃，
+
+948
+00:48:28,000 --> 00:48:31,180
+identities are really overrepresented in toxic comments.
+在有毒评论中，身份确实过多。
+
+949
+00:48:31,180 --> 00:48:35,155
+There's a lot of toxicity towards LGBTQ identities, um,
+对LGBTQ身份有很多毒性，嗯，
+
+950
+00:48:35,155 --> 00:48:37,240
+it's really horrible to work on this stuff that like
+在这些喜欢的东西上工作真的太可怕了
+
+951
+00:48:37,240 --> 00:48:39,985
+really [LAUGHTER] it can really affect you personally.
+真的[笑声]它真的会影响到你个人。
+
+952
+00:48:39,985 --> 00:48:42,790
+Um, uh, and, uh,
+嗯，呃，呃，
+
+953
+00:48:42,790 --> 00:48:48,100
+one of the approaches that the team took was just to add nontoxic data from Wikipedia.
+团队采取的方法之一就是添加来自维基百科的无毒数据。
+
+954
+00:48:48,100 --> 00:48:54,025
+So helping to- helping the model to understand that these kinds of terms can be used in,
+因此，帮助模型理解可以使用这些术语，
+
+955
+00:48:54,025 --> 00:48:58,040
+you know, more positive sorts of contexts.
+你知道，更积极的背景。
+
+956
+00:49:00,720 --> 00:49:03,940
+One of the challenges with measuring, uh,
+测量的挑战之一，呃，
+
+957
+00:49:03,940 --> 00:49:06,295
+how well the system was doing is that there's not
+系统的表现如何，就是没有
+
+958
+00:49:06,295 --> 00:49:11,725
+a really nice way to have controlled toxicity evaluation.
+一种控制毒性评估的非常好的方法。
+
+959
+00:49:11,725 --> 00:49:13,750
+Um, so in real-world conversation,
+嗯，所以在现实世界的对话中，
+
+960
+00:49:13,750 --> 00:49:18,805
+it can be kind of anyone's guess what the toxicity is of a specific sentence.
+任何人都可以猜出特定句子的毒性是什么。
+
+961
+00:49:18,805 --> 00:49:21,070
+Um, if you really wanna control for a different kind of
+嗯，如果你真的想要控制另一种
+
+962
+00:49:21,070 --> 00:49:24,040
+subgroups or intersectional subgroups,
+亚组或交叉子组，
+
+963
+00:49:24,040 --> 00:49:25,810
+and it can be even harder to get, uh,
+它可能更难获得，呃，
+
+964
+00:49:25,810 --> 00:49:28,765
+a real good data to evaluate properly.
+一个真正好的数据来正确评估。
+
+965
+00:49:28,765 --> 00:49:32,395
+So what the team ended up doing was developing a synthetic data approach.
+所以团队最终做的是开发一种合成数据方法。
+
+966
+00:49:32,395 --> 00:49:35,185
+Um, so this is kind of like a bias Mad Libs.
+嗯，所以这有点像偏见疯狂的自由人。
+
+967
+00:49:35,185 --> 00:49:37,465
+Um, where you take template sentences [NOISE], um,
+嗯，你拿模板句[NOISE]，嗯，
+
+968
+00:49:37,465 --> 00:49:41,380
+and you use those for evaluation. This is the kind of, um,
+并使用它们进行评估。这是那种，嗯，
+
+969
+00:49:41,380 --> 00:49:45,280
+evaluation you'd want to use in addition to your target downstream
+除目标下游之外，您还想使用的评估
+
+970
+00:49:45,280 --> 00:49:47,650
+ah, kind of dataset.
+啊，那种数据集。
+
+971
+00:49:47,650 --> 00:49:51,685
+But this helps you get at the biases specifically.
+但这有助于您明确了解偏见。
+
+972
+00:49:51,685 --> 00:49:55,840
+So, um, some template phrase like I am a proud blank person,
+所以，嗯，一些模板短语，比如我是一个自豪的空白人，
+
+973
+00:49:55,840 --> 00:49:58,480
+and then filling in different subgroup identities.
+然后填写不同的子组标识。
+
+974
+00:49:58,480 --> 00:50:01,660
+And you don't want to release the model unless you see that
+除非你看到，否则你不想发布模型
+
+975
+00:50:01,660 --> 00:50:04,990
+the scores across these different kinds of, uh,
+这些不同种类的分数，呃，
+
+976
+00:50:04,990 --> 00:50:08,860
+these different kinds of template sentences with synthetic, uh,
+这些不同类型的模板句子用合成的，呃，
+
+977
+00:50:08,860 --> 00:50:10,795
+the synthetic template sentences, um,
+合成模板句子，嗯，
+
+978
+00:50:10,795 --> 00:50:14,320
+are relatively kind of the same across, ah, yeah.
+相对来说是相同的啊，是啊。
+
+979
+00:50:14,320 --> 00:50:17,210
+All of the different model runs.
+所有不同的模型运行。
+
+980
+00:50:17,460 --> 00:50:24,995
+Cool. Um, so some assumptions that they made in this was that the dataset, um, uh,
+凉。嗯，所以他们在这做的一些假设是数据集，嗯，呃，
+
+981
+00:50:24,995 --> 00:50:28,090
+didn't have annotated bias and they didn't do
+没有注释偏见，他们没有做
+
+982
+00:50:28,090 --> 00:50:31,525
+any causal analysis because they were just trying to focus in particular,
+任何因果分析，因为他们只是特别关注，
+
+983
+00:50:31,525 --> 00:50:33,745
+um, on this toxicity problem.
+嗯，关于这个毒性问题。
+
+984
+00:50:33,745 --> 00:50:36,880
+Um, they used the CNN,
+嗯，他们使用CNN，
+
+985
+00:50:36,880 --> 00:50:39,610
+ah, convolutional, yeah you guys know, blah, blah, blah.
+啊，卷积，是的，你们都知道，等等，等等，等等。
+
+986
+00:50:39,610 --> 00:50:41,650
+Uh, with pretrained chain GloVe embeddings.
+呃，有预训练链GloVe嵌入。
+
+987
+00:50:41,650 --> 00:50:43,240
+This is probably like your bread and butter.
+这可能就像你的面包和黄油。
+
+988
+00:50:43,240 --> 00:50:44,170
+Pretrained GloVe embeddings.
+预训练GloVe嵌入。
+
+989
+00:50:44,170 --> 00:50:45,940
+I'm sure you know all about this in Word2vec.
+我相信你在Word2vec中知道这一切。
+
+990
+00:50:45,940 --> 00:50:48,250
+Cool, uh, Keras implementation of this.
+很酷，呃，Keras实现这个。
+
+991
+00:50:48,250 --> 00:50:53,470
+Um, and, uh, and using these kind of data augmentation approaches, um,
+嗯，呃，并且使用这些数据增强方法，嗯，
+
+992
+00:50:53,470 --> 00:50:55,420
+both a Wikipedia, uh,
+维基百科，呃，
+
+993
+00:50:55,420 --> 00:51:00,955
+kind of approach as well as actually collecting positive statements about LGBTQ identity.
+这种方法以及实际收集关于LGBTQ身份的积极陈述。
+
+994
+00:51:00,955 --> 00:51:03,730
+So there's this project called Project Respect at Google,
+所以这个项目名为Project Respect at Google，
+
+995
+00:51:03,730 --> 00:51:04,990
+where we go out and,
+我们出去的地方，
+
+996
+00:51:04,990 --> 00:51:08,890
+and talk to people who identify as queer or people who have friends who do,
+和那些认同酷儿的人或有朋友的人交谈，
+
+997
+00:51:08,890 --> 00:51:11,290
+and like talk about this in a positive way,
+并以积极的方式谈论这个，
+
+998
+00:51:11,290 --> 00:51:13,120
+and we add this as data.
+我们将其添加为数据。
+
+999
+00:51:13,120 --> 00:51:17,035
+Um, so we can actually know that this is can be a positive thing.
+嗯，所以我们实际上可以知道这可能是一件好事。
+
+1000
+00:51:17,035 --> 00:51:21,385
+Um, and in order to measure the model performance here, um,
+嗯，为了衡量这里的模特表现，嗯，
+
+1001
+00:51:21,385 --> 00:51:25,480
+again it's looking at the differences across different subgroups and trying to
+再次，它正在考虑不同子群体之间的差异并尝试
+
+1002
+00:51:25,480 --> 00:51:29,695
+compare also the subgroup performance to some sort of general distribution.
+将子组性能与某种一般分布进行比较。
+
+1003
+00:51:29,695 --> 00:51:31,930
+So here they use AUC, um,
+所以他们在这里使用AUC，嗯，
+
+1004
+00:51:31,930 --> 00:51:34,630
+where AUC is essentially the probability that a model will
+其中AUC基本上是模型的概率
+
+1005
+00:51:34,630 --> 00:51:37,975
+give a randomly sel- selected positive example,
+给出一个随机选择的正面例子，
+
+1006
+00:51:37,975 --> 00:51:42,070
+a higher score than a randomly selected, uh, negative example.
+得分高于随机选择的呃负面例子。
+
+1007
+00:51:42,070 --> 00:51:44,890
+So, um, here you can see some toxic comments and
+所以，嗯，在这里你可以看到一些有毒的评论和
+
+1008
+00:51:44,890 --> 00:51:49,240
+nontoxic comments with a example sort of low AUC.
+具有低AUC示例的无毒评论。
+
+1009
+00:51:49,240 --> 00:51:52,225
+Um, here, ah, this is an
+嗯，这里啊，这是一个
+
+1010
+00:51:52,225 --> 00:51:53,770
+example with a high AUC,
+AUC高的例子，
+
+1011
+00:51:53,770 --> 00:51:58,000
+so the model is doing a relatively good job of separating these two kinds of comments.
+所以该模型在分离这两种评论方面做得相对较好。
+
+1012
+00:51:58,000 --> 00:52:02,350
+Um, and there are different kinds of biases that they've defined in this work.
+嗯，他们在这项工作中定义了不同类型的偏见。
+
+1013
+00:52:02,350 --> 00:52:05,080
+So, uh, low subgroup performance means that
+所以，呃，低子群表现意味着
+
+1014
+00:52:05,080 --> 00:52:08,005
+the model performs worse on subgroup comments than it does,
+该模型在子组注释上的表现比它更差，
+
+1015
+00:52:08,005 --> 00:52:09,625
+ah, on comments overall.
+啊，总体评论。
+
+1016
+00:52:09,625 --> 00:52:14,150
+And the metric they've introduced to measure this is called subgroup AUC.
+他们为衡量这一点而引入的指标称为子组AUC。
+
+1017
+00:52:14,220 --> 00:52:17,350
+Um, another one is subgroup shift.
+嗯，另一个是小组转移。
+
+1018
+00:52:17,350 --> 00:52:19,960
+And that's when the model systematically scores comments,
+当模型系统地评分评论时，
+
+1019
+00:52:19,960 --> 00:52:22,120
+um, from some subgroup higher.
+嗯，来自某个较高的小组。
+
+1020
+00:52:22,120 --> 00:52:24,280
+Um, so this is sort of like to the right.
+嗯，所以这有点像右边。
+
+1021
+00:52:24,280 --> 00:52:26,620
+Um, and then there's also, uh,
+嗯，然后还有，呃，
+
+1022
+00:52:26,620 --> 00:52:31,220
+this Background Positive Subgroup Negative shifting to the left.
+此背景正子组向左移位负向。
+
+1023
+00:52:31,620 --> 00:52:36,775
+Yeah. Um, yeah that's sort of saying what I said.
+是啊。嗯，是的，这就是我说的话。
+
+1024
+00:52:36,775 --> 00:52:38,980
+It can go either way to the right or the left and there's just
+它可以向右或向左移动，而且只是
+
+1025
+00:52:38,980 --> 00:52:42,740
+kind of different metrics that can define each of these.
+可以定义其中每一种的不同指标。
+
+1026
+00:52:42,780 --> 00:52:46,000
+Cool. Um, and the results in this,
+凉。嗯，结果在这，
+
+1027
+00:52:46,000 --> 00:52:49,765
+ah, sort of going through not only just looking at, you know,
+啊，有点经历，不仅仅是看，你知道，
+
+1028
+00:52:49,765 --> 00:52:53,380
+qualitative examples, um, and general evaluation metrics,
+定性示例，嗯和一般评估指标，
+
+1029
+00:52:53,380 --> 00:52:56,470
+but also focusing in on some of the key metrics defined for this work,
+但也关注为这项工作定义的一些关键指标，
+
+1030
+00:52:56,470 --> 00:52:58,465
+these sort of AUC-based approaches.
+这些基于AUC的方法。
+
+1031
+00:52:58,465 --> 00:53:01,450
+And they were able to see significant differences in
+他们能够看到显着的差异
+
+1032
+00:53:01,450 --> 00:53:05,184
+the original release which didn't account for any of these unintended biases,
+原始版本没有考虑到任何这些非预期的偏见，
+
+1033
+00:53:05,184 --> 00:53:07,510
+and downstream releases, uh, which did,
+和下游版本，呃，哪个，
+
+1034
+00:53:07,510 --> 00:53:10,195
+which incorporated this kind of normative data
+其中包含了这种规范性数据
+
+1035
+00:53:10,195 --> 00:53:14,690
+that said the sort of things that we thought the model should be learning.
+那就是说我们认为模型应该学习的东西。
+
+1036
+00:53:15,390 --> 00:53:18,250
+Cool. Um, so, um,
+凉。嗯，恩，嗯，
+
+1037
+00:53:18,250 --> 00:53:20,980
+the last thing to keep in mind as you sort of develop and,
+在你开发的时候要记住的最后一件事，
+
+1038
+00:53:20,980 --> 00:53:25,840
+and work towards, uh, creating deeper better models is to release responsibly.
+并且努力创造更深层次的更好的模型是负责任地发布。
+
+1039
+00:53:25,840 --> 00:53:28,450
+Um, so this is a project I've been working on with
+嗯，所以这是我一直在努力的项目
+
+1040
+00:53:28,450 --> 00:53:31,510
+a ton of different people called Model Cards for Model Reporting.
+大量不同的人称为模型报告模型卡。
+
+1041
+00:53:31,510 --> 00:53:36,280
+It's, uh, it's a little bit of like the next step after Datasheets for Datasets,
+这是，呃，它有点像Datasheets for Datasets之后的下一步，
+
+1042
+00:53:36,280 --> 00:53:41,335
+um, where, um, Datasheets for Datasets focuses on information about the data.
+嗯，其中，嗯，Datasheets for Datasets专注于有关数据的信息。
+
+1043
+00:53:41,335 --> 00:53:45,490
+Ah, Model Cards for Model Reporting focuses on information about the model.
+啊，模型报告模型卡侧重于有关模型的信息。
+
+1044
+00:53:45,490 --> 00:53:47,935
+Um, so it captures what it does,
+嗯，它抓住了它的作用，
+
+1045
+00:53:47,935 --> 00:53:50,005
+how it works, why it matters.
+它是如何工作的，为什么重要。
+
+1046
+00:53:50,005 --> 00:53:55,600
+Um, and one of the key ideas here is disaggregated in intersectional evaluation.
+嗯，这里的一个关键想法是在交叉评估中分解的。
+
+1047
+00:53:55,600 --> 00:53:57,055
+So it's not enough, uh,
+所以这还不够，呃，
+
+1048
+00:53:57,055 --> 00:54:00,430
+any more to put out human-centered technology that just
+再推出以人为本的技术
+
+1049
+00:54:00,430 --> 00:54:04,105
+has some vague overall score associated to it.
+有一些模糊的总分与之相关。
+
+1050
+00:54:04,105 --> 00:54:07,855
+You actually need to understand how it works across different subpopulations.
+实际上，您需要了解它在不同子群体中的工作原理。
+
+1051
+00:54:07,855 --> 00:54:11,620
+And you have to understand what the data is telling you that.
+而且您必须了解数据告诉您的内容。
+
+1052
+00:54:11,620 --> 00:54:14,530
+Um, so here's some example details that a
+嗯，所以这里有一些例子细节
+
+1053
+00:54:14,530 --> 00:54:16,000
+model card would have,
+模型卡会有，
+
+1054
+00:54:16,000 --> 00:54:17,410
+um, who it's developed by,
+嗯，它是由谁开发的，
+
+1055
+00:54:17,410 --> 00:54:18,970
+what the intended use is,
+用途是什么，
+
+1056
+00:54:18,970 --> 00:54:22,715
+so that it doesn't start being used in ways that it's not intended to be used.
+因此它不会以不打算使用的方式开始使用。
+
+1057
+00:54:22,715 --> 00:54:25,350
+Um, the factors that are likely to be
+嗯，可能是因素
+
+1058
+00:54:25,350 --> 00:54:28,125
+affected by disproportionate performance of the model.
+受到模型不成比例的影响。
+
+1059
+00:54:28,125 --> 00:54:31,430
+Um, so different kinds of identity groups, things like that.
+嗯，不同种类的身份群体，这样的事情。
+
+1060
+00:54:31,430 --> 00:54:33,580
+Um, the metrics that, ah,
+嗯，指标啊，
+
+1061
+00:54:33,580 --> 00:54:37,150
+that you're deciding to use in order to understand the fairness of the model or
+您决定使用以了解模型的公平性或
+
+1062
+00:54:37,150 --> 00:54:42,025
+the different performance of the model across different kinds of subgroups and factors,
+不同类型的子群和因子的模型的不同表现，
+
+1063
+00:54:42,025 --> 00:54:45,970
+information about the evaluation data and training data.
+有关评估数据和培训数据的信息。
+
+1064
+00:54:45,970 --> 00:54:49,210
+Um, as well as ethical considerations, um,
+嗯，还有道德方面的考虑，嗯，
+
+1065
+00:54:49,210 --> 00:54:51,010
+so what were some of the things you took into
+那么你接受了什么呢？
+
+1066
+00:54:51,010 --> 00:54:53,800
+account or what are some of the risks and benefits,
+帐户或有哪些风险和收益，
+
+1067
+00:54:53,800 --> 00:54:56,935
+um, that, uh, that are relevant to this model?
+嗯，那个，呃，与这个模型有关吗？
+
+1068
+00:54:56,935 --> 00:54:59,455
+Um, and additional caveats and recommendations.
+嗯，还有其他警告和建议。
+
+1069
+00:54:59,455 --> 00:55:02,740
+So for example, in the conversation AI case,
+例如，在对话AI案例中，
+
+1070
+00:55:02,740 --> 00:55:04,270
+they're working with synthetic data.
+他们正在使用合成数据。
+
+1071
+00:55:04,270 --> 00:55:08,395
+So this is the sort of limitation of the evaluation that's important to understand, uh,
+所以这是评估的一种限制，这对理解很重要，呃，
+
+1072
+00:55:08,395 --> 00:55:11,020
+because it can tell you a lot about the biases,
+因为它可以告诉你很多偏见，
+
+1073
+00:55:11,020 --> 00:55:13,660
+but doesn't tell you a lot about how it works generally.
+但是并没有告诉你一般它是如何工作的。
+
+1074
+00:55:13,660 --> 00:55:19,570
+[NOISE] And then the key component in the quantitative,
+[NOISE]然后是定量的关键组成部分，
+
+1075
+00:55:19,570 --> 00:55:21,730
+uh, section of the model card is to have
+呃，模型卡的部分是有的
+
+1076
+00:55:21,730 --> 00:55:24,640
+this both intersectional and disaggregated evaluation.
+这是交叉和分解的评估。
+
+1077
+00:55:24,640 --> 00:55:28,300
+And from here, you trivially get to different kinds of fairness definitions.
+从这里开始，您可以轻松地获得不同类型的公平定义。
+
+1078
+00:55:28,300 --> 00:55:30,925
+The closer you get to parity across subgroups,
+你越接近亚组的平价，
+
+1079
+00:55:30,925 --> 00:55:34,840
+the closer you're getting to something that is mathematically fair.
+你越接近数学上公平的东西。
+
+1080
+00:55:34,840 --> 00:55:39,175
+Okay. So hopefully by paying attention to these kinds of approaches,
+好的。希望通过关注这些方法，
+
+1081
+00:55:39,175 --> 00:55:41,080
+taking into account all these kinds of things,
+考虑到所有这些事情，
+
+1082
+00:55:41,080 --> 00:55:44,080
+we can move from majority representation of data in
+我们可以从数据的多数表示转移到
+
+1083
+00:55:44,080 --> 00:55:47,620
+our models to something more like diverse representation,
+我们的模型更像是多样化的表现形式，
+
+1084
+00:55:47,620 --> 00:55:49,435
+uh, from our ethical AI.
+呃，来自我们的道德AI。
+
+1085
+00:55:49,435 --> 00:55:50,905
+Okay. That's it.
+好的。而已。
+
+1086
+00:55:50,905 --> 00:56:02,540
+Thanks. [APPLAUSE]
+谢谢。 [掌声]
+
+1087
+
+

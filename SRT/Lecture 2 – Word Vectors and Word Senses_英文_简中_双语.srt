@@ -1,0 +1,6828 @@
+1
+00:00:04,160 --> 00:00:07,125
+Okay. Hello everyone.
+好的。大家好。
+
+2
+00:00:07,125 --> 00:00:12,915
+Um, welcome back to the second class of, um, CS224N.
+嗯，欢迎回到第二类，嗯，CS224N。
+
+3
+00:00:12,915 --> 00:00:17,310
+Okay, so right at the end of last time I was just showing you a little,
+好的，所以就在上次结束的时候我只是向你展示了一点，
+
+4
+00:00:17,310 --> 00:00:18,975
+um, from this, um,
+嗯，从这个，嗯，
+
+5
+00:00:18,975 --> 00:00:22,140
+IPython Notebook of things that you could do with word vectors
+你能用word向量做的事情的IPython笔记本
+
+6
+00:00:22,140 --> 00:00:25,380
+but I kind of ran out of time a little for a bit.
+但是我有点过时了。
+
+7
+00:00:25,380 --> 00:00:28,050
+So, I'll just spend a couple of more minutes first,
+所以，我先花几分钟时间，
+
+8
+00:00:28,050 --> 00:00:29,850
+um, showing the end of  this.
+嗯，显示结束。
+
+9
+00:00:29,850 --> 00:00:33,360
+I stuck this IPython Notebook up on the course page.
+我把这个IPython Notebook放在了课程页面上。
+
+10
+00:00:33,360 --> 00:00:37,595
+So, under lecture one you can find a copy of it and you can download it.
+因此，在第一讲课中，您可以找到它的副本，您可以下载它。
+
+11
+00:00:37,595 --> 00:00:41,840
+So, I both stuck up just an HTML version of it and a zip file.
+所以，我只是粘贴了它的HTML版本和一个zip文件。
+
+12
+00:00:41,840 --> 00:00:44,240
+Like HTML file is only good to look at.
+像HTML文件一样只有好看。
+
+13
+00:00:44,240 --> 00:00:45,470
+You can't do anything with it.
+你无法做任何事情。
+
+14
+00:00:45,470 --> 00:00:48,275
+So, you wanna, if you wanna play with it by yourself, um,
+所以，你想，如果你想自己玩，嗯，
+
+15
+00:00:48,275 --> 00:00:52,015
+download the zip file and get the IPython Notebook out of that.
+下载zip文件并从中获取IPython Notebook。
+
+16
+00:00:52,015 --> 00:00:53,390
+Okay. So we were looking at
+好的。所以我们在看
+
+17
+00:00:53,390 --> 00:00:57,965
+these Glove word vectors which I'll talk about a bit more today and so there were
+这些Glove单词向量，我今天会谈到更多，所以有
+
+18
+00:00:57,965 --> 00:01:04,930
+these sort of basic results of similarity in this vector space work very nicely for,
+这种向量空间中这些相似的基本结果非常适合，
+
+19
+00:01:04,930 --> 00:01:10,550
+um, discovering similar words and then going on from that,
+嗯，发现类似的话，然后继续，
+
+20
+00:01:10,550 --> 00:01:15,830
+there was this idea that we'll spend some more time on today which was, um,
+有这个想法，我们今天会花更多的时间，这是，嗯，
+
+21
+00:01:15,830 --> 00:01:20,160
+maybe this vector space is not only a similarity space where
+也许这个向量空间不仅仅是一个相似空间
+
+22
+00:01:20,160 --> 00:01:25,760
+close together things have similar meaning but it actually captures meaning
+事物紧密结合在一起具有相似的意义，但它实际上捕捉了意
+
+23
+00:01:25,760 --> 00:01:30,800
+in a considerably deeper and more profound way which is to say that there are
+以更深刻和更深刻的方式，也就是说有
+
+24
+00:01:30,800 --> 00:01:37,280
+actually directions in the space that you can point which have a certain meaning.
+实际上你可以指出具有一定意义的空间方向。
+
+25
+00:01:37,280 --> 00:01:43,970
+So, that if you are pointing in one direction it means this is more so the case,
+所以，如果你指向一个方向，那就意味着情况更是如此，
+
+26
+00:01:43,970 --> 00:01:48,170
+if you are pointing in a different direction and the meaning space it might be this is
+如果你指向一个不同的方向和意义空间，它可能就是这样
+
+27
+00:01:48,170 --> 00:01:50,780
+the capital of this country or
+这个国家的首都或
+
+28
+00:01:50,780 --> 00:01:54,205
+all sorts of different meanings could be encoded in the space.
+可以在空间中编码各种不同的含义。
+
+29
+00:01:54,205 --> 00:01:56,655
+And a way of testing that,
+还有一种测试方法，
+
+30
+00:01:56,655 --> 00:01:59,680
+is to use these analogy, um, problems.
+就是用这些类比，嗯，问题。
+
+31
+00:01:59,680 --> 00:02:03,080
+And I quickly showed this at the end but just to make sure if you're
+我最后很快就展示了这一点，但只是为了确定你是不是
+
+32
+00:02:03,080 --> 00:02:06,890
+unguarded since it's sort of- it's sort of a clever thing right?
+因为它有点无人防守 - 这是一种聪明的事情吗？
+
+33
+00:02:06,890 --> 00:02:14,600
+So, the idea is that we're going to start with a pair of words like king and man.
+所以，我们的想法是，我们将从像王和人这样的词开始。
+
+34
+00:02:14,600 --> 00:02:17,150
+And so what we're gonna do is we're gonna say well,
+所以我们要做的就是说得好，
+
+35
+00:02:17,150 --> 00:02:23,150
+there's a vector for king in the space and there's a vector for man in
+在太空中有一个国王的矢量，并且有一个载人的载体
+
+36
+00:02:23,150 --> 00:02:26,840
+the space and but what we're gonna do is we're going to
+空间，但我们要做的就是我们要去的地方
+
+37
+00:02:26,840 --> 00:02:32,000
+subtract as in just good old vector subtraction that you hopefully learned in your,
+减去你希望在你的学习中得到的好的老矢量减法，
+
+38
+00:02:32,000 --> 00:02:33,750
+um, linear algebra class.
+嗯，线性代数课。
+
+39
+00:02:33,750 --> 00:02:36,020
+We're gonna subtract the man vector from
+我们要从中减去man vector
+
+40
+00:02:36,020 --> 00:02:40,490
+the king vector and the idea we have in our head then is if we do
+如果我们这样做的话，国王的载体和我们头脑中的想法就是如此
+
+41
+00:02:40,490 --> 00:02:47,965
+that what will happen is we'll be left with the meaning of kingship without the manness.
+将要发生的事情是，如果没有人性，我们将被置于王权的意义之中。
+
+42
+00:02:47,965 --> 00:02:54,270
+Um, and so then there's also a direct vector for a woman.
+嗯，然后还有一个女人的直接矢量。
+
+43
+00:02:54,270 --> 00:02:59,810
+So, we can add the woman vector to that resulting vector and then we could say well,
+所以，我们可以将女性向量添加到结果向量中，然后我们可以说，
+
+44
+00:02:59,810 --> 00:03:04,220
+in the vector, we end up at some point in the vector space and then we're gonna say well,
+在向量中，我们最终在向量空间中的某个点，然后我们会说好，
+
+45
+00:03:04,220 --> 00:03:07,340
+what's the closest word that you're gonna find the here
+你在这里找到的最接近的词是什么
+
+46
+00:03:07,340 --> 00:03:11,960
+and it's gonna print out the closest word and as we saw,
+它会打印出最接近的单词，正如我们所见，
+
+47
+00:03:11,960 --> 00:03:14,765
+um, last time, um,
+嗯，上次，嗯，
+
+48
+00:03:14,765 --> 00:03:17,660
+lo and behold if you do that,
+瞧，如果你这样做，
+
+49
+00:03:17,660 --> 00:03:20,565
+um, you get the answer.
+嗯，你得到了答案。
+
+50
+00:03:20,565 --> 00:03:22,260
+I'm saying you get,
+我说你明白了
+
+51
+00:03:22,260 --> 00:03:32,440
+um, king, man, woman.
+嗯，国王，男人，女人。
+
+52
+00:03:33,530 --> 00:03:36,420
+No? All right. [LAUGHTER].
+没有？行。 [笑声]。
+
+53
+00:03:36,420 --> 00:03:39,195
+You gotta reverse king and man.
+你要逆转国王和男人。
+
+54
+00:03:39,195 --> 00:03:40,860
+I have to reverse king and,
+我必须逆转国王，
+
+55
+00:03:40,860 --> 00:03:42,900
+ah, sure, sure, sure. I'm sorry.
+啊，当然，当然，确定。对不起。
+
+56
+00:03:42,900 --> 00:03:49,470
+Oops. Yeah, okay, I kinda do it well like man, king.
+哎呀。是的，好吧，我有点喜欢男人，国王。
+
+57
+00:03:49,470 --> 00:03:55,260
+Ah, [LAUGHTER] Okay. Yeah, that's right.
+啊，[大笑]好的。是啊，没错。
+
+58
+00:03:55,260 --> 00:03:57,480
+Sorry. Okay. Yeah, because it should be
+抱歉。好的。是的，因为它应该是
+
+59
+00:03:57,480 --> 00:04:00,385
+man is to king as woman is to something sorry yeah.
+男人是国王，因为女人是抱歉的事。
+
+60
+00:04:00,385 --> 00:04:03,680
+I was getting [LAUGHTER] my order of components wrong.
+我得到[笑声]我的组件顺序错了。
+
+61
+00:04:03,680 --> 00:04:06,260
+Okay. Um, and, you know,
+好的。嗯，你知道，
+
+62
+00:04:06,260 --> 00:04:10,790
+as I was sort of I guess I was showing some examples last time with
+因为我有点想，我上次展示了一些例子
+
+63
+00:04:10,790 --> 00:04:18,620
+nationality words but I mean this in a way that is sort of surprising to shocking,
+国籍词，但我的意思是这种方式令人震惊，
+
+64
+00:04:18,620 --> 00:04:23,870
+this actually works for all kinds of things that you can get meaning in this space.
+这实际上适用于你可以在这个空间中获得意义的各种事物。
+
+65
+00:04:23,870 --> 00:04:29,030
+So, I can ask various kinds of analogies of sorts.
+所以，我可以问各种各样的类比。
+
+66
+00:04:29,030 --> 00:04:33,380
+So I can say Australia is to beer as France is to-.
+所以我可以说澳大利亚是啤酒，因为法国是 - 。
+
+67
+00:04:33,380 --> 00:04:34,280
+Wine.
+葡萄酒。
+
+68
+00:04:34,280 --> 00:04:35,720
+Wine. You might think wine.
+葡萄酒。你可能会想到葡萄酒。
+
+69
+00:04:35,720 --> 00:04:38,600
+What it gives back as champagne which seems a pretty good answer.
+它作为香槟回馈的东西似乎是一个很好的答案。
+
+70
+00:04:38,600 --> 00:04:40,535
+[LAUGHTER] Um, I'll go with that.
+[大笑]嗯，我会跟着那个。
+
+71
+00:04:40,535 --> 00:04:44,490
+Um, um, you can do more syntactic facts.
+嗯，嗯，你可以做更多的句法事实。
+
+72
+00:04:44,490 --> 00:04:51,000
+So, I can say tall ta- tall is to tallest as long is to longest and it gets set.
+所以，我可以说最高的是最高的，只要最长，它就会被设定。
+
+73
+00:04:51,000 --> 00:04:56,745
+Um, if I say good is to fantastic as bad is to terrible.
+嗯，如果我说好话就是太棒了，坏就是可怕。
+
+74
+00:04:56,745 --> 00:05:00,440
+That it seems to get out that there's some kind of notion of
+似乎有人认为存在某种概念
+
+75
+00:05:00,440 --> 00:05:04,880
+make more extreme direction and get this direction out.
+做出更加极端的方向并将这个方向排除在外。
+
+76
+00:05:04,880 --> 00:05:06,275
+I skipped over one.
+我跳过了一个。
+
+77
+00:05:06,275 --> 00:05:10,565
+A bomber is to Clinton as Reagan is to.
+正如里根所做的那样，轰炸机就是克林顿。
+
+78
+00:05:10,565 --> 00:05:13,675
+You may or may not like the answer it gives for this one
+你可能会也可能不会喜欢这个答案
+
+79
+00:05:13,675 --> 00:05:17,615
+as Obama is to- as Reagan is to Nixon.
+正如奥巴马所做的那样 - 里根是尼克松。
+
+80
+00:05:17,615 --> 00:05:20,420
+Um, now one thing you might notice at
+嗯，现在你可能会注意到一件事
+
+81
+00:05:20,420 --> 00:05:24,350
+this point and this is something I actually want to come back to at the end.
+这一点，这是我实际上想要回到最后的东西。
+
+82
+00:05:24,350 --> 00:05:28,160
+Um, well, there's this problem because Clinton's ambiguous, right?
+嗯，有这个问题，因为克林顿暧昧，对吗？
+
+83
+00:05:28,160 --> 00:05:29,840
+There's Bill or there's Hillary.
+比尔还是那里的希拉里。
+
+84
+00:05:29,840 --> 00:05:32,925
+Um, and, um, I forget,
+嗯，嗯，我忘了，
+
+85
+00:05:32,925 --> 00:05:36,860
+you know, so this data as I said is a few years old.
+你知道吗，所以我说的数据已有几年了。
+
+86
+00:05:36,860 --> 00:05:39,320
+So, this data was done in 2014.
+因此，这些数据是在2014年完成的。
+
+87
+00:05:39,320 --> 00:05:42,230
+So, in sort of in- it definitely doesn't
+所以，在某种程度上它肯定没有
+
+88
+00:05:42,230 --> 00:05:45,170
+have Trump really in it as a politician, um, but, you know,
+让特朗普作为政治家真的参与其中，嗯，但是，你知道，
+
+89
+00:05:45,170 --> 00:05:50,420
+it would have variously both Clintons but as sort of makes sense if probably um,
+如果可能的话，它会有各种各样的Clintons但是有道理，
+
+90
+00:05:50,420 --> 00:05:53,565
+for a sort of proof for 2014 data,
+对于2014年数据的一种证明，
+
+91
+00:05:53,565 --> 00:05:55,575
+um, that Bill Clinton dominated.
+嗯，比尔克林顿占主导地位。
+
+92
+00:05:55,575 --> 00:05:57,510
+So, I think what we're getting, um,
+所以，我想我们得到了什么，嗯，
+
+93
+00:05:57,510 --> 00:06:03,330
+out of this is that Clinton and Nixon are sort of similar of people in dangers,
+除此之外，克林顿和尼克松有点类似于危险的人，
+
+94
+00:06:03,330 --> 00:06:05,790
+um, of being impeached.
+嗯，被弹劾。
+
+95
+00:06:05,790 --> 00:06:11,695
+Um, and, uh, on both sides of the aisle had us thinking primarily of Bill Clinton.
+嗯，而且，呃，在过道的两边让我们主要考虑比尔克林顿。
+
+96
+00:06:11,695 --> 00:06:14,500
+But, um, if this sort of brings up something that
+但是，嗯，如果这种东西带来的东西
+
+97
+00:06:14,500 --> 00:06:17,380
+I'll come back to right at the end of, um,
+我会在最后回来，嗯，
+
+98
+00:06:17,380 --> 00:06:21,370
+it sort of looks like we've got a sort of a problem here because we
+看起来我们在这里遇到了一个问题，因为我们
+
+99
+00:06:21,370 --> 00:06:25,690
+just have this string literally Clinton and that, um,
+只是克林顿这个字符串，那个，嗯，
+
+100
+00:06:25,690 --> 00:06:35,275
+string is any possible sense and meaning of the string Clinton and so minimally um,
+字符串是克林顿字符串的任何可能的意义和含义，所以最低限度，
+
+101
+00:06:35,275 --> 00:06:38,800
+that we have Bill Clinton and Hillary Clinton that near.
+我们有比尔克林顿和希拉里克林顿那附近。
+
+102
+00:06:38,800 --> 00:06:41,240
+Maybe you have some friends that are called Clinton as well, right,
+也许你有一些叫做克林顿的朋友，对，
+
+103
+00:06:41,240 --> 00:06:43,920
+and they're all mixed together in this Clinton.
+在克林顿，他们都混在了一起。
+
+104
+00:06:43,920 --> 00:06:47,200
+And so that seems kinda problematic and that's sort of been an issue
+所以这似乎有点问题，这是一个问题
+
+105
+00:06:47,200 --> 00:06:50,905
+that's been discussed some for these word vectors and I'll come back to that.
+对于这些单词向量已经讨论了一些，我会回过头来看看。
+
+106
+00:06:50,905 --> 00:06:53,780
+Um, another thing you can do is you can give
+嗯，你可以做的另一件事是你可以给
+
+107
+00:06:53,780 --> 00:06:56,705
+a set of words and say which is the odd one out.
+一组单词，并说出哪一个是奇怪的。
+
+108
+00:06:56,705 --> 00:07:00,020
+Maybe you used to do puzzles like that in middle school or something.
+也许你曾经在中学或其他什么地做过那样的谜题。
+
+109
+00:07:00,020 --> 00:07:02,630
+Um, and so you can do that and it decides
+嗯，所以你可以这样做，它决定
+
+110
+00:07:02,630 --> 00:07:06,080
+that cereal is the odd one out of that set. It seems okay.
+谷物是那个谷物中奇怪的一个。好像没关系。
+
+111
+00:07:06,080 --> 00:07:09,950
+Um, and then one other thing I'll just show you is, so, um,
+嗯，然后我要告诉你的另一件事是，所以，嗯，
+
+112
+00:07:09,950 --> 00:07:13,250
+it'll sort of be nice to look at these words that I've drawn
+看看我画的这些单词真是太好了
+
+113
+00:07:13,250 --> 00:07:16,220
+them in some of the slide pictures.
+他们在一些幻灯片图片。
+
+114
+00:07:16,220 --> 00:07:18,680
+So, this is saying to put together a PCA or
+所以，这就是说将PCA或PCA放在一起
+
+115
+00:07:18,680 --> 00:07:22,025
+Principal Components Analysis, um, scatter plot.
+主成分分析，嗯，散点图。
+
+116
+00:07:22,025 --> 00:07:26,490
+Um, so, I can do that and then I can say, "Um,
+嗯，所以，我可以这样做，然后我可以说，“嗯，
+
+117
+00:07:26,490 --> 00:07:33,480
+give it a set of words and draw me these as a scatter plot" and um,
+给它一套文字并把它作为散点图画给我“和嗯，
+
+118
+00:07:33,480 --> 00:07:36,375
+hopefully if I can just about fit it in,
+希望如果我可以适应它，
+
+119
+00:07:36,375 --> 00:07:38,475
+um, here's my scatter plot.
+嗯，这是我的散点图。
+
+120
+00:07:38,475 --> 00:07:40,090
+And it works pretty well, right?
+它运作得很好，对吧？
+
+121
+00:07:40,090 --> 00:07:41,510
+I've got the wine, champagne,
+我有葡萄酒，香槟，
+
+122
+00:07:41,510 --> 00:07:43,910
+beer up here then the coffee and tea.
+啤酒在这里然后是咖啡和茶。
+
+123
+00:07:43,910 --> 00:07:45,770
+Um, here are the countries.
+嗯，这是国家。
+
+124
+00:07:45,770 --> 00:07:49,055
+Here is the schools, college institute, universities.
+这里是学校，大学学院，大学。
+
+125
+00:07:49,055 --> 00:07:51,380
+Um, the animals are down here.
+嗯，动物都在这里。
+
+126
+00:07:51,380 --> 00:07:55,410
+Um, foodstuffs there.
+嗯，食品在那里。
+
+127
+00:07:55,410 --> 00:08:00,290
+So, yeah, this sort of really does work with this two direction- dimensional display.
+所以，是的，这种两种方向尺寸显示确实有效。
+
+128
+00:08:00,290 --> 00:08:02,810
+It basically shows you similarity.
+它基本上显示了你的相似性
+
+129
+00:08:02,810 --> 00:08:06,355
+Now, um, there are, you know,
+现在，嗯，有，你知道，
+
+130
+00:08:06,355 --> 00:08:10,790
+to some extent though you want to hold on to your wallet with these PCA displays.
+在某种程度上，虽然你想用这些PCA显示器保持你的钱包。
+
+131
+00:08:10,790 --> 00:08:13,160
+So, it's as I've discussed before since you're
+所以，就像我之前讨论过的那样
+
+132
+00:08:13,160 --> 00:08:16,070
+taking something that was 100-dimensional and we're just doing
+采取100维的东西，我们正在做
+
+133
+00:08:16,070 --> 00:08:20,720
+this 2D projection that is capturing some of the major geometry of
+这个2D投影正在捕捉一些主要的几何形状
+
+134
+00:08:20,720 --> 00:08:25,430
+the space but it just has to be losing a huge amount of the information.
+空间，但它只是必须丢失大量的信息。
+
+135
+00:08:25,430 --> 00:08:27,760
+So, when things end up close together,
+所以，当事情最终靠近时，
+
+136
+00:08:27,760 --> 00:08:30,890
+they might be really close together in the original space or
+它们可能在原始空间中非常接近或者
+
+137
+00:08:30,890 --> 00:08:33,680
+they might just have been words that lost in
+他们可能只是失去了的话
+
+138
+00:08:33,680 --> 00:08:37,640
+the 2D projection because they- there are other patterns that
+2D投影因为它们 - 还有其他模式
+
+139
+00:08:37,640 --> 00:08:41,690
+were more dominant and were chosen as the first two principal components.
+更具优势，被选为前两个主要组成部分。
+
+140
+00:08:41,690 --> 00:08:44,000
+So, you sort of don't wanna over trust
+所以，你有点不想过分信任
+
+141
+00:08:44,000 --> 00:08:47,510
+these things and something if you like Infoviz you might think
+这些东西，如果你喜欢Infoviz，你可能会想到
+
+142
+00:08:47,510 --> 00:08:50,270
+about is how there are other ways that I might be able to
+关于我可能有其他方式
+
+143
+00:08:50,270 --> 00:08:53,690
+represent the distances in a way that was more accurate.
+以更准确的方式表示距离。
+
+144
+00:08:53,690 --> 00:08:56,770
+Um, but anyway this is very simple to do and I'm just getting
+嗯，但无论如何这很简单，我只是得到了
+
+145
+00:08:56,770 --> 00:09:00,650
+a PCA to reduce the dimensionality of the matrix and then,
+PCA减少矩阵的维数然后，
+
+146
+00:09:00,650 --> 00:09:04,585
+um, transforming with it these word vectors and printing them.
+嗯，用它转换这些单词向量并打印它们。
+
+147
+00:09:04,585 --> 00:09:07,380
+Um, it's mainly easy to do.
+嗯，这很容易做到。
+
+148
+00:09:07,380 --> 00:09:09,755
+The bit that wasn't easy for me to do, um,
+这对我来说不容易，嗯，
+
+149
+00:09:09,755 --> 00:09:14,780
+but if someone's got some clever Python um plotting tips I'd like one,
+但如果有人有一些聪明的Python um绘图提示我会喜欢一个，
+
+150
+00:09:14,780 --> 00:09:17,480
+if someone wants to send me a message after class.
+如果有人想在课后给我发消息
+
+151
+00:09:17,480 --> 00:09:20,990
+I would have thought there'd be some default way in which you could just
+我原本以为会有一些默认的方式
+
+152
+00:09:20,990 --> 00:09:25,310
+label points in a scatter plot but I wasn't able to find one.
+散点图中的标签点，但我找不到。
+
+153
+00:09:25,310 --> 00:09:27,230
+So, what I did, um,
+那么，我做了什么，嗯，
+
+154
+00:09:27,230 --> 00:09:29,360
+was I'm just sort of plotting the texts and
+我只是在策划文本和
+
+155
+00:09:29,360 --> 00:09:31,580
+I'm offsetting it a little bit from the points.
+我从点上略微抵消了它。
+
+156
+00:09:31,580 --> 00:09:33,650
+Um, now that works kinda crappily
+嗯，现在有点疯狂
+
+157
+00:09:33,650 --> 00:09:36,245
+because they just collide with each other as you can see.
+因为你可以看到它们只是相互碰撞。
+
+158
+00:09:36,245 --> 00:09:40,970
+Um, so, it'd be better if there was a better way to do point labeling in Python plots.
+嗯，如果有更好的方法在Python图中做点标记会更好。
+
+159
+00:09:40,970 --> 00:09:44,915
+So, if anyone knows the answer to that one you can send it to me.
+所以，如果有人知道那个答案，你可以发给我。
+
+160
+00:09:44,915 --> 00:09:49,715
+Um, okay. So, that's that. Ah.
+嗯，好的。那就是那个。啊。
+
+161
+00:09:49,715 --> 00:09:52,370
+And if you haven't used IPython Notebooks
+如果您还没有使用过IPython笔记本电脑
+
+162
+00:09:52,370 --> 00:09:55,670
+before and don't want your computer to run really slowly,
+之前并且不希望您的计算机运行得非常慢，
+
+163
+00:09:55,670 --> 00:09:56,960
+it's a good idea to halt
+停下来是个好主意
+
+164
+00:09:56,960 --> 00:10:00,095
+your IPython Notebooks when you're not gonna be using them anymore,
+当你不再使用它们时，你的IPython笔记本电脑，
+
+165
+00:10:00,095 --> 00:10:02,525
+um, especially if they're computing something.
+嗯，特别是如果他们正在计算某些东西。
+
+166
+00:10:02,525 --> 00:10:04,250
+Um, okay. [NOISE] Um.
+嗯，好的。 [NOISE]嗯。
+
+167
+00:10:04,250 --> 00:10:26,480
+[NOISE]
+[噪声]
+
+168
+00:10:26,480 --> 00:10:28,220
+Okay. [NOISE] So now,
+好的。 [NOISE]现在，
+
+169
+00:10:28,220 --> 00:10:32,180
+[NOISE] um, lecture two and so for today,
+[NOISE]嗯，今天讲课二，等等，
+
+170
+00:10:32,180 --> 00:10:34,400
+we're gonna keep on talking about things you can do with
+我们将继续谈论你可以做的事情
+
+171
+00:10:34,400 --> 00:10:38,870
+Word Vectors and say a little bit at the end about Word sensors.
+Word Vectors和最后一点关于Word传感器的说法。
+
+172
+00:10:38,870 --> 00:10:41,570
+So, in more detail, [NOISE] um,
+所以，更详细的，[NOISE]嗯，
+
+173
+00:10:41,570 --> 00:10:45,530
+I'm gonna say a bit more about, um, Word2Vec.
+我会更多地谈一下，嗯，Word2Vec。
+
+174
+00:10:45,530 --> 00:10:50,300
+I'm gonna have a sort of a very brief excursion on optimization, um,
+我会对优化进行一次非常简短的游览，嗯，
+
+175
+00:10:50,300 --> 00:10:55,010
+but then I sort of want to explain a bit more of the space of what
+但后来我想解释更多的空间
+
+176
+00:10:55,010 --> 00:11:00,515
+people have done and can do with dense word representations.
+人们已经完成并可以使用密集的单词表示。
+
+177
+00:11:00,515 --> 00:11:02,450
+So I am gonna say something about
+所以我要说些什么
+
+178
+00:11:02,450 --> 00:11:07,205
+count-based approaches to capturing meaning and how do they work.
+基于计数的方法来捕获意义以及它们如何工作。
+
+179
+00:11:07,205 --> 00:11:08,870
+I'm gonna talk for a bit about a,
+我要谈谈一下，
+
+180
+00:11:08,870 --> 00:11:12,755
+a different model of Word Vectors which was the GloVe model that,
+一个不同的Word Vectors模型，它是GloVe模型，
+
+181
+00:11:12,755 --> 00:11:16,055
+um, as a post-doc of mine, um,
+嗯，作为我的博士后，嗯，
+
+182
+00:11:16,055 --> 00:11:18,305
+Jeffrey Pennington and, uh,
+杰弗里潘宁顿，呃，
+
+183
+00:11:18,305 --> 00:11:20,615
+me worked on a couple of years ago,
+我几年前工作过，
+
+184
+00:11:20,615 --> 00:11:22,700
+um, talk some about evaluation,
+嗯，谈谈评估，
+
+185
+00:11:22,700 --> 00:11:25,070
+really quite dominant theme on a lot of what
+在很多东西上真正占据主导地位的主题
+
+186
+00:11:25,070 --> 00:11:27,785
+we do on natural language processing is how do we,
+我们在自然语言处理上做的是我们怎样，
+
+187
+00:11:27,785 --> 00:11:32,105
+how do we evaluate things and how much do we trust our evaluations,
+我们如何评估事物以及我们对评估的信任程度，
+
+188
+00:11:32,105 --> 00:11:35,120
+um, and then say a little bit about, um, word sensors.
+嗯，然后再说一下，嗯，文字传感器。
+
+189
+00:11:35,120 --> 00:11:38,540
+I have a sort of a goal here which is that by the end of the class,
+我有一个目标，就是在课程结束时，
+
+190
+00:11:38,540 --> 00:11:41,900
+um, you should actually sort of understand, um,
+嗯，你真的应该理解，嗯，
+
+191
+00:11:41,900 --> 00:11:43,910
+enough of the lay of the land that you could
+足够的土地，你可以
+
+192
+00:11:43,910 --> 00:11:47,090
+read papers about word vectors such as the ones that
+阅读关于单词向量的论文，例如那些
+
+193
+00:11:47,090 --> 00:11:49,310
+are in the syllabus and actually understand
+是在教学大纲中，实际上是理解的
+
+194
+00:11:49,310 --> 00:11:52,430
+them and where they're coming from and roughly how they work.
+他们和他们来自哪里以及他们的工作方式。
+
+195
+00:11:52,430 --> 00:11:54,410
+And so, you know, if you really wanna minimize
+所以，你知道，如果你真的想最小化
+
+196
+00:11:54,410 --> 00:11:56,690
+work for your c- this class, you could think, "I,
+为你的c-这堂课工作，你可以想，“我，
+
+197
+00:11:56,690 --> 00:11:59,780
+I know everything I need to know after the first week and I'm gonna
+我知道第一周后我需要知道的一切，我会
+
+198
+00:11:59,780 --> 00:12:03,260
+do a final project on word vectors and I'll be okay."
+做一个关于单词向量的最终项目，我会没事的。“
+
+199
+00:12:03,260 --> 00:12:05,150
+Um, and you know, you could actually do that,
+嗯，你知道，你实际上可以这样做，
+
+200
+00:12:05,150 --> 00:12:06,650
+I mentioned during the wo- um,
+我在女儿期间提过，
+
+201
+00:12:06,650 --> 00:12:11,585
+class, um, a couple of recent pieces of work on word vectors.
+上课，嗯，最近几个关于单词向量的工作。
+
+202
+00:12:11,585 --> 00:12:13,055
+On the other hand, um,
+另一方面，嗯，
+
+203
+00:12:13,055 --> 00:12:16,310
+doing things with word vectors as a fairly mined out areas,
+用词向量作为一个相当开采的区域做事，
+
+204
+00:12:16,310 --> 00:12:18,200
+so you're probably better off, um,
+所以你可能会更好，嗯，
+
+205
+00:12:18,200 --> 00:12:21,260
+also listening to some of the later parts of the class.
+还听了班上后来的一些部分。
+
+206
+00:12:21,260 --> 00:12:24,650
+Okay. So, remember we had this idea of Word2Vec,
+好的。所以，记住我们有Word2Vec的想法，
+
+207
+00:12:24,650 --> 00:12:29,975
+so it was an iterative updating algorithm that learned, um,
+所以这是一个迭代更新算法，学到了，嗯，
+
+208
+00:12:29,975 --> 00:12:32,450
+these vector representations of words,
+这些矢量表示的单词，
+
+209
+00:12:32,450 --> 00:12:36,290
+then in some sense capture their meaning and the way it worked was we kinda
+然后在某种意义上捕获它们的意义和它的工作方式是我们有点
+
+210
+00:12:36,290 --> 00:12:40,580
+moved position by position through a corpus and each point in time,
+通过语料库和每个时间点按位置移动位置，
+
+211
+00:12:40,580 --> 00:12:45,170
+we had a center word here into and it's trying to predict
+我们在这里有一个中心词，它正试图预测
+
+212
+00:12:45,170 --> 00:12:47,330
+the words around that by having
+通过拥有这些词语
+
+213
+00:12:47,330 --> 00:12:50,945
+a probability distribution over words will occur around that,
+围绕这个词的概率分布会发生在那里，
+
+214
+00:12:50,945 --> 00:12:55,385
+and that probability distribution is defined simply in terms
+并且简单地用术语来定义概率分布
+
+215
+00:12:55,385 --> 00:13:00,275
+of the.product of the word vectors via the Softmax function.
+通过Softmax函数得到的单词向量的产品。
+
+216
+00:13:00,275 --> 00:13:03,620
+And so, what we wanna do is change those vectors in
+所以，我们想做的是改变那些向量
+
+217
+00:13:03,620 --> 00:13:06,920
+a way that this gives good probability predictions,
+这种方式可以提供良好的概率预测，
+
+218
+00:13:06,920 --> 00:13:12,440
+that gives as high probability as possible to words that you tend to see in the context.
+这使得您倾向于在上下文中看到的单词具有尽可能高的概率。
+
+219
+00:13:12,440 --> 00:13:15,770
+And so, just to drill that in a little bit more, you know,
+所以，只需再多练一点，你知道，
+
+220
+00:13:15,770 --> 00:13:21,305
+what we actually have is we have two matrices, right?
+我们实际拥有的是我们有两个矩阵，对吗？
+
+221
+00:13:21,305 --> 00:13:23,525
+We have for center words,
+我们有中心词，
+
+222
+00:13:23,525 --> 00:13:26,930
+we have a matrix where for each word in our vocabulary,
+我们有一个矩阵，对于我们词汇表中的每个单词，
+
+223
+00:13:26,930 --> 00:13:29,525
+we have a vector, um, and at this,
+我们有一个矢量，嗯，在这，
+
+224
+00:13:29,525 --> 00:13:32,450
+this is probably as good a point as any to say that it
+这可能与任何说法一样好
+
+225
+00:13:32,450 --> 00:13:36,065
+turns out that all the major deep learning packages,
+事实证明，所有主要的深度学习包，
+
+226
+00:13:36,065 --> 00:13:40,115
+TensorFlow, PyTorch, etc., for their word vectors,
+TensorFlow，PyTorch等，用于它们的单词向量，
+
+227
+00:13:40,115 --> 00:13:43,040
+the word vectors are represented as rows.
+单词向量表示为行。
+
+228
+00:13:43,040 --> 00:13:44,780
+If you've done a bunch of math classes,
+如果你做过一堆数学课，
+
+229
+00:13:44,780 --> 00:13:46,790
+that might not be what you would expect.
+这可能不是你所期望的。
+
+230
+00:13:46,790 --> 00:13:48,830
+You might have expected the other way around,
+你可能已经预料到了另一种方式，
+
+231
+00:13:48,830 --> 00:13:50,540
+but they all put them in rows.
+但他们都把它们排成一排。
+
+232
+00:13:50,540 --> 00:13:53,285
+So we can have rows for our,
+所以我们可以有我们的行，
+
+233
+00:13:53,285 --> 00:13:56,915
+um, so we have six words and a five dimensional vector each.
+嗯，所以我们每个都有六个单词和一个五维向量。
+
+234
+00:13:56,915 --> 00:14:00,035
+Okay. And then, we have this outside, um,
+好的。然后，我们在外面，嗯，
+
+235
+00:14:00,035 --> 00:14:02,825
+matrix where we also have a second, um,
+矩阵，我们还有第二个，嗯，
+
+236
+00:14:02,825 --> 00:14:07,625
+vector for each word which is this representation in context.
+每个单词的向量，这是在上下文中的表示。
+
+237
+00:14:07,625 --> 00:14:11,345
+Um, so when we have a particular center word here,
+嗯，所以当我们在这里有一个特定的中心词时，
+
+238
+00:14:11,345 --> 00:14:12,950
+word four, you know,
+第四个字，你知道，
+
+239
+00:14:12,950 --> 00:14:14,930
+when we're doing our computations,
+当我们进行计算时，
+
+240
+00:14:14,930 --> 00:14:19,640
+we're taking a.product between v_4 and each row of
+我们在v_4和每一行之间取一个产品
+
+241
+00:14:19,640 --> 00:14:25,655
+U and that's then giving us a vector of dot product scores.
+那时那就给我们一个点积分数的向量。
+
+242
+00:14:25,655 --> 00:14:27,350
+And so, then after that,
+然后，那之后，
+
+243
+00:14:27,350 --> 00:14:31,190
+we're running Softmaxes on each of those numbers doing it
+我们在每个这样的数字上运行Softmaxes
+
+244
+00:14:31,190 --> 00:14:33,350
+element-wise and that's been giving us
+元素方面，这一直在给我们
+
+245
+00:14:33,350 --> 00:14:37,080
+a probability distribution over words in the context.
+上下文中单词的概率分布。
+
+246
+00:14:37,080 --> 00:14:41,650
+Um, and the sort of things to notice there, um,
+嗯，还有那些需要注意的事情，嗯，
+
+247
+00:14:41,650 --> 00:14:43,360
+which hopefully you noticed last time,
+希望你上次注意到，
+
+248
+00:14:43,360 --> 00:14:45,020
+but to make sure you noticed that,
+但要确保你注意到了，
+
+249
+00:14:45,020 --> 00:14:49,280
+um, you know, we've just got one probability distribution, right?
+嗯，你知道，我们只有一个概率分布，对吧？
+
+250
+00:14:49,280 --> 00:14:51,440
+So in terms of what words we predict,
+所以就我们预测的词而言，
+
+251
+00:14:51,440 --> 00:14:55,640
+we're predicting exactly the same probability distribution, every position.
+我们预测每个位置的概率分布完全相同。
+
+252
+00:14:55,640 --> 00:14:58,640
+We've sort of saying the most likely word one to the left
+我们有点说左边最可能的单词
+
+253
+00:14:58,640 --> 00:15:02,630
+is whatever it is house or most likely word to the left is house,
+不管它是什么房子，或者最左边的字是房子，
+
+254
+00:15:02,630 --> 00:15:04,070
+three to the left is house,
+左边三个是房子，
+
+255
+00:15:04,070 --> 00:15:06,470
+the one to the right should be house too, right?
+右边的那个也应该是房子，对吧？
+
+256
+00:15:06,470 --> 00:15:09,320
+So, it's sort of no sort of find us a prediction,
+所以，有点像我们预测的那样，
+
+257
+00:15:09,320 --> 00:15:11,345
+it's just an overall kind of
+这只是一种整体的
+
+258
+00:15:11,345 --> 00:15:16,160
+probability distribution of words that are likely to occur in my context.
+在我的上下文中可能发生的单词的概率分布。
+
+259
+00:15:16,160 --> 00:15:19,685
+So, all we're asking for is a model that gives
+所以，我们要求的只是一个给出的模型
+
+260
+00:15:19,685 --> 00:15:23,480
+reasonably high probability estimates to all words that
+所有单词的概率估计值相当高
+
+261
+00:15:23,480 --> 00:15:27,845
+occur in the context of this word relatively often,
+相对经常出现在这个词的上下文中，
+
+262
+00:15:27,845 --> 00:15:29,975
+is nothing more to it than that.
+没有什么比这更重要了。
+
+263
+00:15:29,975 --> 00:15:32,450
+And that's part of why it's sort of surprising when you've got
+这就是为什么当你得到它时会有点惊讶的部分原因
+
+264
+00:15:32,450 --> 00:15:36,380
+such a simplistic thing that it seems like at the end of the day,
+这样一个简单的事情，似乎在一天结束时，
+
+265
+00:15:36,380 --> 00:15:38,915
+it can end up capturing so much about
+它最终可以捕获这么多
+
+266
+00:15:38,915 --> 00:15:42,770
+the meanings of words and aspects of the meanings of words,
+单词的意义和单词意义的方面，
+
+267
+00:15:42,770 --> 00:15:47,345
+like in the examples I've just showing you in the IPython Notebook.
+就像我刚刚在IPython Notebook中展示的例子一样。
+
+268
+00:15:47,345 --> 00:15:53,300
+Um, and [NOISE] there's one other thing I was gonna say, oh yeah,
+嗯，[NOISE]我还会说另外一件事哦，是的，
+
+269
+00:15:53,300 --> 00:15:59,254
+one other thing I was gonna say was the other thing that might occur to you from this is,
+我要说的另一件事是你可能发生的另一件事是，
+
+270
+00:15:59,254 --> 00:16:00,905
+um, well, wait a minute,
+嗯，好吧，等一下，
+
+271
+00:16:00,905 --> 00:16:03,185
+there was like that and-and,
+有那样的 - 和，
+
+272
+00:16:03,185 --> 00:16:06,125
+and-of that occur all the time.
+并且 - 这一直在发生。
+
+273
+00:16:06,125 --> 00:16:16,219
+Um, so that means every word must have a high dot product with words like that and of and,
+嗯，这意味着每个单词必须有一个高点产品，其中包含类似的单词和
+
+274
+00:16:16,219 --> 00:16:18,605
+um, they get their probabilities right.
+嗯，他们的概率正确。
+
+275
+00:16:18,605 --> 00:16:23,015
+And the first answer to that is, "Yup, that's true."
+而第一个答案是，“是的，这是真的。”
+
+276
+00:16:23,015 --> 00:16:25,985
+And it turns out that all word vectors, [NOISE] um,
+事实证明，所有的单词向量，[NOISE]嗯，
+
+277
+00:16:25,985 --> 00:16:31,010
+have a very strong prob- word probability component that reflects that.
+有一个非常强大的概率概率成分反映了这一点。
+
+278
+00:16:31,010 --> 00:16:34,910
+And I mean, one of the things that some workers discuss,
+我的意思是，一些工人讨论的事情之一，
+
+279
+00:16:34,910 --> 00:16:36,980
+so on the readings,
+所以在读数上，
+
+280
+00:16:36,980 --> 00:16:41,150
+there are two papers from Sanjeev Arora's group in Princeton and one of
+来自普林斯顿的Sanjeev Arora小组有两篇论文
+
+281
+00:16:41,150 --> 00:16:45,485
+those papers sort of discusses, um, this probability,
+那些论文有点讨论，嗯，这个概率，
+
+282
+00:16:45,485 --> 00:16:49,490
+high frequency effect and your crude way of [NOISE] actually
+实际上，高频效应和你的粗暴[NOISE]方式
+
+283
+00:16:49,490 --> 00:16:53,960
+fixing this high frequency effect is that normally, um,
+固定这种高频效果通常是，嗯，
+
+284
+00:16:53,960 --> 00:16:55,685
+the first, um,
+第一个，嗯，
+
+285
+00:16:55,685 --> 00:16:58,460
+the first biggest component in
+中国第一大组成部分
+
+286
+00:16:58,460 --> 00:17:02,390
+your word vectors is actually a frequency effect and if you just lop it off,
+你的单词向量实际上是一个频率效果，如果你只是把它丢掉，
+
+287
+00:17:02,390 --> 00:17:05,000
+you can make your semantic similarities better.
+你可以使你的语义相似性更好。
+
+288
+00:17:05,000 --> 00:17:09,860
+Um, but there are other things that we do to sort of deal with high frequencies.
+嗯，但我们还有其他一些事情可以解决高频问题。
+
+289
+00:17:09,860 --> 00:17:14,615
+Okay, so we get these lovely spaces that I've shown some of.
+好的，所以我们得到了这些可爱的空间，我已经展示了一些。
+
+290
+00:17:14,615 --> 00:17:17,510
+But I'll make one more remark. Um.
+但我还会再说一遍。嗯。
+
+291
+00:17:17,510 --> 00:17:21,500
+Yeah, so did I say this last time? Oh, oh.
+是的，我上次这么说了吗？哦，哦。
+
+292
+00:17:21,500 --> 00:17:24,155
+Um, my remark anyway is that,
+嗯，无论如何我的评论是，
+
+293
+00:17:24,155 --> 00:17:28,580
+um, we show all these two-dimensional pictures.
+嗯，我们展示所有这些二维图片。
+
+294
+00:17:28,580 --> 00:17:33,455
+They're exceedingly, exceedingly misleading because in these pic,
+它们非常极具误导性，因为在这些照片中，
+
+295
+00:17:33,455 --> 00:17:36,410
+two-dimensional pictures, you know,
+二维图片，你知道，
+
+296
+00:17:36,410 --> 00:17:39,530
+you have these effects that if, you know,
+你有这些影响，如果，你知道，
+
+297
+00:17:39,530 --> 00:17:42,470
+Samsung is close to Nokia,
+三星接近诺基亚，
+
+298
+00:17:42,470 --> 00:17:47,690
+it has to be over here and then it has to be far away from words that are over here.
+它必须在这里，然后它必须远离这里的文字。
+
+299
+00:17:47,690 --> 00:17:50,660
+Um, whereas you might sort of also want to have the effect that
+嗯，你也可能想要产生这样的效果
+
+300
+00:17:50,660 --> 00:17:54,619
+Nokia is close to Finland for a different reason,
+由于其他原因，诺基亚离芬兰很近，
+
+301
+00:17:54,619 --> 00:17:57,245
+um, and you can't do that in two-dimensional, um,
+嗯，你不能用二维的方式做到这一点，嗯，
+
+302
+00:17:57,245 --> 00:18:00,665
+vector spaces but, you know, one of the, um,
+矢量空间，但是，你知道，其中一个，嗯，
+
+303
+00:18:00,665 --> 00:18:05,120
+most of the properties of high dimensional vector spaces are very unintuitive,
+高维向量空间的大多数属性非常不直观，
+
+304
+00:18:05,120 --> 00:18:09,800
+and one of the ways that they're unintuitive is in a high dimensional vector space,
+并且它们不直观的方式之一是在高维向量空间中，
+
+305
+00:18:09,800 --> 00:18:15,275
+a word can be close to lots of other words in different directions.
+一个单词可以接近很多不同方向的其他单词。
+
+306
+00:18:15,275 --> 00:18:18,545
+Um, okay. So um,
+嗯，好的。嗯，
+
+307
+00:18:18,545 --> 00:18:24,980
+we sort of started to talk about how we went about learning these word vectors.
+我们开始讨论如何学习这些单词向量。
+
+308
+00:18:24,980 --> 00:18:31,580
+I'm sort of going to take about a five minute detour into optimization.
+我有点花费大约五分钟的时间来进行优化。
+
+309
+00:18:31,580 --> 00:18:33,950
+Now, this isn't really an optimization class,
+现在，这不是一个真正的优化类，
+
+310
+00:18:33,950 --> 00:18:36,350
+if you want to learn a lot about optimization.
+如果你想学习很多关于优化的知识。
+
+311
+00:18:36,350 --> 00:18:38,870
+Well you can learn more about optimization if you do
+如果你这样做，你可以了解更多有关优化的信息
+
+312
+00:18:38,870 --> 00:18:42,830
+229 and if you do something like Stephen Boyd's optimization class,
+229如果你像Stephen Boyd的优化课那样做，
+
+313
+00:18:42,830 --> 00:18:45,800
+you can learn a lot of optimization but this is
+你可以学到很多优化但是这样
+
+314
+00:18:45,800 --> 00:18:49,790
+sort of really baby optimization but just to make sure everyone's on the same page,
+有点真正的宝贝优化，但只是为了确保每个人都在同一页上，
+
+315
+00:18:49,790 --> 00:18:52,085
+here are three slides.
+这是三张幻灯片。
+
+316
+00:18:52,085 --> 00:18:53,960
+Right, so what we did at the end,
+是的，所以我们最后做了什么，
+
+317
+00:18:53,960 --> 00:18:55,490
+what we did over there,
+我们在那边做了什么，
+
+318
+00:18:55,490 --> 00:18:59,090
+where I apologized that my writing was too small,
+我道歉，我的写作太小了，
+
+319
+00:18:59,090 --> 00:19:03,500
+but that will give you the chance to when doing homework too and you have to
+但这样你就有机会做作业了，你必须这样做
+
+320
+00:19:03,500 --> 00:19:08,495
+write that out to work it out for yourselves and learn more in the process.
+写出来为自己解决问题并在此过程中学习更多。
+
+321
+00:19:08,495 --> 00:19:11,780
+Right, so what we had was a cost function that we wanted to
+是的，我们所拥有的是我们想要的成本函数
+
+322
+00:19:11,780 --> 00:19:15,440
+minimize and so what we did was we did our bit of
+最小化，所以我们做了什么，我们做了一点点
+
+323
+00:19:15,440 --> 00:19:20,465
+calculus to calculate the gradient of the cost function with respect
+微积分计算成本函数的梯度
+
+324
+00:19:20,465 --> 00:19:26,570
+to our word vectors which were our variables theta and then what we want to do is say,
+我们的单词向量是我们的变量theta然后我们想要做的是说，
+
+325
+00:19:26,570 --> 00:19:30,050
+well if we take a small step in
+好吧，如果我们迈出一小步
+
+326
+00:19:30,050 --> 00:19:35,000
+the direction of the negative of the gradient that will be taking us down,
+渐渐消极的方向会让我们失望，
+
+327
+00:19:35,000 --> 00:19:38,615
+down hill in this space and we want to keep on
+在这个空间下山，我们想继续
+
+328
+00:19:38,615 --> 00:19:42,410
+doing that and sort of head to the minimum of our space.
+这样做，并在我们的空间最小化。
+
+329
+00:19:42,410 --> 00:19:45,499
+I mean, of course in our high multi-dimensional space,
+我的意思是，当然在我们高度多维的空间里，
+
+330
+00:19:45,499 --> 00:19:48,140
+you know, it might not be a nice smooth curve like this.
+你知道，这可能不是一个很好的平滑曲线。
+
+331
+00:19:48,140 --> 00:19:52,865
+It might be a horrible and non-convex curve but that's just the idea.
+它可能是一个可怕的非凸曲线，但这只是一个想法。
+
+332
+00:19:52,865 --> 00:19:56,510
+So, essentially we're saying we've got the old parameters,
+所以，基本上我们说我们有旧的参数，
+
+333
+00:19:56,510 --> 00:20:01,525
+we work out the gradient of the objective function using those old parameters.
+我们使用那些旧参数计算出目标函数的梯度。
+
+334
+00:20:01,525 --> 00:20:05,830
+We multiply that by a small alpha which is
+我们将它乘以一个小的alpha
+
+335
+00:20:05,830 --> 00:20:08,680
+our step size or learning rate because we only want to move a
+我们的步长或学习率因为我们只想移动一个
+
+336
+00:20:08,680 --> 00:20:11,860
+little bit each time because if back here,
+每次都有点，因为如果回到这里，
+
+337
+00:20:11,860 --> 00:20:15,250
+if we sort of said downhill is this way and said,
+如果我们说下坡是这样的，并说，
+
+338
+00:20:15,250 --> 00:20:16,960
+"Great let's go a long way that way."
+“很棒，让我们走很长的路。”
+
+339
+00:20:16,960 --> 00:20:18,790
+You could kind of completely overshoot,
+你可能会完全超调，
+
+340
+00:20:18,790 --> 00:20:21,220
+so we only want to go a little bit each time.
+所以我们每次只想做一点点。
+
+341
+00:20:21,220 --> 00:20:24,890
+So we normally have a small learning rate alpha and so we
+所以我们通常有一个小的学习率alpha，所以我们
+
+342
+00:20:24,890 --> 00:20:28,745
+subtract a small multiple of the gradient and we,
+减去渐变的一小部分，我们，
+
+343
+00:20:28,745 --> 00:20:30,470
+from the old parameters and we get
+从旧的参数，我们得到
+
+344
+00:20:30,470 --> 00:20:34,580
+our new parameters and that sort of effectively being worked out,
+我们的新参数和那种有效的方法，
+
+345
+00:20:34,580 --> 00:20:37,190
+component wise as is shown below,
+组件如下所示，
+
+346
+00:20:37,190 --> 00:20:40,925
+that we're just doing that to each of the partial derivatives and then,
+我们只是对每个偏导数做这个，然后，
+
+347
+00:20:40,925 --> 00:20:45,485
+that our hope is that that will let us gradually walk down this surface.
+我们希望这会让我们逐渐走下这个层面。
+
+348
+00:20:45,485 --> 00:20:48,050
+Now, if you actually did this,
+现在，如果你真的这样做了，
+
+349
+00:20:48,050 --> 00:20:50,840
+it would be unbelievably bad for the kind of
+对于那种情况来说，这将是令人难以置信的糟糕
+
+350
+00:20:50,840 --> 00:20:54,080
+systems that we build and there's a lot of work on
+我们构建的系统，并且有很多工作要做
+
+351
+00:20:54,080 --> 00:20:57,890
+clever optimization but the most basic thing
+聪明的优化，但最基本的事情
+
+352
+00:20:57,890 --> 00:21:02,015
+which you definitely need to know is that well,
+你肯定需要知道的是，
+
+353
+00:21:02,015 --> 00:21:04,895
+our objective function here,
+我们的目标函数在这里
+
+354
+00:21:04,895 --> 00:21:09,230
+J of theta was a function of our entire corpus, right?
+theta的J是我们整个语料库的函数，对吗？
+
+355
+00:21:09,230 --> 00:21:11,000
+And to get this to work well,
+为了让这个工作顺利，
+
+356
+00:21:11,000 --> 00:21:12,980
+the first thing you want to do is,
+你要做的第一件事是，
+
+357
+00:21:12,980 --> 00:21:17,600
+you know collect a few billion words of your favorite language and then say,
+你知道收集几十亿字你喜欢的语言，然后说，
+
+358
+00:21:17,600 --> 00:21:21,245
+"Go and build a Word2Vec model for me, " and so,
+“为我建立一个Word2Vec模型”，所以，
+
+359
+00:21:21,245 --> 00:21:23,945
+if you have to evaluate
+如果你必须评估
+
+360
+00:21:23,945 --> 00:21:30,110
+a billion center words and maybe then to- for each of 10 billion context words,
+十亿个中心词，然后可能为每个100亿个上下文词，
+
+361
+00:21:30,110 --> 00:21:35,690
+if you have a window size of five and you- so you have to do these sort of 10 billion um,
+如果你有一个5的窗口大小你 - 所以你必须做这100亿美元，
+
+362
+00:21:35,690 --> 00:21:40,775
+Softmax calculations before you work out what your gradient is,
+在计算出渐变之前的Softmax计算，
+
+363
+00:21:40,775 --> 00:21:45,350
+that you're going to be having your computer compute for a quite a long time before
+您将在很长一段时间内完成计算机计算
+
+364
+00:21:45,350 --> 00:21:50,045
+you make one little step in the gradient and so things are going to go so, so slowly.
+你在渐变中迈出了一小步，所以情况会如此缓慢。
+
+365
+00:21:50,045 --> 00:21:53,705
+So, no one does that in deep learning systems.
+所以，在深度学习系统中没有人这样做。
+
+366
+00:21:53,705 --> 00:21:56,270
+Um, so what people- everyone does is use
+嗯，所以每个人都做的就是使用
+
+367
+00:21:56,270 --> 00:22:00,680
+stochastic gradient descent and in stochastic gradient descent,
+随机梯度下降和随机梯度下降，
+
+368
+00:22:00,680 --> 00:22:05,325
+we sample our window in the simplest case.
+我们以最简单的方式对窗口进行采样。
+
+369
+00:22:05,325 --> 00:22:08,170
+We, just for this one window,
+我们，只为这一个窗口，
+
+370
+00:22:08,170 --> 00:22:13,900
+work out an estimate of the gradient and we use it as a parameter update.
+计算出梯度的估计值，并将其用作参数更新。
+
+371
+00:22:13,900 --> 00:22:16,060
+So, this is sort of an amazingly,
+所以，这有点令人惊讶，
+
+372
+00:22:16,060 --> 00:22:18,970
+amazingly noisy estimate of
+令人惊讶的嘈杂估计
+
+373
+00:22:18,970 --> 00:22:23,600
+the gradient but it sort of doesn't matter too much because as soon as we've done it,
+渐变，但它有点无关紧要，因为我们一做到这一点，
+
+374
+00:22:23,600 --> 00:22:26,750
+we're going to choose a different center word and do it again and again,
+我们要选择一个不同的中心词并一次又一次地做，
+
+375
+00:22:26,750 --> 00:22:30,830
+so that gradually we sort of approach what we would have gotten if we'd sort
+所以，如果我们排序，我们会逐渐接近我们会得到的东西
+
+376
+00:22:30,830 --> 00:22:34,999
+of looked at all of the center words before we took any steps,
+在我们采取任何步骤之前看了所有的中心词，
+
+377
+00:22:34,999 --> 00:22:37,280
+but because we take steps as we go,
+但是因为我们采取措施，
+
+378
+00:22:37,280 --> 00:22:43,655
+we get to the minimum of the function orders and magnitude more quickly.
+我们更快地达到函数指令和幅度的最小值。
+
+379
+00:22:43,655 --> 00:22:48,995
+So thi- this shows the simplest case where we're just sampling one window.
+所以这显示了最简单的情况，我们只是采样一个窗口。
+
+380
+00:22:48,995 --> 00:22:51,980
+In practice, that's not what we normally do.
+在实践中，这不是我们通常做的事情。
+
+381
+00:22:51,980 --> 00:22:55,895
+We normally sample as- a small bunch,
+我们通常采样为一小群，
+
+382
+00:22:55,895 --> 00:22:59,210
+you know, order of approximately 32 or 64.
+你知道，大约32或64的顺序。
+
+383
+00:22:59,210 --> 00:23:03,185
+Um, so if we have a sample that's bigger,
+嗯，如果我们有一个更大的样本，
+
+384
+00:23:03,185 --> 00:23:05,765
+that's generally referred to as a mini-batch and we
+这通常被称为小批量和我们
+
+385
+00:23:05,765 --> 00:23:09,110
+calculate a gradient estimate from the mini-batch.
+从小批量计算梯度估计。
+
+386
+00:23:09,110 --> 00:23:12,050
+Um, so that has two advantages.
+嗯，这样有两个好处。
+
+387
+00:23:12,050 --> 00:23:16,550
+One advantage is that you kind of get less noisy estimates of
+一个优点是你可以减少噪音估计
+
+388
+00:23:16,550 --> 00:23:18,590
+the gradient because you've kind of averaged
+渐变，因为你有一定的平均值
+
+389
+00:23:18,590 --> 00:23:21,830
+over a bunch of examples rather than just using one,
+在一堆例子而不是仅仅使用一个，
+
+390
+00:23:21,830 --> 00:23:23,870
+but the second advantage,
+但第二个优势，
+
+391
+00:23:23,870 --> 00:23:25,955
+which is the one why we really care,
+这就是我们真正关心的原因，
+
+392
+00:23:25,955 --> 00:23:30,815
+is if we want our computations to go fast when we're using a GPU,
+如果我们在使用GPU时希望计算速度快，
+
+393
+00:23:30,815 --> 00:23:36,050
+that you need to get parallelization of doing the same operation a whole bunch of
+你需要得到一大堆相同操作的并行化
+
+394
+00:23:36,050 --> 00:23:38,960
+times and then you gain a lot by using
+时间，然后你通过使用获得了很多
+
+395
+00:23:38,960 --> 00:23:42,275
+a mini-batch of 64 examples or something like that.
+一小部分64个例子或类似的东西。
+
+396
+00:23:42,275 --> 00:23:44,510
+Um, and you don't have to but you know,
+嗯，你不必，但你知道，
+
+397
+00:23:44,510 --> 00:23:47,780
+it turns out the details of the guts of the hardware that you know,
+它证明了你知道的硬件内容的细节，
+
+398
+00:23:47,780 --> 00:23:50,600
+it isn't- [inaudible] GPUs, you know, they have these,
+它不是 -  [听不清] GPU，你知道，他们有这些，
+
+399
+00:23:50,600 --> 00:23:52,040
+whatever they have inside them,
+无论他们在里面有什么，
+
+400
+00:23:52,040 --> 00:23:53,495
+there in powers of two.
+有两个权力。
+
+401
+00:23:53,495 --> 00:23:57,965
+So, you get better speedups if you use batches like 32 or 64,
+因此，如果您使用32或64等批次，您可以获得更好的加速
+
+402
+00:23:57,965 --> 00:24:01,070
+rather than just deciding that 42 is still your favorite number from
+而不只是决定42仍然是你最喜欢的数字
+
+403
+00:24:01,070 --> 00:24:06,060
+high school [LAUGHTER] and you're going to use that as the size of your mini-batch.
+高中[大笑]，你将使用它作为你的小批量的大小。
+
+404
+00:24:07,000 --> 00:24:10,610
+Okay. um, yeah here's
+好的。嗯，是的，这里
+
+405
+00:24:10,610 --> 00:24:13,730
+one other interesting thing which
+另一个有趣的事情
+
+406
+00:24:13,730 --> 00:24:17,270
+actually has some optimization details in it, it turns out.
+事实证明，其中有一些优化细节。
+
+407
+00:24:17,270 --> 00:24:19,625
+Um, if you think of these um,
+嗯，如果你想到这些，
+
+408
+00:24:19,625 --> 00:24:22,955
+doing stochastic gradients with word vectors,
+用词向量做随机渐变，
+
+409
+00:24:22,955 --> 00:24:24,500
+that's actually very different to
+这实际上是非常不同的
+
+410
+00:24:24,500 --> 00:24:28,385
+some other deep learning problems like vision deep learning problems.
+其他一些深度学习问题，如视觉深度学习问题。
+
+411
+00:24:28,385 --> 00:24:33,740
+Because for either a single window or even a sort of a reasonably sized mini-batch,
+因为对于单个窗口甚至是一种合理大小的小批量，
+
+412
+00:24:33,740 --> 00:24:36,575
+it will turn out that those mini-batch,
+结果那些小批量，
+
+413
+00:24:36,575 --> 00:24:39,260
+mini-batch only has, you know,
+你知道，小批量只有
+
+414
+00:24:39,260 --> 00:24:41,990
+relatively speaking a handful of words in it, right?
+相对而言，其中有几句话，对吧？
+
+415
+00:24:41,990 --> 00:24:45,710
+So, if you have mini-batch of size 32 and a window size of ten,
+所以，如果你有32个小批量和10个窗口大小，
+
+416
+00:24:45,710 --> 00:24:50,000
+you know, probably there are only about a 100,150 different words in it.
+你知道，它中可能只有大约100,150个不同的单词。
+
+417
+00:24:50,000 --> 00:24:53,030
+Um, but yet we're building this model over
+嗯，但我们正在构建这个模型
+
+418
+00:24:53,030 --> 00:24:56,135
+a vocabulary of quarter of a million words or something like that.
+一个百万字的词汇或类似的词汇。
+
+419
+00:24:56,135 --> 00:25:00,290
+So, just about all of the elements in this vector are zero.
+所以，这个向量中的所有元素都是零。
+
+420
+00:25:00,290 --> 00:25:03,440
+Um, and so, um,
+嗯，等等，嗯，
+
+421
+00:25:03,440 --> 00:25:06,935
+we sort of really have this very sparse um,
+我们真的有这个非常稀疏的嗯，
+
+422
+00:25:06,935 --> 00:25:10,565
+perimeter update and so, um,
+周边更新等等，嗯，
+
+423
+00:25:10,565 --> 00:25:14,300
+that sort of suggests that we actually probably um,
+那种暗示我们实际上可能是，
+
+424
+00:25:14,300 --> 00:25:17,780
+want to sort of only update the word vectors that
+想要只更新那些单词向量
+
+425
+00:25:17,780 --> 00:25:21,380
+appear and then the question is whether you can achieve that, right?
+出现，然后问题是你是否能实现这一点，对吗？
+
+426
+00:25:21,380 --> 00:25:25,040
+The dumb way to do it, is you just have this matrix that's normally,
+这样做的愚蠢方法是你只需要这个矩阵，
+
+427
+00:25:25,040 --> 00:25:27,830
+nearly all zeros and you say add
+几乎所有的零，你说添加
+
+428
+00:25:27,830 --> 00:25:33,230
+those two matrices together and there you go and then the question is,
+那两个矩阵在一起，你去，然后问题是，
+
+429
+00:25:33,230 --> 00:25:38,030
+can you actually have a sparse matrix update which only updates
+你真的可以有一个只更新的稀疏矩阵更新
+
+430
+00:25:38,030 --> 00:25:41,030
+the certain rows of the matrix that contain
+包含的矩阵的某些行
+
+431
+00:25:41,030 --> 00:25:44,645
+the words that you've entered and do things much faster?
+你输入的字数和做得更快的话？
+
+432
+00:25:44,645 --> 00:25:47,240
+And if you're doing something even cleverer like doing
+如果你做的事情比做更聪明
+
+433
+00:25:47,240 --> 00:25:52,220
+distributed computation over multiple computers and sharing your parameters,
+在多台计算机上分布式计算并共享您的参数，
+
+434
+00:25:52,220 --> 00:25:54,620
+well then definitely you just sort of only want to update
+那么你肯定只是想要更新
+
+435
+00:25:54,620 --> 00:25:58,660
+the word vectors that you've actually been getting a parameter estimate for.
+您实际上已获得参数估计的单词向量。
+
+436
+00:25:58,660 --> 00:26:00,850
+So, there's sort of some details there but I'm
+所以，那里有一些细节但是我
+
+437
+00:26:00,850 --> 00:26:03,990
+going to skip past them for more details, um.
+要跳过它们了解更多细节，嗯。
+
+438
+00:26:03,990 --> 00:26:08,570
+Right. So, a couple of people asked afterwards, yeah,
+对。所以，有几个人事后问，是的，
+
+439
+00:26:08,570 --> 00:26:14,525
+why are there these two word vectors that sort of center and the outside one?
+为什么这两个单词向量中心和外部单词？
+
+440
+00:26:14,525 --> 00:26:16,670
+And, I mean the answer to that is,
+而且，我的意思是答案是，
+
+441
+00:26:16,670 --> 00:26:19,520
+it makes that math I showed you easy, right?
+这让数学我很容易，对吧？
+
+442
+00:26:19,520 --> 00:26:21,875
+So that if, um,
+所以，如果，嗯，
+
+443
+00:26:21,875 --> 00:26:25,445
+if you do it as I showed you, well,
+如果你像我给你看的那样做，好吧，
+
+444
+00:26:25,445 --> 00:26:28,130
+you know, for working out, um,
+你知道，为了锻炼，嗯，
+
+445
+00:26:28,130 --> 00:26:31,985
+the partial derivatives for the center word.
+中心词的偏导数。
+
+446
+00:26:31,985 --> 00:26:35,210
+It's just as I showed you, it's easy.
+正如我向你展示的那样，这很简单。
+
+447
+00:26:35,210 --> 00:26:39,980
+Um, but if you use only one set of word vectors,
+嗯，但是如果你只使用一组单词向量，
+
+448
+00:26:39,980 --> 00:26:41,810
+well then the same word,
+那么同一个词，
+
+449
+00:26:41,810 --> 00:26:43,235
+that's the center word,
+这是中心词，
+
+450
+00:26:43,235 --> 00:26:45,440
+will be one of the choices for
+将是其中一个选择
+
+451
+00:26:45,440 --> 00:26:49,895
+the context word when you're working out that Softmax for the context word.
+当您为上下文单词设计Softmax时的上下文单词。
+
+452
+00:26:49,895 --> 00:26:52,550
+And then you'll get these terms that are then
+然后你会得到这些术语
+
+453
+00:26:52,550 --> 00:26:55,820
+squared terms in terms of the two references,
+两个参考文献中的平方术语，
+
+454
+00:26:55,820 --> 00:26:57,290
+so that same word,
+所以同一个词，
+
+455
+00:26:57,290 --> 00:26:59,930
+and that makes your math more difficult.
+这会让你的数学更加困难。
+
+456
+00:26:59,930 --> 00:27:03,725
+Um, so it's sort of just a practical thing,
+嗯，所以它只是一个实用的东西，
+
+457
+00:27:03,725 --> 00:27:05,375
+um, in the end.
+嗯，最后。
+
+458
+00:27:05,375 --> 00:27:08,600
+I mean it sort of doesn't make very much difference,
+我的意思是它并没有太大的区别，
+
+459
+00:27:08,600 --> 00:27:12,005
+because if you sort of think about it since you're going along through all the,
+因为如果你经历了所有的考虑，你会想到它，
+
+460
+00:27:12,005 --> 00:27:13,625
+um, positions, you know.
+嗯，职位，你知道。
+
+461
+00:27:13,625 --> 00:27:17,000
+What was a center word at one point is immediately afterwards
+之后立刻就是一个中心词是什么
+
+462
+00:27:17,000 --> 00:27:20,510
+a context word of what used to be a context word,
+曾经是上下文单词的上下文单词，
+
+463
+00:27:20,510 --> 00:27:21,890
+which is now the center word.
+这是现在的中心词。
+
+464
+00:27:21,890 --> 00:27:26,240
+So, sort of doing the same computations because, you know,
+所以，有点做同样的计算，因为，你知道，
+
+465
+00:27:26,240 --> 00:27:28,504
+the dot product is symmetric actually,
+点积实际上是对称的，
+
+466
+00:27:28,504 --> 00:27:30,770
+um, all over again.
+嗯，一遍又一遍。
+
+467
+00:27:30,770 --> 00:27:34,100
+So, they get pretty similar vector representations.
+因此，他们获得了非常相似的矢量表示。
+
+468
+00:27:34,100 --> 00:27:36,530
+So, it seems like in general you can get the best results
+所以，似乎一般来说你可以获得最好的结果
+
+469
+00:27:36,530 --> 00:27:39,349
+by averaging what comes out for your two vectors,
+通过对你的两个向量进行平均，
+
+470
+00:27:39,349 --> 00:27:41,990
+and you end up with just one vector per word.
+你最终每个单词只有一个向量。
+
+471
+00:27:41,990 --> 00:27:45,740
+Okay, more substantively, um,
+好的，更实质性的，嗯，
+
+472
+00:27:45,740 --> 00:27:48,620
+if you go to the word2vec paper,
+如果你去word2vec论文，
+
+473
+00:27:48,620 --> 00:27:51,920
+you'll discover that there's sort of more to word2vec that they
+你会发现他们对word2vec有更多的了解
+
+474
+00:27:51,920 --> 00:27:55,565
+define as sort of a family of word2vec models.
+定义为word2vec模型的一类。
+
+475
+00:27:55,565 --> 00:27:59,045
+And there are so two main parts of that family.
+这个家庭有两个主要部分。
+
+476
+00:27:59,045 --> 00:28:03,455
+Um, firstly, there's a choice between the Continuous Bag of Words model,
+嗯，首先，在Continuous Bag of Words模型之间有一个选择，
+
+477
+00:28:03,455 --> 00:28:05,345
+and the skip-grams model.
+和skip-gram模型。
+
+478
+00:28:05,345 --> 00:28:07,940
+And what I presented with the skip-grams models.
+我用skip-gram模型提出了什么。
+
+479
+00:28:07,940 --> 00:28:09,650
+So, in the skip-grams model,
+那么，在skip-gram模型中，
+
+480
+00:28:09,650 --> 00:28:12,170
+you've got one center word and you're trying to
+你有一个中心词，你正试图
+
+481
+00:28:12,170 --> 00:28:15,515
+predict all the words in context one at a time.
+一次一个地预测上下文中的所有单词。
+
+482
+00:28:15,515 --> 00:28:19,225
+For the Continuous Bag of Words model it's the opposite.
+对于Continuous Bag of Words模型，情况正好相反。
+
+483
+00:28:19,225 --> 00:28:23,980
+You've got all of the outside words and you're trying to use all of them,
+你已经掌握了所有外部词汇，而你正在尝试使用所有这些词语，
+
+484
+00:28:23,980 --> 00:28:29,715
+though considered independently like a Naive Bayes model to predict the center word.
+虽然像Naive Bayes模型一样被独立考虑来预测中心词。
+
+485
+00:28:29,715 --> 00:28:34,325
+Um, and then the second one is, um,
+嗯，然后第二个是，嗯，
+
+486
+00:28:34,325 --> 00:28:37,685
+the way I presented learning this was
+我学习这个的方式是
+
+487
+00:28:37,685 --> 00:28:41,240
+the method that's using the so called Naive Softmax.
+使用所谓的Naive Softmax的方法。
+
+488
+00:28:41,240 --> 00:28:44,315
+So, therefore when we are wanting to work things out,
+因此，当我们想要解决问题时，
+
+489
+00:28:44,315 --> 00:28:49,354
+we were sort of saying okay we want probability estimates for the context words,
+我们有点说好，我们想要上下文单词的概率估计，
+
+490
+00:28:49,354 --> 00:28:50,990
+and so we're just going to sum over
+所以我们只是总结一下
+
+491
+00:28:50,990 --> 00:28:55,550
+the whole vocabulary and we'll come up with these probability estimates.
+整个词汇表，我们将提出这些概率估计。
+
+492
+00:28:55,550 --> 00:28:59,540
+Um, in practice, that turns out to be a sort of
+嗯，实际上，结果证明是一种
+
+493
+00:28:59,540 --> 00:29:03,860
+a bad idea because that would also make things mega slow.
+一个坏主意，因为这也会使事情变得非常缓慢。
+
+494
+00:29:03,860 --> 00:29:05,884
+So, in homework two,
+所以，在作业二，
+
+495
+00:29:05,884 --> 00:29:08,000
+coming up next week, um,
+下周即将到来，嗯，
+
+496
+00:29:08,000 --> 00:29:11,585
+you will get to implement a much more practical, um,
+你会实现一个更实用的，嗯，
+
+497
+00:29:11,585 --> 00:29:15,530
+way of doing this which they present in the word2vec papers, right?
+他们在word2vec论文中提出这样做​​的方式，对吧？
+
+498
+00:29:15,530 --> 00:29:16,730
+So, the problem is,
+所以，问题是，
+
+499
+00:29:16,730 --> 00:29:21,035
+if we're using this equation that we use to do the calculus,
+如果我们使用这个我们用来做微积分的方程，
+
+500
+00:29:21,035 --> 00:29:23,225
+that down in this denominator here,
+这个分母在这里，
+
+501
+00:29:23,225 --> 00:29:26,420
+we're doing the sum over the entire vocabulary.
+我们正在对整个词汇进行总结。
+
+502
+00:29:26,420 --> 00:29:29,120
+So, if you have a vocabulary of a quarter million words,
+所以，如果你有25万字的词汇，
+
+503
+00:29:29,120 --> 00:29:31,610
+we're sort of doing a quarter of a million dot products and
+我们有点像25万个点产品
+
+504
+00:29:31,610 --> 00:29:36,170
+exponentials and adding them all to work out that denominator.
+指数并将它们全部加入以计算出分母。
+
+505
+00:29:36,170 --> 00:29:38,180
+And that sort of seems uh,
+那种似乎呃，
+
+506
+00:29:38,180 --> 00:29:41,240
+sort of a really bad idea if you want things to be fast.
+如果你想让事情变得更快，那就是一个非常糟糕的主意。
+
+507
+00:29:41,240 --> 00:29:44,360
+Um, so, um, Tomas Mikolov and
+嗯，所以，嗯，Tomas Mikolov和
+
+508
+00:29:44,360 --> 00:29:48,830
+colleagues came up with this idea of negative sampling would be near enough.
+同事想出了这种负抽样的想法就足够了。
+
+509
+00:29:48,830 --> 00:29:51,035
+And so the idea of negative sampling,
+所以负抽样的想法，
+
+510
+00:29:51,035 --> 00:29:55,745
+is we're going to train binary logistic regressions instead.
+我们是要培训二进制逻辑回归。
+
+511
+00:29:55,745 --> 00:29:59,525
+And so, we're going to train one binary logistic regression
+因此，我们将训练一个二元逻辑回归
+
+512
+00:29:59,525 --> 00:30:04,055
+for the actual word observed what's in the numerator,
+对于实际的单词，观察分子中的内容，
+
+513
+00:30:04,055 --> 00:30:09,140
+and you want to give high probability to the word that was actually observed.
+并且你想给出实际观察到的单词的概率很高。
+
+514
+00:30:09,140 --> 00:30:11,825
+And then, what we're going to do,
+然后，我们要做什么，
+
+515
+00:30:11,825 --> 00:30:15,680
+is we're going to sort of randomly sample a bunch of other words,
+我们是要随机抽样一堆其他的话，
+
+516
+00:30:15,680 --> 00:30:21,920
+they're the negative samples and say they weren't the ones that were actually seen.
+他们是负面样本，并说他们不是实际看到的样本。
+
+517
+00:30:21,920 --> 00:30:26,795
+So, you should be trying to give them as low a probability as possible.
+所以，你应该尽量给它们尽可能低的概率。
+
+518
+00:30:26,795 --> 00:30:30,920
+Okay, so, um, the sort of notation that
+好的，嗯，那种符号
+
+519
+00:30:30,920 --> 00:30:35,195
+they use in the paper is sort of slightly different to the one I've used.
+他们在论文中使用的与我使用的略有不同。
+
+520
+00:30:35,195 --> 00:30:38,360
+They actually do maximization not minimization,
+他们实际上做最大化而不是最小化，
+
+521
+00:30:38,360 --> 00:30:42,380
+and that's the equation which I'll come back to.
+这就是我要回到的等式。
+
+522
+00:30:42,380 --> 00:30:46,700
+Um, though before we do that here's the sigmoid function.
+嗯，虽然在我们这之前这里是sigmoid功能。
+
+523
+00:30:46,700 --> 00:30:49,310
+So, the sigmoid function is normally written like this,
+所以，sigmoid函数通常是这样编写的，
+
+524
+00:30:49,310 --> 00:30:51,905
+one over one plus E to the minus X.
+一个加一个加E到负X.
+
+525
+00:30:51,905 --> 00:30:54,230
+But, um, essentially,
+但是，嗯，基本上，
+
+526
+00:30:54,230 --> 00:30:59,600
+the sigmoid function is like a binary case of the Softmax function, right?
+sigmoid函数就像是Softmax函数的二进制情况，对吗？
+
+527
+00:30:59,600 --> 00:31:03,020
+That we have two possible outcomes, yes or no,
+我们有两种可能的结果，是或否，
+
+528
+00:31:03,020 --> 00:31:07,610
+and that you're sort of again got an input that is any real number,
+并且你有点再次获得任何实数的输入，
+
+529
+00:31:07,610 --> 00:31:11,300
+and it's mapping it onto a probability distribution between
+它将它映射到两者之间的概率分布
+
+530
+00:31:11,300 --> 00:31:14,870
+zero and one which represents these two binary outcomes.
+零和一个代表这两个二元结果。
+
+531
+00:31:14,870 --> 00:31:16,790
+And to the extent that the number is positive,
+并且在数量为正的范围内，
+
+532
+00:31:16,790 --> 00:31:21,215
+it kind of ceilings to one and negative goes down to zero.
+它有一种天花板，负面可以降到零。
+
+533
+00:31:21,215 --> 00:31:23,165
+Okay, so with this time,
+好的，所以这个时候，
+
+534
+00:31:23,165 --> 00:31:26,239
+we're going to take the dot for- for the good word,
+我们要拿点来换一个好词，
+
+535
+00:31:26,239 --> 00:31:29,330
+we're going to take the dot product of the two vectors,
+我们将采用两个向量的点积，
+
+536
+00:31:29,330 --> 00:31:31,835
+shove it through our sigmoid function
+通过我们的S形函数推动它
+
+537
+00:31:31,835 --> 00:31:34,280
+and then we're going to want that probability estimate,
+然后我们想要那个概率估计，
+
+538
+00:31:34,280 --> 00:31:36,710
+um, to be as high as possible.
+嗯，要尽可能高。
+
+539
+00:31:36,710 --> 00:31:38,810
+So, if I show you this version,
+所以，如果我给你看这个版本，
+
+540
+00:31:38,810 --> 00:31:41,840
+which is just written slightly differently, um,
+这只是略有不同，嗯，
+
+541
+00:31:41,840 --> 00:31:46,730
+to look as much as possible like the notation that we used last time,
+像我们上次使用的符号一样尽可能多地看，
+
+542
+00:31:46,730 --> 00:31:50,675
+here is our new objective function for using negative sampling.
+这是我们使用负抽样的新目标函数。
+
+543
+00:31:50,675 --> 00:31:52,415
+And we've got two terms,
+我们有两个术语，
+
+544
+00:31:52,415 --> 00:31:54,500
+the first one, um,
+第一个，嗯，
+
+545
+00:31:54,500 --> 00:31:59,285
+is the log of the sigmoid of the observed context word,
+是观察到的上下文单词的sigmoid的对数，
+
+546
+00:31:59,285 --> 00:32:02,810
+the outside words, dot producted with the center word,
+外面的单词，用中心词生成的点，
+
+547
+00:32:02,810 --> 00:32:05,180
+and we're going to want that to be big.
+而且我们希望它变大。
+
+548
+00:32:05,180 --> 00:32:08,435
+Um, and then on the other hand,
+嗯，然后另一方面，
+
+549
+00:32:08,435 --> 00:32:12,785
+um, we've got, um, the,
+嗯，我们有，嗯，
+
+550
+00:32:12,785 --> 00:32:16,850
+um, randomly chosen K words,
+嗯，随机选择的K字，
+
+551
+00:32:16,850 --> 00:32:18,530
+which are just other words,
+这只是其他的话，
+
+552
+00:32:18,530 --> 00:32:21,905
+and we're going to work out dot products between them and the center word.
+我们要研究它们和中心词之间的点积。
+
+553
+00:32:21,905 --> 00:32:25,100
+And we're going to want those to be as small as possible.
+而且我们希望那些尽可能小。
+
+554
+00:32:25,100 --> 00:32:28,340
+Um, note that extra minus sign in there which is causing
+嗯，请注意那里造成的额外减号
+
+555
+00:32:28,340 --> 00:32:31,550
+the sign of the two things to be different, right?
+这两件事的标志是不同的，对吧？
+
+556
+00:32:31,550 --> 00:32:34,355
+So, those are our negative samples.
+所以，那些是我们的负面样本。
+
+557
+00:32:34,355 --> 00:32:37,220
+And for big K, it can be a reasonably modest number,
+而对于大K来说，它可能是一个相当适中的数字，
+
+558
+00:32:37,220 --> 00:32:38,600
+you can just take kind of 10,
+你可以采取10种，
+
+559
+00:32:38,600 --> 00:32:42,665
+15 negative samples and that works pretty fine.
+15个负面样本，效果很好。
+
+560
+00:32:42,665 --> 00:32:46,670
+Um, I said we sort of sampled some words,
+嗯，我说我们对一些单词进行了抽样，
+
+561
+00:32:46,670 --> 00:32:48,755
+um, to be the negative samples.
+嗯，是负面样本。
+
+562
+00:32:48,755 --> 00:32:54,260
+They in particular propose a sampling distribution that helps them along
+他们特别提出了一个可以帮助他们的抽样分布
+
+563
+00:32:54,260 --> 00:33:00,260
+a little in partly dealing with this pro- problem of very frequent words.
+稍微部分地处理这个非常频繁的词的问题。
+
+564
+00:33:00,260 --> 00:33:03,980
+Um, so the starting point of how you sample words is you
+嗯，所以你如何采样单词的起点就是你
+
+565
+00:33:03,980 --> 00:33:07,460
+use what we call the- the unigram distribution.
+使用我们称之为unigram的分布。
+
+566
+00:33:07,460 --> 00:33:11,390
+So, that just means you take words on a large corpus and count up
+所以，这只意味着你在一个大型语料库上说话并计算起来
+
+567
+00:33:11,390 --> 00:33:16,010
+how often each one occurs just as a count of independent words,
+每个人出现的频率与独立单词的数量相同，
+
+568
+00:33:16,010 --> 00:33:18,125
+so there's the called unigram counts.
+所以有所谓的unigram计数。
+
+569
+00:33:18,125 --> 00:33:20,480
+And so you start off with unigram counts,
+所以你从unigram计数开始，
+
+570
+00:33:20,480 --> 00:33:23,585
+but then you raise them to the three quarters power.
+但是你把它们提升到四分之三的力量。
+
+571
+00:33:23,585 --> 00:33:25,730
+And raising to the three quarters power,
+并提升到四分之三的力量，
+
+572
+00:33:25,730 --> 00:33:27,395
+has the effect of, um,
+有这样的效果，嗯，
+
+573
+00:33:27,395 --> 00:33:30,785
+decreasing how often you sample very common words,
+减少你采样非常常见的单词的频率，
+
+574
+00:33:30,785 --> 00:33:35,195
+and increasing how often you sample rarer words.
+并增加你采样稀有词的频率。
+
+575
+00:33:35,195 --> 00:33:39,395
+Okay, um, and that's that.
+好的，嗯，就是这样。
+
+576
+00:33:39,395 --> 00:33:43,955
+Okay, so that's everything about word2vec I am going to say.
+好的，这就是我要说的关于word2vec的一切。
+
+577
+00:33:43,955 --> 00:33:48,560
+Anyone have any last thing.
+任何人都有最后的事情。
+
+578
+00:33:48,560 --> 00:33:52,245
+Yes. [NOISE]
+是。 [噪声]
+
+579
+00:33:52,245 --> 00:33:55,275
+Oh, oh [NOISE]. This is a- sorry Z,
+哦，哦[NOISE]。这是对不起Z，
+
+580
+00:33:55,275 --> 00:34:00,660
+that capital Z is often used as a normalization term and so this is saying,
+资本Z经常被用作规范化术语，所以这就是说，
+
+581
+00:34:00,660 --> 00:34:03,705
+well if you want the probability distribution of words,
+如果你想要单词的概率分布，
+
+582
+00:34:03,705 --> 00:34:06,960
+is you work out this three quarters power of the count
+你在计算这四分之三的力量吗？
+
+583
+00:34:06,960 --> 00:34:10,230
+of the word for every word in the vocabulary and then these
+对于词汇表中的每个单词，然后是这些单词
+
+584
+00:34:10,230 --> 00:34:13,800
+numbers you just sum them up over the vocabulary and it'll be sum
+数字你只是将它们总结在词汇表中，它就是总和
+
+585
+00:34:13,800 --> 00:34:17,670
+total and we're dividing by that so we get a probability distribution.
+总和，我们除以那个，所以我们得到概率分布。
+
+586
+00:34:17,670 --> 00:34:19,845
+Good question because i hadn't explained that.
+好问题，因为我没有解释过。
+
+587
+00:34:19,845 --> 00:34:23,610
+Um, in this class, when you see the letter Z with no explanation,
+嗯，在这堂课上，当你看到字母Z没有解释时，
+
+588
+00:34:23,610 --> 00:34:28,740
+it normally means I am a normalization term to turn things into
+它通常意味着我是一个将事情变为现实的标准化术语
+
+589
+00:34:28,740 --> 00:34:31,200
+probabilities and you sort of iterate over
+概率和你的迭代
+
+590
+00:34:31,200 --> 00:34:34,800
+the numerator term and summing them and divide through.
+分子术语并将它们相加并除以。
+
+591
+00:34:34,800 --> 00:34:40,530
+Any other questions of things I haven't explained or otherwise? Yes.
+关于我没有解释过的其他问题或其他问题？是。
+
+592
+00:34:40,530 --> 00:34:45,000
+So the window [inaudible] that's a [inaudible]
+所以窗口[音频不清晰]是[音频不清晰]
+
+593
+00:34:45,000 --> 00:34:46,290
+Yeah, yes.
+是的，是的。
+
+594
+00:34:46,290 --> 00:34:48,480
+So, [NOISE] what size window do you use?
+所以，[NOISE]你使用什么尺寸的窗户？
+
+595
+00:34:48,480 --> 00:34:52,515
+I'll actually come back to that in a bit and show a little bit of data on that,
+我实际上会稍微回过头来展示一些关于它的数据，
+
+596
+00:34:52,515 --> 00:34:54,480
+but yeah, we haven't done anything about that.
+但是，我们还没有做过任何事情。
+
+597
+00:34:54,480 --> 00:34:57,270
+At the moment we're guessing a window size like five,
+目前我们猜测窗口大小为五，
+
+598
+00:34:57,270 --> 00:34:58,995
+which isn't a bad one um,
+这不是一个坏的嗯，
+
+599
+00:34:58,995 --> 00:35:04,305
+but you know there isn't- there hasn't really been any science behind that, um,
+但是你知道没有 - 那背后真的没有任何科学，嗯，
+
+600
+00:35:04,305 --> 00:35:09,405
+that people treat that as what's then called a hyperparameter which means that um,
+人们把它视为当时所谓的超参数，这意味着，嗯，
+
+601
+00:35:09,405 --> 00:35:12,720
+you try a few different numbers and see which one seems
+你尝试了几个不同的数字，看看哪一个看起来
+
+602
+00:35:12,720 --> 00:35:17,310
+best and that's the one that you use in your future work. Yeah.
+最好的，这是你在未来工作中使用的那个。是啊。
+
+603
+00:35:17,310 --> 00:35:19,485
+Um, [inaudible] three quarters power
+嗯，[听不清]四分之三的力量
+
+604
+00:35:19,485 --> 00:35:24,180
+chosen for any theoretical reason or just because it seems to work in practice?
+选择任何理论上的原因还是因为它似乎在实践中起作用？
+
+605
+00:35:24,180 --> 00:35:27,060
+Um, no. Um, that,
+不。嗯，那个，
+
+606
+00:35:27,060 --> 00:35:33,120
+that was um, also chosen as a hyperparameter and improved performance.
+那是嗯，也被选为超参数和改进的性能。
+
+607
+00:35:33,120 --> 00:35:35,490
+I mean, actually um, you know,
+我的意思是，实际上，嗯，你知道，
+
+608
+00:35:35,490 --> 00:35:38,580
+for this Word2Vec paper, I mean,
+对于这篇Word2Vec论文，我的意思是，
+
+609
+00:35:38,580 --> 00:35:40,995
+you know, it turns out that um,
+你知道，事实证明，嗯，
+
+610
+00:35:40,995 --> 00:35:43,320
+in the actual paper um,
+在实际的论文中，
+
+611
+00:35:43,320 --> 00:35:47,490
+the model looks very- fairly clean but what
+该模型看起来非常干净，但是什么
+
+612
+00:35:47,490 --> 00:35:51,449
+people's discovered when they started digging through the code,
+人们在开始挖掘代码时发现了
+
+613
+00:35:51,449 --> 00:35:56,325
+which to- to their credit they did make available, reproducible research,
+他们确实提供了可重复的研究，
+
+614
+00:35:56,325 --> 00:35:59,175
+that there are actually a whole bunch of tricks
+实际上有一大堆技巧
+
+615
+00:35:59,175 --> 00:36:03,300
+of different things like these hyperparameters of um,
+像这些超参数这些不同的东西，
+
+616
+00:36:03,300 --> 00:36:08,475
+how you sample, and how you wait windows and various things to make the numbers better.
+你如何抽样，以及你如何等待窗户和各种事情来改善数字。
+
+617
+00:36:08,475 --> 00:36:11,190
+So, you know, people play quite a few tricks to make
+所以，你知道，人们会玩很多技巧
+
+618
+00:36:11,190 --> 00:36:15,205
+the numbers go up which aren't particularly theoretical.
+数字上升并不是特别理论上的。
+
+619
+00:36:15,205 --> 00:36:17,530
+Are we good?
+我们好吗？
+
+620
+00:36:17,530 --> 00:36:33,540
+Yeah.
+是啊。
+
+621
+00:36:33,540 --> 00:36:39,230
+[inaudible] [NOISE].
+[听不清] [NOISE]。
+
+622
+00:36:39,230 --> 00:36:42,325
+Ah, sometimes.
+啊，有时候。
+
+623
+00:36:42,325 --> 00:36:48,510
+I so- I- you- so in general for a lot of these sampling things,
+我是 - 我 - 你 - 所以一般来说很多这些采样的东西，
+
+624
+00:36:48,510 --> 00:36:53,145
+it's a bad idea if you're going to be doing multiple passes if you just go bloom,
+如果你只是去做多次传球，这是一个坏主意，
+
+625
+00:36:53,145 --> 00:36:55,530
+bloom, bloom and then bloom, bloom, bloom again,
+绽放，绽放，然后绽放，绽放，再次绽放，
+
+626
+00:36:55,530 --> 00:36:56,670
+that's a bad idea,
+这是一个坏主意，
+
+627
+00:36:56,670 --> 00:36:59,580
+but a common technique a lot of the packages use
+但是许多软件包使用的常用技术
+
+628
+00:36:59,580 --> 00:37:02,820
+is that they do use this shuffling operation at the beginning.
+是他们在开始时使用这种改组操作。
+
+629
+00:37:02,820 --> 00:37:04,320
+So for each epoch,
+所以对于每个时代，
+
+630
+00:37:04,320 --> 00:37:08,880
+they'll shuffle the data randomly and then they'll go through it in sequence and that has
+他们会随机地对数据进行随机播放，然后他们会依次对其进行处理
+
+631
+00:37:08,880 --> 00:37:13,905
+the benefits of faster computation from locality et cetera um,
+从本地开始计算速度更快的好处，等等，
+
+632
+00:37:13,905 --> 00:37:16,590
+while ha- meaning that when you do it differently epoch,
+虽然ha-意味着当你做不同的时代，
+
+633
+00:37:16,590 --> 00:37:18,720
+it will work out differently.
+它将以不同的方式运作。
+
+634
+00:37:18,720 --> 00:37:28,650
+Uh, yeah, yeah.
+呃，是的，是的
+
+635
+00:37:28,650 --> 00:37:28,950
+[inaudible] [NOISE] [inaudible].
+[听不清] [NOISE] [听不清]。
+
+636
+00:37:28,950 --> 00:37:34,185
+That last question I think was talking about taking the mini-batches from the corpus and
+我认为最后一个问题是谈论从语料库中获取迷你批次
+
+637
+00:37:34,185 --> 00:37:37,140
+contrasting whether you actually say sample 20
+对比你是否真的说样品20
+
+638
+00:37:37,140 --> 00:37:41,535
+randomly from the whole corpus versus just sort of working from left to right.
+从整个语料库中随机选择，而不是从左到右。
+
+639
+00:37:41,535 --> 00:37:43,230
+Yes, do you have a question?
+是的，你有问题吗？
+
+640
+00:37:43,230 --> 00:37:55,770
+Um, yeah [inaudible] [NOISE].
+嗯，是的[听不清] [NOISE]。
+
+641
+00:37:55,770 --> 00:37:59,190
+Yeah. So- so you could argue- you could argue
+是啊。所以你可以争论 - 你可以争辩
+
+642
+00:37:59,190 --> 00:38:02,895
+whether or not this was written in the clearest way, but, right.
+这是否是以最清晰的方式写的，但是，对。
+
+643
+00:38:02,895 --> 00:38:07,110
+So, we're making this dot product and then we're negating it
+所以，我们正在制作这个点产品，然后我们就是否定它
+
+644
+00:38:07,110 --> 00:38:11,510
+which is then flipping which side of the space we're on, right?
+然后翻转我们所在空间的哪一边，对吗？
+
+645
+00:38:11,510 --> 00:38:15,890
+Because the sigmoid is symmetric around zero.
+因为S形在零附近是对称的。
+
+646
+00:38:15,890 --> 00:38:19,215
+So, if we've got some dot product um,
+那么，如果我们有一些点产品，
+
+647
+00:38:19,215 --> 00:38:20,790
+and then we negate it,
+然后我们否定它，
+
+648
+00:38:20,790 --> 00:38:25,095
+we're sort of working out a one minus probability and so
+我们有点算一个减去概率等等
+
+649
+00:38:25,095 --> 00:38:30,225
+that's the way in which we're actually for the first um,
+这就是我们实际上第一个这样的方式，
+
+650
+00:38:30,225 --> 00:38:32,910
+for the first time we're wanting the probability to be
+我们第一次想要概率
+
+651
+00:38:32,910 --> 00:38:35,640
+high and then for the negative samples,
+高，然后为负样本，
+
+652
+00:38:35,640 --> 00:38:38,520
+we're wanting their probability to be low.
+我们希望他们的概率很低。
+
+653
+00:38:38,520 --> 00:38:42,495
+Okay, I'll maybe run ahead now.
+好的，我现在可能会跑。
+
+654
+00:38:42,495 --> 00:38:47,810
+Um, so this was an algorithm which um,
+嗯，所以这是一个算法，嗯，
+
+655
+00:38:47,810 --> 00:38:53,870
+sort of you're going through this corpus position by position and you're sort of doing
+有点你按位置经历这个语料库位置而你正在做什么
+
+656
+00:38:53,870 --> 00:38:56,780
+this prediction of words and then you're
+这个词的预测然后你就是
+
+657
+00:38:56,780 --> 00:39:00,200
+updating some parameters and you're learning something and you know,
+更新一些参数，你正在学习一些东西，你知道，
+
+658
+00:39:00,200 --> 00:39:04,400
+by job it seemed to work based on what we saw in the examples,
+按工作，它似乎是基于我们在示例中看到的，
+
+659
+00:39:04,400 --> 00:39:07,155
+but you know, you might have thought um,
+但是你知道，你可能想过，
+
+660
+00:39:07,155 --> 00:39:08,955
+that that was kind of weird right?
+那有点奇怪吧？
+
+661
+00:39:08,955 --> 00:39:12,600
+Look we have this whole big pile of data you know,
+看看我们拥有你知道的大量数据，
+
+662
+00:39:12,600 --> 00:39:16,560
+sort of traditional, I'm thinking of statistics, right?
+有点传统，我在考虑统计，对吧？
+
+663
+00:39:16,560 --> 00:39:18,180
+So you have a big pile of data,
+所以你有大量的数据，
+
+664
+00:39:18,180 --> 00:39:22,530
+you aggregate it and it sort of seems like there are obvious things you could do here.
+你聚合它，似乎你可以在这里做一些明显的事情。
+
+665
+00:39:22,530 --> 00:39:24,930
+You could say, well there's a word like,
+你可以说，好吧有一个词，
+
+666
+00:39:24,930 --> 00:39:27,030
+whatever word we're using, banana.
+我们用的任何字，香蕉。
+
+667
+00:39:27,030 --> 00:39:31,140
+Let's just see what words occur in the context of the gut banana and count
+让我们看看在香蕉和计数的背景下会出现什么词
+
+668
+00:39:31,140 --> 00:39:35,370
+them all up and then we'll be able to use those to predict somehow and you know,
+他们全部起来，然后我们将能够用这些来预测，你知道，
+
+669
+00:39:35,370 --> 00:39:38,940
+those kinds of methods were traditionally
+传统上这些方法
+
+670
+00:39:38,940 --> 00:39:43,350
+used including even with distributed representation techniques.
+甚至使用分布式表示技术。
+
+671
+00:39:43,350 --> 00:39:45,210
+Um, so I want to say a bit about that,
+嗯，所以我想说一点，
+
+672
+00:39:45,210 --> 00:39:49,815
+so you're fully educated and don't sound like one of those people who were
+所以你受过充分的教育，听起来不像那些人
+
+673
+00:39:49,815 --> 00:39:55,440
+aware of no work that happened before 2013 when your network's took off.
+意识到在2013年网络启动之前没有发生任何工作。
+
+674
+00:39:55,440 --> 00:39:59,310
+Um, okay. So, what we could do is we can essentially
+嗯，好的。所以，我们能做的就是我们可以
+
+675
+00:39:59,310 --> 00:40:03,300
+do the same thing as sort of Word2Vec.
+做与Word2Vec相同的事情。
+
+676
+00:40:03,300 --> 00:40:07,185
+We could say there's a five word window around
+我们可以说周围有一个五字窗口
+
+677
+00:40:07,185 --> 00:40:11,160
+each word instance that's often referred to as a word token, right?
+每个单词实例通常被称为单词标记，对吧？
+
+678
+00:40:11,160 --> 00:40:17,250
+So at NLP, we often want to distinguish between a particular kind of type like banana
+所以在NLP，我们经常想要区分像香蕉这样的特定类型
+
+679
+00:40:17,250 --> 00:40:20,400
+or apple versus particular instances
+或苹果与特定情况
+
+680
+00:40:20,400 --> 00:40:23,985
+often in the text and that's referred to as sort of a type token distinction.
+通常在文本中，这被称为类型标记的区别。
+
+681
+00:40:23,985 --> 00:40:26,160
+So we could, um,
+所以我们可以，嗯，
+
+682
+00:40:26,160 --> 00:40:29,670
+look at each um token with a word,
+用一个单词看每个um标记，
+
+683
+00:40:29,670 --> 00:40:31,290
+and the words five around that,
+和周围的五个字，
+
+684
+00:40:31,290 --> 00:40:34,680
+and then we could so start counting up which words occur,
+然后我们就可以开始计算出哪些单词出现了，
+
+685
+00:40:34,680 --> 00:40:40,845
+occur with it and so we can then have a matrix of co-occurrence counts.
+随之发生，因此我们可以得到共生计数矩阵。
+
+686
+00:40:40,845 --> 00:40:42,930
+Um, okay.
+嗯，好的。
+
+687
+00:40:42,930 --> 00:40:44,415
+So, we'll have again,
+那么，我们会再来一次，
+
+688
+00:40:44,415 --> 00:40:46,080
+and I'm going to give me an example of this.
+我会举一个这样的例子。
+
+689
+00:40:46,080 --> 00:40:49,350
+So, normally again you use the five to 10 but you know I can just
+所以，通常你再次使用5到10，但你知道我可以
+
+690
+00:40:49,350 --> 00:40:53,055
+use a window of one to keep my counts very simple and small.
+使用一个窗口来保持我的计数非常简单和小。
+
+691
+00:40:53,055 --> 00:40:56,400
+I ignore left or right just like Word2Vec did,
+我像Word2Vec那样忽略了左或右，
+
+692
+00:40:56,400 --> 00:40:59,475
+and so if I have a teeny baby corpus like this,
+所以，如果我有这样一个小小的婴儿语料库，
+
+693
+00:40:59,475 --> 00:41:00,840
+you know, what I could do,
+你知道，我能做什么
+
+694
+00:41:00,840 --> 00:41:05,445
+is just say here is the matrix of word co-occurrence accounts.
+这里只说这是单词共现帐户的矩阵。
+
+695
+00:41:05,445 --> 00:41:08,295
+So, within my window size of one,
+所以，在我的窗口大小一个，
+
+696
+00:41:08,295 --> 00:41:10,860
+I occurs next to like twice,
+我发生在旁边两次，
+
+697
+00:41:10,860 --> 00:41:14,490
+and that means that like occurs next I twice it's symmetric,
+这意味着，就像下一次我发生两次对称，
+
+698
+00:41:14,490 --> 00:41:18,720
+and all my other accounts here are singletons, um.
+我所有的其他账户都是单身人士，嗯。
+
+699
+00:41:18,720 --> 00:41:25,580
+And so this gives me a big huge sparse matrix of word co-occurrence accounts.
+所以这给了我一个庞大的单词共现帐户的稀疏矩阵。
+
+700
+00:41:25,580 --> 00:41:30,000
+And so one thing that you could do is just use this matrix directly,
+所以你可以做的一件事就是直接使用这个矩阵，
+
+701
+00:41:30,000 --> 00:41:32,870
+because I haven't really got enough data here.
+因为我这里没有足够的数据。
+
+702
+00:41:32,870 --> 00:41:35,180
+But, you know, if you sort of,
+但是，你知道，如果你有点，
+
+703
+00:41:35,180 --> 00:41:38,125
+um, decided that, you know,
+嗯，决定，你知道，
+
+704
+00:41:38,125 --> 00:41:40,915
+the word like is like the word learning,
+这个词就像学习这个词，
+
+705
+00:41:40,915 --> 00:41:42,760
+what you'd do is you'd expect that
+你要做的就是你期待的
+
+706
+00:41:42,760 --> 00:41:46,880
+these two vectors would end up kind of similar to each other.
+这两个向量最终会彼此相似。
+
+707
+00:41:46,880 --> 00:41:48,345
+And [NOISE] they do.
+并且[噪音]他们这样做。
+
+708
+00:41:48,345 --> 00:41:50,015
+So, you can just measure, um,
+所以，你可以测量，嗯，
+
+709
+00:41:50,015 --> 00:41:55,580
+similarity of the vectors directly in terms of these co-occurrence counts.
+直接就这些共现计数而言，矢量的相似性。
+
+710
+00:41:55,580 --> 00:41:59,980
+But, you know, it's a little bit unappealing doing things this way, right?
+但是，你知道，用这种方式做事有点不吸引人，对吧？
+
+711
+00:41:59,980 --> 00:42:03,160
+If you have a quarter million word vocabulary that's where
+如果你有25万字的词汇就在哪里
+
+712
+00:42:03,160 --> 00:42:06,545
+you are in this space where my math is bad,
+你在这个数学不好的地方，
+
+713
+00:42:06,545 --> 00:42:09,850
+but it's in the trillions of the number of cells of this matrix,
+但它在这个矩阵的细胞数量的数万亿，
+
+714
+00:42:09,850 --> 00:42:11,930
+might require a lot of storage.
+可能需要大量存储空间。
+
+715
+00:42:11,930 --> 00:42:15,490
+Though if you're clever and notice that most of the cells were zero and could do
+虽然你很聪明并且注意到大多数细胞都是零并且可以做到
+
+716
+00:42:15,490 --> 00:42:20,040
+some clever sparse matrix representation might take a little bit less.
+一些聪明的稀疏矩阵表示可能会少一些。
+
+717
+00:42:20,040 --> 00:42:23,710
+Um, your classification models might have sparsity issues cause, you know,
+嗯，你的分类模型可能有稀疏性问题因为你知道，
+
+718
+00:42:23,710 --> 00:42:27,460
+a lot of those cells aren't present and so it might not be very robust.
+许多细胞不存在，因此它可能不是很强大。
+
+719
+00:42:27,460 --> 00:42:31,980
+And so those are traditional answer to all of these things which is well,
+所以这些都是对所有这些事情的传统回答，这很好，
+
+720
+00:42:31,980 --> 00:42:36,105
+maybe we could have that big co-occurrence counts matrix
+也许我们可以有那么大的共现计数矩阵
+
+721
+00:42:36,105 --> 00:42:40,930
+and somehow reduce its dimensionality of just, um,
+并以某种方式减少它的维度，嗯，
+
+722
+00:42:40,930 --> 00:42:45,545
+find a corresponding low dimensional matrix which preserves,
+找到保留的相应低维矩阵，
+
+723
+00:42:45,545 --> 00:42:47,915
+uh, most of the information, um,
+呃，大部分信息，嗯，
+
+724
+00:42:47,915 --> 00:42:50,780
+in the original matrix and, you know,
+在原始矩阵中，你知道，
+
+725
+00:42:50,780 --> 00:42:56,140
+maybe we'll reduce things to a dimensionality of somewhere around the size 25 to a 1,000,
+也许我们会将事物减少到25到1000左右的某个维度，
+
+726
+00:42:56,140 --> 00:42:59,195
+um as is done with Word2Vec.
+就像使用Word2Vec一样。
+
+727
+00:42:59,195 --> 00:43:02,620
+So, there's sort of a standard most common way of doing
+所以，有一种标准的最常见的做法
+
+728
+00:43:02,620 --> 00:43:07,210
+this dimensionality reduction and you don't really have to understand all the math,
+这种维数降低，你真的不需要了解所有的数学，
+
+729
+00:43:07,210 --> 00:43:10,715
+but you get to play with this and homework one which is, um,
+但是你可以玩这个和家庭作业，这是，嗯，
+
+730
+00:43:10,715 --> 00:43:15,665
+for any matrix you can do what's called the singular value decomposition, um,
+对于任何矩阵，你可以做所谓的奇异值分解，嗯，
+
+731
+00:43:15,665 --> 00:43:23,505
+which is a way you can take an arbitrary matrix and decompose it into three matrices, um,
+这是一种你可以采用任意矩阵并将其分解为三个矩阵的方法，嗯，
+
+732
+00:43:23,505 --> 00:43:27,250
+where the center one is diagonal and has what- in it what are
+中心的一个是对角线，其中有什么
+
+733
+00:43:27,250 --> 00:43:31,320
+called singular vectors which are weightings of the different dimensions.
+称为奇异向量，它们是不同维度的权重。
+
+734
+00:43:31,320 --> 00:43:34,895
+So, they decrease in size as you go downwards.
+因此，随着您的下降，它们的尺寸会减小。
+
+735
+00:43:34,895 --> 00:43:37,540
+And then these two U and V are then
+然后是这两个U和V.
+
+736
+00:43:37,540 --> 00:43:41,945
+orthogonal bases corresponding to the rows and columns.
+对应于行和列的正交基。
+
+737
+00:43:41,945 --> 00:43:43,435
+And so in particular,
+特别是，
+
+738
+00:43:43,435 --> 00:43:47,315
+it's even simpler than the case where we just have these word-word vectors,
+它甚至比我们只有这些单词矢量的情况更简单，
+
+739
+00:43:47,315 --> 00:43:51,095
+because you have a square matrix and so they are effectively the same.
+因为你有一个方阵，所以它们实际上是一样的。
+
+740
+00:43:51,095 --> 00:43:53,490
+But, you know, for the general case, um,
+但是，你知道，对于一般情况，嗯，
+
+741
+00:43:53,490 --> 00:43:57,089
+although you get these sort of full orthogonal bases,
+虽然你得到了这些完全正交的基础，
+
+742
+00:43:57,089 --> 00:44:00,065
+you then have these bits sort of don't really
+然后，你有这些有点不真的
+
+743
+00:44:00,065 --> 00:44:03,855
+matter cause they end up being used for nothing when you work out the product.
+因此，当你计算出产品时，它们最终会被用尽。
+
+744
+00:44:03,855 --> 00:44:09,180
+Um, and then if you want to reduce the dimensionality, what you say is,
+嗯，如果你想减少维数，你说的是，
+
+745
+00:44:09,180 --> 00:44:14,675
+throw away the smallest singular values which remember there are in decreasing
+抛弃最小的奇异值，记住它们在减少
+
+746
+00:44:14,675 --> 00:44:17,740
+size and that means you're then effectively
+大小，这意味着你有效
+
+747
+00:44:17,740 --> 00:44:22,040
+throwing away rows and columns of these other matrices.
+扔掉这些其他矩阵的行和列。
+
+748
+00:44:22,040 --> 00:44:23,140
+And then it says,
+然后它说，
+
+749
+00:44:23,140 --> 00:44:25,860
+behold I've now reduced these things to
+我现在已经把这些东西减少了
+
+750
+00:44:25,860 --> 00:44:28,360
+a two-dimensional representation from
+来自的二维表示
+
+751
+00:44:28,360 --> 00:44:32,440
+the original three-dimensional representation and that's referred to as
+原始的三维表示，即所谓的
+
+752
+00:44:32,440 --> 00:44:39,275
+the reduced SVD and the classic result is in terms of least squares error in
+减少的SVD和经典结果就最小平方误差而言
+
+753
+00:44:39,275 --> 00:44:47,189
+estimation that this- the product of these three things will give X k which is the best,
+估计这三个东西的产物会给出最好的X k，
+
+754
+00:44:47,189 --> 00:44:52,210
+um, k- rank k approximation to the original X in terms of,
+嗯，k-等级k近似于原始X，
+
+755
+00:44:52,210 --> 00:44:55,155
+uh, X squared least squares criterion.
+呃，X平方最小二乘准则。
+
+756
+00:44:55,155 --> 00:44:58,975
+So, we could do this and we could build word vectors.
+所以，我们可以做到这一点，我们可以构建单词向量。
+
+757
+00:44:58,975 --> 00:45:00,750
+So, I can, um,
+所以，我可以，嗯，
+
+758
+00:45:00,750 --> 00:45:02,445
+make use of, um,
+利用，嗯，
+
+759
+00:45:02,445 --> 00:45:07,175
+NumPy's SVD function and I can throw into it,
+NumPy的SVD功能，我可以投入其中，
+
+760
+00:45:07,175 --> 00:45:11,525
+um, matrices and, um,
+嗯，矩阵，嗯，
+
+761
+00:45:11,525 --> 00:45:14,040
+I can make word vectors.
+我可以制作单词向量。
+
+762
+00:45:14,040 --> 00:45:16,175
+And these ones look really bad, but hey,
+这些看起来很糟糕，但是，嘿，
+
+763
+00:45:16,175 --> 00:45:20,825
+I give it a dataset of three centers [LAUGHTER] and it's not exactly a fair comparison.
+我给它一个三个中心的数据集[大笑]，这不是一个公平的比较。
+
+764
+00:45:20,825 --> 00:45:23,420
+But- so this technique was in, um,
+但是 - 这个技术是，嗯，
+
+765
+00:45:23,420 --> 00:45:28,925
+popularized around, um, the turn- the turn of the millennium.
+转向千禧年，转向千禧年。
+
+766
+00:45:28,925 --> 00:45:30,990
+It generally, um, went for
+一般来说，嗯，去了
+
+767
+00:45:30,990 --> 00:45:34,900
+some word applications under the name of latent semantic analysis or
+一些单词应用程序以潜在语义分析或
+
+768
+00:45:34,900 --> 00:45:38,585
+latent semantic indexing and the idea was that you could have
+潜在的语义索引和想法是你可以拥有的
+
+769
+00:45:38,585 --> 00:45:41,490
+these semantic directions that you are
+你是这些语义指导
+
+770
+00:45:41,490 --> 00:45:44,610
+finding in this low dimensional space that had meaning.
+找到这个有意义的低维空间。
+
+771
+00:45:44,610 --> 00:45:47,380
+And people worked with it quite a bit for techniques
+人们对技术的处理非常有用
+
+772
+00:45:47,380 --> 00:45:50,440
+like t- trying to do information retrieval
+喜欢t-尝试进行信息检索
+
+773
+00:45:50,440 --> 00:45:56,945
+using these LSA approximations and it sort of worked a bit.
+使用这些LSA近似值，它有点工作。
+
+774
+00:45:56,945 --> 00:46:02,140
+It kind of never really worked very well I think,
+我觉得它从来没有真正起作用，
+
+775
+00:46:02,140 --> 00:46:06,565
+um, and so it never sort of hugely caught on.
+嗯，所以它永远不会被大肆抓住。
+
+776
+00:46:06,565 --> 00:46:11,770
+Um, but it's- the methods kind of continued to be explored actually mainly in the sort of
+嗯，但是 - 这种方法实际上主要是在某种程度上进行探索
+
+777
+00:46:11,770 --> 00:46:17,135
+COG psych- COGS psych community where people were doing things with word meaning.
+COG psych-COGS心理社区，人们用文字意义做事。
+
+778
+00:46:17,135 --> 00:46:20,140
+And there's this sort of kind of interesting, um,
+而且有这种有趣的，嗯，
+
+779
+00:46:20,140 --> 00:46:24,955
+the [NOISE] to the literature that there was this guy Doug Rohde, um,
+[NOISE]文献中有这个人Doug Rohde，嗯，
+
+780
+00:46:24,955 --> 00:46:31,055
+who, um, did a PhD at CMU, um, in 2005.
+谁，嗯，2005年在CMU获得博士学位。
+
+781
+00:46:31,055 --> 00:46:34,225
+And basically what he discovered was,
+基本上他发现的是，
+
+782
+00:46:34,225 --> 00:46:37,715
+look if rather than just using raw counts,
+看看是否而不仅仅是使用原始计数，
+
+783
+00:46:37,715 --> 00:46:42,175
+I start doing quite a bit more in terms of,
+我开始做的更多，
+
+784
+00:46:42,175 --> 00:46:44,565
+you know, fiddling with the counts,
+你知道，摆弄计数，
+
+785
+00:46:44,565 --> 00:46:47,525
+I can start to produce results that are much better.
+我可以开始产生更好的结果。
+
+786
+00:46:47,525 --> 00:46:49,620
+So, rather than using low counts,
+所以，而不是使用低计数，
+
+787
+00:46:49,620 --> 00:46:53,450
+you have to do something to deal with those very high-frequency words.
+你必须做些什么来处理那些非常高频率的词。
+
+788
+00:46:53,450 --> 00:46:55,960
+So, one idea is you could log scale them which
+所以，一个想法是你可以记录缩放它们
+
+789
+00:46:55,960 --> 00:46:58,505
+is also commonly used in information retrieval.
+也常用于信息检索。
+
+790
+00:46:58,505 --> 00:47:01,575
+Another idea is you could just use something like,
+另一个想法是你可以使用像，
+
+791
+00:47:01,575 --> 00:47:03,450
+uh, a ceiling function,
+呃，天花板功能，
+
+792
+00:47:03,450 --> 00:47:09,905
+so you take the minimum of X,t for t set and that some number like around 100.
+所以你取t的最小值为X，t取一些数字，比如大约100。
+
+793
+00:47:09,905 --> 00:47:15,430
+Um, he had- he used the idea which was also another of the hacks that was put into
+嗯，他曾经 - 他使用了这个想法，这也是另外一个黑客入侵
+
+794
+00:47:15,430 --> 00:47:21,215
+the Word2Vec was rather than just treating the whole window the same that you should,
+Word2Vec不仅仅是对整个窗口的处理方式与你应该的相同，
+
+795
+00:47:21,215 --> 00:47:24,045
+um, count words that are closer more.
+嗯，算一些更接近的词。
+
+796
+00:47:24,045 --> 00:47:29,745
+So, in Word2Vec, they sample closer words more commonly than further away words.
+因此，在Word2Vec中，他们比更远的单词更频繁地采样更接近的单词。
+
+797
+00:47:29,745 --> 00:47:31,715
+Um, in his system, you're sort of having to have
+嗯，在他的系统中，你有点必须拥有
+
+798
+00:47:31,715 --> 00:47:34,925
+a differential count for closer words et cetera.
+更接近单词的差别计数等。
+
+799
+00:47:34,925 --> 00:47:40,435
+And then, um, compared to any of that rather than using counts at all,
+然后，嗯，与任何相比，而不是使用计数，
+
+800
+00:47:40,435 --> 00:47:43,775
+he then started using Pearson correlations which
+然后他开始使用Pearson相关性
+
+801
+00:47:43,775 --> 00:47:48,995
+helped and set they're sometimes negative and he decided that it helped,
+帮助和设置他们有时是负面的，他认为它有帮助，
+
+802
+00:47:48,995 --> 00:47:52,310
+um, if you then got rid of the negative values.
+嗯，如果你那么摆脱负值。
+
+803
+00:47:52,310 --> 00:47:54,030
+So, in- in some sense,
+所以，在某种意义上，
+
+804
+00:47:54,030 --> 00:47:56,045
+this sounds like a bag of hacks,
+这听起来像一袋黑客，
+
+805
+00:47:56,045 --> 00:47:58,459
+um, but on the other hand,
+嗯，但另一方面，
+
+806
+00:47:58,459 --> 00:48:00,555
+he was able to show that, you know,
+他能够表明，你知道，
+
+807
+00:48:00,555 --> 00:48:03,520
+these transformed counts could actually then give
+这些转化的计数实际上可以给出
+
+808
+00:48:03,520 --> 00:48:07,150
+you very useful word vectors as I'm about to show.
+你将要展示的非常有用的单词向量。
+
+809
+00:48:07,150 --> 00:48:13,120
+And- well, we have to realize that actually in slightly different forms,
+而且，我们必须意识到实际上形式略有不同，
+
+810
+00:48:13,120 --> 00:48:17,165
+several of these exact same counts are actually being used in Word2Vec as well.
+其中几个完全相同的计数实际上也在Word2Vec中使用。
+
+811
+00:48:17,165 --> 00:48:21,110
+Do you hear that?
+你听到了吗？
+
+812
+00:48:21,110 --> 00:48:26,885
+Yeah. Were they [inaudible].
+是啊。他们是[音频不清晰]。
+
+813
+00:48:26,885 --> 00:48:31,265
+Yeah. So, so that's an- I'm about to show exactly that.
+是啊。所以，这就是 - 我将要准确地表明这一点。
+
+814
+00:48:31,265 --> 00:48:34,370
+Um, that's actually a really interesting little,
+嗯，这实际上是一个非常有趣的小事，
+
+815
+00:48:34,370 --> 00:48:35,800
+um, bit of the data.
+嗯，有点数据。
+
+816
+00:48:35,800 --> 00:48:39,215
+So, you know, what, um, yeah,
+那么，你知道，嗯，是的，是的，
+
+817
+00:48:39,215 --> 00:48:42,005
+so the, the thing- if you do that,
+那么，事情 - 如果你这样做，
+
+818
+00:48:42,005 --> 00:48:44,915
+you not only get word similarities pretty good.
+你不仅得到相似的相似之处。
+
+819
+00:48:44,915 --> 00:48:48,360
+Let me show you this example which is cleaner.
+让我告诉你这个更清洁的例子。
+
+820
+00:48:48,360 --> 00:48:52,685
+Um, so this- the precise idea of
+嗯，所以这个 - 确切的想法
+
+821
+00:48:52,685 --> 00:48:57,390
+evaluating with analogies was not something that had really been developed.
+用类比进行评估并不是真正发展起来的。
+
+822
+00:48:57,390 --> 00:49:01,520
+So, that was actually something that Marsh Mikolov, um, suggested.
+所以，这实际上是Marsh Mikolov，嗯，建议的东西。
+
+823
+00:49:01,520 --> 00:49:05,655
+But actually, um, Doug Rohde made this, um,
+但实际上，嗯，Doug Rohde做了这个，嗯，
+
+824
+00:49:05,655 --> 00:49:11,100
+really interesting observation which was- he said, look,
+非常有趣的观察 - 他说，看，
+
+825
+00:49:11,100 --> 00:49:14,440
+"Once I do these kind of transformations to
+“一旦我做了这些转变
+
+826
+00:49:14,440 --> 00:49:17,925
+improve the semantic representation of my word vectors,
+改善我的单词向量的语义表示，
+
+827
+00:49:17,925 --> 00:49:21,705
+look this really interesting property emerges.
+看看这个真正有趣的物业出现了。
+
+828
+00:49:21,705 --> 00:49:27,240
+Um, that what you find is that there is semantic vectors
+嗯，你发现的是有语义向量
+
+829
+00:49:27,240 --> 00:49:32,870
+are which basically linear components in my carefully-constructed space.
+在我精心构造的空间中基本上是线性组件。
+
+830
+00:49:32,870 --> 00:49:35,170
+So, here we have the sort of, um,
+所以，我们有这样的，嗯，
+
+831
+00:49:35,170 --> 00:49:38,055
+verb to the doer of the verb direction,
+动词对动词方向的动词，
+
+832
+00:49:38,055 --> 00:49:40,740
+drive, driver, um, clean,
+开车，司机，嗯，干净，
+
+833
+00:49:40,740 --> 00:49:43,505
+janitor, swim, swimmer, learn,
+看门人，游泳，游泳，学习，
+
+834
+00:49:43,505 --> 00:49:45,645
+teacher or teach, teacher,
+老师或教师，老师，
+
+835
+00:49:45,645 --> 00:49:48,705
+doctor, treat, priest, pray.
+医生，治疗，牧师，祈祷。
+
+836
+00:49:48,705 --> 00:49:51,000
+I mean, you know, it's not exactly perfect,
+我的意思是，你知道，它并不完美，
+
+837
+00:49:51,000 --> 00:49:52,910
+you know, there's a little bit of wiggle there, right?
+你知道吗，那里有一点点摆动，对吧？
+
+838
+00:49:52,910 --> 00:49:57,740
+But, you know, roughly it's completely clear that there's sort of a direction
+但是，你知道，大致完全清楚的是有一个方向
+
+839
+00:49:57,740 --> 00:50:03,320
+in the space that corresponds to- from a verb to the doers of a verb.
+在动词与动词的实施者对应的空间中。
+
+840
+00:50:03,320 --> 00:50:06,430
+Um, and yeah, so he [inaudible] - he-
+嗯，是的，所以他[听不清]  - 他 -
+
+841
+00:50:06,430 --> 00:50:10,450
+no one had thought of this idea of doing the analogies and tests.
+没有人想到这种类比和测试的想法。
+
+842
+00:50:10,450 --> 00:50:14,895
+But the thing in retrospect that's obvious is,
+但回想起来的事情很明显，
+
+843
+00:50:14,895 --> 00:50:20,195
+if you can construct a vector space that has this linearity property,
+如果你可以构造一个具有这种线性属性的向量空间，
+
+844
+00:50:20,195 --> 00:50:23,740
+then you're definitely gonna do well in analogy.
+那么你肯定会做类比的好。
+
+845
+00:50:23,740 --> 00:50:26,610
+So, effectively he had invented a vector space that do
+所以，实际上他发明了一个矢量空间
+
+846
+00:50:26,610 --> 00:50:29,855
+well in analogies because this means that you've got
+很好地类比，因为这意味着你已经得到了
+
+847
+00:50:29,855 --> 00:50:33,845
+this direction which is the doer and then you can immediately
+这个方向是行动者然后你可以立即
+
+848
+00:50:33,845 --> 00:50:38,155
+say that's the doer vector which you can get from subtracting clean from swimmer.
+说这是你可以通过从游泳运动员中减去干净而获得的实施者。
+
+849
+00:50:38,155 --> 00:50:40,745
+And the- Right. So, it's clean from janitor.
+而且 - 对。所以，它从看门人那里干净了。
+
+850
+00:50:40,745 --> 00:50:45,385
+And then we can add it on to swim and we'll get somewhere close to swimmer.
+然后我们可以将它添加到游泳中，我们将会到达游泳者附近。
+
+851
+00:50:45,385 --> 00:50:48,410
+Um, so his space actually did do that.
+嗯，所以他的空间确实这样做了。
+
+852
+00:50:48,410 --> 00:50:51,930
+And so, um, this is- so the,
+所以，嗯，这是 - 所以，
+
+853
+00:50:51,930 --> 00:50:53,705
+the moral in some sense is,
+在某种意义上，道德是，
+
+854
+00:50:53,705 --> 00:50:58,545
+if you have- if you kind of do carefully control accounts and so on,
+如果你有 - 如果你有点谨慎控制帐户等，
+
+855
+00:50:58,545 --> 00:51:04,715
+that conventional methods can also give you good word vector spaces and- I mean,
+传统的方法也可以给你很好的单词向量空间 - 我的意思是，
+
+856
+00:51:04,715 --> 00:51:09,110
+so that was actually the starting off point for our work on GloVe.
+所以这实际上是我们在GloVe上工作的起点。
+
+857
+00:51:09,110 --> 00:51:11,010
+Um, so that essentially,
+嗯，基本上，
+
+858
+00:51:11,010 --> 00:51:13,440
+there had been these two schools of work.
+曾经有过这两个学派。
+
+859
+00:51:13,440 --> 00:51:16,775
+Um, there had been the school of work that had
+嗯，曾经有过的工作学校
+
+860
+00:51:16,775 --> 00:51:20,160
+been explored more in COG psych than anywhere else,
+在COG心理学中探索的比其他任何地方都要多，
+
+861
+00:51:20,160 --> 00:51:23,870
+which had been based on counting and transforming counts.
+这是基于计数和转换计数。
+
+862
+00:51:23,870 --> 00:51:29,795
+And, you know, it had some advantages or it seemed it had some advantages, right?
+并且，你知道，它有一些优势，或者它似乎有一些优势，对吧？
+
+863
+00:51:29,795 --> 00:51:33,670
+That, um, you're making sort of efficient use of statistics as you're using
+那个，嗯，你在使用时正在有效地使用统计数据
+
+864
+00:51:33,670 --> 00:51:38,045
+the global statistics of the whole matrix directly to estimate things.
+整个矩阵的全局统计直接估计事物。
+
+865
+00:51:38,045 --> 00:51:41,310
+Um, and at that poi- up until then,
+嗯，直到那时为止，
+
+866
+00:51:41,310 --> 00:51:45,575
+it had really only being used to capture word similarity, um,
+它真的只被用来捕捉单词的相似性，嗯，
+
+867
+00:51:45,575 --> 00:51:51,675
+and a lot of it had suffered from disproportionate im- importance given to large counts.
+并且其中很多都遭受了大量不成比例的不重要。
+
+868
+00:51:51,675 --> 00:51:56,210
+But Doug Rohde, he had sort of started to show how to solve both of these problems.
+但道格罗德，他有点开始展示如何解决这两个问题。
+
+869
+00:51:56,210 --> 00:51:57,700
+And so on the other hand,
+等等，
+
+870
+00:51:57,700 --> 00:51:59,760
+there had been these neural network methods
+曾经有过这些神经网络方法
+
+871
+00:51:59,760 --> 00:52:02,145
+which are kind of direct prediction methods that
+这是一种直接的预测方法
+
+872
+00:52:02,145 --> 00:52:07,110
+we're defining that probability distribution and trying to predict the words that occur.
+我们正在定义概率分布并试图预测发生的单词。
+
+873
+00:52:07,110 --> 00:52:09,970
+And they had some advantages, right?
+他们有一些优势，对吗？
+
+874
+00:52:09,970 --> 00:52:15,030
+The fact that your sampling means that you're not going to run out of memory hopefully.
+你的抽样意味着你不会希望你的内存不足。
+
+875
+00:52:15,030 --> 00:52:18,425
+I know we've had some memory problems with homework one, but in principle,
+我知道我们家庭作业存在一些记忆问题，但原则上，
+
+876
+00:52:18,425 --> 00:52:21,460
+you're not as bad memory position and if you have to
+你没有那么糟糕的记忆位置，如果你必须这样做
+
+877
+00:52:21,460 --> 00:52:24,690
+construct a huge matrix because you're going linearly,
+构造一个巨大的矩阵，因为你是线性的，
+
+878
+00:52:24,690 --> 00:52:27,360
+um, but, you know, since you're doing it sample by
+嗯，但是，你知道，因为你正在做样品
+
+879
+00:52:27,360 --> 00:52:31,340
+sample it's inefficient use of statistics, um.
+样本是统计数据的低效使用，嗯。
+
+880
+00:52:31,340 --> 00:52:37,255
+Okay. And so, but on the other hand Mikolov's work it performed perfectly.
+好的。所以，但另一方面，Mikolov的工作表现完美。
+
+881
+00:52:37,255 --> 00:52:39,145
+Not perfectly, but really well.
+不完美，但非常好。
+
+882
+00:52:39,145 --> 00:52:42,880
+Um, so this is sort of led into this work,
+嗯，这有点像这项工作，
+
+883
+00:52:42,880 --> 00:52:45,340
+um, that Jeffrey Pennington, um,
+嗯，Jeffrey Pennington，嗯，
+
+884
+00:52:45,340 --> 00:52:50,155
+Richard Socher [inaudible] can we sort of combine these ideas
+Richard Socher [听不清]我们可以将这些想法结合起来
+
+885
+00:52:50,155 --> 00:52:55,445
+and sort of have some of the goodness of the neural net methods,
+并且有一些神经网络方法的优点，
+
+886
+00:52:55,445 --> 00:53:00,535
+um, while trying to do things with some kind of count matrix.
+嗯，同时尝试用某种计数矩阵做事。
+
+887
+00:53:00,535 --> 00:53:02,650
+And so in particular, um,
+尤其如此，嗯，
+
+888
+00:53:02,650 --> 00:53:04,480
+we wanted to get the result in
+我们想得到结果
+
+889
+00:53:04,480 --> 00:53:10,240
+a slightly less hacky way that you want to have components of meaning
+你希望拥有意义组成部分的方式稍微逊色一些
+
+890
+00:53:10,240 --> 00:53:13,540
+being linear ope- linear operations in
+是线性运算的
+
+891
+00:53:13,540 --> 00:53:18,085
+the vector space that they're just some effective or adding or something like this.
+向量空间，它们只是一些有效或添加或类似的东西。
+
+892
+00:53:18,085 --> 00:53:22,540
+And so the crucial observation of this model was that we could use
+所以这个模型的关键观察是我们可以使用
+
+893
+00:53:22,540 --> 00:53:27,685
+ratios of co-occurrence probabilities to encode meaning components.
+共现概率与编码意义成分的比率。
+
+894
+00:53:27,685 --> 00:53:29,320
+And so the idea here is,
+所以这里的想法是，
+
+895
+00:53:29,320 --> 00:53:32,020
+if you have a word like ice and
+如果你有像冰一样的话
+
+896
+00:53:32,020 --> 00:53:35,215
+you say how often the thing's going to co-occur with that,
+你说这件事经常与之共同发生，
+
+897
+00:53:35,215 --> 00:53:38,965
+well solid should co-occur a lot and gas shouldn't.
+固体应该共同发生很多，气体不应该。
+
+898
+00:53:38,965 --> 00:53:45,545
+But well water is also going to co-occur a lot and some random word won't occur much.
+但井水也会同时出现很多，一些随机的词也不会发生太多。
+
+899
+00:53:45,545 --> 00:53:49,525
+If you have, oops.
+如果你有，哎呀。
+
+900
+00:53:49,525 --> 00:53:51,820
+If you have steam,
+如果你有蒸汽，
+
+901
+00:53:51,820 --> 00:53:56,230
+you get the opposite pattern with solid and gas, right?
+你得到了与固体和气体相反的模式，对吧？
+
+902
+00:53:56,230 --> 00:53:58,835
+But so the thing to notice is,
+但需要注意的是，
+
+903
+00:53:58,835 --> 00:54:02,320
+it's not enough to just have large by itself because large
+仅仅因为大而单独拥有它是不够的
+
+904
+00:54:02,320 --> 00:54:06,320
+appears both here and here or small appears there and there,
+出现在这里或这里或小到那里出现，
+
+905
+00:54:06,320 --> 00:54:09,490
+the thing that's interesting and sort of the difference between
+有趣的东西和它们之间的区别
+
+906
+00:54:09,490 --> 00:54:12,925
+these components in there indicating a meaning component.
+这些组件在那里表示含义成分。
+
+907
+00:54:12,925 --> 00:54:20,275
+And so we can get it that if we look at the ratio of co-occurrence probabilities.
+因此，如果我们看一下共现概率的比例，我们就可以得到它。
+
+908
+00:54:20,275 --> 00:54:25,810
+And so for the ratio of co-occurrence probabilities this is a dimension of
+因此，对于共现概率的比率，这是一个维数
+
+909
+00:54:25,810 --> 00:54:33,200
+meaning and where for other words and this sort of ratio cancels out to about one.
+意思和其他词语的位置和这种比例取消大约一个。
+
+910
+00:54:33,200 --> 00:54:36,970
+And so in this slide I've moved so it's not how my
+所以在这张幻灯片中我已经移动了所以不是我的
+
+911
+00:54:36,970 --> 00:54:40,840
+small and large that these are actually actual counts from a corpus.
+从小到大，这些实际上都来自语料库。
+
+912
+00:54:40,840 --> 00:54:43,660
+So we roughly get dimension of meaning between
+所以我们大致得到了意义之间的维度
+
+913
+00:54:43,660 --> 00:54:46,240
+solid and gas are the ones coming out
+固体和天然气是出来的
+
+914
+00:54:46,240 --> 00:54:49,540
+as about one because they are not the dimension of meaning.
+至于一个，因为它们不是意义的维度。
+
+915
+00:54:49,540 --> 00:54:53,960
+And so, it seems like what we want is we want to have ratio of
+所以，似乎我们想要的是我们想要的比例
+
+916
+00:54:53,960 --> 00:54:58,660
+co-occurrence probabilities become linear and our space.
+共现概率变为线性和我们的空间。
+
+917
+00:54:58,660 --> 00:55:00,515
+And then we're in a good business.
+然后我们的业务很好。
+
+918
+00:55:00,515 --> 00:55:03,340
+And so that's what we want to set about doing.
+这就是我们想要做的事情。
+
+919
+00:55:03,340 --> 00:55:05,410
+Well, how can you do that?
+那你怎么能这样做？
+
+920
+00:55:05,410 --> 00:55:07,360
+Well, the way you can do that,
+好吧，你可以这样做，
+
+921
+00:55:07,360 --> 00:55:15,775
+is by if you can make the dot products equal to the log of the co-occurrence probability,
+如果你可以使点积等于共现概率的对数，
+
+922
+00:55:15,775 --> 00:55:19,450
+then immediately you get the fact that when you have
+然后你马上得到了这样的事实
+
+923
+00:55:19,450 --> 00:55:26,605
+a vector difference it turns into a ratio of the co-occurrence probabilities.
+矢量差异变成共现概率的比率。
+
+924
+00:55:26,605 --> 00:55:30,640
+And so, essentially the whole of the model is that we
+因此，基本上整个模型就是我们
+
+925
+00:55:30,640 --> 00:55:34,630
+want to have dot products or logs of co-occurrence probabilities.
+想拥有共现概率的点积或对数。
+
+926
+00:55:34,630 --> 00:55:36,940
+And so, that's what we do.
+所以，这就是我们的工作。
+
+927
+00:55:36,940 --> 00:55:39,700
+So, here is our objective function here
+所以，这是我们的目标函数
+
+928
+00:55:39,700 --> 00:55:43,325
+and it's made to look a little bit more complicated.
+它看起来有点复杂。
+
+929
+00:55:43,325 --> 00:55:47,095
+But essentially we've got this squared loss here
+但基本上我们在这里得到了这个平方损失
+
+930
+00:55:47,095 --> 00:55:51,820
+and then we wanting to say the dot-product should be as similar
+然后我们想说点积应该是相似的
+
+931
+00:55:51,820 --> 00:55:53,980
+as possible to the log of
+尽可能的日志
+
+932
+00:55:53,980 --> 00:55:57,190
+co-occurrence probability and so you'll they'll
+共现概率，所以你会他们
+
+933
+00:55:57,190 --> 00:56:00,745
+be lost to the extent that they're not the same,
+失去他们不一样的程度，
+
+934
+00:56:00,745 --> 00:56:07,180
+but we kind of complexify it a little by putting in bias terms for both of the two words.
+但是我们通过对这两个词加上偏见来稍微复杂化一点。
+
+935
+00:56:07,180 --> 00:56:10,180
+Because maybe the word is just overall common and likes to
+因为这个词可能只是整体而且喜欢
+
+936
+00:56:10,180 --> 00:56:13,660
+co-occur things or uncommon or does end.
+共同发生或不常见或结束。
+
+937
+00:56:13,660 --> 00:56:18,160
+And then we do one more little trick because every [inaudible] does tricks to make the performance
+然后我们又做了一个小技巧，因为每个[音频不清晰]都会制作一些技巧来表现
+
+938
+00:56:18,160 --> 00:56:23,185
+better is that we also use this f-function in front,
+更好的是我们也在前面使用这个f函数，
+
+939
+00:56:23,185 --> 00:56:25,510
+so that we're sort of capping the effect that
+所以我们有点限制那种效果
+
+940
+00:56:25,510 --> 00:56:30,370
+very common word pairs can have on the performance of the system.
+非常常见的单词对可以对系统的性能产生影响。
+
+941
+00:56:30,370 --> 00:56:35,155
+Okay. And so that gave us the GloVe model of word vectors.
+好的。所以这给了我们GloVe的单词向量模型。
+
+942
+00:56:35,155 --> 00:56:40,165
+And theoretically, the interest of this was,
+理论上，这的兴趣是，
+
+943
+00:56:40,165 --> 00:56:43,240
+you know, a lot of the preceding literature had been there had
+你知道，以前的很多文献都有
+
+944
+00:56:43,240 --> 00:56:46,515
+been these count methods and there had been these prediction methods.
+一直是这些计数方法，并有这些预测方法。
+
+945
+00:56:46,515 --> 00:56:49,900
+And the hope was that this could sort of unify the
+希望是这可以统一
+
+946
+00:56:49,900 --> 00:56:53,245
+two by showing you how you could have a method that
+两个通过向您展示如何拥有一个方法
+
+947
+00:56:53,245 --> 00:56:58,675
+is estimated simply of a count matrix but it's done in the same kind of
+估计只是一个计数矩阵，但它是在同一类型中完成的
+
+948
+00:56:58,675 --> 00:57:01,510
+iterative loss based estimation method that's
+基于迭代损耗的估计方法
+
+949
+00:57:01,510 --> 00:57:04,960
+used for the neural methods to get good word vectors.
+用于神经方法来获得良好的单词向量。
+
+950
+00:57:04,960 --> 00:57:07,390
+And this also worked to give good word vectors.
+这也有助于提供良好的单词向量。
+
+951
+00:57:07,390 --> 00:57:10,490
+So here's GloVe results for the word frog.
+所以这里是青蛙这个词的GloVe结果。
+
+952
+00:57:10,490 --> 00:57:13,985
+And frogs and toad are obvious.
+青蛙和蟾蜍很明显。
+
+953
+00:57:13,985 --> 00:57:16,675
+But there are these different kinds of words, uh,
+但是有这些不同的词，呃，
+
+954
+00:57:16,675 --> 00:57:21,205
+various kinds of pretty tree frogs and things like that.
+各种漂亮的树蛙和类似的东西。
+
+955
+00:57:21,205 --> 00:57:26,440
+Okay. Um, so I'll then go from here and say a little
+好的。嗯，所以我会从这里开始说一点
+
+956
+00:57:26,440 --> 00:57:31,180
+bit more about some of the work on evaluating word vectors.
+更多关于评估单词向量的一些工作。
+
+957
+00:57:31,180 --> 00:57:36,505
+And this is maybe also a chance just talk a little bit about evaluation altogether.
+这也许是一个机会，只谈一点关于评估。
+
+958
+00:57:36,505 --> 00:57:40,165
+So, normally in NLP when we do a valuation,
+那么，通常在NLP进行估值时，
+
+959
+00:57:40,165 --> 00:57:45,320
+the first thing that comes up is intrinsic versus extrinsic evaluation.
+首先出现的是内在与外在的评价。
+
+960
+00:57:45,320 --> 00:57:50,170
+So, normally if there's something we trying to do like model, um,
+所以，通常如果我们试图像模型那样做，嗯，
+
+961
+00:57:50,170 --> 00:57:54,790
+word similarity with word vectors or we're trying to, um,
+与单词向量的单词相似性或我们正在尝试，嗯，
+
+962
+00:57:54,790 --> 00:57:57,889
+put parts of speech on words or something,
+把词性放在单词或东西上，
+
+963
+00:57:57,889 --> 00:58:02,860
+we can just have an intrinsic evaluation of saying how good a job did you get.
+我们可以对你说你的工作有多好有内在的评价。
+
+964
+00:58:02,860 --> 00:58:05,105
+Are you guessing the right part of speech?
+你猜对了吗？
+
+965
+00:58:05,105 --> 00:58:07,480
+Are you putting synonyms close together?
+你把同义词放在一起吗？
+
+966
+00:58:07,480 --> 00:58:12,265
+And that's sort of normally very easy to do and fast to compute.
+而这通常很容易做到并且计算速度快。
+
+967
+00:58:12,265 --> 00:58:16,585
+And it's useful to do because it helps us understand the system.
+这样做很有用，因为它有助于我们理解系统。
+
+968
+00:58:16,585 --> 00:58:20,440
+On the other hand, a lot of the time those intrinsic evaluations,
+另一方面，很多时候那些内在的评价，
+
+969
+00:58:20,440 --> 00:58:26,285
+it's not very clear where- where they're having done well on that task is really going to
+目前还不是很清楚他们在这项任务上做得好的地方确实会发生
+
+970
+00:58:26,285 --> 00:58:30,460
+help us build the amazing natural language understanding robots
+帮助我们建立令人惊叹的自然语言理解机器人
+
+971
+00:58:30,460 --> 00:58:32,230
+that we so ardently desire.
+我们如此热切地渴望。
+
+972
+00:58:32,230 --> 00:58:37,660
+Um, so, people are also very interested in extrinsic evaluations.
+嗯，人们对外在评价也很感兴趣。
+
+973
+00:58:37,660 --> 00:58:41,470
+And so extrinsically is then saying well suppose you use
+因此，外在地说，假设你使用
+
+974
+00:58:41,470 --> 00:58:47,455
+this new stuff in a real system doesn't make performance go up.
+真实系统中的这些新东西并没有使性能提升。
+
+975
+00:58:47,455 --> 00:58:50,200
+And it's then sort of definitional what counts
+然后它就是那些重要的定义
+
+976
+00:58:50,200 --> 00:58:52,835
+to you as a real system that normally that's
+你作为一个真正的系统，通常是那样的
+
+977
+00:58:52,835 --> 00:58:58,675
+meaning it's some application that human beings actually care about and liked to use.
+这意味着它是人类真正关心和喜欢使用的一些应用。
+
+978
+00:58:58,675 --> 00:59:02,980
+So that's something like web search, or question answering,
+这就像网络搜索或问答，
+
+979
+00:59:02,980 --> 00:59:07,030
+or phone dialog system or something like that, um,
+或电话对话系统或类似的东西，嗯，
+
+980
+00:59:07,030 --> 00:59:11,135
+hat you can put it into that system and the numbers get- go up.
+你可以把它放进那个系统，数字就会上升。
+
+981
+00:59:11,135 --> 00:59:13,300
+So, that seems what you want to do.
+所以，这似乎是你想要做的。
+
+982
+00:59:13,300 --> 00:59:15,575
+You want to have stuff that works in real tasks.
+你想拥有适合实际任务的东西。
+
+983
+00:59:15,575 --> 00:59:20,500
+Of course, there are sort of on the other hand a lot of things are a lot harder than.
+当然，另一方面，有很多事情要比很多事情困难得多。
+
+984
+00:59:20,500 --> 00:59:27,340
+So much more work to do such an evaluation and run different variance of a system.
+还有更多的工作要做这样的评估，并运行不同的系统方差。
+
+985
+00:59:27,340 --> 00:59:30,580
+And even when the results, uh,
+即使结果，呃，
+
+986
+00:59:30,580 --> 00:59:34,600
+poor or great sometimes it's hard to diagnose.
+贫穷或伟大有时很难诊断。
+
+987
+00:59:34,600 --> 00:59:39,095
+You know, if- if your great new word vectors don't work better in the system, you know,
+你知道，如果你的伟大的新单词向量在系统中不能更好地工作，你知道，
+
+988
+00:59:39,095 --> 00:59:41,800
+it might be for sort of some extraneous reason about
+它可能是出于某些无关紧要的原因
+
+989
+00:59:41,800 --> 00:59:44,825
+how the system was built at sort of hiding all your magic.
+系统是如何构建的，隐藏着你所有的魔力。
+
+990
+00:59:44,825 --> 00:59:49,300
+And if you just change the rest of the system and suddenly show its good effects.
+如果你只是改变系统的其余部分并突然显示其良好的效果。
+
+991
+00:59:49,300 --> 00:59:51,130
+So, it's kind of hard to do,
+所以，这很难做到，
+
+992
+00:59:51,130 --> 00:59:53,035
+um, sort of, um,
+嗯，有点，嗯，
+
+993
+00:59:53,035 --> 00:59:58,060
+apportionment of goodness and badness Okay.
+好与坏的分配好的。
+
+994
+00:59:58,060 --> 01:00:01,780
+So, um, so, today I'm mainly going to say a little bit more about
+所以，嗯，今天我主要是要多说一点
+
+995
+01:00:01,780 --> 01:00:05,980
+these intrinsic word vector evaluations that we've talked about.
+我们已经讨论过的这些内在的单词向量评估。
+
+996
+01:00:05,980 --> 01:00:09,835
+So we've talked quite a bit about these analogies.
+所以我们已经谈了很多关于这些类比的话题。
+
+997
+01:00:09,835 --> 01:00:12,370
+So if we're actually working out the analogies,
+所以，如果我们真的在计算类比，
+
+998
+01:00:12,370 --> 01:00:16,210
+it turns out that normally what people are doing is working out
+事实证明，通常人们正在做的事情正在发挥作用
+
+999
+01:00:16,210 --> 01:00:20,890
+a cosine distance and angle between, um,
+余弦距离和角度之间，嗯，
+
+1000
+01:00:20,890 --> 01:00:23,740
+different word candidates, um,
+不同的候选人，嗯，
+
+1001
+01:00:23,740 --> 01:00:26,950
+to work out which is the word that solves the analogy which
+找出哪个是解决类比的词
+
+1002
+01:00:26,950 --> 01:00:30,565
+is an Norbert little tiny wrinkle of difference there.
+诺贝尔那里有一点不同的皱纹。
+
+1003
+01:00:30,565 --> 01:00:34,000
+And there's also one other trick that people commonly use.
+还有人们常用的另一个技巧。
+
+1004
+01:00:34,000 --> 01:00:37,620
+They forbid the system from returning one of the three word she put
+他们禁止系统返回她提出的三个单词中的一个
+
+1005
+01:00:37,620 --> 01:00:41,620
+into the analogy Okay.
+进入类比好吧。
+
+1006
+01:00:41,620 --> 01:00:45,265
+But nevertheless, so, this is something that you can evaluate.
+但是，所以，这是你可以评估的东西。
+
+1007
+01:00:45,265 --> 01:00:48,520
+Here now some GloVe visualizations.
+现在这里有一些GloVe可视化。
+
+1008
+01:00:48,520 --> 01:00:52,240
+And so these GloVe visualizations show exactly the same kind of
+因此，这些GloVe可视化显示的完全相同
+
+1009
+01:00:52,240 --> 01:00:57,970
+linearity property that Doug Rohde discovered which means that analogy's work.
+Doug Rohde发现的线性属性意味着类比的工作。
+
+1010
+01:00:57,970 --> 01:00:59,259
+Sort of by construction,
+按建筑类别划分，
+
+1011
+01:00:59,259 --> 01:01:03,295
+because our vector space wanted to make meaning components linear.
+因为我们的向量空间想要使意义成分成为线性
+
+1012
+01:01:03,295 --> 01:01:05,275
+So, this is then, um,
+那么，这就是，嗯，
+
+1013
+01:01:05,275 --> 01:01:08,425
+showing a gender display.
+显示性别显示。
+
+1014
+01:01:08,425 --> 01:01:13,450
+This is showing one between companies and their CEOs, kind of cool.
+这显示了公司和他们的CEO之间的一种，很酷。
+
+1015
+01:01:13,450 --> 01:01:16,150
+And you can also do more syntactic facts.
+而且你也可以做更多的句法事实。
+
+1016
+01:01:16,150 --> 01:01:17,770
+So this is showing, um,
+所以这表明，嗯，
+
+1017
+01:01:17,770 --> 01:01:21,440
+positive comparative and superlative of adjectives.
+形容词的积极比较和最高级。
+
+1018
+01:01:21,440 --> 01:01:28,645
+Yeah. So, Tomas Mikolov came up with this idea of doing these analogy tasks.
+是啊。因此，Tomas Mikolov提出了做这些类比任务的想法。
+
+1019
+01:01:28,645 --> 01:01:32,815
+And so he built a data-set with a lot of analogies in it.
+因此他构建了一个包含许多类比的数据集。
+
+1020
+01:01:32,815 --> 01:01:37,330
+It's sort of- it's a bit of a weirdo data-set because it's sort of tests a few
+它有点像一个古怪的数据集，因为它是一些测试
+
+1021
+01:01:37,330 --> 01:01:42,380
+random different things which may have been things that his system worked well on, um,
+随机不同的东西可能是他的系统运作良好的东西，嗯，
+
+1022
+01:01:42,380 --> 01:01:46,185
+but you know, it tests countries and capitals,
+但是你知道，它会测试国家和首都，
+
+1023
+01:01:46,185 --> 01:01:52,780
+country, cities and states, countries and currency.
+国家，城市和州，国家和货币。
+
+1024
+01:01:52,780 --> 01:01:55,535
+So there are a bunch of semantic things that tests.
+所以有一堆语义测试。
+
+1025
+01:01:55,535 --> 01:01:58,630
+And then there are some, um,
+还有一些，嗯，
+
+1026
+01:01:58,630 --> 01:02:01,360
+syntactic things that tests so bad, worst,
+测试如此糟糕，最差的句法事物
+
+1027
+01:02:01,360 --> 01:02:04,535
+fast fastest for superlatives.
+最快速的最高级。
+
+1028
+01:02:04,535 --> 01:02:07,780
+But, you know, even some of the ones I was showing before, you know,
+但是，你知道，甚至我之前展示过的一些，你知道，
+
+1029
+01:02:07,780 --> 01:02:10,210
+there's no- there's no Obama is to
+没有，奥巴马没有
+
+1030
+01:02:10,210 --> 01:02:15,400
+Clinton kind of ones that are actually in this evaluation set.
+克林顿那种实际上属于这个评估集的人。
+
+1031
+01:02:15,400 --> 01:02:18,579
+Um, here's a big table of results,
+嗯，这是一个很大的结果表，
+
+1032
+01:02:18,579 --> 01:02:20,830
+um, that comes from our GloVe paper.
+嗯，来自我们的GloVe论文。
+
+1033
+01:02:20,830 --> 01:02:25,270
+So not surprisingly the GloVe paper perform best in this evaluation.
+因此，GloVe论文在本次评估中表现最佳也就不足为奇了。
+
+1034
+01:02:25,270 --> 01:02:28,150
+Because that was our paper. Um, [LAUGHTER]
+因为那是我们的论文。嗯，[大笑]
+
+1035
+01:02:28,150 --> 01:02:31,450
+[LAUGHTER] But I mean perhaps- you know,
+[笑声]但我的意思是 - 你知道，
+
+1036
+01:02:31,450 --> 01:02:34,180
+perhaps the things to start to notice is,
+也许要开始注意的事情是，
+
+1037
+01:02:34,180 --> 01:02:37,660
+yeah, if you just do a plain SVD on counts.
+是的，如果你只是做一个简单的SVD计数。
+
+1038
+01:02:37,660 --> 01:02:44,170
+You know that that works abominably badly for these, um, analogy tasks.
+你知道这对于这些类比的任务来说非常糟糕。
+
+1039
+01:02:44,170 --> 01:02:46,825
+But, you know, kind of as Doug Rohde showed,
+但是，你知道，就像Doug Rohde所说的那样，
+
+1040
+01:02:46,825 --> 01:02:53,875
+if you start then doing manipulations of the count matrix before you do an SVD,
+如果您在进行SVD​​之前开始操作计数矩阵，
+
+1041
+01:02:53,875 --> 01:02:55,690
+you can actually start to produce
+你真的可以开始生产了
+
+1042
+01:02:55,690 --> 01:03:01,090
+an SVD based system that actually performs quite well on these tasks.
+基于SVD的系统，实际上可以很好地完成这些任务。
+
+1043
+01:03:01,090 --> 01:03:05,410
+Um, you know, not badly against other things.
+嗯，你知道，对其他事情并没有太糟糕。
+
+1044
+01:03:05,410 --> 01:03:07,990
+Um, other things that you will discover,
+嗯，你会发现的其他事情，
+
+1045
+01:03:07,990 --> 01:03:10,480
+right at the top there are a 100 dimensional ones,
+在顶部有一个100维的，
+
+1046
+01:03:10,480 --> 01:03:13,360
+and at the bottom there are some 1000 dimensional ones,
+在底部有一些1000维的，
+
+1047
+01:03:13,360 --> 01:03:15,355
+and other 300 dimensional ones.
+和其他300维的。
+
+1048
+01:03:15,355 --> 01:03:17,725
+At least when you're training on a big amount of text,
+至少当你训练大量的文字时，
+
+1049
+01:03:17,725 --> 01:03:20,530
+bigger dimensionality definitely works better.
+更大的维度肯定更好。
+
+1050
+01:03:20,530 --> 01:03:22,420
+And I'll come back to that in a minute.
+我会在一分钟后再回过头来看看。
+
+1051
+01:03:22,420 --> 01:03:25,630
+Um, the amount of text makes a difference as well, right?
+嗯，文字的数量也有所不同，对吧？
+
+1052
+01:03:25,630 --> 01:03:30,520
+So we're going up from- so one to 1,5 billion words at the beginning,
+所以我们从一开始就上升到15亿字，
+
+1053
+01:03:30,520 --> 01:03:34,480
+to these ones down here are being trained over 42 billion words of text,
+对这些人来说，正在培训超过420亿字的文字，
+
+1054
+01:03:34,480 --> 01:03:40,450
+and perhaps unsurprisingly, the 42 billion words of texts ones work better.
+也许不出所料，420亿字的文本更好用。
+
+1055
+01:03:40,450 --> 01:03:42,660
+Um, so it's big data.
+嗯，这是大数据。
+
+1056
+01:03:42,660 --> 01:03:45,525
+Um, here are a couple more steps from this paper.
+嗯，这是本文的几个步骤。
+
+1057
+01:03:45,525 --> 01:03:50,100
+So this is a graph of dimensionality and what the performance is.
+所以这是一个维度图和性能图。
+
+1058
+01:03:50,100 --> 01:03:52,979
+So for the three lines the green one's semantic,
+所以对于三行绿色的语义，
+
+1059
+01:03:52,979 --> 01:03:57,715
+the blue one's the syntactic analogies and so red's the overall score.
+蓝色的是句法类比，所以红色是整体得分。
+
+1060
+01:03:57,715 --> 01:04:00,790
+So sort of what you see is up to dimensionality
+所以你看到的东西取决于维度
+
+1061
+01:04:00,790 --> 01:04:04,375
+300 things that clearly increasing quite a bit,
+300件事明显增加了很多，
+
+1062
+01:04:04,375 --> 01:04:06,085
+and then it gets fairly flat,
+然后它变得相当平坦，
+
+1063
+01:04:06,085 --> 01:04:09,325
+which is precisely why you find a lot of word vectors,
+这正是你找到很多单词向量的原因，
+
+1064
+01:04:09,325 --> 01:04:11,770
+um, that are of dimensionality 300.
+嗯，具有维数300。
+
+1065
+01:04:11,770 --> 01:04:15,505
+Um, this one's showing what window size.
+嗯，这个显示什么窗口大小。
+
+1066
+01:04:15,505 --> 01:04:20,680
+So this is sort of what we talked about symmetric on both sides window size,
+所以这就是我们谈到的双面窗口尺寸对称性，
+
+1067
+01:04:20,680 --> 01:04:23,455
+and as it goes from 246810.
+从246810开始。
+
+1068
+01:04:23,455 --> 01:04:25,240
+And sort of what you see is,
+而你看到的是，
+
+1069
+01:04:25,240 --> 01:04:29,635
+if you use a very small window like two, that actually works.
+如果你使用像2这样的非常小的窗口，那实际上是有效的。
+
+1070
+01:04:29,635 --> 01:04:33,610
+That the, the syntactic prediction is stronger because well,
+那个，句法预测更强，因为，
+
+1071
+01:04:33,610 --> 01:04:35,770
+syntactic effects are very local.
+句法效果非常局部。
+
+1072
+01:04:35,770 --> 01:04:37,345
+Whereas as you go out,
+你外出的时候
+
+1073
+01:04:37,345 --> 01:04:39,805
+the semantic prediction gets better and better.
+语义预测变得越来越好。
+
+1074
+01:04:39,805 --> 01:04:42,370
+Actually this syntactic gets a bit better as well,
+实际上这个句法也变得更好了，
+
+1075
+01:04:42,370 --> 01:04:45,100
+but it's especially the semantic that gains.
+但它尤其是获得的语义。
+
+1076
+01:04:45,100 --> 01:04:50,080
+Um, the right graph shows that if you only use context on one side,
+嗯，右边的图表显示，如果你只在一边使用上下文，
+
+1077
+01:04:50,080 --> 01:04:52,570
+um, your numbers aren't as good.
+嗯，你的数字不太好。
+
+1078
+01:04:52,570 --> 01:05:00,700
+Okay, um, so, I sort of just wanted to sort of sneak in a little cameos of a couple of,
+好吧，嗯，所以，我有点想偷偷溜进几个小小的浮雕，
+
+1079
+01:05:00,700 --> 01:05:03,040
+um, recent bits of work,
+嗯，最近的一些工作，
+
+1080
+01:05:03,040 --> 01:05:05,815
+as sort of a first of what things people are doing,
+作为人们正在做的第一件事，
+
+1081
+01:05:05,815 --> 01:05:07,570
+um, with word vectors.
+嗯，用词向量。
+
+1082
+01:05:07,570 --> 01:05:09,670
+Um, so this one, um,
+嗯，所以这个，嗯，
+
+1083
+01:05:09,670 --> 01:05:12,475
+was actually by two Stanford people.
+实际上是两个斯坦福人。
+
+1084
+01:05:12,475 --> 01:05:15,010
+Um, now the best- this would be the best story.
+嗯，现在是最好的 - 这将是最好的故事。
+
+1085
+01:05:15,010 --> 01:05:17,995
+If I could say that this was a final project,
+如果我能说这是最后的项目，
+
+1086
+01:05:17,995 --> 01:05:19,540
+um, in this class last year,
+嗯，去年上课，
+
+1087
+01:05:19,540 --> 01:05:21,025
+but unfortunately that's not true.
+但不幸的是，这不是真的。
+
+1088
+01:05:21,025 --> 01:05:25,330
+This paper has nothing to do with this class [LAUGHTER].
+本文与本课程[笑声]无关。
+
+1089
+01:05:25,330 --> 01:05:26,710
+But it-- right.
+但它 - 对。
+
+1090
+01:05:26,710 --> 01:05:30,490
+Um, Zin Yin and Yuanyuan,
+嗯，Zin Yin和Yuanyuan，
+
+1091
+01:05:30,490 --> 01:05:33,910
+um, actually had, um,
+嗯，实际上有，嗯，
+
+1092
+01:05:33,910 --> 01:05:37,690
+some sort of clever and very mathy ideas,
+某种聪明而又非常狡猾的想法，
+
+1093
+01:05:37,690 --> 01:05:41,200
+where they're using matrix perturbation theory.
+他们在哪里使用矩阵扰动理论。
+
+1094
+01:05:41,200 --> 01:05:44,140
+Um, and sort of just showing how, um,
+嗯，还有点只是展示如何，嗯，
+
+1095
+01:05:44,140 --> 01:05:49,030
+dimensionality in word vectors actually sort of feeds into the bias-variance trade-off.
+单词向量中的维度实际上是对偏差 - 方差权衡的馈送。
+
+1096
+01:05:49,030 --> 01:05:50,335
+If you've seen that,
+如果你看过，
+
+1097
+01:05:50,335 --> 01:05:52,825
+um, in other parts of machine learning.
+嗯，在机器学习的其他部分。
+
+1098
+01:05:52,825 --> 01:05:56,185
+And I'm not even going to attempt to explain their paper.
+而我甚至都不会试图解释他们的论文。
+
+1099
+01:05:56,185 --> 01:05:57,535
+Um, but here it is,
+嗯，但在这里，
+
+1100
+01:05:57,535 --> 01:05:59,230
+that they did really well with this paper,
+他们用这篇论文做得很好，
+
+1101
+01:05:59,230 --> 01:06:01,570
+they gone all talk in Europe's from it.
+他们在欧洲谈论它们。
+
+1102
+01:06:01,570 --> 01:06:03,580
+Um, and so- but there's sort of
+嗯，等等 - 但是有点儿
+
+1103
+01:06:03,580 --> 01:06:07,720
+an interesting result of what you see with these word vectors,
+你用这些单词向量看到的有趣结果，
+
+1104
+01:06:07,720 --> 01:06:10,015
+which is in a way kind of surprising.
+这在某种程度上令人惊讶。
+
+1105
+01:06:10,015 --> 01:06:16,210
+So this is showing doing word vector dimensions from zero up to 10,000.
+所以这显示了从零到10,000的单词矢量维度。
+
+1106
+01:06:16,210 --> 01:06:19,270
+So we're going way higher than we talked about before.
+所以我们比以前谈过的要高。
+
+1107
+01:06:19,270 --> 01:06:23,440
+And so what you discover which people have known for ages is,
+所以你发现哪些人已经知道多年了，
+
+1108
+01:06:23,440 --> 01:06:27,745
+that there's sort of a little blip that somewhere around two or 300,
+有两点或三点左右的小点，
+
+1109
+01:06:27,745 --> 01:06:30,235
+which seems to optimize performance.
+这似乎优化了性能。
+
+1110
+01:06:30,235 --> 01:06:32,275
+So, I've used those sizes.
+所以，我已经使用了这些尺寸。
+
+1111
+01:06:32,275 --> 01:06:35,920
+But the thing that they were sort of doing a lot of their theory about,
+但他们做了很多关于他们的理论的事情，
+
+1112
+01:06:35,920 --> 01:06:38,185
+and it's kind of surprising is, well,
+令人惊讶的是，嗯，
+
+1113
+01:06:38,185 --> 01:06:42,250
+surely if you have a humongous humongous number, like,
+当然，如果你有一个巨大的数字，如，
+
+1114
+01:06:42,250 --> 01:06:44,290
+if you are using 10,000,
+如果你使用10,000，
+
+1115
+01:06:44,290 --> 01:06:46,720
+um, dimensional vectors, you know,
+嗯，维数向量，你知道，
+
+1116
+01:06:46,720 --> 01:06:53,320
+you're trying to estimate another two orders of magnitude more numbers for every word,
+你试图为每个单词估计另外两个数量级的数字，
+
+1117
+01:06:53,320 --> 01:06:56,455
+surely things should just fall apart, um,
+当然事情应该崩溃，嗯，
+
+1118
+01:06:56,455 --> 01:06:59,920
+because you've got hopelessly many parameters relative to
+因为相对于你而言，你已经绝望了许多参数
+
+1119
+01:06:59,920 --> 01:07:04,060
+the amount of training data that you're trying to estimate these numbers from.
+您尝试估算这些数字的训练数据量。
+
+1120
+01:07:04,060 --> 01:07:07,330
+And so the interesting result that they show is,
+所以他们展示的有趣结果是，
+
+1121
+01:07:07,330 --> 01:07:10,270
+that things don't fall apart.
+事情不会崩溃。
+
+1122
+01:07:10,270 --> 01:07:15,280
+Um, and that you can essentially go out to these huge huge dimensionalities,
+嗯，你基本上可以走出这些巨大的空间，
+
+1123
+01:07:15,280 --> 01:07:17,365
+and the performance stays flat.
+并且表现保持平稳。
+
+1124
+01:07:17,365 --> 01:07:19,285
+And that they've got a lot of theory,
+他们有很多理论，
+
+1125
+01:07:19,285 --> 01:07:24,670
+sort of for predicting why that that's actually going to end up being the case.
+有点预测为什么这实际上最终会成为现实。
+
+1126
+01:07:24,670 --> 01:07:26,785
+Um, yeah.
+嗯，是的
+
+1127
+01:07:26,785 --> 01:07:28,975
+So for training these models iteratively,
+因此，为了迭代地训练这些模型，
+
+1128
+01:07:28,975 --> 01:07:33,775
+this is- orange is showing, um, GloVe training.
+这是 - 橙色正在展示，嗯，GloVe培训。
+
+1129
+01:07:33,775 --> 01:07:36,370
+You know, they keep on getting better for a while.
+你知道，他们会在一段时间内保持良好状态。
+
+1130
+01:07:36,370 --> 01:07:37,870
+So you know, just go out,
+所以你知道，出去吧
+
+1131
+01:07:37,870 --> 01:07:41,020
+go sleep and see in the morning how it's doing, right?
+睡觉，早上看它是怎么做的，对吧？
+
+1132
+01:07:41,020 --> 01:07:42,550
+So that if you were running it, um,
+所以，如果你正在运行它，嗯，
+
+1133
+01:07:42,550 --> 01:07:47,290
+for 24 hours your numbers are better than if you only ran it for six hours.
+24小时你的数字比你只运行6个小时更好。
+
+1134
+01:07:47,290 --> 01:07:51,610
+Um, and that's true for a lot of deep learning models, sorry.
+嗯，对于很多深度学习模型来说都是如此，对不起。
+
+1135
+01:07:51,610 --> 01:07:54,730
+So this is the key reason why you don't want
+所以这就是你不想要的关键原因
+
+1136
+01:07:54,730 --> 01:07:57,910
+to start your assignment the night before it's due.
+在到期前一晚开始你的任务。
+
+1137
+01:07:57,910 --> 01:08:00,880
+Because even if you program it perfectly,
+因为即使你完美地编程，
+
+1138
+01:08:00,880 --> 01:08:03,865
+you might just not have enough time for it to run,
+你可能没有足够的时间来运行，
+
+1139
+01:08:03,865 --> 01:08:07,430
+um, so that you produce good numbers at the end of it.
+嗯，这样你就可以在结尾处产生好的数字。
+
+1140
+01:08:08,160 --> 01:08:12,280
+Um, okay. Uh, yeah so,
+嗯，好的。呃，是的，
+
+1141
+01:08:12,280 --> 01:08:14,965
+so couple of more, um,
+所以还有几个，嗯，
+
+1142
+01:08:14,965 --> 01:08:17,710
+things, on that, um.
+那些东西，嗯。
+
+1143
+01:08:17,710 --> 01:08:21,850
+Yes. So, um, what are we showing here?
+是。那么，嗯，我们在这里展示什么？
+
+1144
+01:08:21,850 --> 01:08:26,185
+So these are again semantics in tactic and overall numbers.
+所以这些又是战术和整体数字的语义。
+
+1145
+01:08:26,185 --> 01:08:29,950
+So there are sort of two things that are sort of being mixed together here.
+所以有两种东西在这里混合在一起。
+
+1146
+01:08:29,950 --> 01:08:33,010
+One is, if we just look at the overall numbers,
+一个是，如果我们只看一下整体数字，
+
+1147
+01:08:33,010 --> 01:08:35,095
+they're highest over here, um,
+他们在这里最高，嗯，
+
+1148
+01:08:35,095 --> 01:08:39,730
+which is this 42 billion Common Crawl web-pages corpus,
+这是这个420亿共同爬网网页语料库，
+
+1149
+01:08:39,730 --> 01:08:42,085
+that gives us the highest overall number.
+这给了我们最高的总数。
+
+1150
+01:08:42,085 --> 01:08:46,735
+But there's sort of something else that's interesting in this graph, which is,
+但是这个图中有一些其他有趣的东西，
+
+1151
+01:08:46,735 --> 01:08:51,730
+um, that using Wikipedia works frequently well.
+嗯，使用维基百科经常运作良好。
+
+1152
+01:08:51,730 --> 01:08:57,040
+So that you actually find that 1,6 billion tokens of Wikipedia works
+因此，您实际上发现了维基百科的16亿个令牌
+
+1153
+01:08:57,040 --> 01:09:03,640
+better than 4,3 billion tokens of News-wire newspaper article data.
+新闻报道文章数据优于43亿美元。
+
+1154
+01:09:03,640 --> 01:09:08,125
+And so I, I think that's sort of actually make sense,
+所以我，我认为这实际上是有道理的，
+
+1155
+01:09:08,125 --> 01:09:09,280
+which is well, you know,
+哪个好，你知道，
+
+1156
+01:09:09,280 --> 01:09:11,620
+the job of encyclopedias is to just sort of
+百科全书的工作就是这样
+
+1157
+01:09:11,620 --> 01:09:14,860
+explain concepts and how they relate to each other, right?
+解释概念以及它们如何相互关联，对吧？
+
+1158
+01:09:14,860 --> 01:09:16,870
+So that encyclopedias are
+所以百科全书是
+
+1159
+01:09:16,870 --> 01:09:22,000
+just much more expository text that show all the connections between things,
+更多的说明性文本显示了事物之间的所有联系，
+
+1160
+01:09:22,000 --> 01:09:27,730
+whereas newspapers in general aren't trying to expose at how things fit together.
+而一般而言，报纸并不试图揭露事物如何融合在一起。
+
+1161
+01:09:27,730 --> 01:09:29,530
+They're just telling you about, you know,
+他们只是告诉你，你知道，
+
+1162
+01:09:29,530 --> 01:09:32,980
+who got shot dead last night or something like that, right?
+昨晚谁被枪杀了，对吧？
+
+1163
+01:09:32,980 --> 01:09:37,600
+So, um, so this is sort of interesting fact, um,
+所以，嗯，所以这是一个有趣的事实，嗯，
+
+1164
+01:09:37,600 --> 01:09:39,955
+that this Wikipedia data kind of really,
+这个维基百科的数据确实如此，
+
+1165
+01:09:39,955 --> 01:09:42,655
+it sort of is differentially useful, um,
+它有点不同，嗯，
+
+1166
+01:09:42,655 --> 01:09:46,180
+for, um, making word vectors.
+因为，嗯，制作单词向量。
+
+1167
+01:09:46,180 --> 01:09:48,385
+And you know, in fact, you know,
+而且你知道，事实上，你知道，
+
+1168
+01:09:48,385 --> 01:09:53,935
+when we did very well without GloVe word vectors and lots of people use those.
+当我们在没有GloVe单词向量的情况下做得很好并且很多人使用它们。
+
+1169
+01:09:53,935 --> 01:09:58,060
+You know, I think actually one of the reasons why they work so well is that
+你知道，我认为他们工作得很好的原因之一就是
+
+1170
+01:09:58,060 --> 01:10:03,880
+the original word2vec vectors that Google distributes are built only on Google News data,
+Google发布的原始word2vec向量仅基于Google新闻数据构建，
+
+1171
+01:10:03,880 --> 01:10:05,770
+where else sort of have this,
+在哪里有这个，
+
+1172
+01:10:05,770 --> 01:10:07,915
+um, Wikipedia data inside them.
+嗯，维基百科里面的数据。
+
+1173
+01:10:07,915 --> 01:10:11,650
+Okay, um, rushing ahead.
+好吧，嗯，赶紧前进。
+
+1174
+01:10:11,650 --> 01:10:14,500
+Um, yes, so the- there's all the work on analogy,
+嗯，是的，所以有关于类比的所有工作，
+
+1175
+01:10:14,500 --> 01:10:20,380
+but the other more basic evaluation is this one of capturing similarity judgments.
+但另一个更基本的评估就是捕捉相似性判断。
+
+1176
+01:10:20,380 --> 01:10:23,020
+And I haven't said much about this, but you know,
+我没有多说这个，但你知道，
+
+1177
+01:10:23,020 --> 01:10:28,135
+there is this sort of large sub-literature in the psychology community,
+在心理学界有这种大型的子文献，
+
+1178
+01:10:28,135 --> 01:10:32,935
+where people have wanted to model humans judgments of similarity.
+人们想要模仿人类对相似性的判断。
+
+1179
+01:10:32,935 --> 01:10:36,265
+So like a good psych person, what you do,
+所以，像一个好心理的人，你做的，
+
+1180
+01:10:36,265 --> 01:10:39,655
+is you find your classroom of Psych one undergrads,
+你找到了一个心理学本科的班级，
+
+1181
+01:10:39,655 --> 01:10:42,520
+and you show them pairs of words and say rate
+然后你向他们展示一对单词并说出率
+
+1182
+01:10:42,520 --> 01:10:45,745
+these things for similarity on a scale of one to 10.
+这些东西的相似性在1到10的范围内。
+
+1183
+01:10:45,745 --> 01:10:48,265
+And lots of that data has been collected,
+并收集了大量的数据，
+
+1184
+01:10:48,265 --> 01:10:50,875
+and you work out the mean over human beings,
+你解决了人类的意思，
+
+1185
+01:10:50,875 --> 01:10:55,255
+and they give numbers like this of tiger and cat, 7,35.
+他们给出了像老虎和猫这样的数字，7,35。
+
+1186
+01:10:55,255 --> 01:10:58,945
+Tiger's similar to Tiger 10, book and paper,
+Tiger类似于Tiger 10，书和纸，
+
+1187
+01:10:58,945 --> 01:11:01,225
+plane and car, stock and phone,
+飞机和汽车，股票和电话，
+
+1188
+01:11:01,225 --> 01:11:03,895
+stock and CD, and you get numbers.
+股票和CD，你得到数字。
+
+1189
+01:11:03,895 --> 01:11:07,000
+So then, what we're doing is wanting to say,
+那么，我们正在做的就是想说，
+
+1190
+01:11:07,000 --> 01:11:13,140
+well let's use distance in the space to map directly onto these similarity judgments,
+好吧，让我们利用空间中的距离直接映射到这些相似性判断，
+
+1191
+01:11:13,140 --> 01:11:15,540
+and how well does it map?
+它的映射程度如何？
+
+1192
+01:11:15,540 --> 01:11:18,570
+And so that's sort of similarity judging has
+所以这种相似性判断有
+
+1193
+01:11:18,570 --> 01:11:22,350
+also then being used for evaluating these systems.
+然后用于评估这些系统。
+
+1194
+01:11:22,350 --> 01:11:24,570
+So again, here are a lot of models.
+所以，这里有很多模型。
+
+1195
+01:11:24,570 --> 01:11:26,550
+This is again from our GloVe paper.
+这再次来自我们的GloVe论文。
+
+1196
+01:11:26,550 --> 01:11:29,500
+But so there are these various similarity data-sets.
+但是有这些不同的相似性数据集。
+
+1197
+01:11:29,500 --> 01:11:36,190
+So one of the best-known ones that I had on the slide before is this, um, Wordsim 353.
+所以我之前在幻灯片上最着名的就是这个，嗯，Wordsim 353。
+
+1198
+01:11:36,190 --> 01:11:38,140
+It has 353, um,
+它有353，嗯，
+
+1199
+01:11:38,140 --> 01:11:40,120
+different ones in it,
+不同的，
+
+1200
+01:11:40,120 --> 01:11:44,140
+and so you are sort of then modeling a correlation
+因此，您可以对相关性进行建模
+
+1201
+01:11:44,140 --> 01:11:49,225
+between your judgments of similarity and the ones that came from the human beings.
+在你的相似性判断与人类的判断之间。
+
+1202
+01:11:49,225 --> 01:11:52,960
+Okay. Two more things I want to say. Um, yes.
+好的。还有两件事我想说。嗯，是的。
+
+1203
+01:11:52,960 --> 01:11:56,860
+So, we had that problem right at the beginning
+所以，我们一开始就遇到了这个问题
+
+1204
+01:11:56,860 --> 01:12:01,765
+of Clinton and how that could be various people.
+克林顿以及那可能是各种各样的人。
+
+1205
+01:12:01,765 --> 01:12:07,030
+And that's perhaps in some sense the simplest case of words being ambiguous,
+从某种意义上说，这可能是最简单的单词含糊不清的情况，
+
+1206
+01:12:07,030 --> 01:12:10,585
+when you have names which have reference to different people.
+当你的名字引用不同的人。
+
+1207
+01:12:10,585 --> 01:12:13,810
+Um, but it's not only true of names.
+嗯，但这不仅仅是名字。
+
+1208
+01:12:13,810 --> 01:12:15,595
+So by and large,
+总的来说，
+
+1209
+01:12:15,595 --> 01:12:21,820
+words in human languages are ambiguous and have lots of meanings.
+人类语言中的单词含糊不清，含义多种多样。
+
+1210
+01:12:21,820 --> 01:12:24,640
+Um, that's especially true of common words.
+嗯，对于常见词汇尤其如此。
+
+1211
+01:12:24,640 --> 01:12:26,500
+They always have lots of meaning.
+他们总是有很多意义。
+
+1212
+01:12:26,500 --> 01:12:30,625
+It's especially true of words that have existed for a long time.
+对于长期存在的词语尤其如此。
+
+1213
+01:12:30,625 --> 01:12:34,315
+It's not true of new very technical words, you know, carcinoma.
+对于新的非常技术性的词语，你知道癌症是不正确的。
+
+1214
+01:12:34,315 --> 01:12:35,965
+I think that only has one meaning.
+我认为这只有一个含义。
+
+1215
+01:12:35,965 --> 01:12:37,090
+Um, but, you know,
+嗯，但是，你知道，
+
+1216
+01:12:37,090 --> 01:12:40,585
+if you think of any relatively, um,
+如果你想到任何相对的，嗯，
+
+1217
+01:12:40,585 --> 01:12:43,690
+common word and starts, um,
+常用词和开头，嗯，
+
+1218
+01:12:43,690 --> 01:12:45,955
+scratching your head for a moment,
+挠了一下头，
+
+1219
+01:12:45,955 --> 01:12:48,430
+you'll find it has lots of meanings.
+你会发现它有很多含义。
+
+1220
+01:12:48,430 --> 01:12:50,680
+I- maybe this isn't even such a common word,
+我 - 也许这甚至不是一个常见的词，
+
+1221
+01:12:50,680 --> 01:12:53,110
+but my random word I've got here is Pike.
+但我在这里的随机词是派克。
+
+1222
+01:12:53,110 --> 01:12:55,270
+Um, pike has lots of meanings,
+嗯，派克有很多含义，
+
+1223
+01:12:55,270 --> 01:12:57,610
+it has meanings like?
+它有什么意义？
+
+1224
+01:12:57,610 --> 01:12:59,230
+Fish.
+鱼。
+
+1225
+01:12:59,230 --> 01:13:00,760
+Fish, it's a kind of fish, yeah.
+鱼，它是一种鱼，是的。
+
+1226
+01:13:00,760 --> 01:13:02,140
+So there's a fish that's a pike.
+所以有一条鱼是长矛。
+
+1227
+01:13:02,140 --> 01:13:03,220
+What else is a pike?
+还有什么是梭子鱼？
+
+1228
+01:13:03,220 --> 01:13:04,480
+A large spear.
+一把大矛。
+
+1229
+01:13:04,480 --> 01:13:05,740
+A large spear.
+一把大矛。
+
+1230
+01:13:05,740 --> 01:13:08,200
+Yes, so a large spear is a pike.
+是的，所以大矛是长矛。
+
+1231
+01:13:08,200 --> 01:13:09,940
+Other kinds of pike's?
+其他种类的梭子鱼？
+
+1232
+01:13:09,940 --> 01:13:10,535
+Gymnastics move.
+体操动作。
+
+1233
+01:13:10,535 --> 01:13:10,920
+It's a road.
+这是一条路。
+
+1234
+01:13:10,920 --> 01:13:13,350
+Gymnastics move or in diving move.
+体操运动或潜水运动。
+
+1235
+01:13:13,350 --> 01:13:14,595
+It's a road.
+这是一条路。
+
+1236
+01:13:14,595 --> 01:13:18,240
+Um, yeah. Um, so there are lots of meanings.
+嗯，是的嗯，所以有很多含义。
+
+1237
+01:13:18,240 --> 01:13:19,845
+Um, there are other meanings.
+嗯，还有其他的含义。
+
+1238
+01:13:19,845 --> 01:13:21,240
+Um, in Australian English,
+嗯，澳大利亚英语，
+
+1239
+01:13:21,240 --> 01:13:23,760
+pike is also used as a verb to mean,
+派克也被用作动词，意思是，
+
+1240
+01:13:23,760 --> 01:13:25,935
+um, to pull out from doing something.
+嗯，退出做某事。
+
+1241
+01:13:25,935 --> 01:13:31,590
+Like, "We were all going to go out to a nightclub later, but Joe piked."
+就像，“我们以后都会去一家夜总会，但乔嘲笑道。”
+
+1242
+01:13:31,590 --> 01:13:35,160
+[LAUGHTER] Um, I don't think that usage is common in this country,
+[笑声]嗯，我不认为这个国家的用法很常见，
+
+1243
+01:13:35,160 --> 01:13:38,255
+but, um, you can try that, um. [LAUGHTER]
+但是，嗯，你可以尝试一下，嗯。 [笑声]
+
+1244
+01:13:38,255 --> 01:13:41,355
+Right. But lots of meanings and, you know,
+对。但很多意思，你知道，
+
+1245
+01:13:41,355 --> 01:13:44,940
+this isn't only true of the word pike, right?
+这不仅仅是派克这个词，对吧？
+
+1246
+01:13:44,940 --> 01:13:47,540
+Pick any other simple word, right?
+选择任何其他简单的词，对吗？
+
+1247
+01:13:47,540 --> 01:13:52,040
+You can pick a word like shell or field or house or make,
+你可以选择像shell或field或house或make这样的单词，
+
+1248
+01:13:52,040 --> 01:13:55,065
+you know, they have lots of meanings when it comes down to it.
+你知道，它归结为它时有很多含义。
+
+1249
+01:13:55,065 --> 01:13:56,550
+So, you know, but, uh,
+所以，你知道，但是，呃，
+
+1250
+01:13:56,550 --> 01:14:01,069
+how can this work if we just have one meaningful words?
+如果我们只有一个有意义的词，这怎么可行呢？
+
+1251
+01:14:01,069 --> 01:14:04,380
+And that's the interesting question and it was something that
+这是一个有趣的问题，它就是那个问题
+
+1252
+01:14:04,380 --> 01:14:08,120
+[NOISE] we were actually interested in early on.
+[NOISE]我们实际上对它很感兴趣。
+
+1253
+01:14:08,120 --> 01:14:13,815
+So, I'm even before the Word2Vec paper came out back in 2012,
+所以，我甚至在2012年Word2Vec论文发布之前，
+
+1254
+01:14:13,815 --> 01:14:15,910
+um, we were playing around, um,
+嗯，我们在玩耍，嗯，
+
+1255
+01:14:15,910 --> 01:14:20,370
+with neural word vectors and, um, we thought,
+用神经词向量和嗯，我们想，
+
+1256
+01:14:20,370 --> 01:14:23,790
+boy this is so broken having only one,
+这个男孩只有一个，
+
+1257
+01:14:23,790 --> 01:14:26,605
+um, cents, for a word.
+嗯，美分，一句话。
+
+1258
+01:14:26,605 --> 01:14:30,045
+Why don't we come up with a model that has multiple sensors for a word?
+为什么我们不提出一个具有多个传感器的模型呢？
+
+1259
+01:14:30,045 --> 01:14:33,565
+And so we did that and we did it in a pretty crude way,
+所以我们这样做了，我们以粗暴的方式做到了，
+
+1260
+01:14:33,565 --> 01:14:34,920
+I guess, [NOISE] um,
+我猜，[NOISE]嗯，
+
+1261
+01:14:34,920 --> 01:14:36,710
+the way we did it is say,
+我们这样做的方式是说，
+
+1262
+01:14:36,710 --> 01:14:40,145
+well, let's for each common word,
+好吧，让我们为每个常用词，
+
+1263
+01:14:40,145 --> 01:14:44,285
+let's cluster all the contexts in which it occurs.
+让我们聚集它发生的所有上下文。
+
+1264
+01:14:44,285 --> 01:14:47,365
+And then we'll see if there seem to be
+然后我们会看看是否有
+
+1265
+01:14:47,365 --> 01:14:51,980
+multiple clear clusters by some criterion for that word.
+通过该词的某些标准的多个清晰簇。
+
+1266
+01:14:51,980 --> 01:14:56,220
+And if so, we'll just sort of split the word into pseudo words.
+如果是这样，我们只会把这个词分成伪词。
+
+1267
+01:14:56,220 --> 01:14:59,180
+So, if it seems like that there are five clusters,
+所以，如果看起来有五个集群，
+
+1268
+01:14:59,180 --> 01:15:00,960
+um, for the word,
+嗯，这个词，
+
+1269
+01:15:00,960 --> 01:15:03,020
+the example I meant to use here is jaguar.
+我打算在这里使用的例子是美洲虎。
+
+1270
+01:15:03,020 --> 01:15:05,090
+Five clusters for the word jaguar,
+捷豹这个词有五个星团，
+
+1271
+01:15:05,090 --> 01:15:08,240
+I will just call them jaguar_1, jaguar_2, jaguar_3, four,
+我会称他们为jaguar_1，jaguar_2，jaguar_3，四，
+
+1272
+01:15:08,240 --> 01:15:10,570
+five, so it's just literally changed
+五，所以它只是字面上改变了
+
+1273
+01:15:10,570 --> 01:15:13,945
+the word in our corpus according to its cluster number.
+我们语料库中的单词根据其簇号。
+
+1274
+01:15:13,945 --> 01:15:16,990
+And then we run our word vectoring algorithm and so we get
+然后我们运行我们的单词矢量算法，所以我们得到
+
+1275
+01:15:16,990 --> 01:15:20,870
+a representation that each of those sensors of the word.
+表示每个传感器的单词。
+
+1276
+01:15:20,870 --> 01:15:22,380
+And basically, that works,
+基本上，这是有效的，
+
+1277
+01:15:22,380 --> 01:15:24,570
+right up the top is jaguar_1 next,
+接下来是jaguar_1，
+
+1278
+01:15:24,570 --> 01:15:26,825
+uh, luxury and convertible.
+呃，豪华和敞篷车。
+
+1279
+01:15:26,825 --> 01:15:33,260
+Um, here is, I guess there's a very old version of MacOS called Jaguar,
+嗯，这里是，我猜有一个非常古老的MacOS版本叫Jaguar，
+
+1280
+01:15:33,260 --> 01:15:34,860
+any remem- remember that one?
+任何记忆 - 还记得吗？
+
+1281
+01:15:34,860 --> 01:15:40,435
+Um. Right. So, jaguars right next to software and Microsoft up there, so that's hopeful.
+嗯。对。因此，美洲虎紧挨着软件和微软那边，所以这是有希望的。
+
+1282
+01:15:40,435 --> 01:15:44,715
+Um, here's the jaguar that's right next to the Hunter, um,
+嗯，这是猎人旁边的美洲虎，嗯，
+
+1283
+01:15:44,715 --> 01:15:47,070
+and I'm being confused on this one,
+我对此感到困惑，
+
+1284
+01:15:47,070 --> 01:15:50,550
+is jaguar as near solo musical keyboard and string.
+是美洲虎作为近独奏音乐键盘和字符串。
+
+1285
+01:15:50,550 --> 01:15:53,545
+Is there a band, [NOISE] a brand of keyboard called jaguar?
+是否有乐队，[NOISE]一个名为美洲虎的键盘品牌？
+
+1286
+01:15:53,545 --> 01:15:55,015
+I'm not quite sure about that one,
+我不太确定那一个，
+
+1287
+01:15:55,015 --> 01:15:57,380
+but anyway, it's sort of basically works.
+但无论如何，它基本上是有效的。
+
+1288
+01:15:57,380 --> 01:16:02,080
+Um, but that was sort of crude and it's also perhaps problematic,
+嗯，但这有点粗糙，也可能有问题，
+
+1289
+01:16:02,080 --> 01:16:06,450
+so a lot of time, the divisions between sensors aren't very clear, right?
+所以很多时候，传感器之间的划分不是很明确，对吧？
+
+1290
+01:16:06,450 --> 01:16:10,330
+A lot of sensors are actually related to each other and overlapping because
+许多传感器实际上彼此相关并且重叠，因为
+
+1291
+01:16:10,330 --> 01:16:14,790
+when how sensors normally arrive is that people stretch the meanings of words.
+当传感器通常如何到达时，人们会延伸词语的含义。
+
+1292
+01:16:14,790 --> 01:16:16,860
+It's not that they just sort of randomly
+并不是他们只是随意的
+
+1293
+01:16:16,860 --> 01:16:19,685
+wake up the next morning and say, "I know carpet.
+第二天早上醒来说：“我知道地毯。
+
+1294
+01:16:19,685 --> 01:16:23,005
+I could also refer to that as stone," um,
+我也可以把它称为石头，​​“嗯，
+
+1295
+01:16:23,005 --> 01:16:25,990
+and given a new sense to the word stone, right?
+对石头这个词有了新的认识，对吧？
+
+1296
+01:16:25,990 --> 01:16:28,600
+You so take something that you know about like
+你这样拿一些你知道的东西
+
+1297
+01:16:28,600 --> 01:16:33,085
+a web and you extend it metaphorically to other uses of webbing.
+一个网络，你将其隐喻地扩展到其他网络使用。
+
+1298
+01:16:33,085 --> 01:16:37,000
+Um, so here's a perhaps more interesting things,
+嗯，所以这里可能是更有趣的事情，
+
+1299
+01:16:37,000 --> 01:16:39,475
+so this is the other Sanjeev Arora,
+所以这是另一个Sanjeev Arora，
+
+1300
+01:16:39,475 --> 01:16:41,980
+um, paper that I was going to mention.
+嗯，我要提到的论文。
+
+1301
+01:16:41,980 --> 01:16:44,710
+So, that what happens if you don't,
+那么，如果你不这样做会发生什么，
+
+1302
+01:16:44,710 --> 01:16:50,095
+um, if you don't have more than one cents for each word?
+嗯，如果每个单词的分数不超过1美分？
+
+1303
+01:16:50,095 --> 01:16:53,100
+Well, effectively what you get is that
+嗯，实际上你得到的就是那个
+
+1304
+01:16:53,100 --> 01:16:57,260
+the word vector that you learn is what's referred to by
+你学到的单词向量是指的
+
+1305
+01:16:57,260 --> 01:17:01,040
+physicists and fancy people as a superposition
+物理学家和花哨的人作为叠加
+
+1306
+01:17:01,040 --> 01:17:05,910
+of the word vectors of the different sentence, different sensors.
+不同句子的词向量，不同的传感器。
+
+1307
+01:17:05,910 --> 01:17:09,995
+By supersitio- superposition just means a weighted average.
+通过超叠加仅仅意味着加权平均。
+
+1308
+01:17:09,995 --> 01:17:14,930
+Um, um, [LAUGHTER] so that effectively
+嗯，嗯，[笑声]这样有效
+
+1309
+01:17:14,930 --> 01:17:17,040
+my meaning of pike is sort of
+我对派克的意思是那种
+
+1310
+01:17:17,040 --> 01:17:20,865
+a weighted average of the vectors for the different sensors of pike,
+派克不同传感器的矢量加权平均值，
+
+1311
+01:17:20,865 --> 01:17:24,645
+and the components are just weighted by their frequency.
+并且组件仅按其频率加权。
+
+1312
+01:17:24,645 --> 01:17:28,265
+Um, so that part maybe is perhaps not too surprising,
+嗯，这部分也许不是太令人惊讶，
+
+1313
+01:17:28,265 --> 01:17:31,830
+but the part that's really surprising is well,
+但真正令人惊讶的部分很好，
+
+1314
+01:17:31,830 --> 01:17:34,375
+if we just averaging these word vectors,
+如果我们只是平均这些单词向量，
+
+1315
+01:17:34,375 --> 01:17:38,380
+you'd think you couldn't get anything out of the average, right|?
+你认为你无法从平均水平中得到任何东西，对吧？
+
+1316
+01:17:38,380 --> 01:17:43,180
+Like if I tell you I'm thinking of two numbers and they're here,
+就像我告诉你我想到两个数字而他们在这里，
+
+1317
+01:17:43,180 --> 01:17:46,010
+weighted sum is 54,
+加权和是54，
+
+1318
+01:17:46,010 --> 01:17:47,870
+what are my two numbers, right?
+我的两个号码是什么，对吧？
+
+1319
+01:17:47,870 --> 01:17:51,990
+You are sort of really short of information to be able to answer my question.
+你有点缺乏能够回答我的问题的信息。
+
+1320
+01:17:51,990 --> 01:17:53,610
+But, well, you know,
+但是，嗯，你知道，
+
+1321
+01:17:53,610 --> 01:17:56,820
+for these word vectors, um,
+对于这些单词向量，嗯，
+
+1322
+01:17:56,820 --> 01:18:02,625
+we have these high dimensional spaces and even though there
+我们有这些高维空间，即使在那里
+
+1323
+01:18:02,625 --> 01:18:07,980
+are a lot of words that the space is so vast for thoughts dimensions,
+对于思想维度来说空间是如此巨大的很多话
+
+1324
+01:18:07,980 --> 01:18:13,535
+that actual words or sensors are very sparse in that space.
+在那个空间里，实际的单词或传感器非常稀疏。
+
+1325
+01:18:13,535 --> 01:18:17,650
+And so it turns out that there's this whole literature on, um,
+所以事实证明，这整篇文献都是关于的，嗯，
+
+1326
+01:18:17,650 --> 01:18:20,330
+sparse coding, compressed sensing,
+稀疏编码，压缩感知，
+
+1327
+01:18:20,330 --> 01:18:23,740
+um, some of which has actually done by people in the stats department here,
+嗯，其中一些实际上是由统计部门的人员在这里完成的，
+
+1328
+01:18:23,740 --> 01:18:29,325
+um, which shows that in these cases where you have these sort of sparse,
+嗯，这表明在这些情况下你有这种稀疏，
+
+1329
+01:18:29,325 --> 01:18:32,115
+um, codes in these high dimensional spaces,
+嗯，这些高维空间的代码，
+
+1330
+01:18:32,115 --> 01:18:36,885
+you can actually commonly reconstruct out the components of a superposition,
+你实际上可以通常重建叠加的组件，
+
+1331
+01:18:36,885 --> 01:18:40,240
+even though all you've done is sort of done this weighted average,
+即使你所做的一切都是按照加权平均值完成的，
+
+1332
+01:18:40,240 --> 01:18:45,010
+and so, um, this paper looks at how you can do this and so they have,
+所以，嗯，这篇论文着眼于你如何做到这一点，所以他们有，
+
+1333
+01:18:45,010 --> 01:18:48,105
+um, these underlying meaning components,
+嗯，这些潜在的意义成分，
+
+1334
+01:18:48,105 --> 01:18:49,910
+and they sort of separated out.
+他们有点分开了。
+
+1335
+01:18:49,910 --> 01:18:52,810
+So, tie has one meaning component,
+所以，领带有一个含义组成部分，
+
+1336
+01:18:52,810 --> 01:18:55,975
+there's in this space of trousers, blouse, waistcoat,
+这里有裤子，衬衫，背心，
+
+1337
+01:18:55,975 --> 01:19:00,300
+that makes sense, and other one in this meaning component of seasoned teams,
+这是有道理的，而另一个在经验丰富的团队的意义组成部分，
+
+1338
+01:19:00,300 --> 01:19:02,645
+winning league, makes sense.
+赢得联赛，有道理。
+
+1339
+01:19:02,645 --> 01:19:06,015
+Um, scoreline goal with equalizer clinching scorers,
+嗯，得分平衡器得分手的得分线，
+
+1340
+01:19:06,015 --> 01:19:08,355
+this one seems to overlap with this one a bit.
+这个似乎与这个有点重叠。
+
+1341
+01:19:08,355 --> 01:19:10,045
+Um, but here tie,
+嗯，但这里领带，
+
+1342
+01:19:10,045 --> 01:19:13,800
+this is sort of cable ties and wire ties and things like that.
+这是一种电缆扎带和电线扎带等类似的东西。
+
+1343
+01:19:13,800 --> 01:19:17,245
+So, they are actually able to pull out the different sense meanings,
+所以，他们实际上能够理解不同的意义，
+
+1344
+01:19:17,245 --> 01:19:21,055
+um, from outside, out of the meaning of the word.
+嗯，从外面看，出于这个词的意思。
+
+1345
+01:19:21,055 --> 01:19:24,045
+Um, so that is a kind of a cool thing.
+嗯，这是一件很酷的事情。
+
+1346
+01:19:24,045 --> 01:19:26,085
+I just wanna, um,
+我只想，嗯，
+
+1347
+01:19:26,085 --> 01:19:28,195
+say one more thing.
+再说一件事。
+
+1348
+01:19:28,195 --> 01:19:32,010
+Okay. [NOISE] All the evaluations so far was intrinsic,
+好的。 [NOISE]迄今为止的所有评估都是内在的，
+
+1349
+01:19:32,010 --> 01:19:35,735
+um, you also might wanna do extrinsic evaluation.
+嗯，你也可能想做外在的评价。
+
+1350
+01:19:35,735 --> 01:19:40,010
+Why, why word vectors excited people on NLP so much?
+为什么，为什么单词向量激动人们对NLP这么多？
+
+1351
+01:19:40,010 --> 01:19:42,300
+Is it turned out that having this meaning,
+事实证明有这个含义，
+
+1352
+01:19:42,300 --> 01:19:45,965
+having this representation meaning just turned out to be
+具有这种表达意义只是证明了
+
+1353
+01:19:45,965 --> 01:19:49,810
+very useful and sort of improve all of your tasks after that.
+非常有用，并在此之后完善所有任务。
+
+1354
+01:19:49,810 --> 01:19:52,280
+Um, and so, um,
+嗯，等等，嗯，
+
+1355
+01:19:52,280 --> 01:19:55,360
+this is doing named entity recognition which is labeling
+这是做标记的命名实体识别
+
+1356
+01:19:55,360 --> 01:19:58,860
+persons and locations and organizations, but, you know,
+人员，地点和组织，但是，你知道，
+
+1357
+01:19:58,860 --> 01:20:01,755
+it's typical of many tasks of what people found,
+它是人们发现的许多任务的典型代表，
+
+1358
+01:20:01,755 --> 01:20:06,610
+was if you started with a model without sort of word representations
+如果你开始使用没有单词表示的模型
+
+1359
+01:20:06,610 --> 01:20:11,875
+and you throw in your word vectors regardless of whether they were to vehicle GloVe ones,
+然后你把你的单词向量扔进去，不管它们是否属于车辆GloVe，
+
+1360
+01:20:11,875 --> 01:20:15,505
+just kind of your numbers go up a couple of percent or more?
+只是你的数字上涨百分之几或更多？
+
+1361
+01:20:15,505 --> 01:20:19,570
+And so word vectors were just sort of this useful source that you could
+因此，单词向量只是这种有用的来源
+
+1362
+01:20:19,570 --> 01:20:24,190
+throw into any NLP system that you build and your numbers went up.
+扔进你建立的任何NLP系统，你的数字上升了。
+
+1363
+01:20:24,190 --> 01:20:27,335
+So, that there was just a very effective technology, um,
+那么，只有一种非常有效的技术，嗯，
+
+1364
+01:20:27,335 --> 01:20:28,980
+which actually did work in
+实际上确实有效
+
+1365
+01:20:28,980 --> 01:20:34,490
+basically any extrinsic tasks you type tried it on. Okay. Thanks a lot.
+基本上你输入的任何外在任务都试过了。好的。非常感谢。
+
+1366
+
+

@@ -1,0 +1,7018 @@
+1
+00:00:05,210 --> 00:00:07,950
+Hi, everyone. I'm Abby,
+嗨，大家好。我是艾比，
+
+2
+00:00:07,950 --> 00:00:09,544
+I'm the head TA for this class
+我是这堂课的校长
+
+3
+00:00:09,544 --> 00:00:12,510
+and I'm also a PhD student in the Stanford NLP group.
+我也是斯坦福大学NLP小组的博士生。
+
+4
+00:00:12,510 --> 00:00:14,670
+And today I'm gonna be telling you about
+今天我要告诉你
+
+5
+00:00:14,670 --> 00:00:17,040
+language models and recurrent neural networks.
+语言模型和循环神经网络。
+
+6
+00:00:17,040 --> 00:00:19,980
+So, here's an overview of what we're gonna do today.
+所以，这里是我们今天要做的事情的概述。
+
+7
+00:00:19,980 --> 00:00:24,885
+Today, first, we're going to introduce a new NLP task, that's language modelling,
+今天，首先，我们将介绍一个新的NLP任务，即语言建模，
+
+8
+00:00:24,885 --> 00:00:29,504
+and that's going to motivate us to learn about a new family of neural networks,
+这将激励我们学习一个新的神经网络系列，
+
+9
+00:00:29,504 --> 00:00:32,730
+that is recurrent neural networks or RNNs.
+这是递归神经网络或RNN。
+
+10
+00:00:32,730 --> 00:00:34,440
+So, I'd say that these are two of
+所以，我会说这是两个
+
+11
+00:00:34,440 --> 00:00:37,415
+the most important ideas you're going to learn for the rest of the course.
+你将要学习的其他课程中最重要的想法。
+
+12
+00:00:37,415 --> 00:00:41,070
+So, we're going to be covering some fairly cool material today.
+所以，我们今天将要介绍一些相当酷的材料。
+
+13
+00:00:41,070 --> 00:00:44,305
+So, let's start off with language modeling.
+那么，让我们从语言建模开始吧。
+
+14
+00:00:44,305 --> 00:00:48,775
+Language modeling is the task of predicting what word comes next.
+语言建模是预测接下来会出现什么词的任务。
+
+15
+00:00:48,775 --> 00:00:52,230
+So, given this piece of text the students opens their blank,
+所以，鉴于这段文字，学生们打开了他们的空白，
+
+16
+00:00:52,230 --> 00:00:56,200
+could anyone shout out a word which you think might be coming next?
+有人会喊出你认为可能会接下来的一个词吗？
+
+17
+00:00:58,370 --> 00:00:59,550
+Purpose. [NOISE].
+目的。 [噪声]。
+
+18
+00:00:59,550 --> 00:01:03,840
+[OVERLAPPING] Mind, what else? I didn't quite hear them,
+[重叠]记住，还有什么？我没听到他们，
+
+19
+00:01:03,840 --> 00:01:06,720
+but, uh, yeah, these are all likely things, right?
+但是，呃，是的，这些都是可能的事情，对吧？
+
+20
+00:01:06,720 --> 00:01:08,150
+So, these are some things which I thought,
+所以，这些是我认为的一些事情，
+
+21
+00:01:08,150 --> 00:01:09,490
+students might be opening, uh,
+学生可能会开学，呃，
+
+22
+00:01:09,490 --> 00:01:11,200
+students open their books, seems likely.
+学生们打开他们的书，似乎很可能。
+
+23
+00:01:11,200 --> 00:01:13,280
+Uh, students open their laptops,
+呃，学生们打开笔记本电脑，
+
+24
+00:01:13,280 --> 00:01:15,040
+students open their exams,
+学生们打开考试，
+
+25
+00:01:15,040 --> 00:01:16,580
+Students open their minds, incredibly,
+学生们打开他们的思想，令人难以置信，
+
+26
+00:01:16,580 --> 00:01:18,700
+someone came up with one, that one just now,
+有人提出了一个，刚才那个，
+
+27
+00:01:18,700 --> 00:01:20,330
+uh, it's kind of a metaphorical meaning of opening.
+呃，这是开放的一种隐喻意义。
+
+28
+00:01:20,330 --> 00:01:23,675
+So, you are all performing language modeling right now.
+所以，你们现在都在进行语言建模。
+
+29
+00:01:23,675 --> 00:01:25,475
+And thinking about what word comes next,
+并考虑下一步是什么词，
+
+30
+00:01:25,475 --> 00:01:27,250
+you are being a language model.
+你是一个语言模型。
+
+31
+00:01:27,250 --> 00:01:31,385
+So, here's a more formal definition of what a language model is.
+所以，这是一个更正式的语言模型定义。
+
+32
+00:01:31,385 --> 00:01:34,430
+Given a sequence of words X1 up to Xt,
+给定X1到Xt的单词序列，
+
+33
+00:01:34,430 --> 00:01:37,340
+a language model, is something that computes
+语言模型，是计算的东西
+
+34
+00:01:37,340 --> 00:01:41,200
+the probability distribution of the next word, Xt plus 1.
+下一个单词的概率分布，Xt加1。
+
+35
+00:01:41,200 --> 00:01:44,194
+So, a language model comes up with the probability distribution,
+因此，语言模型提出了概率分布，
+
+36
+00:01:44,194 --> 00:01:49,067
+the conditional probability, of what X t plus 1 is given the words it found.
+条件概率，X t加1给出它找到的单词。
+
+37
+00:01:49,067 --> 00:01:50,810
+And here we're assuming that, Xt plus 1
+在这里我们假设，Xt加1
+
+38
+00:01:50,810 --> 00:01:53,960
+can be any word w from a fixed vocabulary V.
+可以是固定词汇表中的任何单词。
+
+39
+00:01:53,960 --> 00:01:55,520
+So we are assuming that there is
+所以我们假设有
+
+40
+00:01:55,520 --> 00:01:58,205
+a pre-defined list of words that we're considering.
+我们正在考虑的预定义词汇列表。
+
+41
+00:01:58,205 --> 00:02:00,140
+In this way, you can view language modeling
+通过这种方式，您可以查看语言建模
+
+42
+00:02:00,140 --> 00:02:01,850
+as a type of classification task,
+作为一种分类任务，
+
+43
+00:02:01,850 --> 00:02:04,580
+because there's a predefined number of possibilities.
+因为有预定义的可能性。
+
+44
+00:02:04,580 --> 00:02:09,360
+Um, we call a system that does this a language model.
+嗯，我们称这个系统为语言模型。
+
+45
+00:02:09,850 --> 00:02:12,050
+There's an alternative way of thinking
+还有另一种思维方式
+
+46
+00:02:12,050 --> 00:02:13,715
+about a language model as well.
+关于语言模型。
+
+47
+00:02:13,715 --> 00:02:15,200
+You can think of a language model
+你可以想到一种语言模型
+
+48
+00:02:15,200 --> 00:02:19,060
+as a system which assigns probability to a piece of text.
+作为一个系统，它将概率分配给一段文本。
+
+49
+00:02:19,060 --> 00:02:21,470
+So, for example, if we have some piece of text,
+所以，例如，如果我们有一些文字，
+
+50
+00:02:21,470 --> 00:02:23,180
+X up to X capital T,
+X高达X大写T，
+
+51
+00:02:23,180 --> 00:02:25,040
+then, the probability of this text
+那么，这个文本的概率
+
+52
+00:02:25,040 --> 00:02:27,830
+according to the language model can be broken down.
+根据语言模型可以分解。
+
+53
+00:02:27,830 --> 00:02:29,250
+So, just by definition,
+所以，按照定义，
+
+54
+00:02:29,250 --> 00:02:31,250
+you can say that the probability is equal to,
+你可以说概率等于，
+
+55
+00:02:31,250 --> 00:02:34,530
+the product of all of these conditional probabilities.
+所有这些条件概率的乘积。
+
+56
+00:02:34,530 --> 00:02:37,375
+And, uh, the form inside,
+而且，呃，里面的形式，
+
+57
+00:02:37,375 --> 00:02:40,480
+the products is exactly what a language model provides.
+产品正是语言模型提供的。
+
+58
+00:02:40,480 --> 00:02:42,465
+So, you can think of these things as somewhat equivalent.
+所以，你可以认为这些东西有点等同。
+
+59
+00:02:42,465 --> 00:02:44,720
+Predicting next words, gives you a system,
+预测下一个单词，给你一个系统，
+
+60
+00:02:44,720 --> 00:02:49,110
+that can give the probability of a given piece of text.
+这可以给出给定文本的概率。
+
+61
+00:02:49,270 --> 00:02:52,745
+So, in fact, you, use language models every day.
+所以，事实上，你每天都在使用语言模型。
+
+62
+00:02:52,745 --> 00:02:56,120
+For example, when you're texting on your phone and you're writing a message,
+例如，当您在手机上发短信并且正在撰写邮件时，
+
+63
+00:02:56,120 --> 00:02:57,610
+then most likely if you have a smartphone,
+那么最有可能的是你有智能手机，
+
+64
+00:02:57,610 --> 00:03:00,080
+it will be predicting what word you might be about to say.
+它会预测你可能要说的是什么词。
+
+65
+00:03:00,080 --> 00:03:01,790
+So, if you say, um, I'll meet you at the-
+所以，如果你说，嗯，我会在 - 见到你
+
+66
+00:03:01,790 --> 00:03:04,250
+your phone might suggest perhaps you mean airport or cafe,
+你的手机可能暗示你的意思是机场或咖啡馆，
+
+67
+00:03:04,250 --> 00:03:06,025
+or office, for example.
+或者办公室，例如。
+
+68
+00:03:06,025 --> 00:03:08,905
+Another situation which you use language models every day
+您每天使用语言模型的另一种情况
+
+69
+00:03:08,905 --> 00:03:11,495
+is when you search for something on the internet, for example, Google,
+当你在互联网上搜索某些东西时，例如Google，
+
+70
+00:03:11,495 --> 00:03:12,830
+and you start typing your query,
+然后你开始输入你的查询，
+
+71
+00:03:12,830 --> 00:03:15,952
+then Google tries to complete your query for you, and that's language modeling.
+然后Google会尝试为您完成查询，这就是语言建模。
+
+72
+00:03:15,952 --> 00:03:19,020
+It's predicting what word or words might come next.
+它预测接下来会有什么词或词。
+
+73
+00:03:20,480 --> 00:03:23,715
+So, that's what a language model is,
+那么，这就是语言模型，
+
+74
+00:03:23,715 --> 00:03:26,675
+and the question is, how would you learn a language model?
+问题是，你将如何学习语言模型？
+
+75
+00:03:26,675 --> 00:03:29,917
+So, if I was to ask that question in the pre- deep learning era,
+所以，如果我要在前深度学习时代问这个问题，
+
+76
+00:03:29,917 --> 00:03:31,730
+which was really only a few years ago,
+这真的是几年前，
+
+77
+00:03:31,730 --> 00:03:35,005
+the answer would be, you would learn a n-gram language model.
+答案是，你将学习一种n-gram语言模型。
+
+78
+00:03:35,005 --> 00:03:38,570
+So, today first we're going to learn about n-gram language models.
+所以，今天我们首先要学习n-gram语言模型。
+
+79
+00:03:38,570 --> 00:03:41,330
+So, before I can tell you what a n-gram language model is,
+那么，在我告诉你什么是n-gram语言模型之前，
+
+80
+00:03:41,330 --> 00:03:43,160
+you need to know what an n-gram is.
+你需要知道什么是n-gram。
+
+81
+00:03:43,160 --> 00:03:47,905
+So, by definition an n-gram is a chunk of n  consecutive words.
+因此，根据定义，n-gram是n个连续单词的一部分。
+
+82
+00:03:47,905 --> 00:03:50,400
+So, for example, a one gram or unigram,
+所以，例如，一克或一克，
+
+83
+00:03:50,400 --> 00:03:52,050
+is just all of the individual words
+只是所有的单词
+
+84
+00:03:52,050 --> 00:03:55,020
+in the sequence that would be "the students open the-"
+按照“学生打开 - ”的顺序
+
+85
+00:03:55,020 --> 00:03:58,810
+A two gram or bigram would be all of the consecutive chunks of pairs of words,
+两克或二元组将是所有连续的单词对，
+
+86
+00:03:58,810 --> 00:04:00,980
+"the students", "students opened", "opened their"
+“学生”，“学生开”，“开了他们的”
+
+87
+00:04:00,980 --> 00:04:04,560
+and so on for trigrams and four-grams, etc.
+等等三卦和四克等
+
+88
+00:04:05,050 --> 00:04:08,575
+So, the core idea of an n-gram language model
+所以，n-gram语言模型的核心思想
+
+89
+00:04:08,575 --> 00:04:11,035
+is that in order to predict what word comes next,
+是为了预测下一个词是什么，
+
+90
+00:04:11,035 --> 00:04:12,815
+you're going to collect a bunch of statistics,
+你要收集一堆统计数据，
+
+91
+00:04:12,815 --> 00:04:14,930
+about how frequent different n-grams are,
+关于不同n-gram的频率，
+
+92
+00:04:14,930 --> 00:04:16,490
+from some kind of training data,
+从某种培训数据来看，
+
+93
+00:04:16,490 --> 00:04:18,110
+and then you can use those statistics
+然后你可以使用这些统计数据
+
+94
+00:04:18,110 --> 00:04:21,120
+to predict what next words might be likely.
+预测下一个词可能是什么。
+
+95
+00:04:21,830 --> 00:04:23,640
+Here is some more detail.
+这里有一些更详细的信息。
+
+96
+00:04:23,640 --> 00:04:26,325
+So, to make an n-gram language model,
+那么，要制作一个n-gram语言模型，
+
+97
+00:04:26,325 --> 00:04:28,490
+first you need to make a simplifying assumption,
+首先，你需要做一个简化的假设，
+
+98
+00:04:28,490 --> 00:04:30,305
+and this your assumption.
+这是你的假设。
+
+99
+00:04:30,305 --> 00:04:33,350
+You say that the next word Xt plus 1
+你说下一个单词Xt加1
+
+100
+00:04:33,350 --> 00:04:37,535
+depends only on the preceding N-1 words.
+仅取决于前面的N-1个单词。
+
+101
+00:04:37,535 --> 00:04:39,900
+So, what we're assuming,
+所以，我们假设，
+
+102
+00:04:39,900 --> 00:04:41,650
+is that the probability distribution,
+是概率分布，
+
+103
+00:04:41,650 --> 00:04:45,020
+the conditional probability of Xt plus 1 given all of the words they follow,
+给出他们遵循的所有单词的Xt加1的条件概率，
+
+104
+00:04:45,020 --> 00:04:46,160
+we're just going to simplify that,
+我们只是简化一下，
+
+105
+00:04:46,160 --> 00:04:50,485
+and say it only depends on the last N-1 words,  and that's our assumption.
+并说它只取决于最后的N-1个单词，这是我们的假设。
+
+106
+00:04:50,485 --> 00:04:53,950
+So, by the definition of conditional probability,
+那么，通过条件概率的定义，
+
+107
+00:04:53,950 --> 00:04:55,600
+we can say that this probability,
+我们可以说这个概率，
+
+108
+00:04:55,600 --> 00:04:58,385
+is just the ratio of two different probabilities.
+只是两种不同概率的比率。
+
+109
+00:04:58,385 --> 00:05:01,180
+So, on the top, you've got the probability of
+所以，在顶部，你有可能
+
+110
+00:05:01,180 --> 00:05:03,220
+a particular n-gram and on the bottom we've
+一个特定的n-gram，在我们的底部
+
+111
+00:05:03,220 --> 00:05:06,192
+got the probability of a particular N-1 gram
+得到了特定N-1克的概率
+
+112
+00:05:06,192 --> 00:05:08,020
+This is a little hard to read because of all the superscripts
+由于所有的上标，这有点难以阅读
+
+113
+00:05:08,020 --> 00:05:11,015
+but I'm gonna give an example with words on the next slide.
+但是我将在下一张幻灯片中举一个例子。
+
+114
+00:05:11,015 --> 00:05:15,055
+Okay. So, that's the definition of the probability of the next word,
+好的。那么，这就是下一个单词概率的定义，
+
+115
+00:05:15,055 --> 00:05:17,140
+but the question remains, how do we get all of
+但问题仍然存在，我们如何得到所有
+
+116
+00:05:17,140 --> 00:05:19,980
+these n-gram and N-1 gram probabilities?
+这些n-gram和N-1克概率？
+
+117
+00:05:19,980 --> 00:05:22,300
+So, the answer is, we're going to get them by
+所以，答案是，我们将得到它们
+
+118
+00:05:22,300 --> 00:05:25,050
+counting them in some large corpus of text.
+在一些大型文本中计算它们。
+
+119
+00:05:25,050 --> 00:05:26,510
+So, we're going to approximate,
+所以，我们将近似，
+
+120
+00:05:26,510 --> 00:05:29,560
+these probabilities just by the count of the number of times that
+这些概率只是通过次数的计数
+
+121
+00:05:29,560 --> 00:05:34,190
+these particular n-grams and N-1 grams appeared in our training corpus.
+这些特殊的n-gram和N-1克出现在我们的训练语料库中。
+
+122
+00:05:34,410 --> 00:05:37,370
+Okay. So, here's an example with some words.
+好的。所以，这里有一些例子。
+
+123
+00:05:37,370 --> 00:05:40,565
+Suppose we are trying to learn a 4-gram language model,
+假设我们正在尝试学习4-gram语言模型，
+
+124
+00:05:40,565 --> 00:05:42,830
+and suppose that we have a piece of text, that says,
+并假设我们有一段文字，说，
+
+125
+00:05:42,830 --> 00:05:44,540
+"As the proctor started the clock,
+“当监考人员开始计时时，
+
+126
+00:05:44,540 --> 00:05:46,100
+the students opened their blank",
+学生们打开了他们的空白“，
+
+127
+00:05:46,100 --> 00:05:48,895
+and we're trying to predict what word is coming next.
+我们正试图预测接下来会发生什么。
+
+128
+00:05:48,895 --> 00:05:51,740
+So, because we're learning a 4-gram language model,
+所以，因为我们正在学习4克语言模型，
+
+129
+00:05:51,740 --> 00:05:55,910
+a simplifying assumption is that the next word depends only on the last three words,
+一个简化的假设是，下一个单词仅取决于最后三个单词，
+
+130
+00:05:55,910 --> 00:05:57,605
+last N-1 words.
+最后N-1个单词。
+
+131
+00:05:57,605 --> 00:06:01,520
+So, we're going to discard all of the context so far except for the last few words,
+所以，到目前为止，我们将丢弃所有上下文，除了最后几个字，
+
+132
+00:06:01,520 --> 00:06:03,780
+which is, "Students opened their."
+也就是说，“学生们开了他们的”。
+
+133
+00:06:03,800 --> 00:06:07,620
+So, as a reminder, n-gram language model says that,
+所以，作为提醒，n-gram语言模型说，
+
+134
+00:06:07,620 --> 00:06:08,940
+the probability of the next word being,
+下一个单词存在的概率，
+
+135
+00:06:08,940 --> 00:06:13,230
+some particular word W in the vocabulary is equal to the number of times we saw
+词汇表中的某个特定单词W等于我们看到的次数
+
+136
+00:06:13,230 --> 00:06:15,510
+students opened their W divided by the number of
+学生打开他们的W除以数量
+
+137
+00:06:15,510 --> 00:06:18,655
+times we saw students opened their,  in the training corpus.
+我们看到学生们在训练语料库中打开了他们的时间。
+
+138
+00:06:18,655 --> 00:06:21,440
+So, let's suppose that in our training corpus,
+那么，让我们假设在我们的训练语料库中，
+
+139
+00:06:21,440 --> 00:06:24,215
+we saw the phrase "students open their" 1,000 times.
+我们看到“学生打开他们的”这个短语1000次。
+
+140
+00:06:24,215 --> 00:06:28,340
+And suppose that, we saw "students opened their books" 400 times.
+并且假设，我们看到“学生们开了他们的书”400次。
+
+141
+00:06:28,340 --> 00:06:32,220
+This means that the probability of the next word being books is 0,4.
+这意味着下一个单词是书的概率是0,4。
+
+142
+00:06:32,220 --> 00:06:36,810
+And uh, similarly, let's suppose that we saw students open their exams 100 times,
+呃，同样地，让我们假设我们看到学生开了100次考试，
+
+143
+00:06:36,810 --> 00:06:39,260
+this means that the probability of exams given students
+这意味着给予学生考试的概率
+
+144
+00:06:39,260 --> 00:06:41,930
+open their is 0,1. Is there a question?
+打开他们是0,1。有问题吗？
+
+145
+00:06:41,930 --> 00:06:44,900
+[inaudible].
+[听不见的。
+
+146
+00:06:44,900 --> 00:06:47,010
+The question is, does the order of the words matter?
+问题是，这些词的顺序是否重要？
+
+147
+00:06:47,010 --> 00:06:50,340
+And the answer is yes, the order of students open there does matter.
+答案是肯定的，学生在那里打开的顺序很重要。
+
+148
+00:06:50,340 --> 00:06:53,190
+It's different to "the students opened."
+这与“学生们开学”不同。
+
+149
+00:06:53,190 --> 00:06:56,985
+So, the question I want to raise now is,
+那么，我现在要提出的问题是，
+
+150
+00:06:56,985 --> 00:07:00,805
+was it a good idea for us to discard the proctor context?
+我们抛弃监考背景是一个好主意吗？
+
+151
+00:07:00,805 --> 00:07:03,115
+If you look at the actual example that we had,
+如果你看看我们的实际例子，
+
+152
+00:07:03,115 --> 00:07:06,070
+the example was as the proctor started the clock,
+这个例子是监考人员开始计时的，
+
+153
+00:07:06,070 --> 00:07:07,850
+the students opened their blank.
+学生们打开了他们的空白。
+
+154
+00:07:07,850 --> 00:07:12,360
+So, do we think that books or exams is more likely given the actual context,
+那么，我们是否认为根据实际情况更有可能进行书籍或考试，
+
+155
+00:07:12,360 --> 00:07:14,550
+the full context? Yep.
+完整的背景？是的。
+
+156
+00:07:14,550 --> 00:07:15,450
+Exams.
+考试。
+
+157
+00:07:15,450 --> 00:07:17,795
+Right. Exams is more likely because the proctor and
+对。考试更有可能是因为监考人和
+
+158
+00:07:17,795 --> 00:07:20,260
+the clock heavily implies that it's an exam scenario, so
+时钟在很大程度上意味着它是一个考试场景，所以
+
+159
+00:07:20,260 --> 00:07:22,625
+they're more likely to be opening the exams than the books,
+他们更有可能参加考试而不是书本，
+
+160
+00:07:22,625 --> 00:07:24,400
+unless it's an open book exam.
+除非是开卷考试。
+
+161
+00:07:24,400 --> 00:07:26,830
+Uh, but I think, overall, it should be exams.
+呃，但我认为，总的来说，它应该是考试。
+
+162
+00:07:26,830 --> 00:07:29,890
+So, the problem that we're seeing here is that in the training corpus,
+所以，我们在这里看到的问题是在训练语料库中，
+
+163
+00:07:29,890 --> 00:07:31,240
+the fact that students were opening
+学生们开学的事实
+
+164
+00:07:31,240 --> 00:07:33,990
+something means that it's more likely to be books than exams
+有些东西意味着它更有可能是书而不是考试
+
+165
+00:07:33,990 --> 00:07:36,305
+because overall, books are more common than exams.
+因为总的来说，书籍比考试更常见。
+
+166
+00:07:36,305 --> 00:07:38,565
+But if we know that the context is,
+但如果我们知道背景是，
+
+167
+00:07:38,565 --> 00:07:41,078
+the proctor and the clock, then it should be exams.
+监考人和时钟，那应该是考试。
+
+168
+00:07:41,078 --> 00:07:44,240
+So, what I'm highlighting here is a problem with our simplifying assumption.
+所以，我在这里强调的是我们的简化假设的问题。
+
+169
+00:07:44,240 --> 00:07:45,860
+If we throw away too much context,
+如果我们扔掉太多的背景，
+
+170
+00:07:45,860 --> 00:07:50,455
+then we are not as good as predicting the words as we would be if we kept the context.
+那么如果我们保持上下文，我们就不如预测那些单词那么好。
+
+171
+00:07:50,455 --> 00:07:54,690
+Okay. So, that's one problem with n-gram, uh, language models.
+好的。那么，这是n-gram，呃语言模型的一个问题。
+
+172
+00:07:54,690 --> 00:07:56,810
+Uh, there are some other problems as well.
+呃，还有其他一些问题。
+
+173
+00:07:56,810 --> 00:08:00,470
+So, uh, here again is the equation that you saw before.
+那么，呃，这里再次是你之前看到过的等式。
+
+174
+00:08:00,470 --> 00:08:01,880
+One problem which we're gonna call
+我们要称之为的一个问题
+
+175
+00:08:01,880 --> 00:08:05,465
+the sparsity problem is what happens if the number on top,
+稀疏问题是如果数字在顶部，会发生什么
+
+176
+00:08:05,465 --> 00:08:08,380
+the numerator, what if that count is equal to zero.
+分子，如果该计数等于零，该怎么办？
+
+177
+00:08:08,380 --> 00:08:11,210
+So, what if for some particular word W,
+那么，如果对某些特定的词W，
+
+178
+00:08:11,210 --> 00:08:14,450
+the phrase students opened their W never occurred in the data.
+学生打开他们的W这句话从未发生在数据中。
+
+179
+00:08:14,450 --> 00:08:17,240
+So, for example, let's suppose students opened their petri dishes,
+所以，例如，我们假设学生们打开他们的培养皿，
+
+180
+00:08:17,240 --> 00:08:19,880
+is fairly uncommon and it never appears in the data,
+是相当罕见的，它从未出现在数据中，
+
+181
+00:08:19,880 --> 00:08:24,355
+then that means our probability of the next word being petri dishes will be zero.
+那意味着我们下一个词是培养皿的概率将为零。
+
+182
+00:08:24,355 --> 00:08:27,390
+And this is bad, because it might be uncommon but it is,
+这很糟糕，因为它可能不常见但是，
+
+183
+00:08:27,390 --> 00:08:29,385
+a valid scenario, right?
+一个有效的场景，对吗？
+
+184
+00:08:29,385 --> 00:08:31,090
+If you're a biology student for example.
+如果你是一名生物学学生。
+
+185
+00:08:31,090 --> 00:08:34,085
+So, this is a problem and we call it the sparsity problem,
+所以，这是一个问题，我们称之为稀疏性问题，
+
+186
+00:08:34,085 --> 00:08:37,790
+because the problem is that if we'd never seen an event happen in the training data,
+因为问题是如果我们从未在训练数据中看到过事件，
+
+187
+00:08:37,790 --> 00:08:41,485
+then our model assigns zero probability to that event.
+然后我们的模型为该事件分配零概率。
+
+188
+00:08:41,485 --> 00:08:46,415
+So, one partial solution to this problem is that maybe we should add a small delta,
+所以，这个问题的一个部分解决方案是，我们可能应该添加一个小的delta，
+
+189
+00:08:46,415 --> 00:08:48,290
+small number delta to the count,
+计数的小数三角洲，
+
+190
+00:08:48,290 --> 00:08:50,420
+for every word in the vocabulary.
+对于词汇表中的每个单词。
+
+191
+00:08:50,420 --> 00:08:53,920
+And then this way, every possible word that come next,
+然后就这样，接下来的每一个可能的词，
+
+192
+00:08:53,920 --> 00:08:56,250
+has at least some small probability.
+至少有一些小概率。
+
+193
+00:08:56,250 --> 00:08:59,089
+So, petri dishes will have some small probability,
+因此，培养皿的概率很小，
+
+194
+00:08:59,089 --> 00:09:02,410
+but then so, will all of the other words which are possibly bad choices.
+但那么，所有其他可能是错误选择的话。
+
+195
+00:09:02,410 --> 00:09:05,580
+So, this, uh, technique is called smoothing, because the idea is,
+所以，这个，呃，技术被称为平滑，因为这个想法是，
+
+196
+00:09:05,580 --> 00:09:06,945
+you're going from a very, uh,
+你是从非常呃，
+
+197
+00:09:06,945 --> 00:09:10,050
+sparse probability distribution, which is zero, almost everywhere,
+稀疏概率分布，零，几乎无处不在，
+
+198
+00:09:10,050 --> 00:09:11,550
+with a few spikes where there's,
+有几个尖峰的地方，
+
+199
+00:09:11,550 --> 00:09:13,445
+uh, being n-grams that we've seen,
+呃，我们见过的n-gram，
+
+200
+00:09:13,445 --> 00:09:16,100
+it goes from that to being a more smooth probability distribution
+它从那变为更平滑的概率分布
+
+201
+00:09:16,100 --> 00:09:19,615
+where everything has at least a small probability on it.
+一切都至少有一个小概率。
+
+202
+00:09:19,615 --> 00:09:24,270
+So, the second sparsity problem which is possibly worse than the first one is,
+那么，第二个稀疏问题可能比第一个更糟糕，
+
+203
+00:09:24,270 --> 00:09:28,130
+what happens if the number in the denominator is zero?
+如果分母中的数字为零会怎样？
+
+204
+00:09:28,130 --> 00:09:30,200
+So, in our example, that would mean,
+所以，在我们的例子中，这意味着，
+
+205
+00:09:30,200 --> 00:09:34,655
+what if we never even saw the trigram "students opened their" in the training data.
+如果我们甚至从未在训练数据中看到“学生打开他们的”三元组怎么办？
+
+206
+00:09:34,655 --> 00:09:38,480
+If that happens, then we can't even calculate this probability distribution at
+如果发生这种情况，那么我们甚至无法计算此概率分布
+
+207
+00:09:38,480 --> 00:09:42,820
+all for any word W because we never even saw this context before.
+所有单词W都是因为我们以前从未见过这个词。
+
+208
+00:09:42,820 --> 00:09:45,825
+So, a possible solution to this is that
+因此，一个可能的解决方案是
+
+209
+00:09:45,825 --> 00:09:48,450
+if you can't find "students open their" in the corpus,
+如果你在语料库中找不到“学生打开他们的”，
+
+210
+00:09:48,450 --> 00:09:51,940
+then you should back off to just conditioning on the last two words,
+然后你应该退回去调整最后两个字，
+
+211
+00:09:51,940 --> 00:09:53,545
+rather than the last three words.
+而不是最后三个字。
+
+212
+00:09:53,545 --> 00:09:55,900
+So, now you'd be looking at times when you'd seen,
+那么，现在你看看你见过的时候，
+
+213
+00:09:55,900 --> 00:09:58,460
+uh, "open their" and seeing what what's come next.
+呃，“打开他们的”，看看接下来会发生什么。
+
+214
+00:09:58,460 --> 00:10:01,350
+So, this is called back-off because in this failure case,
+因此，这被称为后退，因为在这种失败的情况下，
+
+215
+00:10:01,350 --> 00:10:04,025
+for when you have no data for your 4-gram language model,
+当你没有4克语言模型的数据时，
+
+216
+00:10:04,025 --> 00:10:06,020
+you're backing off to a trigram language model.
+你正在退回到一个三元语言模型。
+
+217
+00:10:06,020 --> 00:10:09,510
+Are there any questions at this point?
+此时有什么问题吗？
+
+218
+00:10:12,310 --> 00:10:17,570
+Okay. So, um, another thing to note is that these sparsity problems
+好的。那么，嗯，另外需要注意的是这些稀疏性问题
+
+219
+00:10:17,570 --> 00:10:22,100
+get worse if you increase N. If you make N larger in your n-gram language model,
+如果你增加N会变得更糟。如果你的n-gram语言模型中的N更大，
+
+220
+00:10:22,100 --> 00:10:23,870
+and you might want to do this, for example,
+你可能想要这样做，例如，
+
+221
+00:10:23,870 --> 00:10:26,390
+you might think, uh, I want to have a larger context,
+你可能会想，呃，我想拥有更大的背景，
+
+222
+00:10:26,390 --> 00:10:28,565
+so I can pay attention to words that
+所以我可以注意那些话
+
+223
+00:10:28,565 --> 00:10:30,890
+happened longer ago and that's gonna make it a better predictor.
+发生在更久以前，这将使它成为一个更好的预测者。
+
+224
+00:10:30,890 --> 00:10:33,275
+So, you might think making N bigger is a good idea.
+所以，你可能会认为让N更大是一个好主意。
+
+225
+00:10:33,275 --> 00:10:36,410
+But the problem is if you do that then the sparsity problems get worse.
+但问题是，如果你这样做，那么稀疏性问题会变得更糟。
+
+226
+00:10:36,410 --> 00:10:37,700
+Because, let's suppose you say,
+因为，假设你说，
+
+227
+00:10:37,700 --> 00:10:39,215
+I want a 10-gram language model.
+我想要一个10克的语言模型。
+
+228
+00:10:39,215 --> 00:10:40,910
+Then the problem is that you're going to be counting,
+然后问题是你要算数，
+
+229
+00:10:40,910 --> 00:10:43,480
+how often you seen process in 9-grams and 10-grams.
+你经常看到9克和10克的过程。
+
+230
+00:10:43,480 --> 00:10:45,485
+But 9-grams and 10-grams, there's so many of them,
+但9克和10克，有这么多，
+
+231
+00:10:45,485 --> 00:10:47,615
+that the one you are interested in probably never occurred,
+您感兴趣的那个可能永远不会发生，
+
+232
+00:10:47,615 --> 00:10:51,155
+in your training data which means that the whole thing becomes dysfunctional.
+在你的训练数据中，这意味着整个事情变得功能失调。
+
+233
+00:10:51,155 --> 00:10:55,680
+So, in practice, we usually can't have N much bigger than five.
+所以，在实践中，我们通常不能有大于五的N.
+
+234
+00:10:56,170 --> 00:10:58,490
+Okay. So, that was, uh,
+好的。那就是，呃，
+
+235
+00:10:58,490 --> 00:11:00,875
+two sparsity problems with n-gram language models.
+n-gram语言模型存在两个稀疏性问题。
+
+236
+00:11:00,875 --> 00:11:02,770
+Here is a problem with storage.
+这是存储问题。
+
+237
+00:11:02,770 --> 00:11:04,710
+So, if we look at this equation, uh,
+所以，如果我们看一下这个等式，呃，
+
+238
+00:11:04,710 --> 00:11:06,780
+you have to think about what do you need to
+你必须考虑你需要什么
+
+239
+00:11:06,780 --> 00:11:09,365
+store in order to use your n-gram language model.
+存储以使用您的n-gram语言模型。
+
+240
+00:11:09,365 --> 00:11:12,020
+You need to store this count number,
+你需要存储这个计数，
+
+241
+00:11:12,020 --> 00:11:14,090
+for all of the n-grams that you observed in
+对于你观察到的所有n-gram
+
+242
+00:11:14,090 --> 00:11:17,215
+the corpus when you were going through the training corpus counting them.
+当你通过训练语料库计算它们时的语料库。
+
+243
+00:11:17,215 --> 00:11:19,440
+And the problem is, that as you increase N,
+问题是，当你增加N时，
+
+244
+00:11:19,440 --> 00:11:23,480
+then this number of n-grams that you have to store and count increases.
+那么你必须存储和数量的这个n-gram数量会增加。
+
+245
+00:11:23,480 --> 00:11:27,515
+So, another problem with increasing N is that the size of your model,
+因此，增加N的另一个问题是模型的大小，
+
+246
+00:11:27,515 --> 00:11:30,750
+or your n-gram model, uh, gets bigger.
+或者你的n-gram模型，呃，变大了。
+
+247
+00:11:31,490 --> 00:11:37,215
+Okay, so n-gram Language Models in practice. Let's look at an example.
+好的，所以n-gram语言模型在实践中。我们来看一个例子。
+
+248
+00:11:37,215 --> 00:11:42,540
+You can actually build a simple trigram Language Model over a 1,7 million word corpus,
+你实际上可以在一个170万字的语料库上建立一个简单的三元语言模型，
+
+249
+00:11:42,540 --> 00:11:44,325
+uh, in a few seconds on your laptop.
+呃，在你的笔记本电脑上几秒钟。
+
+250
+00:11:44,325 --> 00:11:46,140
+And in fact, the corpus that I used to do this
+事实上，我曾经这样做的语料库
+
+251
+00:11:46,140 --> 00:11:47,970
+was the same one that you met in assignment one.
+和你在第一部中遇到的人一样。
+
+252
+00:11:47,970 --> 00:11:49,605
+It's Reuters' corpus which is,
+这是路透社的语料库，
+
+253
+00:11:49,605 --> 00:11:51,180
+uh, business and financial news.
+呃，商业和财经新闻。
+
+254
+00:11:51,180 --> 00:11:52,380
+So, if you want to do this yourself,
+所以，如果你想自己做，
+
+255
+00:11:52,380 --> 00:11:55,005
+you can follow that link at the bottom of the slide later.
+您可以稍后点击幻灯片底部的链接。
+
+256
+00:11:55,005 --> 00:11:57,000
+So, uh, this is, uh,
+所以，呃，这是，呃，
+
+257
+00:11:57,000 --> 00:11:59,280
+something which I ran on my laptop in a few second.
+我在几秒钟内在笔记本电脑上运行的东西。
+
+258
+00:11:59,280 --> 00:12:02,790
+So I gave it the context of the bigram today the,
+所以今天我给它了二元组的背景，
+
+259
+00:12:02,790 --> 00:12:06,480
+and then I asked the trigram Language Model what word is likely to come next.
+然后我问trigram语言模型接下来可能会出现什么词。
+
+260
+00:12:06,480 --> 00:12:09,855
+So, the Language Model said that the top next most likely words are
+因此，语言模型表示下一个最可能的单词是
+
+261
+00:12:09,855 --> 00:12:13,455
+company, bank, price, Italian, emirate, et cetera.
+公司，银行，价格，意大利，酋长国，等等。
+
+262
+00:12:13,455 --> 00:12:17,640
+So already just looking at these probabilities that are assigned to these different words,
+因此，只需查看分配给这些不同单词的这些概率，
+
+263
+00:12:17,640 --> 00:12:19,590
+uh, you can see that there is a sparsity problem.
+呃，你可以看到存在稀疏性问题。
+
+264
+00:12:19,590 --> 00:12:21,840
+For example, the top two most likely words have
+例如，前两个最可能的单词有
+
+265
+00:12:21,840 --> 00:12:24,720
+the exact same probability and the reason for that is,
+完全相同的概率和原因是，
+
+266
+00:12:24,720 --> 00:12:26,760
+that this number is 4 over 26.
+这个数字是26岁以上的4。
+
+267
+00:12:26,760 --> 00:12:28,800
+So these are quite small integers, uh,
+所以这些都是很小的整数，呃，
+
+268
+00:12:28,800 --> 00:12:30,270
+meaning that we only saw, uh,
+意思是我们只看到了，呃，
+
+269
+00:12:30,270 --> 00:12:33,000
+today the company and today the bank four times each.
+今天公司和今天银行各四次。
+
+270
+00:12:33,000 --> 00:12:34,560
+So, uh, this is an example of
+所以，呃，这是一个例子
+
+271
+00:12:34,560 --> 00:12:37,290
+the sparsity problem because overall these are quite low counts,
+稀疏性问题，因为总体而言这些问题非常少，
+
+272
+00:12:37,290 --> 00:12:39,165
+we haven't seen that many different, uh,
+我们还没见过那么多不同的，呃，
+
+273
+00:12:39,165 --> 00:12:40,500
+versions of this event,
+这个事件的版本，
+
+274
+00:12:40,500 --> 00:12:43,885
+so we don't have a very granular probability distribution.
+所以我们没有非常精细的概率分布。
+
+275
+00:12:43,885 --> 00:12:46,385
+But in any case ignoring the sparsity problem,
+但无论如何忽略稀疏性问题，
+
+276
+00:12:46,385 --> 00:12:47,765
+I would say that overall,
+总的来说，我会说
+
+277
+00:12:47,765 --> 00:12:50,640
+these, uh, top suggestions look pretty reasonable.
+这些，呃，顶级建议看起来很合理。
+
+278
+00:12:52,600 --> 00:12:55,670
+So you can actually use a Language Model to
+所以你实际上可以使用语言模型
+
+279
+00:12:55,670 --> 00:12:58,305
+generate text and this is how you would do it.
+生成文本，这就是你要做的。
+
+280
+00:12:58,305 --> 00:13:00,735
+So let's suppose you have your first two words already, uh,
+所以，假设你已经有了前两个单词，呃，
+
+281
+00:13:00,735 --> 00:13:04,560
+you condition on this and you ask your Language Model what's likely to come next.
+你对此有所了解，并问你的语言模型接下来会发生什么。
+
+282
+00:13:04,560 --> 00:13:07,305
+So then given this probability distribution over the words,
+那么考虑到这个概率分布，
+
+283
+00:13:07,305 --> 00:13:08,850
+you can sample from it, that is,
+你可以从中取样，即
+
+284
+00:13:08,850 --> 00:13:11,865
+select some words with, you know, the associated probability.
+你知道，选择一些相关的概率。
+
+285
+00:13:11,865 --> 00:13:14,235
+So let's suppose that gives us the word price.
+所以我们假设这给了我们价格这个词。
+
+286
+00:13:14,235 --> 00:13:17,730
+So then price is your next word, and then you just condition on the last two words,
+那么价格就是你的下一个词，那么你只需考虑最后两个词，
+
+287
+00:13:17,730 --> 00:13:20,385
+which in this ex- example is now the price.
+在这个例子中，现在是价格。
+
+288
+00:13:20,385 --> 00:13:23,790
+So now you get a new probability distribution and you can continue this process,
+所以现在你得到一个新的概率分布，你可以继续这个过程，
+
+289
+00:13:23,790 --> 00:13:27,960
+uh, sampling and then conditioning again and sampling.
+呃，取样然后再次调理和取样。
+
+290
+00:13:27,960 --> 00:13:30,150
+So if you do this long enough,
+所以，如果你做得这么久，
+
+291
+00:13:30,150 --> 00:13:31,350
+you will get a piece of text,
+你会得到一段文字，
+
+292
+00:13:31,350 --> 00:13:33,690
+so this is the actual text that I got when
+所以这是我得到的实际文本
+
+293
+00:13:33,690 --> 00:13:37,005
+I run this generation process with this trigram Language Model.
+我用这个trigram语言模型运行这个生成过程。
+
+294
+00:13:37,005 --> 00:13:40,260
+So it says, "Today the price of gold per ton,
+所以它说，“今天每吨黄金的价格，
+
+295
+00:13:40,260 --> 00:13:43,260
+while production of shoe lasts and shoe industry,
+在生产鞋楦和鞋业的同时，
+
+296
+00:13:43,260 --> 00:13:46,230
+the bank intervened just after it considered and rejected
+在考虑并拒绝后，银行进行了干预
+
+297
+00:13:46,230 --> 00:13:49,365
+an IMF demand to rebuild depleted European stocks,
+国际货币基金组织要求重建耗尽的欧洲股票，
+
+298
+00:13:49,365 --> 00:13:52,810
+September, 30th end primary 76 counts a share.''
+9月30日结束小学76分数。''
+
+299
+00:13:52,810 --> 00:13:55,250
+Okay. So, uh, what do we think about this text?
+好的。那么，呃，我们对这个文本有什么看法？
+
+300
+00:13:55,250 --> 00:13:59,195
+We think it's good? We, uh, surprised?
+我们认为这很好吗？我们，呃，很惊讶？
+
+301
+00:13:59,195 --> 00:14:02,370
+Um, I would say that in some ways it is good,
+嗯，我会说在某些方面它很好，
+
+302
+00:14:02,370 --> 00:14:04,620
+it's kind of surprisingly grammatical, you know,
+你知道，它有点令人惊讶的语法
+
+303
+00:14:04,620 --> 00:14:07,860
+it mostly, uh, kind of pauses,
+它主要是，呃，有点停顿，
+
+304
+00:14:07,860 --> 00:14:09,150
+uh, but you would definitely say that it,
+呃，但你肯定会说，
+
+305
+00:14:09,150 --> 00:14:10,500
+it doesn't really make any sense.
+它没有任何意义。
+
+306
+00:14:10,500 --> 00:14:12,180
+It's pretty incoherent.
+这是非常不连贯的。
+
+307
+00:14:12,180 --> 00:14:14,580
+And we shouldn't be surprised that it's incoherent I
+我们不应该感到惊讶，因为它不连贯
+
+308
+00:14:14,580 --> 00:14:17,715
+think because if you remember this is a trigram Language Model,
+想想因为如果你还记得这是一个三元语言模型，
+
+309
+00:14:17,715 --> 00:14:20,265
+it has a memory of just the last well,
+它有最后一口井的记忆，
+
+310
+00:14:20,265 --> 00:14:22,635
+three or two words depending on how you look at it.
+三到两个字，取决于你如何看待它。
+
+311
+00:14:22,635 --> 00:14:24,510
+So clearly we need to consider
+显然我们需要考虑
+
+312
+00:14:24,510 --> 00:14:27,990
+more than three words at a time if we want to model language well.
+如果我们想要很好地模拟语言，一次超过三个单词。
+
+313
+00:14:27,990 --> 00:14:32,265
+But as we already know, increasing n makes the sparsity problem worse,
+但正如我们已经知道的那样，增加n会使稀疏性问题变得更糟，
+
+314
+00:14:32,265 --> 00:14:38,370
+n-gram Language Models, and it also increases model size. Is that a question?
+n-gram语言模型，它也增加了模型大小。这是一个问题吗？
+
+315
+00:14:38,370 --> 00:14:40,320
+How does it [inaudible] [NOISE]
+怎么样[听不清] [NOISE]
+
+316
+00:14:40,320 --> 00:14:43,380
+So the question is, how does the n-gram Language Model know when to put commas.
+所以问题是，n-gram语言模型如何知道何时使用逗号。
+
+317
+00:14:43,380 --> 00:14:45,150
+Uh, so you can,
+呃，你可以，
+
+318
+00:14:45,150 --> 00:14:50,400
+[NOISE] decide that commas and other punctuation are just another kind of word,
+[NOISE]决定逗号和其他标点符号只是另一种词，
+
+319
+00:14:50,400 --> 00:14:51,705
+is that well or token,
+那是好还是令牌，
+
+320
+00:14:51,705 --> 00:14:54,510
+and then, to the Language Model it doesn't really make much difference.
+然后，对于语言模型，它并没有太大的区别。
+
+321
+00:14:54,510 --> 00:14:57,705
+It's just used that as another possible world that can be, um, predicted,
+它只是用作另一个可能的世界，嗯，预测，
+
+322
+00:14:57,705 --> 00:14:59,445
+that's why we've got the weird spacing around the,
+这就是为什么我们周围有奇怪的间距，
+
+323
+00:14:59,445 --> 00:15:01,770
+the commas is because it was essentially viewed as a separate word.
+逗号是因为它基本上被视为一个单独的词。
+
+324
+00:15:01,770 --> 00:15:06,135
+[NOISE] Okay.
+[NOISE]好的。
+
+325
+00:15:06,135 --> 00:15:09,195
+So this course is called NLP with Deep Learning.
+因此，本课程称为NLP与深度学习。
+
+326
+00:15:09,195 --> 00:15:12,765
+So you probably thinking how do we build a neural Language Model?
+所以你可能在想我们如何构建神经语言模型？
+
+327
+00:15:12,765 --> 00:15:15,450
+So let's just recap, uh, in case you forgot.
+所以，让我们回顾一下，呃，万一你忘记了。
+
+328
+00:15:15,450 --> 00:15:17,940
+Remember that a Language Model is something that takes
+请记住语言模型是需要的东西
+
+329
+00:15:17,940 --> 00:15:20,760
+inputs which is a sequence of words X1 up to Xt,
+输入是一系列单词X1到Xt，
+
+330
+00:15:20,760 --> 00:15:26,290
+and then it outputs a probability distribution of what the next word might be Xt plus 1.
+然后它输出下一个单词可能是Xt加1的概率分布。
+
+331
+00:15:27,470 --> 00:15:32,070
+Okay, so when we think about what kind of neural models we've met in this course so far.
+好的，所以当我们考虑到目前为止我们在这个课程中遇到了什么样的神经模型。
+
+332
+00:15:32,070 --> 00:15:34,545
+Uh, we've already met window-based neural models.
+呃，我们已经遇到了基于窗口的神经模型。
+
+333
+00:15:34,545 --> 00:15:36,780
+And in lecture three, we saw how you could apply
+在第三讲中，我们看到了如何申请
+
+334
+00:15:36,780 --> 00:15:40,035
+a window-based neural model to a named entity recognition.
+基于窗口的神经模型到命名实体识别。
+
+335
+00:15:40,035 --> 00:15:43,050
+So in that scenario you take some kind of window around the word that you
+所以在这种情况下，你会在你的单词周围采取某种形式的窗口
+
+336
+00:15:43,050 --> 00:15:46,125
+care about which in this example is Paris, and then, uh,
+关心这个例子中巴黎是什么，然后，呃，
+
+337
+00:15:46,125 --> 00:15:48,780
+you get the word embeddings for those, concatenate them put them through
+你得到那些嵌入词，连接它们让它们通过
+
+338
+00:15:48,780 --> 00:15:52,890
+some layers, and then you get your decision which is that Paris is a location not,
+一些层次，然后你得到你的决定，巴黎不是一个位置，
+
+339
+00:15:52,890 --> 00:15:55,425
+you know, a person or organization.
+你知道，一个人或一个组织。
+
+340
+00:15:55,425 --> 00:15:57,900
+So that's a recap of what we saw in lecture three.
+这是对我们在第三讲中所看到的内容的回顾。
+
+341
+00:15:57,900 --> 00:16:03,795
+How would we apply a model like this to language modeling? So here's how you would do it.
+我们如何将这样的模型应用于语言建模？所以这就是你如何做到的。
+
+342
+00:16:03,795 --> 00:16:06,930
+Here's an example of a fixed-window neural language model.
+这是一个固定窗口神经语言模型的例子。
+
+343
+00:16:06,930 --> 00:16:09,420
+So, again, we have some kind of context
+所以，我们再次拥有某种背景
+
+344
+00:16:09,420 --> 00:16:12,060
+which is, as the proctor started the clock the students opened their,
+也就是说，当监考员开始时钟时，学生们开了他们的，
+
+345
+00:16:12,060 --> 00:16:15,225
+um, we're trying to guess what word might come next.
+嗯，我们试着猜猜接下来会说些什么。
+
+346
+00:16:15,225 --> 00:16:18,450
+So we have to make a similar simplifying assumption to before.
+所以我们必须做出类似的简化假设。
+
+347
+00:16:18,450 --> 00:16:21,255
+Uh, because it's a fixed size window, uh,
+呃，因为它是一个固定大小的窗口，呃，
+
+348
+00:16:21,255 --> 00:16:25,500
+we have to discard the context except for the window that we're conditioning on.
+我们必须丢弃上下文，除了我们正在调整的窗口。
+
+349
+00:16:25,500 --> 00:16:29,070
+So let's suppose that our fixed window is of size four.
+所以我们假设我们的固定窗口大小为4。
+
+350
+00:16:29,070 --> 00:16:34,390
+So what we'll do is similarly to the, ah, NER model.
+那么我们要做的是和啊，NER模型类似。
+
+351
+00:16:34,390 --> 00:16:38,400
+We're going to represent these words with one-hot vectors,
+我们将用一个热矢量来表示这些单词，
+
+352
+00:16:38,400 --> 00:16:42,745
+and then we'll use those to look up the word embeddings for these words using the,
+然后我们将使用这些来查找这些单词的嵌入字，使用，
+
+353
+00:16:42,745 --> 00:16:44,895
+uh, embedding lookup matrix.
+呃，嵌入查找矩阵。
+
+354
+00:16:44,895 --> 00:16:48,075
+So then we get all of our word embeddings E,1, 2, 3, 4,
+那么我们得到所有的单词嵌入E，1,2,3,4，
+
+355
+00:16:48,075 --> 00:16:51,270
+and then we concatenate them together to get e. We put this through
+然后我们将它们连接起来以获得e。我们通过这个
+
+356
+00:16:51,270 --> 00:16:55,215
+a linear layer and a nonlinearity function f to get some kind of hidden layer,
+线性层和非线性函数f得到某种隐藏层，
+
+357
+00:16:55,215 --> 00:16:57,720
+and then we put it through another linear layer and
+然后我们通过另一个线性层和
+
+358
+00:16:57,720 --> 00:17:01,860
+the softmax function and now we have an output probability distribution y hat.
+softmax函数，现在我们有一个输出概率分布。
+
+359
+00:17:01,860 --> 00:17:05,925
+And in our case because we're trying to predict what word comes next, ah, ah,
+在我们的例子中，因为我们试图预测下一个字是什么啊，啊，
+
+360
+00:17:05,925 --> 00:17:08,430
+vector y hat will be of length v where v is
+矢量y帽的长度为v，其中v为
+
+361
+00:17:08,430 --> 00:17:10,020
+the vocabulary and it will contain
+词汇，它将包含
+
+362
+00:17:10,020 --> 00:17:12,555
+the probabilities of all the different words in the vocabulary.
+词汇表中所有不同单词的概率。
+
+363
+00:17:12,555 --> 00:17:15,600
+So here I've represented that as a bar charts where if you suppose
+所以在这里我把它表示为条形图，如果你想的话
+
+364
+00:17:15,600 --> 00:17:18,690
+you've got all of the words listed alphabetically from a to z,
+你有从a到z按字母顺序列出的所有单词，
+
+365
+00:17:18,690 --> 00:17:21,300
+and then there's the different probabilities of the words.
+然后是单词的不同概率。
+
+366
+00:17:21,300 --> 00:17:22,845
+So if everything goes well,
+所以，如果一切顺利，
+
+367
+00:17:22,845 --> 00:17:24,480
+then this language model should tell us that
+那么这种语言模型应该告诉我们
+
+368
+00:17:24,480 --> 00:17:27,930
+some likely next words are books and laptops, for example.
+例如，一些可能的下一个词是书籍和笔记本电脑。
+
+369
+00:17:27,930 --> 00:17:29,940
+So none of this should be, um,
+所以这一切都不应该，嗯，
+
+370
+00:17:29,940 --> 00:17:31,770
+unfamiliar to you because you saw it all last week.
+你不熟悉，因为你上周看到了这一切。
+
+371
+00:17:31,770 --> 00:17:36,100
+We're just applying a Window-based model to a different task,  such as language modeling.
+我们只是将基于窗口的模型应用于不同的任务，例如语言建模。
+
+372
+00:17:36,470 --> 00:17:38,940
+Okay, so what are,
+好的，那是什么，
+
+373
+00:17:38,940 --> 00:17:42,240
+some good things about this model compared to n-gram language models?
+与n-gram语言模型相比，这个模型有些好处吗？
+
+374
+00:17:42,240 --> 00:17:46,305
+So one, ah, advantage I'd say is that there's no sparsity problem.
+所以，我要说的一个优点是，没有稀疏性问题。
+
+375
+00:17:46,305 --> 00:17:49,695
+If you remember an n-gram language model has a sparsity problem
+如果你还记得n-gram语言模型有稀疏性问题
+
+376
+00:17:49,695 --> 00:17:53,205
+which is that if you've never seen a particular n-gram in training then,
+那就是如果你从未在培训中看过特定的n-gram那么，
+
+377
+00:17:53,205 --> 00:17:55,005
+you can't assign any probability to it.
+你不能给它任何概率。
+
+378
+00:17:55,005 --> 00:17:56,445
+You don't have any data on it.
+您没有任何数据。
+
+379
+00:17:56,445 --> 00:17:59,340
+Whereas at least here you can take any, you know, for example,
+至少在这里你可以拿任何，你知道，例如，
+
+380
+00:17:59,340 --> 00:18:02,115
+4-gram you want and you can feed it into the, ah,
+你想要的4克，你可以把它喂进啊，
+
+381
+00:18:02,115 --> 00:18:03,795
+the neural nets and it will give you
+神经网络它会给你
+
+382
+00:18:03,795 --> 00:18:06,150
+an output distribution of what it thinks the next word would be.
+它认为下一个单词的输出分布。
+
+383
+00:18:06,150 --> 00:18:10,245
+It might not be a good prediction but at least it will, it will run.
+它可能不是一个好的预测，但至少它会，它会运行。
+
+384
+00:18:10,245 --> 00:18:12,930
+Another advantage is you don't need to store
+另一个优点是你不需要存储
+
+385
+00:18:12,930 --> 00:18:15,090
+all of the observed n-grams that you ever saw.
+你见过的所有观察到的n-gram。
+
+386
+00:18:15,090 --> 00:18:17,280
+So, uh, this an advantage by, uh,
+所以，呃，这是一个优势，呃，
+
+387
+00:18:17,280 --> 00:18:19,230
+comparison you just have to store
+比较你只需要存储
+
+388
+00:18:19,230 --> 00:18:22,155
+all of the word vectors for all the words in your vocabulary.
+词汇表中所有单词的所有单词向量。
+
+389
+00:18:22,155 --> 00:18:26,085
+Uh, but there are quite a lot of problems with this fixed-window language model.
+呃，但是这个固定窗口语言模型存在很多问题。
+
+390
+00:18:26,085 --> 00:18:29,160
+So here are some remaining problems: Uh,
+所以这里有一些遗留的问题：呃，
+
+391
+00:18:29,160 --> 00:18:31,470
+one is that your fixed window is probably too small.
+一个是你的固定窗口可能太小了。
+
+392
+00:18:31,470 --> 00:18:33,885
+No matter how big you make your fixed window, uh,
+不管你的固定窗口有多大，呃，
+
+393
+00:18:33,885 --> 00:18:35,640
+you're probably going to be losing some kind of
+你可能会失去一些
+
+394
+00:18:35,640 --> 00:18:38,490
+useful context that you would want to use sometimes.
+您有时想要使用的有用上下文。
+
+395
+00:18:38,490 --> 00:18:41,745
+And in fact, if you try to enlarge the window size,
+事实上，如果你试图放大窗口大小，
+
+396
+00:18:41,745 --> 00:18:44,175
+then you also have to enlarge the size of your,
+那么你还需要扩大你的大小，
+
+397
+00:18:44,175 --> 00:18:45,480
+uh, weight factor, sorry,
+呃，体重因素，抱歉，
+
+398
+00:18:45,480 --> 00:18:47,580
+your weight matrix W. Uh,
+你的体重矩阵W.呃，
+
+399
+00:18:47,580 --> 00:18:49,590
+so the width of W because you're multiplying it
+所以宽度为W，因为你是乘以它
+
+400
+00:18:49,590 --> 00:18:52,110
+by e which is the concatenation of your word embeddings.
+通过e，这是你的单词嵌入的串联。
+
+401
+00:18:52,110 --> 00:18:56,230
+The width of W grows as you increase the size of your window.
+随着窗口大小的增加，W的宽度会增大。
+
+402
+00:18:56,390 --> 00:19:01,210
+So in inclusion really your window can never be large enough.
+因此，在包含中，您的窗口永远不会足够大。
+
+403
+00:19:01,280 --> 00:19:05,460
+Another problem with this model which is more of a subtle point is that
+这个模型的另一个问题是更微妙的一点
+
+404
+00:19:05,460 --> 00:19:08,820
+X1 and X2 and really all of the words in the window they're,
+X1和X2，真的是窗口中的所有单词，
+
+405
+00:19:08,820 --> 00:19:11,100
+uh, multiplied by completely diffe rent weights in
+呃，乘以完全不同的租金权重
+
+406
+00:19:11,100 --> 00:19:14,565
+W. So to demonstrate this you could draw a picture.
+W.所以为了证明这一点，你可以画一幅画。
+
+407
+00:19:14,565 --> 00:19:17,610
+So the problem is that if you have
+所以问题是，如果你有
+
+408
+00:19:17,610 --> 00:19:21,720
+your weight matrix W and then you have
+你的体重矩阵W然后你有
+
+409
+00:19:21,720 --> 00:19:26,910
+your concatenation of embeddings e and we have, uh, four embeddings.
+你嵌入e的连接，我们有四个嵌入。
+
+410
+00:19:26,910 --> 00:19:30,390
+So we have e_1, e_2, e_3,
+所以我们有e_1，e_2，e_3，
+
+411
+00:19:30,390 --> 00:19:33,135
+e_4, and you multiply, uh,
+e_4，你倍增，呃，
+
+412
+00:19:33,135 --> 00:19:36,615
+the concatenated embeddings by the weight matrix.
+由权重矩阵连接的嵌入。
+
+413
+00:19:36,615 --> 00:19:39,120
+So really you can see that there are essentially
+所以你真的可以看到基本上存在
+
+414
+00:19:39,120 --> 00:19:42,449
+kind of four sections of the weight matrix,
+重量矩阵的四个部分，
+
+415
+00:19:42,449 --> 00:19:45,570
+and the first word embedding e_1 is only
+并且嵌入e_1的第一个单词是唯一的
+
+416
+00:19:45,570 --> 00:19:48,825
+ever multiplied by the weights for it in this section,
+在本节中，乘以它的权重，
+
+417
+00:19:48,825 --> 00:19:53,025
+and that's completely separate to the weights that multiply by e_2 and so forth.
+并且这与权重乘以e_2等完全分开。
+
+418
+00:19:53,025 --> 00:19:56,700
+So the problem with this is that what you
+所以问题就在于你
+
+419
+00:19:56,700 --> 00:20:00,060
+learn in the weight matrix in one section is not shared with the others.
+在一个部分中的权重矩阵中学习不与其他部分共享。
+
+420
+00:20:00,060 --> 00:20:03,985
+You're kind of learning a lot of similar functions four times.
+你有四次学习很多类似的功能。
+
+421
+00:20:03,985 --> 00:20:07,910
+So the reason why we think this is a problem is because there should be a lot of
+所以我们认为这是一个问题的原因是因为应该有很多
+
+422
+00:20:07,910 --> 00:20:12,130
+commonalities in how you process the incoming word embeddings.
+如何处理传入的字嵌入的共性。
+
+423
+00:20:12,130 --> 00:20:14,880
+So what you learn about how to process, you know,
+所以你学到了如何处理，你知道，
+
+424
+00:20:14,880 --> 00:20:18,375
+the third embedding, some of it at least should be shared with all of the embeddings.
+第三次嵌入，其中一些至少应与所有嵌入共享。
+
+425
+00:20:18,375 --> 00:20:21,960
+So what I'm saying is it's kind of inefficient that we're learning, uh,
+所以我所说的是我们正在学习的那种效率低下，呃，
+
+426
+00:20:21,960 --> 00:20:24,300
+all of these separate weights for these different words
+这些不同单词的所有这些单独的权重
+
+427
+00:20:24,300 --> 00:20:27,970
+when there's a lot of commonalities between them. Is there a question?
+当他们之间有很多共同点的时候。有问题吗？
+
+428
+00:20:29,840 --> 00:20:31,180
+So that's why [inaudible] [NOISE].
+这就是[听不清] [NOISE]的原因。
+
+429
+00:20:31,180 --> 00:20:31,965
+Okay-
+好的-
+
+430
+00:20:31,965 --> 00:20:36,560
+Yeah, hopefully- hopefully the verbal description is on.
+是的，希望 - 希望口头描述是正确的。
+
+431
+00:20:38,280 --> 00:20:42,310
+So, in conclusion, I'd say that the biggest problem that we've got with
+所以，总而言之，我会说这是我们遇到的最大问题
+
+432
+00:20:42,310 --> 00:20:45,280
+this fixed-size neural model is that clearly we
+这个固定大小的神经模型显然是我们
+
+433
+00:20:45,280 --> 00:20:48,355
+need some kind of neural architecture that can process any length input,
+需要某种可以处理任何长度输入的神经架构，
+
+434
+00:20:48,355 --> 00:20:51,070
+because most of the problems here come from the fact that we had to make
+因为这里的大多数问题来自我们必须做的事实
+
+435
+00:20:51,070 --> 00:20:54,920
+this simplifying assumption that there was a fixed window.
+这个简化的假设是有一个固定的窗口。
+
+436
+00:20:56,670 --> 00:21:00,040
+Okay. So this motivates, uh,
+好的。所以这就是激励，呃，
+
+437
+00:21:00,040 --> 00:21:02,590
+us to introduce this new family of neural architecture,
+我们来介绍这个新的神经系统家族，
+
+438
+00:21:02,590 --> 00:21:05,515
+it's called recurrent neural networks or RNNs.
+它被称为循环神经网络或RNN。
+
+439
+00:21:05,515 --> 00:21:09,100
+So, this is a simplified diagram that shows you the most important,
+所以，这是一个简化的图表，向您展示最重要的，
+
+440
+00:21:09,100 --> 00:21:11,320
+um, features of an RNN.
+嗯，RNN的特征。
+
+441
+00:21:11,320 --> 00:21:15,070
+So we have again an input sequence of X1, X2,
+所以我们再次输入X1，X2的输入序列，
+
+442
+00:21:15,070 --> 00:21:20,245
+et cetera, but you can assume that this sequence is of any arbitrary length you like.
+等等，但你可以假设这个序列是你喜欢的任意长度。
+
+443
+00:21:20,245 --> 00:21:24,460
+The idea is that you have a sequence of hidden states instead of just having,
+这个想法是你有一系列隐藏的状态而不是只有，
+
+444
+00:21:24,460 --> 00:21:27,175
+for example, one hidden state as we did in the previous model.
+例如，我们在之前的模型中所做的一个隐藏状态。
+
+445
+00:21:27,175 --> 00:21:30,940
+We have a sequence of hidden states and we have as many of them as we have inputs.
+我们有一系列隐藏的状态，我们有尽可能多的输入。
+
+446
+00:21:30,940 --> 00:21:35,440
+And the important thing is that each hidden state ht is computed based
+重要的是每个隐藏状态都是基于计算的
+
+447
+00:21:35,440 --> 00:21:40,315
+on the previous hidden state and also the input on that step.
+在上一个隐藏状态以及该步骤的输入。
+
+448
+00:21:40,315 --> 00:21:44,050
+So the reason why they're called hidden states is because you could think of
+所以他们被称为隐藏状态的原因是因为你可以想到
+
+449
+00:21:44,050 --> 00:21:47,425
+this as a single state that's mutating over time.
+这是一个随时间变化的单一状态。
+
+450
+00:21:47,425 --> 00:21:50,260
+It's kind of like several versions of the same thing.
+它有点像同一件事的几个版本。
+
+451
+00:21:50,260 --> 00:21:53,830
+And for this reason, we often call these time-steps, right?
+因此，我们经常将这些时间步骤称为对，对吧？
+
+452
+00:21:53,830 --> 00:21:55,540
+So these steps that go left to right,
+所以这些步骤从左到右，
+
+453
+00:21:55,540 --> 00:21:57,860
+we often call them time-steps.
+我们经常称他们为时间步骤。
+
+454
+00:21:58,950 --> 00:22:01,870
+So the really important thing is that
+所以非常重要的是
+
+455
+00:22:01,870 --> 00:22:07,210
+the same weight matrix W is applied on every time-step of this RNN.
+在该RNN的每个时间步长上应用相同的权重矩阵W.
+
+456
+00:22:07,210 --> 00:22:11,365
+That's what makes us able to process any length input we want.
+这就是我们能够处理任何我们想要的长度输入的原因。
+
+457
+00:22:11,365 --> 00:22:13,930
+Is because we don't have to have different weights on every step,
+是因为我们不必在每一步都有不同的权重，
+
+458
+00:22:13,930 --> 00:22:17,990
+because we just apply the exact same transformation on every step.
+因为我们只是在每一步都应用完全相同的转换。
+
+459
+00:22:18,870 --> 00:22:22,690
+So additionally, you can also have some outputs from the RNN.
+此外，您还可以从RNN获得一些输出。
+
+460
+00:22:22,690 --> 00:22:23,995
+So these y hats,
+所以这些帽子，
+
+461
+00:22:23,995 --> 00:22:26,155
+these are the outputs on each step.
+这些是每一步的输出。
+
+462
+00:22:26,155 --> 00:22:28,735
+And they're optional because you don't have to compute them
+它们是可选的，因为您不必计算它们
+
+463
+00:22:28,735 --> 00:22:31,210
+or you can compute them on just some steps and not others.
+或者你可以只在一些步骤而不是其他步骤计算它们。
+
+464
+00:22:31,210 --> 00:22:34,160
+It depends on where you want to use your RNN to do.
+这取决于您希望使用RNN的位置。
+
+465
+00:22:34,920 --> 00:22:38,260
+Okay. So that's a simple diagram of an RNN.
+好的。这是一个简单的RNN图。
+
+466
+00:22:38,260 --> 00:22:39,850
+Uh, here I'm going to give you a bit more detail.
+呃，我在这里给你一些细节。
+
+467
+00:22:39,850 --> 00:22:43,630
+So here's how you would apply an RNN to do language modeling.
+所以这里是你如何应用RNN进行语言建模。
+
+468
+00:22:43,630 --> 00:22:48,175
+So, uh, again, let's suppose that we have some kind of text so far.
+那么，呃，再说一次，我们假设到目前为止我们有一些文本。
+
+469
+00:22:48,175 --> 00:22:50,860
+My text is only four words long,
+我的文字只有四个字，
+
+470
+00:22:50,860 --> 00:22:53,320
+but you can assume that it could be any length, right?
+但你可以认为它可以是任何长度，对吗？
+
+471
+00:22:53,320 --> 00:22:55,420
+It's just short because we can't fit more on the slide.
+它只是简短，因为我们不能适应幻灯片。
+
+472
+00:22:55,420 --> 00:22:58,390
+So you have some sequence of tags, which could be kind of long.
+所以你有一些标签序列，这可能有点长。
+
+473
+00:22:58,390 --> 00:23:02,020
+And again, we're going to represent these by some kind of one-hot vectors and
+而且，我们将通过某种单热的向量来表示这些
+
+474
+00:23:02,020 --> 00:23:06,460
+use those to look up the word embeddings from our embedding matrix.
+使用它们从我们的嵌入矩阵中查找嵌入这个词。
+
+475
+00:23:06,460 --> 00:23:10,370
+So then to compute the first hidden state H1,
+那么计算第一个隐藏状态H1，
+
+476
+00:23:10,370 --> 00:23:14,300
+we need to compute it based on the previous hidden state and the current input.
+我们需要根据先前的隐藏状态和当前输入来计算它。
+
+477
+00:23:14,300 --> 00:23:16,615
+We already have the current input, that's E1,
+我们已经有了当前的输入，即E1，
+
+478
+00:23:16,615 --> 00:23:19,570
+but the question is where do we get this first hidden state from?
+但问题是我们从哪里获得第一个隐藏状态？
+
+479
+00:23:19,570 --> 00:23:21,160
+All right, what comes before H1?
+好吧，H1之前会发生什么？
+
+480
+00:23:21,160 --> 00:23:24,670
+So we often call the initial hidden state H0, uh, yes,
+所以我们经常调用初始隐藏状态H0，呃，是的，
+
+481
+00:23:24,670 --> 00:23:28,015
+we call the initial hidden state and it can either be something that you learn,
+我们称之为初始隐藏状态，它可以是你学到的东西，
+
+482
+00:23:28,015 --> 00:23:32,065
+like it's a parameter of the network and you learn how to initialize it,
+喜欢它是网络的参数，你学习如何初始化它，
+
+483
+00:23:32,065 --> 00:23:35,395
+or you can assume something like maybe it's the zero vector.
+或者你可以假设它可能是零矢量。
+
+484
+00:23:35,395 --> 00:23:40,495
+So the formula we use to compute the new hidden state based on the previous one,
+所以我们用来计算基于前一个隐藏状态的公式，
+
+485
+00:23:40,495 --> 00:23:43,195
+and also the current inputs is written on the left.
+并且当前输入也写在左侧。
+
+486
+00:23:43,195 --> 00:23:46,690
+So you do a linear transformation on the previous hidden state and on
+因此，您对之前的隐藏状态进行线性转换
+
+487
+00:23:46,690 --> 00:23:48,640
+the current input and then you add some kind of
+当前输入然后你添加一些
+
+488
+00:23:48,640 --> 00:23:50,919
+bias and then put it through a non-linearity,
+偏见，然后通过非线性，
+
+489
+00:23:50,919 --> 00:23:52,990
+like for example, the sigmoid function.
+例如，sigmoid函数。
+
+490
+00:23:52,990 --> 00:23:55,700
+And that gives you a new hidden state.
+这会给你一个新的隐藏状态。
+
+491
+00:23:56,670 --> 00:23:59,470
+Okay. So, once you've done that,
+好的。所以，一旦你做到了，
+
+492
+00:23:59,470 --> 00:24:01,480
+then you can compute the next hidden state and you
+然后你可以计算下一个隐藏状态和你
+
+493
+00:24:01,480 --> 00:24:03,850
+can keep unrolling the network like this.
+可以像这样继续展开网络。
+
+494
+00:24:03,850 --> 00:24:06,025
+And that's, uh, yeah,
+那就是，呃，是的，
+
+495
+00:24:06,025 --> 00:24:07,450
+that's called unrolling because you're kind of
+这就是所谓的展开，因为你有点像
+
+496
+00:24:07,450 --> 00:24:10,270
+computing each step given the previous one.
+计算给定前一步的每一步。
+
+497
+00:24:10,270 --> 00:24:12,160
+All right. So finally, if you remember,
+行。所以最后，如果你还记得，
+
+498
+00:24:12,160 --> 00:24:13,330
+we're trying to do language modeling.
+我们正在尝试进行语言建模。
+
+499
+00:24:13,330 --> 00:24:17,530
+So we're trying to predict which words should come next after the students opened their.
+所以我们试着预测学生们打开他们后应该接下来的单词。
+
+500
+00:24:17,530 --> 00:24:19,870
+So on this fourth step over here,
+所以在这第四步，
+
+501
+00:24:19,870 --> 00:24:21,205
+we can use, uh,
+我们可以用，呃，
+
+502
+00:24:21,205 --> 00:24:22,825
+the current hidden state, H4,
+目前的隐藏状态，H4，
+
+503
+00:24:22,825 --> 00:24:27,430
+and put it through a linear layer and put it through a softmax function and then we get
+并通过一个线性层，并通过softmax函数，然后我们得到
+
+504
+00:24:27,430 --> 00:24:32,800
+our output distribution Y-hat 4 which is a distribution over the vocabulary.
+我们的输出分布Y-hat 4是词汇表中的分布。
+
+505
+00:24:32,800 --> 00:24:34,720
+And again, hopefully, we'll get some kind of
+再次，希望，我们会得到一些
+
+506
+00:24:34,720 --> 00:24:38,080
+sensible estimates for what the next word might be.
+对下一个词可能是什么的合理估计。
+
+507
+00:24:38,080 --> 00:24:43,210
+Any questions at this point. Yep?
+此时有任何问题。是的？
+
+508
+00:24:43,210 --> 00:24:47,650
+Is the- the number of hidden state or is it gonna be the number of words in your input?
+是隐藏状态的数量还是输入中的单词数量？
+
+509
+00:24:47,650 --> 00:24:50,845
+The question is, is the number of hidden states the number of words in your input?
+问题是，隐藏状态的数量是输入中的单词数量吗？
+
+510
+00:24:50,845 --> 00:24:53,485
+Yeah, in this setting here, uh, yes,
+是的，在这里，呃，是的，
+
+511
+00:24:53,485 --> 00:24:58,405
+or you could say more generally the number of hidden states is the number of inputs. Yep.
+或者你可以更一般地说隐藏状态的数量是输入的数量。是的。
+
+512
+00:24:58,405 --> 00:24:59,950
+And just as with the n-gram model,
+和n-gram模型一样，
+
+513
+00:24:59,950 --> 00:25:05,590
+we could use the output as the input from the tasks mutation in transformational model?
+我们可以使用输出作为转换模型中任务变异的输入吗？
+
+514
+00:25:05,590 --> 00:25:07,000
+Yeah, so the question is,
+是的，所以问题是，
+
+515
+00:25:07,000 --> 00:25:08,650
+as with the n-gram language model,
+与n-gram语言模型一样，
+
+516
+00:25:08,650 --> 00:25:10,570
+could we use the output as the input on the next step?
+我们可以在下一步使用输出作为输入吗？
+
+517
+00:25:10,570 --> 00:25:12,715
+And the answer is yes, and I'll show you that in a minute.
+答案是肯定的，我会在一分钟内告诉你。
+
+518
+00:25:12,715 --> 00:25:15,700
+Any other questions? Yeah.
+还有其他问题吗？是啊。
+
+519
+00:25:15,700 --> 00:25:17,995
+Are you learning the embedding?
+你在学习嵌入吗？
+
+520
+00:25:17,995 --> 00:25:20,560
+The question is, are you learning the embeddings?
+问题是，你在学习嵌入吗？
+
+521
+00:25:20,560 --> 00:25:21,925
+Um, that's a choice.
+嗯，这是一个选择。
+
+522
+00:25:21,925 --> 00:25:23,770
+You could have the embeddings be for example,
+你可以嵌入例如，
+
+523
+00:25:23,770 --> 00:25:27,370
+pre-generated embeddings that you download and you use those and they're frozen,
+您下载的预先生成的嵌入，您使用它们并将它们冻结，
+
+524
+00:25:27,370 --> 00:25:28,750
+or maybe you could download them,
+或者你可以下载它们，
+
+525
+00:25:28,750 --> 00:25:30,190
+but then you could fine-tune them.
+但是你可以对它们进行微调。
+
+526
+00:25:30,190 --> 00:25:32,200
+That is,  allow them to be changed as parameters of
+也就是说，允许它们作为参数更改
+
+527
+00:25:32,200 --> 00:25:35,170
+the network or you could initialize them to,
+网络或你可以初始化它们，
+
+528
+00:25:35,170 --> 00:25:38,560
+you know, small, uh, random values and learn them from scratch.
+你知道，小，呃，随机值，从头开始学习它们。
+
+529
+00:25:38,560 --> 00:25:40,570
+Any other questions? Yeah.
+还有其他问题吗？是啊。
+
+530
+00:25:40,570 --> 00:25:43,690
+So you said you use the same delta matrix,
+所以你说你使用相同的delta矩阵，
+
+531
+00:25:43,690 --> 00:25:45,490
+like you do back propagation,
+就像你做反向传播一样
+
+532
+00:25:45,490 --> 00:25:48,030
+does that you only update like WE,
+那你只是像WE一样更新，
+
+533
+00:25:48,030 --> 00:25:51,080
+or do you update both WH and WE?
+或者你更新WH和WE？
+
+534
+00:25:51,080 --> 00:25:56,085
+So the question is, you say we reuse the matrix, do we update WE and WH, or just one?
+所以问题是，你说我们重用矩阵，我们更新WE和WH，还是只更新一个？
+
+535
+00:25:56,085 --> 00:25:58,980
+So you suddenly learn both WE and WH.
+所以你突然学习了WE和WH。
+
+536
+00:25:58,980 --> 00:26:01,410
+I suppose I was emphasizing WH more, but yeah,
+我想我更强调WH，但是，是的，
+
+537
+00:26:01,410 --> 00:26:04,090
+they're both matrices that are applied repeatedly.
+它们都是重复应用的矩阵。
+
+538
+00:26:04,090 --> 00:26:05,500
+There was also a question about back-prop,
+还有一个关于反支柱的问题，
+
+539
+00:26:05,500 --> 00:26:07,675
+but we're going to cover that later in this lecture.
+但是我们将在本讲座的后面部分介绍。
+
+540
+00:26:07,675 --> 00:26:12,250
+Okay, moving on for now. Um, so,
+好的，继续前进。嗯，所以，
+
+541
+00:26:12,250 --> 00:26:17,530
+what are some advantages and disadvantages of this RNN language model?
+这种RNN语言模型有哪些优点和缺点？
+
+542
+00:26:17,530 --> 00:26:23,005
+So here are some advantages that we can see in comparison to the fixed window one.
+因此，与固定窗口相比，我们可以看到一些优点。
+
+543
+00:26:23,005 --> 00:26:28,210
+So an obvious advantage is that this RNN can process any length of input.
+因此，一个明显的优势是该RNN可以处理任何长度的输入。
+
+544
+00:26:28,210 --> 00:26:31,180
+Another advantage is that the computation for
+另一个优点是计算
+
+545
+00:26:31,180 --> 00:26:35,050
+step t can in theory use information from many steps back.
+理论上，步骤t可以使用来自许多步骤的信息。
+
+546
+00:26:35,050 --> 00:26:36,730
+So in our motivation example,
+所以在我们的动机例子中，
+
+547
+00:26:36,730 --> 00:26:38,650
+which was as the proctor started the clock,
+这是监考人员启动的时钟，
+
+548
+00:26:38,650 --> 00:26:39,970
+the students opened their.
+学生们开了他们的。
+
+549
+00:26:39,970 --> 00:26:42,250
+We think that proctor and maybe clock are
+我们认为监考人员和时钟都是
+
+550
+00:26:42,250 --> 00:26:45,340
+both pretty important hints for what might be coming up next.
+对于下一步可能会出现的重要提示。
+
+551
+00:26:45,340 --> 00:26:47,275
+So, at least in theory,
+所以，至少在理论上，
+
+552
+00:26:47,275 --> 00:26:49,390
+the hidden state at the end
+最后隐藏的状态
+
+553
+00:26:49,390 --> 00:26:54,950
+can have access to the information from the input from many steps ago.
+可以从许多步骤前的输入中访问信息。
+
+554
+00:26:55,350 --> 00:26:59,785
+Another advantage is that the model size doesn't increase for longer inputs.
+另一个优点是，对于较长的输入，模型大小不会增加。
+
+555
+00:26:59,785 --> 00:27:02,485
+So, uh, the size of the model is actually fixed.
+所以，呃，模型的大小实际上是固定的。
+
+556
+00:27:02,485 --> 00:27:05,005
+It's just WH and WE,s
+这只是WH和WE，s
+
+557
+00:27:05,005 --> 00:27:09,400
+and then also the biases and also the embedding matrix, if you're counting that.
+然后还有偏见和嵌入矩阵，如果你在计算它。
+
+558
+00:27:09,400 --> 00:27:13,000
+None of those get bigger if you want to apply it to more,
+如果你想把它应用到更多，这些都不会变大，
+
+559
+00:27:13,000 --> 00:27:17,300
+uh, longer inputs because you just apply the same weights repeatedly.
+呃，输入时间较长，因为你只是重复应用相同的权重。
+
+560
+00:27:18,030 --> 00:27:23,995
+And another advantage is that you have the same weights applied on every time-step.
+另一个优点是您在每个时间步都应用相同的权重。
+
+561
+00:27:23,995 --> 00:27:29,425
+So I said this thing before about how the fixed-sized window neural model,
+所以我之前说过这个关于如何固定大小的窗口神经模型，
+
+562
+00:27:29,425 --> 00:27:31,720
+it was less efficient because it was applying
+效率较低，因为它正在应用
+
+563
+00:27:31,720 --> 00:27:34,270
+different weights of the weight matrix to the different,
+重量矩阵的权重不同，
+
+564
+00:27:34,270 --> 00:27:35,905
+uh, words in the window.
+呃，窗口中的文字。
+
+565
+00:27:35,905 --> 00:27:38,470
+And the advantage about this RNN is that it's
+这个RNN的优势在于它
+
+566
+00:27:38,470 --> 00:27:41,650
+applying the exact same transformation to each of the inputs.
+对每个输入应用完全相同的变换。
+
+567
+00:27:41,650 --> 00:27:45,835
+So this means that if it learns a good way to process one input,
+所以这意味着如果它学会了处理一个输入的好方法，
+
+568
+00:27:45,835 --> 00:27:48,010
+that is applied to every input in the sequence.
+这适用于序列中的每个输入。
+
+569
+00:27:48,010 --> 00:27:50,630
+So you can see it as more efficient in that way.
+所以你可以通过这种方式看到它更有效率。
+
+570
+00:27:51,480 --> 00:27:54,805
+Okay, so what are the disadvantages of this model?
+好的，这个型号的缺点是什么？
+
+571
+00:27:54,805 --> 00:27:58,270
+One is that recurrent computation is pretty slow.
+一个是经常计算很慢。
+
+572
+00:27:58,270 --> 00:27:59,995
+Uh, as you saw before,
+呃，正如你之前看到的，
+
+573
+00:27:59,995 --> 00:28:03,865
+you have to compute the hidden state based on the previous hidden state.
+你必须根据以前的隐藏状态计算隐藏状态。
+
+574
+00:28:03,865 --> 00:28:06,925
+So this means that you can't compute all of the hidden states in parallel.
+因此，这意味着您无法并行计算所有隐藏状态。
+
+575
+00:28:06,925 --> 00:28:08,665
+You have to compute them in sequence.
+你必须按顺序计算它们。
+
+576
+00:28:08,665 --> 00:28:13,120
+So, especially if you're trying to compute an RNN over a pretty long sequence of inputs,
+所以，特别是如果你试图在相当长的输入序列上计算RNN，
+
+577
+00:28:13,120 --> 00:28:16,660
+this means that the RNN can be pretty slow to compute.
+这意味着RNN的计算速度可能非常慢。
+
+578
+00:28:16,660 --> 00:28:20,425
+Another disadvantage of RNNs is that it tuns out,
+RNN的另一个缺点是它可以用完，
+
+579
+00:28:20,425 --> 00:28:24,175
+in practice, it's quite difficult to access information from many steps back.
+实际上，从很多步骤中获取信息非常困难。
+
+580
+00:28:24,175 --> 00:28:26,290
+So even though I said we should be able to remember about
+所以即使我说我们应该能够记住
+
+581
+00:28:26,290 --> 00:28:28,930
+the proctor and the clock and use that to predict exams and our books,
+监考人员和时钟用于预测考试和我们的书籍，
+
+582
+00:28:28,930 --> 00:28:30,430
+it turns out that RNNs,
+事实证明，RNN，
+
+583
+00:28:30,430 --> 00:28:32,470
+at least the ones that I've presented in this lecture,
+至少我在本次讲座中提到过的那些，
+
+584
+00:28:32,470 --> 00:28:35,305
+are not as good as that as you would think.
+没有你想象的那么好。
+
+585
+00:28:35,305 --> 00:28:39,295
+Um, we're gonna learn more about both of these disadvantages later in the course,
+嗯，我们将在课程后期更多地了解这两个缺点，
+
+586
+00:28:39,295 --> 00:28:42,610
+and we're going to learn something about how you can try to fix them.
+我们将学习如何尝试修复它们。
+
+587
+00:28:42,610 --> 00:28:46,900
+Have we gotten any questions at this point? Yep.
+我们此时有任何问题吗？是的。
+
+588
+00:28:46,900 --> 00:28:48,010
+Why do we assume that WH are the same?
+为什么我们假设WH是相同的？
+
+589
+00:28:48,010 --> 00:28:51,265
+Sorry, can you speak up?
+对不起，你能说出来吗？
+
+590
+00:28:51,265 --> 00:28:55,900
+Why do we assume that the WH should be the same?
+为什么我们假设WH应该是相同的？
+
+591
+00:28:55,900 --> 00:28:59,635
+So the question is, why should you assume that the WH are the same?
+所以问题是，为什么你认为WH是相同的？
+
+592
+00:28:59,635 --> 00:29:01,450
+I suppose, it's not exactly an assumption,
+我想，这不是一个假设，
+
+593
+00:29:01,450 --> 00:29:04,390
+it's more a deliberate decision in the design of an RNN.
+在设计RNN时，这是一个深思熟虑的决定。
+
+594
+00:29:04,390 --> 00:29:06,460
+So, an RNN is by definition,
+所以，根据定义，RNN是
+
+595
+00:29:06,460 --> 00:29:10,450
+a network where you apply the exact same weights on every step.
+在每个步骤中应用完全相同权重的网络。
+
+596
+00:29:10,450 --> 00:29:13,800
+So, I suppose the question why do you assume maybe should be,
+那么，我想问你为什么应该假设，
+
+597
+00:29:13,800 --> 00:29:15,225
+why is that a good idea?
+为什么这是一个好主意？
+
+598
+00:29:15,225 --> 00:29:17,520
+Um, so I spoke a little bit about why it's a good idea,
+嗯，所以我谈了一下为什么这是一个好主意，
+
+599
+00:29:17,520 --> 00:29:18,690
+and this list of advantages,
+这个优点列表，
+
+600
+00:29:18,690 --> 00:29:23,950
+I suppose, are the reasons why you'd want to do that. Does that answer your question?
+我想，是你想要这样做的原因。这是否回答你的问题？
+
+601
+00:29:24,560 --> 00:29:29,020
+Open their books, right? If you assume that WH are the same,
+打开他们的书吧？如果你认为WH是相同的，
+
+602
+00:29:29,020 --> 00:29:31,420
+you mean that like, uh,
+你的意思是，呃，
+
+603
+00:29:31,420 --> 00:29:34,660
+Markov chain, it's like a Markov chain.
+马尔可夫链，就像马尔可夫链。
+
+604
+00:29:34,660 --> 00:29:37,780
+Uh, the trans- transmit, uh,
+呃，转发，呃，
+
+605
+00:29:37,780 --> 00:29:42,955
+trans- transfer probability for the human moods open,
+人类情绪开放的转移概率，
+
+606
+00:29:42,955 --> 00:29:44,890
+they are the same,
+他们是一样的，
+
+607
+00:29:44,890 --> 00:29:50,940
+but actually the Markov chain.
+但实际上是马尔可夫链。
+
+608
+00:29:50,940 --> 00:29:56,535
+The model, [inaudible] the transfer probability for that is the same,
+该模型[听不清]该转移概率是相同的，
+
+609
+00:29:56,535 --> 00:30:00,895
+so [inaudible] probability,
+所以[听不清]概率，
+
+610
+00:30:00,895 --> 00:30:07,105
+it- it's just an approximation but it's another test.
+它 - 它只是一个近似值，但它是另一个测试。
+
+611
+00:30:07,105 --> 00:30:08,240
+Okay. So I think that [OVERLAPPING]
+好的。所以我觉得[OVERLAPPING]
+
+612
+00:30:08,240 --> 00:30:10,810
+If you assume WH could be the same,
+如果你认为WH可能是相同的，
+
+613
+00:30:10,810 --> 00:30:14,725
+it's good because you used a number of parameters,
+这很好，因为你使用了很多参数，
+
+614
+00:30:14,725 --> 00:30:20,560
+but this is just an, this is just an approximation.
+但这只是一个，这只是一个近似值。
+
+615
+00:30:20,560 --> 00:30:23,410
+The underlying transfer, uh,
+潜在的转移，呃，
+
+616
+00:30:23,410 --> 00:30:25,660
+probability, it shouldn't be the same. Especially [OVERLAPPING]
+概率，它应该不一样。特别是[OVERLAPPING]
+
+617
+00:30:25,660 --> 00:30:28,835
+Okay. Um, so I think the question is saying that given the- these
+好的。嗯，所以我认为问题在于给出了 - 这些
+
+618
+00:30:28,835 --> 00:30:30,540
+words the students opened their
+学生打开他们的话
+
+619
+00:30:30,540 --> 00:30:32,490
+are all different and they're happening in different context,
+都是不同的，它们发生在不同的背景下，
+
+620
+00:30:32,490 --> 00:30:35,850
+then why should we be applying the same transformation each time?
+那为什么我们每次都要应用相同的转换呢？
+
+621
+00:30:35,850 --> 00:30:37,440
+So that's a- that's a good question.
+所以这是一个很好的问题。
+
+622
+00:30:37,440 --> 00:30:41,670
+I think, uh, the idea is that you are learning a general function, not just, you know,
+我想，呃，这个想法是你正在学习一般功能，不仅仅是，你知道，
+
+623
+00:30:41,670 --> 00:30:43,535
+how to deal with students,
+如何对待学生，
+
+624
+00:30:43,535 --> 00:30:46,090
+the one-word students in this one context.
+在这一个背景下的单字学生。
+
+625
+00:30:46,090 --> 00:30:48,520
+We're trying to learn a general function of how you
+我们正在努力学习你的一般功能
+
+626
+00:30:48,520 --> 00:30:51,070
+should deal with a word given the word so far.
+到目前为止应该处理一个词。
+
+627
+00:30:51,070 --> 00:30:55,090
+You're trying to learn a general representation of language and context so far,
+到目前为止，您正试图学习语言和上下文的一般表示，
+
+628
+00:30:55,090 --> 00:30:57,055
+which is indeed a very difficult problem.
+这确实是一个非常棘手的问题。
+
+629
+00:30:57,055 --> 00:31:00,175
+Um, I think you also mentioned that something about an approximation.
+嗯，我想你也提到了一些近似的东西。
+
+630
+00:31:00,175 --> 00:31:01,780
+Uh, another thing to note is that all of
+呃，另外需要注意的是所有的
+
+631
+00:31:01,780 --> 00:31:04,570
+the hidden states are vectors, they're not just single numbers, right?
+隐藏状态是向量，它们不仅仅是单个数字，对吗？
+
+632
+00:31:04,570 --> 00:31:06,670
+They are vectors of lengths, I don't know, 500 or something?
+它们是长度的载体，我不知道，500还是什么？
+
+633
+00:31:06,670 --> 00:31:09,610
+So they have quite a large capacity to hold lots of information about
+所以他们有很大的能力来掌握大量的信息
+
+634
+00:31:09,610 --> 00:31:13,530
+different things in all of their different, um, positions.
+他们所有不同的职位都有不同的东西。
+
+635
+00:31:13,530 --> 00:31:15,630
+So, I think the idea is that you can
+所以，我认为你的想法是可以的
+
+636
+00:31:15,630 --> 00:31:18,255
+store a lot of different information in different contexts,
+在不同的环境中存储大量不同的信息，
+
+637
+00:31:18,255 --> 00:31:19,830
+in different parts of the hidden state,
+在隐藏状态的不同部分，
+
+638
+00:31:19,830 --> 00:31:21,960
+but it is indeed an approximation and there is
+但它确实是近似值而且存在
+
+639
+00:31:21,960 --> 00:31:24,575
+some kind of limit to how much information you can store.
+您可以存储多少信息的某种限制。
+
+640
+00:31:24,575 --> 00:31:26,845
+Okay, any other questions? Yes.
+好的，还有其他问题吗？是。
+
+641
+00:31:26,845 --> 00:31:29,410
+Since you kinda process any single length frame,
+既然你有点处理任何单一长度的帧，
+
+642
+00:31:29,410 --> 00:31:31,135
+what length do you use during your training?
+你在训练期间用了多长时间？
+
+643
+00:31:31,135 --> 00:31:35,035
+And does the length you use for training affect WH?
+你用于训练的长度是否影响WH？
+
+644
+00:31:35,035 --> 00:31:39,355
+Okay, so, the question is, given that you can have any length input,
+好吧，问题是，鉴于你可以有任何长度输入，
+
+645
+00:31:39,355 --> 00:31:41,950
+what length is the input during training?
+训练期间输入的长度是多长？
+
+646
+00:31:41,950 --> 00:31:44,185
+So, I suppose in practice,
+所以，我想在实践中，
+
+647
+00:31:44,185 --> 00:31:46,510
+you choose how long the inputs are in
+您可以选择输入的时长
+
+648
+00:31:46,510 --> 00:31:49,630
+training either based on what your data is or maybe based on,
+根据您的数据或可能基于的数据进行培训，
+
+649
+00:31:49,630 --> 00:31:52,615
+uh, your efficiency concerns so maybe you make it artificially
+呃，你的效率问题所以也许你会人为地做出来
+
+650
+00:31:52,615 --> 00:31:55,900
+shorter by chopping it up. Um, what was the other question?
+切碎它会缩短。嗯，另一个问题是什么？
+
+651
+00:31:55,900 --> 00:31:58,360
+Uh, does WH depend on that?
+呃，WH依赖于那个吗？
+
+652
+00:31:58,360 --> 00:32:01,255
+Okay. So the question was, does WH depend on the length you used?
+好的。所以问题是，WH取决于您使用的长度吗？
+
+653
+00:32:01,255 --> 00:32:04,075
+So, no, and that's one of the good things in the advantages list.
+所以，不，这是优势列表中的好事之一。
+
+654
+00:32:04,075 --> 00:32:07,165
+Is that the model size doesn't increase for longer input,
+对于更长的输入，模型大小是不会增加的，
+
+655
+00:32:07,165 --> 00:32:09,040
+because we just unroll the RNN
+因为我们只是展开RNN
+
+656
+00:32:09,040 --> 00:32:11,245
+applying the same weights again and again for as long as we'd like.
+只要我们愿意，一次又一次地使用相同的重量。
+
+657
+00:32:11,245 --> 00:32:13,930
+There's no need to have more weights just because you have a longer input.
+没有必要仅仅因为你有更长的输入而有更多的权重。
+
+658
+00:32:13,930 --> 00:32:16,795
+[NOISE] Yeah.
+[NOISE]是的
+
+659
+00:32:16,795 --> 00:32:24,235
+So how the ratios that you mentioned are [inaudible] the number of words.
+那么你提到的比率如何[听不清]单词的数量。
+
+660
+00:32:24,235 --> 00:32:28,405
+[NOISE] Are you asking about capital E or the lowercase E?
+[NOISE]您在询问大写字母E还是小写字母E？
+
+661
+00:32:28,405 --> 00:32:29,485
+Uh, lowercase E.
+呃，小写字母E.
+
+662
+00:32:29,485 --> 00:32:30,790
+Okay. So, the question is,
+好的。所以，问题是，
+
+663
+00:32:30,790 --> 00:32:32,890
+how do we choose the dimension of the lowercase Es?
+我们如何选择小写Es的尺寸？
+
+664
+00:32:32,890 --> 00:32:34,300
+Uh, so, you could, for example,
+呃，所以，你可以，例如，
+
+665
+00:32:34,300 --> 00:32:37,120
+assume that those are just pre-trained word vectors like the ones that you,
+假设那些只是预先训练过的单词向量，就像你那样，
+
+666
+00:32:37,120 --> 00:32:38,815
+uh, used in assignment one.
+呃，用于作业一。
+
+667
+00:32:38,815 --> 00:32:39,715
+More like word2vec.
+更像是word2vec。
+
+668
+00:32:39,715 --> 00:32:41,140
+Yeah. For example, word2vec,
+是啊。例如，word2vec，
+
+669
+00:32:41,140 --> 00:32:42,610
+and you just download them and use them,
+你只需下载并使用它们，
+
+670
+00:32:42,610 --> 00:32:44,380
+or maybe you learn them from scratch, in which case,
+或者你也可以从零开始学习它们，在这种情况下，
+
+671
+00:32:44,380 --> 00:32:46,930
+you decide at the beginning of training how big you want those vectors to be.
+你在训练开始时决定你想要那些矢量有多大。
+
+672
+00:32:46,930 --> 00:32:49,210
+[NOISE] Okay. I'm gonna move on for now.
+[NOISE]好的。我现在要继续前进。
+
+673
+00:32:49,210 --> 00:32:54,895
+[NOISE] So, we've learned what an RNN language model is and we've learned how you would,
+[NOISE]所以，我们已经学会了RNN语言模型是什么，我们已经学会了你的意思，
+
+674
+00:32:54,895 --> 00:32:56,845
+uh, run one forward, but the question remains,
+呃，跑一个前进，但问题仍然存在，
+
+675
+00:32:56,845 --> 00:32:59,080
+how would you train an RNN language model?
+你会如何训练RNN语言模型？
+
+676
+00:32:59,080 --> 00:33:02,230
+How would you learn it? [NOISE]
+你会怎么学习的？ [噪声]
+
+677
+00:33:02,230 --> 00:33:03,850
+So, as always, in machine learning,
+所以，一如既往，在机器学习中，
+
+678
+00:33:03,850 --> 00:33:06,670
+our answer starts with, you're going to get a big corpus of text,
+我们的答案开头，你将得到一个大的文本语料库，
+
+679
+00:33:06,670 --> 00:33:11,230
+and we're gonna call that just a sequence of words X1 up to X capital T. So,
+我们打算把它称为X1到X大写字母T的序列。所以，
+
+680
+00:33:11,230 --> 00:33:15,115
+you feed the sequence of words into the RNN language model, and then,
+你将单词序列输入RNN语言模型，然后，
+
+681
+00:33:15,115 --> 00:33:19,615
+the idea is that you compute the output distribution Y-hat T for every step T. So,
+我们的想法是你计算每一步T的输出分布Y-hat T.所以，
+
+682
+00:33:19,615 --> 00:33:21,700
+I know that the picture I showed on the previous, uh,
+我知道我之前展示的图片，呃，
+
+683
+00:33:21,700 --> 00:33:23,560
+slide [NOISE] only showed us doing on the last step,
+幻灯片[NOISE]只显示我们在最后一步做的事，
+
+684
+00:33:23,560 --> 00:33:26,140
+but the idea is, you would actually compute this on every step.
+但是这个想法是，你实际上会在每一步都计算出来。
+
+685
+00:33:26,140 --> 00:33:28,420
+So, this means that you're actually predicting
+所以，这意味着你实际上在预测
+
+686
+00:33:28,420 --> 00:33:31,000
+the probability of the next word on every step.
+每一步的下一个单词的概率。
+
+687
+00:33:31,000 --> 00:33:33,130
+[NOISE] Okay.
+[NOISE]好的。
+
+688
+00:33:33,130 --> 00:33:35,515
+So, once you've done that, then you can define the loss function,
+所以，一旦你完成了，那么你可以定义损失函数，
+
+689
+00:33:35,515 --> 00:33:37,120
+and this should be familiar to you by now.
+这对你来说应该很熟悉了。
+
+690
+00:33:37,120 --> 00:33:39,190
+Uh, this is the cross-entropy between [NOISE]
+呃，这是[NOISE]之间的交叉熵
+
+691
+00:33:39,190 --> 00:33:43,915
+our predicted probability distribution Y-hat T and the true, uh,
+我们预测的概率分布Y-hat T和真实的，呃，
+
+692
+00:33:43,915 --> 00:33:47,260
+distribution, which is Y-hat- sorry, just YT,
+分发，这是Y-hat-对不起，只是YT，
+
+693
+00:33:47,260 --> 00:33:49,570
+which is a one-hot vector, uh,
+这是一个单热的矢量，呃，
+
+694
+00:33:49,570 --> 00:33:51,055
+representing the true next [NOISE] words,
+代表真正的下一个[NOISE]字，
+
+695
+00:33:51,055 --> 00:33:52,495
+which is XT plus one.
+这是XT加一。
+
+696
+00:33:52,495 --> 00:33:54,490
+So, as you've seen before, this, uh,
+所以，正如你以前见过的那样，呃，
+
+697
+00:33:54,490 --> 00:33:57,100
+cross-entropy [NOISE] between those two vectors can be written
+可以写出这两个向量之间的交叉熵[NOISE]
+
+698
+00:33:57,100 --> 00:34:00,640
+also as a negative log probability.
+也作为负对数概率。
+
+699
+00:34:00,640 --> 00:34:05,635
+And then, lastly, if you average this cross-entropy loss across every step, uh,
+然后，最后，如果你在每一步中平均这个交叉熵损失，呃，
+
+700
+00:34:05,635 --> 00:34:08,740
+every T in the corpus time step T, then,
+语料库时间步长T中的每个T，然后，
+
+701
+00:34:08,740 --> 00:34:11,800
+uh, this gives you your overall loss for the entire training set.
+呃，这会给你整个训练集的整体损失。
+
+702
+00:34:11,800 --> 00:34:16,360
+[NOISE] Okay.
+[NOISE]好的。
+
+703
+00:34:16,360 --> 00:34:18,475
+So, just to make that even more clear with a picture,
+所以，只是为了让图片更加清晰，
+
+704
+00:34:18,475 --> 00:34:20,080
+uh, suppose that our corpus is,
+呃，假设我们的语料库是，
+
+705
+00:34:20,080 --> 00:34:21,370
+the students open their exams,
+学生们开考试，
+
+706
+00:34:21,370 --> 00:34:23,020
+et cetera, and it goes on for a long time.
+等等，它持续了很长时间。
+
+707
+00:34:23,020 --> 00:34:24,550
+Then, what we'd be doing is,
+然后，我们要做的是，
+
+708
+00:34:24,550 --> 00:34:26,980
+we'd be running our RNN over this text, and then,
+我们将在此文本上运行我们的RNN，然后，
+
+709
+00:34:26,980 --> 00:34:30,535
+on every step, we would be predicting the probability [NOISE] distribution Y-hats,
+在每一步，我们都会预测概率[NOISE]分布Y-hats，
+
+710
+00:34:30,535 --> 00:34:31,780
+and then, from each of those,
+然后，从每一个，
+
+711
+00:34:31,780 --> 00:34:33,310
+you can calculate what your loss is,
+你可以计算出你的损失，
+
+712
+00:34:33,310 --> 00:34:36,400
+which is the JT, and then, uh, on the first step,
+这是JT，然后，呃，第一步，
+
+713
+00:34:36,400 --> 00:34:38,965
+the loss would be the negative log probability of the next word,
+损失将是下一个单词的负对数概率，
+
+714
+00:34:38,965 --> 00:34:40,060
+which is, in this example,
+在这个例子中，
+
+715
+00:34:40,060 --> 00:34:42,040
+students, [NOISE] and so on.
+学生，[NOISE]等。
+
+716
+00:34:42,040 --> 00:34:45,070
+Each of those is the negative log probability of the next word.
+其中每一个都是下一个单词的负对数概率。
+
+717
+00:34:45,070 --> 00:34:47,515
+[NOISE] And then, once you've computed all of those,
+[NOISE]然后，一旦你计算了所有这些，
+
+718
+00:34:47,515 --> 00:34:49,585
+you can add them [NOISE] all up and average them,
+你可以添加它们[NOISE]全部并平均它们，
+
+719
+00:34:49,585 --> 00:34:51,160
+and then, this gives you your final loss.
+然后，这会给你最后的损失。
+
+720
+00:34:51,160 --> 00:34:56,260
+[NOISE] Okay. So, there's a caveat here.
+[NOISE]好的。所以，这里有一个警告。
+
+721
+00:34:56,260 --> 00:34:59,935
+Um, computing the loss and gradients across the entire corpus,
+嗯，计算整个语料库的损失和梯度，
+
+722
+00:34:59,935 --> 00:35:02,350
+all of those words X1 up to X capital T is too
+所有这些单词X1到X大都会T也是如此
+
+723
+00:35:02,350 --> 00:35:04,840
+expensive [NOISE] because your corpus is probably really big.
+贵[NOISE]，因为你的语料库可能真的很大。
+
+724
+00:35:04,840 --> 00:35:07,810
+[NOISE] So, um, as a student asked earlier,
+[NOISE]所以，嗯，正如学生先前所说，
+
+725
+00:35:07,810 --> 00:35:10,555
+uh, in practice, what do you actually regard as your sequence?
+呃，在实践中，你真正认为你的序列是什么？
+
+726
+00:35:10,555 --> 00:35:12,580
+So, in practice, you might regard your sequence as, uh,
+所以，在实践中，你可能会认为你的序列是，呃，
+
+727
+00:35:12,580 --> 00:35:14,590
+something like a sentence or a document,
+像句子或文件之类的东西，
+
+728
+00:35:14,590 --> 00:35:17,270
+some shorter unit of text.
+一些较短的文本单位。
+
+729
+00:35:17,430 --> 00:35:20,890
+So, uh, another thing you'll do [NOISE] is, if you remember,
+所以，呃，你会做的另一件事[NOISE]是，如果你还记得，
+
+730
+00:35:20,890 --> 00:35:23,785
+stochastic gradient descent allows you to compute gradients
+随机梯度下降允许您计算梯度
+
+731
+00:35:23,785 --> 00:35:26,980
+for small chunks of data rather than the whole corpus at a time.
+对于小块数据而不是一次整个语料库。
+
+732
+00:35:26,980 --> 00:35:29,275
+So, in practice, if you're training a language model,
+所以，在实践中，如果你正在训练语言模型，
+
+733
+00:35:29,275 --> 00:35:32,830
+what you're actually likely to be doing is computing the loss for a sentence,
+你真正可能做的是计算句子的损失，
+
+734
+00:35:32,830 --> 00:35:35,290
+but that's actually a batch of sentences, and then,
+但那实际上是一批句子，然后，
+
+735
+00:35:35,290 --> 00:35:37,945
+you compute the gradients with respect to that batch of sentences,
+你根据那批句子计算渐变，
+
+736
+00:35:37,945 --> 00:35:39,760
+update your weights, and repeat.
+更新你的重量，并重复。
+
+737
+00:35:39,760 --> 00:35:46,405
+Any questions at this point? [NOISE] Okay.
+有什么问题吗？ [NOISE]好的。
+
+738
+00:35:46,405 --> 00:35:48,040
+So, uh, moving onto backprop.
+所以，呃，转向backprop。
+
+739
+00:35:48,040 --> 00:35:51,055
+Don't worry, there won't be as much backprop as there was last week,
+别担心，没有像上周那样多的反推，
+
+740
+00:35:51,055 --> 00:35:53,230
+but, uh, there's an interesting question here, right?
+但是，呃，这里有一个有趣的问题，对吧？
+
+741
+00:35:53,230 --> 00:35:55,899
+So, the, uh, characteristic thing about RNNs
+所以，关于RNN的特征性问题
+
+742
+00:35:55,899 --> 00:35:58,975
+is that they apply the same weight matrix repeatedly.
+是他们反复应用相同的权重矩阵。
+
+743
+00:35:58,975 --> 00:36:00,280
+So, the question is,
+所以，问题是，
+
+744
+00:36:00,280 --> 00:36:02,215
+[NOISE] what's the derivative of our loss function,
+[NOISE]我们的损失函数的衍生物是什么，
+
+745
+00:36:02,215 --> 00:36:03,610
+let's say, on step T?
+让我们说，在第T步？
+
+746
+00:36:03,610 --> 00:36:08,635
+What's the derivative of that loss with respect to the repeated weight matrix WH?
+对于重复的权重矩阵WH，该损失的衍生物是什么？
+
+747
+00:36:08,635 --> 00:36:13,570
+So, the answer is that the derivative of the loss, uh,
+那么，答案是损失的衍生物，呃，
+
+748
+00:36:13,570 --> 00:36:16,390
+the gradient with respect to the repeated weight is
+相对于重复重量的梯度是
+
+749
+00:36:16,390 --> 00:36:19,780
+the sum of the gradient with respect to each time it appears,
+每次出现时梯度的总和，
+
+750
+00:36:19,780 --> 00:36:21,355
+and that's what that equation says.
+这就是那个等式所说的。
+
+751
+00:36:21,355 --> 00:36:25,615
+So, on the right, the notation with the vertical line and the I is saying, uh,
+那么，在右边，垂直线的符号和我说，呃，
+
+752
+00:36:25,615 --> 00:36:30,670
+the derivative of the loss with respect to WH when it appears on the Ith step.
+当它出现在第I步时，相对于WH的损失的衍生物。
+
+753
+00:36:30,670 --> 00:36:32,770
+Okay. So, so, why is that true?
+好的。那么，为什么这是真的呢？
+
+754
+00:36:32,770 --> 00:36:35,260
+[NOISE] Uh, to sketch why this is true,
+[NOISE]呃，要勾勒出为什么会这样，
+
+755
+00:36:35,260 --> 00:36:37,840
+uh, [NOISE] I'm gonna remind you of the multivariable chain rule.
+呃，[NOISE]我要提醒你多变量链条规则。
+
+756
+00:36:37,840 --> 00:36:42,535
+So, uh, this is a screenshot from a Khan Academy article on the multivariable chain rule,
+所以，呃，这是关于多变量链规则的可汗学院文章的截图，
+
+757
+00:36:42,535 --> 00:36:44,440
+and, uh, I advise you check it out if you
+而且，呃，我建议你检查一下
+
+758
+00:36:44,440 --> 00:36:46,630
+want to learn more because it's very easy to understand.
+想要了解更多，因为它很容易理解。
+
+759
+00:36:46,630 --> 00:36:48,220
+Uh, and what it says is,
+呃，它说的是，
+
+760
+00:36:48,220 --> 00:36:52,045
+given a function F [NOISE] which depends on X and Y,
+给定函数F [NOISE]取决于X和Y，
+
+761
+00:36:52,045 --> 00:36:56,140
+which are both themselves functions of some variable T, then,
+这两者本身都是某些变量T的函数，那么，
+
+762
+00:36:56,140 --> 00:36:59,430
+if you want to get the derivative of F with respect to T,
+如果你想得到关于T的F的导数，
+
+763
+00:36:59,430 --> 00:37:04,380
+then you need to do the chain ru- rule across X and Y separately and then add them up.
+那么你需要分别在X和Y之间做链式规则，然后将它们加起来。
+
+764
+00:37:04,380 --> 00:37:07,020
+[NOISE] So, that's the multivariable chain rule,
+[NOISE]那么，这就是多变量链规则，
+
+765
+00:37:07,020 --> 00:37:10,510
+[NOISE] and if we apply this to our scenario with trying to take
+[NOISE]如果我们将此应用于我们的场景并试图采取
+
+766
+00:37:10,510 --> 00:37:14,889
+the derivative of the loss JT with respect to our weight matrix WH,
+相对于我们的权重矩阵WH，损失JT的导数，
+
+767
+00:37:14,889 --> 00:37:19,300
+then you could view it as this kind of diagram [NOISE] where WH has, uh,
+然后你可以把它看作这种图[NOISE]，其中WH有，呃，
+
+768
+00:37:19,300 --> 00:37:22,810
+a relationship with all of these individual appearances of WH,
+与WH的所有这些个人形象的关系，
+
+769
+00:37:22,810 --> 00:37:23,860
+but it's a [NOISE] simple relationship,
+但这是一个[NOISE]简单的关系，
+
+770
+00:37:23,860 --> 00:37:25,495
+it's just equality, and then,
+这只是平等，然后，
+
+771
+00:37:25,495 --> 00:37:29,690
+each of those appearances of WH affect the loss in different ways.
+WH的每一个出现都以不同的方式影响损失。
+
+772
+00:37:29,690 --> 00:37:34,080
+So, then, if we apply the multivariable chain rule,
+那么，如果我们应用多变量链规则，
+
+773
+00:37:34,080 --> 00:37:37,470
+then it says that the derivative of the loss with respect to
+然后它说损失的衍生物相对于
+
+774
+00:37:37,470 --> 00:37:41,190
+WH is the sum of those chain rule things,
+WH是那些连锁规则的总和，
+
+775
+00:37:41,190 --> 00:37:45,600
+but the expression on the right is just one because it's an equality relation,
+但右边的表达只是一个，因为它是一个平等关系，
+
+776
+00:37:45,600 --> 00:37:50,480
+[NOISE] and then, that gives us the equation that I wrote on the previous slide.
+[NOISE]然后，这给了我在上一张幻灯片上写的等式。
+
+777
+00:37:50,480 --> 00:37:55,240
+So, this is a proof sketch for why the derivative of the loss with
+因此，这是为什么损失的衍生物的证明草图
+
+778
+00:37:55,240 --> 00:38:00,565
+respect to our recurrent matrix is the sum of the derivatives each time it appears.
+对于我们的递归矩阵，每次出现时都是导数的总和。
+
+779
+00:38:00,565 --> 00:38:03,190
+Okay. So, suppose you believe me on that, that is,
+好的。所以，假设你相信我，那就是
+
+780
+00:38:03,190 --> 00:38:04,555
+how you compute the, uh,
+你是如何计算的，呃，
+
+781
+00:38:04,555 --> 00:38:06,475
+gradient with respect to the recurrent weight.
+相对于复发体重的梯度。
+
+782
+00:38:06,475 --> 00:38:08,440
+So, a remaining question is, well,
+所以，剩下的问题是，好吧，
+
+783
+00:38:08,440 --> 00:38:10,720
+how [NOISE] do we actually calculate this in practice?
+我们如何在实践中实际计算出这一点？
+
+784
+00:38:10,720 --> 00:38:16,660
+[NOISE] So, the answer is that you're going to calculate this sum by doing backprop,
+[NOISE]所以，答案是你要通过做backprop来计算这笔钱，
+
+785
+00:38:16,660 --> 00:38:19,390
+uh, backwards, kind of right to left, um,
+呃，向后，从右到左，嗯，
+
+786
+00:38:19,390 --> 00:38:23,590
+through the RNN, and you're going to accumulate this sum as you go.
+通过RNN，你将在你去的时候累积这笔钱。
+
+787
+00:38:23,590 --> 00:38:24,940
+So, the important thing is,
+所以，重要的是，
+
+788
+00:38:24,940 --> 00:38:28,435
+you shouldn't compute each of those things separately, uh,
+你不应该分别计算这些东西，呃，
+
+789
+00:38:28,435 --> 00:38:30,880
+you should compute them by accumulating, like,
+你应该通过累积来计算它们，比如
+
+790
+00:38:30,880 --> 00:38:34,360
+each one can be computed in form- in terms of the previous one.
+每一个都可以用前一个形式计算。
+
+791
+00:38:34,360 --> 00:38:39,130
+[NOISE] So, this algorithm of computing each of these,
+[NOISE]那么，这个计算这些算法的算法，
+
+792
+00:38:39,130 --> 00:38:41,320
+uh, each of these gradients with respect to
+呃，这些渐变中的每一个都相对于
+
+793
+00:38:41,320 --> 00:38:44,305
+the previous one is called backpropagation through time.
+前一个被称为反向传播。
+
+794
+00:38:44,305 --> 00:38:47,650
+And, um, I always think that this sounds way more sci-fi than it is.
+而且，嗯，我一直认为这听起来比科幻更加科幻。
+
+795
+00:38:47,650 --> 00:38:49,030
+It sounds like it's time travel or something,
+这听起来像是时间旅行或其他什么的，
+
+796
+00:38:49,030 --> 00:38:50,560
+but it's actually pretty simple.
+但它实际上非常简单。
+
+797
+00:38:50,560 --> 00:38:53,290
+Uh, it's just the name you give to
+呃，这只是你给的名字
+
+798
+00:38:53,290 --> 00:38:57,290
+applying the backprop algorithm to a recurrent neural network.
+将backprop算法应用于递归神经网络。
+
+799
+00:38:57,960 --> 00:39:02,350
+Any questions at this point? Yep. [NOISE]
+有什么问题吗？是的。 [噪声]
+
+800
+00:39:02,350 --> 00:39:07,240
+So, it seems that how you break up the batches matter your end result.
+所以，似乎你如何分解批次对你的最终结果至关重要。
+
+801
+00:39:07,240 --> 00:39:15,700
+[inaudible].
+[听不见的。
+
+802
+00:39:15,700 --> 00:39:21,460
+So, if you break it into much more [inaudible].
+所以，如果你把它分解成更多[音频不清晰]。
+
+803
+00:39:21,460 --> 00:39:23,605
+Okay. So the question is, um, surely,
+好的。所以问题是，嗯，当然，
+
+804
+00:39:23,605 --> 00:39:27,865
+how you decide to break up your batches affects how you learn, right?
+你如何决定分手，影响你的学习方式，对吧？
+
+805
+00:39:27,865 --> 00:39:29,560
+Because if you choose, uh,
+因为如果你选择，呃，
+
+806
+00:39:29,560 --> 00:39:31,660
+one set of data to be your batch, right, then,
+一组数据作为您的批次，对，然后，
+
+807
+00:39:31,660 --> 00:39:33,880
+you will make your update based on that, and then,
+你将根据它进行更新，然后，
+
+808
+00:39:33,880 --> 00:39:36,760
+you only update the next one based on [NOISE] where you go from there.
+你只能根据[NOISE]从那里开始更新下一个。
+
+809
+00:39:36,760 --> 00:39:38,950
+So, if you decided to put different data in the batch,
+所以，如果你决定在批处理中放入不同的数据，
+
+810
+00:39:38,950 --> 00:39:40,495
+then you would have made a different step.
+那么你会做出不同的一步。
+
+811
+00:39:40,495 --> 00:39:42,910
+So, that's true, [NOISE] and that is why
+所以，这是真的，[NOISE]，这就是原因
+
+812
+00:39:42,910 --> 00:39:45,910
+stochastic gradient descent is only an approximation of
+随机梯度下降只是近似值
+
+813
+00:39:45,910 --> 00:39:49,660
+true gradient descent because the gradient that you compute with
+真正的梯度下降，因为您计算的渐变
+
+814
+00:39:49,660 --> 00:39:53,950
+respect to one batch is just an approximation of the true gradient with respect to the,
+对一批的尊重只是对真实梯度的近似，
+
+815
+00:39:53,950 --> 00:39:56,095
+uh, the loss over the whole corpus.
+呃，整个语料库的损失。
+
+816
+00:39:56,095 --> 00:39:58,165
+So, yes, it's true that it's an approximation
+所以，是的，这是一个近似值
+
+817
+00:39:58,165 --> 00:40:00,580
+and how [NOISE] you choose to batch up your data can matter,
+以及如何选择批量处理数据[NOISE]
+
+818
+00:40:00,580 --> 00:40:03,040
+and that's why, for example, shuffling your data is a good idea,
+这就是为什么，例如，改组你的数据是一个好主意，
+
+819
+00:40:03,040 --> 00:40:05,575
+and shuffling it differently, each epoch, is a good idea.
+并且以不同的方式改变它，每个时代，都是一个好主意。
+
+820
+00:40:05,575 --> 00:40:09,130
+Uh, but the, the core idea of SGD is [NOISE] that, um,
+呃，但是SGD的核心理念是[NOISE]，嗯，
+
+821
+00:40:09,130 --> 00:40:12,085
+it should be a good enough approximation that over many steps,
+它应该是一个很好的近似，在很多步骤，
+
+822
+00:40:12,085 --> 00:40:14,740
+you will, uh, minimize your loss.
+你会，呃，尽量减少你的损失。
+
+823
+00:40:14,740 --> 00:40:33,010
+[NOISE] Any other questions? [NOISE] Yeah.
+[NOISE]还有其他问题吗？ [NOISE]是的
+
+824
+00:40:33,010 --> 00:40:35,410
+[NOISE] So, is, uh, is the question,
+[NOISE]那么，呃，问题是，
+
+825
+00:40:35,410 --> 00:40:37,180
+as you compute forward prop,
+当你计算前方道具时，
+
+826
+00:40:37,180 --> 00:40:40,345
+do you start computing backprop before you've even, like, got to the loss?
+你是否开始计算backprop之前，甚至是亏本？
+
+827
+00:40:40,345 --> 00:40:41,620
+Is that the question? [NOISE]
+这是个问题吗？ [噪声]
+
+828
+00:40:41,620 --> 00:40:42,325
+Yes.
+是。
+
+829
+00:40:42,325 --> 00:40:45,640
+I didn't think so, right? Because you need to know what the loss is in
+我不这么认为，对吧？因为你需要知道损失是什么
+
+830
+00:40:45,640 --> 00:40:49,030
+order to compute the derivative of the loss with respect to something.
+为了计算相对于某物的损失的衍生物。
+
+831
+00:40:49,030 --> 00:40:50,560
+So, I think you need to get to the end.
+所以，我认为你需要走到尽头。
+
+832
+00:40:50,560 --> 00:40:51,760
+So, if we assume simplicity,
+所以，如果我们假设简单，
+
+833
+00:40:51,760 --> 00:40:54,490
+that there is only one loss which you get at the end of several steps,
+在几个步骤结束时只有一个损失，
+
+834
+00:40:54,490 --> 00:40:55,585
+then you need to get to the end,
+然后你需要走到尽头，
+
+835
+00:40:55,585 --> 00:40:59,365
+compute the loss before you can compute the derivatives.
+在计算导数之前计算损失。
+
+836
+00:40:59,365 --> 00:41:02,200
+But I suppose you, you, you could compute the derivative of two,
+但我想你，你，你可以计算出两个的导数，
+
+837
+00:41:02,200 --> 00:41:04,240
+kind of, adjacent things of one with respect to the other.
+一种相对于另一种相邻的东西。
+
+838
+00:41:04,240 --> 00:41:05,470
+[OVERLAPPING] But, yeah. [NOISE]
+[重叠]但是，是的。 [噪声]
+
+839
+00:41:05,470 --> 00:41:07,780
+As you're going forward, do- you need to sort of keep a track of what,
+当你前进的时候，你需要做一些跟踪的事情，
+
+840
+00:41:07,780 --> 00:41:13,720
+what you would have [inaudible] the one you eventually get the loss. [inaudible]
+你有什么[听不清]你最终得到的损失。 [听不见]
+
+841
+00:41:13,720 --> 00:41:15,865
+Yes. So, when you forward prop,
+是。所以，当你转发道具时，
+
+842
+00:41:15,865 --> 00:41:19,660
+you certainly have to hang on to all of the intervening factors.
+你当然必须坚持所有干预因素。
+
+843
+00:41:19,660 --> 00:41:20,680
+[NOISE] Okay. I'm gonna move on for now.
+[NOISE]好的。我现在要继续前进。
+
+844
+00:41:20,680 --> 00:41:24,790
+Uh, so, that was a maths-heavy bit but,
+呃，那是一个数学上很重的一点，但是，
+
+845
+00:41:24,790 --> 00:41:27,130
+um, now, we're getting on to text generation,
+嗯，现在，我们正在进行文本生成，
+
+846
+00:41:27,130 --> 00:41:28,675
+which someone asked about earlier.
+以前有人问过的。
+
+847
+00:41:28,675 --> 00:41:32,965
+So, um, just as we use the n-gram language model to generate text,
+所以，嗯，正如我们使用n-gram语言模型生成文本一样，
+
+848
+00:41:32,965 --> 00:41:36,115
+you can also use an RNN language model to generate text,
+您还可以使用RNN语言模型生成文本，
+
+849
+00:41:36,115 --> 00:41:38,650
+uh, via the same repeated sampling technique.
+呃，通过相同的重复采样技术。
+
+850
+00:41:38,650 --> 00:41:41,050
+Um, so, here's a picture of how that would work.
+嗯，这是，这是一个如何工作的图片。
+
+851
+00:41:41,050 --> 00:41:43,990
+How you start off with your initial hidden state H0, uh,
+你如何开始你的初始隐藏状态H0，呃，
+
+852
+00:41:43,990 --> 00:41:46,330
+which, uh, we have either as a parameter of
+哪个，呃，我们要么作为参数
+
+853
+00:41:46,330 --> 00:41:49,060
+the model or we initialize it to zero, or something like that.
+模型或我们将其初始化为零，或类似的东西。
+
+854
+00:41:49,060 --> 00:41:51,340
+So, let's suppose that we have the first word my,
+所以，我们假设我们有第一个字，
+
+855
+00:41:51,340 --> 00:41:54,235
+and Iet's suppose I, um, supply that to the model.
+并且Iet假设我，嗯，将它提供给模型。
+
+856
+00:41:54,235 --> 00:41:57,235
+So, then, using the inputs and the initial hidden state,
+那么，使用输入和初始隐藏状态，
+
+857
+00:41:57,235 --> 00:41:59,200
+you can get our first hidden state H1.
+你可以得到我们的第一个隐藏状态H1。
+
+858
+00:41:59,200 --> 00:42:01,555
+And then from there, we can compute the, er,
+然后从那里，我们可以计算，呃，
+
+859
+00:42:01,555 --> 00:42:04,765
+probability distribution Y hat one of what's coming next,
+概率分布Y接下来会发生什么，
+
+860
+00:42:04,765 --> 00:42:07,435
+and then we can use that distribution to sample some word.
+然后我们可以使用该分布对一些单词进行采样。
+
+861
+00:42:07,435 --> 00:42:09,385
+So let's suppose that we sampled the word favorite.
+所以我们假设我们对喜欢这个词进行了抽样。
+
+862
+00:42:09,385 --> 00:42:14,200
+So, the idea is that we use the outputted word as the input on the next step.
+因此，我们的想法是在下一步使用输出的单词作为输入。
+
+863
+00:42:14,200 --> 00:42:16,960
+So, we feed favorite into the second step of the RNN,
+所以，我们将最喜欢的东西送到RNN的第二步，
+
+864
+00:42:16,960 --> 00:42:18,220
+we get a new hidden state,
+我们得到一个新的隐藏状态，
+
+865
+00:42:18,220 --> 00:42:20,784
+and again we get a new probability distribution,
+我们又获得了一个新的概率分布，
+
+866
+00:42:20,784 --> 00:42:22,885
+and from that we can sample a new word.
+从中我们可以采样一个新词。
+
+867
+00:42:22,885 --> 00:42:25,675
+So, we can just continue doing this process again and again,
+所以，我们可以一次又一次地继续这个过程，
+
+868
+00:42:25,675 --> 00:42:27,685
+and in this way we can generate some text.
+通过这种方式，我们可以生成一些文本。
+
+869
+00:42:27,685 --> 00:42:29,500
+So, uh, here we've generated the text,
+所以，呃，我们在这里生成了文本，
+
+870
+00:42:29,500 --> 00:42:30,760
+My favorite season is Spring,
+我最喜欢的季节是春天，
+
+871
+00:42:30,760 --> 00:42:34,070
+and we can keep going for as long as we'd like.
+只要我们愿意，我们就可以坚持下去。
+
+872
+00:42:36,060 --> 00:42:39,130
+Okay, so, uh, let's have some fun with this.
+好的，所以，呃，让我们玩得开心吧。
+
+873
+00:42:39,130 --> 00:42:41,395
+Uh, you can generate,
+呃，你可以生成，
+
+874
+00:42:41,395 --> 00:42:43,885
+uh, text using an RNN language model.
+呃，使用RNN语言模型的文本。
+
+875
+00:42:43,885 --> 00:42:48,070
+If you train the RNN language model on any kind of text,
+如果您在任何类型的文本上训练RNN语言模型，
+
+876
+00:42:48,070 --> 00:42:51,340
+then you can use it to generate text in that style.
+然后你可以用它来生成那种风格的文本。
+
+877
+00:42:51,340 --> 00:42:53,380
+And in fact, this has become a whole kind of
+事实上，这已经成为一种整体
+
+878
+00:42:53,380 --> 00:42:55,780
+genre of internet humor that you might've seen.
+您可能已经看过的互联网幽默类型。
+
+879
+00:42:55,780 --> 00:42:57,595
+So, uh, for example,
+所以，呃，例如，
+
+880
+00:42:57,595 --> 00:43:00,925
+here is an RNN language model trained on Obama speeches,
+这是一个受奥巴马演讲训练的RNN语言模型，
+
+881
+00:43:00,925 --> 00:43:03,100
+and I found this in a blog post online.
+我在网上发表了一篇博文。
+
+882
+00:43:03,100 --> 00:43:07,120
+So, here's the text that the RNN language model generated.
+所以，这是RNN语言模型生成的文本。
+
+883
+00:43:07,120 --> 00:43:11,350
+"The United States will step up to the cost of a new challenges of
+“美国将加大对新挑战的支出力度
+
+884
+00:43:11,350 --> 00:43:15,520
+the American people that will share the fact that we created the problem.
+美国人民将分享我们创造问题的事实。
+
+885
+00:43:15,520 --> 00:43:19,630
+They were attacked and so that they have to say that
+他们受到了攻击，所以他们不得不这样说
+
+886
+00:43:19,630 --> 00:43:24,190
+all the task of the final days of war that I will not be able to get this done."
+战争最后几天的所有任务我都无法完成。“
+
+887
+00:43:24,190 --> 00:43:27,130
+[LAUGHTER] Okay.
+[大笑]好的。
+
+888
+00:43:27,130 --> 00:43:30,205
+So, if we look at this and
+所以，如果我们看看这个和
+
+889
+00:43:30,205 --> 00:43:32,230
+especially think about what did
+特别想想做了什么
+
+890
+00:43:32,230 --> 00:43:34,570
+that text look like that we got from the n-gram language model,
+那个文本看起来就像我们从n-gram语言模型得到的那样，
+
+891
+00:43:34,570 --> 00:43:36,160
+the one about the, the price of gold.
+一个关于黄金的价格。
+
+892
+00:43:36,160 --> 00:43:39,715
+Um, I'd say that this is kind of recognizably better than that.
+嗯，我会说这有点明显比那更好。
+
+893
+00:43:39,715 --> 00:43:41,620
+It seems more fluent overall.
+整体看起来更流畅。
+
+894
+00:43:41,620 --> 00:43:43,690
+Uh, I'd say it has a more of
+呃，我会说它有更多
+
+895
+00:43:43,690 --> 00:43:48,535
+a sustained context in that it kind of makes sense for longer stretches at a time,
+一个持续的背景，因为它对于一次更长的延伸是有意义的，
+
+896
+00:43:48,535 --> 00:43:51,666
+and I'd say it does sound totally like Obama as well.
+而且我说它听起来也像奥巴马一样。
+
+897
+00:43:51,666 --> 00:43:53,035
+So, all of that's pretty good,
+所以，所有这些都非常好，
+
+898
+00:43:53,035 --> 00:43:55,735
+but you can see that it's still pretty incoherent overall,
+但是你可以看到它总体上仍然非常不连贯，
+
+899
+00:43:55,735 --> 00:43:58,930
+like i- it was quite difficult to read it because it didn't really make sense, right?
+喜欢我 - 它很难读，因为它没有意义，对吧？
+
+900
+00:43:58,930 --> 00:44:00,130
+So I had to read the words carefully.
+所以我必须仔细阅读这些文字。
+
+901
+00:44:00,130 --> 00:44:02,890
+Um, so, yeah, I think this shows
+嗯，是的，是的，我认为这表明
+
+902
+00:44:02,890 --> 00:44:06,310
+some of the progress you can get from using RNNs to generate text but still,
+使用RNN生成文本可以获得的一些进展但是，
+
+903
+00:44:06,310 --> 00:44:09,610
+um, very far from human level. Here are some more examples.
+嗯，离人类水平很远。这里有一些例子。
+
+904
+00:44:09,610 --> 00:44:13,285
+Uh, here's an RNN language model that was trained on the Harry Potter books.
+呃，这是一个RNN语言模型，受过哈利波特书籍的训练。
+
+905
+00:44:13,285 --> 00:44:17,095
+And here's what it said. "Sorry." Harry shouted, panicking.
+这就是它所说的。 “抱歉。”哈利惊恐地喊道。
+
+906
+00:44:17,095 --> 00:44:19,600
+"I'll leave those brooms in London." Are they?
+“我会把这些扫帚留在伦敦。”是吗？
+
+907
+00:44:19,600 --> 00:44:21,880
+"No idea." said Nearly Headless Nick,
+“不知道。”几乎无头的尼克说，
+
+908
+00:44:21,880 --> 00:44:23,740
+casting low close by Cedric,
+靠近塞德里克，
+
+909
+00:44:23,740 --> 00:44:26,980
+carrying the last bit of treacle Charms from Harry's shoulder.
+哈利的肩膀上带着最后一点糖浆。
+
+910
+00:44:26,980 --> 00:44:29,290
+And to answer him the common room perched upon it,
+并回答他在它上面的公共休息室，
+
+911
+00:44:29,290 --> 00:44:33,025
+four arms held a shining knob from when the Spider hadn't felt it seemed.
+当蜘蛛感觉不到时，四只手臂握着一个闪亮的旋钮。
+
+912
+00:44:33,025 --> 00:44:34,855
+He reached the teams too."
+他也到了球队。“
+
+913
+00:44:34,855 --> 00:44:38,065
+So, again, I'd say that this is fairly fluent.
+所以，再次，我会说这是相当流利的。
+
+914
+00:44:38,065 --> 00:44:40,000
+It sounds totally like the Harry Potter books.
+这听起来完全像哈利波特的书。
+
+915
+00:44:40,000 --> 00:44:41,710
+In fact, I'm pretty impressed by how much it does
+事实上，我对它的作用印象深刻
+
+916
+00:44:41,710 --> 00:44:44,170
+sound like in the voice of the Harry Potter books.
+听起来就像哈利波特书中的声音。
+
+917
+00:44:44,170 --> 00:44:46,510
+You even got some character attributes,
+你甚至有一些角色属性，
+
+918
+00:44:46,510 --> 00:44:50,395
+I'd say that Harry the character does often panic in the book so that seems right.
+我会说哈利这个角色经常在书中恐慌，所以这似乎是正确的。
+
+919
+00:44:50,395 --> 00:44:54,520
+Um, [LAUGHTER] but some bad things are that we have,
+嗯，[笑声]但是我们有一些不好的事情，
+
+920
+00:44:54,520 --> 00:44:58,660
+for example, a pretty long run-on sentence in the second paragraph that's hard to read.
+例如，第二段中很长的连续句子很难读。
+
+921
+00:44:58,660 --> 00:45:01,490
+Uh, you have some nonsensical things that really make no sense.
+呃，你有一些毫无意义的无意义的事情。
+
+922
+00:45:01,490 --> 00:45:03,195
+Like, I don't know what a treacle charm is.
+就像，我不知道什么是糖蜜的魅力。
+
+923
+00:45:03,195 --> 00:45:04,890
+It sounds delicious but I don't think it's real,
+听起来很美味，但我不认为这是真的，
+
+924
+00:45:04,890 --> 00:45:07,790
+uh, and overall it's just pretty nonsensical.
+呃，总的来说，它只是非常荒谬。
+
+925
+00:45:07,790 --> 00:45:12,865
+Here's another example. Here is an RNN language model that was trained on recipes.
+这是另一个例子。这是一个在食谱上训练的RNN语言模型。
+
+926
+00:45:12,865 --> 00:45:16,000
+So, uh, [LAUGHTER] this one's pretty bizarre,
+所以，呃，[笑声]这个很奇怪，
+
+927
+00:45:16,000 --> 00:45:18,565
+the title is 'chocolate ranch barbecue',
+标题是'巧克力牧场烧烤'，
+
+928
+00:45:18,565 --> 00:45:20,950
+It contains Parmesan cheese,
+它包含帕玛森芝士，
+
+929
+00:45:20,950 --> 00:45:25,555
+coconut milk, eggs, and the recipe says place each pasta over layers of lumps,
+椰奶，鸡蛋和配方说每个意大利面都放在一层块的块上，
+
+930
+00:45:25,555 --> 00:45:29,500
+shape mixture into the moderate oven and simmer until firm.
+将混合物加入适度的烤箱中，慢慢搅拌至坚硬。
+
+931
+00:45:29,500 --> 00:45:31,210
+Serve hot in bodied fresh,
+适合新鲜的酒体，
+
+932
+00:45:31,210 --> 00:45:32,575
+mustard orange and cheese.
+芥末橙和奶酪。
+
+933
+00:45:32,575 --> 00:45:35,815
+Combine the cheese and salt together the dough in a large skillet;
+将奶酪和盐混合在一起，放入一个大煎锅中;
+
+934
+00:45:35,815 --> 00:45:38,140
+add the ingredients and stir in the chocolate and pepper.
+加入配料，加入巧克力和胡椒粉。
+
+935
+00:45:38,140 --> 00:45:41,635
+[LAUGHTER] Um, so, one thing that I think is
+[大笑]嗯，所以，我认为有一点是
+
+936
+00:45:41,635 --> 00:45:45,340
+even more clear here in the recipes example than the prose example,
+在食谱例子中比散文例子更清楚，
+
+937
+00:45:45,340 --> 00:45:49,405
+is the inability to remember what's [NOISE] what's happening overall, right?
+是无法记住整体上发生了什么[NOISE]，对吧？
+
+938
+00:45:49,405 --> 00:45:53,020
+Cuz a recipe you could say is pretty challenging because you need to remember
+因为你需要记住，因此你可以说是非常具有挑战性的食谱
+
+939
+00:45:53,020 --> 00:45:57,100
+the title of what you're trying to make which in this case is chocolate ranch barbecue,
+你想要制作的标题是巧克力牧场烧烤，
+
+940
+00:45:57,100 --> 00:45:59,470
+and you need to actually, you know, make that thing by the end.
+实际上，你知道，你需要做到最后。
+
+941
+00:45:59,470 --> 00:46:01,060
+Uh, you also need to remember what were the ingredients
+呃，你还需要记住成分是什么
+
+942
+00:46:01,060 --> 00:46:02,500
+in the beginning and did you use them.
+在开始时你是否使用它们。
+
+943
+00:46:02,500 --> 00:46:05,230
+And in a recipe, if you make something and put it in the oven,
+在食谱中，如果你做了什么并把它放在烤箱里，
+
+944
+00:46:05,230 --> 00:46:07,720
+you need to take it out later, a- and stuff like that, right?
+你需要稍后把它拿出来 - 和那样的东西，对吧？
+
+945
+00:46:07,720 --> 00:46:09,400
+So, clearly it's not really
+所以，显然它不是真的
+
+946
+00:46:09,400 --> 00:46:11,890
+remembering what's happening overall or what it's trying to do,
+记住整体上正在发生的事情或它正在尝试做的事情，
+
+947
+00:46:11,890 --> 00:46:13,915
+it seems to be just generating kind of
+它似乎只是产生了一种
+
+948
+00:46:13,915 --> 00:46:17,785
+generic recipe sentences and putting them in a random order.
+通用配方句子并以随机顺序放置它们。
+
+949
+00:46:17,785 --> 00:46:20,635
+Uh, but again, I mean, we can see that it's fairly fluent,
+呃，但是，我的意思是，我们可以看到它相当流利，
+
+950
+00:46:20,635 --> 00:46:23,350
+it's grammatically right, it kind of sounds like a recipe.
+它的语法正确，听起来像是一个食谱。
+
+951
+00:46:23,350 --> 00:46:25,855
+Uh, but the problem is it's just nonsensical.
+呃，但问题是它只是荒谬的。
+
+952
+00:46:25,855 --> 00:46:28,300
+Like for example, shape mixture into
+例如，将形状混合成
+
+953
+00:46:28,300 --> 00:46:31,345
+the moderate oven is grammatical but it doesn't make any sense.
+温和的烤箱是语法的，但没有任何意义。
+
+954
+00:46:31,345 --> 00:46:33,295
+Okay, last example.
+好的，最后一个例子。
+
+955
+00:46:33,295 --> 00:46:37,510
+So, here's an RNN language model that's trained on paint-color names.
+所以，这是一个RNN语言模型，它是在油漆颜色名称上训练的。
+
+956
+00:46:37,510 --> 00:46:41,200
+And this is an example of a character-level language model because
+这是一个字符级语言模型的例子，因为
+
+957
+00:46:41,200 --> 00:46:44,845
+it's predicting what character comes next not what word comes next.
+它预测接下来会出现什么样的角色。
+
+958
+00:46:44,845 --> 00:46:47,650
+And this is why it's able to come up with new words.
+这就是为什么它能够提出新词。
+
+959
+00:46:47,650 --> 00:46:49,840
+Another thing to note is that this language model was
+另一件需要注意的是，这种语言模型是
+
+960
+00:46:49,840 --> 00:46:52,090
+trained to be conditioned on some kind of input.
+训练有条件的某种输入。
+
+961
+00:46:52,090 --> 00:46:55,780
+So here, the input is the color itself I think represented by the three numbers,
+所以在这里，输入是我认为由三个数字代表的颜色本身，
+
+962
+00:46:55,780 --> 00:46:57,145
+that's probably RGB numbers.
+这可能是RGB数字。
+
+963
+00:46:57,145 --> 00:47:00,925
+And it generated some names for the colors.
+它为颜色生成了一些名称。
+
+964
+00:47:00,925 --> 00:47:02,140
+And I think these are pretty funny.
+我认为这些非常有趣。
+
+965
+00:47:02,140 --> 00:47:04,060
+My favorite one is Stanky Bean,
+我最喜欢的是Stanky Bean，
+
+966
+00:47:04,060 --> 00:47:05,140
+which is in the bottom right.
+在右下方。
+
+967
+00:47:05,140 --> 00:47:07,930
+[LAUGHTER] Um, so, it's pretty creative,
+[大笑]嗯，这很有创意，
+
+968
+00:47:07,930 --> 00:47:10,210
+[LAUGHTER] and I think these do sound kind of
+[笑声]我认为这听起来有点像
+
+969
+00:47:10,210 --> 00:47:13,360
+like paint colors but often they're quite bizarre.
+喜欢油漆颜色，但往往它们很奇怪。
+
+970
+00:47:13,360 --> 00:47:20,570
+[LAUGHTER] Light of Blast is pretty good too.
+[大笑]爆炸之光也很不错。
+
+971
+00:47:20,910 --> 00:47:23,500
+So, uh, you're gonna learn more about
+所以，呃，你会学到更多
+
+972
+00:47:23,500 --> 00:47:25,765
+character-level language models in a future lecture,
+未来演讲中的人物级语言模型，
+
+973
+00:47:25,765 --> 00:47:28,870
+and you're also going to learn more about how to condition a language model
+你还将学习更多关于如何调整语言模型的知识
+
+974
+00:47:28,870 --> 00:47:32,440
+based on some kind of input such as the color, um, code.
+基于某种输入，如颜色，嗯，代码。
+
+975
+00:47:32,440 --> 00:47:34,330
+So, these are pretty funny,
+所以，这些都很有趣，
+
+976
+00:47:34,330 --> 00:47:35,890
+uh, but I do want to say a warning.
+呃，但我确实想说一个警告。
+
+977
+00:47:35,890 --> 00:47:38,920
+Um, you'll find a lot of these kinds of articles online,
+嗯，你会在网上找到很多这类文章，
+
+978
+00:47:38,920 --> 00:47:40,585
+uh, often with headlines like,
+呃，经常有头条新闻，
+
+979
+00:47:40,585 --> 00:47:43,000
+"We forced a bot to watch, you know,
+“我们强迫机器人观看，你知道，
+
+980
+00:47:43,000 --> 00:47:46,705
+1000 hours of sci-fi movies and it wrote a script," something like that.
+1000小时的科幻电影，它写了一个剧本，“这样的东西。
+
+981
+00:47:46,705 --> 00:47:50,800
+Um, so, my advice is you have to take these with a big pinch of salt, because often,
+嗯，所以，我的建议是你必须用大量的盐来摄取这些，因为经常，
+
+982
+00:47:50,800 --> 00:47:53,080
+uh, the examples that people put online were
+呃，人们上网的例子是
+
+983
+00:47:53,080 --> 00:47:55,375
+hand selected by humans to be the funniest examples.
+人类选择的手是最有趣的例子。
+
+984
+00:47:55,375 --> 00:47:58,660
+Like I think all of the examples I've shown today were definitely hand selected
+就像我想的那样，我今天展示的所有例子都是手工挑选的
+
+985
+00:47:58,660 --> 00:48:02,200
+by humans as the funniest examples that the RNN came up with.
+人类是RNN提出的最有趣的例子。
+
+986
+00:48:02,200 --> 00:48:05,455
+And in some cases they might even have been edited by a human.
+在某些情况下，它们甚至可能是由人类编辑的。
+
+987
+00:48:05,455 --> 00:48:08,560
+So, uh, yeah, you do need to be a little bit skeptical when you look at these examples.
+所以，呃，是的，当你看这些例子时，你确实需要有点怀疑。
+
+988
+00:48:08,560 --> 00:48:10,195
+[OVERLAPPING] Yep.
+[重叠]是的。
+
+989
+00:48:10,195 --> 00:48:12,925
+So, uh, in the Harry Potter one,
+所以，呃，在“哈利波特”中，
+
+990
+00:48:12,925 --> 00:48:16,630
+there was a opening quote and then there was a closing quote.
+有一个开场报价然后有一个收盘报价。
+
+991
+00:48:16,630 --> 00:48:18,745
+So, like do you expect the RNN,
+那么，就像你期望的RNN一样，
+
+992
+00:48:18,745 --> 00:48:22,000
+like when it puts that opening quote and keeps putting more words,
+比如当它把那个开头的引用放在一边并继续说更多的话
+
+993
+00:48:22,000 --> 00:48:28,825
+do you expect the probability of a closing quote to like increase as you're going or decrease?
+你是否期望结束报价的概率随着你的进展或减少而增加？
+
+994
+00:48:28,825 --> 00:48:31,150
+That's a great question. So, uh,
+这是一个很好的问题。所以，呃，
+
+995
+00:48:31,150 --> 00:48:32,515
+the question was, uh,
+问题是，呃，
+
+996
+00:48:32,515 --> 00:48:34,450
+we noticed that in the Harry Potter example,
+我们注意到在哈利波特的例子中，
+
+997
+00:48:34,450 --> 00:48:36,295
+there was some open quotes and some closed quotes.
+有一些公开的报价和一些封闭的报价。
+
+998
+00:48:36,295 --> 00:48:38,410
+And it looks like the model didn't screw up, right?
+看起来这个模型并没有搞砸，对吧？
+
+999
+00:48:38,410 --> 00:48:40,075
+All of these open quotes and closed quotes,
+所有这些公开引号和封闭式报价，
+
+1000
+00:48:40,075 --> 00:48:41,815
+uh, are in the correct places.
+呃，在正确的地方。
+
+1001
+00:48:41,815 --> 00:48:44,455
+So, the question is, do we expect the model to put
+所以，问题是，我们是否期望该模型
+
+1002
+00:48:44,455 --> 00:48:48,775
+a higher probability on closing the quote given that is inside a quo- quote passage?
+如果在报价段落内，关闭报价的概率更高？
+
+1003
+00:48:48,775 --> 00:48:51,115
+So, I should say definitely yes and
+所以，我应该肯定地说是的
+
+1004
+00:48:51,115 --> 00:48:54,220
+that's most- mostly the explanation for why this works.
+这是最主要的解释为什么这个工作。
+
+1005
+00:48:54,220 --> 00:48:56,500
+Um, there's been some really interesting work in trying
+嗯，尝试中有一些非常有趣的工作
+
+1006
+00:48:56,500 --> 00:48:58,540
+to look inside the hidden states of, uh,
+看看隐藏的状态，呃，
+
+1007
+00:48:58,540 --> 00:49:01,345
+language models to see whether it's tracking things like,
+语言模型，看它是否跟踪像，
+
+1008
+00:49:01,345 --> 00:49:03,610
+are we inside an open quote or a close quote?
+我们在公开报价或近距离报价中吗？
+
+1009
+00:49:03,610 --> 00:49:06,430
+And there has been some limited evidence to show that
+并且有一些有限的证据表明这一点
+
+1010
+00:49:06,430 --> 00:49:09,370
+maybe there are certain neuron or neurons inside the hidden state,
+也许在隐藏状态下有某些神经元或神经元，
+
+1011
+00:49:09,370 --> 00:49:10,900
+which are tracking things like,
+正在跟踪的事情，
+
+1012
+00:49:10,900 --> 00:49:12,550
+are we currently inside a quote or not?
+我们目前是否在报价内？
+
+1013
+00:49:12,550 --> 00:49:13,855
+[NOISE]. Yeah.
+[噪声]。是啊。
+
+1014
+00:49:13,855 --> 00:49:18,370
+So, so, like do you think the probability would increase  as you go more to the right [OVERLAPPING]?
+那么，你认为随着你向右走[概述]，概率会增加吗？
+
+1015
+00:49:18,370 --> 00:49:22,270
+So, the question is as the quote passage goes on for longer,
+所以，问题在于引用段落的持续时间更长，
+
+1016
+00:49:22,270 --> 00:49:23,740
+do you think the priority or
+你认为优先考虑还是优先考虑？
+
+1017
+00:49:23,740 --> 00:49:26,770
+the probability of outputting a closed quote should increase?
+输出封闭报价的概率应该增加？
+
+1018
+00:49:26,770 --> 00:49:28,045
+Um, I don't know.
+嗯，我不知道。
+
+1019
+00:49:28,045 --> 00:49:31,420
+Maybe. Um, that would be good, I suppose,
+也许。嗯，我想，这会很好，
+
+1020
+00:49:31,420 --> 00:49:32,980
+because you don't want an infinite quote,
+因为你不想要无限的引用，
+
+1021
+00:49:32,980 --> 00:49:35,650
+uh, but I wouldn't be surprised if that didn't happen.
+呃，但如果没有发生，我不会感到惊讶。
+
+1022
+00:49:35,650 --> 00:49:39,400
+Like I wouldn't be surprised if maybe some other worse-trained language models,
+就像我可能不会感到惊讶，如果可能是其他一些训练有素的语言模型，
+
+1023
+00:49:39,400 --> 00:49:41,395
+just opened quotes and never closed them.
+只是打开引号而从未关闭它们。
+
+1024
+00:49:41,395 --> 00:49:44,815
+Uh, any other questions? Yeah.
+呃，还有其他问题吗？是啊。
+
+1025
+00:49:44,815 --> 00:49:47,605
+What are the dimensions of the W metric?
+W指标的维度是多少？
+
+1026
+00:49:47,605 --> 00:49:50,710
+Okay. So, the question is what are the dimensions of the W metric?
+好的。那么，问题是W指标的维度是什么？
+
+1027
+00:49:50,710 --> 00:49:52,480
+So we're going back to the online stuff.
+所以我们回到网上的东西。
+
+1028
+00:49:52,480 --> 00:49:55,900
+Uh, okay. You're asking me about W_h or W_e or something else?
+呃，好的。你问我关于W_h或W_e还是别的什么？
+
+1029
+00:49:55,900 --> 00:49:56,610
+Yeah.
+是啊。
+
+1030
+00:49:56,610 --> 00:49:58,960
+So, W_h will be,
+所以，W_h将是，
+
+1031
+00:49:58,960 --> 00:50:01,435
+uh, if we say that the hidden size has size n,
+呃，如果我们说隐藏的大小是n，
+
+1032
+00:50:01,435 --> 00:50:07,240
+then W_h will be n by n. And if we suppose that the embeddings have size d,
+那么W_h将是n乘n。如果我们假设嵌入的大小为d，
+
+1033
+00:50:07,240 --> 00:50:08,635
+then W_e will be, uh,
+那么，呃，呃，
+
+1034
+00:50:08,635 --> 00:50:12,550
+d by n, n by d, maybe.
+d由n，n乘以d，也许。
+
+1035
+00:50:12,550 --> 00:50:19,990
+Does that answer your question? [NOISE] Uh,
+这是否回答你的问题？ [NOISE]呃，
+
+1036
+00:50:19,990 --> 00:50:23,380
+any other questions about generating or anything? Yep.
+关于生成或其他任何问题？是的。
+
+1037
+00:50:23,380 --> 00:50:28,030
+So, you said that there was a long sentence in the Harry Potter-related text?
+所以，你说哈利波特相关文本中有一个长句吗？
+
+1038
+00:50:28,030 --> 00:50:28,425
+Yeah.
+是啊。
+
+1039
+00:50:28,425 --> 00:50:33,640
+Is it ever sort of practical to combine RNNs with like in this hand written rules?
+在这个手写规则中将RNN与类似的结合起来是否实际可行？
+
+1040
+00:50:33,640 --> 00:50:35,395
+Sorry. Is it ever practical to combine-
+抱歉。是否实际结合 -
+
+1041
+00:50:35,395 --> 00:50:37,810
+RNNs with a written list of hand-written rules.
+带有手写规则书面清单的RNN。
+
+1042
+00:50:37,810 --> 00:50:38,830
+[OVERLAPPING]
+[重叠]
+
+1043
+00:50:38,830 --> 00:50:39,880
+Okay. Yeah. That's a great question.
+好的。是啊。这是一个很好的问题。
+
+1044
+00:50:39,880 --> 00:50:42,220
+So the question was, is it ever practical to
+所以问题是，它是否实用
+
+1045
+00:50:42,220 --> 00:50:44,980
+combine RNNs with a list of hand-written rules?
+将RNN与手写规则列表相结合？
+
+1046
+00:50:44,980 --> 00:50:49,285
+For example, don't let your sentence be longer than this many words.
+例如，不要让你的句子长于这么多单词。
+
+1047
+00:50:49,285 --> 00:50:50,530
+Um, so yeah.
+嗯，是的。
+
+1048
+00:50:50,530 --> 00:50:54,070
+I'd say it probably is practical maybe especially if you're interested in, uh,
+我想说这可能是实用的，尤其是如果你对此感兴趣，呃，
+
+1049
+00:50:54,070 --> 00:50:56,260
+making sure that certain bad things don't happen,
+确保不会发生某些不好的事情，
+
+1050
+00:50:56,260 --> 00:51:01,900
+you might apply some hacky rules like yeah forcing it to end, uh, early.
+你可能会应用一些hacky规则，比如是的，迫使它结束，呃，早。
+
+1051
+00:51:01,900 --> 00:51:03,580
+I mean, okay. So there's this thing called Beam Search
+我的意思是，好吧。所以这就是梁搜索
+
+1052
+00:51:03,580 --> 00:51:05,335
+which we're going to learn about in a later lecture,
+我们将在后面的讲座中学习，
+
+1053
+00:51:05,335 --> 00:51:06,640
+which essentially doesn't just,
+这基本上不仅仅是，
+
+1054
+00:51:06,640 --> 00:51:09,340
+um, choose one word in each step and continue.
+嗯，在每一步中选择一个单词并继续。
+
+1055
+00:51:09,340 --> 00:51:12,325
+It explores many different options for words you could generate.
+它为您可以生成的单词探索了许多不同的选项。
+
+1056
+00:51:12,325 --> 00:51:14,410
+And you can apply some kinds of rules on that
+你可以对此应用某些规则
+
+1057
+00:51:14,410 --> 00:51:16,540
+where if you have lots of different things to choose from,
+如果你有很多不同的东西可供选择，
+
+1058
+00:51:16,540 --> 00:51:18,250
+then you can maybe get rid of
+然后你可以摆脱
+
+1059
+00:51:18,250 --> 00:51:21,265
+some options if you don't like them because they break some of your rules.
+一些选项，如果你不喜欢它们，因为它们违反了你的一些规则。
+
+1060
+00:51:21,265 --> 00:51:28,340
+But, um, it can be difficult to do. Any other questions?
+但是，嗯，这可能很难做到。还有其他问题吗？
+
+1061
+00:51:29,490 --> 00:51:38,380
+Okay. Um, so we've talked about generating from language models.
+好的。嗯，所以我们谈到了从语言模型中生成。
+
+1062
+00:51:38,380 --> 00:51:40,630
+Uh, so unfortunately, you can't just use
+呃，不幸的是，你不能只是使用
+
+1063
+00:51:40,630 --> 00:51:44,140
+generation as your evaluation metric for the language models.
+生成作为语言模型的评估指标。
+
+1064
+00:51:44,140 --> 00:51:47,245
+You do need some kind of, um, measurable metric.
+你确实需要某种，可衡量的指标。
+
+1065
+00:51:47,245 --> 00:51:52,015
+So, the standard evaluation metric for language models is called perplexity.
+因此，语言模型的标准评估指标称为困惑。
+
+1066
+00:51:52,015 --> 00:51:54,250
+And, uh, perplexity is defined as
+而且，呃，困惑被定义为
+
+1067
+00:51:54,250 --> 00:51:58,480
+the inverse probability of the corpus according to the language model.
+根据语言模型的语料库的逆概率。
+
+1068
+00:51:58,480 --> 00:52:02,200
+So, if you look at it you can see that that's what this formula is saying.
+所以，如果你看一下，你可以看到这就是这个公式所说的。
+
+1069
+00:52:02,200 --> 00:52:04,075
+It's saying that for every, uh,
+它说的是每一个，呃，
+
+1070
+00:52:04,075 --> 00:52:07,555
+word xt, lowercase t, in the corpus, uh,
+单词xt，小写字母t，在语料库中，呃，
+
+1071
+00:52:07,555 --> 00:52:10,420
+we're computing the probability of that word given
+我们正在计算给出该单词的概率
+
+1072
+00:52:10,420 --> 00:52:13,630
+everything that came so far but its inverse is one over that.
+到目前为止所发生的一切，但它的反面是一个。
+
+1073
+00:52:13,630 --> 00:52:16,600
+And then lastly, when normalizing this big,
+最后，当规范化这个大的时候，
+
+1074
+00:52:16,600 --> 00:52:19,960
+uh, product by the number of words,
+呃，产品的数量，
+
+1075
+00:52:19,960 --> 00:52:23,995
+which is capital T. And the reason why we're doing that is because if we didn't do that,
+这是资本T.而我们这样做的原因是因为如果我们不这样做，
+
+1076
+00:52:23,995 --> 00:52:28,195
+then perplexity would just get smaller and smaller as your corpus got bigger.
+然后，当你的语料库变大时，困惑会变得越来越小。
+
+1077
+00:52:28,195 --> 00:52:31,070
+So we need to normalize by that factor.
+所以我们需要按照这个因素进行标准化。
+
+1078
+00:52:31,140 --> 00:52:33,910
+So, you can actually show you that this, uh,
+所以，你实际上可以告诉你这个，呃，
+
+1079
+00:52:33,910 --> 00:52:38,470
+perplexity is equal to the exponential of the cross-entropy loss J Theta.
+困惑等于交叉熵损失J Theta的指数。
+
+1080
+00:52:38,470 --> 00:52:41,470
+So if you remember, cross-entropy loss J Theta is, uh,
+所以，如果你还记得，交叉熵损失J Theta是，呃，
+
+1081
+00:52:41,470 --> 00:52:44,305
+the training objective that we're using to train the language model.
+我们用来培训语言模型的培训目标。
+
+1082
+00:52:44,305 --> 00:52:46,555
+And, uh, by rearranging things a little bit,
+而且，呃，通过重新安排一点点，
+
+1083
+00:52:46,555 --> 00:52:50,890
+you can see that perplexity is actually the exponential of the cross-entropy.
+你可以看到，困惑实际上是交叉熵的指数。
+
+1084
+00:52:50,890 --> 00:52:52,750
+And this is a good thing, uh,
+这是件好事，呃，
+
+1085
+00:52:52,750 --> 00:52:55,750
+because if we're training the language model to, uh,
+因为如果我们正在训练语言模型，呃，
+
+1086
+00:52:55,750 --> 00:52:58,900
+minimize the cross-entropy loss,
+最小化交叉熵损失，
+
+1087
+00:52:58,900 --> 00:53:04,070
+then you are training it to optimize the perplexity as well.
+那么你正在训练它以优化困惑。
+
+1088
+00:53:04,800 --> 00:53:08,860
+So you should remember that the lower perplexity is better,
+所以你应该记住，较低的困惑是更好的，
+
+1089
+00:53:08,860 --> 00:53:12,640
+uh, because perplexity is the inverse probability of the corpus.
+呃，因为困惑是语料库的反向概率。
+
+1090
+00:53:12,640 --> 00:53:17,965
+So, uh, if you want your language model to assign high probability to the corpus, right?
+所以，呃，如果你想让你的语言模型为语料库分配高概率，对吧？
+
+1091
+00:53:17,965 --> 00:53:21,470
+Then that means you want to get low perplexity.
+那意味着你想要低迷。
+
+1092
+00:53:21,600 --> 00:53:28,480
+Uh, any questions? [NOISE] Okay.
+呃，有什么问题吗？ [NOISE]好的。
+
+1093
+00:53:28,480 --> 00:53:36,220
+Uh, so RNNs have been pretty successful in recent years in improving perplexity.
+呃，所以RNN近年来在改善困惑方面取得了相当大的成功。
+
+1094
+00:53:36,220 --> 00:53:39,880
+So, uh, this is a results table from a recent,
+所以，呃，这是最近的一个结果表，
+
+1095
+00:53:39,880 --> 00:53:43,630
+uh, Facebook research paper about RNN language models.
+呃，Facebook关于RNN语言模型的研究论文。
+
+1096
+00:53:43,630 --> 00:53:46,600
+And, uh, you don't have to understand all of the details of this table,
+而且，呃，你不必了解这张桌子的所有细节，
+
+1097
+00:53:46,600 --> 00:53:48,055
+but what it's telling you is that,
+但它告诉你的是，
+
+1098
+00:53:48,055 --> 00:53:50,785
+on the, uh, top where we have n gram language model.
+在呃，顶部，我们有n语言模型。
+
+1099
+00:53:50,785 --> 00:53:52,240
+And thessssssssssssn in the subsequent various,
+thessssssssssssn在随后的各种中，
+
+1100
+00:53:52,240 --> 00:53:55,735
+we have some increasingly complex and large RNNs.
+我们有一些越来越复杂和庞大的RNN。
+
+1101
+00:53:55,735 --> 00:53:58,945
+And you can see that the perplexity numbers are decreasing,
+你可以看到困惑数正在减少，
+
+1102
+00:53:58,945 --> 00:54:00,475
+because lower is better.
+因为越低越好。
+
+1103
+00:54:00,475 --> 00:54:02,770
+So RNNs have been really great for
+所以RNN真的很棒
+
+1104
+00:54:02,770 --> 00:54:06,320
+making more effective language models in the last few years.
+在过去几年中制作更有效的语言模型。
+
+1105
+00:54:08,910 --> 00:54:11,695
+Okay. So to zoom out a little bit,
+好的。所以要缩小一点，
+
+1106
+00:54:11,695 --> 00:54:13,120
+you might be thinking, uh,
+你可能在想，呃，
+
+1107
+00:54:13,120 --> 00:54:15,460
+why should I care about Language Modelling?
+我为什么要关心语言模型？
+
+1108
+00:54:15,460 --> 00:54:17,350
+Why is it important? I'd say there are
+它为什么如此重要？我会说有
+
+1109
+00:54:17,350 --> 00:54:19,735
+two main reasons why Language Modelling is important.
+语言建模很重要的两个主要原因。
+
+1110
+00:54:19,735 --> 00:54:21,160
+Uh, so the first one is,
+呃，第一个是，
+
+1111
+00:54:21,160 --> 00:54:23,620
+that language modelling is a benchmark task that
+语言建模是一项基准任务
+
+1112
+00:54:23,620 --> 00:54:26,770
+helps us measure our progress on understanding language.
+帮助我们衡量我们理解语言的进度。
+
+1113
+00:54:26,770 --> 00:54:28,540
+So, you could view language modeling as
+因此，您可以将语言建模视为
+
+1114
+00:54:28,540 --> 00:54:31,990
+a pretty general language understanding task, right?
+一个非常通用的语言理解任务，对吗？
+
+1115
+00:54:31,990 --> 00:54:35,425
+Because predicting what word comes next to given any,
+因为预测下一个给出的单词是什么，
+
+1116
+00:54:35,425 --> 00:54:37,795
+any kind of, uh, generic text.
+任何一种呃通用文本。
+
+1117
+00:54:37,795 --> 00:54:40,975
+Um, that's quite a difficult and general problem.
+嗯，这是一个非常困难和普遍的问题。
+
+1118
+00:54:40,975 --> 00:54:43,330
+And in order to be good at language modelling,
+为了擅长语言建模，
+
+1119
+00:54:43,330 --> 00:54:45,340
+you have to understand a lot of things, right?
+你必须了解很多东西，对吧？
+
+1120
+00:54:45,340 --> 00:54:46,780
+You have to understand grammar,
+你必须懂语法，
+
+1121
+00:54:46,780 --> 00:54:48,115
+you have to understand syntax,
+你必须要理解语法，
+
+1122
+00:54:48,115 --> 00:54:49,615
+and you have to understand,
+而且你必须明白，
+
+1123
+00:54:49,615 --> 00:54:51,115
+uh, logic and reasoning.
+呃，逻辑和推理。
+
+1124
+00:54:51,115 --> 00:54:52,570
+And you have to understand something about,
+你必须了解一些事情，
+
+1125
+00:54:52,570 --> 00:54:53,845
+you know, real-world knowledge.
+你知道，现实世界的知识。
+
+1126
+00:54:53,845 --> 00:54:55,720
+You have to understand a lot of things in order to be
+你必须了解很多东西才能成为
+
+1127
+00:54:55,720 --> 00:54:57,970
+able to do language modelling properly.
+能够正确地进行语言建模。
+
+1128
+00:54:57,970 --> 00:54:59,530
+So, the reason why we care about it as
+所以，我们之所以关心它
+
+1129
+00:54:59,530 --> 00:55:02,350
+a benchmark task is because if you're able to build a model,
+基准任务是因为如果你能够建立一个模型，
+
+1130
+00:55:02,350 --> 00:55:05,050
+which is a better language model than the ones that came before it,
+这是一个比之前更好的语言模型，
+
+1131
+00:55:05,050 --> 00:55:07,930
+then you must have made some kind of progress on at
+那么你必须取得一些进展
+
+1132
+00:55:07,930 --> 00:55:11,620
+least some of those sub-components of natural language understanding.
+至少有一些自然语言理解的子组件。
+
+1133
+00:55:11,620 --> 00:55:14,470
+So, another more tangible reason why you might
+所以，你可能会有另一个更明显的理由
+
+1134
+00:55:14,470 --> 00:55:16,930
+care about language modelling is that it's a sub-component of
+关心语言建模是它的一个子组件
+
+1135
+00:55:16,930 --> 00:55:19,990
+many many NLP tasks especially those which involve
+许多NLP任务，尤其是涉及的任务
+
+1136
+00:55:19,990 --> 00:55:23,560
+generating text or estimating the probability of text.
+生成文本或估计文本的概率。
+
+1137
+00:55:23,560 --> 00:55:25,675
+So, here's a bunch of examples.
+所以，这里有一堆例子。
+
+1138
+00:55:25,675 --> 00:55:27,220
+Uh, one is predictive typing.
+呃，一个是预测性打字。
+
+1139
+00:55:27,220 --> 00:55:29,170
+That's the example that we showed at the beginning of the lecture
+这是我们在讲座开始时展示的例子
+
+1140
+00:55:29,170 --> 00:55:31,450
+with typing on your phone or searching on Google.
+在手机上打字或在Google上搜索。
+
+1141
+00:55:31,450 --> 00:55:35,185
+Uh, this is also very useful for people who have movement disabilities, uh,
+呃，对于有运动障碍的人来说这也很有用，呃，
+
+1142
+00:55:35,185 --> 00:55:39,595
+because they are these systems that help people communicate using fewer movements.
+因为这些系统可以帮助人们使用更少的动作进行通信。
+
+1143
+00:55:39,595 --> 00:55:41,920
+Uh, another example is speech recognition.
+呃，另一个例子是语音识别。
+
+1144
+00:55:41,920 --> 00:55:43,600
+So, in speech recognition you have
+所以，在语音识别中你有
+
+1145
+00:55:43,600 --> 00:55:45,820
+some kind of audio recording of a person saying something
+某种人说某事的录音
+
+1146
+00:55:45,820 --> 00:55:49,975
+and often it's kind of noisy and hard to make out what they're saying and you need to,
+而且经常有点吵，很难弄清楚他们说的是什么，你需要，
+
+1147
+00:55:49,975 --> 00:55:51,700
+uh, figure out what words did they say.
+呃，弄清楚他们说的是什么词。
+
+1148
+00:55:51,700 --> 00:55:55,300
+So this an example where you have to estimate the probability of different,
+所以这个例子你必须估计不同的概率，
+
+1149
+00:55:55,300 --> 00:55:58,210
+uh, different options of what, what it is they could have said.
+呃，不同的选择，他们可以说什么。
+
+1150
+00:55:58,210 --> 00:56:00,445
+And in the same way, handwriting recognition,
+以同样的方式，手写识别，
+
+1151
+00:56:00,445 --> 00:56:02,410
+is an example where there's a lot of noise
+是一个有很多噪音的例子
+
+1152
+00:56:02,410 --> 00:56:05,470
+and you have to figure out what the person intended to say.
+你必须弄明白这个人想说什么。
+
+1153
+00:56:05,470 --> 00:56:07,810
+Uh, spelling and grammar correction is yet
+呃，拼写和语法修正还没有
+
+1154
+00:56:07,810 --> 00:56:10,705
+another example where it's all about trying to figure out what someone meant.
+另一个例子就是试图找出某人的意思。
+
+1155
+00:56:10,705 --> 00:56:12,340
+And that means you actually understand how
+这意味着你真的明白了
+
+1156
+00:56:12,340 --> 00:56:14,695
+likely it is that they were saying different things.
+可能是他们说的不同。
+
+1157
+00:56:14,695 --> 00:56:19,555
+Uh, an interesting, an interesting application is authorship identification.
+呃，一个有趣的，有趣的应用是作者身份识别。
+
+1158
+00:56:19,555 --> 00:56:22,480
+So suppose that you have a piece of text and you're trying to
+所以假设你有一段文字而你正在尝试
+
+1159
+00:56:22,480 --> 00:56:25,495
+figure out who likely wrote it and maybe you have,
+找出谁可能写了它，也许你有，
+
+1160
+00:56:25,495 --> 00:56:29,830
+uh, several different authors and you have text written by those different authors.
+呃，几个不同的作者，你有这些不同作者写的文字。
+
+1161
+00:56:29,830 --> 00:56:31,285
+So you could, for example,
+所以，你可以，例如，
+
+1162
+00:56:31,285 --> 00:56:34,720
+train a separate language model on each of the different authors' texts.
+在每个不同作者的文本上训练单独的语言模型。
+
+1163
+00:56:34,720 --> 00:56:36,160
+And then, because, remember,
+然后，因为，请记住，
+
+1164
+00:56:36,160 --> 00:56:39,805
+a language model can tell you the probability of a given piece of text.
+语言模型可以告诉您给定文本的概率。
+
+1165
+00:56:39,805 --> 00:56:42,430
+Then you could ask all the different language models,
+然后你可以问所有不同的语言模型，
+
+1166
+00:56:42,430 --> 00:56:45,790
+um, how likely the texts and the question is,
+嗯，文本和问题的可能性有多大，
+
+1167
+00:56:45,790 --> 00:56:49,720
+and then if a certain author's language model says that it's likely then that
+然后，如果某个作者的语言模型表明它可能那么
+
+1168
+00:56:49,720 --> 00:56:55,000
+means that text the texts and the question is more likely to be written by that author.
+意味着文本和问题更可能由该作者撰写。
+
+1169
+00:56:55,000 --> 00:56:57,820
+Um, other examples include machine translation.
+嗯，其他例子包括机器翻译。
+
+1170
+00:56:57,820 --> 00:56:59,200
+This is a huge, uh,
+这是一个巨大的，呃，
+
+1171
+00:56:59,200 --> 00:57:01,390
+application of language models,
+应用语言模型，
+
+1172
+00:57:01,390 --> 00:57:03,565
+uh, because it's all about generating text.
+呃，因为这都是关于生成文本的。
+
+1173
+00:57:03,565 --> 00:57:05,740
+Uh, similarly, summarization is
+呃，同样，摘要是
+
+1174
+00:57:05,740 --> 00:57:09,280
+a task where we need to generate some text given some input text.
+我们需要在给定输入文本的情况下生成一些文本的任务。
+
+1175
+00:57:09,280 --> 00:57:11,185
+Uh, dialogue as well,
+呃，对话也是，
+
+1176
+00:57:11,185 --> 00:57:14,980
+not all dialogue agents necessarily are RNN language models but you can
+并非所有的对话代理都必然是RNN语言模型，但你可以
+
+1177
+00:57:14,980 --> 00:57:19,285
+build a dialogue agent that generates the text using an RNN language model.
+构建一个使用RNN语言模型生成文本的对话代理。
+
+1178
+00:57:19,285 --> 00:57:21,560
+And there are more examples as well.
+还有更多的例子。
+
+1179
+00:57:21,560 --> 00:57:25,360
+Any questions on this? [LAUGHTER] Yep.
+对此有任何疑问？ [大笑]是的。
+
+1180
+00:57:25,360 --> 00:57:47,875
+So, I know that [inaudible]
+所以，我知道[音频不清晰]
+
+1181
+00:57:47,875 --> 00:57:49,945
+Great question. So, the question was,
+好问题。所以，问题是，
+
+1182
+00:57:49,945 --> 00:57:51,475
+uh, for some of these examples, uh,
+呃，对于其中一些例子，呃，
+
+1183
+00:57:51,475 --> 00:57:55,315
+such as speech recognition or maybe [NOISE] image captioning,
+如语音识别或[NOISE]图像字幕，
+
+1184
+00:57:55,315 --> 00:57:59,290
+the input is audio or image or something that is not text, right?
+输入是音频或图像或不是文本的东西，对吧？
+
+1185
+00:57:59,290 --> 00:58:01,780
+So, you can't represent it in the way that we've talked about so far.
+所以，你不能用我们到目前为止谈论的方式来表达它。
+
+1186
+00:58:01,780 --> 00:58:04,180
+Um, so, [NOISE] in those examples,
+嗯，所以，[NOISE]在这些例子中，
+
+1187
+00:58:04,180 --> 00:58:06,460
+you will have some way of representing the input,
+你将有一些表达输入的方式，
+
+1188
+00:58:06,460 --> 00:58:08,725
+some way of encoding the audio or the image or whatever.
+某种编码音频或图像的方式或其他方式。
+
+1189
+00:58:08,725 --> 00:58:13,315
+Uh, the reason I brought it up now in terms of language models is that that's the input,
+呃，我现在用语言模型提出的原因是那是输入，
+
+1190
+00:58:13,315 --> 00:58:15,685
+but you use the language model to get the output, right?
+但你使用语言模型来获得输出，对吧？
+
+1191
+00:58:15,685 --> 00:58:17,170
+So, the language model, [NOISE] uh, generates
+所以，语言模型，[NOISE]呃，生成
+
+1192
+00:58:17,170 --> 00:58:19,345
+the output in the way that we saw earlier, uh,
+我们之前看到的输出，呃，
+
+1193
+00:58:19,345 --> 00:58:22,120
+but we're gonna learn more about those conditional language [NOISE] models later.
+但我们稍后会更多地了解那些条件语言[NOISE]模型。
+
+1194
+00:58:22,120 --> 00:58:25,090
+[NOISE] Anyone else?
+[NOISE]其他人？
+
+1195
+00:58:25,090 --> 00:58:29,020
+[NOISE] Okay.
+[NOISE]好的。
+
+1196
+00:58:29,020 --> 00:58:32,965
+[NOISE] So, uh, here's a recap.
+[NOISE]所以，呃，这是一个回顾。
+
+1197
+00:58:32,965 --> 00:58:36,730
+If I've lost you somewhere in this lecture, uh, or you got tired,
+如果我在这个讲座的某个地方失去了你，呃，或者你累了，
+
+1198
+00:58:36,730 --> 00:58:38,770
+um, now's a great time to jump back in
+嗯，现在是跳回来的好时机
+
+1199
+00:58:38,770 --> 00:58:41,050
+because things are gonna get a little bit more accessible.
+因为事情会变得更容易接近。
+
+1200
+00:58:41,050 --> 00:58:43,045
+Okay. So, here's a recap of what we've done today.
+好的。所以，这里回顾一下我们今天所做的事情。
+
+1201
+00:58:43,045 --> 00:58:46,210
+Uh, a language model is a system that predicts the next word,
+呃，语言模型是一个预测下一个单词的系统，
+
+1202
+00:58:46,210 --> 00:58:48,460
+[NOISE] and a recurrent neural network,
+[NOISE]和一个递归的神经网络，
+
+1203
+00:58:48,460 --> 00:58:50,590
+is a new family, oh, new to us,
+是一个新的家庭，哦，我们新来的，
+
+1204
+00:58:50,590 --> 00:58:53,710
+a family of neural networks that takes sequential input
+一系列神经网络，需要顺序输入
+
+1205
+00:58:53,710 --> 00:58:57,175
+of any length and it applies the same weights on every step,
+任何长度，它在每一步都适用相同的权重，
+
+1206
+00:58:57,175 --> 00:58:59,620
+and it can optionally produce some kind of output on
+它可以选择性地产生某种输出
+
+1207
+00:58:59,620 --> 00:59:02,020
+each step or some of the steps or none of the steps.
+每个步骤或一些步骤或没有步骤。
+
+1208
+00:59:02,020 --> 00:59:04,945
+[NOISE] So, don't be confused.
+[噪音]所以，不要混淆。
+
+1209
+00:59:04,945 --> 00:59:08,305
+A recurrent neural network is not [NOISE] the same thing as a language model.
+递归神经网络与语言模型不同[NOISE]。
+
+1210
+00:59:08,305 --> 00:59:12,970
+Uh, we've seen today that an RNN is a great way to build a language model, but actually,
+呃，我们今天看到RNN是构建语言模型的好方法，但实际上，
+
+1211
+00:59:12,970 --> 00:59:15,010
+it turns out that you can use RNNs for,
+事实证明你可以使用RNN，
+
+1212
+00:59:15,010 --> 00:59:17,710
+uh, a lot of other different things that are not language modeling.
+呃，很多其他不同的东西都不是语言建模。
+
+1213
+00:59:17,710 --> 00:59:19,840
+[NOISE] So, here's a few examples of that.
+[NOISE]所以，这里有一些例子。
+
+1214
+00:59:19,840 --> 00:59:24,085
+[NOISE] Uh, you can use an RNN to do a tagging task.
+[NOISE]呃，您可以使用RNN进行标记任务。
+
+1215
+00:59:24,085 --> 00:59:26,320
+So, some examples of tagging tasks are
+因此，标记任务的一些示例是
+
+1216
+00:59:26,320 --> 00:59:29,260
+part-of-speech tagging and named entity recognition.
+词性标注和命名实体识别。
+
+1217
+00:59:29,260 --> 00:59:32,590
+So, pictured here is part-of-speech tagging, and this is the task.
+所以，这里的图片是词性标注，这就是任务。
+
+1218
+00:59:32,590 --> 00:59:35,245
+We have some kind of input text such as, uh,
+我们有一些输入文本，例如，呃，
+
+1219
+00:59:35,245 --> 00:59:37,645
+the startled cat knocked over the vase,
+被震惊的猫撞倒了花瓶，
+
+1220
+00:59:37,645 --> 00:59:39,385
+and your job is to, uh,
+你的工作是，呃，
+
+1221
+00:59:39,385 --> 00:59:42,085
+label or tag each word with its part of speech.
+用其词性标记或标记每个单词。
+
+1222
+00:59:42,085 --> 00:59:45,160
+So, for example, cat is a noun and knocked is a verb.
+因此，例如，cat是一个名词，而knock则是一个动词。
+
+1223
+00:59:45,160 --> 00:59:48,205
+So, you can use an RNN to do this task in,
+因此，您可以使用RNN执行此任务，
+
+1224
+00:59:48,205 --> 00:59:50,350
+in the way that we've pictured, which is that you, uh,
+就像我们想象的那样，那是你，呃，
+
+1225
+00:59:50,350 --> 00:59:52,720
+feed the text into the RNN, [NOISE] and then,
+将文本输入RNN，[NOISE]然后，
+
+1226
+00:59:52,720 --> 00:59:53,905
+on each step of the RNN,
+在RNN的每一步，
+
+1227
+00:59:53,905 --> 00:59:55,705
+you, uh, have an output,
+你，呃，有输出，
+
+1228
+00:59:55,705 --> 00:59:57,790
+probably a distribution over what, uh,
+可能是分布在什么，呃，
+
+1229
+00:59:57,790 --> 01:00:01,775
+tag you think it is, and then, uh, you can tag it in that way.
+标记你认为它是，然后，呃，你可以用这种方式标记它。
+
+1230
+01:00:01,775 --> 01:00:04,050
+And then, also for named entity recognition,
+然后，也用于命名实体识别，
+
+1231
+01:00:04,050 --> 01:00:05,190
+that's all about, um,
+这就是，嗯，
+
+1232
+01:00:05,190 --> 01:00:08,085
+tagging each of the words with what named entity type they are.
+用它们所命名的实体类型标记每个单词。
+
+1233
+01:00:08,085 --> 01:00:11,820
+So, you do it in the same way. [NOISE] Okay.
+所以，你以同样的方式做到这一点。 [NOISE]好的。
+
+1234
+01:00:11,820 --> 01:00:13,470
+Here's another thing you can use RNNs for,
+这是你可以使用RNN的另一件事，
+
+1235
+01:00:13,470 --> 01:00:16,200
+uh, you can use them for sentence classification.
+呃，你可以用它们进行句子分类。
+
+1236
+01:00:16,200 --> 01:00:19,080
+So, sentence classification is just a general term to mean
+因此，句子分类只是一个通用术语
+
+1237
+01:00:19,080 --> 01:00:22,170
+any kind of task where you want to take sentence or other piece of text,
+任何你想要判刑或其他文字的任务，
+
+1238
+01:00:22,170 --> 01:00:24,945
+and then, you want to classify it into one of several classes.
+然后，您想将其分类为几个类之一。
+
+1239
+01:00:24,945 --> 01:00:28,120
+So, an example of that is sentiment classification.
+因此，一个例子是情绪分类。
+
+1240
+01:00:28,120 --> 01:00:30,400
+Uh, sentiment classification is when you have some kind
+呃，情绪分类是你有什么样的
+
+1241
+01:00:30,400 --> 01:00:32,680
+of input text such as, let's say, overall,
+输入文本，例如，整体而言，
+
+1242
+01:00:32,680 --> 01:00:34,510
+I enjoyed the movie a lot, and then,
+我很喜欢这部电影，然后，
+
+1243
+01:00:34,510 --> 01:00:35,770
+you're trying to classify that as being
+你试图把它归类为存在
+
+1244
+01:00:35,770 --> 01:00:38,095
+positive or negative or [NOISE] neutral sentiment.
+积极或消极或[噪音]中立情绪。
+
+1245
+01:00:38,095 --> 01:00:40,090
+So, in this example, this is positive sentiment.
+因此，在这个例子中，这是积极的情绪。
+
+1246
+01:00:40,090 --> 01:00:45,400
+[NOISE] So, one way you might use an RNN to tackle this task is, uh,
+[NOISE]因此，你可能使用RNN来解决这个问题的一种方法是，呃，
+
+1247
+01:00:45,400 --> 01:00:49,450
+you might encode the text using the RNN, and then,
+您可以使用RNN对文本进行编码，然后，
+
+1248
+01:00:49,450 --> 01:00:53,350
+really what you want is some kind of sentence encoding so that you
+你真正想要的是某种句子编码让你
+
+1249
+01:00:53,350 --> 01:00:57,265
+can output your label for the sentence, right?
+可以输出你的句子标签，对吗？
+
+1250
+01:00:57,265 --> 01:00:59,680
+And it'll be useful if you would have a single vector to
+如果你有一个向量，它将是有用的
+
+1251
+01:00:59,680 --> 01:01:02,965
+represent the sentence rather than all of these separate vectors.
+代表句子而不是所有这些单独的向量。
+
+1252
+01:01:02,965 --> 01:01:04,870
+So, how would you do this?
+那么，你会怎么做？
+
+1253
+01:01:04,870 --> 01:01:07,000
+How would you get the sentence encoding from the RNN?
+你如何从RNN获得句子编码？
+
+1254
+01:01:07,000 --> 01:01:10,540
+[NOISE] Uh, one thing you could do [NOISE] is,
+[NOISE]呃，你能做的一件事[NOISE]是，
+
+1255
+01:01:10,540 --> 01:01:14,290
+you could use the final hidden state as your sentence encoding.
+您可以使用最终隐藏状态作为句子编码。
+
+1256
+01:01:14,290 --> 01:01:18,460
+So, um, the reason why you might think this is a good idea is because,
+所以，嗯，你可能认为这是一个好主意的原因是因为，
+
+1257
+01:01:18,460 --> 01:01:19,810
+for example, in the RNN,
+例如，在RNN中，
+
+1258
+01:01:19,810 --> 01:01:22,675
+we regard the, the final hidden state as,
+我们认为，最后隐藏的状态是，
+
+1259
+01:01:22,675 --> 01:01:25,735
+um, this is the thing you use to predict what's coming next, right?
+嗯，这是你用来预测接下来会发生什么的事情，对吧？
+
+1260
+01:01:25,735 --> 01:01:28,300
+So, we're assuming that the final hidden state contains
+所以，我们假设最终的隐藏状态包含
+
+1261
+01:01:28,300 --> 01:01:31,465
+information about all of the text that has come so far, right?
+关于到目前为止所有文本的信息，对吧？
+
+1262
+01:01:31,465 --> 01:01:34,990
+So, for that reason, you might suppose that this is a good sentence encoding,
+所以，出于这个原因，你可能会认为这是一个很好的句子编码，
+
+1263
+01:01:34,990 --> 01:01:36,460
+and we could use that [NOISE] to predict, you know,
+我们可以使用[NOISE]来预测，你知道，
+
+1264
+01:01:36,460 --> 01:01:39,040
+what, uh, what sentiment is this sentence.
+什么，呃，这句话是什么情绪。
+
+1265
+01:01:39,040 --> 01:01:41,350
+And it turns out that usually, a better way to do this,
+事实证明，通常，这是一种更好的方法，
+
+1266
+01:01:41,350 --> 01:01:42,595
+usually a more effective way,
+通常是一种更有效的方式，
+
+1267
+01:01:42,595 --> 01:01:46,240
+is to do something like maybe take an element-wise max or
+是做一些像可能采取元素最大或最大的事情
+
+1268
+01:01:46,240 --> 01:01:50,080
+an element-wise mean of all these hidden states to get your sentence encoding,
+所有这些隐藏状态的元素均值来获得你的句子编码，
+
+1269
+01:01:50,080 --> 01:01:52,345
+um, [NOISE] and, uh,
+嗯，[NOISE]，呃，
+
+1270
+01:01:52,345 --> 01:01:54,640
+this tends to work better than just using the final hidden state.
+这比使用最终隐藏状态更有效。
+
+1271
+01:01:54,640 --> 01:01:58,490
+[NOISE] Uh, there are some other more advanced things you can do as well.
+[NOISE]呃，你还可以做一些其他更先进的事情。
+
+1272
+01:01:59,310 --> 01:02:02,215
+Okay. [NOISE] Another thing that you can use RNNs for
+好的。 [NOISE]你可以使用RNNs的另一件事
+
+1273
+01:02:02,215 --> 01:02:05,335
+is as a general purpose encoder module.
+是作为通用编码器模块。
+
+1274
+01:02:05,335 --> 01:02:08,470
+Uh, so, here's an example that's question answering,
+呃，这是一个回答问题的例子，
+
+1275
+01:02:08,470 --> 01:02:10,480
+but really this idea of RNNs as
+但实际上这个RNN的想法是
+
+1276
+01:02:10,480 --> 01:02:15,085
+a general purpose encoder module is very common [NOISE] and use it in lots of different,
+通用编码器模块很常见[NOISE]并且在很多不同的地方使用它，
+
+1277
+01:02:15,085 --> 01:02:17,590
+um, deep learning [NOISE] architectures for NLP.
+嗯，NLP的深度学习[NOISE]架构。
+
+1278
+01:02:17,590 --> 01:02:21,175
+[NOISE] So, here's an example which is question answering.
+[NOISE]所以，这是一个问答的例子。
+
+1279
+01:02:21,175 --> 01:02:23,410
+Uh, so, let's suppose that the, the task is,
+呃，那么，让我们假设，任务是，
+
+1280
+01:02:23,410 --> 01:02:24,670
+you've got some kind of context,
+你有某种背景，
+
+1281
+01:02:24,670 --> 01:02:26,110
+which, in this, uh, situation,
+哪个，呃，情况，
+
+1282
+01:02:26,110 --> 01:02:29,365
+is the Wikipedia article on Beethoven, and then,
+是关于贝多芬的维基百科文章，然后，
+
+1283
+01:02:29,365 --> 01:02:31,210
+you have a question which is asking,
+你有一个问题，
+
+1284
+01:02:31,210 --> 01:02:33,070
+what nationality was Beethoven?
+贝多芬的国籍是什么？
+
+1285
+01:02:33,070 --> 01:02:36,400
+Uh, and this is actually taken from the SQuAD Challenge,
+呃，这实际上来自SQUAD Challenge，
+
+1286
+01:02:36,400 --> 01:02:38,680
+which is the subject of the Default Final Project.
+这是默认最终项目的主题。
+
+1287
+01:02:38,680 --> 01:02:41,770
+So, um, if you choose to do- to do the Default Final Project,
+所以，嗯，如果你选择做 - 默认最终项目，
+
+1288
+01:02:41,770 --> 01:02:44,950
+you're going to be building systems that solve this problem.
+你将构建解决这个问题的系统。
+
+1289
+01:02:44,950 --> 01:02:49,930
+So, what you might do is, you might use an RNN to process the question,
+那么，您可能会做的是，您可能会使用RNN来处理问题，
+
+1290
+01:02:49,930 --> 01:02:51,970
+what nationality was [NOISE] Beethoven?
+什么国籍是[噪音]贝多芬？
+
+1291
+01:02:51,970 --> 01:02:56,215
+And then, you might use those hidden states that you get from this, uh,
+然后，你可以使用你从中获得的隐藏状态，呃，
+
+1292
+01:02:56,215 --> 01:03:00,280
+RNN of the question as a representation of the question.
+问题的RNN作为问题的表示。
+
+1293
+01:03:00,280 --> 01:03:03,580
+And I'm being intentionally vague here [NOISE] about what might happen next, uh,
+我在这里故意模糊[NOISE]关于接下来会发生什么，呃，
+
+1294
+01:03:03,580 --> 01:03:05,200
+but the idea is that you have [NOISE]
+但想法是你有[噪音]
+
+1295
+01:03:05,200 --> 01:03:08,500
+both the context and the question are going to be fed some way,
+上下文和问题都将以某种方式提供，
+
+1296
+01:03:08,500 --> 01:03:10,900
+and maybe you'll use an RNN on context as well,
+也许你会在上下文中使用RNN，
+
+1297
+01:03:10,900 --> 01:03:14,485
+and you're going to have lots more neural architecture in order to get your answer,
+并且你将拥有更多的神经结构以获得你的答案，
+
+1298
+01:03:14,485 --> 01:03:15,895
+which is, uh, German.
+那是，呃，德国人。
+
+1299
+01:03:15,895 --> 01:03:21,355
+So, the point here is that the RNN is acting as an encoder for the question,
+所以，这里的重点是RNN充当问题的编码器，
+
+1300
+01:03:21,355 --> 01:03:23,920
+that is, the hidden states that you get from running
+也就是说，你从跑步中获得的隐藏状态
+
+1301
+01:03:23,920 --> 01:03:26,650
+the RNN over the question, represent the question.
+关于问题的RNN代表了问题。
+
+1302
+01:03:26,650 --> 01:03:31,810
+[NOISE] Uh, so, the encoder is part of a larger neural system,
+[NOISE]呃，所以，编码器是更大的神经系统的一部分，
+
+1303
+01:03:31,810 --> 01:03:33,940
+[NOISE] and it's the, the hidden states themselves
+[NOISE]它就是隐藏的状态本身
+
+1304
+01:03:33,940 --> 01:03:36,295
+that you're interested in because they contain the information.
+您感兴趣的是因为它们包含信息。
+
+1305
+01:03:36,295 --> 01:03:38,140
+So, you could have, um, taken,
+所以，你可以，嗯，采取，
+
+1306
+01:03:38,140 --> 01:03:39,700
+uh, element-wise max or mean,
+呃，元素最大或平均，
+
+1307
+01:03:39,700 --> 01:03:41,005
+like we showed in the previous slide,
+就像我们在上一张幻灯片中所示，
+
+1308
+01:03:41,005 --> 01:03:44,170
+to get a single vector for the question, but often, you don't do that.
+获得问题的单个向量，但通常，你不这样做。
+
+1309
+01:03:44,170 --> 01:03:48,160
+Often, you'll, uh, do something else which uses the hidden states directly.
+通常，你会，呃，做一些直接使用隐藏状态的事情。
+
+1310
+01:03:48,160 --> 01:03:53,440
+So, the general point here is that RNNs are quite powerful as a way to represent,
+因此，这里的一般观点是RNN作为表示方式非常强大，
+
+1311
+01:03:53,440 --> 01:03:54,925
+uh, a sequence of text,
+呃，一系列文字，
+
+1312
+01:03:54,925 --> 01:03:57,710
+uh, for further computation.
+呃，进一步计算。
+
+1313
+01:03:58,170 --> 01:04:02,935
+Okay. Last example. So, going back to RNN language models again, [NOISE] uh,
+好的。最后的例子。所以，再次回到RNN语言模型，[NOISE]呃，
+
+1314
+01:04:02,935 --> 01:04:04,570
+they can be used to generate text,
+它们可以用来生成文本，
+
+1315
+01:04:04,570 --> 01:04:07,300
+and there are lots of different, uh, applications for this.
+并且有很多不同的，呃，应用程序。
+
+1316
+01:04:07,300 --> 01:04:11,020
+So, for example, speech recognition, uh, you will have your input,
+那么，例如，语音识别，呃，你会得到你的意见，
+
+1317
+01:04:11,020 --> 01:04:13,345
+which is the audio, and as a student asked earlier,
+这是音频，正如学生先前所说，
+
+1318
+01:04:13,345 --> 01:04:15,865
+this will be, uh, represented in some way,
+这将是，呃，以某种方式表现，
+
+1319
+01:04:15,865 --> 01:04:19,480
+and then, uh, maybe you'll do a neural encoding of that, [NOISE] and then,
+然后，呃，也许你会做一个神经编码，[NOISE]然后，
+
+1320
+01:04:19,480 --> 01:04:22,615
+you use your RNN language model to generate the output,
+您使用RNN语言模型生成输出，
+
+1321
+01:04:22,615 --> 01:04:24,354
+which, in this case, is going to be a transcription
+在这种情况下，这将是一个转录
+
+1322
+01:04:24,354 --> 01:04:26,275
+of what the audio recording is saying.
+音频录音的内容。
+
+1323
+01:04:26,275 --> 01:04:28,030
+So, you will have some way of conditioning,
+所以，你会有一些调节方式，
+
+1324
+01:04:28,030 --> 01:04:29,830
+and we're gonna talk more about how this works, uh,
+我们会更多地讨论这是如何工作的，呃，
+
+1325
+01:04:29,830 --> 01:04:31,780
+in a later lecture, but you have some way of
+在后来的演讲中，你有一些方法
+
+1326
+01:04:31,780 --> 01:04:35,230
+conditioning your RNN language model on the input.
+在输入上调整您的RNN语言模型。
+
+1327
+01:04:35,230 --> 01:04:38,920
+So, you'll use that to generate your text, [NOISE] and in this case,
+所以，你会用它来生成你的文字，[NOISE]，在这种情况下，
+
+1328
+01:04:38,920 --> 01:04:41,335
+the utterance might be something like, what's the weather,
+话语可能是什么样的，天气怎么样，
+
+1329
+01:04:41,335 --> 01:04:44,590
+question mark. [OVERLAPPING] [NOISE]
+问号。 [重叠] [噪音]
+
+1330
+01:04:44,590 --> 01:04:54,220
+Yeah. [NOISE]
+是啊。 [噪声]
+
+1331
+01:04:54,220 --> 01:04:58,120
+In speech recognition, [inaudible].
+在语音识别中，[音频不清晰]。
+
+1332
+01:04:58,120 --> 01:05:00,100
+Okay. So, the question is, in speech recognition,
+好的。所以，问题是，在语音识别中，
+
+1333
+01:05:00,100 --> 01:05:02,755
+we often use word error rates to evaluate,
+我们经常使用字错误率来评估，
+
+1334
+01:05:02,755 --> 01:05:04,690
+but would you use perplexity to evaluate?
+但你会用困惑来评价吗？
+
+1335
+01:05:04,690 --> 01:05:07,690
+[NOISE] Um, I don't actually know much about that. Do you know, Chris,
+[NOISE]嗯，我实际上对此并不了解。你知道吗，克里斯，
+
+1336
+01:05:07,690 --> 01:05:09,250
+what they use in, uh,
+他们用的是什么，呃，
+
+1337
+01:05:09,250 --> 01:05:15,010
+speech recognition as an eval metric? [NOISE]
+语音识别作为评估指标？ [噪声]
+
+1338
+01:05:15,010 --> 01:05:23,590
+[inaudible] word error rate [inaudible].
+[听不清]字错误率[听不清]。
+
+1339
+01:05:23,590 --> 01:05:25,375
+The answer is, you often use WER,
+答案是，你经常使用WER，
+
+1340
+01:05:25,375 --> 01:05:27,550
+uh, for eval, but you might also use perplexity.
+呃，对于eval，但你也可能会使用困惑。
+
+1341
+01:05:27,550 --> 01:05:29,500
+Yeah. Any other questions?
+是啊。还有其他问题吗？
+
+1342
+01:05:29,500 --> 01:05:35,575
+[NOISE] Okay. So, um,
+[NOISE]好的。那么，嗯，
+
+1343
+01:05:35,575 --> 01:05:38,350
+this is an example of a conditional language model,
+这是条件语言模型的一个例子，
+
+1344
+01:05:38,350 --> 01:05:39,970
+and it's called a conditional language model
+它被称为条件语言模型
+
+1345
+01:05:39,970 --> 01:05:41,725
+because we have the language model component,
+因为我们有语言模型组件，
+
+1346
+01:05:41,725 --> 01:05:44,740
+but crucially, we're conditioning it on some kind of input.
+但至关重要的是，我们会根据某种意见来调整它。
+
+1347
+01:05:44,740 --> 01:05:48,580
+So, unlike the, uh, fun examples like with the Harry Potter text where we were just, uh,
+所以，不像呃那些有趣的例子，比如哈利波特的文字，我们只是，呃，
+
+1348
+01:05:48,580 --> 01:05:51,460
+generating text basically unconditionally, you know,
+你知道，基本上无条件地生成文本
+
+1349
+01:05:51,460 --> 01:05:52,750
+we trained it on the training data, and then,
+我们训练了它的训练数据，然后，
+
+1350
+01:05:52,750 --> 01:05:54,820
+we just started [NOISE] with some kind of random seed,
+我们刚开始[NOISE]用某种随机种子，
+
+1351
+01:05:54,820 --> 01:05:56,305
+and then, it generates unconditionally.
+然后，它无条件地生成。
+
+1352
+01:05:56,305 --> 01:05:58,540
+This is called a conditional language model
+这称为条件语言模型
+
+1353
+01:05:58,540 --> 01:06:01,615
+because there's some kind of input that we need to condition on.
+因为有一些我们需要调整的输入。
+
+1354
+01:06:01,615 --> 01:06:05,980
+Uh, machine translation is an example [NOISE] also of a conditional language model,
+呃，机器翻译也是条件语言模型的一个例子[NOISE]，
+
+1355
+01:06:05,980 --> 01:06:07,780
+and we're going to see that in much more detail in
+我们将在更详细的内容中看到这一点
+
+1356
+01:06:07,780 --> 01:06:09,520
+the lecture next week on machine translation.
+下周关于机器翻译的讲座。
+
+1357
+01:06:09,520 --> 01:06:12,895
+[NOISE] All right. Are there any more questions?
+[NOISE]好的。还有其他问题吗？
+
+1358
+01:06:12,895 --> 01:06:14,320
+You have a bit of extra time, I think.
+我想你有一点额外的时间。
+
+1359
+01:06:14,320 --> 01:06:17,665
+[NOISE] Yeah.
+[NOISE]是的
+
+1360
+01:06:17,665 --> 01:06:20,350
+I have a question about RNNs in general.
+我对RNN一般有疑问。
+
+1361
+01:06:20,350 --> 01:06:25,345
+[NOISE] Do people ever combine the RNN,
+[NOISE]有人组合RNN，
+
+1362
+01:06:25,345 --> 01:06:27,220
+uh, patterns of architecture,
+呃，建筑模式，
+
+1363
+01:06:27,220 --> 01:06:29,965
+um, with other neural networks?
+嗯，与其他神经网络？
+
+1364
+01:06:29,965 --> 01:06:31,885
+Say, [NOISE] you have, um, you know,
+说，[NOISE]你有，嗯，你知道，
+
+1365
+01:06:31,885 --> 01:06:34,285
+N previous layers that could be doing anything,
+以前的N层可以做任何事情，
+
+1366
+01:06:34,285 --> 01:06:35,410
+and at the end of your network,
+在你的网络结束时，
+
+1367
+01:06:35,410 --> 01:06:36,880
+you wanna run them through,
+你想要经历它们，
+
+1368
+01:06:36,880 --> 01:06:39,160
+uh, five recurrent layers.
+呃，五个复发层。
+
+1369
+01:06:39,160 --> 01:06:40,810
+Do people mix and match like that,
+人们是这样混合搭配的，
+
+1370
+01:06:40,810 --> 01:06:42,190
+or these, uh, [inaudible]. [NOISE]
+或者这些，呃，[听不清]。 [噪声]
+
+1371
+01:06:42,190 --> 01:06:46,090
+Uh, the question is,
+呃，问题是，
+
+1372
+01:06:46,090 --> 01:06:48,580
+do you ever combine RNN for the other types of architecture?
+你有没有将RNN用于其他类型的架构？
+
+1373
+01:06:48,580 --> 01:06:49,870
+So, I think the answer is yes.
+所以，我认为答案是肯定的。
+
+1374
+01:06:49,870 --> 01:06:51,595
+[NOISE] Uh, you might, [NOISE] you know, uh,
+[NOISE]呃，你可能，[NOISE]你知道吗，呃，
+
+1375
+01:06:51,595 --> 01:06:55,210
+have- you might have other types of architectures, uh,
+你可能有其他类型的架构，呃，
+
+1376
+01:06:55,210 --> 01:06:58,540
+to produce the vectors that are going to be the input to RNN,
+生成将成为RNN输入的向量，
+
+1377
+01:06:58,540 --> 01:07:00,280
+or you might use the output of your RNN
+或者您可以使用RNN的输出
+
+1378
+01:07:00,280 --> 01:07:03,320
+[NOISE] and feed that into a different type of neural network.
+[NOISE]并将其输入不同类型的神经网络。
+
+1379
+01:07:06,390 --> 01:07:08,620
+So, yes. [NOISE] Any other questions?
+所以，是的。 [NOISE]还有其他问题吗？
+
+1380
+01:07:08,620 --> 01:07:11,820
+[NOISE] Okay.
+[NOISE]好的。
+
+1381
+01:07:11,820 --> 01:07:15,510
+Uh, so, before we finish, uh, I have a note on terminology.
+呃，所以，在我们结束之前，呃，我有一个关于术语的说明。
+
+1382
+01:07:15,510 --> 01:07:17,490
+Uh, when you're reading papers,
+呃，当你在读报纸的时候，
+
+1383
+01:07:17,490 --> 01:07:20,915
+you might find often this phrase vanilla RNN,
+你可能会经常发现这句短语香草RNN，
+
+1384
+01:07:20,915 --> 01:07:23,065
+and when you see the phrase vanilla RNN,
+当你看到短语vanilla RNN时，
+
+1385
+01:07:23,065 --> 01:07:24,535
+that usually means, uh,
+这通常意味着，呃，
+
+1386
+01:07:24,535 --> 01:07:26,905
+the RNNs that are described in this lecture.
+本讲座中描述的RNN。
+
+1387
+01:07:26,905 --> 01:07:30,460
+So, the reason why those are called vanilla RNNs is
+所以，那些被称为香草RNN的原因是
+
+1388
+01:07:30,460 --> 01:07:34,765
+because there are actually other more complex kinds of RNN flavors.
+因为实际上还有其他更复杂的RNN口味。
+
+1389
+01:07:34,765 --> 01:07:38,005
+So, for example, there's GRU and LSTM,
+那么，例如，有GRU和LSTM，
+
+1390
+01:07:38,005 --> 01:07:40,330
+and we're gonna learn about both of those next week.
+我们将在下周了解这两个方面。
+
+1391
+01:07:40,330 --> 01:07:42,610
+And another thing we're going to learn about next week
+我们将在下周学习另一件事
+
+1392
+01:07:42,610 --> 01:07:45,085
+[NOISE] is that you can actually get some multi-layer RNNs,
+[NOISE]是你实际上可以获得一些多层RNN，
+
+1393
+01:07:45,085 --> 01:07:48,250
+which is when you stack multiple RNNs on top of each other.
+这是当您将多个RNN堆叠在一起时。
+
+1394
+01:07:48,250 --> 01:07:50,935
+[NOISE] So, uh, you're gonna learn about those,
+[NOISE]所以，呃，你会了解那些，
+
+1395
+01:07:50,935 --> 01:07:53,875
+but we hope that by the time you reach the end of this course,
+但我们希望当你到达本课程结束时，
+
+1396
+01:07:53,875 --> 01:07:56,905
+you're going to be able to read a research paper and see a phrase like
+你将能够阅读一篇研究论文并看到一个类似的短语
+
+1397
+01:07:56,905 --> 01:08:01,150
+stacked bidirectional LSTM with residual connections and self-attention,
+堆叠双向LSTM，具有残余连接和自我关注，
+
+1398
+01:08:01,150 --> 01:08:02,680
+and you'll know exactly what that is.
+而且你会确切地知道那是什么。
+
+1399
+01:08:02,680 --> 01:08:04,840
+[NOISE] That's just an RNN with all of the toppings.
+[NOISE]这只是一个带有所有浇头的RNN。
+
+1400
+01:08:04,840 --> 01:08:07,840
+[LAUGHTER] All right. Thank you. That's it for today.
+[大笑]好的。谢谢。今天就是这样。
+
+1401
+01:08:07,840 --> 01:08:15,910
+[NOISE] Uh, next time- [APPLAUSE] next time,
+[NOISE]呃，下次 -  [掌声]下次，
+
+1402
+01:08:15,910 --> 01:08:18,340
+we're learning about problems [NOISE] and fancy RNNs.
+我们正在学习问题[NOISE]和花哨的RNN。
+
+1403
+01:08:18,340 --> 01:08:24,770
+[NOISE]
+[噪声]
+
+1404
+
+

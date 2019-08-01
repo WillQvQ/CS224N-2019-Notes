@@ -1,0 +1,6648 @@
+1
+00:00:04,850 --> 00:00:07,410
+Okay. Hi everyone.
+好的。嗨，大家好。
+
+2
+00:00:07,410 --> 00:00:11,430
+Let's get started [NOISE] Okay.
+让我们开始吧[NOISE]好的。
+
+3
+00:00:11,430 --> 00:00:14,280
+So, so for today's lecture,
+那么，今天的讲座，
+
+4
+00:00:14,280 --> 00:00:20,025
+what we're gonna do is look at the topic of having Tree Recursive Neural Networks.
+我们要做的是查看树递归神经网络的主题。
+
+5
+00:00:20,025 --> 00:00:22,110
+I mean, this is actually, uh,
+我的意思是，这实际上是，呃，
+
+6
+00:00:22,110 --> 00:00:26,660
+a topic which I feel especially fond of and attached to,
+一个我特别喜欢和附属的话题，
+
+7
+00:00:26,660 --> 00:00:32,975
+because actually when we started doing deep learning for NLP here at Stanford in 2010,
+因为实际上当我们在2010年开始在斯坦福大学深入学习NLP时，
+
+8
+00:00:32,975 --> 00:00:37,940
+really for the sort of period from 2010 to 2015,
+真的是从2010年到2015年的那段时间，
+
+9
+00:00:37,940 --> 00:00:42,320
+the dominant set of ideas that we were working on was this topic of how you
+我们正在研究的主要观点是你如何这个主题
+
+10
+00:00:42,320 --> 00:00:46,945
+could build a recur- recursive tree structure into neural networks.
+可以在神经网络中构建一个递归树结构。
+
+11
+00:00:46,945 --> 00:00:50,645
+So in a way, it's kind of funny that I'm only getting to it now.
+所以在某种程度上，我现在只能接受它，这很有趣。
+
+12
+00:00:50,645 --> 00:00:53,420
+I mean, there are sort of reasons for that,
+我的意思是，有这样的原因，
+
+13
+00:00:53,420 --> 00:00:56,720
+but I think there are a bunch of interesting ideas
+但我认为有很多有趣的想法
+
+14
+00:00:56,720 --> 00:01:00,365
+here which relate closely to linguistic structure,
+这里与语言结构密切相关，
+
+15
+00:01:00,365 --> 00:01:02,720
+and so it's good stuff to have seen.
+所以看到它是件好事。
+
+16
+00:01:02,720 --> 00:01:04,625
+But in practice, um,
+但在实践中，嗯，
+
+17
+00:01:04,625 --> 00:01:08,105
+these ideas have proven kind of hard to scale
+这些想法已被证明难以扩展
+
+18
+00:01:08,105 --> 00:01:11,870
+and not necessarily to work better in practice than
+并不一定在实践中更好地工作
+
+19
+00:01:11,870 --> 00:01:15,140
+the kind of things that we've spent more time on
+我们花了更多时间的东西
+
+20
+00:01:15,140 --> 00:01:19,100
+meaning things like looking at LSTMs and looking at transformers,
+意思是看LSTM和看变形金刚，
+
+21
+00:01:19,100 --> 00:01:20,570
+and things like that.
+和那样的事情。
+
+22
+00:01:20,570 --> 00:01:25,860
+And so that's kinda why we sort of shunted them towards the end of the curriculum.
+所以这就是为什么我们会在课程结束时将它们分开。
+
+23
+00:01:25,860 --> 00:01:29,090
+But I want to sort of say something about the motivations,
+但我想谈谈动机，
+
+24
+00:01:29,090 --> 00:01:31,190
+and the ways you can build tree structures,
+以及构建树结构的方法，
+
+25
+00:01:31,190 --> 00:01:34,220
+and neural networks, and look at some of the possibilities,
+和神经网络，并看看一些可能性，
+
+26
+00:01:34,220 --> 00:01:36,065
+um, we explored um,
+嗯，我们探究过你，
+
+27
+00:01:36,065 --> 00:01:38,170
+in during this class.
+在这堂课上。
+
+28
+00:01:38,170 --> 00:01:44,690
+Um, another fact about this class is actually this is the last class I'm going to give.
+嗯，关于这堂课的另一个事实实际上这是我要给的最后一堂课。
+
+29
+00:01:44,690 --> 00:01:47,060
+Um, so two more classes next week.
+嗯，下周还有两节课。
+
+30
+00:01:47,060 --> 00:01:49,320
+Don't forget about next week, um,
+别忘了下周，嗯，
+
+31
+00:01:49,320 --> 00:01:52,275
+CS224N classes, um,
+CS224N课程，嗯，
+
+32
+00:01:52,275 --> 00:01:54,220
+but on Tuesday, um,
+但是周二，嗯，
+
+33
+00:01:54,220 --> 00:01:57,280
+we've gotten the final invited speaker, ,
+我们得到了最后邀请的演讲者，
+
+34
+00:01:57,280 --> 00:02:00,410
+who's a great speaker and has tons of interesting stuff
+谁是一个伟大的演讲者，有很多有趣的东西
+
+35
+00:02:00,410 --> 00:02:04,865
+to say about fairness and ethics in NLP and AI.
+在NLP和AI中谈论公平和道德。
+
+36
+00:02:04,865 --> 00:02:06,425
+And then for the final lecture,
+然后进行最后的讲座，
+
+37
+00:02:06,425 --> 00:02:09,650
+one of my- another of my PhD students  is
+我的另一位博士生是
+
+38
+00:02:09,650 --> 00:02:13,270
+gonna give that and talk about some of the recent,
+要给出并谈谈最近的一些，
+
+39
+00:02:13,270 --> 00:02:16,965
+what's been happening in deep learning in 2018, '19,
+在2018年的深度学习中发生了什么，'19，
+
+40
+00:02:16,965 --> 00:02:20,975
+of some of the sort of recent developments in NLP and deep learning. Um,
+NLP和深度学习的一些近期发展。嗯，
+
+41
+00:02:20,975 --> 00:02:24,875
+so, um, let's- I'll say my farewells at the end of this one.
+所以，嗯，让我们在这一节结束时告别我的告别。
+
+42
+00:02:24,875 --> 00:02:28,730
+Um, so hopefully, everyone has submitted, um,
+嗯，希望每个人都提交了，嗯，
+
+43
+00:02:28,730 --> 00:02:33,380
+their, um, milestone for their final project.
+他们的，最后项目的里程碑。
+
+44
+00:02:33,380 --> 00:02:37,310
+If you haven't, you should really begin your milestone in- um,
+如果你还没有，你应该真正开始你的里程碑，
+
+45
+00:02:37,310 --> 00:02:40,640
+you know, it's inevitable that somewhere around here,
+你知道吗，这里的某个地方不可避免
+
+46
+00:02:40,640 --> 00:02:46,290
+there start to be problems that people have the situation that nothing works,
+人们开始出现无事无益的问题，
+
+47
+00:02:46,290 --> 00:02:48,855
+and everything is too slow, and you panic.
+一切都太慢了，你恐慌。
+
+48
+00:02:48,855 --> 00:02:52,095
+Um, and, um, this happens.
+嗯，而且，嗯，这发生了。
+
+49
+00:02:52,095 --> 00:02:54,030
+Um, I wish you luck, of course.
+嗯，我祝你好运，当然。
+
+50
+00:02:54,030 --> 00:02:55,900
+I mean, what can you do about it?
+我的意思是，你能做些什么呢？
+
+51
+00:02:55,900 --> 00:03:00,785
+I mean, it can be really hard when you have things that don't work as to work out,
+我的意思是，如果你的东西不起作用，那真的很难，
+
+52
+00:03:00,785 --> 00:03:02,255
+why they don't work,
+为什么他们不工作，
+
+53
+00:03:02,255 --> 00:03:03,800
+and how to fix them.
+以及如何解决它们。
+
+54
+00:03:03,800 --> 00:03:08,660
+I mean, I think often the best thing to do is really to go back to something
+我的意思是，我认为通常最好的办法就是回归某些事情
+
+55
+00:03:08,660 --> 00:03:14,405
+simple that you can get working and to work forward from there again.
+很简单，你可以继续工作，并再次从那里前进。
+
+56
+00:03:14,405 --> 00:03:18,980
+It also really helps to have really small data sets.
+拥有非常小的数据集也很有帮助。
+
+57
+00:03:18,980 --> 00:03:23,540
+I really recommend the strategy of sort of having a 10-item,
+我真的推荐一种有10个项目的策略，
+
+58
+00:03:23,540 --> 00:03:28,510
+or 20-item data set and checking that your model works perfectly,
+或20项数据集并检查您的模型是否完美，
+
+59
+00:03:28,510 --> 00:03:31,320
+over-trains to 100 percent accuracy on that kind of data
+对这类数据进行过度训练，达到100％的准确率
+
+60
+00:03:31,320 --> 00:03:34,610
+set saves you huge amounts of time,
+套装可以节省大量的时间，
+
+61
+00:03:34,610 --> 00:03:39,170
+and it's sort of after you've gotten something simple working on a small amount of data,
+在你完成一些简单的小数据工作之后，
+
+62
+00:03:39,170 --> 00:03:41,780
+that's the right time to sort of then,
+那时候是正确的时间，
+
+63
+00:03:41,780 --> 00:03:44,600
+um, expand forward again.
+嗯，再次向前扩展。
+
+64
+00:03:44,600 --> 00:03:47,330
+Um, you should definitely always make sure that
+嗯，你一定要确保这一点
+
+65
+00:03:47,330 --> 00:03:49,970
+you can completely overfit on your training data set.
+你可以完全过度训练你的训练数据集。
+
+66
+00:03:49,970 --> 00:03:51,180
+That's sort of, um,
+那是那种，嗯，
+
+67
+00:03:51,180 --> 00:03:52,370
+not quite a proof,
+不完全证明，
+
+68
+00:03:52,370 --> 00:03:56,780
+but it's at least a first good requirement for your model being implemented properly.
+但这至少是你的模型正确实施的第一个好要求。
+
+69
+00:03:56,780 --> 00:04:01,130
+Um, you, you know part of the trick of being
+嗯，你，你知道存在的一部分技巧
+
+70
+00:04:01,130 --> 00:04:03,920
+a successful deep learning researcher is actually
+实际上，一个成功的深度学习研究员
+
+71
+00:04:03,920 --> 00:04:07,565
+managing to get things done and not wasting a ton of time.
+设法完成任务而不是浪费大量时间。
+
+72
+00:04:07,565 --> 00:04:10,300
+And so it definitely always helps just to be, you know,
+所以，你知道，这总是有帮助的。
+
+73
+00:04:10,300 --> 00:04:12,975
+plotting as you go along your training and
+在你的训练和你的训练中密谋
+
+74
+00:04:12,975 --> 00:04:16,160
+dev errors so that you can sort of tell if things are working,
+开发错误，以便您可以判断事情是否正常，
+
+75
+00:04:16,160 --> 00:04:17,900
+or if things aren't working,
+或者如果事情不起作用，
+
+76
+00:04:17,900 --> 00:04:20,930
+and you should abandon and start again with a new experiment,
+你应该放弃并重新开始一个新的实验，
+
+77
+00:04:20,930 --> 00:04:25,505
+tha- that just things like that save you hours and get you, uh, more done.
+那么这样的事情可以节省你的时间并让你，呃，做得更多。
+
+78
+00:04:25,505 --> 00:04:27,350
+And so then once things are working,
+一旦事情奏效，那么
+
+79
+00:04:27,350 --> 00:04:30,080
+there's sort of a whole bunch of things to make it work better.
+有很多东西可以让它更好地运作。
+
+80
+00:04:30,080 --> 00:04:33,410
+There's regularization with L2 and Dropout,
+有L2和Dropout的正规化，
+
+81
+00:04:33,410 --> 00:04:36,969
+there's time to do hyperparameter search,
+有时间进行超参数搜索，
+
+82
+00:04:36,969 --> 00:04:38,530
+um, and, you know,
+嗯，你知道，
+
+83
+00:04:38,530 --> 00:04:42,620
+often doing these things and make quite a lot of difference to what
+经常做这些事情，并做出很大的改变
+
+84
+00:04:42,620 --> 00:04:46,820
+your final results are and so it's good to have time to do those things.
+你的最终结果是，所以有时间做这些事情是件好事。
+
+85
+00:04:46,820 --> 00:04:48,680
+But clearly, you want to get things, um,
+但显然，你想得到的东西，嗯，
+
+86
+00:04:48,680 --> 00:04:51,590
+working first before you go on to that, um,
+在你继续之前先做好工作，嗯，
+
+87
+00:04:51,590 --> 00:04:54,380
+and sort of really encourage people to still
+并且真的鼓励人们继续
+
+88
+00:04:54,380 --> 00:04:57,470
+stop by in office hours if you've got any problems,
+如果你有任何问题，请在办公时间停下来，
+
+89
+00:04:57,470 --> 00:05:00,530
+and we'll try our best to help out here within
+我们会尽力在这里提供帮助
+
+90
+00:05:00,530 --> 00:05:05,205
+the limitations of what we can do from just being hit cold with problems.
+我们可以做些什么来解决问题。
+
+91
+00:05:05,205 --> 00:05:08,240
+Okay, um, yeah.
+好的，恩，是的
+
+92
+00:05:08,240 --> 00:05:13,595
+So, I wanted to sort of just say some general remarks about, um,
+所以，我想说一些关于的一般性评论，嗯，
+
+93
+00:05:13,595 --> 00:05:16,680
+language and theories of language,
+语言和语言理论，
+
+94
+00:05:16,680 --> 00:05:22,790
+um, that, in the context that motivate these tree recursive networks.
+嗯，在激励这些树递归网络的环境中。
+
+95
+00:05:22,790 --> 00:05:27,485
+Um, so this is an art installation at Carnegie Mellon University.
+嗯，这是卡内基梅隆大学的艺术装置。
+
+96
+00:05:27,485 --> 00:05:29,150
+And as an NLP person,
+作为一个NLP人，
+
+97
+00:05:29,150 --> 00:05:31,700
+I really love this art installation.
+我真的很喜欢这个艺术装置。
+
+98
+00:05:31,700 --> 00:05:36,805
+Um, so we need better art installations around the Stanford School of Engineering.
+嗯，所以我们需要在斯坦福工程学院附近进行更好的艺术装置。
+
+99
+00:05:36,805 --> 00:05:40,510
+Um, so this is the bag-of-words art Installation.
+嗯，所以这就是文字艺术装置。
+
+100
+00:05:40,510 --> 00:05:42,710
+There's the bag with a lot of words in it.
+包里面有很多单词。
+
+101
+00:05:42,710 --> 00:05:44,120
+And you see down here,
+你在这里看到，
+
+102
+00:05:44,120 --> 00:05:47,015
+there were the stop words, the the, and the us,
+有停止的话，the和我们，
+
+103
+00:05:47,015 --> 00:05:49,135
+that had fallen out of the bag,
+从包里掉了出来，
+
+104
+00:05:49,135 --> 00:05:52,175
+and are represented on the ground as the stop words.
+并在地面上作为停止词表示。
+
+105
+00:05:52,175 --> 00:05:55,730
+Beautiful artwork, right? So, um,
+美丽的艺术品，对吗？那么，嗯，
+
+106
+00:05:55,730 --> 00:06:02,690
+one of the interesting things that has been found about NLP models of language,
+关于NLP语言模型的一个有趣的事情，
+
+107
+00:06:02,690 --> 00:06:04,670
+and I think this is even more true in
+我认为这更加真实
+
+108
+00:06:04,670 --> 00:06:08,600
+the deep learning world than it used to be previously is,
+比以前更深刻的学习世界是，
+
+109
+00:06:08,600 --> 00:06:11,510
+boy, you can do a lot with bag-of-words models, right?
+男孩，你可以用词袋模型做很多事，对吧？
+
+110
+00:06:11,510 --> 00:06:15,920
+That you can just often get a lot of power by saying,
+通过说，你可以经常获得很多权力，
+
+111
+00:06:15,920 --> 00:06:18,400
+well, let's get our neural word vectors,
+好吧，让我们得到我们的神经词向量，
+
+112
+00:06:18,400 --> 00:06:20,670
+we're gonna average them or max pool them,
+我们要平均他们或最大值他们，
+
+113
+00:06:20,670 --> 00:06:21,975
+or something like this,
+或类似的东西，
+
+114
+00:06:21,975 --> 00:06:23,580
+and do nothing more,
+而且什么都不做，
+
+115
+00:06:23,580 --> 00:06:26,300
+and that gives me a pretty good sentence representation or
+这给了我一个很好的句子代表或
+
+116
+00:06:26,300 --> 00:06:30,035
+document representation that I could use in a classifier or something.
+我可以在分类器或其他东西中使用的文档表示。
+
+117
+00:06:30,035 --> 00:06:33,830
+And sometimes, you can do not much more than that and get even better.
+有时，你可以做的不仅仅是那些，而是变得更好。
+
+118
+00:06:33,830 --> 00:06:37,910
+So people have done things like deep averaging networks where you're taking
+因此，人们已经做了诸如深度平均网络之类的事情
+
+119
+00:06:37,910 --> 00:06:40,400
+the output of a bag-of-words model and sort of
+一个袋子模型和类型的输出
+
+120
+00:06:40,400 --> 00:06:43,475
+feeding it through a couple more layers and improving things.
+通过更多层次提供它并改善事物。
+
+121
+00:06:43,475 --> 00:06:47,300
+So that is in complete distinction to
+所以这是完全不同的
+
+122
+00:06:47,300 --> 00:06:51,560
+what's been dominant in linguistics of looking at language structure.
+在语言学中看待语言结构的主导因素是什么。
+
+123
+00:06:51,560 --> 00:06:58,340
+That typically in linguistics the emphasis has been on identifying kind of
+通常在语言学中，重点是识别类型
+
+124
+00:06:58,340 --> 00:07:05,480
+huge amounts of structure of linguistic utterances through very complex formalisms.
+通过非常复杂的形式主义，大量的语言表达结构。
+
+125
+00:07:05,480 --> 00:07:10,455
+I guess this is sort of a bit of a picture of a Chomsky minimalism syntactic tree,
+我想这有点像乔姆斯基极简主义句法树的图片，
+
+126
+00:07:10,455 --> 00:07:15,260
+and the one up at the top is a bit of a picture of head-driven phrase structure grammar.
+而顶部的一个是头部驱动的短语结构语法的图片。
+
+127
+00:07:15,260 --> 00:07:18,035
+Which was a theory that was predominantly, um,
+这主要是一种理论，嗯，
+
+128
+00:07:18,035 --> 00:07:21,935
+developed at Stanford in the '90s.
+在上世纪90年代在斯坦福大学发展起来。
+
+129
+00:07:21,935 --> 00:07:25,070
+Um, but sort of very complex data structures and
+嗯，但有点非常复杂的数据结构和
+
+130
+00:07:25,070 --> 00:07:28,895
+articulated structures used to describe linguistics.
+用于描述语言学的铰接结构。
+
+131
+00:07:28,895 --> 00:07:32,645
+And there's a huge gap between these two things.
+这两件事之间存在巨大差距。
+
+132
+00:07:32,645 --> 00:07:36,260
+And you might think that, you know, surely,
+你可能会认为，当然，
+
+133
+00:07:36,260 --> 00:07:41,180
+there's some good points in the middle where we have a certain amount of structure,
+在我们有一定数量的结构的中间有一些好点，
+
+134
+00:07:41,180 --> 00:07:43,460
+and that's going to help us do what we want.
+这将帮助我们做我们想做的事。
+
+135
+00:07:43,460 --> 00:07:46,525
+And so in particular, um,
+尤其如此，嗯，
+
+136
+00:07:46,525 --> 00:07:49,745
+that if we're wanting to semantically interpret language,
+如果我们想要语义解释语言，
+
+137
+00:07:49,745 --> 00:07:53,300
+it seems like we don't just want to have word vectors,
+看起来我们不只是想拥有单词向量，
+
+138
+00:07:53,300 --> 00:07:56,120
+we want to have meanings of bigger phrases.
+我们希望有更大的短语的含义。
+
+139
+00:07:56,120 --> 00:07:59,705
+So here's the snowboarders leaping over a mogul,
+所以这里的挡雪板跳过一个大人物，
+
+140
+00:07:59,705 --> 00:08:03,170
+and a person on a snowboard jumps into the air.
+一个人在滑雪板上跳到空中。
+
+141
+00:08:03,170 --> 00:08:06,635
+And what we'd like to be able to say is that the snowboarder
+我们想要说的是滑雪板
+
+142
+00:08:06,635 --> 00:08:10,790
+means basically the same thing as a person on the snowboard.
+与滑雪板上的人基本相同。
+
+143
+00:08:10,790 --> 00:08:13,220
+So we wanted to have these chunks of
+所以我们想拥有这些块
+
+144
+00:08:13,220 --> 00:08:17,255
+language which in linguistics will be constituent  phrases,
+语言学中将成为组成短语的语言，
+
+145
+00:08:17,255 --> 00:08:19,430
+and say that they have a meaning,
+并说他们有意义，
+
+146
+00:08:19,430 --> 00:08:21,830
+and we'd like to be able to compare their meaning.
+我们希望能够比较它们的含义。
+
+147
+00:08:21,830 --> 00:08:26,870
+Now, we've looked at at least one tool that allows us to have chunks of language, right?
+现在，我们已经研究了至少一种允许我们拥有大量语言的工具，对吗？
+
+148
+00:08:26,870 --> 00:08:30,320
+Because we looked at convolutional neural networks where you could take
+因为我们查看了你可以采取的卷积神经网络
+
+149
+00:08:30,320 --> 00:08:34,805
+three words and make a representation of the convolutional neural network,
+三个单词并表示卷积神经网络，
+
+150
+00:08:34,805 --> 00:08:38,090
+but the fundamental difference is that in
+但根本区别在于
+
+151
+00:08:38,090 --> 00:08:41,254
+human languages you have these chunks that have meaning,
+人类语言你有这些有意义的块，
+
+152
+00:08:41,254 --> 00:08:43,055
+that are of different sizes.
+有不同的大小。
+
+153
+00:08:43,055 --> 00:08:45,935
+So we'd like to say the snowboarder
+所以我们想说滑雪板
+
+154
+00:08:45,935 --> 00:08:50,120
+is pretty much semantically equivalent to a person on the snowboard,
+在语义上相当于滑雪板上的人，
+
+155
+00:08:50,120 --> 00:08:52,790
+but the top one is two words long,
+但最重要的是两个字长，
+
+156
+00:08:52,790 --> 00:08:55,295
+and the bottom one is five words long.
+最下面一个是五个字。
+
+157
+00:08:55,295 --> 00:08:59,200
+And so if we're gonna be able to do that, um,
+所以，如果我们能够做到这一点，嗯，
+
+158
+00:08:59,200 --> 00:09:03,230
+we somehow wanted to have these sort of constituent chunks and be
+我们不知何故想要拥有这些组成块
+
+159
+00:09:03,230 --> 00:09:07,070
+able to work with and represent them in neural networks.
+能够在神经网络中使用并表示它们。
+
+160
+00:09:07,070 --> 00:09:08,630
+And that's sort of, um,
+那是那种，嗯，
+
+161
+00:09:08,630 --> 00:09:11,870
+the central idea of what
+什么是中心思想
+
+162
+00:09:11,870 --> 00:09:16,235
+motivated some of the sort of tree structured neural networks that I'm about to show you.
+激发了一些我即将向你展示的树形结构神经网络。
+
+163
+00:09:16,235 --> 00:09:21,380
+There's another related thing that you might wanna think about is, you know,
+您可能想要考虑的另一个相关的事情是，你知道，
+
+164
+00:09:21,380 --> 00:09:23,240
+a person on a snowboard,
+一个人在滑雪板上，
+
+165
+00:09:23,240 --> 00:09:27,950
+how do human beings manage to understand what that means?
+人类如何理解这意味着什么？
+
+166
+00:09:27,950 --> 00:09:31,055
+And then a person on a snowboard jumps into the air,
+然后一个人在滑雪板上跳到空中，
+
+167
+00:09:31,055 --> 00:09:35,655
+how does people manage to understand what that means?
+人们如何理解这意味着什么？
+
+168
+00:09:35,655 --> 00:09:41,030
+And it sort of seems like the only possible answer to
+它似乎是唯一可能的答案
+
+169
+00:09:41,030 --> 00:09:46,595
+this is what's normally referred to as the principle of compositionality.
+这通常被称为组合原则。
+
+170
+00:09:46,595 --> 00:09:49,040
+That people know the word person,
+人们都知道这个词，
+
+171
+00:09:49,040 --> 00:09:50,240
+they know the word on,
+他们知道这个词，
+
+172
+00:09:50,240 --> 00:09:52,760
+they know the word snowboard, therefore,
+他们知道滑雪板这个词，因此，
+
+173
+00:09:52,760 --> 00:09:55,880
+they can work out what on a snowboard means, um,
+他们可以在滑雪板上找出什么意思，嗯，
+
+174
+00:09:55,880 --> 00:10:00,170
+and they can work out what person on a snowboard means by knowing
+他们可以通过了解来确定滑雪板上的人是什么意思
+
+175
+00:10:00,170 --> 00:10:05,900
+the meanings of components and putting them together into bigger pieces.
+组件的含义并将它们组合成更大的部件。
+
+176
+00:10:05,900 --> 00:10:08,295
+There's a f- there's a famous,
+有一个f-有一个着名的，
+
+177
+00:10:08,295 --> 00:10:12,500
+um, applied mathematician statistician, um,
+嗯，应用数学家统计学家，嗯，
+
+178
+00:10:12,500 --> 00:10:17,235
+at Brown University, Stu Geman, and I guess the way he summarized this is,
+在布朗大学，Stu Geman，我猜他总结的方式是，
+
+179
+00:10:17,235 --> 00:10:21,680
+either the principle of compositionality is true, or God exists.
+组合原则是真的，还是上帝存在的。
+
+180
+00:10:21,680 --> 00:10:24,285
+Um, for [LAUGHTER] which he was, um,
+嗯，对于[笑声]他是谁，嗯，
+
+181
+00:10:24,285 --> 00:10:27,200
+well you can take that as- as you want but, you know,
+那么你可以随心所欲，但是，你知道，
+
+182
+00:10:27,200 --> 00:10:30,480
+um, I think what he meant was well, you know,
+嗯，我想他的意思很好，你知道，
+
+183
+00:10:30,480 --> 00:10:32,880
+you can just make these infinite number of
+你可以做出这些无数的
+
+184
+00:10:32,880 --> 00:10:36,085
+infinitely long sentences and human beings understand them,
+无限长的句子和人类理解它们，
+
+185
+00:10:36,085 --> 00:10:39,365
+that it just has to be that people can know about
+它只是人们可以知道的
+
+186
+00:10:39,365 --> 00:10:43,650
+words and ways to combine meanings and-and make bigger meanings because,
+将意义和意义结合起来的意义和方法，因为，
+
+187
+00:10:43,650 --> 00:10:47,945
+you know, how else could it possibly work that people could understand sentences.
+你知道吗，人们怎么能理解句子。
+
+188
+00:10:47,945 --> 00:10:50,375
+And so we want to be able to do that.
+所以我们希望能够做到这一点。
+
+189
+00:10:50,375 --> 00:10:54,664
+We want to be able to work out semantic compositions of smaller elements,
+我们希望能够计算出较小元素的语义成分，
+
+190
+00:10:54,664 --> 00:10:57,415
+to work out the meanings of bigger pieces.
+弄清楚更大的作品的意义。
+
+191
+00:10:57,415 --> 00:11:01,200
+And that this obviously isn't only a linguistic thing,
+这显然不仅仅是一种语言学的东西，
+
+192
+00:11:01,200 --> 00:11:05,050
+compositionality, um, appears in other places as well, right.
+组合性，嗯，也出现在其他地方，对吧。
+
+193
+00:11:05,050 --> 00:11:10,620
+So, um, if you want to understand how some piece of machinery works,
+所以，嗯，如果你想了解某些机器是如何工作的，
+
+194
+00:11:10,620 --> 00:11:14,195
+what you kind of wanna know is it has different sub-components.
+你有点想知道的是它有不同的子组件。
+
+195
+00:11:14,195 --> 00:11:16,140
+And if you can understand how
+如果你能理解如何
+
+196
+00:11:16,140 --> 00:11:19,370
+the different sub-components work and how they're fitted together,
+不同的子组件工作以及它们如何组合在一起，
+
+197
+00:11:19,370 --> 00:11:24,605
+um, then you might have some understanding of how the whole scene works.
+嗯，那么你可能对整个场景的运作方式有所了解。
+
+198
+00:11:24,605 --> 00:11:31,170
+Um, and, um, compositionality seems to be wor- at work in vision as well.
+嗯，而且，嗯，组合性似乎也是在视觉上的工作。
+
+199
+00:11:31,170 --> 00:11:35,950
+So here is a scene and again it seems like this scene has parts.
+所以这是一个场景，看起来这个场景似乎有部分。
+
+200
+00:11:35,950 --> 00:11:38,650
+So there are little parts that go together, right.
+所以很少有部分组合在一起，对吧。
+
+201
+00:11:38,650 --> 00:11:41,725
+So there are people that go together into a crowd of people,
+所以有些人聚集在一群人中，
+
+202
+00:11:41,725 --> 00:11:44,860
+and there's a roof and a second floor and another bit of roof.
+还有一个屋顶和一个二楼以及另一个屋顶。
+
+203
+00:11:44,860 --> 00:11:48,850
+and a first floor that go together into a picture of this church.
+和一楼一起拍摄这座教堂的照片。
+
+204
+00:11:48,850 --> 00:11:54,275
+And so this is also kind of a compositional scene in which pieces go together.
+因此，这也是一种组合场景，其中各个部分组合在一起。
+
+205
+00:11:54,275 --> 00:11:58,695
+So it sort of seems like certainly for language understanding,
+所以对于语言理解来说，这似乎是肯定的，
+
+206
+00:11:58,695 --> 00:12:02,810
+and then really for a lot of the other things that we use for intelligence,
+然后真的用于我们用于智能的很多其他事情，
+
+207
+00:12:02,810 --> 00:12:05,495
+that we somehow need to be able to understand
+我们不知何故需要能够理解
+
+208
+00:12:05,495 --> 00:12:09,335
+bigger things from knowing about smaller parts.
+了解较小部件的更大事情。
+
+209
+00:12:09,335 --> 00:12:14,870
+Um, yeah, so computational- so the most- I mentioned this earlier,
+嗯，是的，所以计算 - 所以最多 - 我之前提到的，
+
+210
+00:12:14,870 --> 00:12:16,850
+sometime the most famous, um,
+有时最有名的，嗯，
+
+211
+00:12:16,850 --> 00:12:20,480
+linguist is Noam Chomsky at MIT and,
+语言学家是麻省理工学院的Noam Chomsky，
+
+212
+00:12:20,480 --> 00:12:24,480
+um, you know, really computational linguists,
+嗯，你知道，真正的计算语言学家，
+
+213
+00:12:24,480 --> 00:12:28,355
+a lot of the time haven't been that friendly to, um,
+很多时候都没那么友好，嗯，
+
+214
+00:12:28,355 --> 00:12:32,590
+linguistics linguists and in particular some of Noam Chomsky's, um,
+语言学语言学家，尤其是诺姆乔姆斯基的一些语言学家，嗯，
+
+215
+00:12:32,590 --> 00:12:36,250
+theories of language because really he's never been
+语言理论因为他从未去过
+
+216
+00:12:36,250 --> 00:12:39,970
+sympathetic to the idea of machine learning.
+同情机器学习的想法。
+
+217
+00:12:39,970 --> 00:12:44,075
+Or in general does some of the empirical ability to learn from data.
+或者一般来说做一些从数据中学习的经验能力。
+
+218
+00:12:44,075 --> 00:12:46,020
+He's sort of always been, um,
+他总是这样，嗯，
+
+219
+00:12:46,020 --> 00:12:48,575
+[NOISE] wanting to refuse to that exists.
+[NOISE]想要拒绝存在。
+
+220
+00:12:48,575 --> 00:12:51,470
+But, um, if we nevertheless look for a little bit of,
+但是，嗯，如果我们仍然寻找一点，
+
+221
+00:12:51,470 --> 00:12:53,565
+um, insight on that.
+嗯，对此的见解。
+
+222
+00:12:53,565 --> 00:12:58,115
+Um, you know, this is a recent paper of Chomsky's with authors and that they're sort
+嗯，你知道，这是乔姆斯基最近发表的一篇有关作者的论文，他们很有兴趣
+
+223
+00:12:58,115 --> 00:13:03,120
+of trying to give a version of what is unique about human language.
+试图给出一个人类语言独特的版本。
+
+224
+00:13:03,120 --> 00:13:05,280
+And essentially what they, um,
+基本上他们是什么，嗯，
+
+225
+00:13:05,280 --> 00:13:07,985
+zero in on is that well,
+归零就是这样，
+
+226
+00:13:07,985 --> 00:13:09,910
+if you're sort of looking at, you know,
+如果你有点看，你知道，
+
+227
+00:13:09,910 --> 00:13:13,730
+humans versus other fairly intelligent creatures.
+人类与其他相当聪明的生物。
+
+228
+00:13:13,730 --> 00:13:17,790
+They suggest that the defining difference of human beings, um,
+他们认为人类的决定性差异，嗯，
+
+229
+00:13:17,790 --> 00:13:22,095
+is that they have this ability to model recursion.
+是他们有这种模拟递归的能力。
+
+230
+00:13:22,095 --> 00:13:27,450
+And so the- this paper argues that the- the singular distinction that allowed
+因此 - 本文认为 - 允许的单一区别
+
+231
+00:13:27,450 --> 00:13:30,390
+language to develop in human beings was that we
+人类发展的语言就是我们
+
+232
+00:13:30,390 --> 00:13:33,555
+could put together smaller parts to make bigger things,
+可以把较小的部分放在一起制作更大的东西，
+
+233
+00:13:33,555 --> 00:13:38,495
+in a recursive process and that that was the sort of defining new ability.
+在递归过程中，这就是定义新能力的那种。
+
+234
+00:13:38,495 --> 00:13:41,135
+Um, not sure I- not sure I believe that or not,
+嗯，不确定我 - 不确定我是否相信，
+
+235
+00:13:41,135 --> 00:13:43,920
+um, [LAUGHTER] you can decide what you think.
+嗯，[大笑]你可以决定你的想法。
+
+236
+00:13:43,920 --> 00:13:46,325
+But what I think, um,
+但我的想法是，嗯，
+
+237
+00:13:46,325 --> 00:13:51,390
+is certainly the case is that- it's just incontrovertible that
+当然是这样的 - 这是无可争议的
+
+238
+00:13:51,390 --> 00:13:56,990
+the structure of human language sentences have these pieces,
+人类语言句子的结构有这些部分，
+
+239
+00:13:56,990 --> 00:14:01,260
+um, constituents that then form together hierarchically or
+嗯，成分，然后分层次地或
+
+240
+00:14:01,260 --> 00:14:05,555
+recursively into bigger pieces as you go up in the tree.
+当你走进树里时，递归地变成更大的碎片。
+
+241
+00:14:05,555 --> 00:14:11,190
+And in particular you get this recursion where you get a little noun phrase meat,
+特别是你得到这个递归，你得到一个小名词短语肉，
+
+242
+00:14:11,190 --> 00:14:15,375
+which then appears in a bigger noun phrase like spaghetti with meat.
+然后出现在一个更大的名词短语中，如肉意大利面。
+
+243
+00:14:15,375 --> 00:14:17,640
+And you can repeat that several times,
+你可以重复几次，
+
+244
+00:14:17,640 --> 00:14:19,530
+giving you a recursive structure.
+给你一个递归结构。
+
+245
+00:14:19,530 --> 00:14:22,710
+And I have an example of that in blue up at the top.
+我有一个例子，在蓝色的顶部。
+
+246
+00:14:22,710 --> 00:14:25,180
+So the person standing next to the man from
+所以那个站在男人旁边的人
+
+247
+00:14:25,180 --> 00:14:28,035
+the company that purchased the firm that you used to work at,
+购买了您曾经工作过的公司的公司，
+
+248
+00:14:28,035 --> 00:14:32,675
+um, that whole thing is a big noun phrase.
+嗯，整件事是一个大名词短语。
+
+249
+00:14:32,675 --> 00:14:36,280
+Um, but inside that there's a noun phrase,
+嗯，但里面有一个名词短语，
+
+250
+00:14:36,280 --> 00:14:39,780
+the man from the company that purchased the firm that you used to work at,
+购买了您曾经工作过的公司的公司的人，
+
+251
+00:14:39,780 --> 00:14:41,880
+which is another big noun phrase.
+这是另一个大名词短语。
+
+252
+00:14:41,880 --> 00:14:43,820
+And well inside that, um,
+嗯，嗯，
+
+253
+00:14:43,820 --> 00:14:47,260
+there are smaller noun phrases like,
+还有较小的名词短语，
+
+254
+00:14:47,260 --> 00:14:49,890
+the company that purchased the firm you used to work at.
+购买你曾经工作过的公司的公司。
+
+255
+00:14:49,890 --> 00:14:53,190
+But, you know, it's still got inside that noun phrases like,
+但是，你知道，它仍然在里面，名词短语，如，
+
+256
+00:14:53,190 --> 00:14:55,055
+the firm that you used to work at.
+你曾经工作的公司。
+
+257
+00:14:55,055 --> 00:14:57,660
+And actually even that's got it inside,
+实际上即使它已经内部，
+
+258
+00:14:57,660 --> 00:14:59,365
+the smaller noun phrase,
+小名词短语，
+
+259
+00:14:59,365 --> 00:15:02,035
+which is just the word you.
+这就是你的话。
+
+260
+00:15:02,035 --> 00:15:06,945
+So an individual pronoun is also a noun phrase.
+因此，个体代词也是名词短语。
+
+261
+00:15:06,945 --> 00:15:11,000
+Um, so just kind of structuring of
+嗯，所以只是一种结构
+
+262
+00:15:11,000 --> 00:15:13,565
+language where you get this sort of
+你得到这种语言的语言
+
+263
+00:15:13,565 --> 00:15:16,895
+hierarchical structure and the same kind of things inside them.
+层次结构和它们内部的同类事物。
+
+264
+00:15:16,895 --> 00:15:20,465
+I think that's just sort of totally, totally correct.
+我认为这完全是完全正确的。
+
+265
+00:15:20,465 --> 00:15:23,130
+Um, the- the claim then that,
+嗯，那个说法，那个，
+
+266
+00:15:23,130 --> 00:15:26,210
+you know, our language is recursive, I mean,
+你知道，我的语言是递归的，我的意思是，
+
+267
+00:15:26,210 --> 00:15:29,615
+in a formal sense is not quite clear that that's,
+在正式意义上并不十分清楚，那是
+
+268
+00:15:29,615 --> 00:15:33,365
+uh, it's a clear thing.
+呃，这是一个明确的事情。
+
+269
+00:15:33,365 --> 00:15:36,850
+And that's the reason- to say something is recursive,
+这就是为什么说一些东西是递归的，
+
+270
+00:15:36,850 --> 00:15:39,500
+it has to repeat out to infinity, right.
+它必须重复到无限，对。
+
+271
+00:15:39,500 --> 00:15:43,180
+So as soon as you put any bound on something,
+所以只要你对某些东西施加任何限制，
+
+272
+00:15:43,180 --> 00:15:48,819
+and you say, "Look that's a noun phrase you just gave me with five levels of nesting."
+而且你说，“你看这是一个名词短语，你只给了我五层嵌套。”
+
+273
+00:15:48,819 --> 00:15:52,615
+That's pretty implausible that someone is going to say that.
+有人会这么说，这是不可思议的。
+
+274
+00:15:52,615 --> 00:15:54,630
+And so as soon as you sort of,
+所以，只要你这样，
+
+275
+00:15:54,630 --> 00:15:56,570
+um, want to make an argument like,
+嗯，想做个论点，
+
+276
+00:15:56,570 --> 00:15:57,960
+okay even if they said that,
+好吧，即使他们说，
+
+277
+00:15:57,960 --> 00:16:01,110
+no one is going to say a noun phrase with 10 levels of nesting.
+没有人会说出10级嵌套的名词短语。
+
+278
+00:16:01,110 --> 00:16:04,340
+And if you put some hard limit on it like that, um,
+如果你像那样对它施加一些硬限制，嗯，
+
+279
+00:16:04,340 --> 00:16:08,970
+then in some sense it's not truly recursive because it doesn't go out to infinity.
+那么在某种意义上它不是真正的递归，因为它不会出现无穷大。
+
+280
+00:16:08,970 --> 00:16:10,290
+Um, but, you know,
+嗯，但是，你知道，
+
+281
+00:16:10,290 --> 00:16:12,280
+regardless what you think about that,
+不管你怎么想，
+
+282
+00:16:12,280 --> 00:16:16,090
+that doesn't negate the basic argument that you get this hierarchical
+这并没有否定你得到这种等级的基本论点
+
+283
+00:16:16,090 --> 00:16:19,900
+structuring with the same kinds of things like noun phrases,
+用类似名词短语，
+
+284
+00:16:19,900 --> 00:16:26,780
+sentences, verb phrases, appearing inside each other in a way that has no clear bound.
+句子，动词短语，以一种没有明确界限的方式出现在彼此之内。
+
+285
+00:16:26,780 --> 00:16:30,200
+Like to the extent that I show you a complex sentence,
+就像我向你展示一个复杂的句子，
+
+286
+00:16:30,200 --> 00:16:35,430
+you can say I can make that an even bigger, more complex sentence by putting it inside,
+你可以说我可以通过把它放进去做一个更大，更复杂的句子，
+
+287
+00:16:35,430 --> 00:16:38,315
+you said to me that, and then saying,
+你告诉我那个，然后说，
+
+288
+00:16:38,315 --> 00:16:39,940
+um, my sentence, right.
+嗯，我的判决，对。
+
+289
+00:16:39,940 --> 00:16:44,880
+So that's the sense in which it does appear to be a recursive generative process,
+所以这就是它看起来像一个递归的生成过程的意义，
+
+290
+00:16:44,880 --> 00:16:50,510
+even though practically there are limits to how complex sentences people say.
+尽管人们说的复杂句子实际上是有限的。
+
+291
+00:16:50,510 --> 00:16:53,625
+And so that's the kind of structure that gets
+这就是那种结构
+
+292
+00:16:53,625 --> 00:16:57,605
+captured in these constituency, um, structure trees.
+在这些选区中捕获，嗯，结构树。
+
+293
+00:16:57,605 --> 00:17:02,780
+So before the early time when we talked about parsing and you guys did some of it,
+所以在我们谈论解析的早期之前，你们做了一些，
+
+294
+00:17:02,780 --> 00:17:05,365
+I emphasized dependency parsing.
+我强调了依赖解析。
+
+295
+00:17:05,365 --> 00:17:08,220
+Um, but the other kind of parsing which is actually
+嗯，但实际上是另一种解析
+
+296
+00:17:08,220 --> 00:17:12,035
+the kind that the models I'm going to talk about today was using,
+那个我今天要讨论的模型正在使用的那种，
+
+297
+00:17:12,035 --> 00:17:15,605
+was this idea of what's often called constituency
+这是什么通常被称为选区的想法
+
+298
+00:17:15,605 --> 00:17:19,790
+parsing or linguists often call it phrase structure grammars,
+解析或语言学家经常称它为短语结构语法，
+
+299
+00:17:19,790 --> 00:17:24,635
+um, or in sort of computer science formal language theory.
+嗯，或者说是某种计算机科学的形式语言理论。
+
+300
+00:17:24,635 --> 00:17:27,185
+These are context-free grammars, where, um,
+这些是无上下文的语法，其中，嗯，
+
+301
+00:17:27,185 --> 00:17:29,525
+we're having, um, these,
+我们有，嗯，这些，
+
+302
+00:17:29,525 --> 00:17:32,129
+um, non-terminals like noun phrase,
+嗯，像名词短语这样的非终端，
+
+303
+00:17:32,129 --> 00:17:35,105
+and verb phrase, and that's inside another noun phrases,
+和动词短语，那是在另一个名词短语里面，
+
+304
+00:17:35,105 --> 00:17:36,715
+it's inside another verb phrase,
+它在另一个动词短语里面，
+
+305
+00:17:36,715 --> 00:17:38,879
+which is inside more verb phrases,
+这是更多的动词短语，
+
+306
+00:17:38,879 --> 00:17:40,775
+heading up the sentence.
+领导这句话。
+
+307
+00:17:40,775 --> 00:17:43,895
+And so these are our constituency grammars.
+所以这些是我们的选区语法。
+
+308
+00:17:43,895 --> 00:17:47,585
+And when we've occasionally mentioned the Penn Treebank tree,
+当我们偶尔提到Penn Treebank树时，
+
+309
+00:17:47,585 --> 00:17:52,495
+this was kind of an original Penn Treebank tree which is basically, uh,
+这是一种原始的Penn Treebank树，基本上，呃，
+
+310
+00:17:52,495 --> 00:17:54,005
+phrase structure grammar like,
+短语结构语法，如，
+
+311
+00:17:54,005 --> 00:17:56,705
+this with sort of various extra annotations,
+这有各种额外的注释，
+
+312
+00:17:56,705 --> 00:17:58,850
+um, put on the nodes.
+嗯，穿上节点。
+
+313
+00:17:58,850 --> 00:18:04,775
+Okay, so what did seem- what- what do you- to capture some of these properties,
+好的，那么看起来什么 - 你有什么 - 捕获一些这些属性，
+
+314
+00:18:04,775 --> 00:18:07,925
+it seems like we'd like to have a neural model
+好像我们想要一个神经模型
+
+315
+00:18:07,925 --> 00:18:11,405
+that can make use of some of this same kind of tree structure.
+可以利用这种相同类型的树结构。
+
+316
+00:18:11,405 --> 00:18:17,720
+And so what we'd like to do for working out semantic similarity of constituents,
+那么我们想要做些什么来制定成分的语义相似性，
+
+317
+00:18:17,720 --> 00:18:20,255
+is we want to not only have
+我们不仅希望拥有
+
+318
+00:18:20,255 --> 00:18:25,185
+a word vector space like we started off with right at the beginning of the quarter,
+一个单词向量空间就像我们在季度开始时一样，
+
+319
+00:18:25,185 --> 00:18:30,065
+but we'd like to be able to take bigger constituents like noun phrases,
+但我们希望能够采取更大的成分，如名词短语，
+
+320
+00:18:30,065 --> 00:18:31,565
+the country of my birth,
+我出生的国家，
+
+321
+00:18:31,565 --> 00:18:33,475
+and the place where I was born,
+和我出生的地方，
+
+322
+00:18:33,475 --> 00:18:35,535
+and also give them a meaning.
+并给他们一个意义。
+
+323
+00:18:35,535 --> 00:18:39,370
+And so it seems like what we'd like to do is have a method of
+所以我们想要做的就是有一种方法
+
+324
+00:18:39,370 --> 00:18:44,140
+computing the meaning of any phrase in a compositional manner,
+以组合方式计算任何短语的含义，
+
+325
+00:18:44,140 --> 00:18:47,320
+such that the end result is also that
+这样最终结果也是如此
+
+326
+00:18:47,320 --> 00:18:52,410
+these phrases could be stuck inside our vector space models.
+这些短语可能会卡在我们的矢量空间模型中。
+
+327
+00:18:52,410 --> 00:18:56,300
+So we're still going to stick with our vector space semantics of phrases,
+所以我们仍然会坚持使用短语的向量空间语义，
+
+328
+00:18:56,300 --> 00:18:59,625
+and we wanna comp- compute the meanings of phrases.
+我们想要计算短语的含义。
+
+329
+00:18:59,625 --> 00:19:01,530
+And so then the question is,
+那么问题是，
+
+330
+00:19:01,530 --> 00:19:04,715
+how could we go about doing that?
+我们怎么能这样做呢？
+
+331
+00:19:04,715 --> 00:19:07,865
+And well answer number one is we're gonna use the principle of
+第一，我们将使用原则
+
+332
+00:19:07,865 --> 00:19:11,375
+compositionality since we're sure it's right,
+因为我们确定它是正确的，
+
+333
+00:19:11,375 --> 00:19:15,740
+and so, well, what the principle of compositionality essentially says,
+那么，组合性原则本质上是什么，
+
+334
+00:19:15,740 --> 00:19:20,170
+if you want to work out the meaning- or here it says of a sentence.
+如果你想弄清楚意思 - 或者在这里说出一句话。
+
+335
+00:19:20,170 --> 00:19:24,340
+But the meaning of any phrase, any constituent is you're going to
+但任何一个短语的含义，任何成分都是你要去的
+
+336
+00:19:24,340 --> 00:19:29,050
+build it by knowing the meanings of its words,
+通过了解其词义来建立它，
+
+337
+00:19:29,050 --> 00:19:31,565
+and then having rules that combine these meanings.
+然后制定结合这些含义的规则。
+
+338
+00:19:31,565 --> 00:19:34,280
+So starting off with the country of my birth,
+所以从我出生的国家开始，
+
+339
+00:19:34,280 --> 00:19:37,310
+I should be able to calculate a meaning of my birth,
+我应该能够计算出生的意义，
+
+340
+00:19:37,310 --> 00:19:39,105
+and meaning of the country,
+和国家的意义，
+
+341
+00:19:39,105 --> 00:19:43,540
+and meaning of of the- my birth and then a meaning of the country of my birth.
+和我的出生的意义，然后是我出生的国家的意义。
+
+342
+00:19:43,540 --> 00:19:47,680
+So we'd have meaning composition rules which will let us calculate
+所以我们有意义组合规则让我们计算
+
+343
+00:19:47,680 --> 00:19:52,520
+meanings upwards for larger constituents or sentences.
+较大的成分或句子的意义向上。
+
+344
+00:19:52,520 --> 00:19:57,290
+Um, so that seems kind of the right thing to do.
+嗯，所以这似乎是正确的事情。
+
+345
+00:19:57,290 --> 00:20:00,140
+And so then the question is well, can we, um,
+那么问题就好了，我们可以，嗯，
+
+346
+00:20:00,140 --> 00:20:04,470
+then build a model of how to do that?
+然后建立一个如何做到这一点的模型？
+
+347
+00:20:04,470 --> 00:20:08,630
+Well, here's sort of a straightforward way of doing this, okay.
+嗯，这是一种直截了当的方式，好吧。
+
+348
+00:20:08,630 --> 00:20:16,105
+So we- we have word vectors for the words that we've calculated.
+所以我们 - 我们为我们计算的单词提供了单词向量。
+
+349
+00:20:16,105 --> 00:20:20,405
+And what we'd like to do is work out, um-
+而我们想要做的就是锻炼，嗯 -
+
+350
+00:20:20,405 --> 00:20:23,625
+Then a meaning representation of this sentence.
+然后是这句话的意思表示。
+
+351
+00:20:23,625 --> 00:20:26,680
+And at this point we sort of have two things to do.
+在这一点上，我们有两件事要做。
+
+352
+00:20:26,680 --> 00:20:31,590
+We have parsing to do of working out what's the right structure of the sentence,
+我们已经解析了如何解决句子的正确结构，
+
+353
+00:20:31,590 --> 00:20:35,250
+and then we have meaning computation to do of
+然后我们有意义计算
+
+354
+00:20:35,250 --> 00:20:39,515
+working out what is the meaning representation of this sentence.
+弄清楚这句话的意思是什么。
+
+355
+00:20:39,515 --> 00:20:42,900
+Um, so for parsing we'd sort of be building,
+嗯，所以对于解析我们有点建设，
+
+356
+00:20:42,900 --> 00:20:45,280
+sort of noun phrase, prepositional phrase,
+一种名词短语，介词短语，
+
+357
+00:20:45,280 --> 00:20:48,120
+verb phrase, sentence kind of units, um,
+动词短语，句子类型，嗯，
+
+358
+00:20:48,120 --> 00:20:49,895
+to get "the cat sat on the mat",
+得到“猫坐在垫子上”，
+
+359
+00:20:49,895 --> 00:20:51,380
+and then will, what,
+什么，
+
+360
+00:20:51,380 --> 00:20:52,935
+we, if we had that,
+我们，如果有的话，
+
+361
+00:20:52,935 --> 00:20:57,220
+we could then run some kind of meaning computation program,
+然后我们可以运行某种意义计算程序，
+
+362
+00:20:57,220 --> 00:20:59,195
+and give us sort of a vector space,
+并给我们一个矢量空间，
+
+363
+00:20:59,195 --> 00:21:01,310
+um, meaning of these sentences.
+嗯，这些句子的意思。
+
+364
+00:21:01,310 --> 00:21:02,970
+So that's kind of what we want,
+这就是我们想要的东西，
+
+365
+00:21:02,970 --> 00:21:04,270
+is to do both of those,
+是做这两个，
+
+366
+00:21:04,270 --> 00:21:07,355
+and in a little bit I'll show you an example of the kind
+稍后我会告诉你一个这样的例子
+
+367
+00:21:07,355 --> 00:21:10,660
+of one way that you go about approaching that.
+一种方式，你去接近那个。
+
+368
+00:21:10,660 --> 00:21:13,085
+But before I do that, just sort of stepping back for
+但在我这样做之前，只是退一步
+
+369
+00:21:13,085 --> 00:21:15,935
+a moment as to what's different here, right?
+关于这里有什么不同的时刻，对吧？
+
+370
+00:21:15,935 --> 00:21:18,395
+That here we had our
+我们在这里有我们的
+
+371
+00:21:18,395 --> 00:21:21,630
+recurrent neural network which in some sense has been
+在某种意义上已经存在的递归神经网络
+
+372
+00:21:21,630 --> 00:21:25,125
+our workhorse tool in this class up to now,
+到目前为止，我们这个班级的主力工具，
+
+373
+00:21:25,125 --> 00:21:26,465
+and it gives you,
+它给了你，
+
+374
+00:21:26,465 --> 00:21:30,605
+it gives you a representation of the meaning of the country of my birth sort of,
+它为您提供了我的出生国家的意义，
+
+375
+00:21:30,605 --> 00:21:32,920
+you could either say that's the meaning of,
+你可以说这是意思，
+
+376
+00:21:32,920 --> 00:21:34,740
+um, the country of my birth,
+嗯，我出生的国家，
+
+377
+00:21:34,740 --> 00:21:36,980
+or we talked about other tricks like,
+或者我们谈过其他技巧，比如
+
+378
+00:21:36,980 --> 00:21:39,979
+doing max pooling across all of these,
+在所有这些中进行最大池化，
+
+379
+00:21:39,979 --> 00:21:42,820
+or you could have a separate node out here,
+或者你可以在这里有一个单独的节点，
+
+380
+00:21:42,820 --> 00:21:44,620
+which so does attention over these.
+对这些人的关注也是如此。
+
+381
+00:21:44,620 --> 00:21:49,240
+So it does give you a sort of representation, um,
+所以它确实给你一种表现，嗯，
+
+382
+00:21:49,240 --> 00:21:50,950
+of the meaning of this,
+这个意思，
+
+383
+00:21:50,950 --> 00:21:54,785
+of any, um, sub-sequence of words as well.
+任何，嗯，字的子序列。
+
+384
+00:21:54,785 --> 00:21:57,410
+Um, but they, they're sort of different, right?
+嗯，但他们，他们有点不同，对吧？
+
+385
+00:21:57,410 --> 00:21:59,290
+That this what, the top,
+这是什么，顶部，
+
+386
+00:21:59,290 --> 00:22:01,435
+the tree recursive neural network,
+树递归神经网络，
+
+387
+00:22:01,435 --> 00:22:07,775
+it requires a sentence or any kind of phrase to have a tree structure.
+它需要一个句子或任何类型的短语来具有树结构。
+
+388
+00:22:07,775 --> 00:22:10,390
+So we know what its component parts are,
+所以我们知道它的组成部分是什么，
+
+389
+00:22:10,390 --> 00:22:14,935
+but then we're working out meaning representations
+但后来我们正在制定意义陈述
+
+390
+00:22:14,935 --> 00:22:20,800
+for the phrase that is sensitive to what its syntactic structure is,
+对于对其句法结构敏感的短语，
+
+391
+00:22:20,800 --> 00:22:24,215
+that how the words go together to build phrases.
+这些单词如何组合在一起构建短语。
+
+392
+00:22:24,215 --> 00:22:27,875
+Whereas for the recurrent neural network we're
+而对于递归神经网络，我们是
+
+393
+00:22:27,875 --> 00:22:31,549
+just in an oblivious way running a sequence model along,
+只是以一种不经意的方式运行序列模型，
+
+394
+00:22:31,549 --> 00:22:33,500
+and say and compute things,
+说和计算的东西，
+
+395
+00:22:33,500 --> 00:22:35,120
+and in the obvious,
+在显而易见的
+
+396
+00:22:35,120 --> 00:22:38,390
+it doesn't in any obvious way give a meaning representation of,
+它没有任何明显的方式给出一个含义，
+
+397
+00:22:38,390 --> 00:22:41,970
+of my birth, or my birth contained inside that.
+我的出生，或者我的出生包含在那里。
+
+398
+00:22:41,970 --> 00:22:46,240
+We sort of only have a meaning representation for the whole sequence,
+我们只对整个序列有一个含义表示，
+
+399
+00:22:46,240 --> 00:22:48,680
+whereas if we're doing things this way, um,
+如果我们这样做，嗯，
+
+400
+00:22:48,680 --> 00:22:54,705
+we do have meaning representations for the different meaningful parts of the sentence.
+我们对句子的不同有意义部分有意义表示。
+
+401
+00:22:54,705 --> 00:22:58,730
+Okay. That makes sense of what we're trying to do?
+好的。这是我们想要做的事情的意义吗？
+
+402
+00:22:59,120 --> 00:23:01,625
+Okay. So how could we do,
+好的。那我们该怎么做呢
+
+403
+00:23:01,625 --> 00:23:03,240
+go about doing that?
+那样做呢？
+
+404
+00:23:03,240 --> 00:23:08,385
+Um, well, the idea of how we could go about doing that is,
+嗯，我们如何做到这一点的想法是，
+
+405
+00:23:08,385 --> 00:23:09,859
+if we work bottom-up,
+如果我们自下而上工作，
+
+406
+00:23:09,859 --> 00:23:14,245
+at the very bottom we have word vectors,
+在最底层我们有单词向量，
+
+407
+00:23:14,245 --> 00:23:19,890
+and so we want to recursively compute the meaning of bigger constituents.
+所以我们想要递归地计算更大的成分的意义。
+
+408
+00:23:19,890 --> 00:23:25,280
+So if we wanted to compute the meaning of "on the mat" what we can do is say,
+因此，如果我们想要计算“在垫子上”的含义，我们可以做的就是说，
+
+409
+00:23:25,280 --> 00:23:30,135
+well, we have, already have a meaning representation of, on and mat.
+好吧，我们已经有了，on和mat的含义。
+
+410
+00:23:30,135 --> 00:23:33,910
+So if we could feed those into a neural network, because that's our
+因此，如果我们可以将它们提供给神经网络，因为那是我们的
+
+411
+00:23:33,910 --> 00:23:37,820
+one tool, we could maybe get out of it two things.
+一个工具，我们可以从中得到两件事。
+
+412
+00:23:37,820 --> 00:23:42,055
+We could get out of it a goodness score.
+我们可以从中获得良好的分数。
+
+413
+00:23:42,055 --> 00:23:44,420
+So this is what we're going to use for parsing.
+这就是我们将要用于解析的内容。
+
+414
+00:23:44,420 --> 00:23:49,450
+We're going to say, "Do you belie- do you believe you can put together "on" and the
+我们会说，“你相信 - 你相信你可以把”放在一起“和”
+
+415
+00:23:49,450 --> 00:23:55,055
+"mat" to form a good constituent that's part of a parse tree?
+“席子”是否构成了解析树的一部分？
+
+416
+00:23:55,055 --> 00:23:58,055
+And this will be a big positive number if the answer is true,
+如果答案是真的，这将是一个很大的正数，
+
+417
+00:23:58,055 --> 00:23:59,865
+and negative if it's not true,
+如果不是这样，则为负数，
+
+418
+00:23:59,865 --> 00:24:03,305
+and then we have a meaning composition device,
+然后我们有一个意义组合设备，
+
+419
+00:24:03,305 --> 00:24:05,270
+which says, "Okay, um,
+它说，“好的，嗯，
+
+420
+00:24:05,270 --> 00:24:07,480
+if you put together these two things,
+如果你把这两件事放在一起，
+
+421
+00:24:07,480 --> 00:24:11,965
+what would be the meaning representation of what we put together?"
+我们放在一起的意义是什么呢？“
+
+422
+00:24:11,965 --> 00:24:16,200
+And so this is the first model that we explored which
+所以这是我们探索的第一个模型
+
+423
+00:24:16,200 --> 00:24:19,660
+was doing this in a pretty simple way, right?
+这是以一种非常简单的方式做到的，对吗？
+
+424
+00:24:19,660 --> 00:24:22,750
+So here was our meaning composition, um,
+所以这是我们的意思构成，嗯，
+
+425
+00:24:22,750 --> 00:24:27,665
+device that we concatenated the two vectors of the constituents,
+我们连接成分的两个向量的设备，
+
+426
+00:24:27,665 --> 00:24:30,230
+we multiply them by a matrix, add a
+我们将它们乘以矩阵，加上一个
+
+427
+00:24:30,230 --> 00:24:31,840
+bias as usual,
+像往常一样偏见，
+
+428
+00:24:31,840 --> 00:24:33,955
+put it through a tan h. Uh,
+穿过棕褐色。呃，
+
+429
+00:24:33,955 --> 00:24:35,345
+this work is old enough,
+这项工作已经够老了，
+
+430
+00:24:35,345 --> 00:24:36,815
+it's sort of before things, like,
+它有点像事情，比如，
+
+431
+00:24:36,815 --> 00:24:38,110
+ReLUs became popular,
+ReLU开始流行，
+
+432
+00:24:38,110 --> 00:24:41,735
+but maybe it's better to have a tan h anyway, um, fit more like,
+但也许最好还是晒黑，嗯，更适合，
+
+433
+00:24:41,735 --> 00:24:43,235
+a recurrent neural network,
+一个递归神经网络，
+
+434
+00:24:43,235 --> 00:24:47,580
+and so this was our meaning composition that gave the meaning of the parent.
+所以这是我们的意思构成，赋予了父母的意义。
+
+435
+00:24:47,580 --> 00:24:52,305
+And then to the side, what the score of it was as to whether this was a good phrase,
+然后在旁边，它的得分是否是一个好词，
+
+436
+00:24:52,305 --> 00:24:55,370
+we were taking that parent vector representation,
+我们正在采用父矢量表示，
+
+437
+00:24:55,370 --> 00:24:58,949
+and multiplying it by another vector,
+并将其乘以另一个向量，
+
+438
+00:24:58,949 --> 00:25:01,990
+and that was giving us out a number.
+那就是给我们一个数字。
+
+439
+00:25:02,100 --> 00:25:06,180
+Um, if you think about it a bit while we're doing this,
+嗯，如果你在我们这样做的时候考虑一​​下，
+
+440
+00:25:06,180 --> 00:25:10,699
+you might think that this isn't quite a perfect model of meaning composition,
+你可能会认为这不是一个完美的意义构成模型，
+
+441
+00:25:10,699 --> 00:25:14,800
+and later on in the class I'll talk about some more complex models,
+然后在课堂上我会谈到一些更复杂的模型，
+
+442
+00:25:14,800 --> 00:25:17,880
+um, that we then started to explore.
+嗯，我们开始探索。
+
+443
+00:25:17,880 --> 00:25:21,815
+Um, but this is sort of enough to get us going,
+嗯，但这足以让我们前进，
+
+444
+00:25:21,815 --> 00:25:24,520
+and this gave us a way of building
+这给了我们一种建设方式
+
+445
+00:25:24,520 --> 00:25:29,805
+a recursive neural network parser which both found parsers,
+一个递归的神经网络解析器，它都找到了解析器，
+
+446
+00:25:29,805 --> 00:25:33,530
+and worked out a meaning representation for them.
+并为他们制定了意义表示。
+
+447
+00:25:33,530 --> 00:25:37,565
+And so the way we did this was in the simplest possible way really,
+所以我们这样做的方式是以最简单的方式，
+
+448
+00:25:37,565 --> 00:25:39,580
+which was to have a greedy parser.
+这是一个贪婪的解析器。
+
+449
+00:25:39,580 --> 00:25:42,620
+So if we start off with the "cat sat on the mat",
+所以，如果我们从“猫坐在垫子上”开始，
+
+450
+00:25:42,620 --> 00:25:43,960
+what we could do is say,
+我们能做的就是说，
+
+451
+00:25:43,960 --> 00:25:47,040
+well, maybe you should join "the" and "cat" together.
+好吧，也许你应该加入“the”和“cat”。
+
+452
+00:25:47,040 --> 00:25:48,220
+Let's try that.
+我们试试吧。
+
+453
+00:25:48,220 --> 00:25:49,865
+Run it through our neural network,
+通过我们的神经网络运行它，
+
+454
+00:25:49,865 --> 00:25:53,315
+it'll get a score and a meaning representation,
+它会获得分数和意义表示，
+
+455
+00:25:53,315 --> 00:25:55,565
+and while we could try doing that for "cat" and
+虽然我们可以尝试为“猫”而做
+
+456
+00:25:55,565 --> 00:25:58,635
+"sat" we could try doing it for "sat" and "on".
+“坐”我们可以尝试为“坐”和“开”。
+
+457
+00:25:58,635 --> 00:26:03,170
+We could try doing it for "on" and "the" we could try doing it for "the" and "mat".
+我们可以尝试“on”和“the”，我们可以尝试为“the”和“mat”做这件事。
+
+458
+00:26:03,170 --> 00:26:06,665
+And then at this point we'd say, okay, well the,
+然后在这一点上我们会说，好吧，好吧，
+
+459
+00:26:06,665 --> 00:26:12,725
+the best phrase that we can make combining these word vectors is the one for "the cat".
+我们可以结合这些单词向量的最佳短语是“猫”。
+
+460
+00:26:12,725 --> 00:26:14,770
+So let's just commit to that one,
+所以，让我们承诺那个，
+
+461
+00:26:14,770 --> 00:26:17,360
+and it has this semantic representation,
+它有这种语义表示，
+
+462
+00:26:17,360 --> 00:26:20,825
+and at this point we can essentially repeat.
+在这一点上，我们可以基本上重复。
+
+463
+00:26:20,825 --> 00:26:25,190
+Now, all the work we did over there we can just reuse because nothing has changed,
+现在，我们在那里所做的所有工作都可以重复使用，因为没有任何改变，
+
+464
+00:26:25,190 --> 00:26:28,850
+but we can also consider now joining the "cat"
+但我们现在也可以考虑加入“猫”
+
+465
+00:26:28,850 --> 00:26:32,965
+as a constituent with "sat" and get a score for that.
+作为“sat”的成分并获得分数。
+
+466
+00:26:32,965 --> 00:26:34,930
+And so at this point we decide, okay,
+所以在这一点上我们决定，好吧，
+
+467
+00:26:34,930 --> 00:26:37,140
+the mat is the best constituent to build,
+垫子是构建的最佳组成部分，
+
+468
+00:26:37,140 --> 00:26:41,455
+commit to that, calculate a meaning representation for "on the mat".
+承诺，计算“在垫子上”的含义表示。
+
+469
+00:26:41,455 --> 00:26:44,025
+That looks good, commit to that,
+看起来很好，承诺，
+
+470
+00:26:44,025 --> 00:26:46,080
+and kind of keep on chugging up,
+并继续喋喋不休，
+
+471
+00:26:46,080 --> 00:26:51,200
+and so we've got a mechanism for sort of choosing a parse of a sentence in a,
+所以我们有一种机制来选择一个句子的解析，
+
+472
+00:26:51,200 --> 00:26:52,655
+in a greedy manner.
+贪得无厌
+
+473
+00:26:52,655 --> 00:26:55,300
+But, you know, when we looked at the dependency parsing,
+但是，你知道，当我们查看依赖解析时，
+
+474
+00:26:55,300 --> 00:26:57,230
+we're also doing that greedily, right?
+我们也贪婪地这样做，对吧？
+
+475
+00:26:57,230 --> 00:27:00,955
+Um, and coming up with a meaning representation.
+嗯，并想出一个意义表示。
+
+476
+00:27:00,955 --> 00:27:06,105
+Okay. So that was our first model of having a tree recursive neural network,
+好的。这是我们第一个拥有树递归神经网络的模型，
+
+477
+00:27:06,105 --> 00:27:07,630
+and using it for parsing.
+并使用它进行解析。
+
+478
+00:27:07,630 --> 00:27:12,630
+Um, there are a few more details here,
+嗯，这里还有一些细节，
+
+479
+00:27:12,630 --> 00:27:16,200
+some of which probably aren't super,
+其中一些可能不是超级的，
+
+480
+00:27:16,200 --> 00:27:18,335
+um, important at this point, right?
+嗯，在这一点上很重要，对吧？
+
+481
+00:27:18,335 --> 00:27:22,790
+So we could score a tree by summing the scores at each node,
+所以我们可以通过总结每个节点的得分来得分树，
+
+482
+00:27:22,790 --> 00:27:25,290
+um, for working out,
+嗯，为了锻炼，
+
+483
+00:27:25,290 --> 00:27:27,730
+for the optimization we were working out,
+为了优化我们正在努力，
+
+484
+00:27:27,730 --> 00:27:33,545
+we're using this kind of max-margin loss that we've looked at in other places.
+我们正在使用我们在其他地方看过的这种最大边际损失。
+
+485
+00:27:33,545 --> 00:27:37,780
+Um, the simplest way to do things is completely greedily.
+嗯，最简单的做事方式是贪得无厌。
+
+486
+00:27:37,780 --> 00:27:41,825
+You just, um, find the best local decision at each point,
+你，嗯，在每个点找到最好的当地决定，
+
+487
+00:27:41,825 --> 00:27:42,845
+and make that structure,
+并使这个结构，
+
+488
+00:27:42,845 --> 00:27:43,985
+and keep on going.
+并继续前进。
+
+489
+00:27:43,985 --> 00:27:45,610
+But if you wanna do things a bit better,
+但如果你想做得更好一点，
+
+490
+00:27:45,610 --> 00:27:47,100
+and we explored this,
+我们探索了这个，
+
+491
+00:27:47,100 --> 00:27:48,750
+um, you could say,
+嗯，你可以说，
+
+492
+00:27:48,750 --> 00:27:50,910
+um, we could do beam search.
+嗯，我们可以进行光束搜索。
+
+493
+00:27:50,910 --> 00:27:54,020
+We could explore out several good ways of merging,
+我们可以探索几种合并的好方法，
+
+494
+00:27:54,020 --> 00:27:59,480
+and then decide later higher up the tree as to which was the best way, um, to merge.
+然后决定以后更高的树，哪个是合并的最佳方式。
+
+495
+00:27:59,480 --> 00:28:03,155
+Um, we haven't talked about it in this class,
+嗯，我们在这堂课里没有谈过这个，
+
+496
+00:28:03,155 --> 00:28:05,240
+but just to mention, um,
+但是，嗯，嗯，
+
+497
+00:28:05,240 --> 00:28:08,490
+something in case people have seen it is, um,
+人们已经看到它的一些事情，嗯，
+
+498
+00:28:08,490 --> 00:28:12,545
+traditional constituency parsing where you have symbols here,
+传统选区解析你在哪里有符号，
+
+499
+00:28:12,545 --> 00:28:14,405
+like, NP or VP.
+比如，NP或VP。
+
+500
+00:28:14,405 --> 00:28:19,240
+Um, there exist efficient dynamic programming algorithms where you can
+嗯，你可以在那里使用高效的动态编程算法
+
+501
+00:28:19,240 --> 00:28:24,660
+find the optimal parse of a sentence in polynomial time.
+在多项式时间内找到句子的最佳解析。
+
+502
+00:28:24,660 --> 00:28:26,190
+So in, in cubic time.
+因此，在立方时间内。
+
+503
+00:28:26,190 --> 00:28:29,375
+So if you have a regular context-free grammar, and well,
+所以，如果你有一个常规的无上下文语法，那么，
+
+504
+00:28:29,375 --> 00:28:32,615
+so regular probabilistic context-free grammar, um,
+所以常规的概率上下文语法，嗯，
+
+505
+00:28:32,615 --> 00:28:35,010
+and if you want to know what is the best parse of
+如果你想知道什么是最好的解析
+
+506
+00:28:35,010 --> 00:28:38,385
+the sentence according to the probabilistic context-free grammar,
+根据概率上下文无关语法的句子，
+
+507
+00:28:38,385 --> 00:28:43,265
+you can write a cubic time dynamic programming algorithm and you can find it.
+你可以写一个立方时间动态编程算法，你可以找到它。
+
+508
+00:28:43,265 --> 00:28:47,560
+That's good. And in the old days of CS224N,
+非常好。在CS224N的旧时代，
+
+509
+00:28:47,560 --> 00:28:51,605
+um, before neural networks we used to have everyone do that.
+嗯，在神经网络之前，我们曾经让每个人都这样做。
+
+510
+00:28:51,605 --> 00:28:57,240
+The, the most, the most brain-breaking assignment of the old CS224N
+旧CS224N的最大，最突兀的任务
+
+511
+00:28:57,240 --> 00:29:02,380
+was writing this dynamic program to do context-free grammar parsing of a sentence.
+正在编写这个动态程序来对句子进行无上下文语法分析。
+
+512
+00:29:02,380 --> 00:29:05,620
+Um, the slightly sad fact is,
+嗯，有点可悲的是，
+
+513
+00:29:05,620 --> 00:29:08,810
+once you go to these kind of neural network representations,
+一旦你进入这种神经网络表示，
+
+514
+00:29:08,810 --> 00:29:12,975
+you can't write clever dynamic programming algorithms anymore,
+你不能再编写聪明的动态编程算法了，
+
+515
+00:29:12,975 --> 00:29:18,094
+because clever dynamic programming algorithms only work when you have symbols
+因为聪明的动态编程算法只有在你有符号时才有用
+
+516
+00:29:18,094 --> 00:29:23,580
+from a reasonably small set for your non-terminals because if that's the case,
+从你的非终端的一个相当小的集合，因为如果是这样的话，
+
+517
+00:29:23,580 --> 00:29:26,110
+you can, you kind of have collisions, right?
+你可以，你有碰撞，对吧？
+
+518
+00:29:26,110 --> 00:29:29,075
+You have lots of ways of parsing stuff lower down,
+你有很多解析东西的方法，
+
+519
+00:29:29,075 --> 00:29:30,760
+which kind of, uh,
+哪种，呃，
+
+520
+00:29:30,760 --> 00:29:33,485
+turn out to be different ways to make a noun phrase,
+结果是制作名词短语的不同方法，
+
+521
+00:29:33,485 --> 00:29:35,850
+or different ways to make a prepositional phrase,
+或制作介词短语的不同方式，
+
+522
+00:29:35,850 --> 00:29:38,825
+and therefore you can save work with dynamic programming.
+因此，您可以使用动态编程来节省工作。
+
+523
+00:29:38,825 --> 00:29:40,645
+If you've got a model like this,
+如果你有这样的模特，
+
+524
+00:29:40,645 --> 00:29:44,490
+since everything that you build is going through layers of neural network,
+因为你构建的所有内容都是通过层次的神经网络，
+
+525
+00:29:44,490 --> 00:29:47,745
+and you've got a meaning representation, some high-dimensional vector,
+你有一个意义表示，一些高维向量，
+
+526
+00:29:47,745 --> 00:29:49,760
+things are never going to collide,
+事物永远不会碰撞，
+
+527
+00:29:49,760 --> 00:29:53,070
+and so you can never save work by doing dynamic programming.
+所以你永远不能通过动态编程来节省工作。
+
+528
+00:29:53,070 --> 00:29:58,520
+And so, um, you're either doing exponential work to explore out everything,
+所以，嗯，你要么做指数工作来探索一切，
+
+529
+00:29:58,520 --> 00:30:03,950
+or else you're using some kind of beam to explore a bunch of likely stuff.
+或者你正在使用某种光束来探索一堆可能的东西。
+
+530
+00:30:04,090 --> 00:30:09,260
+Yeah. Um, we actually also applied this,
+是啊。嗯，我们其实也应用了这个，
+
+531
+00:30:09,260 --> 00:30:11,915
+um, to vision at the same time.
+嗯，同时有远见。
+
+532
+00:30:11,915 --> 00:30:14,330
+So it wasn't just sort of completely
+所以它不仅仅是完全的
+
+533
+00:30:14,330 --> 00:30:17,300
+a vague motivation of, um,
+一个模糊的动机，嗯，
+
+534
+00:30:17,300 --> 00:30:23,255
+visual scenes have parts that we actually started exploring that well you could take, um,
+视觉场景有我们真正开始探索的部分，你可以采取，嗯，
+
+535
+00:30:23,255 --> 00:30:27,590
+these pieces of scenes and then work out, um,
+这些场景然后解决，嗯，
+
+536
+00:30:27,590 --> 00:30:32,885
+representations for scenes using a similar form of compositionality.
+使用类似形式的组合的场景的表示。
+
+537
+00:30:32,885 --> 00:30:35,405
+And so in particular,
+特别是，
+
+538
+00:30:35,405 --> 00:30:40,715
+um, there was sort of this dataset that was being used for, um,
+嗯，有一些这个数据集正在用于，嗯，
+
+539
+00:30:40,715 --> 00:30:43,894
+multi-class segmentation in vision,
+视觉中的多级分割，
+
+540
+00:30:43,894 --> 00:30:48,830
+where you start off with very small patches and then you wanna combine them
+你从非常小的补丁开始，然后你想要结合它们
+
+541
+00:30:48,830 --> 00:30:51,050
+up into parts of a scene of sort of
+到某种场景的某些部分
+
+542
+00:30:51,050 --> 00:30:54,170
+recognizing which part of the picture was the building,
+认识到图片的哪一部分是建筑物，
+
+543
+00:30:54,170 --> 00:30:58,025
+the sky, the road, various other classes.
+天空，道路，各种其他类。
+
+544
+00:30:58,025 --> 00:31:02,435
+And we were actually at the time able to do this really rather well, um,
+我们当时真的很能做到这一点，嗯，
+
+545
+00:31:02,435 --> 00:31:06,140
+using one of these tree recursive structured neural networks better
+更好地使用这些树递归结构化神经网络之一
+
+546
+00:31:06,140 --> 00:31:11,435
+than preceding work in vision had done in the late 2000s decade.
+比起之前的视觉工作已经在21世纪后期进行了。
+
+547
+00:31:11,435 --> 00:31:17,225
+Okay. So how can we- how can we build neural networks,
+好的。那么我们怎样才能建立神经网络，
+
+548
+00:31:17,225 --> 00:31:19,550
+um, that do this kind of stuff?
+嗯，这样做的东西？
+
+549
+00:31:19,550 --> 00:31:25,730
+Um, so when- when we started off exploring these tree structured neural networks, um,
+嗯，所以当我们开始探索这些树状结构神经网络的时候，嗯，
+
+550
+00:31:25,730 --> 00:31:29,480
+we thought that this was a cool original idea and no one
+我们认为这是一个很酷的原创想法，没有人
+
+551
+00:31:29,480 --> 00:31:33,305
+had worked on tree structured neural networks successfully before.
+以前成功地在树结构神经网络上工作过。
+
+552
+00:31:33,305 --> 00:31:39,560
+Um, but it turned out we were wrong, that there were a couple of Germans in the mid-1990s,
+嗯，但事实证明我们错了，在20世纪90年代中期有几个德国人，
+
+553
+00:31:39,560 --> 00:31:44,765
+um, had actually started looking at tree structured neural networks and had worked out,
+嗯，实际上已经开始研究树状结构神经网络并且已经解决了，
+
+554
+00:31:44,765 --> 00:31:45,950
+um, the math of them.
+嗯，他们的数学。
+
+555
+00:31:45,950 --> 00:31:49,535
+So corresponding to the backpropagation through time algorithm,
+因此对应于通过时间算法的反向传播，
+
+556
+00:31:49,535 --> 00:31:52,865
+um, that Abby talked about when we were doing recurrent neural networks.
+嗯，Abby谈到我们做反复神经网络的时候。
+
+557
+00:31:52,865 --> 00:31:55,310
+They worked out the tree structured case which they
+他们制定了树形结构的案例
+
+558
+00:31:55,310 --> 00:31:58,310
+called backpropagation, um, through structure.
+称为反向传播，嗯，通过结构。
+
+559
+00:31:58,310 --> 00:32:02,810
+Um, there are several slides on this in
+嗯，这里有几张幻灯片
+
+560
+00:32:02,810 --> 00:32:07,505
+the slides but I think I'm gonna sort of skip them.
+幻灯片，但我想我会跳过它们。
+
+561
+00:32:07,505 --> 00:32:08,765
+If anyone wants to look at them,
+如果有人想看看他们，
+
+562
+00:32:08,765 --> 00:32:10,610
+they're on the web and you can look at them.
+他们在网上，你可以看看他们。
+
+563
+00:32:10,610 --> 00:32:14,720
+I mean, there isn't actually anything that's new.
+我的意思是，实际上没有什么是新的。
+
+564
+00:32:14,720 --> 00:32:17,420
+So if you remember with- with
+所以，如果你还记得
+
+565
+00:32:17,420 --> 00:32:21,725
+bad scarring or something that was early lectures of this class of working out,
+糟糕的疤痕或早期讲授这类锻炼的东西，
+
+566
+00:32:21,725 --> 00:32:26,450
+um, the derivatives of neural networks and how it worked with recurrent neural networks.
+嗯，神经网络的衍生物以及它如何与递归神经网络一起工作。
+
+567
+00:32:26,450 --> 00:32:28,130
+It's sort of the same, right.
+它是一样的，对吧。
+
+568
+00:32:28,130 --> 00:32:32,585
+You have this recurrent matrix at different levels of tree structure.
+您在树结构的不同级别具有此循环矩阵。
+
+569
+00:32:32,585 --> 00:32:37,220
+You're summing the derivatives of everywhere it turns up.
+你总结了它所到之处的衍生物。
+
+570
+00:32:37,220 --> 00:32:40,370
+The only difference is sort of because we now have tree structure,
+唯一的区别是因为我们现在有树结构，
+
+571
+00:32:40,370 --> 00:32:43,040
+you're sort of splitting things downwards.
+你有点向下分裂。
+
+572
+00:32:43,040 --> 00:32:45,410
+Um, so yes.
+嗯，是的。
+
+573
+00:32:45,410 --> 00:32:48,560
+So forward prop we kind of compute it forwards.
+所以前进道具我们有点计算它前进。
+
+574
+00:32:48,560 --> 00:32:51,245
+And then when we're doing back prop,
+然后当我们做背部道具时，
+
+575
+00:32:51,245 --> 00:32:55,910
+when we've had the backward propagation we have the error signal coming from above.
+当我们进行了向后传播时，我们会得到来自上方的误差信号。
+
+576
+00:32:55,910 --> 00:32:58,025
+We then, um, combine it,
+那么，我们，把它结合起来，
+
+577
+00:32:58,025 --> 00:33:00,530
+um, with the calculations at this node.
+嗯，在这个节点上进行计算。
+
+578
+00:33:00,530 --> 00:33:03,350
+And then we're sort of sending it back in a tree structure
+然后我们将它发送回树形结构中
+
+579
+00:33:03,350 --> 00:33:06,845
+down to each of the branches underneath us.
+到我们下面的每个分支。
+
+580
+00:33:06,845 --> 00:33:11,960
+So that was our first version of things and we got some decent results.
+这是我们的第一个版本的东西，我们得到了一些不错的结果。
+
+581
+00:33:11,960 --> 00:33:16,985
+We got this good vision results that I showed you and it sort of seemed to do,
+我给你看了这个好的视力结果，它似乎有点像，
+
+582
+00:33:16,985 --> 00:33:19,490
+um, some good for, um,
+嗯，有些好，嗯，
+
+583
+00:33:19,490 --> 00:33:23,030
+language both for parsing and doing- We had
+解析和做的语言 - 我们有
+
+584
+00:33:23,030 --> 00:33:27,410
+some results I haven't actually included here of sort of doing paraphrase,
+一些结果我实际上并没有包含这样的解释，
+
+585
+00:33:27,410 --> 00:33:33,545
+um, judgment between sentences and it- it modeled things, um, fairly well.
+嗯，句子和它之间的判断 - 它模仿了事物，嗯，相当不错。
+
+586
+00:33:33,545 --> 00:33:37,760
+But once we started thinking about it more it seemed like
+但是，一旦我们开始考虑它，它似乎就像
+
+587
+00:33:37,760 --> 00:33:41,780
+that very simple neural net function couldn't possibly
+那种非常简单的神经网络功能是不可能的
+
+588
+00:33:41,780 --> 00:33:46,955
+compute the kind of meanings that we wanted to compute for sentence meanings.
+计算我们想要为句子意义计算的那种意义。
+
+589
+00:33:46,955 --> 00:33:49,760
+And so we then sort of set about trying to come up with
+因此，我们接下来试图提出
+
+590
+00:33:49,760 --> 00:33:52,970
+some more complex ways of working out kind
+一些更复杂的方法
+
+591
+00:33:52,970 --> 00:33:56,180
+of meaning composition functions and nodes that
+意义组合函数和节点
+
+592
+00:33:56,180 --> 00:33:59,630
+could then be used to build a better neural network.
+然后可以用来建立一个更好的神经网络。
+
+593
+00:33:59,630 --> 00:34:04,520
+And sort of some- some of the essence of that is on this slide.
+还有一些本质的一部分就是这张幻灯片。
+
+594
+00:34:04,520 --> 00:34:07,280
+But, you know, for the first version we just
+但是，你知道，对于我们的第一个版本
+
+595
+00:34:07,280 --> 00:34:10,130
+didn't have enough complexity of neural network, frankly, right?
+坦率地说，没有足够复杂的神经网络，对吧？
+
+596
+00:34:10,130 --> 00:34:13,730
+So when we had two constituents we concatenated
+因此，当我们有两个成分时，我们会连接起来
+
+597
+00:34:13,730 --> 00:34:19,040
+them and multiply that by a weight, uh, weight matrix.
+它们乘以重量，呃，重量矩阵。
+
+598
+00:34:19,040 --> 00:34:21,590
+Um, and that was sort of essentially all we had.
+嗯，这基本上就是我们所拥有的一切。
+
+599
+00:34:21,590 --> 00:34:27,740
+And, um, as I hope you've gotten more of a sense of in this class.
+而且，嗯，因为我希望你在这堂课上有更多的感觉。
+
+600
+00:34:27,740 --> 00:34:31,610
+If you just concatenate and multiply by a weight matrix,
+如果你只是连接并乘以权重矩阵，
+
+601
+00:34:31,610 --> 00:34:36,200
+you're not actually modeling the interaction between these two vectors, right.
+你实际上并没有模拟这两个向量之间的相互作用，对吧。
+
+602
+00:34:36,200 --> 00:34:39,500
+Because you can think of this weight matrix as just sort of being
+因为你可以把这个权重矩阵想象成一种存在
+
+603
+00:34:39,500 --> 00:34:43,490
+divided in two and half of it multiplies this vector,
+分成两半，它乘以这个向量，
+
+604
+00:34:43,490 --> 00:34:45,605
+and half of it multiplies this vector.
+它的一半乘以这个向量。
+
+605
+00:34:45,605 --> 00:34:49,685
+So the meanings of these two things don't act on each other.
+所以这两件事的意义并不相互作用。
+
+606
+00:34:49,685 --> 00:34:52,280
+And so somehow you have to make your neural network,
+所以你不得不建立你的神经网络，
+
+607
+00:34:52,280 --> 00:34:54,620
+um, more complex than that.
+嗯，比那更复杂。
+
+608
+00:34:54,620 --> 00:34:59,944
+But the other way in which this seemed too simple is in the first model,
+但另一种看似太简单的方式是在第一个模型中，
+
+609
+00:34:59,944 --> 00:35:04,505
+we had just one weight matrix which we use for everything.
+我们只有一个重量矩阵，我们用它来做所有事情。
+
+610
+00:35:04,505 --> 00:35:08,120
+And, ah, at least if you're a linguist and you're
+啊，至少如果你是一名语言学家而且你是
+
+611
+00:35:08,120 --> 00:35:12,050
+thinking about the structure of language you might start thinking of well,
+思考你可能开始思考的语言结构，
+
+612
+00:35:12,050 --> 00:35:14,630
+wait a minute, sometimes you're gonna be putting
+等一下，有时候你会放
+
+613
+00:35:14,630 --> 00:35:17,645
+together a verb and an object noun phrase.
+一起动词和一个对象名词短语。
+
+614
+00:35:17,645 --> 00:35:19,490
+Um, hit the ball.
+嗯，击球。
+
+615
+00:35:19,490 --> 00:35:24,125
+Sometimes you're gonna be putting together an article and a noun, uh, ball.
+有时你会把一篇文章和一个名词，呃，球放在一起。
+
+616
+00:35:24,125 --> 00:35:29,150
+Sometimes you're gonna be doing adjectival modification blue ball.
+有时候你会做一些形容词修饰蓝球。
+
+617
+00:35:29,150 --> 00:35:32,705
+These things are very different in their semantics.
+这些东西在语义上是非常不同的。
+
+618
+00:35:32,705 --> 00:35:36,980
+Can it really be the case that you can just have one weight matrix that is
+你真的可以拥有一个权重矩阵吗？
+
+619
+00:35:36,980 --> 00:35:41,645
+this universal composition function for putting together the meaning of phrases?
+这个通用的组合功能，用于拼写短语的含义？
+
+620
+00:35:41,645 --> 00:35:43,280
+Could that possibly work?
+这可能有用吗？
+
+621
+00:35:43,280 --> 00:35:45,020
+And you sort of might suspect,
+你有点怀疑，
+
+622
+00:35:45,020 --> 00:35:46,820
+um, it doesn't work.
+嗯，它不起作用。
+
+623
+00:35:46,820 --> 00:35:49,355
+Um, and so I'm gonna go on and, um,
+嗯，所以我会继续，嗯，
+
+624
+00:35:49,355 --> 00:35:53,150
+show, um, some of those different things.
+显示，嗯，其中一些不同的东西。
+
+625
+00:35:53,150 --> 00:35:57,965
+But really, um, before I show the different things,
+但是，真的，嗯，在我展示不同的东西之前，
+
+626
+00:35:57,965 --> 00:36:02,810
+um, I'm gonna show one more version that's sort of related to the first thing,
+嗯，我要再显示一个与第一件事有关的版本，
+
+627
+00:36:02,810 --> 00:36:07,355
+which actually gave a pretty successful and good parser,
+这实际上给了一个非常成功和良好的解析器，
+
+628
+00:36:07,355 --> 00:36:10,250
+um, for doing, um,
+嗯，干嘛，嗯，
+
+629
+00:36:10,250 --> 00:36:14,195
+context-free style constituency parsing.
+无上下文风格选区解析。
+
+630
+00:36:14,195 --> 00:36:21,950
+And so this was another way of getting away from the parsing being completely greedy.
+所以这是摆脱解析完全贪婪的另一种方式。
+
+631
+00:36:21,950 --> 00:36:26,900
+Um, which was to actually split apart the two parts of g. We
+嗯，实际上是将g的两个部分分开了。我们
+
+632
+00:36:26,900 --> 00:36:31,880
+have to come up with a tree structure for our sentence from,
+必须为我们的句子想出一个树形结构，
+
+633
+00:36:31,880 --> 00:36:34,805
+'Let's compute the meaning of the sentence'.
+'让我们计算句子的意思'。
+
+634
+00:36:34,805 --> 00:36:37,280
+And so the thinking was, well,
+所以这个想法是，好吧，
+
+635
+00:36:37,280 --> 00:36:42,965
+in terms of deciding what's a good tree structure for a sentence,
+在决定一个句子的好树结构方面，
+
+636
+00:36:42,965 --> 00:36:47,015
+that's actually something you can do pretty well with the symbolic grammar.
+这实际上是你可以用符号语法做得很好的东西。
+
+637
+00:36:47,015 --> 00:36:49,940
+But the problems with symbolic grammars aren't
+但符号语法的问题却不是
+
+638
+00:36:49,940 --> 00:36:53,270
+that they can't put tree structures over sentences.
+他们不能把树结构放在句子上。
+
+639
+00:36:53,270 --> 00:36:55,790
+The problems you have with those grammars is that,
+你对这些语法的问题是，
+
+640
+00:36:55,790 --> 00:36:59,390
+they can't compute meaning representation and they're not
+他们不能计算意义表示而他们不能
+
+641
+00:36:59,390 --> 00:37:03,710
+very good at choosing between alternative tree structures.
+非常擅长在替代树结构之间进行选择。
+
+642
+00:37:03,710 --> 00:37:07,175
+But we can divide up the two parts.
+但我们可以将这两部分分开。
+
+643
+00:37:07,175 --> 00:37:08,750
+So what we can do is say, well,
+所以我们能做的就是说，好吧，
+
+644
+00:37:08,750 --> 00:37:13,175
+let's just use a regular probabilistic Context-Free Grammar
+让我们使用常规的概率无上下文语法
+
+645
+00:37:13,175 --> 00:37:16,580
+to generate possible tree structures for sentences.
+为句子生成可能的树结构。
+
+646
+00:37:16,580 --> 00:37:19,205
+We can generate a k best list and say,
+我们可以生成ak最佳列表并说，
+
+647
+00:37:19,205 --> 00:37:21,110
+what are the 50 best, um,
+什么是最好的50，嗯，
+
+648
+00:37:21,110 --> 00:37:24,230
+context-free grammar structures for this sentence?
+这句话的无上下文语法结构？
+
+649
+00:37:24,230 --> 00:37:28,775
+And that's something we can do very efficiently with dynamic programming algorithms.
+这是我们可以通过动态编程算法非常有效地完成的事情。
+
+650
+00:37:28,775 --> 00:37:33,125
+And then we can work out a neural net,
+然后我们可以找出一个神经网络，
+
+651
+00:37:33,125 --> 00:37:38,105
+um, that will work out the meaning representation of the sentence.
+嗯，这将解决句子的意义表示。
+
+652
+00:37:38,105 --> 00:37:41,675
+Um, and so that led to this, um,
+嗯，这导致了这个，嗯，
+
+653
+00:37:41,675 --> 00:37:46,670
+what's called syntactically untied recursive neural network.
+什么叫做语法解开的递归神经网络。
+
+654
+00:37:46,670 --> 00:37:51,260
+Um, so essentially what this is saying is that we
+嗯，基本上这就是说我们
+
+655
+00:37:51,260 --> 00:37:55,925
+ha- for each node and the sentence it's got a category,
+ha-对于每个节点和句子都有一个类别，
+
+656
+00:37:55,925 --> 00:37:58,940
+um, of a symbolic context-free grammar.
+嗯，一个象征性的无语境语法。
+
+657
+00:37:58,940 --> 00:38:02,630
+So they're category A and B and C. So when
+所以他们是A，B和C类。所以
+
+658
+00:38:02,630 --> 00:38:06,500
+we put things together we'll be able to say, okay.
+我们把事情放在一起，我们可以说，好的。
+
+659
+00:38:06,500 --> 00:38:10,430
+We've got a rule that says, um,
+我们有一条规则说，嗯，
+
+660
+00:38:10,430 --> 00:38:12,620
+X goes to BC,
+X去了BC，
+
+661
+00:38:12,620 --> 00:38:15,365
+so that licenses this node here.
+所以在这里许可这个节点。
+
+662
+00:38:15,365 --> 00:38:18,800
+So that part of the parsing is symbolic.
+所以解析的一部分是象征性的。
+
+663
+00:38:18,800 --> 00:38:21,050
+Then- then we want to, um,
+然后 - 我们想，嗯，
+
+664
+00:38:21,050 --> 00:38:24,110
+work out the meaning of this phrase.
+弄清楚这句话的意思。
+
+665
+00:38:24,110 --> 00:38:27,770
+Um, and well, the second problem I talked about
+嗯，好吧，我谈到的第二个问题
+
+666
+00:38:27,770 --> 00:38:32,075
+was surely just having a one way of doing composition
+肯定只是一种做作文的方式
+
+667
+00:38:32,075 --> 00:38:35,990
+is expecting a lot too much to be able to have
+期待能够拥有太多的东西
+
+668
+00:38:35,990 --> 00:38:40,535
+sort of verb and object versus adjective and noun composed the same way.
+动词和宾语与形容词和名词的组合方式相同。
+
+669
+00:38:40,535 --> 00:38:42,980
+So we have this idea of well,
+所以我们有这个想法，
+
+670
+00:38:42,980 --> 00:38:46,190
+since we now know about the syntactic categories of
+因为我们现在知道了语法的类别
+
+671
+00:38:46,190 --> 00:38:51,215
+the children that we maybe know that this is an adjective and this is a noun.
+孩子们，我们可能知道这是一个形容词，这是一个名词。
+
+672
+00:38:51,215 --> 00:38:55,010
+What we could do is have different weight matrices for
+我们能做的是有不同的权重矩阵
+
+673
+00:38:55,010 --> 00:38:58,895
+composition depending on what the categories are.
+组成取决于类别。
+
+674
+00:38:58,895 --> 00:39:01,790
+So rather than where before there was
+所以而不是之前的地方
+
+675
+00:39:01,790 --> 00:39:07,325
+just this one universal weight matrix which was meant to do all meaning composition.
+只是这一个通用的权重矩阵，意味着做所有意义的组合。
+
+676
+00:39:07,325 --> 00:39:08,810
+Here we can have,
+我们可以在这里，
+
+677
+00:39:08,810 --> 00:39:11,840
+this is the weight matrix for combining together
+这是组合在一起的权重矩阵
+
+678
+00:39:11,840 --> 00:39:15,439
+the meanings of an adjective and a noun and it will compute,
+形容词和名词的含义，它会计算，
+
+679
+00:39:15,439 --> 00:39:17,810
+um, the meaning of this constituent.
+嗯，这个成分的含义。
+
+680
+00:39:17,810 --> 00:39:21,590
+But then we'll have a different weight matrix for combining
+但是我们将有一个不同的权重矩阵进行组合
+
+681
+00:39:21,590 --> 00:39:27,870
+together the meanings of a determiner and a noun phrase or something like that.
+一起确定者和名词短语的含义或类似的东西。
+
+682
+00:39:30,090 --> 00:39:34,450
+Okay. Um, yes.
+好的。嗯，是的。
+
+683
+00:39:34,450 --> 00:39:37,360
+So I sort of always said this one I guess,
+所以我总是说这个我猜，
+
+684
+00:39:37,360 --> 00:39:40,825
+um, we wanted to be able to do things quickly.
+嗯，我们希望能够快速做事。
+
+685
+00:39:40,825 --> 00:39:44,830
+And so our solution to be able to do that is we sort of
+所以我们能够做到这一点的解决方案就是我们
+
+686
+00:39:44,830 --> 00:39:49,525
+used a probabilistic context-free grammar to find likely parses,
+使用概率上下文无关语法来查找可能的解析，
+
+687
+00:39:49,525 --> 00:39:55,120
+um, and then only worked out our meaning for ones that were, um, quite probable.
+嗯，然后只为那些很有可能的人找出了我们的意思。
+
+688
+00:39:55,120 --> 00:39:59,050
+And so we call this result a compositional vector grammar which was
+所以我们将这个结果称为组合矢量语法
+
+689
+00:39:59,050 --> 00:40:03,745
+a combination of a PCFG and a tree recursive neural network.
+PCFG和树递归神经网络的组合。
+
+690
+00:40:03,745 --> 00:40:07,440
+Um, and yeah.
+嗯，是的
+
+691
+00:40:07,440 --> 00:40:11,010
+So, um, essentially at the time,
+所以，嗯，基本上当时，
+
+692
+00:40:11,010 --> 00:40:14,235
+this actually gave a pretty good constituency parser.
+这实际上给了一个非常好的选区解析器。
+
+693
+00:40:14,235 --> 00:40:16,845
+So there are sort of lots of results here.
+所以这里有很多结果。
+
+694
+00:40:16,845 --> 00:40:20,040
+The top ones are kind of our classic older, um,
+顶级的是我们经典的老年人，嗯，
+
+695
+00:40:20,040 --> 00:40:25,285
+Stanford Parser which is a PCFG,  the kind of parsers that people had built.
+Stanford Parser是PCFG，是人们建造的解析器。
+
+696
+00:40:25,285 --> 00:40:32,080
+This is our compositional vector grammar that the time of this being done in 2013,
+这是我们的组合矢量语法，这个时间是在2013年完成的，
+
+697
+00:40:32,080 --> 00:40:34,690
+it wasn't the very best parser available.
+它不是最好的解析器。
+
+698
+00:40:34,690 --> 00:40:38,155
+There had been some better work by Eugene Charniak at Brown.
+布朗的Eugene Charniak做了一些更好的工作。
+
+699
+00:40:38,155 --> 00:40:41,980
+But we actually had a pretty good parser coming out of that system.
+但是我们实际上有一个非常好的解析器来自该系统。
+
+700
+00:40:41,980 --> 00:40:46,495
+But what was perhaps a bit more interesting was we,
+但是我们可能更有趣的是，
+
+701
+00:40:46,495 --> 00:40:50,845
+we didn't only have a parser that was meant to give the right parse trees.
+我们不仅有一个解析器，旨在提供正确的解析树。
+
+702
+00:40:50,845 --> 00:40:54,850
+We are also computing meaning representations of nodes.
+我们还计算节点的意义表示。
+
+703
+00:40:54,850 --> 00:40:58,210
+And as a kind of a consequence of that,
+作为一种结果，
+
+704
+00:40:58,210 --> 00:41:02,140
+you can look at not only meaning representations of nodes.
+你不仅可以看到节点的意义表示。
+
+705
+00:41:02,140 --> 00:41:06,355
+You could learn about the weight matrices that these models were learning,
+你可以了解这些模型正在学习的权重矩阵，
+
+706
+00:41:06,355 --> 00:41:08,980
+um, when they combine together meanings.
+嗯，当他们将意义结合在一起时。
+
+707
+00:41:08,980 --> 00:41:13,600
+So remember we had these sort of category-specific W matrices,
+所以记住我们有这些类别特定的W矩阵，
+
+708
+00:41:13,600 --> 00:41:17,455
+that were going together with the children to work out the meaning.
+与孩子们一起努力解决这个问题。
+
+709
+00:41:17,455 --> 00:41:20,875
+Um, so these are a little bit hard to interpret.
+嗯，所以这些有点难以解释。
+
+710
+00:41:20,875 --> 00:41:24,130
+But the deal is, when we load these matrices,
+但是，当我们加载这些矩阵时，这笔交易是
+
+711
+00:41:24,130 --> 00:41:27,310
+we initialize them as a pair of diagonal matrices.
+我们将它们初始化为一对对角矩阵。
+
+712
+00:41:27,310 --> 00:41:32,125
+So these are sort of two by one rectangular matrices because there are two children.
+所以这些是两个一个矩形矩阵，因为有两个孩子。
+
+713
+00:41:32,125 --> 00:41:35,335
+Um, so half of it is, um,
+嗯，所以有一半是，嗯，
+
+714
+00:41:35,335 --> 00:41:37,090
+multiplying the left child,
+乘以左边的孩子，
+
+715
+00:41:37,090 --> 00:41:39,535
+the other half is multiplying the right child.
+另一半正在增加正确的孩子。
+
+716
+00:41:39,535 --> 00:41:45,520
+And we initialize them as sort of like a compi- two identity matrices next to each
+我们将它们初始化为类似于每个旁边的复杂身份矩阵
+
+717
+00:41:45,520 --> 00:41:48,895
+other which would give us the sort of default semantics
+其他会给我们提供默认语义的
+
+718
+00:41:48,895 --> 00:41:52,840
+of just averaging until something different was learned in the,
+只是平均，直到学到了不同的东西，
+
+719
+00:41:52,840 --> 00:41:55,690
+in the, in the weight vectors.
+在，在权重向量中。
+
+720
+00:41:55,690 --> 00:42:02,070
+And to the extent that sort of nothing interesting has been learned by the model,
+并且在某种程度上，模型没有学到任何有趣的东西，
+
+721
+00:42:02,070 --> 00:42:08,325
+you'll get yellow along the diagonal and this sort of sky blue in the rest of the field.
+你将沿着对角线变黄，这种天蓝色在其他地方。
+
+722
+00:42:08,325 --> 00:42:11,100
+And to the extent that it's learned something
+并且在某种程度上，它学到了一些东西
+
+723
+00:42:11,100 --> 00:42:14,355
+interesting to take out of the semantics of a child,
+有趣的是取出孩子的语义，
+
+724
+00:42:14,355 --> 00:42:17,770
+you will then start to see reds and oranges on the diagonal,
+然后你会开始看到对角线上的红色和橙色，
+
+725
+00:42:17,770 --> 00:42:22,465
+and dark blues and greens and stuff in the rest of the field.
+和其他领域的深蓝色和绿色和东西。
+
+726
+00:42:22,465 --> 00:42:26,200
+So what you find is that if you train this model,
+所以你发现如果你训练这个模型，
+
+727
+00:42:26,200 --> 00:42:34,225
+it's learning about which children of a phrase are actually the important ones.
+它正在学习一个短语的哪些孩子实际上是重要的。
+
+728
+00:42:34,225 --> 00:42:36,370
+Um, so these ones are saying that if you're
+嗯，所以这些人说如果你是
+
+729
+00:42:36,370 --> 00:42:39,310
+combining together a noun phrase and the coordination,
+将名词短语和协调结合在一起，
+
+730
+00:42:39,310 --> 00:42:41,830
+so something like "the cat and",
+所以像“猫和”，
+
+731
+00:42:41,830 --> 00:42:45,055
+that most of the semantics have to be found in "the cat"
+大多数语义必须在“猫”中找到
+
+732
+00:42:45,055 --> 00:42:48,760
+and not much of the semantics is going to be found in "and".
+并没有太多的语义将在“和”中找到。
+
+733
+00:42:48,760 --> 00:42:52,825
+Whereas if you are combining together a possessive pronoun,
+如果你把所有格代词组合在一起，
+
+734
+00:42:52,825 --> 00:42:55,045
+something like her or his,
+像她或他的东西，
+
+735
+00:42:55,045 --> 00:42:58,615
+um, with a noun phrase inside it like,
+嗯，里面有一个名词短语，
+
+736
+00:42:58,615 --> 00:43:02,425
+um, her tabby cat or something like that.
+嗯，她的虎斑猫或类似的东西。
+
+737
+00:43:02,425 --> 00:43:06,595
+Then most of the meaning is to be found inside the tabby cat constituent.
+然后大部分的意思是在虎斑猫成分中找到。
+
+738
+00:43:06,595 --> 00:43:10,555
+So it's actually learning where the important semantics of sentences is.
+所以它实际上是在学习句子的重要语义。
+
+739
+00:43:10,555 --> 00:43:18,460
+Um, and there're lots of examples of that. Um, yeah.
+嗯，还有很多例子。嗯，是的
+
+740
+00:43:18,460 --> 00:43:21,850
+This one sort of- so this one shows a variety of
+这一种 - 所以这个显示了各种各样的
+
+741
+00:43:21,850 --> 00:43:26,575
+modification structures where adjectives or adverbs,
+形容词或副词的修饰结构，
+
+742
+00:43:26,575 --> 00:43:31,330
+um, modify either a noun phrase or an adjective phrase or
+嗯，修改名词短语或形容词短语或
+
+743
+00:43:31,330 --> 00:43:35,995
+just a single adjective is multiplying a noun phrase.
+只有一个形容词乘以名词短语。
+
+744
+00:43:35,995 --> 00:43:40,120
+And the thing that you seem to notice is that there are particular dimensions which are
+你似乎注意到的事情是有特定的维度
+
+745
+00:43:40,120 --> 00:43:44,200
+kind of capturing sort of modification meanings.
+有点捕捉某种修饰意义。
+
+746
+00:43:44,200 --> 00:43:50,395
+So dimension 6 and dimension 11 is sort of showing up in these different,
+所以尺寸6和尺寸11有点出现在这些不同的，
+
+747
+00:43:50,395 --> 00:43:53,830
+um, combinations here, as sort of capturing meaning components.
+嗯，这里的组合，作为捕捉意义组件的一种。
+
+748
+00:43:53,830 --> 00:43:55,645
+So that was kind of neat.
+所以这很整洁。
+
+749
+00:43:55,645 --> 00:44:00,430
+And so this slightly more complex model actually worked pretty
+所以这个稍微复杂的模型实际上非常有效
+
+750
+00:44:00,430 --> 00:44:05,035
+well at capturing a meaning of phrases and sentences.
+很好地捕捉短语和句子的含义。
+
+751
+00:44:05,035 --> 00:44:07,105
+So in this test here,
+所以在这个测试中，
+
+752
+00:44:07,105 --> 00:44:11,920
+we were giving it- the system a test sentence and saying well,
+我们给它 - 系统一个测试句并说得好，
+
+753
+00:44:11,920 --> 00:44:17,785
+what are the other- what are sentences that are most similar in meaning,
+什么是其他 - 什么是最相似的句子，
+
+754
+00:44:17,785 --> 00:44:22,120
+nearest to paraphrases in our corpus for this sentence?
+最接近我们语料库中对于这句话的释义？
+
+755
+00:44:22,120 --> 00:44:25,990
+So if all the figures are adjusted for seasonal variations,
+因此，如果所有数字都根据季节变化进行调整，
+
+756
+00:44:25,990 --> 00:44:29,650
+the two most similar other sentences in the corpus were,
+语料库中两个最相似的句子是，
+
+757
+00:44:29,650 --> 00:44:32,995
+all the numbers are adjusted for seasonal vet fluctuation.
+所有数字都根据季节性兽医波动进行调整。
+
+758
+00:44:32,995 --> 00:44:34,270
+That's a pretty easy one.
+这很简单。
+
+759
+00:44:34,270 --> 00:44:37,960
+Or all the figures are adjusted to remove usual seasonal patterns.
+或者调整所有数字以消除通常的季节性模式。
+
+760
+00:44:37,960 --> 00:44:40,240
+So that seems to be working pretty well.
+所以这似乎工作得很好。
+
+761
+00:44:40,240 --> 00:44:43,000
+"Knight-Ridder wouldn't a comment on the author,
+“Knight-Ridder不会对作者发表评论，
+
+762
+00:44:43,000 --> 00:44:46,360
+Harsco declined to say what country placed the order."
+哈斯科拒绝透露哪个国家下订单。“
+
+763
+00:44:46,360 --> 00:44:48,640
+The semantics there are a bit more different but it
+那里的语义有点不同但是它
+
+764
+00:44:48,640 --> 00:44:51,490
+seems like it is capturing something similar.
+好像它正在捕捉类似的东西。
+
+765
+00:44:51,490 --> 00:44:53,860
+"Um, Coastal wouldn't disclose the terms."
+“嗯，Coastal不会透露这些条款。”
+
+766
+00:44:53,860 --> 00:44:55,630
+That's kind of a really interesting one,
+那是一个非常有趣的，
+
+767
+00:44:55,630 --> 00:45:00,010
+because that one is actually very similar in meaning but it's expressed in
+因为那个实际上在意义上非常相似，但它表达的是
+
+768
+00:45:00,010 --> 00:45:05,215
+a very different way in terms of the words and the syntactic structure that are used.
+就所使用的单词和句法结构而言，这是一种非常不同的方式。
+
+769
+00:45:05,215 --> 00:45:09,820
+Okay, so that was progress because now
+好的，所以这是进步，因为现在
+
+770
+00:45:09,820 --> 00:45:14,815
+we could have different matrices for different constituent types.
+我们可以为不同的组成类型使用不同的矩阵。
+
+771
+00:45:14,815 --> 00:45:22,015
+Um, but there's still some reason to think that we didn't have enough power,
+嗯，但仍有一些理由认为我们没有足够的力量，
+
+772
+00:45:22,015 --> 00:45:28,225
+and that was we're still at heart using this very simple compositional structure
+那就是我们仍然在使用这种非常简单的构图结构
+
+773
+00:45:28,225 --> 00:45:34,960
+where we're just concatenating the two children's vectors and multiplying it by a matrix.
+我们只是连接两个孩子的向量并将其乘以矩阵。
+
+774
+00:45:34,960 --> 00:45:37,885
+So that means the two words, um,
+这意味着两个词，嗯，
+
+775
+00:45:37,885 --> 00:45:41,470
+didn't interact with each other in terms of their meaning.
+在意义上没有相互影响。
+
+776
+00:45:41,470 --> 00:45:49,450
+Um, but, um, it seems like we want to have them interact in their meaning, right?
+嗯，但是，嗯，好像我们想要让他们互相交流，对吧？
+
+777
+00:45:49,450 --> 00:45:54,100
+So in particular if you if you think about
+所以特别是如果你想的话
+
+778
+00:45:54,100 --> 00:45:59,305
+human languages and the kind of things that people look at in linguistic semantics,
+人类语言和人们在语言语义学中看到的东西，
+
+779
+00:45:59,305 --> 00:46:04,465
+you get words that appear to be kind of modifiers or operators.
+你会得到一些似乎是修饰语或运算符的单词。
+
+780
+00:46:04,465 --> 00:46:06,970
+So the word very,
+所以这个词非常，
+
+781
+00:46:06,970 --> 00:46:09,580
+sort of doesn't mean much by itself.
+有点并不意味着什么。
+
+782
+00:46:09,580 --> 00:46:14,980
+I mean it means something like strengthening or more so or something like that,
+我的意思是它意味着像强化或类似或类似的东西，
+
+783
+00:46:14,980 --> 00:46:18,160
+but you know, it doesn't really have a meaning, right?
+但是你知道，它确实没有意义，对吧？
+
+784
+00:46:18,160 --> 00:46:20,050
+It doesn't have any denotation.
+它没有任何外延。
+
+785
+00:46:20,050 --> 00:46:22,360
+You can't show me very things, right?
+你不能告诉我很多东西吧？
+
+786
+00:46:22,360 --> 00:46:25,135
+You can show me chairs and pens and, um,
+你可以告诉我椅子和笔，嗯，
+
+787
+00:46:25,135 --> 00:46:27,910
+children but you can't show me very things,
+孩子，但你不能告诉我很多东西，
+
+788
+00:46:27,910 --> 00:46:32,695
+that the meaning of very seems to be that something comes after it, good.
+非常好的意思似乎就是事情发生了，好的。
+
+789
+00:46:32,695 --> 00:46:39,580
+And this has a sort of an operator meaning of increase on the scale of this thing,
+这有一种运算符意味着增加这个东西的规模，
+
+790
+00:46:39,580 --> 00:46:42,490
+and it can increase on the scale in either direction.
+它可以在任何方向上增加规模。
+
+791
+00:46:42,490 --> 00:46:45,115
+You can have very good or very bad.
+你可以有非常好或非常糟糕的。
+
+792
+00:46:45,115 --> 00:46:49,990
+So if we want to capture that kind of semantics,
+所以如果我们想捕获那种语义，
+
+793
+00:46:49,990 --> 00:46:53,425
+it seems like we can't capture that kind of semantics by just
+似乎我们不能仅通过捕获那种语义
+
+794
+00:46:53,425 --> 00:46:58,330
+concatenating two vectors and multiplying them by a matrix.
+连接两个向量并将它们乘以矩阵。
+
+795
+00:46:58,330 --> 00:47:04,300
+It seems like what we really want to say is very is gonna grab
+看起来我们真正想说的就是抓住它
+
+796
+00:47:04,300 --> 00:47:06,880
+hold of the meaning of good and
+掌握好和的意义
+
+797
+00:47:06,880 --> 00:47:10,915
+modify it in some ways to produce a new meaning for very good.
+在某些方面修改它以产生非常好的新意义。
+
+798
+00:47:10,915 --> 00:47:15,130
+And indeed, that's the kind of approach that's typically,
+事实上，这种方法通常是
+
+799
+00:47:15,130 --> 00:47:17,980
+um, been done in linguistic semantics.
+嗯，已经完成了语言语义学。
+
+800
+00:47:17,980 --> 00:47:20,530
+So in linguistic theories of semantic,
+所以在语义学的语言学理论中，
+
+801
+00:47:20,530 --> 00:47:22,120
+you would normally say, okay,
+你通常会说，好的，
+
+802
+00:47:22,120 --> 00:47:23,620
+good has a meaning,
+好有意义，
+
+803
+00:47:23,620 --> 00:47:29,530
+very is a function that takes in the meaning of good and returns a meaning of very good.
+非常是一种功能，它具有良好的意义，并返回非常好的意义。
+
+804
+00:47:29,530 --> 00:47:31,825
+And so we wanted to have, um,
+所以我们想拥有，嗯，
+
+805
+00:47:31,825 --> 00:47:35,050
+a way of putting that into a neural network.
+一种将它放入神经网络的方法。
+
+806
+00:47:35,050 --> 00:47:40,750
+And so to try and come up with a new composition function as to how to do that.
+因此，尝试提出一个新的组合功能，如何做到这一点。
+
+807
+00:47:40,750 --> 00:47:44,530
+And there are various ways that you could think about
+您可以通过各种方式进行思考
+
+808
+00:47:44,530 --> 00:47:48,340
+doing that and other people have had a couple of different attempts.
+这样做，其他人有几个不同的尝试。
+
+809
+00:47:48,340 --> 00:47:52,915
+But essentially what was in our head is well,
+但基本上我们脑子里的东西很好，
+
+810
+00:47:52,915 --> 00:47:55,120
+we have word vectors,
+我们有单词向量，
+
+811
+00:47:55,120 --> 00:48:01,990
+and if we want to say that very takes the meaning of good and returns a new meaning,
+如果我们想说这非常有意义并带来新意义，
+
+812
+00:48:01,990 --> 00:48:05,410
+the kind of obvious thing to do is to say very
+那种显而易见的事情就是说非常
+
+813
+00:48:05,410 --> 00:48:08,830
+has a matrix attached to it because then we could use the,
+有一个矩阵附加到它，因为那时我们可以使用，
+
+814
+00:48:08,830 --> 00:48:13,990
+the very matrix and multiply it by the good vector and we get a new,
+非常矩阵并乘以良好的向量，我们得到一个新的，
+
+815
+00:48:13,990 --> 00:48:16,360
+um, vector coming out.
+嗯，矢量出来了。
+
+816
+00:48:16,360 --> 00:48:19,045
+And so then, well,
+那么，好吧，
+
+817
+00:48:19,045 --> 00:48:21,310
+the problem is, uh,
+问题是，呃，
+
+818
+00:48:21,310 --> 00:48:25,810
+which- then which words have vectors and which words have matrices?
+哪个 - 哪些词有向量，哪些词有矩阵？
+
+819
+00:48:25,810 --> 00:48:27,700
+And that's kind of, um,
+那就是那种，嗯，
+
+820
+00:48:27,700 --> 00:48:30,190
+hard to know the answer to.
+很难知道答案。
+
+821
+00:48:30,190 --> 00:48:32,485
+I mean, in particular, um,
+我的意思是，尤其是，嗯，
+
+822
+00:48:32,485 --> 00:48:35,875
+words that act as operators can,
+作为运营商的话可以，
+
+823
+00:48:35,875 --> 00:48:39,550
+um, often themselves be modified.
+嗯，经常自己被修改。
+
+824
+00:48:39,550 --> 00:48:44,305
+Um, and so, um, that you know,
+嗯，嗯，你知道，
+
+825
+00:48:44,305 --> 00:48:49,680
+good can also- good also is a operator, right?
+好还可以 - 好也是一个运营商，对吗？
+
+826
+00:48:49,680 --> 00:48:52,740
+So that from a sort of a person,
+所以，从某种人，
+
+827
+00:48:52,740 --> 00:48:56,115
+you can have a good person and that's sort of also an operator,
+你可以有一个好人，这也是一个操作员，
+
+828
+00:48:56,115 --> 00:48:58,290
+and very is modifying that good.
+而且正在修改这个好处。
+
+829
+00:48:58,290 --> 00:49:03,460
+So the idea we came up with is let's not try and predetermine all of this.
+所以我们提出的想法是让我们不要尝试预先确定所有这一切。
+
+830
+00:49:03,460 --> 00:49:07,630
+Why don't we say that every word and every phrase has
+为什么我们不说每个词和每个短语都有
+
+831
+00:49:07,630 --> 00:49:12,385
+connected to it both matrix and vector.
+矩阵和矢量都连接到它。
+
+832
+00:49:12,385 --> 00:49:15,175
+So here's our very good movie.
+所以这是我们非常好的电影。
+
+833
+00:49:15,175 --> 00:49:16,645
+So for each word,
+所以对于每个单词，
+
+834
+00:49:16,645 --> 00:49:19,945
+we have a vector meaning and it has a matrix meaning,
+我们有一个矢量意义，它有一个矩阵意义，
+
+835
+00:49:19,945 --> 00:49:23,530
+and then as we start to build up phrases like very good,
+然后我们开始建立非常好的短语，
+
+836
+00:49:23,530 --> 00:49:28,795
+they're also going to have a vector meaning and a matrix meaning.
+它们也将具有矢量意义和矩阵意义。
+
+837
+00:49:28,795 --> 00:49:32,635
+And so what we proposed was,
+所以我们提出的是，
+
+838
+00:49:32,635 --> 00:49:34,390
+um, so first of all,
+嗯，首先，
+
+839
+00:49:34,390 --> 00:49:37,015
+we, we would like to be able, um,
+我们，我们希望能够，嗯，
+
+840
+00:49:37,015 --> 00:49:40,765
+to calculate, um, the vector meanings.
+计算，嗯，向量含义。
+
+841
+00:49:40,765 --> 00:49:47,005
+So to work out the vector meaning of a phrase like very good.
+所以要弄清楚一个非常好的短语的向量含义。
+
+842
+00:49:47,005 --> 00:49:49,540
+Each word has a matrix meaning.
+每个单词都有一个矩阵含义。
+
+843
+00:49:49,540 --> 00:49:53,680
+And so we're going to combine their opposing matrix and vector meaning.
+所以我们将结合他们的对立矩阵和向量意义。
+
+844
+00:49:53,680 --> 00:49:56,860
+So we're going to take the matrix meaning of
+所以我们将采用矩阵的含义
+
+845
+00:49:56,860 --> 00:50:00,610
+good and multiply it by the vector meaning of very.
+好，并乘以非常的矢量意义。
+
+846
+00:50:00,610 --> 00:50:03,910
+And we're going to take the matrix meaning of very and
+我们将采用矩阵的含义
+
+847
+00:50:03,910 --> 00:50:07,525
+multiply it by the vector meaning of good.
+将它乘以良好的向量含义。
+
+848
+00:50:07,525 --> 00:50:11,185
+And so we're going to have both of those two things.
+所以我们将同时拥有这两件事。
+
+849
+00:50:11,185 --> 00:50:17,620
+And then we're going to have a neural network layer like before that combine those together.
+然后我们将像以前一样将神经网络层结合在一起。
+
+850
+00:50:17,620 --> 00:50:19,540
+And so that's sort of in the red box.
+这就是红盒子里的那种。
+
+851
+00:50:19,540 --> 00:50:22,045
+Then those two things were concatenated,
+然后这两件事被连接在一起，
+
+852
+00:50:22,045 --> 00:50:25,840
+and put through the kind of neural network layer we had before to give us
+并通过我们之前提供的那种神经网络层给我们
+
+853
+00:50:25,840 --> 00:50:30,235
+a final vector meaning on this, for the phrase.
+这个短语的最终载体意思就是这个。
+
+854
+00:50:30,235 --> 00:50:34,675
+And then we also needed a matrix meaning for the phrase.
+然后我们还需要这个短语的矩阵含义。
+
+855
+00:50:34,675 --> 00:50:38,395
+And so for the matrix meaning for the phrase, um.
+对于短语的矩阵意义，嗯。
+
+856
+00:50:38,395 --> 00:50:44,185
+We did this kind of simple model which maybe actually wasn't very good which was to say,
+我们做了这种简单的模型，可能实际上并不是很好，也就是说，
+
+857
+00:50:44,185 --> 00:50:50,260
+let's just concatenate the two matrices of the- um,
+让我们简单地连接这两个矩阵，
+
+858
+00:50:50,260 --> 00:50:53,560
+the constituents, multiply them by
+选民，乘以他们
+
+859
+00:50:53,560 --> 00:50:57,280
+another matrix and that's then going to give us a matrix,
+另一个矩阵然后会给我们一个矩阵，
+
+860
+00:50:57,280 --> 00:50:59,920
+um, version of the parent node.
+嗯，父节点的版本。
+
+861
+00:50:59,920 --> 00:51:05,605
+And so this was gave us our new more compo- more powerful composition procedure.
+所以这给了我们新的更强大的组合程序。
+
+862
+00:51:05,605 --> 00:51:11,620
+Um, this did seem like it could do some kind of good things that captured,
+嗯，这似乎可以做一些捕获的好东西，
+
+863
+00:51:11,620 --> 00:51:17,980
+uh, uh, sort of operator semantics where one word modified the meaning of another word.
+呃，呃，一种运算符语义，其中一个单词修饰了另一个单词的含义。
+
+864
+00:51:17,980 --> 00:51:25,610
+Um, so here's a kind of a neat thing that we were able to do with this.
+嗯，所以这是一个我们能够用它做的一件好事。
+
+865
+00:51:25,620 --> 00:51:30,040
+Um, that we are wanting to be able to work out
+嗯，我们希望能够解决这个问题
+
+866
+00:51:30,040 --> 00:51:34,330
+the semantics of an operator modifying another word.
+修改另一个单词的操作符的语义。
+
+867
+00:51:34,330 --> 00:51:40,450
+So unbelievably annoying, unbelievably awesome, unbelievably sad.
+令人难以置信的烦人，令人难以置信的令人难以置信的令人难以置信的悲伤。
+
+868
+00:51:40,450 --> 00:51:44,260
+Um, not annoying, not awesome, not sad.
+嗯，不讨厌，不太棒，不难过。
+
+869
+00:51:44,260 --> 00:51:48,340
+[NOISE] And so this was contrasting,
+[NOISE]所以这是对比的，
+
+870
+00:51:48,340 --> 00:51:54,205
+our, um, old model versus the new model.
+我们，嗯，旧模型与新模型。
+
+871
+00:51:54,205 --> 00:51:58,345
+And this scale is a scale of positive to negative.
+而这个规模是一个积极到消极的尺度。
+
+872
+00:51:58,345 --> 00:52:03,210
+So this is completely negative to completely positive, all right?
+所以这对完全正面完全是消极的，好吗？
+
+873
+00:52:03,210 --> 00:52:06,750
+And so the kind of contrast you get,
+所以你得到的那种对比，
+
+874
+00:52:06,750 --> 00:52:09,910
+uh, that for, um,
+呃，那个，嗯，
+
+875
+00:52:09,910 --> 00:52:15,290
+not annoying that the simple model thought that this was pretty negative,
+并不觉得简单模型认为这是非常消极的，
+
+876
+00:52:15,290 --> 00:52:19,070
+whereas the new model thinks this is pretty neutral in meaning,
+而新模型认为这在意义上是非常中立的，
+
+877
+00:52:19,070 --> 00:52:22,615
+and that seems to be reasonably correct.
+这似乎是合理的正确。
+
+878
+00:52:22,615 --> 00:52:25,210
+Um, but not sad,
+嗯，但不是悲伤，
+
+879
+00:52:25,210 --> 00:52:31,180
+that means it's a little bit positive and both models were trying to capt- capture that,
+这意味着它有点积极，两个模型都试图捕获 - 捕获，
+
+880
+00:52:31,180 --> 00:52:34,775
+that- you know, the results here are a little bit ambivalent,
+你知道，这里的结果有点矛盾，
+
+881
+00:52:34,775 --> 00:52:36,970
+but- but it sort of seems that they sort of go a
+但是 - 但它似乎有点像
+
+882
+00:52:36,970 --> 00:52:40,105
+little bit in the direction of what we want. Yes.
+我们想要的方向一点点。是。
+
+883
+00:52:40,105 --> 00:52:42,640
+What is the ground truth in the "not sad" example?
+“不悲伤”的例子中的基本事实是什么？
+
+884
+00:52:42,640 --> 00:52:45,745
+Oh, yeah. So this ground truth
+哦耶。所以这个基本事实
+
+885
+00:52:45,745 --> 00:52:49,510
+was- we actually asked a whole bunch of human beings to say,
+是 - 我们实际上要求一大群人说，
+
+886
+00:52:49,510 --> 00:52:53,215
+um, rate the [LAUGHTER] meaning of not sad,
+嗯，评价[笑声]不悲伤的意思，
+
+887
+00:52:53,215 --> 00:52:55,210
+on this scale of 1 to 10.
+在这个1至10的范围内。
+
+888
+00:52:55,210 --> 00:52:58,390
+Maybe this wasn't a very good clear task because as you can see it,
+也许这不是一个非常明确的任务，因为你可以看到它，
+
+889
+00:52:58,390 --> 00:53:01,630
+bounced around a lot [LAUGHTER] as to,
+围绕很多[笑声]反弹，
+
+890
+00:53:01,630 --> 00:53:05,350
+um, what kind of ratings we were getting for things.
+嗯，我们得到了什么样的评价。
+
+891
+00:53:05,350 --> 00:53:08,230
+But yeah, that was actually kind of getting human judgments.
+但是，是的，这实际上是一种人类的判断。
+
+892
+00:53:08,230 --> 00:53:13,464
+Um, we also then use this,
+嗯，我们也用这个，
+
+893
+00:53:13,464 --> 00:53:15,220
+um, model to say, "Well,
+嗯，模特说，“嗯，
+
+894
+00:53:15,220 --> 00:53:18,910
+could we do, um, semantic classification tasks?"
+我们能做什么，嗯，语义分类任务？“
+
+895
+00:53:18,910 --> 00:53:24,965
+So if we wanted to understand relations between different noun phrases,
+所以如果我们想要理解不同名词短语之间的关系，
+
+896
+00:53:24,965 --> 00:53:28,255
+so this was a dataset where, um,
+所以这是一个数据集，嗯，
+
+897
+00:53:28,255 --> 00:53:32,695
+there were relations marked between two noun phrases.
+两个名词短语之间存在关系。
+
+898
+00:53:32,695 --> 00:53:37,390
+My apartment has a pretty large kitchen that that was seen as an example of
+我的公寓有一个漂亮的大厨房，被视为一个例子
+
+899
+00:53:37,390 --> 00:53:43,840
+a component-whole, a part of relationship between the two noun phrases,
+一个组件整体，两个名词短语之间的关系的一部分，
+
+900
+00:53:43,840 --> 00:53:49,210
+and there were other relationships between different kinds of noun phrases.
+并且不同类型的名词短语之间存在其他关系。
+
+901
+00:53:49,210 --> 00:53:52,240
+So if it was the movie showed wars, um,
+所以如果电影显示战争，嗯，
+
+902
+00:53:52,240 --> 00:53:54,535
+that that was then a message topic,
+那是一个消息主题，
+
+903
+00:53:54,535 --> 00:53:59,455
+so there's some communication medium that contains some topic relationship.
+所以有一些通信媒介包含一些主题关系。
+
+904
+00:53:59,455 --> 00:54:01,930
+And so we were using this kind of
+所以我们使用这种方式
+
+905
+00:54:01,930 --> 00:54:05,860
+neural network to sort of build our meaning representations and
+神经网络来构建我们的意义表征和
+
+906
+00:54:05,860 --> 00:54:06,940
+then putting them through
+然后把它们穿过
+
+907
+00:54:06,940 --> 00:54:12,395
+another neural network layer as a classifier to see how well we did.
+另一个神经网络层作为分类器，看看我们做得多好。
+
+908
+00:54:12,395 --> 00:54:15,580
+And so we got some sort of fairly good results on that.
+所以我们得到了一些相当不错的结果。
+
+909
+00:54:15,580 --> 00:54:18,970
+So this was a dataset that people had worked on with
+所以这是人们一直在研究的数据集
+
+910
+00:54:18,970 --> 00:54:24,070
+traditional NLP systems of different kinds of machine learning methods.
+传统的NLP系统的各种机器学习方法。
+
+911
+00:54:24,070 --> 00:54:26,170
+But in some sense, you know,
+但从某种意义上说，你知道，
+
+912
+00:54:26,170 --> 00:54:29,710
+what we were interested in was we seem to be making progress in having
+我们感兴趣的是我们似乎在取得进展
+
+913
+00:54:29,710 --> 00:54:32,440
+a better semantic composition system that
+一个更好的语义合成系统
+
+914
+00:54:32,440 --> 00:54:37,180
+our old recursive neural network was getting about 75 percent,
+我们旧的递归神经网络大约增加了75％，
+
+915
+00:54:37,180 --> 00:54:40,255
+and then our new one was getting about 79 percent,
+然后我们新的约占79％，
+
+916
+00:54:40,255 --> 00:54:45,280
+which we could sort of push up further by putting more features into our system.
+我们可以通过在系统中添加更多功能来进一步推进。
+
+917
+00:54:45,280 --> 00:54:47,770
+So that was progress,
+这就是进步，
+
+918
+00:54:47,770 --> 00:54:50,815
+um, but we didn't stop there.
+嗯，但我们并没有就此止步。
+
+919
+00:54:50,815 --> 00:54:55,375
+We kept on trying to come up with better ways of doing things.
+我们一直在努力想出更好的做事方式。
+
+920
+00:54:55,375 --> 00:54:59,660
+And so even though things worked fairly well here,
+所以即使事情在这里运作得相当好，
+
+921
+00:54:59,660 --> 00:55:07,500
+it sort of seemed like this way of doing matrices wasn't necessarily very good.
+看起来这种做矩阵的方式并不一定非常好。
+
+922
+00:55:07,500 --> 00:55:09,675
+It sort of had two problems.
+它有两个问题。
+
+923
+00:55:09,675 --> 00:55:15,910
+One problem was it introduced a humongous number of parameters because,
+一个问题是它引入了大量的参数，因为，
+
+924
+00:55:15,910 --> 00:55:19,630
+you know, for just about everything that we've done, otherwise,
+你知道，对于我们所做的一切，否则，
+
+925
+00:55:19,630 --> 00:55:22,360
+words have had a vector and well,
+单词有一个向量和井，
+
+926
+00:55:22,360 --> 00:55:28,090
+maybe sometimes we use quite high dimensional vectors like 1,024,
+也许有时我们使用相当高的维度向量，如1,024，
+
+927
+00:55:28,090 --> 00:55:31,900
+um, [NOISE] but, you know, that's a relatively modest number of parameters.
+嗯，[NOISE]但是，你知道，这是一个相对适度的参数。
+
+928
+00:55:31,900 --> 00:55:35,305
+Whereas once we introduce this matrix here,
+而一旦我们在这里介绍这个矩阵，
+
+929
+00:55:35,305 --> 00:55:40,540
+we've got that number of squared additional parameters for every word.
+我们为每个单词都有这么多的平方附加参数。
+
+930
+00:55:40,540 --> 00:55:43,300
+And essentially because of that number of
+而且主要是因为这个数字
+
+931
+00:55:43,300 --> 00:55:46,690
+parameters to be able to compute this model at all,
+能够计算这个模型的参数，
+
+932
+00:55:46,690 --> 00:55:49,180
+we were making the vector size small.
+我们使矢量大小变小。
+
+933
+00:55:49,180 --> 00:55:51,250
+So what we were actually using was that these were
+所以我们实际使用的是这些
+
+934
+00:55:51,250 --> 00:55:55,570
+just 25-dimensional vectors so that the 25 squared,
+只有25维向量使25平方，
+
+935
+00:55:55,570 --> 00:56:01,495
+625, still safe, sort of decently within the range in which we could compute.
+625，仍然安全，有点在我们可以计算的范围内。
+
+936
+00:56:01,495 --> 00:56:03,775
+So that was the first problem.
+这是第一个问题。
+
+937
+00:56:03,775 --> 00:56:05,485
+The second problem is,
+第二个问题是，
+
+938
+00:56:05,485 --> 00:56:08,620
+we didn't really have very good ways of
+我们真的没有很好的方法
+
+939
+00:56:08,620 --> 00:56:13,210
+sort of building up the matrix meaning of bigger phrases.
+建立矩阵意义的更大的短语。
+
+940
+00:56:13,210 --> 00:56:14,350
+I mean, you know,
+我的意思是，你知道，
+
+941
+00:56:14,350 --> 00:56:17,830
+this sort of seems something simple we could do but it didn't,
+这种看起来很简单我们可以做但事实并非如此
+
+942
+00:56:17,830 --> 00:56:21,970
+you know, feel a very good way of getting a matrix meaning of a phrase.
+你知道，感觉一种非常好的方法来获得短语的矩阵意义。
+
+943
+00:56:21,970 --> 00:56:24,760
+So we sort of wanted to come up with some other way of doing
+所以我们想要提出一些其他的做法
+
+944
+00:56:24,760 --> 00:56:28,375
+things that could fix both of those problems.
+可以解决这两个问题的事情。
+
+945
+00:56:28,375 --> 00:56:33,940
+And then, that led into work on recursive neural tensor networks.
+然后，这导致了递归神经张量网络的工作。
+
+946
+00:56:33,940 --> 00:56:39,415
+Um, and there's a kind of a nice idea here of these neural tensors,
+嗯，这里有一个关于这些神经张量的好主意，
+
+947
+00:56:39,415 --> 00:56:44,590
+which is an idea that's actually been used in other places including, um,
+这个想法实际上已经在其他地方使用，包括，嗯，
+
+948
+00:56:44,590 --> 00:56:49,210
+work on sort of putting vector embeddings of knowledge graphs and so on,
+研究知识图的嵌入矢量嵌入等等，
+
+949
+00:56:49,210 --> 00:56:51,550
+which is a kind of a bit of a nice idea.
+这是一个很好的主意。
+
+950
+00:56:51,550 --> 00:56:55,570
+So I wanted to sort of show a bit of how this model works.
+所以我想要展示一下这个模型是如何工作的。
+
+951
+00:56:55,570 --> 00:56:58,930
+Um, and but just to say, first,
+嗯，但只是说，首先，
+
+952
+00:56:58,930 --> 00:57:03,670
+a place where we applied this model was on the problem of sentiment analysis.
+我们应用这个模型的地方是关于情绪分析的问题。
+
+953
+00:57:03,670 --> 00:57:08,650
+Now, I think the term sentiment analysis has come up a few times as something you can
+现在，我认为情绪分析一词已经出现了几次
+
+954
+00:57:08,650 --> 00:57:13,720
+do and actually which I then mentioned in the last, um, lecture.
+做，实际上我在上一次，嗯，讲座中提到过。
+
+955
+00:57:13,720 --> 00:57:17,320
+But I think we've never really talked for five minutes, um,
+但我想我们从来没有真正谈过五分钟，嗯，
+
+956
+00:57:17,320 --> 00:57:19,450
+in this class on sentiment analysis,
+在这个关于情绪分析的课堂上，
+
+957
+00:57:19,450 --> 00:57:22,645
+so I'll, um, give you this as an example of that.
+所以我，嗯，给你这个作为一个例子。
+
+958
+00:57:22,645 --> 00:57:24,910
+Um, sentiment analysis has actually been
+嗯，情绪分析实际上已经存在
+
+959
+00:57:24,910 --> 00:57:30,940
+a really common and important application in natural language processing.
+在自然语言处理中非常普遍和重要的应用。
+
+960
+00:57:30,940 --> 00:57:34,705
+Um, you're looking at a piece of text and you're sort of saying,
+嗯，你正在看一段文字，你有点儿说，
+
+961
+00:57:34,705 --> 00:57:37,810
+"Is it, um, positive or negative?"
+“是，呃，是积极的还是消极的？”
+
+962
+00:57:37,810 --> 00:57:42,160
+Um, and that's just something that's very useful for lots of, um,
+嗯，这只是对很多人来说非常有用的东西，嗯，
+
+963
+00:57:42,160 --> 00:57:46,955
+commercial applications of looking at product reviews or doing brand,
+查看产品评论或做品牌的商业应用，
+
+964
+00:57:46,955 --> 00:57:51,530
+um, awareness and things like that of sort of looking at sentiment connected to things.
+嗯，意识和类似于看待与事物相关的情绪的事物。
+
+965
+00:57:51,530 --> 00:57:55,540
+And to some extent doing sentiment analysis is easy, right?
+在某种程度上，做情绪分析很容易，对吧？
+
+966
+00:57:55,540 --> 00:57:57,220
+That you can kind of say,
+你可以说，
+
+967
+00:57:57,220 --> 00:57:58,840
+"Well, look at a piece of text.
+“好吧，看一段文字。
+
+968
+00:57:58,840 --> 00:58:00,700
+If you see words like loved,
+如果你看到喜欢的话，
+
+969
+00:58:00,700 --> 00:58:03,265
+great, impressed, marvelous, then it's positive.
+伟大的，令人印象深刻的，非凡的，然后它是积极的。
+
+970
+00:58:03,265 --> 00:58:04,570
+It's a positive review.
+这是一个积极的评论。
+
+971
+00:58:04,570 --> 00:58:06,880
+And if it's saying, bad and awful,
+如果它说，糟糕而可怕，
+
+972
+00:58:06,880 --> 00:58:08,440
+then it's a negative review."
+然后是负面评论。“
+
+973
+00:58:08,440 --> 00:58:13,420
+And to some extent that's the baseline of sentiment analysis that you can use
+在某种程度上，这是您可以使用的情绪分析的基线
+
+974
+00:58:13,420 --> 00:58:18,805
+just either selected word features or all words in a bag of words.
+只需选择单词功能或单词中的所有单词。
+
+975
+00:58:18,805 --> 00:58:20,035
+And if you do that,
+如果你这样做，
+
+976
+00:58:20,035 --> 00:58:22,780
+you don't actually do that badly,
+你实际上做得不好，
+
+977
+00:58:22,780 --> 00:58:25,150
+um, in sentiment analysis.
+嗯，在情绪分析中。
+
+978
+00:58:25,150 --> 00:58:26,650
+If you have longer documents,
+如果你有更长的文件，
+
+979
+00:58:26,650 --> 00:58:31,135
+just looking at bags of words can give you 90 percent in sentiment analysis.
+只要看一袋文字就可以给你90％的情绪分析。
+
+980
+00:58:31,135 --> 00:58:32,335
+But on the other hand,
+但另一方面，
+
+981
+00:58:32,335 --> 00:58:35,140
+things often do get trickier, right?
+事情往往变得棘手，对吧？
+
+982
+00:58:35,140 --> 00:58:38,020
+So, um, this is from Rotten Tomatoes.
+所以，嗯，这是来自烂番茄。
+
+983
+00:58:38,020 --> 00:58:40,450
+With this cast and the subject matter,
+有了这个演员和主题，
+
+984
+00:58:40,450 --> 00:58:43,480
+the movie should have been funnier and more entertaining.
+电影应该更有趣，更有趣。
+
+985
+00:58:43,480 --> 00:58:47,004
+And if you sort of pretend you're a bag of words model,
+如果你有点假装你是一个单词模型袋，
+
+986
+00:58:47,004 --> 00:58:52,840
+the only words in this that are sort of clearly sentiment-laden words, uh,
+在这里唯一的词语是一种明显充满情感的词，呃，
+
+987
+00:58:52,840 --> 00:58:57,969
+entertaining and funnier, and both of those are pretty positive words,
+娱乐性和有趣性，这些都是非常积极的话，
+
+988
+00:58:57,969 --> 00:59:04,615
+um, but it's fairly obvious that this actually is meant to be a bad review of the movie.
+嗯，但很明显，这实际上是对电影的糟糕评论。
+
+989
+00:59:04,615 --> 00:59:07,360
+And so well, how are we meant to know that?
+那么，我们怎么想知道呢？
+
+990
+00:59:07,360 --> 00:59:11,320
+Well, it sort of seems again like what we have to do is meaning composition.
+好吧，它似乎再次像我们要做的那样意味着构图。
+
+991
+00:59:11,320 --> 00:59:15,310
+We have to get sort of phrases like "should have been
+我们必须得到一些像“本来应该的”这样的短语
+
+992
+00:59:15,310 --> 00:59:21,070
+funnier," and then realized that that's actually a negative meaning for a phrase.
+有趣的，“然后意识到这实际上是一个短语的负面含义。
+
+993
+00:59:21,070 --> 00:59:25,690
+And so we wanted to explore how we could look at those sort of meanings for
+因此，我们想要探索如何看待这些意义
+
+994
+00:59:25,690 --> 00:59:33,310
+phrases and explore building up those meanings as doing meaning composition over trees.
+短语和探索将这些含义构建为对树木的意义构成。
+
+995
+00:59:33,310 --> 00:59:36,400
+Um, so the first thing we did, um,
+嗯，所以我们做的第一件事，嗯，
+
+996
+00:59:36,400 --> 00:59:42,490
+was we built a treebank of sentiment trees where we got people to rate sentiment.
+我们是否建立了一个情感树的树库，我们让人们对情绪进行评价。
+
+997
+00:59:42,490 --> 00:59:45,910
+And so this led to the Stanford Sentiment Treebank,
+所以这导致了斯坦福情感树库，
+
+998
+00:59:45,910 --> 00:59:49,675
+which is still a dataset you often see used in, um,
+这仍然是你经常看到的数据集，嗯，
+
+999
+00:59:49,675 --> 00:59:54,280
+various of evaluations with a whole bunch of datasets. Indeed,
+各种数据集的各种评估。确实，
+
+1000
+00:59:54,280 --> 00:59:57,175
+it showed up in decaNLP last week.
+它出现在上周的decaNLP中。
+
+1001
+00:59:57,175 --> 01:00:00,545
+Um, so what we were doing in this was taking,
+嗯，所以我们在这里做的是，
+
+1002
+01:00:00,545 --> 01:00:06,265
+um, sentences which were Rotten Tomatoes sentences from movies.
+嗯，句子是烂电影中的烂番茄句子。
+
+1003
+01:00:06,265 --> 01:00:13,450
+We were parsing them to give tree structure and then we were asking Mechanical Turkers to
+我们正在解析它们以给出树结构，然后我们要求Mechanical Turkers
+
+1004
+01:00:13,450 --> 01:00:16,745
+rate the different phra- the different words and
+评价不同的语言 - 不同的单词和
+
+1005
+01:00:16,745 --> 01:00:21,460
+phrases on a sentiment scale of very positive to very negative.
+情绪量表上的短语非常积极到非常消极。
+
+1006
+01:00:21,460 --> 01:00:25,660
+So lots of stuff is white because it's just not sentiment-laden, right?
+所以很多东西都是白色的，因为它不是充满感情的，对吧？
+
+1007
+01:00:25,660 --> 01:00:27,575
+There's words that are the,
+有的话是，
+
+1008
+01:00:27,575 --> 01:00:29,710
+and there's phrases like the movie and
+还有像电影和电影这样的短语
+
+1009
+01:00:29,710 --> 01:00:33,325
+the movie was- which don't really have any sentiment,
+电影是 - 真的没有任何情绪，
+
+1010
+01:00:33,325 --> 01:00:37,180
+but then you have pieces that are sort of very positives pieces of
+但是你会得到一些非常积极的作品
+
+1011
+01:00:37,180 --> 01:00:42,025
+tree and negative pieces of tree that are then shown in the blue and the red.
+树和负片树，然后以蓝色和红色显示。
+
+1012
+01:00:42,025 --> 01:00:45,265
+And- so typically in sentiment datasets,
+通常在情绪数据集中，
+
+1013
+01:00:45,265 --> 01:00:49,720
+people have only labeled the entire sentence to say,
+人们只用标记整句话来说，
+
+1014
+01:00:49,720 --> 01:00:53,140
+"This is a positive sentence or a very positive sentence.
+“这是一个积极的判决或非常积极的判决。
+
+1015
+01:00:53,140 --> 01:00:55,840
+This is a negative sentence or a very negative sentence."
+这是一个否定句或一个非常消极的句子。“
+
+1016
+01:00:55,840 --> 01:01:01,810
+Crucially, what we were doing differently here is every phrase in the sentence
+至关重要的是，我们在这里做的不同的是句子中的每个短语
+
+1017
+01:01:01,810 --> 01:01:08,170
+according to our tree structure was being given a label for its positivity or negativity.
+根据我们的树形结构，它被赋予了积极性或消极性的标签。
+
+1018
+01:01:08,170 --> 01:01:11,080
+Um, and perhaps not surprisingly,
+嗯，也许并不奇怪，
+
+1019
+01:01:11,080 --> 01:01:14,990
+just the fact that you have a lot more annotations like that, um,
+事实上，你有更多这样的注释，嗯，
+
+1020
+01:01:14,990 --> 01:01:20,400
+just improves the behavior of classifiers because you kind of can
+只是改善了分类器的行为，因为你可以
+
+1021
+01:01:20,400 --> 01:01:26,735
+do better attribution of which words in a sentence are positive or negative. Um.
+更好地归因于句子中的哪些词是积极的还是消极的。嗯。
+
+1022
+01:01:26,735 --> 01:01:32,810
+So, these were um were results of sort of preceding models.
+所以，这些都是前面模型的结果。
+
+1023
+01:01:32,810 --> 01:01:39,650
+So the green is a Naive Bayes model except it not only uses individual words,
+所以绿色是朴素贝叶斯模型，除了它不仅使用单个词，
+
+1024
+01:01:39,650 --> 01:01:41,630
+but it uses pairs of words.
+但它使用成对的单词。
+
+1025
+01:01:41,630 --> 01:01:45,590
+It turns out if you're building a traditional classifier and you
+事实证明，如果你正在构建一个传统的分类器和你
+
+1026
+01:01:45,590 --> 01:01:49,940
+wanna do sentiment analysis as opposed to something like topic classification,
+想做情绪分析，而不是像主题分类那样
+
+1027
+01:01:49,940 --> 01:01:54,500
+you get a lot better results if you also use word pair features.
+如果你还使用单词对功能，你会得到更好的结果。
+
+1028
+01:01:54,500 --> 01:01:58,850
+And that's because it does a baby bit of um composition for you.
+那是因为它为你做了一点点的成分。
+
+1029
+01:01:58,850 --> 01:02:01,659
+You don't only have features for not an interesting,
+你不仅有一个有趣的功能，
+
+1030
+01:02:01,659 --> 01:02:03,610
+but you can have a feature for not
+但你可以有一个功能
+
+1031
+01:02:03,610 --> 01:02:07,030
+interesting and that lets you model a certain amount of stuff.
+有趣，这可以让你模拟一定数量的东西。
+
+1032
+01:02:07,030 --> 01:02:10,630
+Um, and then these are our older generations of neural networks,
+嗯，然后这些是我们老一代的神经网络，
+
+1033
+01:02:10,630 --> 01:02:14,935
+our ori- original tree structured neural network and our matrix vector one.
+我们的原始树结构神经网络和我们的矩阵向量一。
+
+1034
+01:02:14,935 --> 01:02:19,070
+And so simply having- for these sort of fixed models,
+因此，对于这些固定模型，
+
+1035
+01:02:19,070 --> 01:02:23,810
+simply having the richer supervision that comes from our new treebank,
+只是拥有来自我们新的树库的更丰富的监督，
+
+1036
+01:02:23,810 --> 01:02:26,330
+it's sort of moved up the performance of every model.
+它提升了每个模型的性能。
+
+1037
+01:02:26,330 --> 01:02:29,450
+So even um, for just the um,
+所以，即使是嗯，对于嗯，
+
+1038
+01:02:29,450 --> 01:02:33,695
+Naive Bayes model's performances going up about four percent um,
+朴素贝叶斯模型的表现上涨约4％，
+
+1039
+01:02:33,695 --> 01:02:35,940
+because of the fact um,
+因为这个事实，
+
+1040
+01:02:35,940 --> 01:02:38,405
+that it now knows more about which
+它现在知道更多关于哪个
+
+1041
+01:02:38,405 --> 01:02:42,005
+particular words are positive or negative in the sentences.
+句子中的特定词语是正面的或负面的。
+
+1042
+01:02:42,005 --> 01:02:47,075
+Um, but still none of these performances are really great.
+嗯，但这些表演中没有一个真的很棒。
+
+1043
+01:02:47,075 --> 01:02:53,120
+Um, so we still thought that well can we build better models of how to do this.
+嗯，所以我们仍然认为我们可以建立更好的模型来解决这个问题。
+
+1044
+01:02:53,120 --> 01:02:56,390
+Um, in particular, if you look at sentences with
+嗯，特别是，如果你看看句子
+
+1045
+01:02:56,390 --> 01:02:59,450
+sort of various kinds of negation you know,
+你知道各种各样的否定，
+
+1046
+01:02:59,450 --> 01:03:01,505
+things like should've been funnier,
+这样的事情本来应该更有趣，
+
+1047
+01:03:01,505 --> 01:03:06,170
+these models in general still couldn't capture the right meanings for them.
+一般来说，这些模型仍然无法捕捉到它们的正确含义。
+
+1048
+01:03:06,170 --> 01:03:11,600
+And so that led into our fourth model of how to do this,
+因此，这导致了我们的第四个如何做到这一点的模型，
+
+1049
+01:03:11,600 --> 01:03:15,965
+which is this idea of recursive neural tensor networks.
+这就是递归神经张量网络的概念。
+
+1050
+01:03:15,965 --> 01:03:22,550
+Um, and so what we wanted to be able to do is go back to just having um,
+嗯，所以我们想要做的就是回到刚刚，
+
+1051
+01:03:22,550 --> 01:03:26,660
+meanings of words be vectors,
+单词的意义是向量，
+
+1052
+01:03:26,660 --> 01:03:30,335
+but nevertheless despite that to be able to
+但尽管如此，尽管如此
+
+1053
+01:03:30,335 --> 01:03:34,355
+have a meaningful phrase where the two vectors um,
+有两个向量的有意义的短语，
+
+1054
+01:03:34,355 --> 01:03:36,140
+acted on each other.
+相互作用。
+
+1055
+01:03:36,140 --> 01:03:39,245
+And well, you know, this kind of,
+嗯，你知道，这种，
+
+1056
+01:03:39,245 --> 01:03:41,810
+this is the picture of what we did when we were
+这是我们做的时候所做的事情
+
+1057
+01:03:41,810 --> 01:03:44,615
+doing attention in a bi-linear way, right?
+以双线方式注意，对吧？
+
+1058
+01:03:44,615 --> 01:03:46,625
+We had vectors for two words.
+我们有两个单词的向量。
+
+1059
+01:03:46,625 --> 01:03:50,330
+We stuck a matrix in between and we used
+我们在中间插入了一个矩阵，我们使用了
+
+1060
+01:03:50,330 --> 01:03:54,775
+that and gave an attention and got an attention score out.
+那引起了注意并得到了一个注意力得分。
+
+1061
+01:03:54,775 --> 01:03:59,245
+So that let these two vectors interact with each other,
+那么让这两个向量相互作用，
+
+1062
+01:03:59,245 --> 01:04:02,635
+but it only produced one number as the output.
+但它只产生一个数字作为输出。
+
+1063
+01:04:02,635 --> 01:04:04,630
+But there's a way to fix that,
+但是有办法解决这个问题，
+
+1064
+01:04:04,630 --> 01:04:10,295
+which is to say well rather than having a matrix here,
+这也就是说，而不是在这里有一个矩阵，
+
+1065
+01:04:10,295 --> 01:04:14,555
+what we could stick here is a three-dimensional cube,
+我们在这里可以坚持的是一个三维立方体，
+
+1066
+01:04:14,555 --> 01:04:19,220
+which physicists and deep learning people now call a tensor, right?
+物理学家和深度学习者现在称之为张量，对吧？
+
+1067
+01:04:19,220 --> 01:04:22,550
+So a tensor is just higher multi-dimensional array um,
+所以张量只是更高的多维数组，
+
+1068
+01:04:22,550 --> 01:04:24,560
+in computer science terms.
+用计算机科学术语。
+
+1069
+01:04:24,560 --> 01:04:28,595
+Um, so if we sort of made that a tensor,
+嗯，所以如果我们做出那种张量，
+
+1070
+01:04:28,595 --> 01:04:33,035
+you know, it's like we have sort of multiple layers of matrix here.
+你知道，这就像我们在这里有多层矩阵。
+
+1071
+01:04:33,035 --> 01:04:38,795
+And so the end result of that is we get one number here and one number here.
+因此，最终结果是我们在这里得到一个数字，在这里得到一个数字。
+
+1072
+01:04:38,795 --> 01:04:42,979
+So in total, we get out a size two vector,
+总的来说，我们得到了一个二号矢量，
+
+1073
+01:04:42,979 --> 01:04:46,355
+which is all we need in my baby example where
+这就是我在宝宝示例中所需要的全部内容
+
+1074
+01:04:46,355 --> 01:04:50,300
+baby examples, where we only have these two component vectors for words.
+宝贝示例，其中我们只有这两个单词向量的单词。
+
+1075
+01:04:50,300 --> 01:04:52,250
+But in general, we have a tensor with
+但总的来说，我们有一个张量
+
+1076
+01:04:52,250 --> 01:04:55,835
+the extra mention dimension of the size of our word vector.
+我们的单词向量大小的额外提及维度。
+
+1077
+01:04:55,835 --> 01:04:58,985
+And so therefore, we will get a word vector, w hat,
+因此，我们将得到一个单词向量，w，
+
+1078
+01:04:58,985 --> 01:05:03,800
+we will get a phrase vector out from the composition that's the same size of
+我们将从相同大小的组合中获取一个短语向量
+
+1079
+01:05:03,800 --> 01:05:06,980
+the input vectors and will allow them to
+输入向量并允许它们
+
+1080
+01:05:06,980 --> 01:05:12,450
+interact with each other in working out the meaning of the entire thing.
+在计算整个事物的意义时彼此互动。
+
+1081
+01:05:12,910 --> 01:05:17,390
+Okay. Um, all right.
+好的。嗯，好的。
+
+1082
+01:05:17,390 --> 01:05:19,220
+So at that point um,
+嗯，那个时候，
+
+1083
+01:05:19,220 --> 01:05:23,250
+we use the resulting vectors um um,
+我们使用生成的向量um，
+
+1084
+01:05:24,610 --> 01:05:28,265
+so we had our neural tensor network.
+所以我们有了神经张量网络。
+
+1085
+01:05:28,265 --> 01:05:33,695
+We actually combined it together with the sort of previous kind of layer we used to have,
+我们实际上将它与我们以前的那种层结合在一起，
+
+1086
+01:05:33,695 --> 01:05:37,310
+our sort of first RNN, maybe you  didn't need to do this,
+我们的第一个RNN，也许你不需要这样做，
+
+1087
+01:05:37,310 --> 01:05:39,485
+but we just decided to add that in as well,
+但我们只是决定添加它，
+
+1088
+01:05:39,485 --> 01:05:42,470
+put things through a nonlinearity and that was then
+把事情放在一个非线性的时候
+
+1089
+01:05:42,470 --> 01:05:45,770
+giving us our new representation of phrases.
+给我们新的短语表示。
+
+1090
+01:05:45,770 --> 01:05:49,190
+We built that up the tree and then at the end,
+我们把它建在树上，然后在最后，
+
+1091
+01:05:49,190 --> 01:05:53,120
+we could classify the meaning of any phrase um,
+我们可以对任何短语的含义进行分类，
+
+1092
+01:05:53,120 --> 01:05:56,900
+in the same kind of way with softmax regression and we could
+以softmax回归的方式，我们可以
+
+1093
+01:05:56,900 --> 01:06:00,585
+train these weights with gradient descent to predict sentiment.
+用梯度下降训练这些权重来预测情绪。
+
+1094
+01:06:00,585 --> 01:06:03,910
+And so this actually worked pretty nicely.
+所以这实际上非常好用。
+
+1095
+01:06:03,910 --> 01:06:05,245
+I mean in particular,
+我的意思是，
+
+1096
+01:06:05,245 --> 01:06:09,820
+it didn't so really work any better with just the sentence labels.
+只用句子标签就没那么好了。
+
+1097
+01:06:09,820 --> 01:06:13,194
+But if we train the model with our treebank,
+但是如果我们用树库训练模型，
+
+1098
+01:06:13,194 --> 01:06:15,820
+we could then get a kind of- of whatever
+然后我们可以得到一种什么
+
+1099
+01:06:15,820 --> 01:06:18,700
+that is about another couple of percent in performance,
+这是另外几个百分点的表现，
+
+1100
+01:06:18,700 --> 01:06:20,575
+and so that seemed good.
+这似乎很好。
+
+1101
+01:06:20,575 --> 01:06:21,880
+And so in particular,
+特别是，
+
+1102
+01:06:21,880 --> 01:06:26,920
+it seemed to do a much better job of actually understanding meaning composition.
+它似乎在实际理解意义构成方面做得更好。
+
+1103
+01:06:26,920 --> 01:06:32,095
+So here's the kind of sentence where you have there are slow and repetitive parts,
+所以这里有一种句子，你有缓慢和重复的部分，
+
+1104
+01:06:32,095 --> 01:06:35,245
+but it has just enough spice to keep it interesting.
+但它有足够的香料来保持它的趣味性。
+
+1105
+01:06:35,245 --> 01:06:38,470
+And the model seen here is pretty good at understanding.
+这里看到的模型非常善于理解。
+
+1106
+01:06:38,470 --> 01:06:41,400
+Okay, this part of the sentence is negative,
+好的，这部分句子是否定的，
+
+1107
+01:06:41,400 --> 01:06:43,880
+this part of the sentence is positive,
+这部分句子是积极的，
+
+1108
+01:06:43,880 --> 01:06:46,310
+and actually when you stick the two halves together,
+实际上当你把两半粘在一起时，
+
+1109
+01:06:46,310 --> 01:06:50,450
+the end result is a sentence that's positive in meaning.
+最终的结果是一个意义上积极的句子。
+
+1110
+01:06:50,450 --> 01:06:54,170
+But focusing in a little bit more what seems
+但是更多地关注似乎更多
+
+1111
+01:06:54,170 --> 01:06:58,610
+like it's especially good was for the first time this actually
+喜欢它特别好，这实际上是第一次
+
+1112
+01:06:58,610 --> 01:07:02,270
+did seem like it could do a better job of
+看起来好像可以做得更好
+
+1113
+01:07:02,270 --> 01:07:07,220
+working out sort of what happens when you do things like negation.
+找出当你做出否定之类的事情时会发生什么。
+
+1114
+01:07:07,220 --> 01:07:11,975
+So here we have it's just incredibly dull and it's definitely not dull.
+所以在这里，我们有它非常沉闷，它绝对不会沉闷。
+
+1115
+01:07:11,975 --> 01:07:14,000
+So if it's definitely not dull,
+所以，如果它绝对不是沉闷的，
+
+1116
+01:07:14,000 --> 01:07:16,130
+that's actually means it's good, right?
+这实际上意味着它很好，对吗？
+
+1117
+01:07:16,130 --> 01:07:20,480
+Can we work out the meaning of, it's definitely not dull?
+我们可以弄清楚它的含义吗，它绝对不会沉闷？
+
+1118
+01:07:20,480 --> 01:07:25,610
+And so um, these, this is sort of
+所以，嗯，这些，这是一种
+
+1119
+01:07:25,610 --> 01:07:31,505
+showing sort of what happens when you have a negative,
+显示当你有负面时会发生什么，
+
+1120
+01:07:31,505 --> 01:07:34,790
+a negative sentence that's further negated.
+一个被否定的否定句。
+
+1121
+01:07:34,790 --> 01:07:39,890
+So if you go from um,
+所以，如果你从嗯，
+
+1122
+01:07:39,890 --> 01:07:42,305
+so if you sort of do
+所以如果你这样做的话
+
+1123
+01:07:42,305 --> 01:07:48,710
+a annex- negation of a negative thing should become moderately positive, right?
+附件 - 否定的东西应该变得适度积极，对吧？
+
+1124
+01:07:48,710 --> 01:07:54,065
+So that if you have dull is negative and if you say not dull,
+所以，如果你有沉闷是消极的，如果你说不沉闷，
+
+1125
+01:07:54,065 --> 01:07:56,105
+it doesn't mean it's fantastic,
+这并不意味着它太棒了，
+
+1126
+01:07:56,105 --> 01:07:58,400
+but it means it's moderately positive.
+但这意味着它适度积极。
+
+1127
+01:07:58,400 --> 01:08:04,070
+And so for either a kind of Naive Bayes model or our preceding models,
+对于一种朴素贝叶斯模型或我们之前的模型，
+
+1128
+01:08:04,070 --> 01:08:09,755
+they weren't capable of capturing that of sort of going from dull to not dull your,
+他们无法捕捉从沉闷到不沉闷的那种，
+
+1129
+01:08:09,755 --> 01:08:14,135
+your meaning computation did not come out any more positive.
+你的意思计算没有出来更积极。
+
+1130
+01:08:14,135 --> 01:08:17,000
+Whereas this sort of neural tensor network was
+而这种神经张量网络是
+
+1131
+01:08:17,000 --> 01:08:22,470
+capturing the fact that not dull meant that it was reasonably good.
+捕捉到不沉闷的事实意味着它相当不错。
+
+1132
+01:08:22,750 --> 01:08:26,960
+So that was progress. Um, yes.
+这就是进步。嗯，是的。
+
+1133
+01:08:26,960 --> 01:08:31,460
+So I think that's as much as I'll um show you really now about applying
+所以我认为这就像我现在向你展示的那样
+
+1134
+01:08:31,460 --> 01:08:37,590
+these tree structured neural networks um, to natural language.
+这些树结构的神经网络，对于自然语言。
+
+1135
+01:08:37,810 --> 01:08:43,190
+Um, you know, I think the summary I sort of said at the beginning um is that I
+嗯，你知道，我认为我在开头说的总结就是我
+
+1136
+01:08:43,190 --> 01:08:48,275
+think you know, they're kind of interesting ideas and linguistic connections here.
+你知道，他们在这里有一些有趣的想法和语言联系。
+
+1137
+01:08:48,275 --> 01:08:52,325
+I mean, for various reasons,
+我的意思是，出于各种原因，
+
+1138
+01:08:52,325 --> 01:08:55,100
+these ideas haven't been um,
+这些想法不是嗯，
+
+1139
+01:08:55,100 --> 01:08:59,570
+pursued a ton in recent years of natural language processing.
+近年来追求自然语言处理。
+
+1140
+01:08:59,570 --> 01:09:04,610
+You know, one is in all honesty people have found that um,
+你知道，一个人是诚实的，人们已经找到了，嗯，
+
+1141
+01:09:04,610 --> 01:09:08,090
+once you have high dimensional vectors
+一旦你有高维矢量
+
+1142
+01:09:08,090 --> 01:09:11,480
+in things like the kind of sequence models that we've looked at,
+在我们看过的那种序列模型之类的东西中，
+
+1143
+01:09:11,480 --> 01:09:15,980
+whether it's meaning things like the sort of LSTM models or any of
+是否意味着像LSTM模型或任何类型的东西
+
+1144
+01:09:15,980 --> 01:09:21,200
+the more recent contextual language models, those work incredibly well um,
+最新的语境语言模型，那些工作非常好，嗯，
+
+1145
+01:09:21,200 --> 01:09:24,890
+and it's not, it's not clear that overall these models work better.
+而事实并非如此，目前尚不清楚整体这些模型的效果是否更好。
+
+1146
+01:09:24,890 --> 01:09:28,399
+The second reason is sort of a computational reason,
+第二个原因是计算原因，
+
+1147
+01:09:28,399 --> 01:09:35,495
+which is um, GPUs work great when you're doing uniform computation.
+这是嗯，当你进行统一计算时，GPU工作得很好。
+
+1148
+01:09:35,495 --> 01:09:40,130
+And the beauty of having something like a sequence model is that there's uh,
+拥有像序列模型这样的东西的美妙之处在于，呃，
+
+1149
+01:09:40,130 --> 01:09:43,595
+there's just one determinant computation you are doing
+你正在做的只有一个决定性计算
+
+1150
+01:09:43,595 --> 01:09:47,180
+along the sequence or in the convolutional neural network,
+沿序列或卷积神经网络，
+
+1151
+01:09:47,180 --> 01:09:49,010
+there's one determinant um,
+有一个决定因素，
+
+1152
+01:09:49,010 --> 01:09:51,530
+computation you're doing up um,
+计算你在做什么，
+
+1153
+01:09:51,530 --> 01:09:54,170
+through your convolutional layers and therefore,
+通过你的卷积层因此，
+
+1154
+01:09:54,170 --> 01:09:58,805
+things can be represented and computed efficiently on a GPU.
+事物可以在GPU上有效地表示和计算。
+
+1155
+01:09:58,805 --> 01:10:03,020
+The huge problem with these kind of models was what computations you are
+这些模型的巨大问题是你的计算
+
+1156
+01:10:03,020 --> 01:10:07,475
+going to do depended on which structure you are assigning to the sentence,
+要做什么取决于你分配给句子的结构，
+
+1157
+01:10:07,475 --> 01:10:12,110
+and every sentence was going to have a different structure, and so therefore,
+每个句子都会有不同的结构，因此，
+
+1158
+01:10:12,110 --> 01:10:15,200
+there was no way to batch the computations over a group of
+没有办法批量计算一组
+
+1159
+01:10:15,200 --> 01:10:18,860
+sentences and have the same computations being done for
+句子并进行相同的计算
+
+1160
+01:10:18,860 --> 01:10:22,310
+different sentences, it sort of undermined the ability
+不同的句子，它有点破坏了这种能力
+
+1161
+01:10:22,310 --> 01:10:26,365
+to sort of efficiently build these models in the large.
+在大型中有效地构建这些模型。
+
+1162
+01:10:26,365 --> 01:10:31,145
+The thing I thought I'd just sort of say a moment about at the end.
+我认为我最后会说一下这个问题。
+
+1163
+01:10:31,145 --> 01:10:36,195
+Um, the funny thing is that although these haven't been used much for,
+嗯，有趣的是，尽管这些还没有被广泛使用，
+
+1164
+01:10:36,195 --> 01:10:39,250
+um, language in the last few years, um,
+嗯，最近几年的语言，嗯，
+
+1165
+01:10:39,250 --> 01:10:45,650
+that they've actually had some use and found different applications in different places,
+他们实际上有一些用处并在不同的地方找到了不同的应用，
+
+1166
+01:10:45,650 --> 01:10:48,215
+um, which is just sort of seen kind of cute.
+嗯，这有点可爱。
+
+1167
+01:10:48,215 --> 01:10:52,850
+Um, so this is actually an application from physics.
+嗯，所以这实际上是物理学的应用。
+
+1168
+01:10:52,850 --> 01:10:56,020
+Um, and I think I'm going to just have to read this and
+嗯，我想我只需要阅读这篇文章
+
+1169
+01:10:56,020 --> 01:10:58,890
+so I have no idea what half the words mean.
+所以我不知道一半的意思是什么。
+
+1170
+01:10:58,890 --> 01:11:04,295
+Um, but, um, what it says is by far the most common structures seen in collisions at
+嗯，但是，嗯，它说的是到目前为止碰撞中看到的最常见的结构
+
+1171
+01:11:04,295 --> 01:11:10,295
+the Large Hadron Collider are collimated sprays of energetic hadrons referred to as jets.
+大型强子对撞机是被称为喷气式飞机的精力充沛的强子喷射。
+
+1172
+01:11:10,295 --> 01:11:14,135
+These jets are produced from the fragmentation and hadronization of
+这些喷气机是由碎裂和强化产生的
+
+1173
+01:11:14,135 --> 01:11:19,200
+quarks and gluons as described by quantum chromodynamics.
+量子色动力学描述的夸克和胶子。
+
+1174
+01:11:19,200 --> 01:11:21,420
+Anyone knows what that means?
+谁知道这意味着什么？
+
+1175
+01:11:21,420 --> 01:11:23,550
+Um, I hope you're following along here.
+嗯，我希望你跟着来这里。
+
+1176
+01:11:23,550 --> 01:11:26,970
+Um, one compelling physics challenge is to search for
+嗯，一个令人信服的物理挑战是搜索
+
+1177
+01:11:26,970 --> 01:11:32,000
+highly boosted standard model particles decaying hadronically.
+高度增强的标准模型颗粒长期腐烂。
+
+1178
+01:11:32,000 --> 01:11:36,935
+Unfortunately there's a large background from jets produced by more mundane,
+不幸的是，有更多平凡的喷气式飞机有很大的背景，
+
+1179
+01:11:36,935 --> 01:11:41,090
+um, QCD, that's quantum chromodynamics processes.
+嗯，QCD，这是量子色动力学过程。
+
+1180
+01:11:41,090 --> 01:11:44,610
+In this work, we propose instead a solution for
+在这项工作中，我们提出了一个解决方案
+
+1181
+01:11:44,610 --> 01:11:48,215
+jet classification based on an analogy between
+喷射分类基于类比之间的类比
+
+1182
+01:11:48,215 --> 01:11:52,470
+quantum chromodynamics and natural languages as inspired by
+量子色动力学和自然语言的启发
+
+1183
+01:11:52,470 --> 01:11:56,775
+several works from natural language, um, processing.
+从自然语言，嗯，处理的几个作品。
+
+1184
+01:11:56,775 --> 01:11:59,520
+Much like a sentence is composed of words
+就像句子由单词组成一样
+
+1185
+01:11:59,520 --> 01:12:02,865
+following a syntactic structure organized as a parse tree,
+遵循组织为解析树的句法结构，
+
+1186
+01:12:02,865 --> 01:12:08,050
+a jet is also composed of 4-momenta following a structure dictated by
+喷射器也由4-momenta组成，遵循由结构决定的结构
+
+1187
+01:12:08,050 --> 01:12:09,760
+QCD and organized via
+QCD和组织通过
+
+1188
+01:12:09,760 --> 01:12:14,100
+the clustering history of a sequential co- combination jet algorithm.
+序贯联合喷射算法的聚类历史。
+
+1189
+01:12:14,100 --> 01:12:18,005
+Um, so anyway um, yeah with these jets you see they're getting
+嗯，无论如何，是的，是的，你会看到他们正在使用这些喷气式飞机
+
+1190
+01:12:18,005 --> 01:12:23,794
+a tree structure over them and they're using the tree recursive neural network,
+它们上面的树结构，它们使用树递归神经网络，
+
+1191
+01:12:23,794 --> 01:12:25,100
+um, to model it.
+嗯，模仿它。
+
+1192
+01:12:25,100 --> 01:12:31,435
+Um, well that's a little bit far afield but to show you just one more example, um,
+嗯，那有点远，但是再向你展示一个例子，嗯，
+
+1193
+01:12:31,435 --> 01:12:35,320
+that another place where these models have actually being quite
+另一个地方，这些模型实际上是相当的
+
+1194
+01:12:35,320 --> 01:12:39,840
+useful is for doing things in programming languages.
+有用的是用编程语言做事。
+
+1195
+01:12:39,840 --> 01:12:42,020
+And I think in part this,
+我认为在某种程度上，
+
+1196
+01:12:42,020 --> 01:12:46,545
+this is because the application is easier in programming languages.
+这是因为应用程序在编程语言中更容易。
+
+1197
+01:12:46,545 --> 01:12:51,150
+So unlike in natural language where we have this uncertainty as to what is
+因此，与自然语言不同，我们对这是什么有不确定性
+
+1198
+01:12:51,150 --> 01:12:55,775
+the correct parse tree because there's a lot of ambiguity in natural language,
+正确的解析树因为自然语言存在很多歧义，
+
+1199
+01:12:55,775 --> 01:12:58,295
+in programming languages, um,
+在编程语言中，嗯，
+
+1200
+01:12:58,295 --> 01:13:01,175
+the parse trees are actually pretty determinant.
+解析树实际上是非常重要的。
+
+1201
+01:13:01,175 --> 01:13:07,560
+Um, so a group of people at Berkeley, Dawn Song and her students have worked on doing
+嗯，伯克利的一群人，Dawn Song和她的学生们都在努力
+
+1202
+01:13:07,560 --> 01:13:10,870
+programming language translation by building
+通过构建编程语言翻译
+
+1203
+01:13:10,870 --> 01:13:14,490
+tree recursive neural network encoder-decoders.
+树递归神经网络编码器 - 解码器。
+
+1204
+01:13:14,490 --> 01:13:17,375
+So that you're building up a tree structured
+这样你就可以建立一个结构化的树
+
+1205
+01:13:17,375 --> 01:13:22,120
+neural network representation of a program in one language.
+一种语言的程序的神经网络表示。
+
+1206
+01:13:22,120 --> 01:13:26,345
+This is a CoffeeScript program and then you're wanting to build a tree to
+这是一个CoffeeScript程序，然后你想要构建一个树
+
+1207
+01:13:26,345 --> 01:13:31,760
+tree model which is then translating that to a program in a different language.
+树模型，然后将其转换为不同语言的程序。
+
+1208
+01:13:31,760 --> 01:13:35,150
+And they've been able to do that and get good results.
+他们已经能够做到这一点，并取得了良好的效果。
+
+1209
+01:13:35,150 --> 01:13:38,760
+Um, I was too lazy to retype this table.
+嗯，我懒得重新输入这张桌子。
+
+1210
+01:13:38,760 --> 01:13:40,610
+So this is probably a bit,
+所以这可能有点，
+
+1211
+01:13:40,610 --> 01:13:42,010
+bit hard to read.
+有点难读。
+
+1212
+01:13:42,010 --> 01:13:46,320
+But what's it's contrasting is for a number of programs this is the sort of
+但对比的是，对于许多程序来说，这就是那种情况
+
+1213
+01:13:46,320 --> 01:13:51,650
+CoffeeScript to JavaScript, um, um, translation.
+CoffeeScript到JavaScript，嗯，嗯，翻译。
+
+1214
+01:13:51,650 --> 01:13:54,980
+They're comparing using tree to tree models.
+他们使用树与树模型进行比较。
+
+1215
+01:13:54,980 --> 01:13:57,130
+Um, and then using sequence to sequence
+嗯，然后使用序列来排序
+
+1216
+01:13:57,130 --> 01:14:00,120
+models and then they tried both other combinations,
+模型，然后他们尝试了其他组合，
+
+1217
+01:14:00,120 --> 01:14:03,345
+sequence to tree and tree to sequence.
+序列到树和树到序列。
+
+1218
+01:14:03,345 --> 01:14:06,215
+Um, and what they find is you can get the best
+嗯，他们发现你可以得到最好的
+
+1219
+01:14:06,215 --> 01:14:10,175
+results with the tree to tree neural network models.
+结果用树到树的神经网络模型。
+
+1220
+01:14:10,175 --> 01:14:13,665
+And in particular these tree to tree models are
+特别是这些树到树的模型
+
+1221
+01:14:13,665 --> 01:14:17,345
+augmented with attention so they have attention like we talked about
+注意力增强，所以他们像我们谈到的那样受到关注
+
+1222
+01:14:17,345 --> 01:14:21,490
+the sequence to sequence models where you're then being able to do attention back to
+顺序模型的序列，然后你可以回到那里
+
+1223
+01:14:21,490 --> 01:14:26,990
+nodes in the tree structure which is a pretty natural way of doing translation.
+树结构中的节点是一种非常自然的翻译方式。
+
+1224
+01:14:26,990 --> 01:14:31,320
+And indeed what these results show is if you don't have- that's right these results
+事实上，这些结果表明，如果你没有 - 这些结果是正确的
+
+1225
+01:14:31,320 --> 01:14:36,035
+show is if you don't have the attention operation it doesn't work at all.
+show是如果你没有注意操作它根本不起作用。
+
+1226
+01:14:36,035 --> 01:14:37,680
+It's too difficult, um,
+这太难了，嗯，
+
+1227
+01:14:37,680 --> 01:14:39,060
+to get things, um,
+得到的东西，嗯，
+
+1228
+01:14:39,060 --> 01:14:41,050
+sort of done if you've just sort of trying to create
+如果你只想尝试创造，那就完成了
+
+1229
+01:14:41,050 --> 01:14:45,810
+a single tree representation and then say generate the tra- the translation from that.
+单个树表示，然后说从那里生成tra-翻译。
+
+1230
+01:14:45,810 --> 01:14:48,245
+But if you can do it with this sort of putting attention
+但如果你能用这种注意力来做到这一点
+
+1231
+01:14:48,245 --> 01:14:51,735
+into the different modes, um, that's great.
+进入不同的模式，嗯，这很棒。
+
+1232
+01:14:51,735 --> 01:14:56,385
+Um, you might- If you know what CoffeeScript is you might, um,
+嗯，你可能 - 如果你知道CoffeeScript是什么，嗯，
+
+1233
+01:14:56,385 --> 01:14:58,740
+feel like wait that's cheating slightly because
+感觉好像等待那个作弊，因为
+
+1234
+01:14:58,740 --> 01:15:02,125
+CoffeeScript is a bit too similar to JavaScript.
+CoffeeScript与JavaScript有点相似。
+
+1235
+01:15:02,125 --> 01:15:03,725
+Um, but they've also, um,
+嗯，但他们也是，嗯，
+
+1236
+01:15:03,725 --> 01:15:05,310
+done it in other languages.
+用其他语言完成。
+
+1237
+01:15:05,310 --> 01:15:11,090
+So this is going between Java and C# and this is a sort of
+所以这是在Java和C＃之间进行的，这是一种
+
+1238
+01:15:11,090 --> 01:15:14,490
+handwritten Java to C# converter that you can
+你可以手写Java到C＃转换器
+
+1239
+01:15:14,490 --> 01:15:18,820
+download from GitHub if you want but it doesn't actually work that well.
+如果你愿意，可以从GitHub下载，但它实际上并没有那么好用。
+
+1240
+01:15:18,820 --> 01:15:20,570
+Um, and they're able to show,
+嗯，他们能够表现出来，
+
+1241
+01:15:20,570 --> 01:15:23,120
+the- they're able to build a far better, um,
+他们能够建立一个更好的，嗯，
+
+1242
+01:15:23,120 --> 01:15:25,580
+Java to C# translator,
+Java到C＃翻译器，
+
+1243
+01:15:25,580 --> 01:15:28,080
+um, doing that.
+嗯，这样做。
+
+1244
+01:15:28,080 --> 01:15:30,390
+Um, so that's actually kind of cool.
+嗯，所以这真的很酷。
+
+1245
+01:15:30,390 --> 01:15:33,110
+And it's good to know that tree structured recursive neural networks
+知道树结构的递归神经网络是很好的
+
+1246
+01:15:33,110 --> 01:15:34,905
+are good for some things.
+对某些事情有好处。
+
+1247
+01:15:34,905 --> 01:15:37,820
+Um, so I'm pleased to see work like this.
+嗯，所以我很高兴看到这样的工作。
+
+1248
+01:15:37,820 --> 01:15:41,135
+Okay. I'm, I'm, just about done but I thought,
+好的。我，我，刚刚完成，但我想，
+
+1249
+01:15:41,135 --> 01:15:43,515
+um, before, um, finishing,
+嗯，之前，嗯，完成，
+
+1250
+01:15:43,515 --> 01:15:47,135
+I'd just mention one other [NOISE] thing which is sort of nothing to do
+我只提到另一个[NOISE]的事情，这是无关紧要的事情
+
+1251
+01:15:47,135 --> 01:15:50,850
+with natural language processing precisely but it's about AI.
+精确的自然语言处理，但它是关于AI。
+
+1252
+01:15:50,850 --> 01:15:54,570
+Um, but I wanted to sort of put in a little bit of advertisement.
+嗯，但我想要做一些广告。
+
+1253
+01:15:54,570 --> 01:15:57,335
+Um, that's something that a number of us have been
+嗯，这是我们很多人的事
+
+1254
+01:15:57,335 --> 01:16:00,855
+working on very hard for the last year or so,
+在过去一年左右的时间里努力工作，
+
+1255
+01:16:00,855 --> 01:16:06,710
+is developing, um, a new Stanford Institute for Human-Centered Artificial Intelligence.
+正在开发一个新的斯坦福人类中心人工智能研究所。
+
+1256
+01:16:06,710 --> 01:16:11,880
+And actually the launch of this institute is going to be on Monday of exam week,
+实际上这个研究所的发布将在周一的考试周，
+
+1257
+01:16:11,880 --> 01:16:16,365
+just when you're maximally concentrating on things such as this.
+就在你最大限度地专注于这样的事情的时候。
+
+1258
+01:16:16,365 --> 01:16:19,680
+Um, but our hope is that we can have a lot of
+嗯，但我们希望我们可以有很多
+
+1259
+01:16:19,680 --> 01:16:23,495
+new activity around artificial intelligence,
+围绕人工智能的新活动，
+
+1260
+01:16:23,495 --> 01:16:27,510
+taking a much broader perspective to artificial intelligence, um,
+对人工智能采取更广泛的视角，嗯，
+
+1261
+01:16:27,510 --> 01:16:34,770
+which is centrally viewing it from the viewpoint of humans and working out, um,
+从人类的角度集中观察它，锻炼，嗯，
+
+1262
+01:16:34,770 --> 01:16:38,080
+I'll- exploring a much broader range of issues that
+我将探讨更广泛的问题
+
+1263
+01:16:38,080 --> 01:16:41,490
+embrace a lot of the interests of the rest of the university whether
+拥抱大学其他部分的很多利益
+
+1264
+01:16:41,490 --> 01:16:45,100
+it's the social sciences and humanities, or also variously
+它是社会科学和人文科学，或者也是各种各样的
+
+1265
+01:16:45,100 --> 01:16:48,945
+in professional schools like the law school and the business school.
+在法学院和商学院等专业学校。
+
+1266
+01:16:48,945 --> 01:16:52,760
+Um, so let's just quickly say a minute about that.
+嗯，让我们快点说一下。
+
+1267
+01:16:52,760 --> 01:16:58,980
+Um, that the, the sort of motivating idea is that sort of for most of my life sort
+嗯，那种激励的想法就是我生命中的大部分时间
+
+1268
+01:16:58,980 --> 01:17:01,270
+of AI seemed like a kind of
+人工智能似乎是一种
+
+1269
+01:17:01,270 --> 01:17:03,670
+a fun intellectual quest as
+一个有趣的知识分子追求
+
+1270
+01:17:03,670 --> 01:17:06,420
+to whether you could write bits of software that did anything,
+你是否可以写一些做任何事情的软件，
+
+1271
+01:17:06,420 --> 01:17:10,245
+um, halfway intelligent but that's clearly not what's going to be,
+嗯，中途聪明，但显然不会是什么，
+
+1272
+01:17:10,245 --> 01:17:12,820
+what's happening for the next 25 years.
+未来25年发生了什么。
+
+1273
+01:17:12,820 --> 01:17:14,830
+That we're now at this point in which
+我们现在正处于这一点
+
+1274
+01:17:14,830 --> 01:17:19,680
+artificial intelligence systems are being unleashed on society.
+人工智能系统正在社会中释放出来。
+
+1275
+01:17:19,680 --> 01:17:23,730
+Um, and well hopefully they do some good things but as we've
+嗯，希望他们做一些好事，但正如我们所做的那样
+
+1276
+01:17:23,730 --> 01:17:26,120
+increasingly been seeing there are lots of
+越来越多地看到有很多
+
+1277
+01:17:26,120 --> 01:17:29,070
+also lots of opportunities for them to do bad things.
+也有很多机会让他们做坏事。
+
+1278
+01:17:29,070 --> 01:17:32,510
+And even if we're not imagining Terminator scenarios,
+即使我们没有想象终结者场景，
+
+1279
+01:17:32,510 --> 01:17:35,530
+there are just lots of places where people are using
+人们正在使用很多地方
+
+1280
+01:17:35,530 --> 01:17:39,545
+machine learning and AI algorithms for making decisions.
+用于制定决策的机器学习和AI算法。
+
+1281
+01:17:39,545 --> 01:17:42,570
+Some of the worst ones are things like sentencing guidelines in
+其中一些最糟糕的事情就像量刑指南
+
+1282
+01:17:42,570 --> 01:17:46,950
+courts where you have very biased algorithms making bad decisions and
+法院，你有非常偏见的算法做出错误的决定和
+
+1283
+01:17:46,950 --> 01:17:51,425
+people are starting to become a lot more aware of the issues and so
+人们开始变得更加意识到这些问题
+
+1284
+01:17:51,425 --> 01:17:54,075
+effectively we are wanting to have this institute sort of
+实际上我们想要这个机构
+
+1285
+01:17:54,075 --> 01:17:56,940
+embracing a lot of the work of social scientists,
+拥抱社会科学家的许多工作，
+
+1286
+01:17:56,940 --> 01:18:01,420
+the ethicists and other people to actually explore how to have an AI
+伦理学家和其他人实际探索如何拥有AI
+
+1287
+01:18:01,420 --> 01:18:06,030
+that's really improving human lives rather than having the opposite effect.
+这确实改善了人的生活，而不是产生相反的效果。
+
+1288
+01:18:06,030 --> 01:18:07,860
+And so the three themes,
+所以这三个主题，
+
+1289
+01:18:07,860 --> 01:18:09,390
+um, that we're, um,
+嗯，我们是，嗯，
+
+1290
+01:18:09,390 --> 01:18:15,870
+mainly emphasizing for this institute is the first one in the top left is
+这个研究所主要强调的是左上角的第一个
+
+1291
+01:18:15,870 --> 01:18:19,329
+developing AI technologies but we're particularly
+开发人工智能技术，但我们尤其如此
+
+1292
+01:18:19,329 --> 01:18:22,770
+interested in making linkages back to human intelligence.
+有兴趣将人际关系联系起来。
+
+1293
+01:18:22,770 --> 01:18:25,575
+So cognitive science and neuroscience
+认知科学和神经科学
+
+1294
+01:18:25,575 --> 01:18:28,925
+that when a lot of the early formative work in AI was
+当人工智能的许多早期形成工作时
+
+1295
+01:18:28,925 --> 01:18:31,410
+done including all of
+完成包括所有
+
+1296
+01:18:31,410 --> 01:18:35,330
+the early work in neural networks like the development of back propagation,
+神经网络的早期工作，如反向传播的发展，
+
+1297
+01:18:35,330 --> 01:18:38,400
+it was actually largely done in the context of cognitive science.
+它实际上主要是在认知科学的背景下完成的。
+
+1298
+01:18:38,400 --> 01:18:42,090
+Right? And that was sort of a linkage that tended to get lost in
+对？这种联系往往会迷失方向
+
+1299
+01:18:42,090 --> 01:18:47,140
+the '90s and 2000s statistical machine learning emphasis.
+'90年代和2000年代统计机器学习的重点。
+
+1300
+01:18:47,140 --> 01:18:49,030
+And I think it would be good to renew that.
+而且我认为更新它会更好。
+
+1301
+01:18:49,030 --> 01:18:51,240
+Um, the top right, um,
+嗯，右上角，嗯，
+
+1302
+01:18:51,240 --> 01:18:53,910
+there's paying much more attention to
+有更多的关注
+
+1303
+01:18:53,910 --> 01:18:59,310
+the human and societal impact of AI and so this is looking at legal issues,
+人工智能对人类和社会的影响，所以这是关注法律问题，
+
+1304
+01:18:59,310 --> 01:19:01,920
+economic issues, labor forces,
+经济问题，劳动力，
+
+1305
+01:19:01,920 --> 01:19:05,905
+ethics, um, green power, politics, whatever you are.
+道德，嗯，绿色权力，政治，无论你是什么。
+
+1306
+01:19:05,905 --> 01:19:09,520
+But then down at the bottom is something where it seems like
+但是接下来就是它看起来像的东西
+
+1307
+01:19:09,520 --> 01:19:13,725
+there's just kind of enormous opportunities to do more which is,
+有更多的机会去做更多的事情，
+
+1308
+01:19:13,725 --> 01:19:18,825
+um, how can we build technology that actually augments human lives.
+嗯，我们怎样才能建立真正增强人类生活的技术。
+
+1309
+01:19:18,825 --> 01:19:25,860
+Like to some extent here tech- we've got technology with AI augmenting human lives.
+在某种程度上，这里技术 - 我们已经获得了人工智能增强人类生活的技术。
+
+1310
+01:19:25,860 --> 01:19:29,200
+So all of your cell phones have speech recognition in them now.
+所以你的所有手机现在都有语音识别功能。
+
+1311
+01:19:29,200 --> 01:19:31,235
+So you know that's AI, um,
+所以你知道那是AI，嗯，
+
+1312
+01:19:31,235 --> 01:19:34,055
+that can augment, um, your human lives.
+这可以增加你的人生。
+
+1313
+01:19:34,055 --> 01:19:37,205
+But there's a sense of which not very much of
+但是有一种感觉不是很多
+
+1314
+01:19:37,205 --> 01:19:43,055
+artificial intelligence has actually been put into the service of augmenting human lives.
+人工智能实际上已经被用于增强人类生活。
+
+1315
+01:19:43,055 --> 01:19:45,840
+Like most of what a cell phone has on it is still
+就像手机上的大部分内容一样
+
+1316
+01:19:45,840 --> 01:19:48,160
+sort of clever and cute stuff done by
+完成的一些聪明和可爱的东西
+
+1317
+01:19:48,160 --> 01:19:51,270
+HCI people and designers which is very nice a lot of
+HCI的人和设计师非常好
+
+1318
+01:19:51,270 --> 01:19:55,470
+the time when you're using your map program or something but we don't really have
+您使用地图程序或其他东西的时间，但我们没有
+
+1319
+01:19:55,470 --> 01:20:00,455
+much AI inside these devices helping to make people's lives better.
+这些设备中的人工智能有助于改善人们的生活。
+
+1320
+01:20:00,455 --> 01:20:05,880
+And so we're hoping not only for individuals when applications like health care,
+所以我们不仅希望个人在医疗保健，
+
+1321
+01:20:05,880 --> 01:20:08,240
+um, to be doing much more of sort of putting
+嗯，要做更多的推杆
+
+1322
+01:20:08,240 --> 01:20:12,420
+artificial intelligence into human-centered applications.
+人工智能融入以人为本的应用。
+
+1323
+01:20:12,420 --> 01:20:14,755
+Um, anyway that's my brief advertisement.
+嗯，无论如何这是我的简短广告。
+
+1324
+01:20:14,755 --> 01:20:17,840
+Um, look it out for this while you're not studying for your exams.
+嗯，在你不参加考试的时候看看这个。
+
+1325
+01:20:17,840 --> 01:20:20,700
+And I think there'll be sort of lots of opportunities, um,
+而且我认为会有很多机会，嗯，
+
+1326
+01:20:20,700 --> 01:20:24,315
+for students and others to be getting more involved in this in the coming months.
+学生和其他人将在未来几个月内更多地参与其中。
+
+1327
+01:20:24,315 --> 01:20:26,290
+Okay. Thank you very much.
+好的。非常感谢你。
+
+1328
+01:20:26,290 --> 01:20:37,290
+Um, and I will see you later, um, at the poster session.
+嗯，我稍后会见到你，嗯，在海报会议上。
+
+1329
+01:20:37,290 --> 01:20:37,400
+[APPLAUSE].
+[掌声]。
+
+1330
+
+

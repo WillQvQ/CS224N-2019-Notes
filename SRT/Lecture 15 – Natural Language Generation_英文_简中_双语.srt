@@ -1,0 +1,8068 @@
+1
+00:00:04,760 --> 00:00:09,990
+So today we're gonna be learning about Natural Language Generation.
+所以今天我们要学习自然语言生成。
+
+2
+00:00:09,990 --> 00:00:12,460
+And uh, this is probably going to be a little different to
+呃，这可能会有点不同
+
+3
+00:00:12,460 --> 00:00:16,380
+my previous lectures because this is going to be much more of a kind of survey,
+我之前的讲座，因为这将是一种更多的调查，
+
+4
+00:00:16,380 --> 00:00:17,745
+of lots of cutting edge, uh,
+很多前沿，呃，
+
+5
+00:00:17,745 --> 00:00:21,060
+research topics that are happening in NLG right now.
+现在正在NLG中发生的研究课题。
+
+6
+00:00:21,060 --> 00:00:22,800
+So before we get to that, uh,
+所以在我们开始之前，呃，
+
+7
+00:00:22,800 --> 00:00:24,315
+we've got a few announcements.
+我们收到了一些公告。
+
+8
+00:00:24,315 --> 00:00:26,370
+Uh, so I guess the main announcement is just,
+呃，所以我猜主要宣布就是，
+
+9
+00:00:26,370 --> 00:00:28,290
+thank you all so much for your hard work.
+非常感谢你的辛勤工作。
+
+10
+00:00:28,290 --> 00:00:31,020
+I know, um, the last week or two have been pretty tough.
+我知道，嗯，过去一两周非常艰难。
+
+11
+00:00:31,020 --> 00:00:33,450
+Uh, assignment five was really quite difficult,
+呃，任务五真的很难，
+
+12
+00:00:33,450 --> 00:00:35,300
+I think, and it was a challenge to do it in eight days.
+我认为，在八天内完成这项工作是一项挑战。
+
+13
+00:00:35,300 --> 00:00:38,000
+So we just really appreciate all the hard work you've put in.
+所以我们非常感谢你付出的辛勤劳动。
+
+14
+00:00:38,000 --> 00:00:40,910
+Um, we also understand the project proposal was,
+嗯，我们也理解项目提案是，
+
+15
+00:00:40,910 --> 00:00:45,590
+uh, sometimes a bit difficult to understand the expectations for some people.
+呃，有时候有点难以理解对某些人的期望。
+
+16
+00:00:45,590 --> 00:00:47,990
+Um, so, yeah, these are both new components of
+嗯，是的，这些都是新的组成部分
+
+17
+00:00:47,990 --> 00:00:50,465
+the class this year that were not present last year.
+今年的班级去年没有出席。
+
+18
+00:00:50,465 --> 00:00:52,115
+Um, so you know,
+嗯，你知道，
+
+19
+00:00:52,115 --> 00:00:55,265
+we have to go through some learning curves as well as the teaching staff.
+我们必须经历一些学习曲线以及教学人员。
+
+20
+00:00:55,265 --> 00:00:57,710
+So just we really want to say thank you so much, uh,
+所以我们真的很想说谢谢你，呃，
+
+21
+00:00:57,710 --> 00:01:00,365
+for putting everything into this class.
+把所有东西都放进这堂课。
+
+22
+00:01:00,365 --> 00:01:03,230
+And please do continue to give us your feedback both right
+请继续向我们提供您的反馈
+
+23
+00:01:03,230 --> 00:01:06,990
+now and in the end of quarter feedback survey.
+现在和季度末反馈调查。
+
+24
+00:01:07,080 --> 00:01:10,685
+Okay, so here's the overview for what we're going to be doing today.
+好的，所以这里是我们今天要做的事情的概述。
+
+25
+00:01:10,685 --> 00:01:13,955
+So today we're going to learn about what's happening in the world
+所以今天我们要了解世界上正在发生的事情
+
+26
+00:01:13,955 --> 00:01:16,960
+of neural approaches for Natural Language Generation.
+自然语言生成的神经方法研究。
+
+27
+00:01:16,960 --> 00:01:18,690
+Uh, that is a super,
+呃，这是超级的，
+
+28
+00:01:18,690 --> 00:01:22,065
+super broad title, Natural Language Generation.
+超级名称，自然语言生成。
+
+29
+00:01:22,065 --> 00:01:25,685
+Um, NLG encompasses a huge variety of research areas
+嗯，NLG涵盖了各种各样的研究领域
+
+30
+00:01:25,685 --> 00:01:27,800
+and pretty much each of those could have had
+几乎每个人都可以拥有
+
+31
+00:01:27,800 --> 00:01:29,825
+their own lectures and we could have taught a whole,
+他们自己的讲座，我们可以教一个整体，
+
+32
+00:01:29,825 --> 00:01:34,035
+a whole quarter- quarter's worth of classes on, ah, NLG.
+一个完整的四分之一的课程，啊，NLG。
+
+33
+00:01:34,035 --> 00:01:37,475
+Uh, but we're going to try to cover a selection of things today.
+呃，但我们今天要试着报道一些事情。
+
+34
+00:01:37,475 --> 00:01:41,520
+And, um, uh, it's mostly going to be, uh,
+而且，恩，呃，它主要是，呃，
+
+35
+00:01:41,520 --> 00:01:42,895
+guided by the things which, uh,
+在事物的引导下，呃，
+
+36
+00:01:42,895 --> 00:01:46,040
+I've seen that I think are cool or interesting or exciting.
+我已经看到我认为很酷或有趣或令人兴奋。
+
+37
+00:01:46,040 --> 00:01:48,140
+So it's by no means going to be comprehensive but
+所以它决不会是全面的，但是
+
+38
+00:01:48,140 --> 00:01:51,300
+I hope you're going to enjoy some of the stuff we're going to learn about.
+我希望你能够享受我们将要学习的一些东西。
+
+39
+00:01:52,070 --> 00:01:56,660
+Okay, so in particular we're going to start off by having a recap of what we
+好的，特别是我们首先要回顾一下我们的情况
+
+40
+00:01:56,660 --> 00:02:01,070
+already know about Natural Language Generation to make sure we're on the same page.
+我们已经了解自然语言生成，以确保我们在同一页面上。
+
+41
+00:02:01,070 --> 00:02:04,235
+And we're also going to learn a little bit extra about decoding algorithms.
+我们还将学习更多有关解码算法的知识。
+
+42
+00:02:04,235 --> 00:02:05,870
+So we learned a bit before about, uh,
+所以我们之前学到了一点，呃，
+
+43
+00:02:05,870 --> 00:02:08,329
+greedy decoding and beam search decoding,
+贪心解码和波束搜索解码，
+
+44
+00:02:08,329 --> 00:02:10,280
+but today we're going to learn some extra information about
+但是今天我们要学习一些额外的信息
+
+45
+00:02:10,280 --> 00:02:13,085
+that and some other types of decoding algorithms.
+那和一些其他类型的解码算法。
+
+46
+00:02:13,085 --> 00:02:15,710
+After that we're going to go through, um,
+在那之后我们将要经历，嗯，
+
+47
+00:02:15,710 --> 00:02:17,570
+a pretty quick tour of lots of
+非常快速的游览
+
+48
+00:02:17,570 --> 00:02:21,860
+different NLG tasks and a selection of neural approaches to them.
+不同的NLG任务和一系列神经方法。
+
+49
+00:02:21,860 --> 00:02:25,580
+And then after that we're gonna talk about probably the biggest problem in NLG research,
+之后我们将讨论可能是NLG研究中的最大问题，
+
+50
+00:02:25,580 --> 00:02:29,945
+which is NLG evaluation and why it is such a tricky situation.
+这是NLG评估以及为什么它是如此棘手的情况。
+
+51
+00:02:29,945 --> 00:02:33,665
+And then lastly, we're going to have some concluding thoughts on NLG research.
+最后，我们将对NLG研究有一些总结性的想法。
+
+52
+00:02:33,665 --> 00:02:37,440
+What are the current trends and where are we going in the future?
+目前的趋势是什么？未来我们将走向何方？
+
+53
+00:02:38,260 --> 00:02:47,875
+Okay. So, uh, section one, let's do a recap.
+好的。所以，呃，第一部分，让我们来回顾一下。
+
+54
+00:02:47,875 --> 00:02:51,440
+Okay, so Natural Language Generation to define it just
+好吧，所以自然语言生成只是定义它
+
+55
+00:02:51,440 --> 00:02:55,090
+refers to any setting in which we are generating some kind of text.
+指我们生成某种文本的任何设置。
+
+56
+00:02:55,090 --> 00:02:58,385
+So for example, NLG is an important sub-component
+因此，例如，NLG是一个重要的子组件
+
+57
+00:02:58,385 --> 00:03:01,400
+of lots of different tasks such as, uh, machine translation,
+很多不同的任务，比如，呃，机器翻译，
+
+58
+00:03:01,400 --> 00:03:04,370
+we've already met, uh, abstracted summarization,
+我们已经见过了，呃抽象摘要，
+
+59
+00:03:04,370 --> 00:03:06,305
+we'll learn a bit more about that later, um,
+我们稍后会详细了解，嗯，
+
+60
+00:03:06,305 --> 00:03:09,760
+dialogue both chit-chat and task-based.
+对话聊天和基于任务的对话。
+
+61
+00:03:09,760 --> 00:03:15,155
+Uh, also creative writing tasks such as writing stories and writing poems even.
+呃，还有创造性的写作任务，比如写故事和写诗。
+
+62
+00:03:15,155 --> 00:03:17,420
+NLG is also a sub-component of,
+NLG也是其中的一个子组件，
+
+63
+00:03:17,420 --> 00:03:19,610
+uh, free-form question answering.
+呃，自由形式的问答。
+
+64
+00:03:19,610 --> 00:03:22,280
+So I know a lot of you are doing the SQuAD project right now, uh,
+所以我知道很多你现在正在做SQUAD项目，呃，
+
+65
+00:03:22,280 --> 00:03:26,030
+that is not an NLG task because you're just extracting the answer from the,
+这不是一个NLG任务，因为你只是从中提取答案，
+
+66
+00:03:26,030 --> 00:03:27,245
+uh, the source document.
+呃，源文件。
+
+67
+00:03:27,245 --> 00:03:29,510
+But there are other question answering tasks
+但还有其他问题回答任务
+
+68
+00:03:29,510 --> 00:03:31,775
+that do have a Natural Language Generation component.
+确实有自然语言生成组件。
+
+69
+00:03:31,775 --> 00:03:35,870
+Uh, image captioning is another example of,
+呃，图像字幕是另一个例子，
+
+70
+00:03:35,870 --> 00:03:38,610
+uh, a task that has an NLG sub-component.
+呃，一个有NLG子组件的任务。
+
+71
+00:03:38,810 --> 00:03:43,625
+So NLG is a pretty cool component of a lot of different NLP tasks.
+因此，NLG是许多不同NLP任务中非常酷的组成部分。
+
+72
+00:03:43,625 --> 00:03:45,440
+All right, let's go into our recap.
+好的，让我们进入我们的回顾。
+
+73
+00:03:45,440 --> 00:03:47,450
+So the first thing I want to recap is,
+所以我要回顾的第一件事是，
+
+74
+00:03:47,450 --> 00:03:48,725
+uh, what is language modeling?
+呃，什么是语言建模？
+
+75
+00:03:48,725 --> 00:03:53,300
+Um, I've noticed that some people are a little bit confused about this, I think it, uh,
+嗯，我注意到有些人对此有点困惑，我想，呃，
+
+76
+00:03:53,300 --> 00:03:56,300
+might be because the name language modeling sounds like it might mean
+可能是因为名称语言建模听起来像它可能意味着
+
+77
+00:03:56,300 --> 00:04:00,635
+just simply encoding language like representing language using embeddings or something.
+只需使用嵌入或其他东西编码语言就像代表语言一样。
+
+78
+00:04:00,635 --> 00:04:02,930
+So as a reminder language modeling,
+所以作为提醒语言建模，
+
+79
+00:04:02,930 --> 00:04:04,135
+uh, has a more precise meaning.
+呃，有更精确的含义。
+
+80
+00:04:04,135 --> 00:04:09,245
+Language modeling is the task of predicting the next word given the word so far.
+到目前为止，语言建模是预测下一个单词的任务。
+
+81
+00:04:09,245 --> 00:04:11,300
+So any system which produces
+所以任何产生的系统
+
+82
+00:04:11,300 --> 00:04:16,420
+this conditional probability distribution that does this task is called a Language Model.
+执行此任务的条件概率分布称为语言模型。
+
+83
+00:04:16,420 --> 00:04:18,645
+And if that language model,
+如果那个语言模型，
+
+84
+00:04:18,645 --> 00:04:20,025
+uh, system is an RNN,
+呃，系统是RNN，
+
+85
+00:04:20,025 --> 00:04:24,190
+then we often abbreviate it as RNN-Language Model.
+然后我们经常将其缩写为RNN语言模型。
+
+86
+00:04:24,350 --> 00:04:27,390
+Okay, so I hope, uh, you'll remember that.
+好的，所以我希望，呃，你会记得的。
+
+87
+00:04:27,390 --> 00:04:29,060
+Uh, the next thing we're going to recap is do you
+呃，接下来我们要回顾一下的是你
+
+88
+00:04:29,060 --> 00:04:31,060
+remember what a Conditional Language Model is?
+还记得条件语言模型是什么吗？
+
+89
+00:04:31,060 --> 00:04:35,040
+Uh, the task of Conditional Language Modeling is when you're predicting, uh,
+呃，条件语言建模的任务就是当你预测时，呃，
+
+90
+00:04:35,040 --> 00:04:37,910
+what word's going to come next but you're also conditioning on
+接下来会说些什么，但你也在调整
+
+91
+00:04:37,910 --> 00:04:41,585
+some other input x as well as all of your words so far.
+到目前为止，还有其他一些输入x以及你所有的单词。
+
+92
+00:04:41,585 --> 00:04:45,640
+So to recap some examples of conditional language modeling include, uh,
+所以回顾一下条件语言建模的一些例子包括，呃，
+
+93
+00:04:45,640 --> 00:04:49,145
+machine translation where you're conditioning on the source sentence x,
+机器翻译，你在源句x上调节，
+
+94
+00:04:49,145 --> 00:04:52,940
+uh, summarization you're conditioning on your input text that you're trying to summarize.
+呃，总结一下，你正在调整你想要总结的输入文本。
+
+95
+00:04:52,940 --> 00:04:57,510
+Dialogue, you're conditioning on your dialogue history and so on.
+对话，你正在调整对话历史等等。
+
+96
+00:04:57,680 --> 00:05:03,455
+Okay, uh, next we're going to quickly recap how do you train an RNN-Language model?
+好的，呃，接下来我们将快速回顾一下你如何训练RNN-Language模型？
+
+97
+00:05:03,455 --> 00:05:07,760
+I guess, it could also be a transformer-based language model or a CNN-based language model,
+我想，它也可能是基于变压器的语言模型或基于CNN的语言模型，
+
+98
+00:05:07,760 --> 00:05:11,090
+now that you know about those, uh, and it could be conditional or it could be not.
+既然你知道那些，呃，它可能是有条件的，也可能不是。
+
+99
+00:05:11,090 --> 00:05:15,620
+So the main thing I want to remind you about is that when you are training the system,
+所以我想提醒你的主要事情是，当你训练系统时，
+
+100
+00:05:15,620 --> 00:05:18,410
+then you feed in the target sequence that you're trying to
+然后你输入你想要的目标序列
+
+101
+00:05:18,410 --> 00:05:21,620
+generate so where it says target sentence from corpus, uh,
+生成所以说它来自语料库的目标句子，呃，
+
+102
+00:05:21,620 --> 00:05:24,290
+that's saying that you have some sequence that you're trying to
+那就是说你有一些你想要的序列
+
+103
+00:05:24,290 --> 00:05:27,785
+generate and you feed that into the decoder, the RNN-Language model.
+生成并将其输入解码器RNN-Language模型。
+
+104
+00:05:27,785 --> 00:05:31,385
+And then it predicts what words are going to come next.
+然后它预测接下来会发生什么样的话。
+
+105
+00:05:31,385 --> 00:05:35,010
+So the super important thing is that during training,
+所以最重要的是在训练期间，
+
+106
+00:05:35,010 --> 00:05:39,430
+we're feeding the gold, that is the reference target sentence into the decoder,
+我们把黄金，即参考目标句子送入解码器，
+
+107
+00:05:39,430 --> 00:05:41,980
+regardless of what the decoder is predicting.
+无论解码器预测什么。
+
+108
+00:05:41,980 --> 00:05:46,750
+So even if let's say this is a very bad decoder that isn't predicting the correct words,
+所以，即使让我们说这是一个非常糟糕的解码器，它不能预测正确的单词，
+
+109
+00:05:46,750 --> 00:05:48,550
+uh, it's not, you know, predicting them high at all,
+呃，它不是，你知道，根本没有预测它们，
+
+110
+00:05:48,550 --> 00:05:51,790
+um, that doesn't matter we still just, um,
+嗯，这没关系，我们还是，嗯，
+
+111
+00:05:51,790 --> 00:05:55,595
+input the targets- the gold target sequence into the decoder.
+将目标 - 黄金目标序列输入解码器。
+
+112
+00:05:55,595 --> 00:05:58,660
+And, um, I'm emphasizing this because it's going to come up later,
+而且，嗯，我正在强调这一点，因为它会在以后出现，
+
+113
+00:05:58,660 --> 00:06:00,895
+uh, this training method is called Teacher Forcing.
+呃，这种训练方法叫做教师强迫。
+
+114
+00:06:00,895 --> 00:06:03,170
+Which might be a phrase that you have come across elsewhere.
+这可能是您在其他地方遇到过的短语。
+
+115
+00:06:03,170 --> 00:06:05,975
+So, yeah, it refers to the fact that the teacher,
+所以，是的，它指的是老师，
+
+116
+00:06:05,975 --> 00:06:09,160
+that is kind of like the gold input is- is forcing, uh,
+这有点像黄金输入正在逼迫，呃，
+
+117
+00:06:09,160 --> 00:06:11,260
+the language model to use that on every step
+在每一步使用它的语言模型
+
+118
+00:06:11,260 --> 00:06:14,495
+instead of using its own predictions on each step.
+而不是在每一步使用自己的预测。
+
+119
+00:06:14,495 --> 00:06:18,630
+So that's how you train a RNN-Language model which might be conditional.
+这就是你如何训练可能有条件的RNN语言模型。
+
+120
+00:06:18,630 --> 00:06:20,610
+Uh, okay.
+呃，好的。
+
+121
+00:06:20,610 --> 00:06:22,815
+So now a recap on decoding algorithms.
+所以现在回顾一下解码算法。
+
+122
+00:06:22,815 --> 00:06:26,945
+So, uh, you've got your trained language model which might be conditional.
+所以，呃，你已经掌握了训练有素的语言模型。
+
+123
+00:06:26,945 --> 00:06:29,345
+The question is how do you use it to generate a text?
+问题是你如何使用它来生成文本？
+
+124
+00:06:29,345 --> 00:06:32,000
+So the answer is you need a decoding algorithm.
+所以答案是你需要一个解码算法。
+
+125
+00:06:32,000 --> 00:06:34,640
+A decoding algorithm is an algorithm you use to
+解码算法是您使用的算法
+
+126
+00:06:34,640 --> 00:06:37,585
+generate the text from your trained language model.
+从训练有素的语言模型中生成文本。
+
+127
+00:06:37,585 --> 00:06:39,680
+So, uh, in the NMT lecture
+所以，呃，在NMT讲座
+
+128
+00:06:39,680 --> 00:06:42,470
+a few weeks ago we learned about two different decoding algorithms.
+几个星期前，我们了解了两种不同的解码算法。
+
+129
+00:06:42,470 --> 00:06:45,620
+We learned about greedy decoding and beam search.
+我们学习了贪心解码和光束搜索。
+
+130
+00:06:45,620 --> 00:06:47,795
+So let's quickly recap those.
+所以让我们快速回顾一下。
+
+131
+00:06:47,795 --> 00:06:51,215
+Uh, greedy decoding is a pretty simple algorithm.
+呃，贪心解码是一个非常简单的算法。
+
+132
+00:06:51,215 --> 00:06:53,030
+On each step you just take what's
+在每一步，你只需要采取什么
+
+133
+00:06:53,030 --> 00:06:55,895
+the most probable words according to the language model.
+根据语言模型最可能的单词。
+
+134
+00:06:55,895 --> 00:06:59,245
+You could deal with the argmax and then use that as the next word,
+您可以处理argmax，然后将其用作下一个单词，
+
+135
+00:06:59,245 --> 00:07:01,340
+you feed it in as the input on the next step.
+你把它作为下一步的输入。
+
+136
+00:07:01,340 --> 00:07:03,860
+And you just keep going until you produce some kind of END
+而你只是继续前进，直到你产生某种END
+
+137
+00:07:03,860 --> 00:07:06,620
+token or maybe when you reach some maximum length.
+令牌或者当你达到某个最大长度时。
+
+138
+00:07:06,620 --> 00:07:09,805
+And I think you're all quite familiar with this because you did it in assignment five.
+而且我认为你们都非常熟悉这一点，因为你是在第五部分中做到的。
+
+139
+00:07:09,805 --> 00:07:15,220
+So uh, yes this diagram shows how greedy decoding would work to generate the sentence.
+嗯，是的，这个图表显示了贪婪的解码如何产生句子。
+
+140
+00:07:15,220 --> 00:07:17,415
+So as we learned before,
+正如我们之前所了解的，
+
+141
+00:07:17,415 --> 00:07:19,610
+due to a kind of lack of backtracking and
+由于缺乏回溯和
+
+142
+00:07:19,610 --> 00:07:22,130
+inability to go back if you made a wrong choice, uh,
+如果你做出了错误的选择，就无法回去，呃，
+
+143
+00:07:22,130 --> 00:07:25,050
+the output from greedy decoding is generally, uh,
+贪心解码的输出一般是，呃，
+
+144
+00:07:25,050 --> 00:07:30,280
+pretty poor like it can be ungrammatical, or it can be unnatural, kind of nonsensical.
+非常贫穷，因为它可能是不合语法的，或者它可能是不自然的，有点荒谬。
+
+145
+00:07:30,280 --> 00:07:33,275
+Okay, let's recap beam search decoding.
+好的，让我们回顾一下波束搜索解码。
+
+146
+00:07:33,275 --> 00:07:38,660
+So beam search is a search algorithm which aims to find a high probability sequence.
+因此，波束搜索是一种旨在找到高概率序列的搜索算法。
+
+147
+00:07:38,660 --> 00:07:43,610
+So if we're doing translation that sequence is the sequence of translation words,
+因此，如果我们正在进行翻译，那么序列就是翻译单词的顺序，
+
+148
+00:07:43,610 --> 00:07:48,200
+um, by tracking multiple possible sequences at once.
+嗯，一次跟踪多个可能的序列。
+
+149
+00:07:48,200 --> 00:07:51,980
+So the core idea is that on each step of the decoder,
+所以核心思想是在解码器的每一步，
+
+150
+00:07:51,980 --> 00:07:53,060
+you're going to be keeping track of
+你将要跟踪
+
+151
+00:07:53,060 --> 00:07:57,515
+the K most probable partial sequences which we call hypotheses.
+K最可能的部分序列，我们称之为假设。
+
+152
+00:07:57,515 --> 00:08:01,000
+And here K is some hyper- hyper parameter called the beam size.
+这里K是一些称为光束大小的超超参数。
+
+153
+00:08:01,000 --> 00:08:02,570
+So the idea is by um,
+所以这个想法是由嗯，
+
+154
+00:08:02,570 --> 00:08:05,870
+considering lots of different hypotheses we're going to try to search effectively for
+考虑到许多不同的假设，我们将尝试有效地搜索
+
+155
+00:08:05,870 --> 00:08:07,790
+a high probability sequence but there is
+高概率序列，但有
+
+156
+00:08:07,790 --> 00:08:10,285
+no guarantee that this is going to be the optimal,
+不能保证这是最佳的，
+
+157
+00:08:10,285 --> 00:08:12,870
+most high probability sequence.
+最高概率序列。
+
+158
+00:08:12,870 --> 00:08:15,930
+So, uh, at the end of beam search, uh,
+所以，呃，在光束搜索结束时，呃，
+
+159
+00:08:15,930 --> 00:08:17,930
+you reach some kind of stopping criterion which we talked
+你达到了我们谈到的某种停止标准
+
+160
+00:08:17,930 --> 00:08:20,300
+about before but I won't cover in detail again.
+关于以前，但我不会再详细介绍。
+
+161
+00:08:20,300 --> 00:08:22,610
+Uh, and once you've reached your stopping criterion,
+呃，一旦达到停止标准，
+
+162
+00:08:22,610 --> 00:08:25,175
+you choose the sequence with the highest probability,
+你选择概率最高的序列，
+
+163
+00:08:25,175 --> 00:08:29,495
+um, factoring in some adjustments for length and then that's your output.
+嗯，考虑一些长度调整，那就是你的输出。
+
+164
+00:08:29,495 --> 00:08:31,400
+So just to do this one more time.
+所以，再一次这样做。
+
+165
+00:08:31,400 --> 00:08:35,435
+Here's the diagram that we saw in the NMT lecture of beam search decoding um,
+这是我们在NMT梁搜索解码讲座中看到的图表，
+
+166
+00:08:35,435 --> 00:08:40,025
+once it's completed and in this scenario we have a beam size of two.
+一旦完成，在这种情况下，我们的光束大小为2。
+
+167
+00:08:40,025 --> 00:08:43,180
+So this is what it looks like after we've done this exploration problem,
+所以这就是我们完成这个探索问题后的样子，
+
+168
+00:08:43,180 --> 00:08:45,420
+this shows the full tree that we explored,
+这显示了我们探索的完整树，
+
+169
+00:08:45,420 --> 00:08:49,145
+and then we've come to some kind of stopping criterion and we identify the top,
+然后我们达到某种停止标准，我们确定顶部，
+
+170
+00:08:49,145 --> 00:08:50,480
+uh, hypothesis and, uh,
+呃，假设，呃，
+
+171
+00:08:50,480 --> 00:08:52,510
+that's highlighted in green.
+以绿色突出显示。
+
+172
+00:08:52,510 --> 00:08:55,815
+So on the subject of beam search decoding,
+那么在光束搜索解码的主题上，
+
+173
+00:08:55,815 --> 00:08:57,810
+I was watching TV the other day,
+前几天我在看电视，
+
+174
+00:08:57,810 --> 00:09:00,710
+and I notice something in Westworld.
+我在Westworld注意到了一些事情。
+
+175
+00:09:00,710 --> 00:09:06,020
+I think the hosts- [LAUGHTER] the AI hosts in Westworld maybe used beam search.
+我认为主持人 -  [笑声] Westworld中的AI主持人可能会使用光束搜索。
+
+176
+00:09:06,020 --> 00:09:08,840
+Which is something I wasn't expecting to see on TV.
+这是我不希望在电视上看到的东西。
+
+177
+00:09:08,840 --> 00:09:10,945
+[LAUGHTER] So there's this scene,
+[大笑]所以有这个场景，
+
+178
+00:09:10,945 --> 00:09:12,390
+uh, Westworld is, by the way,
+呃，Westworld，顺便说一下，
+
+179
+00:09:12,390 --> 00:09:14,240
+a sci-fi series that has these, um,
+有这些的科幻系列，嗯，
+
+180
+00:09:14,240 --> 00:09:16,580
+very convincing humanoid AI systems.
+非常有说服力的人形AI系统。
+
+181
+00:09:16,580 --> 00:09:19,040
+Um, and there's a scene where one of
+嗯，那里有一个场景
+
+182
+00:09:19,040 --> 00:09:22,055
+the AI systems is confronted with the reality of the fact that,
+人工智能系统面临的事实是，
+
+183
+00:09:22,055 --> 00:09:23,975
+um, she, I suppose is,
+嗯，她，我想，是的，
+
+184
+00:09:23,975 --> 00:09:29,850
+um, not human because she sees the generation system of words as she says them,
+嗯，不是人类，因为她看到了她所说的生成系统，
+
+185
+00:09:29,850 --> 00:09:31,680
+and I was looking at the TV and I thought,
+而我正在看电视，我想，
+
+186
+00:09:31,680 --> 00:09:32,775
+is that beam search?
+是光束搜索？
+
+187
+00:09:32,775 --> 00:09:35,840
+Because that diagram looks a lot like this diagram here,
+因为这个图看起来很像这个图，
+
+188
+00:09:35,840 --> 00:09:38,580
+um, but maybe with a bigger beam size.
+嗯，但也许光束尺寸更大。
+
+189
+00:09:38,580 --> 00:09:40,605
+So, I thought, that was pretty cool because, you know,
+所以，我想，这很酷，因为，你知道，
+
+190
+00:09:40,605 --> 00:09:43,490
+AI has hit the mainstream when you see beam search on TV.
+当你在电视上看到光束搜索时，人工智能已经成为主流。
+
+191
+00:09:43,490 --> 00:09:45,200
+And then if you zoom in really hard you can see
+然后，如果你真的很难放大，你可以看到
+
+192
+00:09:45,200 --> 00:09:49,470
+some other exciting words in this screenshot like knowledge base,
+这个截图中的其他令人兴奋的单词，如知识库，
+
+193
+00:09:49,470 --> 00:09:51,170
+forward chaining and backward chaining,
+前向链接和后向链接，
+
+194
+00:09:51,170 --> 00:09:54,200
+identifies the same thing as forward prop and backward prop,
+识别与前方支柱和后方支柱相同的东西，
+
+195
+00:09:54,200 --> 00:09:57,185
+um, and also fuzzy logic algorithms and neural net.
+嗯，还有模糊逻辑算法和神经网络。
+
+196
+00:09:57,185 --> 00:09:59,390
+Um, so yeah, beam search,
+嗯，是的，梁搜索，
+
+197
+00:09:59,390 --> 00:10:00,875
+I think, has hit the mainstream now,
+我认为，现在已经成为主流，
+
+198
+00:10:00,875 --> 00:10:04,100
+um, so it's good enough for Westworld,
+嗯，这对Westworld来说已经足够了，
+
+199
+00:10:04,100 --> 00:10:05,060
+maybe it's good enough for us.
+也许这对我们来说已经足够了。
+
+200
+00:10:05,060 --> 00:10:08,500
+Uh, so with beam search, right?
+呃，光束搜索，对吧？
+
+201
+00:10:08,500 --> 00:10:12,055
+We've talked about how you have this hyperparameter k or the beam size.
+我们已经讨论了如何使用这个超参数k或光束大小。
+
+202
+00:10:12,055 --> 00:10:14,110
+And one thing we didn't talk about in the last lecture,
+还有一件事我们在上一讲中没有谈到，
+
+203
+00:10:14,110 --> 00:10:16,660
+so now we're leaving the recap portion, um,
+所以现在我们要离开recap部分了，嗯，
+
+204
+00:10:16,660 --> 00:10:20,980
+is what's the effect of changing that beam size k. So, uh,
+改变光束大小k的效果是什么？所以，呃，
+
+205
+00:10:20,980 --> 00:10:22,480
+if you have a really small k,
+如果你有一个非常小的k，
+
+206
+00:10:22,480 --> 00:10:26,065
+then you're gonna have similar problems to greedy decoding.
+然后你会遇到类似贪婪解码的问题。
+
+207
+00:10:26,065 --> 00:10:27,370
+And in fact, if k equals one,
+事实上，如果k等于1，
+
+208
+00:10:27,370 --> 00:10:29,890
+then you are actually just doing greedy decoding.
+那么你实际上只是做贪婪的解码。
+
+209
+00:10:29,890 --> 00:10:32,410
+So those same problems are, you know, ungrammatical,
+所以同样的问题，你知道，不合语法，
+
+210
+00:10:32,410 --> 00:10:36,805
+maybe unnatural, nonsensical, just kind of plain incorrect output.
+也许不自然，荒谬，只是一种普通的错误输出。
+
+211
+00:10:36,805 --> 00:10:39,415
+So once if we get larger k,
+所以，如果我们得到更大的k，
+
+212
+00:10:39,415 --> 00:10:41,305
+if you have a larger beam size,
+如果你有更大的光束尺寸，
+
+213
+00:10:41,305 --> 00:10:46,750
+then you're doing your search algorithm but considering more hypotheses, right?
+然后你正在做你的搜索算法，但考虑更多的假设，对吧？
+
+214
+00:10:46,750 --> 00:10:48,610
+You're, you're having a larger search space and
+你是，你有更大的搜索空间和
+
+215
+00:10:48,610 --> 00:10:51,100
+you're considering more different possibilities.
+你正在考虑更多不同的可能性。
+
+216
+00:10:51,100 --> 00:10:55,495
+So if you do that, then we often find that this reduces some of the problems above.
+因此，如果你这样做，那么我们经常发现这减少了上面的一些问题。
+
+217
+00:10:55,495 --> 00:10:58,540
+So you're much less likely to have this ungrammatical,
+所以你不太可能有这种不合语法的，
+
+218
+00:10:58,540 --> 00:11:01,015
+uh, you know, disjointed output.
+呃，你知道，输出脱节​​了。
+
+219
+00:11:01,015 --> 00:11:04,930
+But there are some downsides to raising k. So of course,
+但是提高k有一些缺点。当然，
+
+220
+00:11:04,930 --> 00:11:06,969
+larger k is more computationally expensive
+较大的k在计算上更昂贵
+
+221
+00:11:06,969 --> 00:11:09,250
+and that can get pretty bad if you're trying to, um,
+如果你想要，那可能会变得非常糟糕，嗯，
+
+222
+00:11:09,250 --> 00:11:11,530
+for example, generate your, uh,
+例如，生成你的，呃，
+
+223
+00:11:11,530 --> 00:11:12,850
+outputs for a large, you know,
+你知道，大的输出
+
+224
+00:11:12,850 --> 00:11:15,475
+test set of NMT examples.
+测试集的NMT例子。
+
+225
+00:11:15,475 --> 00:11:17,680
+Um, but more seriously than that,
+嗯，但比这更重要，
+
+226
+00:11:17,680 --> 00:11:19,870
+increasing k can introduce some other problems.
+增加k可以引入一些其他问题。
+
+227
+00:11:19,870 --> 00:11:23,245
+So for example, it's been shown that in NMT,
+例如，已经证明在NMT中，
+
+228
+00:11:23,245 --> 00:11:28,030
+increasing the beam size too much actually decreases the BLEU score.
+过度增加光束尺寸实际上会降低BLEU分数。
+
+229
+00:11:28,030 --> 00:11:30,625
+And this is kind of counter-intuitive, right?
+这有点违反直觉，对吧？
+
+230
+00:11:30,625 --> 00:11:32,875
+Because we were thinking of beam search
+因为我们正在考虑光束搜索
+
+231
+00:11:32,875 --> 00:11:35,410
+as this algorithm that tries to find the optimal solution.
+作为试图找到最优解的算法。
+
+232
+00:11:35,410 --> 00:11:37,015
+So surely, if you increase k,
+所以肯定的是，如果你增加k，
+
+233
+00:11:37,015 --> 00:11:39,970
+then you're only going to find a better solution, right?
+那么你只会找到更好的解决方案，对吧？
+
+234
+00:11:39,970 --> 00:11:44,440
+Um, so I think maybe the key here is the difference between optimality
+嗯，所以我想也许这里的关键是最优性之间的区别
+
+235
+00:11:44,440 --> 00:11:46,300
+in terms of the search problem that is finding
+就发现的搜索问题而言
+
+236
+00:11:46,300 --> 00:11:48,895
+a high probability sequence and BLEU score,
+高概率序列和BLEU得分，
+
+237
+00:11:48,895 --> 00:11:50,080
+which are two separate things,
+这是两个独立的事情，
+
+238
+00:11:50,080 --> 00:11:54,310
+and there's no guarantee that they actually, um, correspond, right?
+并且不能保证他们实际上，嗯，对应，对吧？
+
+239
+00:11:54,310 --> 00:11:57,850
+And I mean, there's a difference, again, between BLEU score and actual translation,
+我的意思是，BLEU得分与实际翻译之间存在差异，
+
+240
+00:11:57,850 --> 00:11:59,440
+uh, quality as we know.
+呃，我们知道的质量。
+
+241
+00:11:59,440 --> 00:12:01,720
+So if you look at the two papers which I've linked to
+所以，如果你看看我链接的两篇论文
+
+242
+00:12:01,720 --> 00:12:04,390
+here which are the ones that show that,
+这里显示的是，
+
+243
+00:12:04,390 --> 00:12:07,330
+uh, increasing beam size too much decreases the BLEU score.
+呃，增加光束尺寸太大会降低BLEU评分。
+
+244
+00:12:07,330 --> 00:12:10,690
+They explain it by saying that the main reason why this
+他们通过说出这个的主要原因来解释它
+
+245
+00:12:10,690 --> 00:12:14,365
+happens is because when you increase the beam size too much,
+发生的原因是当你增加光束尺寸太大时，
+
+246
+00:12:14,365 --> 00:12:18,370
+then you end up producing translations that are too short.
+然后你最终会产生太短的翻译。
+
+247
+00:12:18,370 --> 00:12:22,720
+So I mean, that kind of explains it to a degree that translations are too short,
+所以我的意思是，这种解释在某种程度上翻译太短，
+
+248
+00:12:22,720 --> 00:12:24,130
+therefore they have low BLEU because they're
+因此他们的BLEU很低
+
+249
+00:12:24,130 --> 00:12:26,230
+probably missing words that they should contain.
+可能遗漏了他们应该包含的词。
+
+250
+00:12:26,230 --> 00:12:29,860
+But the question is, why does large beam size gives you short translations?
+但问题是，为什么大光束尺寸会为您提供简短的翻译？
+
+251
+00:12:29,860 --> 00:12:31,210
+I think that's harder to answer.
+我认为这很难回答。
+
+252
+00:12:31,210 --> 00:12:34,975
+Wherever, in these two papers, I didn't see an explicit explanation of why.
+在这两篇论文中，我没有看到对原因的明确解释。
+
+253
+00:12:34,975 --> 00:12:37,920
+Um, I think it's possible larger kind of passing,
+嗯，我认为这可能是更大的传递，
+
+254
+00:12:37,920 --> 00:12:41,565
+we see sometimes with beam search which is when you really increase your, uh,
+我们有时会看到光束搜索，当你真正增加你的时候，呃，
+
+255
+00:12:41,565 --> 00:12:43,440
+search space and make the search much more
+搜索空间并进行更多搜索
+
+256
+00:12:43,440 --> 00:12:46,620
+powerful so that it can consider lots of different alternatives.
+功能强大，可以考虑许多不同的选择。
+
+257
+00:12:46,620 --> 00:12:49,620
+It can end up finding these high probability,
+它最终可能会发现这些概率很高，
+
+258
+00:12:49,620 --> 00:12:53,205
+um, sequences which aren't actually the thing that you want.
+嗯，这些序列实际上并不是你想要的东西。
+
+259
+00:12:53,205 --> 00:12:55,260
+Sure, they're high probabili- probability
+当然，他们的概率很高
+
+260
+00:12:55,260 --> 00:12:57,350
+but they're not actually the thing that you wanted.
+但它们实际上并不是你想要的东西。
+
+261
+00:12:57,350 --> 00:13:00,550
+Um, so another example of that is
+嗯，所以另一个例子是
+
+262
+00:13:00,550 --> 00:13:03,625
+that in open-ended tasks like for example chit-chat dialogue
+在开放式任务中，例如聊天对话
+
+263
+00:13:03,625 --> 00:13:04,825
+where you're trying to just, um,
+你想要的地方，嗯，
+
+264
+00:13:04,825 --> 00:13:07,330
+say something interesting back to your conversational partner,
+对你的对话伙伴说一些有趣的话，
+
+265
+00:13:07,330 --> 00:13:10,300
+if we use a beam search with a large beam size,
+如果我们使用大光束尺寸的光束搜索，
+
+266
+00:13:10,300 --> 00:13:13,495
+we find that that can give you some output that is really generic.
+我们发现这可以给你一些非常通用的输出。
+
+267
+00:13:13,495 --> 00:13:16,405
+Um, and I'll give you an example here to show you what I mean.
+嗯，我会在这里给你一个例子来告诉你我的意思。
+
+268
+00:13:16,405 --> 00:13:20,545
+So these are examples from a chit-chat,
+所以这些是聊天聊天的例子，
+
+269
+00:13:20,545 --> 00:13:22,825
+uh, dialogue project that I was doing.
+呃，我正在做的对话项目。
+
+270
+00:13:22,825 --> 00:13:24,190
+So here you've got, uh,
+所以你在这里，呃，
+
+271
+00:13:24,190 --> 00:13:28,330
+your human chit-chat partner said something like I mostly eat a fresh and raw diet,
+你的人类聊天伙伴说我喜欢吃新鲜的生食，
+
+272
+00:13:28,330 --> 00:13:29,785
+so I save on groceries.
+所以我节省了杂货。
+
+273
+00:13:29,785 --> 00:13:34,030
+And then here's what the chat bot said back depending on the beam size.
+然后这是聊天机器人根据光束大小说回来的内容。
+
+274
+00:13:34,030 --> 00:13:37,790
+I will let you read that.
+我会让你读到这个。
+
+275
+00:13:43,590 --> 00:13:47,350
+So I would say that this is fairly characteristic of what you see
+所以我想说这是你看到的相当特征
+
+276
+00:13:47,350 --> 00:13:50,500
+happening when you raise and lower the beam size [NOISE].
+当你提高和降低光束尺寸时会发生[NOISE]。
+
+277
+00:13:50,500 --> 00:13:51,955
+When you have a low beam size,
+如果光束尺寸较小，
+
+278
+00:13:51,955 --> 00:13:54,700
+um, it might be more kind of on topic.
+嗯，它可能更专注于主题。
+
+279
+00:13:54,700 --> 00:13:57,580
+Like here, we can see that eat healthy, eat healthy,
+像这里一样，我们可以看到吃得健康，吃得健康，
+
+280
+00:13:57,580 --> 00:13:59,710
+I am a nurse so I do not eat raw food and so on,
+我是护士所以我不吃生食等等，
+
+281
+00:13:59,710 --> 00:14:02,335
+that kind of relates to what the user said,
+那种与用户说的有关
+
+282
+00:14:02,335 --> 00:14:04,150
+uh, but it's kind of bad English, right?
+呃，但这是一种糟糕的英语，对吧？
+
+283
+00:14:04,150 --> 00:14:06,100
+There's some repetition and,
+有一些重复，并且
+
+284
+00:14:06,100 --> 00:14:08,020
+uh, it doesn't always make that much sense, right?
+呃，它并不总是那么有意义，对吧？
+
+285
+00:14:08,020 --> 00:14:09,580
+Um, [NOISE] but then,
+嗯，[NOISE]但是，
+
+286
+00:14:09,580 --> 00:14:10,885
+when you raise the beam size,
+当你提高光束大小时，
+
+287
+00:14:10,885 --> 00:14:12,250
+then it kind of converges to
+然后它有点收敛
+
+288
+00:14:12,250 --> 00:14:17,185
+a safe so-called correct response but it's kind of generic and less relevant, right?
+一个安全的所谓正确的反应，但它是一种通用的，不太相关，对吧？
+
+289
+00:14:17,185 --> 00:14:19,600
+And it's kind of applicable in all scenarios, what do you do for a living.
+它适用于所有场景，你以什么为生。
+
+290
+00:14:19,600 --> 00:14:21,970
+Um, so the, the,
+嗯，所以，
+
+291
+00:14:21,970 --> 00:14:24,160
+the particular dataset I was using here is, uh,
+我在这里使用的特定数据集是，呃，
+
+292
+00:14:24,160 --> 00:14:25,240
+one called Persona-Chat,
+一个名为Persona-Chat，
+
+293
+00:14:25,240 --> 00:14:26,440
+that I'll tell you more about later.
+我稍后会告诉你更多。
+
+294
+00:14:26,440 --> 00:14:28,240
+Um, but it's a,
+嗯，但它是，
+
+295
+00:14:28,240 --> 00:14:31,315
+it's a chit-chat dialog dataset where each,
+这是一个聊天对话数据集，其中每个，
+
+296
+00:14:31,315 --> 00:14:35,575
+uh, conv- conversational partner has a persona which is a set of traits.
+呃，会话对话伙伴的角色是一组特征。
+
+297
+00:14:35,575 --> 00:14:37,600
+Um, so the reason it keeps talking about being a nurse,
+嗯，所以它一直在谈论成为一名护士，
+
+298
+00:14:37,600 --> 00:14:39,160
+I think is because it was in the persona.
+我认为是因为它在人物中。
+
+299
+00:14:39,160 --> 00:14:42,340
+[NOISE] But the main point here is that, um,
+[NOISE]但这里的要点是，嗯，
+
+300
+00:14:42,340 --> 00:14:45,685
+we kind of have an unfortunate trade off with no,
+我们有一个不幸的交易没有，
+
+301
+00:14:45,685 --> 00:14:48,805
+with no Goldilocks zone that's very obvious.
+没有金发姑娘区，这是非常明显的。
+
+302
+00:14:48,805 --> 00:14:50,410
+I mean, there's, there's a, yeah,
+我的意思是，有，有，是的，
+
+303
+00:14:50,410 --> 00:14:53,290
+kind of an unfortunate trade-off between having kind of bad,
+有点不好之间的那种不幸的权衡，
+
+304
+00:14:53,290 --> 00:14:56,680
+bad output, bad English and just having something very boring.
+糟糕的输出，糟糕的英语，只是有一些非常无聊的东西。
+
+305
+00:14:56,680 --> 00:15:00,800
+So this is one of the problems that we get with beam, beam search.
+所以这是我们通过光束，光束搜索得到的问题之一。
+
+306
+00:15:01,320 --> 00:15:03,790
+Okay. So we've talked about, uh,
+好的。所以我们谈过，呃，
+
+307
+00:15:03,790 --> 00:15:06,445
+greedy decoding and beam search. Yes.
+贪心解码和波束搜索。是。
+
+308
+00:15:06,445 --> 00:15:13,000
+So beam size depending on the [inaudible]
+所以光束大小取决于[音频不清晰]
+
+309
+00:15:13,000 --> 00:15:14,050
+The question is, can we have
+问题是，我们可以吗？
+
+310
+00:15:14,050 --> 00:15:17,755
+an adaptive beam size dependent on the position that you're in?
+自适应光束大小取决于您所处的位置？
+
+311
+00:15:17,755 --> 00:15:19,060
+You mean like in the sequence?
+你的意思是在序列中？
+
+312
+00:15:19,060 --> 00:15:26,040
+Yeah. That is in [inaudible].
+是啊。那是[听不清]。
+
+313
+00:15:26,040 --> 00:15:29,220
+Yeah. I mean, I think I- I might have heard of a research paper that does that?
+是啊。我的意思是，我想 - 我可能听说过一篇研究论文吗？
+
+314
+00:15:29,220 --> 00:15:34,885
+That adaptively like raises the capacity of the, the hypothesis space.
+这自适应地提高了假设空间的能力。
+
+315
+00:15:34,885 --> 00:15:37,135
+I mean, it sounds awkward to implement, uh,
+我的意思是，实施起来听起来很尴尬，呃，
+
+316
+00:15:37,135 --> 00:15:40,990
+because, you know, things fitting into a fixed space in your GPU.
+因为，你知道，适合GPU中固定空间的东西。
+
+317
+00:15:40,990 --> 00:15:42,580
+Um, but I think that might be possible,
+嗯，但我认为这可能，
+
+318
+00:15:42,580 --> 00:15:46,225
+I suppose you'd would have to learn the criterion on which you increase beam,
+我想你必须学习增加光束的标准，
+
+319
+00:15:46,225 --> 00:15:49,300
+beam size, yeah. Seems possible.
+光束大小，是的。似乎可能。
+
+320
+00:15:49,300 --> 00:15:51,625
+Okay. So we've talked about, uh,
+好的。所以我们谈过，呃，
+
+321
+00:15:51,625 --> 00:15:53,365
+beam search and greedy decoding.
+波束搜索和贪婪解码。
+
+322
+00:15:53,365 --> 00:15:55,990
+So here's a new family of decoding
+所以这是一个新的解码系列
+
+323
+00:15:55,990 --> 00:15:59,095
+algorithms which are pretty simple, uh, sampling-based decoding.
+算法非常简单，呃，基于采样的解码。
+
+324
+00:15:59,095 --> 00:16:03,235
+So something which I'm calling pure sampling because I didn't know what else to call it.
+所以我称之为纯采样，因为我不知道还有什么可以称之为。
+
+325
+00:16:03,235 --> 00:16:04,855
+Um, this is just the,
+嗯，这只是，
+
+326
+00:16:04,855 --> 00:16:07,360
+the simple sampling method that says that on each, uh,
+简单的抽样方法，说每个，呃，
+
+327
+00:16:07,360 --> 00:16:08,890
+timestep of your decoder t,
+解码器的时间步长t，
+
+328
+00:16:08,890 --> 00:16:12,040
+you just want to randomly sample from the probability distribution,
+你只想从概率分布中随机抽样，
+
+329
+00:16:12,040 --> 00:16:13,780
+uh, to obtain your next word.
+呃，获得你的下一个字。
+
+330
+00:16:13,780 --> 00:16:15,490
+So this is very simple.
+所以这很简单。
+
+331
+00:16:15,490 --> 00:16:17,335
+It's just like greedy decoding.
+这就像贪婪的解码。
+
+332
+00:16:17,335 --> 00:16:19,285
+But instead of taking the top words,
+但不是采取顶尖的话，
+
+333
+00:16:19,285 --> 00:16:22,220
+instead just sample from that distribution.
+而只是从该分布中抽样。
+
+334
+00:16:22,350 --> 00:16:28,600
+So the reason I call this pure sampling was to differentiate it from top-n sampling.
+所以我称之为纯采样的原因是将其与top-n采样区分开来。
+
+335
+00:16:28,600 --> 00:16:30,640
+And again, this is actually usually called top-k
+而且，这实际上通常被称为top-k
+
+336
+00:16:30,640 --> 00:16:33,400
+sampling but I already called k the beam size,
+采样，但我已经称为光束大小，
+
+337
+00:16:33,400 --> 00:16:36,340
+and I didn't want to be confusing, so I'm gonna call it top-n sampling for now.
+而且我不想让人感到困惑，所以我现在要把它称为前n个采样。
+
+338
+00:16:36,340 --> 00:16:38,935
+Um, so the idea here is also pretty simple.
+嗯，所以这里的想法也很简单。
+
+339
+00:16:38,935 --> 00:16:40,585
+On each step t,
+在每一步t，
+
+340
+00:16:40,585 --> 00:16:44,035
+you want to randomly sample from your probability distribution but
+你想从概率分布中随机抽样但是
+
+341
+00:16:44,035 --> 00:16:48,265
+you're gonna restrict to just the top n most probable words.
+你将限制在最可能的前几个词中。
+
+342
+00:16:48,265 --> 00:16:50,185
+So this is saying that it's,
+所以这就是说，
+
+343
+00:16:50,185 --> 00:16:51,430
+it's like the simple, you know,
+它就像简单的，你知道，
+
+344
+00:16:51,430 --> 00:16:56,515
+pure sampling method but you want to truncate your probability distribution just to be,
+纯采样方法，但你想截断你的概率分布，
+
+345
+00:16:56,515 --> 00:16:59,020
+you know, the, the top most probable words.
+你知道，最可能的话。
+
+346
+00:16:59,020 --> 00:17:03,145
+So, uh, the idea here kind of like how beam search, um,
+所以，呃，这里的想法有点像梁搜索，嗯，
+
+347
+00:17:03,145 --> 00:17:06,610
+gave you a hyperparameter is kind of go between greedy decoding and,
+给你一个超参数是一种贪婪的解码和，
+
+348
+00:17:06,610 --> 00:17:08,935
+you know, uh, a very exhaustive search.
+你知道，呃，一个非常详尽的搜索。
+
+349
+00:17:08,935 --> 00:17:12,025
+In the same way here, you've got a hyperparameter n
+在这里以同样的方式，你有一个超参数n
+
+350
+00:17:12,025 --> 00:17:15,340
+which can take you between greedy search and pure sampling.
+这可以带你进行贪婪搜索和纯采样。
+
+351
+00:17:15,340 --> 00:17:16,630
+If you think about this for a moment,
+如果你想一下这个，
+
+352
+00:17:16,630 --> 00:17:19,150
+if n is one, then you would truncate it the top one.
+如果n是1，那么你会将它截断为顶部。
+
+353
+00:17:19,150 --> 00:17:21,085
+So you're just taking arg max which is greedy.
+所以你只是采取贪婪的arg max。
+
+354
+00:17:21,085 --> 00:17:22,660
+And if n is vocab size,
+如果n是词汇大小，
+
+355
+00:17:22,660 --> 00:17:24,085
+then you don't truncate it at all.
+然后你根本不截断它。
+
+356
+00:17:24,085 --> 00:17:25,510
+You're sampling from everything,
+你是从一切采样，
+
+357
+00:17:25,510 --> 00:17:27,790
+that's just the pure sampling method.
+这只是纯采样方法。
+
+358
+00:17:27,790 --> 00:17:31,000
+So here, um, it should be clear, I hope,
+所以，嗯，我希望它应该是清楚的，
+
+359
+00:17:31,000 --> 00:17:33,715
+if you think about that if you increase n,
+如果你考虑增加n，
+
+360
+00:17:33,715 --> 00:17:36,910
+then you're gonna get more diverse and risky output, right?
+然后你会得到更多样化和风险的输出，对吧？
+
+361
+00:17:36,910 --> 00:17:39,235
+Because you're, uh, giving it more,
+因为你，呃，给它更多，
+
+362
+00:17:39,235 --> 00:17:42,760
+more to choose from and you're going lower into the probability distribution,
+更多的选择，你会更低的概率分布，
+
+363
+00:17:42,760 --> 00:17:44,770
+going lower into less likely things.
+更低的可能性。
+
+364
+00:17:44,770 --> 00:17:46,270
+And then, if you decrease n,
+然后，如果你减少n，
+
+365
+00:17:46,270 --> 00:17:48,580
+then you're gonna get more kind of generic safe output because you're
+然后你会得到更多种类的通用安全输出，因为你是
+
+366
+00:17:48,580 --> 00:17:51,890
+restricting more to the most high probability options.
+限制更多的概率选项。
+
+367
+00:17:53,460 --> 00:17:56,440
+So both of these are more efficient than
+所以这两者都比效率更高
+
+368
+00:17:56,440 --> 00:17:58,630
+beam search which I think is something important to note,
+光束搜索，我认为是重要的注意事项，
+
+369
+00:17:58,630 --> 00:18:02,425
+uh, because there are no multiple hypotheses to track, right?
+呃，因为没有多个假设需要跟踪，对吧？
+
+370
+00:18:02,425 --> 00:18:04,735
+Because in beam search, on every step t of the decoder,
+因为在波束搜索中，在解码器的每个步骤t，
+
+371
+00:18:04,735 --> 00:18:06,115
+you've got k different, you know,
+你知道，你有不一样的
+
+372
+00:18:06,115 --> 00:18:08,770
+beam size, many hypotheses to track.
+光束大小，跟踪的许多假设。
+
+373
+00:18:08,770 --> 00:18:11,560
+Uh, whereas here, at least if you're only generating one sample,
+呃，而在这里，至少如果你只生成一个样本，
+
+374
+00:18:11,560 --> 00:18:12,760
+there's only one thing to track.
+跟踪只有一件事。
+
+375
+00:18:12,760 --> 00:18:14,440
+So it, it's a very simple algorithm.
+所以，这是一个非常简单的算法。
+
+376
+00:18:14,440 --> 00:18:19,310
+So that is one advantage of these sampling-based algorithms over beam search.
+因此，这是基于采样的算法优于波束搜索的一个优点。
+
+377
+00:18:21,200 --> 00:18:25,560
+Okay. So, the last thing I want to tell you that's kind of related to decoding is,
+好的。所以，我想告诉你的最后一件事与解码有关，是
+
+378
+00:18:25,560 --> 00:18:27,165
+uh, softmax [NOISE] temperature.
+呃，softmax [NOISE]温度。
+
+379
+00:18:27,165 --> 00:18:30,930
+So, if you recall on timestep t of your decoder,
+所以，如果你回想一下解码器的时间步长，
+
+380
+00:18:30,930 --> 00:18:34,590
+your language model computes some kind of probability distribution P_t, uh,
+你的语言模型计算某种概率分布P_t，呃，
+
+381
+00:18:34,590 --> 00:18:39,030
+by applying the softmax function to a vector of scores that you got from somewhere.
+通过将softmax函数应用于从某处获得的分数向量。
+
+382
+00:18:39,030 --> 00:18:42,735
+Like from your transformer or from your RNN or something.
+就像你的变压器或你的RNN或其他东西。
+
+383
+00:18:42,735 --> 00:18:44,670
+So, there's the softmax function again.
+所以，再次有softmax功能。
+
+384
+00:18:44,670 --> 00:18:47,580
+It's saying that the probability of a word W is this softmax function,
+这就是说W的概率就是这个softmax函数，
+
+385
+00:18:47,580 --> 00:18:50,115
+uh, given, given the scores.
+呃，考虑到分数。
+
+386
+00:18:50,115 --> 00:18:55,080
+So, the idea here of a temperature on the softmax is that you have some kind of
+所以，这里关于softmax温度的想法是你有某种
+
+387
+00:18:55,080 --> 00:19:01,200
+temperature hyperparameter tau and you're going to apply that to this, uh, softmax.
+温度超参数tau，你将把它应用到这个，呃，softmax。
+
+388
+00:19:01,200 --> 00:19:04,920
+So, all that we're doing is we're div- dividing all of the scores,
+所以，我们正在做的就是将所有分数分开，
+
+389
+00:19:04,920 --> 00:19:06,375
+or logits you might call them,
+或者您可能称之为的logits，
+
+390
+00:19:06,375 --> 00:19:08,565
+by the temperature hyperparameter.
+由温度超参数。
+
+391
+00:19:08,565 --> 00:19:10,545
+So again, if you just think about this a little bit,
+再说一遍，如果你只是想一点，
+
+392
+00:19:10,545 --> 00:19:12,570
+you'll see that raising the temperature,
+你会看到提高温度，
+
+393
+00:19:12,570 --> 00:19:13,800
+that is increasing, uh,
+那是在增加，呃，
+
+394
+00:19:13,800 --> 00:19:19,935
+the hyperparameter, this is going to make your probability distribution more uniform.
+超参数，这将使您的概率分布更均匀。
+
+395
+00:19:19,935 --> 00:19:23,415
+And this kind of comes down to the question about when you,
+而这种问题归结为关于何时，
+
+396
+00:19:23,415 --> 00:19:25,830
+when you multiply all of your scores by a constant,
+当你将所有分数乘以常数时，
+
+397
+00:19:25,830 --> 00:19:28,980
+um, how does that affect the softmax, right?
+嗯，这对softmax有什么影响，对吧？
+
+398
+00:19:28,980 --> 00:19:33,885
+So, do things get more far apart or less far apart once you take the exponential?
+那么，一旦你采取指数，事情会变得更加分开或者相距甚远吗？
+
+399
+00:19:33,885 --> 00:19:36,690
+So, this is something you can just work up by yourself on paper,
+所以，这是你可以自己在纸上做的事，
+
+400
+00:19:36,690 --> 00:19:38,520
+but as a, uh,
+但作为一个，呃，
+
+401
+00:19:38,520 --> 00:19:40,125
+a kind of a memory shortcut,
+一种记忆快捷方式，
+
+402
+00:19:40,125 --> 00:19:43,500
+a good way to think about it is that if you raise the temperature,
+考虑它的一个好方法是，如果你提高温度，
+
+403
+00:19:43,500 --> 00:19:47,490
+then the distribution kind of melts and goes soft and mushy and uniform.
+然后分布类型融化并变得柔软，糊状和均匀。
+
+404
+00:19:47,490 --> 00:19:48,810
+And if you, uh,
+如果你，呃，
+
+405
+00:19:48,810 --> 00:19:51,150
+lower the temperature, like make it cold then,
+降温，就像让它冷，然后，
+
+406
+00:19:51,150 --> 00:19:54,690
+the probability distribution becomes more spiky, right?
+概率分布变得更加尖锐，对吧？
+
+407
+00:19:54,690 --> 00:19:59,115
+So, like the things which are rated as high probability become like even more,
+所以，像被评为高概率的东西变得更像，
+
+408
+00:19:59,115 --> 00:20:02,670
+uh, disproportionately high probability compared to the other things.
+呃，与其他事物相比，概率不成比例。
+
+409
+00:20:02,670 --> 00:20:05,535
+Um, I think that's a easy way to remember it.
+嗯，我认为这是一种记住它的简单方法。
+
+410
+00:20:05,535 --> 00:20:07,935
+Today I had to work it out on paper and then, uh,
+今天我不得不在纸上解决，然后，呃，
+
+411
+00:20:07,935 --> 00:20:09,135
+I realized that just the, the,
+我意识到，只是，
+
+412
+00:20:09,135 --> 00:20:12,375
+the temperature visualization thing usually gets me there quicker.
+温度可视化的东西通常让我更快。
+
+413
+00:20:12,375 --> 00:20:18,480
+So, um, one thing I want to note is that softmax temperature is not a decoding algorithm.
+所以，嗯，我想要注意的一点是softmax温度不是解码算法。
+
+414
+00:20:18,480 --> 00:20:21,120
+I know that I put it in the decoding algorithm section,
+我知道我把它放在解码算法部分，
+
+415
+00:20:21,120 --> 00:20:23,715
+uh, that was just because it's kind of a thing, a
+呃，那只是因为它是一种东西，一种
+
+416
+00:20:23,715 --> 00:20:29,880
+simple thing that you can do at test time to change how the decoding happens, right?
+你可以在测试时做一些简单的事情来改变解码的发生方式，对吗？
+
+417
+00:20:29,880 --> 00:20:31,320
+You don't need to train, uh,
+你不需要训练，呃，
+
+418
+00:20:31,320 --> 00:20:33,765
+with the, the softmax temperature.
+与softmax温度。
+
+419
+00:20:33,765 --> 00:20:36,225
+So, it's not a decoding algorithm itself.
+所以，它本身并不是解码算法。
+
+420
+00:20:36,225 --> 00:20:38,415
+It's a technique that you can apply at test time
+这是一种可以在测试时应用的技术
+
+421
+00:20:38,415 --> 00:20:41,040
+in conjunction with a decoding algorithm.
+结合解码算法。
+
+422
+00:20:41,040 --> 00:20:44,385
+So, for example, if you're doing beam search or you're doing some kind of sampling,
+因此，例如，如果您正在进行光束搜索或者您正在进行某种采样，
+
+423
+00:20:44,385 --> 00:20:48,615
+then you can also apply a softmax temperature, um, to change,
+那么你也可以应用softmax温度来改变，
+
+424
+00:20:48,615 --> 00:20:54,160
+you know, this kind of risky versus safe, um, trade-off.
+你知道，这种风险与安全，嗯，权衡。
+
+425
+00:20:55,220 --> 00:21:03,060
+Any questions on this? Okay. So, here's
+对此有任何疑问？好的。所以，这是
+
+426
+00:21:03,060 --> 00:21:06,270
+a summary of what we just learned about decoding algorithms.
+我们刚刚学习解码算法的总结。
+
+427
+00:21:06,270 --> 00:21:09,375
+Um, Greedy decoding is a simple method.
+嗯，贪心解码是一种简单的方法。
+
+428
+00:21:09,375 --> 00:21:14,265
+It gives kind of low quality output in comparison to the others, at least beam search.
+与其他产品相比，它提供了低质量的输出，至少是光束搜索。
+
+429
+00:21:14,265 --> 00:21:17,160
+Beam search, especially when you've got a high beam size, uh,
+光束搜索，特别是当你有一个高光束大小时，呃，
+
+430
+00:21:17,160 --> 00:21:20,955
+it searches through lots of different hypotheses for high-probability outputs.
+它通过大量不同的假设搜索高概率输出。
+
+431
+00:21:20,955 --> 00:21:24,120
+And this generally is gonna deliver better quality than greedy search, uh,
+这通常会提供比贪婪搜索更好的质量，呃，
+
+432
+00:21:24,120 --> 00:21:26,730
+but if the beam size is too high, then you can have these,
+但如果光束尺寸太大，那么你可以拥有这些，
+
+433
+00:21:26,730 --> 00:21:29,385
+uh, kind of counter-intuitive problems we talked about before.
+呃，我们之前谈过的一些反直觉问题。
+
+434
+00:21:29,385 --> 00:21:32,865
+Where you've retrieved some kind of high-probability but unsuitable output.
+你在哪里找到某种高概率但不合适的输出。
+
+435
+00:21:32,865 --> 00:21:35,415
+Say, something is too generic or something is too short.
+比方说，某些东西过于通用或某些东西太短暂。
+
+436
+00:21:35,415 --> 00:21:37,290
+And we're gonna talk about that more later.
+我们稍后会再讨论这个问题。
+
+437
+00:21:37,290 --> 00:21:41,220
+Uh, sampling methods are a way to get more diversity,
+呃，抽样方法是获得更多多样性的一种方式，
+
+438
+00:21:41,220 --> 00:21:43,095
+uh, via, via randomness.
+呃，通过，随机。
+
+439
+00:21:43,095 --> 00:21:46,380
+Uh, well, getting randomness might be your goal in itself.
+呃，获得随机性可能是你自己的目标。
+
+440
+00:21:46,380 --> 00:21:49,485
+Um, so, this is good if you want to have some kind of, for example,
+嗯，如果你想要某种东西，这很好，例如，
+
+441
+00:21:49,485 --> 00:21:51,930
+open-ended or creative generation setting like,
+开放式或创意生成设置，如，
+
+442
+00:21:51,930 --> 00:21:53,910
+uh, generating poetry or stories,
+呃，产生诗歌或故事，
+
+443
+00:21:53,910 --> 00:21:56,370
+then sampling is probably a better idea than
+那么抽样可能比一个更好的主意
+
+444
+00:21:56,370 --> 00:21:59,700
+beam search because you want to have a kind of source of randomness to,
+光束搜索，因为你想拥有一种随机源，
+
+445
+00:21:59,700 --> 00:22:02,160
+uh, write different things creatively.
+呃，创造性地写出不同的东西。
+
+446
+00:22:02,160 --> 00:22:07,170
+And top-n sampling allows you to control the diversity by,
+top-n采样允许您控制多样性，
+
+447
+00:22:07,170 --> 00:22:09,330
+uh, changing n. And then lastly,
+呃，改变最后，
+
+448
+00:22:09,330 --> 00:22:11,610
+softmax temperature is another way to control diversity.
+softmax温度是控制多样性的另一种方式。
+
+449
+00:22:11,610 --> 00:22:14,520
+So there's quite a few different knobs you can turn here.
+所以你可以在这里找到很多不同的旋钮。
+
+450
+00:22:14,520 --> 00:22:16,260
+And it's not a decoding algorithm,
+而且它不是解码算法，
+
+451
+00:22:16,260 --> 00:22:20,190
+it's just a technique that you can apply alongside any decoding algorithm.
+它只是一种可以与任何解码算法一起应用的技术。
+
+452
+00:22:20,190 --> 00:22:22,830
+Although it wouldn't make sense to apply it with
+尽管将它应用于它是没有意义的
+
+453
+00:22:22,830 --> 00:22:26,370
+greedy decoding because even if you make it more spiky or more flat,
+贪婪的解码，因为即使你让它更尖刻或更平坦，
+
+454
+00:22:26,370 --> 00:22:29,950
+the argmax is still the argmax, so it doesn't make sense.
+argmax仍然是argmax，所以它没有意义。
+
+455
+00:22:31,400 --> 00:22:34,350
+Okay. Cool. I'm going to move on to section two.
+好的。凉。我将继续讨论第二部分。
+
+456
+00:22:34,350 --> 00:22:39,135
+So, uh, section two is NLG tasks and neural approaches to them.
+所以，呃，第二部分是NLG任务和神经方法。
+
+457
+00:22:39,135 --> 00:22:42,330
+Uh, as mentioned before, this is not going to be an overview of all of NLG.
+呃，如前所述，这不是对所有NLG的概述。
+
+458
+00:22:42,330 --> 00:22:43,620
+That will be quite impossible.
+那将是不可能的。
+
+459
+00:22:43,620 --> 00:22:45,195
+This is gonna be some selected highlights.
+这将是一些精选的亮点。
+
+460
+00:22:45,195 --> 00:22:47,490
+So, in particular, I'm gonna start off with
+所以，特别是，我将开始
+
+461
+00:22:47,490 --> 00:22:51,270
+a fairly deep dive into a particular NLG task that I'm a bit more familiar with,
+深入研究我更熟悉的特定NLG任务，
+
+462
+00:22:51,270 --> 00:22:53,250
+and that is, uh, summarization.
+那就是，呃，总结。
+
+463
+00:22:53,250 --> 00:22:57,660
+So, let's start off with a task definition for summarization.
+那么，让我们从总结的任务定义开始。
+
+464
+00:22:57,660 --> 00:23:02,325
+Um, one sensible definition would be: Given some kind of input text x,
+嗯，一个明智的定义是：给定某种输入文本x，
+
+465
+00:23:02,325 --> 00:23:04,890
+you want to write a summary y which is shorter than
+你想写一个短于的摘要y
+
+466
+00:23:04,890 --> 00:23:07,825
+x and contains the main information of x.
+x并包含x的主要信息。
+
+467
+00:23:07,825 --> 00:23:11,360
+So, summarization can be single-document or multi-document.
+因此，摘要可以是单文档或多文档。
+
+468
+00:23:11,360 --> 00:23:16,510
+Uh, single-document means that you just have a summary y of a single document x.
+呃，单个文档意味着您只有一个单个文档的摘要y。
+
+469
+00:23:16,510 --> 00:23:20,040
+In multi-document summarization, you're saying that you want to write
+在多文档摘要中，您说要写
+
+470
+00:23:20,040 --> 00:23:24,390
+a single summary y of multiple documents x_1 up to x_n.
+多个文档x_1到x_n的单个摘要y。
+
+471
+00:23:24,390 --> 00:23:28,980
+And here typically x_1 up to x_n will have some kind of overlapping content.
+在这里，通常x_1到x_n将具有某种重叠内容。
+
+472
+00:23:28,980 --> 00:23:32,040
+So, for example, they might all be different news articles
+因此，例如，它们可能都是不同的新闻文章
+
+473
+00:23:32,040 --> 00:23:35,220
+from different newspapers about the same event, right?
+来自不同的报纸关于同一事件，对吗？
+
+474
+00:23:35,220 --> 00:23:39,030
+Because it kind of makes sense to write a single summary that draws from all of those.
+因为编写一个从所有这些中提取的摘要是有意义的。
+
+475
+00:23:39,030 --> 00:23:45,010
+Um, makes less sense to summarize things that are about different topics.
+嗯，总结一下有关不同主题的事情没那么有意义。
+
+476
+00:23:45,920 --> 00:23:48,015
+There is further, uh,
+还有，呃，
+
+477
+00:23:48,015 --> 00:23:51,270
+subdivision of, uh, task definitions in, in summarization.
+在摘要中细分，呃，任务定义。
+
+478
+00:23:51,270 --> 00:23:53,835
+So, I'm gonna describe it via some datasets.
+所以，我将通过一些数据集来描述它。
+
+479
+00:23:53,835 --> 00:23:58,455
+Uh, here are some different really common datasets especially in, uh,
+呃，这里有一些不同的真正常见的数据集，尤其是，呃，
+
+480
+00:23:58,455 --> 00:24:01,800
+neural summarization, um, and they kind of correspond to different,
+神经总结，嗯，它们对应的不同，
+
+481
+00:24:01,800 --> 00:24:04,035
+like, lengths and different styles of text.
+喜欢，长度和不同风格的文字。
+
+482
+00:24:04,035 --> 00:24:05,430
+So, a common one is,
+所以，一个常见的是，
+
+483
+00:24:05,430 --> 00:24:07,050
+uh, the Gigaword dataset.
+呃，Gigaword数据集。
+
+484
+00:24:07,050 --> 00:24:09,360
+And the task here is that you want to map from
+这里的任务是你想要映射
+
+485
+00:24:09,360 --> 00:24:13,710
+the first one or two sentences of a news article to write the headline.
+写新标题的新闻文章的前一两句话。
+
+486
+00:24:13,710 --> 00:24:16,290
+[NOISE] And you could think of this as sentence compression,
+[NOISE]你可以把它想象成句子压缩，
+
+487
+00:24:16,290 --> 00:24:19,140
+especially if it's kind of one sentence to headline because you're going from
+特别是如果因为你要去的话，它会成为一个标题
+
+488
+00:24:19,140 --> 00:24:22,710
+a longish sentence to a shortish headline style sentence.
+一句短暂的标题式句子。
+
+489
+00:24:22,710 --> 00:24:26,955
+Uh, next one that I, um,
+呃，下一个，我，嗯，
+
+490
+00:24:26,955 --> 00:24:29,130
+wanted to tell you about is this, uh,
+我想告诉你这个，呃，
+
+491
+00:24:29,130 --> 00:24:31,320
+it's a Chinese summarization dataset but I,
+这是一个中文摘要数据集，但我，
+
+492
+00:24:31,320 --> 00:24:33,690
+I see people using it a lot.
+我看到人们经常使用它。
+
+493
+00:24:33,690 --> 00:24:36,480
+And it's, uh, from a micro-blogging,
+而且，呃，来自微博，
+
+494
+00:24:36,480 --> 00:24:39,945
+um, website where people write summaries of their posts.
+嗯，人们写他们帖子摘要的网站。
+
+495
+00:24:39,945 --> 00:24:42,270
+So, the actual summarization task is
+所以，实际的摘要任务是
+
+496
+00:24:42,270 --> 00:24:44,790
+you've got some paragraph of text and then you want to,
+你有一段文字，然后你想，
+
+497
+00:24:44,790 --> 00:24:46,230
+uh, summarize that into,
+呃，总结一下，
+
+498
+00:24:46,230 --> 00:24:48,180
+I think, a single sentence summary.
+我想，一句话总结。
+
+499
+00:24:48,180 --> 00:24:51,120
+Uh, another one, uh, two actually,
+呃，另一个，呃，两个，
+
+500
+00:24:51,120 --> 00:24:55,650
+are the New York Times and CNN/Daily Mail, uh, datasets.
+是纽约时报和美国有线电视新闻网/每日邮报，呃，数据集。
+
+501
+00:24:55,650 --> 00:24:57,180
+So, these ones are both of the form,
+所以，这些都是形式，
+
+502
+00:24:57,180 --> 00:24:59,940
+you've got a whole news article which is actually pretty long like
+你有一篇完整的新闻文章实际上很长
+
+503
+00:24:59,940 --> 00:25:03,690
+hun-hundreds of words and then you want to summarize that into,
+数百个单词，然后你想把它总结成，
+
+504
+00:25:03,690 --> 00:25:06,840
+uh, like, maybe a single-sentence or multi-sentence summary.
+呃，喜欢，也许是单句或多句的总结。
+
+505
+00:25:06,840 --> 00:25:10,560
+Uh, The New York Times ones are written by, I think, uh,
+呃，“纽约时报”是我写的，呃，
+
+506
+00:25:10,560 --> 00:25:13,125
+librarians or people who, who,
+图书馆员或谁，谁，
+
+507
+00:25:13,125 --> 00:25:16,440
+um, write summaries for, for library purposes.
+嗯，为图书馆目的写摘要。
+
+508
+00:25:16,440 --> 00:25:18,885
+Uh, and then, uh,
+呃，然后，呃，
+
+509
+00:25:18,885 --> 00:25:22,365
+one I just spotted today when I was writing this list is there's a new,
+我今天在写这个清单时发现的一个是新的，
+
+510
+00:25:22,365 --> 00:25:25,845
+fairly new like last six months dataset from wikiHow.
+像wikiHow的过去六个月的数据集一样相当新。
+
+511
+00:25:25,845 --> 00:25:27,840
+So, from what I can tell this seems to be,
+所以，从我所知道的，这似乎是，
+
+512
+00:25:27,840 --> 00:25:31,950
+you've got a full how-to-article from wikiHow and then you want to boil this down to
+你有来自wikiHow的完整的文章，然后你想把它归结为
+
+513
+00:25:31,950 --> 00:25:34,200
+the summary sentences which are kind of cleverly
+巧妙的总结句
+
+514
+00:25:34,200 --> 00:25:37,185
+extracted from throughout the wikiHow article.
+从整个wikiHow文章中提取。
+
+515
+00:25:37,185 --> 00:25:38,790
+They are kind of like headings.
+它们有点像标题。
+
+516
+00:25:38,790 --> 00:25:42,390
+So, um, I looked at this paper and it seems that, um,
+所以，嗯，我看了这篇论文，似乎，嗯，
+
+517
+00:25:42,390 --> 00:25:45,840
+this is kind of interesting because it's a different type of text.
+这很有趣，因为它是一种不同类型的文本。
+
+518
+00:25:45,840 --> 00:25:48,990
+As you might have noticed most of the other ones are news-based and this is,
+您可能已经注意到其他大多数都是基于新闻的，这是，
+
+519
+00:25:48,990 --> 00:25:51,825
+uh, not, so that kind of poses different challenges.
+呃，不是，所以那种不同的挑战。
+
+520
+00:25:51,825 --> 00:25:57,360
+Uh, another kind of division of summarization is sentence simplification.
+呃，另一种摘要划分是句子简化。
+
+521
+00:25:57,360 --> 00:26:00,690
+So, this is a related but actually different task.
+所以，这是一个相关但实际上不同的任务。
+
+522
+00:26:00,690 --> 00:26:04,410
+In summarization, you want to write something which is shorter and contains
+在摘要中，您希望编写更短且包含的内容
+
+523
+00:26:04,410 --> 00:26:08,220
+main information but is still maybe written in just as complex language,
+主要信息，但仍然可能用复杂的语言编写，
+
+524
+00:26:08,220 --> 00:26:13,785
+whereas in sentence simplification you want to rewrite the source text using simpler,
+而在句子简化中，你想用更简单的方法重写源文本，
+
+525
+00:26:13,785 --> 00:26:15,420
+uh, simpler language, right?
+呃，语言比较简单吧？
+
+526
+00:26:15,420 --> 00:26:18,765
+So, like simpler word choices and simpler sentence structure.
+因此，更简单的单词选择和更简单的句子结构。
+
+527
+00:26:18,765 --> 00:26:21,240
+That might mean it's shorter but not necessarily.
+这可能意味着它更短但不一定。
+
+528
+00:26:21,240 --> 00:26:22,890
+So, for example, uh,
+所以，例如，呃，
+
+529
+00:26:22,890 --> 00:26:25,950
+simple Wiki- Wikipedia is a standard dataset for this.
+简单的Wiki-维基百科是一个标准的数据集。
+
+530
+00:26:25,950 --> 00:26:28,470
+And the idea is you've got, um, you know,
+这个想法是你得到的，嗯，你知道，
+
+531
+00:26:28,470 --> 00:26:31,440
+standard Wikipedia and you've got a simple Wikipedia version.
+标准维基百科，你有一个简单的维基百科版本。
+
+532
+00:26:31,440 --> 00:26:32,550
+And they mostly align up,
+他们大多调整起来，
+
+533
+00:26:32,550 --> 00:26:33,960
+so you want to map from
+所以你想要映射
+
+534
+00:26:33,960 --> 00:26:37,365
+some sentence in one to the equivalent sentence in the [NOISE] other.
+一个句子在[NOISE]其他的等同句子中。
+
+535
+00:26:37,365 --> 00:26:41,880
+Another source of data for this is Newsela which is a website that,
+另一个数据来源是Newsela，这是一个网站，
+
+536
+00:26:41,880 --> 00:26:44,085
+uh, rewrites news for children.
+呃，为孩子们改写新闻。
+
+537
+00:26:44,085 --> 00:26:46,320
+Actually, at different learning levels I think.
+实际上，我认为在不同的学习水平。
+
+538
+00:26:46,320 --> 00:26:49,900
+So, you have multiple options for how much it's simplified.
+因此，您有多种选择可以简化它。
+
+539
+00:26:50,180 --> 00:26:54,690
+Okay. So, um, so
+好的。所以，嗯，所以
+
+540
+00:26:54,690 --> 00:26:59,085
+that's the definition or the many definitions of summarization as different tasks.
+这是汇总的定义或许多定义为不同的任务。
+
+541
+00:26:59,085 --> 00:27:00,810
+So, now I'm gonna give an overview of, like,
+那么，现在我要概述一下，比如，
+
+542
+00:27:00,810 --> 00:27:02,190
+what are the main, uh,
+什么是主要的，呃，
+
+543
+00:27:02,190 --> 00:27:04,095
+techniques for doing summarization.
+进行摘要的技巧。
+
+544
+00:27:04,095 --> 00:27:06,390
+So, there's two main strategies for summarization.
+因此，总结有两种主要策略。
+
+545
+00:27:06,390 --> 00:27:10,560
+Uh, you can call them extractive summarization and abstractive summarization.
+呃，你可以称之为提取摘要和抽象概括。
+
+546
+00:27:10,560 --> 00:27:12,735
+And the main idea as I had hinted out earlier,
+而我之前提到的主要想法，
+
+547
+00:27:12,735 --> 00:27:15,720
+is that in extractive summarization you're just selecting
+是你在选择的摘要总结中
+
+548
+00:27:15,720 --> 00:27:19,050
+parts of the original texts to form a summary.
+部分原始文本形成摘要。
+
+549
+00:27:19,050 --> 00:27:22,770
+And often this will be whole sentences but maybe it'll be more granular than that;
+通常这将是完整的句子，但也许它会更精细;
+
+550
+00:27:22,770 --> 00:27:24,825
+maybe, uh, phrases or words.
+也许，呃，短语或单词。
+
+551
+00:27:24,825 --> 00:27:27,360
+Whereas abstractive summarization, you're going to be
+虽然抽象概括，但你将成为
+
+552
+00:27:27,360 --> 00:27:31,275
+generating some new text using NLG techniques.
+使用NLG技术生成一些新文本。
+
+553
+00:27:31,275 --> 00:27:33,840
+So the idea is that it's, you know, generation from scratch.
+因此，我们的想法就是从头开始生成。
+
+554
+00:27:33,840 --> 00:27:37,590
+And my visual metaphor for this is this kind of like the difference between highlighting
+而我对此的视觉隐喻就是这种突出显示之间的区别
+
+555
+00:27:37,590 --> 00:27:42,370
+the parts with a highlighter or writing the summary yourself with a pen.
+带有荧光笔的部件或用笔自己书写摘要。
+
+556
+00:27:43,100 --> 00:27:47,160
+I think the high level things to know about these two techniques are that
+我认为关于这两种技术的高级别事情就是这样
+
+557
+00:27:47,160 --> 00:27:50,610
+extractive summarization is basically easier,
+提取摘要基本上更容易，
+
+558
+00:27:50,610 --> 00:27:52,725
+at least to make a decent system to start,
+至少要建立一个像样的系统，
+
+559
+00:27:52,725 --> 00:27:57,120
+because selecting things is probably easier than writing text from scratch.
+因为选择东西可能比从头开始编写文本更容易。
+
+560
+00:27:57,120 --> 00:28:00,945
+Um, but extractive summarization is pretty restrictive, right?
+嗯，但是提取摘要是相当严格的，对吧？
+
+561
+00:28:00,945 --> 00:28:02,760
+Because you can't really paraphrase anything,
+因为你无法解释任何事情，
+
+562
+00:28:02,760 --> 00:28:05,430
+you can't really do any powerful sentence compression
+你不能真正做任何强大的句子压缩
+
+563
+00:28:05,430 --> 00:28:08,475
+if you can only just select sentences.
+如果你只能选择句子。
+
+564
+00:28:08,475 --> 00:28:12,195
+Um, and, of course, abstractive summarization as a paradigm
+嗯，当然还有抽象概括作为一种范式
+
+565
+00:28:12,195 --> 00:28:15,645
+is more flexible and it's more how humans might summarize,
+更灵活，人类可能总结的更多，
+
+566
+00:28:15,645 --> 00:28:18,150
+uh, but as noted it's pretty difficult.
+呃，但正如所指出的那样非常困难。
+
+567
+00:28:18,150 --> 00:28:23,835
+So, I'm gonna give you a very quick view of what pre-neural summarization looks like.
+所以，我会给你一个非常快速的视图，看看神经前概要是什么样的。
+
+568
+00:28:23,835 --> 00:28:24,945
+And here we've got, uh,
+在这里，我们有，呃，
+
+569
+00:28:24,945 --> 00:28:26,700
+this is a diagram from the, uh,
+这是一张图，呃，
+
+570
+00:28:26,700 --> 00:28:28,800
+Speech and Language Processing book.
+语音和语言处理书。
+
+571
+00:28:28,800 --> 00:28:33,120
+So, uh, pre-neural summarization systems were mostly extractive.
+所以，呃，神经前概括系统主要是提取系统。
+
+572
+00:28:33,120 --> 00:28:35,370
+And like pre-neural NMT,
+和神经前NMT一样，
+
+573
+00:28:35,370 --> 00:28:37,125
+which we learnt about in the NMT lecture,
+我们在NMT讲座中了解到的，
+
+574
+00:28:37,125 --> 00:28:40,395
+it typically had a pipeline which is what this picture is showing.
+它通常有一个管道，这是这张照片所显示的。
+
+575
+00:28:40,395 --> 00:28:43,065
+So, a typical pipeline might have three parts.
+因此，典型的管道可能有三个部分。
+
+576
+00:28:43,065 --> 00:28:46,170
+First, you have content selection which is, uh,
+首先，你有内容选择，呃，
+
+577
+00:28:46,170 --> 00:28:49,785
+essentially choosing some of the sentences from the source document to include.
+基本上从源文档中选择一些句子来包括。
+
+578
+00:28:49,785 --> 00:28:52,155
+And then secondly, you're going to do some kind of information
+然后，你将要做一些信息
+
+579
+00:28:52,155 --> 00:28:56,050
+ordering which means choosing what order should I put these sentences in.
+排序，这意味着选择我应该把这些句子放在哪个顺序。
+
+580
+00:28:56,050 --> 00:28:59,750
+And this is particularly a more nontrivial question if you were
+如果你是这样的话，这尤其是一个非常重要的问题
+
+581
+00:28:59,750 --> 00:29:01,580
+doing multiple document summarization
+做多文档摘要
+
+582
+00:29:01,580 --> 00:29:03,560
+because your sentences might come from different documents.
+因为你的句子可能来自不同的文件。
+
+583
+00:29:03,560 --> 00:29:05,060
+Uh, and then lastly,
+呃，最后，
+
+584
+00:29:05,060 --> 00:29:08,255
+you're going to do a sentence realization that is actually, um,
+你要做一个实际的句子实现，嗯，
+
+585
+00:29:08,255 --> 00:29:12,135
+turning your selected sentences into your actual summary.
+将您选择的句子转换为您的实际摘要。
+
+586
+00:29:12,135 --> 00:29:13,680
+So, although we're not doing, kind of,
+所以，虽然我们没做，有点，
+
+587
+00:29:13,680 --> 00:29:15,825
+free-form text generation, uh,
+自由格式文本生成，呃，
+
+588
+00:29:15,825 --> 00:29:19,290
+there might be some kind of editing for example like, uh, simplifying, editing,
+可能会有某种编辑，例如，呃，简化，编辑，
+
+589
+00:29:19,290 --> 00:29:21,885
+or removing parts that are redundant,
+或删除多余的部分，
+
+590
+00:29:21,885 --> 00:29:23,865
+or fixing continuity issues.
+或修复连续性问题。
+
+591
+00:29:23,865 --> 00:29:26,220
+So for example, you can't refer to
+例如，你不能参考
+
+592
+00:29:26,220 --> 00:29:28,920
+a person as she if you never introduced them in the first place.
+一个人，如果你从来没有介绍过他们。
+
+593
+00:29:28,920 --> 00:29:32,380
+So maybe you need to change that she to the name of the person.
+所以也许你需要把她变成这个人的名字。
+
+594
+00:29:33,180 --> 00:29:35,890
+So in particular [NOISE] uh,
+特别是[NOISE]呃，
+
+595
+00:29:35,890 --> 00:29:37,945
+these pre-neural summarization systems, uh,
+这些神经前概括系统，呃，
+
+596
+00:29:37,945 --> 00:29:41,230
+have some pretty sophisticated algorithms of content selection.
+有一些非常复杂的内容选择算法。
+
+597
+00:29:41,230 --> 00:29:43,450
+Um, so, for example,
+嗯，所以，例如，
+
+598
+00:29:43,450 --> 00:29:46,240
+uh, you would have some sentence scoring functions.
+呃，你会有一些句子评分功能。
+
+599
+00:29:46,240 --> 00:29:48,145
+This is the most simple, uh, way you might do it,
+这是最简单的，呃，你可能会这样做的方式，
+
+600
+00:29:48,145 --> 00:29:50,770
+is you might score all of the sentences individually
+你是否可以单独为所有句子打分
+
+601
+00:29:50,770 --> 00:29:53,620
+and you could score them based on features such as,
+你可以根据以下功能对它们进行评分，
+
+602
+00:29:53,620 --> 00:29:56,650
+um, are there, you know, topic keywords in the sentence?
+嗯，你知道，句子里有主题关键词吗？
+
+603
+00:29:56,650 --> 00:29:59,380
+If so, maybe it's an important sentence that we should include.
+如果是这样，也许这是一个重要的句子，我们应该包括在内。
+
+604
+00:29:59,380 --> 00:30:02,725
+Um, and you could compute those, uh,
+嗯，你可以计算一下，呃，
+
+605
+00:30:02,725 --> 00:30:06,760
+keywords using, uh, statistics such as tf-idf for example.
+关键字使用，例如，tf-idf等统计信息。
+
+606
+00:30:06,760 --> 00:30:10,960
+[NOISE] You can also use pretty basic but powerful features such as,
+[NOISE]您还可以使用非常基本但功能强大的功能，例如：
+
+607
+00:30:10,960 --> 00:30:12,925
+uh, where does the sentence appear in the document?
+呃，句子在文件中出现在哪里？
+
+608
+00:30:12,925 --> 00:30:14,260
+If it's near the top of the document,
+如果它靠近文档的顶部，
+
+609
+00:30:14,260 --> 00:30:16,510
+then it's more likely to be important.
+那么它更有可能是重要的。
+
+610
+00:30:16,510 --> 00:30:18,100
+Uh, there are also
+呃，还有
+
+611
+00:30:18,100 --> 00:30:21,910
+some more complex content selection algorithms such as for example, uh,
+一些更复杂的内容选择算法，例如，呃，
+
+612
+00:30:21,910 --> 00:30:25,420
+there are these graph-based algorithms which kind of view the document as
+有这些基于图形的算法，它们将文档视为
+
+613
+00:30:25,420 --> 00:30:29,005
+a set of sentences and those sentences are the nodes of the graph,
+一组句子和那些句子是图的节点，
+
+614
+00:30:29,005 --> 00:30:30,760
+and you imagine that all sentences, er,
+你想象所有句子，呃，
+
+615
+00:30:30,760 --> 00:30:33,190
+sentence pairs have an edge between them,
+句子对之间有优势，
+
+616
+00:30:33,190 --> 00:30:36,760
+and the weight of the edge is kind of how similar the sentences are.
+边缘的重量与句子有多相似。
+
+617
+00:30:36,760 --> 00:30:39,925
+So, then, if you think about the graph in that sense,
+那么，如果你从这个意义上考虑图表，
+
+618
+00:30:39,925 --> 00:30:43,600
+then now you can try to identify which sentences are
+那么现在你可以尝试识别哪些句子
+
+619
+00:30:43,600 --> 00:30:47,500
+important by finding which sentences are central in the graph.
+通过查找图中的哪些句子是重要的。
+
+620
+00:30:47,500 --> 00:30:49,540
+So you can apply some kind of general purpose
+所以你可以应用某种通用目的
+
+621
+00:30:49,540 --> 00:30:52,930
+gla- graph algorithms to figure out which [NOISE] nodes are central,
+用于确定哪些[NOISE]节点是中心的gla-graph算法，
+
+622
+00:30:52,930 --> 00:30:56,180
+and this is a way to find central sentences.
+这是一种查找中心句子的方法。
+
+623
+00:30:56,340 --> 00:31:03,355
+Okay. So um, [NOISE] back to summarization as a task.
+好的。所以，[NOISE]回到摘要作为一项任务。
+
+624
+00:31:03,355 --> 00:31:06,940
+Um, we've, I can't remember if we've talked about ROUGE already.
+嗯，我们，我不记得我们是否已经谈过ROUGE了。
+
+625
+00:31:06,940 --> 00:31:08,140
+We've certainly talked about BLEU.
+我们当然谈到了BLEU。
+
+626
+00:31:08,140 --> 00:31:09,820
+But I'm gonna tell you about ROUGE now which is
+但我现在要告诉你关于ROUGE的事情
+
+627
+00:31:09,820 --> 00:31:12,400
+the main automatic metric for summarization.
+汇总的主要自动度量。
+
+628
+00:31:12,400 --> 00:31:17,695
+So ROUGE stands for Recall-Oriented Understudy for Gisting Evaluation.
+所以ROUGE代表召回导向的Gisting Evaluation Understudy。
+
+629
+00:31:17,695 --> 00:31:19,480
+I'm not sure if that was the first thing they came up with
+我不确定这是否是他们想出的第一件事
+
+630
+00:31:19,480 --> 00:31:21,790
+or if they made it like that to match BLEU.
+或者，如果他们这样做，以匹配BLEU。
+
+631
+00:31:21,790 --> 00:31:24,610
+Um, and here's the,
+嗯，这是，
+
+632
+00:31:24,610 --> 00:31:26,050
+here's the equation, uh,
+这是等式，呃，
+
+633
+00:31:26,050 --> 00:31:28,855
+for, well, I suppose one of the ROUGE metrics.
+因为，我想其中一个ROUGE指标。
+
+634
+00:31:28,855 --> 00:31:31,210
+I'll tell you more about what that means later and you can
+我会告诉你更多关于这意味着什么，你可以
+
+635
+00:31:31,210 --> 00:31:34,105
+read more in the original paper which is linked at the bottom.
+在底部链接的原始论文中阅读更多内容。
+
+636
+00:31:34,105 --> 00:31:38,095
+So, uh, the overall idea is that ROUGE is actually pretty similar to BLEU.
+所以，呃，总的想法是ROUGE实际上和BLEU很相似。
+
+637
+00:31:38,095 --> 00:31:40,015
+It's based on n-gram overlap.
+它基于n-gram重叠。
+
+638
+00:31:40,015 --> 00:31:45,655
+So, some main differences with BLEU are ROUGE doesn't have a brevity penalty.
+因此，与BLEU的一些主要区别是ROUGE没有简短的惩罚。
+
+639
+00:31:45,655 --> 00:31:47,230
+Um, I'll talk more about that in a minute.
+嗯，我会在一分钟内谈谈这个问题。
+
+640
+00:31:47,230 --> 00:31:52,195
+Uh, the other big one is that ROUGE is based on recall while BLEU is based on precision.
+呃，另一个重要的一点就是ROUGE是基于召回而BLEU是基于精确度的。
+
+641
+00:31:52,195 --> 00:31:53,440
+So you can see it's there in the title.
+所以你可以在标题中看到它。
+
+642
+00:31:53,440 --> 00:31:57,115
+[NOISE] Um, so, if you think about this a little bit,
+[NOISE]嗯，如果你想一点，
+
+643
+00:31:57,115 --> 00:32:02,245
+I think you can say arguably precision is more important for machine translation.
+我认为你可以说精确度对机器翻译更重要。
+
+644
+00:32:02,245 --> 00:32:09,130
+That is, you only want to generate text that appears in one of your reference, uh,
+也就是说，你只想生成一个出现在你的参考文献中的文本，呃，
+
+645
+00:32:09,130 --> 00:32:12,520
+translations, and then to avoid taking
+翻译，然后避免采取
+
+646
+00:32:12,520 --> 00:32:14,770
+a really conservative strategy where you only generate
+一个非常保守的策略，你只生成
+
+647
+00:32:14,770 --> 00:32:17,545
+really safe things in a really short translation.
+真正安全的东西在一个非常短的翻译。
+
+648
+00:32:17,545 --> 00:32:20,035
+That's why you add the brevity penalty to make sure
+这就是为什么你加上简洁惩罚来确保
+
+649
+00:32:20,035 --> 00:32:23,035
+that [NOISE] it tries to write something long enough.
+[NOISE]它试图写出足够长的东西。
+
+650
+00:32:23,035 --> 00:32:24,640
+And then by contrast,
+然后相反，
+
+651
+00:32:24,640 --> 00:32:26,290
+recall is more important for
+召回更为重要
+
+652
+00:32:26,290 --> 00:32:30,265
+summarization because you want to include all the information,
+摘要，因为您想要包含所有信息，
+
+653
+00:32:30,265 --> 00:32:33,190
+the info- the important information in your summary, right?
+信息 - 摘要中的重要信息，对吧？
+
+654
+00:32:33,190 --> 00:32:36,490
+So the information that's in the reference summary is,
+那么参考摘要中的信息是，
+
+655
+00:32:36,490 --> 00:32:38,080
+uh, assumed to be the important information.
+呃，被认为是重要的信息。
+
+656
+00:32:38,080 --> 00:32:40,240
+So recall means that you captured all of that.
+所以召回意味着你抓住了所有这一切。
+
+657
+00:32:40,240 --> 00:32:42,460
+Um, and I suppose i- if you assume that you have
+嗯，我想我 - 如果你认为你有
+
+658
+00:32:42,460 --> 00:32:45,040
+a maximum length constraint for your summarization system,
+摘要系统的最大长度约束，
+
+659
+00:32:45,040 --> 00:32:47,950
+then those two kind of give a trade-off, right?
+然后那两种做出权衡，对吧？
+
+660
+00:32:47,950 --> 00:32:52,720
+Where you want to include all the information but you can't be too long as a summary.
+您希望包含所有信息的位置，但不能太长。
+
+661
+00:32:52,720 --> 00:32:55,435
+So I think that's the kind of justification why you have
+所以我认为这就是为什么你有这种理由
+
+662
+00:32:55,435 --> 00:32:58,150
+recall and precision for these two different tasks.
+回忆和精确这两个不同的任务。
+
+663
+00:32:58,150 --> 00:33:01,480
+However, confusingly, often an F1,
+然而，令人困惑的是，通常是F1，
+
+664
+00:33:01,480 --> 00:33:03,910
+that is combination of precision and recall version of
+这是精确和召回版本的结合
+
+665
+00:33:03,910 --> 00:33:06,940
+ROUGE is reported anyway in the summarization literature.
+无论如何，总结文献中都报道了ROUGE。
+
+666
+00:33:06,940 --> 00:33:09,490
+And to be honest, I'm not entirely sure why this is, uh,
+说实话，我不完全确定为什么会这样，呃，
+
+667
+00:33:09,490 --> 00:33:11,140
+maybe it's because of the lack of,
+也许是因为缺乏，
+
+668
+00:33:11,140 --> 00:33:13,495
+uh, explicit max length constraint.
+呃，显式最大长度约束。
+
+669
+00:33:13,495 --> 00:33:17,815
+Um, anyway, I, I tried to search that but I couldn't find an answer.
+嗯，无论如何，我，我试图搜索，但我找不到答案。
+
+670
+00:33:17,815 --> 00:33:21,100
+So here's some more information on ROUGE.
+所以这里有关于ROUGE的更多信息。
+
+671
+00:33:21,100 --> 00:33:22,840
+Um, if you remember,
+嗯，如果你还记得的话，
+
+672
+00:33:22,840 --> 00:33:24,940
+BLEU is reported as a single number, right?
+BLEU报告为单个号码，对吧？
+
+673
+00:33:24,940 --> 00:33:26,980
+BLEU is just a single number and it is
+BLEU只是一个数字而且是
+
+674
+00:33:26,980 --> 00:33:30,640
+a combination of the precisions for the different n-grams
+不同n-gram的精度组合
+
+675
+00:33:30,640 --> 00:33:32,950
+which is usually 1-4 whereas
+这通常是1-4而
+
+676
+00:33:32,950 --> 00:33:36,910
+ROUGE scores are usually reported separately for each n-gram.
+通常会为每个n-gram单独报告ROUGE分数。
+
+677
+00:33:36,910 --> 00:33:42,250
+So, the most commonly reported ROUGE scores are ROUGE-1, ROUGE-2 and ROUGE-L.
+因此，最常报道的ROUGE分数是ROUGE-1，ROUGE-2和ROUGE-L。
+
+678
+00:33:42,250 --> 00:33:47,365
+So, ROUGE one, not to be confused with Rogue One: A Star Wars Story.
+所以，ROUGE一，不要与Rogue One：星球大战故事混淆。
+
+679
+00:33:47,365 --> 00:33:49,060
+Um, I feel like since that film came out,
+嗯，我觉得自那部电影问世以来，
+
+680
+00:33:49,060 --> 00:33:51,610
+I see so many people mistyping this, and I think it's related.
+我看到很多人误插这个，我认为这是相关的。
+
+681
+00:33:51,610 --> 00:33:54,730
+Um, so, ROUGE-1 is, uh,
+嗯，所以，ROUGE-1是，呃，
+
+682
+00:33:54,730 --> 00:33:57,295
+based on unigram overlap,
+基于单字节重叠，
+
+683
+00:33:57,295 --> 00:34:01,015
+um, [NOISE] and ROUGE-2 based on bigram overlap.
+嗯，[NOISE]和ROUGE-2基于二元重叠。
+
+684
+00:34:01,015 --> 00:34:03,310
+It's kind of an analogy to BLEU really except,
+这真的是BLEU的一个类比，除了，
+
+685
+00:34:03,310 --> 00:34:05,245
+uh, recall-based, not precision-based.
+呃，基于召回，不是基于精确的。
+
+686
+00:34:05,245 --> 00:34:10,450
+The more interesting one is ROUGE-L which is longest common subsequence overlap.
+更有趣的是ROUGE-L，它是最常见的子序列重叠。
+
+687
+00:34:10,450 --> 00:34:14,590
+Um, so, the idea here is that you are interested not only in, uh,
+嗯，所以，这里的想法是你不仅对呃感兴趣，呃，
+
+688
+00:34:14,590 --> 00:34:16,855
+particular n-grams matching up but in,
+特别是n-gram匹配但在，
+
+689
+00:34:16,855 --> 00:34:18,310
+you know, how many, uh, how,
+你知道吗，有多少，呃，怎么样，
+
+690
+00:34:18,310 --> 00:34:23,240
+how long a sequence of words can you find that appear in both.
+你能找到出现在两者中的一系列单词。
+
+691
+00:34:23,520 --> 00:34:26,635
+So you can, uh, read more about these metrics
+所以你可以，呃，阅读更多有关这些指标的信息
+
+692
+00:34:26,635 --> 00:34:29,065
+in the paper that was linked on the previous page.
+在上一页链接的论文中。
+
+693
+00:34:29,065 --> 00:34:31,495
+And another really important thing to note is there's [NOISE] now
+另一个非常重要的事情是现在有[NOISE]
+
+694
+00:34:31,495 --> 00:34:35,200
+a convenient Python implementation of ROUGE, and um,
+一个方便的ROUGE的Python实现，嗯，
+
+695
+00:34:35,200 --> 00:34:38,155
+maybe it is not apparent why that's exciting,
+也许不明白为什么那令人兴奋，
+
+696
+00:34:38,155 --> 00:34:40,420
+but it's actually pretty exciting because for a long time,
+但它实际上非常令人兴奋，因为很长一段时间，
+
+697
+00:34:40,420 --> 00:34:42,480
+there was just this Perl script, um,
+只有这个Perl脚本，嗯，
+
+698
+00:34:42,480 --> 00:34:46,365
+that was quite hard to run and quite hard to set up and understand.
+这很难运行，很难设置和理解。
+
+699
+00:34:46,365 --> 00:34:49,440
+So um, someone out there has been a hero and has, uh,
+那么，有人在那里有一个英雄，有，呃，
+
+700
+00:34:49,440 --> 00:34:52,290
+implemented a pure Python version of ROUGE and checked that it
+实现了一个纯Python版本的ROUGE并检查它
+
+701
+00:34:52,290 --> 00:34:55,320
+really does match up to the Perl script that people were using before.
+确实与之前人们使用的Perl脚本相匹配。
+
+702
+00:34:55,320 --> 00:34:58,890
+So if any of you are using ROUGE or doing summarization for your projects, uh,
+所以如果你们中的任何一个人正在使用ROUGE或为你的项目做总结，呃，
+
+703
+00:34:58,890 --> 00:35:00,075
+make sure that you, uh,
+确保你，呃，
+
+704
+00:35:00,075 --> 00:35:02,530
+go use that because it will probably save you some time.
+去使用它，因为它可能会节省你一些时间。
+
+705
+00:35:02,530 --> 00:35:06,085
+[NOISE] Okay.
+[NOISE]好的。
+
+706
+00:35:06,085 --> 00:35:08,020
+So we're gonna re- return to ROUGE a little bit later.
+所以我们稍后会再回到ROUGE。
+
+707
+00:35:08,020 --> 00:35:10,210
+Um, I know that in assignment 4 you thought about
+嗯，我知道你在任务4中想到了
+
+708
+00:35:10,210 --> 00:35:12,790
+the shortcomings of BLEU as a metric and um,
+BLEU作为衡量指标和缺点的缺点，
+
+709
+00:35:12,790 --> 00:35:16,555
+for sure ROUGE has some short- shortcomings as well as a metric for summarization.
+确保ROUGE有一些简短的缺点以及汇总的度量标准。
+
+710
+00:35:16,555 --> 00:35:18,920
+Um, we're gonna come back to that later.
+嗯，我们以后会回来的。
+
+711
+00:35:19,080 --> 00:35:23,230
+Okay. So, we're gonna move on to neural approaches for summarization.
+好的。因此，我们将继续采用神经方法进行总结。
+
+712
+00:35:23,230 --> 00:35:27,969
+[NOISE] So uh, going back to 2015,
+[NOISE]呃，回到2015年，
+
+713
+00:35:27,969 --> 00:35:30,310
+I don't have another dramatic reenactment, I'm afraid.
+我害怕，我没有另一个戏剧性的重演。
+
+714
+00:35:30,310 --> 00:35:32,710
+[NOISE] Um, Rush et al.
+[NOISE]嗯，Rush等人。
+
+715
+00:35:32,710 --> 00:35:35,590
+published the first seq2seq summarization paper.
+发表了第一篇seq2seq摘要文件。
+
+716
+00:35:35,590 --> 00:35:39,070
+[NOISE] So uh, they were viewing this as,
+[NOISE]所以呃，他们认为这是，
+
+717
+00:35:39,070 --> 00:35:41,395
+you know, NMT has recently been super successful,
+你知道，NMT最近取得了巨大的成功，
+
+718
+00:35:41,395 --> 00:35:44,500
+why don't we view abstractive summarization as a translation task and
+为什么我们不将抽象概括视为翻译任务
+
+719
+00:35:44,500 --> 00:35:48,565
+therefore apply standard translation seq2seq methods to it.
+因此应用标准翻译seq2seq方法。
+
+720
+00:35:48,565 --> 00:35:51,910
+So that's exactly what they did and they applied,
+这就是他们所做的和他们应用的，
+
+721
+00:35:51,910 --> 00:35:53,500
+uh, a standard attention model,
+呃，标准的注意力模型，
+
+722
+00:35:53,500 --> 00:35:58,000
+and then they did a pretty good job at, uh, Gigaword summarization.
+然后他们做了相当不错的工作，呃，Gigaword总结。
+
+723
+00:35:58,000 --> 00:35:59,620
+That's the one where you're, um,
+这就是你所在的那个，嗯，
+
+724
+00:35:59,620 --> 00:36:03,130
+converting from the first sentence of the news article to the headline.
+从新闻文章的第一句话转换为标题。
+
+725
+00:36:03,130 --> 00:36:05,575
+So it's kind of like, uh, sentence compression.
+所以它有点像，呃，句子压缩。
+
+726
+00:36:05,575 --> 00:36:10,570
+So crucially, this is kind of the same order of magnitude of length as NMT, right?
+至关重要的是，这与NMT长度的长度相同，对吧？
+
+727
+00:36:10,570 --> 00:36:13,810
+Because NMT is sentence to sentence and this is kind of sentence to sentence,
+因为NMT是判刑，这是判刑的一种判决，
+
+728
+00:36:13,810 --> 00:36:15,805
+maybe at most two sentence two sentence.
+也许最多两句话两句话。
+
+729
+00:36:15,805 --> 00:36:18,310
+So this works pretty well and you can get pretty decent, um,
+所以这很好用，你可以得到相当不错的，嗯，
+
+730
+00:36:18,310 --> 00:36:20,920
+headline generation or sentence compression using this kind of method.
+使用这种方法生成标题或句子压缩。
+
+731
+00:36:20,920 --> 00:36:23,515
+[NOISE] Okay.
+[NOISE]好的。
+
+732
+00:36:23,515 --> 00:36:25,510
+So after that, since 2015,
+那之后，自2015年以来，
+
+733
+00:36:25,510 --> 00:36:29,380
+there have been lots more developments in neural abstractive summarization.
+神经抽象概括有了更多的发展。
+
+734
+00:36:29,380 --> 00:36:31,435
+And you can kind of um,
+你可以这样，嗯，
+
+735
+00:36:31,435 --> 00:36:33,865
+group together these developments in,
+将这些发展归为一类，
+
+736
+00:36:33,865 --> 00:36:35,440
+uh, a collection of themes.
+呃，一系列主题。
+
+737
+00:36:35,440 --> 00:36:38,020
+So one theme is make it easier to copy.
+所以一个主题是让它更容易复制。
+
+738
+00:36:38,020 --> 00:36:41,050
+Uh, this seems pretty obvious because in summarization, you know,
+呃，这看起来很明显，因为总结一下，你知道，
+
+739
+00:36:41,050 --> 00:36:44,035
+you're gonna want to copy every, quite a few words and even phrases,
+你要复制每一个，几个单词甚至短语，
+
+740
+00:36:44,035 --> 00:36:46,615
+but don't copy too much.
+但不要复制太多。
+
+741
+00:36:46,615 --> 00:36:48,130
+Uh, that's the other thing is that if you make it
+呃，那是另一件事，如果你做到了
+
+742
+00:36:48,130 --> 00:36:49,630
+too easy to copy, then you copy too much.
+太容易复制，然后你复制太多。
+
+743
+00:36:49,630 --> 00:36:52,600
+So, then there's other research showing how to prevent too much copying.
+那么，还有其他研究表明如何防止过多的复制。
+
+744
+00:36:52,600 --> 00:36:58,135
+[NOISE] Uh, the next thing is some kind of hierarchical or multi-level attention.
+[NOISE]呃，接下来的事情是某种层级或多层次的关注。
+
+745
+00:36:58,135 --> 00:36:59,470
+So as I just showed,
+正如我刚才所示，
+
+746
+00:36:59,470 --> 00:37:01,690
+the attention has been pretty key to, um,
+注意力一直很关键，嗯，
+
+747
+00:37:01,690 --> 00:37:04,000
+abstractive neural summarization so far.
+到目前为止抽象神经概括。
+
+748
+00:37:04,000 --> 00:37:05,605
+So there's been some work looking at, you know,
+所以，有一些工作在看，你知道，
+
+749
+00:37:05,605 --> 00:37:08,890
+can we kind of make this attention work at a more kind of high-level,
+我们能不能让这种关注在更高层次上发挥作用，
+
+750
+00:37:08,890 --> 00:37:12,100
+low-level cost fine version so
+低级成本精品版如此
+
+751
+00:37:12,100 --> 00:37:16,030
+that we can kind of maybe do our selection at the high-level and at low-level.
+我们可以在高层和低层进行选择。
+
+752
+00:37:16,030 --> 00:37:18,985
+Another thing which is kind of related is having
+另一件有关系的事情是
+
+753
+00:37:18,985 --> 00:37:21,700
+some more kind of global content selection.
+更多种类的全球内容选择。
+
+754
+00:37:21,700 --> 00:37:23,515
+So if you remember when we were talking about the,
+所以，如果你还记得我们在谈论的时候，
+
+755
+00:37:23,515 --> 00:37:26,020
+the pipelines pre-neural summarization,
+管道预神经概括，
+
+756
+00:37:26,020 --> 00:37:28,435
+they had these different content selection algorithms.
+他们有这些不同的内容选择算法。
+
+757
+00:37:28,435 --> 00:37:30,250
+And I think you can say that,
+我想你可以这么说
+
+758
+00:37:30,250 --> 00:37:32,110
+um, kind of naive attention,
+嗯，有点天真的注意力，
+
+759
+00:37:32,110 --> 00:37:34,630
+attention seq2seq is not necessarily
+注意seq2seq不一定
+
+760
+00:37:34,630 --> 00:37:37,495
+the best way to do content selection for summarization,
+进行摘要的内容选择的最佳方式，
+
+761
+00:37:37,495 --> 00:37:40,885
+maybe you want a more kind of global strategy where you choose what's important.
+也许你想要一种更全面的全球战略，你可以选择什么是重要的。
+
+762
+00:37:40,885 --> 00:37:44,049
+It's not so apparent here when you're doing this small-scale summarization,
+当你进行这种小规模的总结时，这里并不那么明显，
+
+763
+00:37:44,049 --> 00:37:45,430
+but if you imagine that you're summarizing
+但如果你想象你正在总结
+
+764
+00:37:45,430 --> 00:37:48,294
+a whole news article and you're choosing which information,
+一篇完整的新闻文章，您正在选择哪些信息，
+
+765
+00:37:48,294 --> 00:37:50,455
+kind of deciding on each decoder step,
+决定每个解码器步骤，
+
+766
+00:37:50,455 --> 00:37:53,170
+what to choose doesn't seem like the most global strategy.
+选择什么似乎不是最全球化的策略。
+
+767
+00:37:53,170 --> 00:37:56,005
+Er, what else have we got?
+呃，我们还有什么？
+
+768
+00:37:56,005 --> 00:37:59,410
+Uh, there's using, uh, Reinforcement Learning to directly maximize
+呃，正在使用，呃，强化学习直接最大化
+
+769
+00:37:59,410 --> 00:38:01,300
+ROUGE or other discrete goals you might
+你可能会有ROUGE或其他离散目标
+
+770
+00:38:01,300 --> 00:38:03,820
+care about such as maybe the length of the summary.
+关心可能是摘要的长度。
+
+771
+00:38:03,820 --> 00:38:07,495
+Um, and I say discrete here because ROUGE is a non-differentiable,
+嗯，我在这里说离散，因为ROUGE是不可区分的，
+
+772
+00:38:07,495 --> 00:38:09,640
+uh, function of your generated outputs.
+呃，您生成的输出的功能。
+
+773
+00:38:09,640 --> 00:38:12,160
+There's no, you know, easy way to differentiably
+你知道，不容易区分
+
+774
+00:38:12,160 --> 00:38:14,200
+learn that during training in the usual way.
+在通常的方式培训期间了解。
+
+775
+00:38:14,200 --> 00:38:20,170
+Uh, my last point on this list is the kind of theme of
+呃，我在这个名单上的最后一点是那种主题
+
+776
+00:38:20,170 --> 00:38:24,040
+resurrecting pre-neural ideas such as those graph algorithms that I mentioned
+恢复神经前的想法，比如我提到的那些图算法
+
+777
+00:38:24,040 --> 00:38:25,960
+earlier and working them into
+早些时候和他们一起工作
+
+778
+00:38:25,960 --> 00:38:32,005
+these new seq2seq abstractive neural systems and I'm sure there is more as well.
+这些新的seq2seq抽象神经系统，我相信还有更多。
+
+779
+00:38:32,005 --> 00:38:34,150
+So, I'm gonna show you a few of these, um,
+那么，我要告诉你其中的一些，嗯，
+
+780
+00:38:34,150 --> 00:38:37,660
+especially because even if you're not particularly interested in summarization,
+特别是因为即使你对摘要不是特别感兴趣，
+
+781
+00:38:37,660 --> 00:38:40,930
+a lot of the ideas that we're gonna explore here are actually kind of applicable
+我们将在这里探讨的很多想法实际上都是适用的
+
+782
+00:38:40,930 --> 00:38:45,260
+to other areas of NLG or just other areas of NLP deep learning.
+到NLG的其他领域或NLP深度学习的其他领域。
+
+783
+00:38:45,300 --> 00:38:48,700
+So, the first thing on the list is making it easier to copy,
+所以，列表中的第一件事是让它更容易复制，
+
+784
+00:38:48,700 --> 00:38:50,875
+which seems like probably the first thing you want to fix,
+这似乎是你想要解决的第一件事，
+
+785
+00:38:50,875 --> 00:38:53,335
+if you've just got basic seq2seq with attention.
+如果你刚刚得到基本的seq2seq注意力。
+
+786
+00:38:53,335 --> 00:38:55,795
+So, um, a copy mechanism,
+那么，嗯，一个复制机制，
+
+787
+00:38:55,795 --> 00:38:58,900
+which can exist outside of summarization.
+它可以存在于摘要之外。
+
+788
+00:38:58,900 --> 00:39:03,160
+The reason, why you want this is that basic seq2seq with attention,
+原因，为什么你想要这个是基本的seq2seq注意，
+
+789
+00:39:03,160 --> 00:39:05,590
+they're good at writing fluent output, as we know,
+他们擅长写出流利的输出，我们知道，
+
+790
+00:39:05,590 --> 00:39:09,835
+but they are pretty bad at copying over details like rare words correctly.
+但他们很难正确地复制诸如罕见词之类的细节。
+
+791
+00:39:09,835 --> 00:39:13,210
+So a copy mechanism is just the kind of sensible idea of saying,
+所以复制机制只是一种明智的说法，
+
+792
+00:39:13,210 --> 00:39:17,950
+um, let's have an explicit mechanism to just copy over words.
+嗯，让我们有一个明确的机制来复制单词。
+
+793
+00:39:17,950 --> 00:39:20,140
+So for example, you could use
+例如，您可以使用
+
+794
+00:39:20,140 --> 00:39:25,375
+the attention distribution to- to kind of select what you're going to copy.
+注意分配到选择你要复制的内容。
+
+795
+00:39:25,375 --> 00:39:28,890
+Um, so, if you are allowing both copying
+嗯，如果你允许同时复制
+
+796
+00:39:28,890 --> 00:39:32,235
+over words and generating words in the usual way with your language model,
+通过语言模型以通常的方式生成单词并生成单词，
+
+797
+00:39:32,235 --> 00:39:37,220
+then now you've got a kind of hybrid extractive/abstractive approach to summarization.
+那么现在你已经有了一种混合的提取/抽象方法来进行总结。
+
+798
+00:39:37,220 --> 00:39:40,360
+So, there are several papers, which are- which propose
+因此，有几篇论文是提出来的
+
+799
+00:39:40,360 --> 00:39:43,330
+some kind of copy mechanism variants and I think,
+某种复制机制变种，我认为，
+
+800
+00:39:43,330 --> 00:39:45,040
+the reason why there is multiple is because there's
+有多重原因的原因是因为有
+
+801
+00:39:45,040 --> 00:39:48,730
+kind of a few different choices you can make about how to implement this,
+关于如何实现这一点，您可以做出几种不同的选择，
+
+802
+00:39:48,730 --> 00:39:53,380
+and that means that there's a few different versions of how to implement copy mechanism.
+这意味着有几个不同版本的如何实现复制机制。
+
+803
+00:39:53,380 --> 00:39:56,155
+So, uh, yeah, there are several papers here which you can look at.
+所以，呃，是的，这里有几篇论文你可以看一下。
+
+804
+00:39:56,155 --> 00:39:58,690
+I'm going to show you a diagram from a paper that um,
+我要给你看一张纸上的图表，嗯，
+
+805
+00:39:58,690 --> 00:40:01,150
+I did a few years ago with Chris.
+几年前我和克里斯做过。
+
+806
+00:40:01,150 --> 00:40:04,915
+So, this is just one example of how you can do a copying mechanism.
+所以，这只是你如何进行复制机制的一个例子。
+
+807
+00:40:04,915 --> 00:40:06,505
+So, the - the way we did it,
+所以， - 我们这样做的方式，
+
+808
+00:40:06,505 --> 00:40:08,485
+is we said that on each decoder step,
+我们是说在每个解码器步骤中，
+
+809
+00:40:08,485 --> 00:40:11,590
+you're going to calculate this probability Pgen and that's
+你要计算这个概率Pgen，那就是
+
+810
+00:40:11,590 --> 00:40:15,370
+the probability of generating the next word rather than copying it,
+生成下一个单词而不是复制它的概率，
+
+811
+00:40:15,370 --> 00:40:19,090
+and the idea is that this is computed based on your current kind of context,
+并且想法是这是根据您当前的上下文类型计算的，
+
+812
+00:40:19,090 --> 00:40:20,935
+your current decoder hidden state.
+你当前的解码器隐藏状态。
+
+813
+00:40:20,935 --> 00:40:22,585
+So, then once you've done that,
+所以，一旦你做完了，
+
+814
+00:40:22,585 --> 00:40:24,790
+then the idea is you've got your attention distribution as
+然后你的想法是你的注意力分配
+
+815
+00:40:24,790 --> 00:40:27,280
+normal and you've got your kind of output,
+正常，你有你的输出，
+
+816
+00:40:27,280 --> 00:40:31,360
+you know, generation distribution as normal and you're going to use this Pgen,
+你知道，发电正常分配，你将使用这个Pgen，
+
+817
+00:40:31,360 --> 00:40:32,545
+which is just a scalar.
+这只是一个标量。
+
+818
+00:40:32,545 --> 00:40:35,049
+You can use that to kind of, uh, combine,
+你可以用它来呃，结合，
+
+819
+00:40:35,049 --> 00:40:38,005
+mix together these two probability distributions.
+将这两种概率分布混合在一起。
+
+820
+00:40:38,005 --> 00:40:40,120
+So, what this equation is telling you,
+那么，这个等式告诉你的是什么，
+
+821
+00:40:40,120 --> 00:40:41,410
+is that saying that the uh,
+是那个说呃，
+
+822
+00:40:41,410 --> 00:40:44,230
+final output distribution for uh,
+呃的最终输出分布，
+
+823
+00:40:44,230 --> 00:40:45,595
+what word is gonna come next,
+接下来会是什么词，
+
+824
+00:40:45,595 --> 00:40:47,080
+it's kind of saying, you know,
+你知道，有点说
+
+825
+00:40:47,080 --> 00:40:48,685
+it is the probability of generating
+这是产生的概率
+
+826
+00:40:48,685 --> 00:40:51,895
+times your probability distribution of what you would generate
+乘以你将产生的概率分布
+
+827
+00:40:51,895 --> 00:40:54,279
+but then also the probability of copying
+但随后也是复制的概率
+
+828
+00:40:54,279 --> 00:40:57,220
+and then also what you're attending to at that time.
+然后你当时正在参加什么。
+
+829
+00:40:57,220 --> 00:41:01,555
+So, the, the main thing is, you're using attention as your copying mechanism.
+所以，主要的是，你正在使用注意力作为你的复制机制。
+
+830
+00:41:01,555 --> 00:41:03,610
+So, attention is kind of doing double-duty here.
+因此，注意力在这里做双重任务。
+
+831
+00:41:03,610 --> 00:41:07,885
+It's both uh, being useful for the generator to,
+它是呃，对发电机有用，
+
+832
+00:41:07,885 --> 00:41:10,000
+you know, uh, maybe choose to rephrase things
+你知道，呃，也许选择改写一下
+
+833
+00:41:10,000 --> 00:41:12,460
+but it is also being useful as a copying mechanism.
+但它也可用作复制机制。
+
+834
+00:41:12,460 --> 00:41:15,430
+And I think that's one of the several things that these different papers do differently.
+而且我认为这是这些不同论文的不同之处。
+
+835
+00:41:15,430 --> 00:41:18,940
+I think, I've seen a paper that maybe has like two separate uh,
+我想，我看过一篇论文，可能有两个独立的呃，
+
+836
+00:41:18,940 --> 00:41:21,685
+attention distributions, one for the copying and one for the attending.
+注意力分配，一个用于复制，一个用于参与。
+
+837
+00:41:21,685 --> 00:41:24,460
+Um, other choices you can make differently are for example,
+嗯，你可以做出不同的其他选择，例如，
+
+838
+00:41:24,460 --> 00:41:27,430
+D1 Pgen to be this kind of soft thing that's between zero and
+D1 Pgen是零和之间的这种柔软的东西
+
+839
+00:41:27,430 --> 00:41:30,730
+one or do you want it to be a hard thing that has to be either zero or one.
+一个或者你想要它是一个必须是零或一个硬的东西。
+
+840
+00:41:30,730 --> 00:41:33,970
+Um, you can also make decisions about like
+嗯，你也可以做出类似的决定
+
+841
+00:41:33,970 --> 00:41:37,000
+do you want the Pgen to have supervision during training?
+你想让Pgen在训练期间接受监督吗？
+
+842
+00:41:37,000 --> 00:41:40,165
+Do you want to kind of annotate your data set saying these things are copied, things,
+你想要对你的数据集进行注释，说这些东西是复制的，东西，
+
+843
+00:41:40,165 --> 00:41:43,540
+these things are not, or do you want to just like learn it end-to-end?
+这些东西不是，或者你是否想要端到端地学习它？
+
+844
+00:41:43,540 --> 00:41:46,075
+So there's multiple ways you can do this and um,
+所以你有多种方法可以做到这一点，嗯，
+
+845
+00:41:46,075 --> 00:41:48,980
+this has now become pretty, pretty standard.
+这已经变得非常漂亮，非常标准。
+
+846
+00:41:50,100 --> 00:41:52,990
+Okay, so copy mechanism seems like,
+好的，所以复制机制似乎是，
+
+847
+00:41:52,990 --> 00:41:55,960
+seems like a sensible idea but there's a big problem with them,
+似乎是一个明智的想法，但他们有一个很大的问题，
+
+848
+00:41:55,960 --> 00:41:58,330
+which is what I mentioned earlier and that problem is,
+这就是我之前提到过的那个问题，
+
+849
+00:41:58,330 --> 00:41:59,665
+that they copy too much.
+他们复制得太多了。
+
+850
+00:41:59,665 --> 00:42:03,309
+Um, so, when you- when you run these kind of systems on summarization,
+嗯，当你在汇总时运行这些系统时，
+
+851
+00:42:03,309 --> 00:42:05,530
+you find that they end up copying a lot of
+你发现他们最终会复制很多东西
+
+852
+00:42:05,530 --> 00:42:08,860
+long phrases and sometimes even whole sentences and uh,
+长短语，有时甚至整句话呃，
+
+853
+00:42:08,860 --> 00:42:11,860
+unfortunately your dream of having an abstractive summarization system,
+不幸的是你有一个抽象的摘要系统的梦想，
+
+854
+00:42:11,860 --> 00:42:13,795
+isn't going to work out because your, um,
+是不是因为你的，嗯，
+
+855
+00:42:13,795 --> 00:42:16,510
+you know, copy augmented seq2seq system has just
+你知道，复制增强的seq2seq系统就是
+
+856
+00:42:16,510 --> 00:42:20,035
+collapsed into a mostly extractive system, which is unfortunate.
+坍塌成一个主要是采掘系统，这是不幸的。
+
+857
+00:42:20,035 --> 00:42:22,060
+Another problem with these uh,
+这些呃的另一个问题，
+
+858
+00:42:22,060 --> 00:42:25,165
+copy mechanism models is that they are bad at
+复制机制模型是他们擅长的
+
+859
+00:42:25,165 --> 00:42:28,600
+overall content selection especially if the input document is long,
+整体内容选择，特别是如果输入文档很长，
+
+860
+00:42:28,600 --> 00:42:30,250
+and this is what I was hinting at earlier.
+这就是我之前所暗示的。
+
+861
+00:42:30,250 --> 00:42:33,580
+Um, let's suppose, that you are summarizing something that's quite
+嗯，我们假设你正在总结一些相当的东西
+
+862
+00:42:33,580 --> 00:42:37,090
+long like a news article that's hundreds of words long and you,
+就像一篇长达数百字的新闻文章而你，
+
+863
+00:42:37,090 --> 00:42:38,995
+you want to write a several sentence summary.
+你想写几个句子摘要。
+
+864
+00:42:38,995 --> 00:42:41,575
+It doesn't seem like the kind of smartest choice to
+它似乎不是那种最明智的选择
+
+865
+00:42:41,575 --> 00:42:44,350
+on every step of writing your several sentence summary,
+在写下你的几句话摘要的每一步，
+
+866
+00:42:44,350 --> 00:42:46,390
+but you're choosing again what to attend to,
+但你又选择了什么，
+
+867
+00:42:46,390 --> 00:42:48,325
+what to select, what to summarize.
+选择什么，总结一下。
+
+868
+00:42:48,325 --> 00:42:52,795
+It seems better to kind of make a global decision at the beginning and then summarize.
+最初做出全球决策然后进行总结似乎更好。
+
+869
+00:42:52,795 --> 00:42:56,560
+So, yeah, the problem is, there's no overall strategy for selecting the contents.
+所以，是的，问题是，选择内容没有整体策略。
+
+870
+00:42:56,560 --> 00:43:03,825
+So, uh, here's a paper that I found. Nope, not yet.
+所以，呃，这是我发现的一篇论文。没呢还没。
+
+871
+00:43:03,825 --> 00:43:08,450
+Okay. So, how might you do better content selection for neural summarization?
+好的。那么，你怎么能为神经总结做更好的内容选择呢？
+
+872
+00:43:08,450 --> 00:43:12,010
+So, if you remember in this pre-neural summarization we looked at,
+所以，如果你记得我们在这个神经前的总结中看过，
+
+873
+00:43:12,010 --> 00:43:14,890
+you had completely separate stages in the pipeline, right?
+你有完全独立的阶段，对吧？
+
+874
+00:43:14,890 --> 00:43:16,870
+You had the content selection stage and you had
+你有内容选择阶段，你有
+
+875
+00:43:16,870 --> 00:43:20,260
+a surface realization that is the text generation stage.
+表面实现是文本生成阶段。
+
+876
+00:43:20,260 --> 00:43:22,750
+But in our seq2seq attention systems,
+但在我们的seq2seq注意系统中，
+
+877
+00:43:22,750 --> 00:43:25,240
+these two stages are just completely mixed together, right?
+这两个阶段刚刚完全混合在一起，对吧？
+
+878
+00:43:25,240 --> 00:43:28,780
+You're doing your step-by-step surface realization that is text generation,
+你正在逐步实现表面生成，即文本生成，
+
+879
+00:43:28,780 --> 00:43:31,735
+and then on each of those, you're also doing content selection.
+然后在每一个上，你也在做内容选择。
+
+880
+00:43:31,735 --> 00:43:35,305
+So, yeah, this doesn't make sense.
+所以，是的，这没有意义。
+
+881
+00:43:35,305 --> 00:43:37,510
+So, I found a paper, which is,
+所以，我发现了一篇论文，
+
+882
+00:43:37,510 --> 00:43:39,745
+uh, published I think last year,
+呃，我想去年发表的，
+
+883
+00:43:39,745 --> 00:43:42,160
+which gives a quite nice kind of
+这给了一个相当不错的
+
+884
+00:43:42,160 --> 00:43:47,050
+simple solution to this problem and it's called bottom-up summarization.
+这个问题的简单解决方案，它被称为自下而上的摘要。
+
+885
+00:43:47,050 --> 00:43:51,715
+So, in this paper if you look at the- if you look at the figure,
+所以，在本文中，如果你看一下 - 如果你看一下这个数字，
+
+886
+00:43:51,715 --> 00:43:53,260
+uh, the main idea is pretty simple.
+呃，主要的想法很简单。
+
+887
+00:43:53,260 --> 00:43:57,370
+It says that, first you're going to have a content selection stage and this is
+它说，首先你将有一个内容选择阶段，这是
+
+888
+00:43:57,370 --> 00:44:01,990
+just uh, thought of as a neural sequence tagging model problem, right?
+只是呃，被认为是一个神经序列标记模型问题，对吧？
+
+889
+00:44:01,990 --> 00:44:04,660
+You run through your source documents and
+您浏览源文档和
+
+890
+00:44:04,660 --> 00:44:07,615
+you kind of tag every word as include or don't include.
+你把每个单词标记为包含或不包含。
+
+891
+00:44:07,615 --> 00:44:09,790
+So, you're just kinda deciding like what seems important,
+所以，你只是在决定什么似乎很重要，
+
+892
+00:44:09,790 --> 00:44:11,680
+what seems like it should make it into the summary and what
+似乎它应该成为摘要和什么
+
+893
+00:44:11,680 --> 00:44:15,625
+doesn't and then the bottom-up attention stage says that,
+没有，然后自下而上的关注阶段说，
+
+894
+00:44:15,625 --> 00:44:18,010
+now you'll seq2seq with an attention system,
+现在你将使用注意系统seq2seq，
+
+895
+00:44:18,010 --> 00:44:19,945
+which is gonna generate the summary.
+这将产生摘要。
+
+896
+00:44:19,945 --> 00:44:21,610
+Are you're gonna kind of apply a mask?
+你有点戴面具吗？
+
+897
+00:44:21,610 --> 00:44:23,125
+You know, apply a hard constraint that says,
+你知道，应用一个硬约束说，
+
+898
+00:44:23,125 --> 00:44:26,905
+that you can't attend to words that were tagged don't-include.
+你不能注意被标记为不包含的词语。
+
+899
+00:44:26,905 --> 00:44:30,595
+So, this turns out to be pretty simple but effective um,
+所以，事实证明这很简单但很有效，
+
+900
+00:44:30,595 --> 00:44:34,090
+because it's a better overall content selection strategy because by doing
+因为这是一个更好的整体内容选择策略，因为这样做
+
+901
+00:44:34,090 --> 00:44:38,800
+this first content selection stage by sequence-tagging you're kind of just,
+这个第一个内容选择阶段通过序列标记你就是这样，
+
+902
+00:44:38,800 --> 00:44:42,730
+just doing the selection thing without also at the same time doing the generation thing,
+只是做选择的事情，而不是同时做生成的东西，
+
+903
+00:44:42,730 --> 00:44:44,800
+which I think turns out to be a better way to make
+我认为这是一种更好的制作方法
+
+904
+00:44:44,800 --> 00:44:47,815
+better decisions about what to include and then separately,
+关于包含什么的更好的决定，然后分开，
+
+905
+00:44:47,815 --> 00:44:49,900
+this also means as a great side effect,
+这也意味着副作用很大，
+
+906
+00:44:49,900 --> 00:44:53,500
+you have less copying of long sequences in the generation model.
+您在生成模型中复制较长序列的次数较少。
+
+907
+00:44:53,500 --> 00:44:56,830
+Um, because if you are not allowed to attend to things,
+嗯，因为如果你不被允许去做事，
+
+908
+00:44:56,830 --> 00:44:58,225
+which you shouldn't be including,
+你不应该包括哪些，
+
+909
+00:44:58,225 --> 00:45:01,960
+then it's kind of hard to copy a really long sequence, right?
+然后很难复制一个很长的序列，对吗？
+
+910
+00:45:01,960 --> 00:45:05,320
+Like if you want to copy a whole sentence but the sentence has
+就像你想复制整个句子但句子有
+
+911
+00:45:05,320 --> 00:45:08,980
+plenty of don't include words in it,
+很多不包含文字，
+
+912
+00:45:08,980 --> 00:45:11,635
+then you can't really copy a long sequence, you have to break it up.
+然后你不能真正复制一个长序列，你必须打破它。
+
+913
+00:45:11,635 --> 00:45:12,970
+So, what the model ends up doing,
+那么，模型最终会做什么，
+
+914
+00:45:12,970 --> 00:45:14,320
+is it kind of has to skip,
+是不是有点跳过，
+
+915
+00:45:14,320 --> 00:45:17,110
+skip around the parts that is meant to include and then it's forced to
+跳过要包含的部分，然后强制它
+
+916
+00:45:17,110 --> 00:45:20,650
+be more abstractive to put the parts together. Yep.
+将部件放在一起更具抽象性。是的。
+
+917
+00:45:20,650 --> 00:45:25,510
+How did they backpropagate the masking decision because it seems like-
+他们是如何反向传播掩蔽决定的，因为它似乎是 -
+
+918
+00:45:25,510 --> 00:45:28,720
+Because during training [inaudible] masking decision.
+因为在训练期间[听不清]屏蔽决定。
+
+919
+00:45:28,720 --> 00:45:32,035
+Yeah, I think it might be trained separately.
+是的，我认为可能会单独训练。
+
+920
+00:45:32,035 --> 00:45:33,610
+I mean, you can go and check the paper.
+我的意思是，你可以去查看论文。
+
+921
+00:45:33,610 --> 00:45:35,890
+I've, I've read a lot of papers in the last days, I can't quite remember.
+我，我在最后几天读过很多论文，我不记得了。
+
+922
+00:45:35,890 --> 00:45:37,990
+I think, it might be trained separately but they might
+我想，它可能会分开培训，但可能会
+
+923
+00:45:37,990 --> 00:45:40,660
+have tried training it together but it didn't work as well.
+我曾尝试过一起训练但是效果不好。
+
+924
+00:45:40,660 --> 00:45:42,860
+I am not sure. You can check it out.
+我不确定。你可以看看。
+
+925
+00:45:43,200 --> 00:45:48,745
+Okay. So, another paper I want to tell you about is a paper which uh,
+好的。所以，我想告诉你的另一篇论文是一篇论文，呃，
+
+926
+00:45:48,745 --> 00:45:53,965
+used reinforcement learning to directly maximize ROUGE for neural summarization.
+使用强化学习直接最大化ROUGE以进行神经总结。
+
+927
+00:45:53,965 --> 00:45:56,275
+So this was a paper from two years ago.
+所以这是两年前的一篇论文。
+
+928
+00:45:56,275 --> 00:45:58,360
+And the main idea is that they can use RL to
+而主要的想法是他们可以使用RL来实现
+
+929
+00:45:58,360 --> 00:46:01,870
+directly optimize in this case ROUGE-L, the metric.
+在这种情况下直接优化ROUGE-L，度量标准。
+
+930
+00:46:01,870 --> 00:46:06,010
+So by contrast, the standard maximum likelihood of training that is
+所以相比之下，培训的标准最大可能性就是
+
+931
+00:46:06,010 --> 00:46:07,840
+the training objective we've been talking about for
+我们一直在讨论的培训目标
+
+932
+00:46:07,840 --> 00:46:10,390
+the whole class so far for language models uh,
+到目前为止全班的语言模型呃，
+
+933
+00:46:10,390 --> 00:46:13,840
+that can't directly optimize ROUGE-L because it's a non-differentiable function.
+不能直接优化ROUGE-L，因为它是一个不可微分的函数。
+
+934
+00:46:13,840 --> 00:46:16,870
+So they uh, they use this RL technique
+所以他们呃，他们使用这种RL技术
+
+935
+00:46:16,870 --> 00:46:21,820
+to compute the ROUGE score during training and then uh,
+在训练期间计算ROUGE分数然后呃，
+
+936
+00:46:21,820 --> 00:46:26,110
+use a reinforcement learning to backprop to the model.
+使用强化学习来支持模型。
+
+937
+00:46:26,110 --> 00:46:33,220
+So, the interesting finding from this paper is that if they just used the RL objective,
+因此，本文的有趣发现是，如果他们只是使用RL目标，
+
+938
+00:46:33,220 --> 00:46:36,040
+then they do indeed get higher ROUGE scores.
+然后他们确实获得了更高的ROUGE分数。
+
+939
+00:46:36,040 --> 00:46:38,470
+So they can successfully optimize
+所以他们可以成功优化
+
+940
+00:46:38,470 --> 00:46:40,240
+this ROUGE-L metric that they were aiming to
+这个ROUGE-L指标是他们的目标
+
+941
+00:46:40,240 --> 00:46:42,760
+optimize but the problem is that when you do that,
+优化，但问题是，当你这样做，
+
+942
+00:46:42,760 --> 00:46:44,725
+you get lower human judgment scores.
+你获得较低的人类判断分数。
+
+943
+00:46:44,725 --> 00:46:47,050
+So, on the right we're seeing that the RL only model has
+所以，在右边我们看到只有RL的模型了
+
+944
+00:46:47,050 --> 00:46:51,775
+actually pretty pretty bad readability relevance human judgment scores.
+实际上非常糟糕的可读性相关人类判断分数。
+
+945
+00:46:51,775 --> 00:46:57,235
+It's worse than just the maximum likelihood supervised training system.
+它比最大可能性监督训练系统更糟糕。
+
+946
+00:46:57,235 --> 00:47:00,685
+So, this is a quote from their blog post that says,
+所以，这是他们博客文章中的一句话，他说，
+
+947
+00:47:00,685 --> 00:47:02,950
+"We have observed that our models with the highest ROUGE scores
+“我们观察到我们的模型具有最高的ROUGE分数
+
+948
+00:47:02,950 --> 00:47:05,335
+also generated barely readable summaries."
+也产生了几乎无法读取的摘要。“
+
+949
+00:47:05,335 --> 00:47:06,760
+So, this is- this is,
+所以，这是 - 这是，
+
+950
+00:47:06,760 --> 00:47:08,140
+um, I suppose a problem, right?
+嗯，我想是个问题吧？
+
+951
+00:47:08,140 --> 00:47:11,170
+If you try to directly optimize for the metric,
+如果您尝试直接针对指标进行优化，
+
+952
+00:47:11,170 --> 00:47:13,450
+then you might start finding that you're kind of gaming
+然后你可能会开始发现你是一种游戏
+
+953
+00:47:13,450 --> 00:47:16,680
+the metric and not optimizing for the true task, right,
+对于真正的任务，指标并没有优化，对，
+
+954
+00:47:16,680 --> 00:47:20,550
+because we know, just as we know that BLEU was not really a perfect analogy to
+因为我们知道，就像我们知道BLEU并不是一个完美的类比
+
+955
+00:47:20,550 --> 00:47:22,530
+actual translation quality so is ROUGE
+实际的翻译质量也是ROUGE
+
+956
+00:47:22,530 --> 00:47:26,255
+not a perfect analogy to uh, summarization quality.
+不是一个完美的类比，总结质量。
+
+957
+00:47:26,255 --> 00:47:28,660
+But they did do something cool, which is that they found that if
+但他们确实做了一些很酷的事情，就是他们发现了
+
+958
+00:47:28,660 --> 00:47:31,419
+you combine the two objectives,
+你把这两个目标结合起来，
+
+959
+00:47:31,419 --> 00:47:33,025
+so they kind of, uh, you know,
+所以他们有点，呃，你知道，
+
+960
+00:47:33,025 --> 00:47:36,910
+predict the language model sequence objective and then they also like produce
+预测语言模型序列目标，然后他们也喜欢产生
+
+961
+00:47:36,910 --> 00:47:41,305
+an overall summary that gets a high ROUGE score objective and you combine them together,
+获得高ROUGE分数目标并将它们组合在一起的总体摘要，
+
+962
+00:47:41,305 --> 00:47:45,370
+then you can get a better human uh, judgment score,
+然后你可以得到一个更好的人类呃，判断分数，
+
+963
+00:47:45,370 --> 00:47:48,220
+which in the end is the closest thing we have to uh,
+这到底是我们最接近的事情，呃，
+
+964
+00:47:48,220 --> 00:47:49,930
+a measure of actual summarization quality.
+实际摘要质量的衡量标准。
+
+965
+00:47:49,930 --> 00:47:54,340
+[NOISE] Okay.
+[NOISE]好的。
+
+966
+00:47:54,340 --> 00:47:57,280
+So, I'm gonna move on to uh, dialogue,
+那么，我会继续呃，对话，
+
+967
+00:47:57,280 --> 00:48:01,750
+which is um, a different NLG, kind of family of tasks.
+这是一个不同的NLG，一类任务。
+
+968
+00:48:01,750 --> 00:48:05,590
+Uh, so, really dialogue encompasses a really large variety of settings.
+呃，所以，真正的对话包含了各种各样的设置。
+
+969
+00:48:05,590 --> 00:48:06,700
+And we are not going to cover them all,
+我们不打算全部覆盖它们，
+
+970
+00:48:06,700 --> 00:48:08,800
+but here is a kind of overview of all the different kinds
+但这里有一种各种不同的概述
+
+971
+00:48:08,800 --> 00:48:11,185
+of tasks that people might mean, when they say dialogue.
+当他们说对话时，人们可能意味着的任务。
+
+972
+00:48:11,185 --> 00:48:15,490
+Um, so, there's task-oriented dialogue and this kind of refers to any setting,
+嗯，所以，这是面向任务的对话，这种指的是任何设置，
+
+973
+00:48:15,490 --> 00:48:18,205
+where you're trying to kind of get something done in the conversation.
+在那里你试图在谈话中完成一些事情。
+
+974
+00:48:18,205 --> 00:48:19,690
+So, if for example, you've got kind of
+所以，例如，如果你有点
+
+975
+00:48:19,690 --> 00:48:23,590
+assistive tasks where it's assumed that you have, you know, maybe the uh,
+辅助任务，假设你有，你知道，也许是呃，
+
+976
+00:48:23,590 --> 00:48:27,040
+the dialogue agent is trying to help a human user to do
+对话代理正试图帮助人类用户做
+
+977
+00:48:27,040 --> 00:48:30,700
+something like maybe giving customer service or recommendations,
+像是给客户服务或推荐的东西，
+
+978
+00:48:30,700 --> 00:48:32,890
+answering questions, helping a user,
+回答问题，帮助用户，
+
+979
+00:48:32,890 --> 00:48:35,950
+you know, accomplish a task like buying or booking something.
+你知道，完成购买或预订等任务。
+
+980
+00:48:35,950 --> 00:48:38,350
+Uh, these are the kinds of tasks, which the virtual systems on
+呃，这些是虚拟系统所依赖的任务类型
+
+981
+00:48:38,350 --> 00:48:41,740
+your phone can do or can kind of do.
+你的手机可以做什么或者可以做什么。
+
+982
+00:48:41,740 --> 00:48:46,585
+Um, another family of task-oriented dialogue tasks are cooperative tasks.
+嗯，另一个面向任务的对话任务系列是合作任务。
+
+983
+00:48:46,585 --> 00:48:49,150
+So, this is kind of anything where you've  got two agents who are
+所以，这就是你有两个代理人的事情
+
+984
+00:48:49,150 --> 00:48:52,120
+trying to solve a task together via dialogue.
+试图通过对话共同解决任务。
+
+985
+00:48:52,120 --> 00:48:54,715
+Um, and the opposite of that would be adversarial.
+嗯，与此相反的是对抗性的。
+
+986
+00:48:54,715 --> 00:48:58,600
+So anything where you have two agents who are trying to compete in a task and that uh,
+所以你有两个代理商试图参与任务的任何事情，呃，
+
+987
+00:48:58,600 --> 00:49:01,400
+competition is conducted through dialogue.
+竞争是通过对话进行的。
+
+988
+00:49:02,340 --> 00:49:08,950
+[NOISE] So uh, the opposite to task-oriented dialogue is, uh, social dialogue.
+[NOISE]那么，与任务导向对话相反的是，呃，社会对话。
+
+989
+00:49:08,950 --> 00:49:13,600
+So that's something where there is no explicit task other than to, I suppose socialize.
+所以这是除了之外没有明确任务的事情，我想社交。
+
+990
+00:49:13,600 --> 00:49:16,105
+So chit-chat dialogue, um,
+那聊天对话，嗯，
+
+991
+00:49:16,105 --> 00:49:20,200
+is just dialogue where you're just doing it for social fun or for company.
+只是对话，你只是为社交乐趣或公司做这件事。
+
+992
+00:49:20,200 --> 00:49:24,910
+Um, I've also seen some work on kind of like therapy or mental well-being dialogue,
+嗯，我也看过一些类似治疗或心理幸福对话的工作，
+
+993
+00:49:24,910 --> 00:49:26,740
+I'm not sure if this should go in task or social,
+我不确定这应该是在任务还是社交，
+
+994
+00:49:26,740 --> 00:49:28,105
+it's kind of a mix, uh,
+这是一种混合，呃，
+
+995
+00:49:28,105 --> 00:49:30,580
+but I suppose these are the ones where the goal is to
+但我想这些都是目标所在
+
+996
+00:49:30,580 --> 00:49:34,285
+maybe offer kind of emotional support to the human user.
+也许为人类用户提供一种情感支持。
+
+997
+00:49:34,285 --> 00:49:40,030
+Um, so as a very kind of brief overview of how,
+嗯，这是一个非常简短的概述，如何，
+
+998
+00:49:40,030 --> 00:49:42,070
+uh, the deep learning, uh,
+呃，深度学习，呃，
+
+999
+00:49:42,070 --> 00:49:45,070
+renaissance has kind of changed dialog research, um,
+文艺复兴有一种改变对话研究，嗯，
+
+1000
+00:49:45,070 --> 00:49:48,595
+I think you can say that in kind of pre-deep learning,
+我想你可以说这是一种前深度学习，
+
+1001
+00:49:48,595 --> 00:49:50,620
+uh, the difficulty of open-ended,
+呃，开放式的难度，
+
+1002
+00:49:50,620 --> 00:49:53,830
+free-form natural language generation, meant that, uh,
+自由形式的自然语言生成，意思是，呃，
+
+1003
+00:49:53,830 --> 00:49:55,405
+dialogue systems were often,
+对话系统经常是，
+
+1004
+00:49:55,405 --> 00:49:58,360
+uh, not doing free-form NLG.
+呃，不做自由形式的NLG。
+
+1005
+00:49:58,360 --> 00:50:00,730
+They might use predefined templates meaning that you have
+他们可能会使用预定义模板，这意味着您拥有
+
+1006
+00:50:00,730 --> 00:50:03,775
+a template where you just fill in some slots with the content, uh,
+一个模板，你只需用内容填写一些插槽，呃，
+
+1007
+00:50:03,775 --> 00:50:06,700
+or maybe you retrieve an appropriate response from
+或者您可以从中检索适当的回复
+
+1008
+00:50:06,700 --> 00:50:09,625
+a corpus of responses that you have in order to find,
+你有一个回应语料库，以便找到，
+
+1009
+00:50:09,625 --> 00:50:11,380
+you know, an appropriate response for the user.
+你知道，对用户的适当回应。
+
+1010
+00:50:11,380 --> 00:50:13,330
+And these are by no means simple systems,
+而这些绝不是简单的系统，
+
+1011
+00:50:13,330 --> 00:50:16,180
+they had some very complex things going on like deciding, you know,
+他们有一些非常复杂的事情正在进行，比如决定，你知道，
+
+1012
+00:50:16,180 --> 00:50:19,570
+what their dialogue state is and what template you should use and so on and the-
+他们的对话状态是什么，你应该使用什么样的模板等等
+
+1013
+00:50:19,570 --> 00:50:23,905
+all the natural language understanding components of understanding the context so far.
+到目前为止，理解上下文的所有自然语言理解组件。
+
+1014
+00:50:23,905 --> 00:50:26,455
+But, uh, one effect that,
+但是，呃，有一个影响，
+
+1015
+00:50:26,455 --> 00:50:28,825
+that deep learning had is that, uh,
+深度学习的是，呃，
+
+1016
+00:50:28,825 --> 00:50:31,915
+since again kind of 2015 which is when NMT, uh,
+再次2015年是NMT，呃，
+
+1017
+00:50:31,915 --> 00:50:34,615
+became standard, there's been, uh,
+成为标准，有，呃，
+
+1018
+00:50:34,615 --> 00:50:38,440
+just like summarization, lots of papers applying seq2seq methods to dialogue.
+就像摘要一样，很多论文都采用seq2seq方法进行对话。
+
+1019
+00:50:38,440 --> 00:50:43,435
+And this has kind of led to a renewed interest in open-ended, free-form dialogue systems.
+这种情况导致人们对开放式自由形式对话系统产生了新的兴趣。
+
+1020
+00:50:43,435 --> 00:50:45,760
+So uh, if you wanna have a look at what did
+呃，如果你想看看做了什么
+
+1021
+00:50:45,760 --> 00:50:48,130
+those early seq2seq dialogue papers look like,
+那些早期的seq2seq对话文章看起来像，
+
+1022
+00:50:48,130 --> 00:50:53,090
+um, here's two kind of early ones like maybe the first ones to apply seq2seq.
+嗯，这里有两种早期的，比如可能是应用seq2seq的第一种。
+
+1023
+00:50:55,530 --> 00:51:00,400
+Okay. So uh, people quickly applied seq2seq, uh,
+好的。所以，人们很快就应用了seq2seq，呃，
+
+1024
+00:51:00,400 --> 00:51:03,160
+NMT methods to dialogue but it quickly became
+对话的NMT方法很快就成了
+
+1025
+00:51:03,160 --> 00:51:06,130
+very apparent that this kind of naive application of
+很明显，这种天真的应用
+
+1026
+00:51:06,130 --> 00:51:08,560
+standard NMT methods has
+标准的NMT方法有
+
+1027
+00:51:08,560 --> 00:51:13,915
+some serious pervasive deficiencies when applied to a task like chitchat dialogue.
+应用于像聊天对话这样的任务时，存在一些严重的普遍缺陷。
+
+1028
+00:51:13,915 --> 00:51:16,960
+And this is even more true than it was for summarization.
+这比总结更为真实。
+
+1029
+00:51:16,960 --> 00:51:21,145
+So what are some examples of these serious pervas- pervasive deficiencies?
+那么这些严重的普遍缺陷有哪些例子呢？
+
+1030
+00:51:21,145 --> 00:51:24,430
+Uh, one would be genericness or boring responses,
+呃，一个是通用或无聊的回应，
+
+1031
+00:51:24,430 --> 00:51:26,710
+and I'll go into more detail about these in a moment.
+我稍后会详细介绍这些内容。
+
+1032
+00:51:26,710 --> 00:51:29,005
+Another one is irrelevant responses.
+另一个是不相关的回应。
+
+1033
+00:51:29,005 --> 00:51:30,175
+So that's when, uh,
+那就是，呃，
+
+1034
+00:51:30,175 --> 00:51:32,200
+the dialogue agent kind of says something back
+对话代理人说了些什么
+
+1035
+00:51:32,200 --> 00:51:35,065
+that's just kind of unrelated to what the user says.
+这与用户所说的无关。
+
+1036
+00:51:35,065 --> 00:51:36,700
+Um, another one is repetition,
+嗯，另一个是重复，
+
+1037
+00:51:36,700 --> 00:51:38,080
+this is pretty basic but it,
+这是非常基本但它，
+
+1038
+00:51:38,080 --> 00:51:39,640
+uh, it happens a lot.
+呃，它发生了很多。
+
+1039
+00:51:39,640 --> 00:51:44,275
+Um, so that's also repetition within the utterance and maybe repetition across utterances.
+嗯，所以这也是在话语中重复，也许是在话语中重复。
+
+1040
+00:51:44,275 --> 00:51:47,485
+Ah, another difficulty is,
+啊，另一个困难是，
+
+1041
+00:51:47,485 --> 00:51:48,910
+uh, kind of lack of context,
+呃，缺乏背景，
+
+1042
+00:51:48,910 --> 00:51:50,800
+like not remembering the conversation history.
+喜欢不记得对话历史。
+
+1043
+00:51:50,800 --> 00:51:53,710
+Obviously, if you do not condition on the whole conversation history,
+显然，如果你没有对整个谈话历史做出反应，
+
+1044
+00:51:53,710 --> 00:51:57,190
+there's no way your dialogue agent can use it but it is a challenge especially if you
+你的对话代理人无法使用它，但这对你来说是一个挑战
+
+1045
+00:51:57,190 --> 00:52:01,315
+have a very long dialogue history to figure out how to condition on it effectively.
+有一个很长的对话历史来弄清楚如何有效地对其进行调整。
+
+1046
+00:52:01,315 --> 00:52:04,060
+Another problem is the lack of consistent persona.
+另一个问题是缺乏一致的角色。
+
+1047
+00:52:04,060 --> 00:52:05,380
+So if you kind of, uh,
+所以，如果你有点，呃，
+
+1048
+00:52:05,380 --> 00:52:09,970
+naively as in maybe those two papers that I referenced on the previous slide,
+天生就像在上一张幻灯片中引用的那两篇论文一样，
+
+1049
+00:52:09,970 --> 00:52:14,395
+if you naively train a kind of standard seq2seq model to maybe take the, uh,
+如果你天真地训练一种标准的seq2seq模型可能会采取，呃，
+
+1050
+00:52:14,395 --> 00:52:16,480
+you know the user's last utterance and then say something back,
+你知道用户的最后一句话，然后回复一下，
+
+1051
+00:52:16,480 --> 00:52:18,955
+or maybe even the whole dialogue history and say something back.
+或者甚至可能是整个对话历史并回复一些事情。
+
+1052
+00:52:18,955 --> 00:52:22,675
+Often your dialogue agent will have this completely inconsistent persona,
+通常你的对话代理人会有这种完全不一致的角色，
+
+1053
+00:52:22,675 --> 00:52:26,800
+like one moment they will say that it lives in Europe and then it'll say it lives in,
+就像有一刻他们会说它生活在欧洲然后它会说它存在于，
+
+1054
+00:52:26,800 --> 00:52:29,770
+I don't know, China or something and it just doesn't make sense.
+我不知道，中国什么的，它只是没有意义。
+
+1055
+00:52:29,770 --> 00:52:31,915
+So I'm gonna go through, uh,
+所以我要经历，呃，
+
+1056
+00:52:31,915 --> 00:52:34,810
+some of these problems and give you a bit more detail on them.
+其中一些问题，并为您提供更多细节。
+
+1057
+00:52:34,810 --> 00:52:37,870
+So first, this irrelevant response problem.
+首先，这个无关紧要的响应问题。
+
+1058
+00:52:37,870 --> 00:52:40,960
+So in a bit more detail, your problem is that seq2seq often
+所以更详细一点，你的问题往往是seq2seq
+
+1059
+00:52:40,960 --> 00:52:44,080
+generates some response that's kind of unrelated to the user's utterance.
+产生一些与用户话语无关的响应。
+
+1060
+00:52:44,080 --> 00:52:47,155
+So it can be unrelated because it's simply generic,
+所以它可以是不相关的，因为它只是通用的，
+
+1061
+00:52:47,155 --> 00:52:49,150
+which means that this is kind of like an overlap with
+这意味着这有点像重叠
+
+1062
+00:52:49,150 --> 00:52:51,610
+a generic response problem or it can be
+一般的响应问题或它可以
+
+1063
+00:52:51,610 --> 00:52:54,160
+kind of unrelated because the model's choosing to kind of change,
+有点不相干，因为模特选择了一种变化，
+
+1064
+00:52:54,160 --> 00:52:56,845
+to change the subject to something unrelated.
+将主题改为不相关的东西。
+
+1065
+00:52:56,845 --> 00:52:59,020
+So one solution of many, there,
+所以很多人的解决方案，那里，
+
+1066
+00:52:59,020 --> 00:53:00,880
+there are a lot of different papers which, uh,
+有很多不同的论文，呃，
+
+1067
+00:53:00,880 --> 00:53:04,735
+kind of attack this irrelevant response problem, uh, but just one,
+有点攻击这个无关的反应问题，呃，但只有一个，
+
+1068
+00:53:04,735 --> 00:53:07,015
+one for example is, uh,
+例如，呃，
+
+1069
+00:53:07,015 --> 00:53:09,835
+that you should tr- change the training objective.
+你应该改变培训目标。
+
+1070
+00:53:09,835 --> 00:53:12,760
+So instead of trying to optimize, um,
+所以，而不是试图优化，嗯，
+
+1071
+00:53:12,760 --> 00:53:15,520
+mapping from input S to response T such that
+从输入S到响应T的映射使得
+
+1072
+00:53:15,520 --> 00:53:18,625
+you're maximizing the conditional probability of T given S,
+你最大化T给定S的条件概率，
+
+1073
+00:53:18,625 --> 00:53:22,435
+instead you should maximize the maximum mutual information.
+相反，你应该最大化最大的互信息。
+
+1074
+00:53:22,435 --> 00:53:24,235
+So that's why this is here.
+所以这就是为什么这里。
+
+1075
+00:53:24,235 --> 00:53:26,530
+So maximum mutual information, uh,
+所以最大的互信息，呃，
+
+1076
+00:53:26,530 --> 00:53:29,140
+you can kind of rewrite the objective like this,
+你可以像这样改写目标，
+
+1077
+00:53:29,140 --> 00:53:31,915
+and if you want to see some more detail you can go look at this paper here.
+如果你想看到更多的细节，你可以在这里看一下这篇论文。
+
+1078
+00:53:31,915 --> 00:53:35,830
+But the idea is that you're trying to find your response T that kind of, uh,
+但是这个想法是你试图找到你的回答那种，呃，
+
+1079
+00:53:35,830 --> 00:53:38,680
+maximizes this thing which is kind of like saying,
+最大化这个有点像说的东西，
+
+1080
+00:53:38,680 --> 00:53:41,680
+it needs to be probable given the inputs but
+考虑到输入，它需要是可能的
+
+1081
+00:53:41,680 --> 00:53:44,920
+kind of like as a ratio of its probability in itself.
+有点像它本身的概率比。
+
+1082
+00:53:44,920 --> 00:53:49,510
+So if T is very high likelihood,
+所以，如果T很可能，
+
+1083
+00:53:49,510 --> 00:53:52,600
+then it gets penalized and it's kind of like about the ratio
+然后它会受到惩罚，这有点像比例
+
+1084
+00:53:52,600 --> 00:53:56,440
+of the probability given the input and it's just the stand-alone probability.
+给出输入的概率，它只是独立的概率。
+
+1085
+00:53:56,440 --> 00:53:59,650
+So the idea is that this is meant to discourage, um,
+所以这个想法是，这是为了劝阻，嗯，
+
+1086
+00:53:59,650 --> 00:54:04,240
+just saying generic things that just have a high PT by themselves.
+只是说自己拥有高PT的通用东西。
+
+1087
+00:54:04,240 --> 00:54:08,995
+Um, so that's the irrelevant response problem.
+嗯，这是无关的反应问题。
+
+1088
+00:54:08,995 --> 00:54:10,780
+And as I just hinted at, there's, uh,
+就像我刚才暗示的那样，呃，
+
+1089
+00:54:10,780 --> 00:54:12,040
+definitely a strong link between
+绝对是一个强大的联系
+
+1090
+00:54:12,040 --> 00:54:16,870
+the irrelevant response problem and the kind of generic or boring response problem.
+无关的反应问题和一般或无聊的反应问题。
+
+1091
+00:54:16,870 --> 00:54:21,490
+So to look at the genericness or boring response problem.
+所以要看一般性或无聊的响应问题。
+
+1092
+00:54:21,490 --> 00:54:27,730
+[NOISE] So I think
+[噪音]所以我想
+
+1093
+00:54:27,730 --> 00:54:32,230
+there are some pretty easy fixes that you can make to,
+你可以做一些非常简单的修复，
+
+1094
+00:54:32,230 --> 00:54:35,470
+to a degree ameliorate the boring response problem.
+在一定程度上改善了无聊的反应问题。
+
+1095
+00:54:35,470 --> 00:54:38,410
+Whether you're really getting to the heart of the issue is a different question.
+你是否真正了解问题的核心是一个不同的问题。
+
+1096
+00:54:38,410 --> 00:54:42,310
+But some kind of easy test-time fixes that you can certainly do are for example,
+但是，您可以做的某些简单的测试时修复例如，
+
+1097
+00:54:42,310 --> 00:54:46,885
+you can just directly up-rate, up-weight rare words during beam search.
+你可以直接在波束搜索过程中直接升级，增加稀有词。
+
+1098
+00:54:46,885 --> 00:54:49,675
+So you can say, all rare words kind of get a boost to their, uh,
+所以你可以说，所有罕见的词都能得到提升，呃，
+
+1099
+00:54:49,675 --> 00:54:51,880
+log probabilities and then now we're
+记录概率然后我们现在
+
+1100
+00:54:51,880 --> 00:54:54,220
+more likely to produce them during beam search.
+在光束搜索期间更有可能产生它们。
+
+1101
+00:54:54,220 --> 00:54:56,410
+Another thing you could do is you could use for example,
+你可以做的另一件事是你可以使用，例如，
+
+1102
+00:54:56,410 --> 00:55:00,535
+a sampling decoding algorithm rather than beam search and we talked about that earlier,
+采样解码算法而不是波束搜索，我们之前讨论过，
+
+1103
+00:55:00,535 --> 00:55:02,350
+um, or you could use, oh yeah,
+嗯，或者你可以用，哦是的，
+
+1104
+00:55:02,350 --> 00:55:04,195
+you could use softmax temperature as well.
+你也可以使用softmax温度。
+
+1105
+00:55:04,195 --> 00:55:07,105
+That's another thing. So those are
+那是另一回事。那些是
+
+1106
+00:55:07,105 --> 00:55:12,040
+kind of test-time fixes and you could regard those as a kind of late intervention, right?
+一种测试时间修复，你可以认为这是一种后期干预，对吧？
+
+1107
+00:55:12,040 --> 00:55:16,000
+So an earlier intervention would be maybe training your model differently.
+因此，早期的干预可能会以不同方式训练您的模型。
+
+1108
+00:55:16,000 --> 00:55:20,005
+So I'm calling these kind of conditioning fixes because these fixes kind of relate to,
+所以我称之为这种修复方式，因为这些修复有点与之相关，
+
+1109
+00:55:20,005 --> 00:55:23,965
+uh, conditioning your model on something that's gonna help it be less boring.
+呃，让你的模型适应一些会让它变得不那么无聊的东西。
+
+1110
+00:55:23,965 --> 00:55:26,320
+So one example is maybe you should condition
+所以一个例子就是你应该有条件
+
+1111
+00:55:26,320 --> 00:55:28,930
+the decoder on some kind of additional context.
+某种附加上下文的解码器。
+
+1112
+00:55:28,930 --> 00:55:31,150
+Uh, so for example, there's some work showing that, you know,
+呃，例如，有一些工作表明，你知道，
+
+1113
+00:55:31,150 --> 00:55:33,625
+if you're doing chitchat dialogue, then maybe you should, uh,
+如果你正在进行闲聊对话，那么也许你应该，呃，
+
+1114
+00:55:33,625 --> 00:55:36,280
+go and sample some related words that are related to
+去抽样一些与之相关的相关单词
+
+1115
+00:55:36,280 --> 00:55:38,710
+what the user said and then just kind of attend to them when you
+用户说了什么，然后当你的时候只是照顾他们
+
+1116
+00:55:38,710 --> 00:55:41,350
+generate and then you're more likely to say something that's kind of content
+生成，然后你更有可能说出某种内容
+
+1117
+00:55:41,350 --> 00:55:44,080
+full and interesting compared to the boring things you were saying before.
+与你之前说过的无聊事物相比，充实而有趣。
+
+1118
+00:55:44,080 --> 00:55:46,870
+Ah, another option is you could train
+啊，另一种选择是你可以训练
+
+1119
+00:55:46,870 --> 00:55:50,770
+a retrieve-and-refine model rather than a generate-from-scratch model.
+检索和优化模型，而不是从头开始生成模型。
+
+1120
+00:55:50,770 --> 00:55:53,440
+So by retrieve-and-refine, I mean, uh,
+所以通过检索和改进，我的意思是，呃，
+
+1121
+00:55:53,440 --> 00:55:55,825
+you've- supposing you have some kind of corpus of,
+你 - 假设你有某种语料库，
+
+1122
+00:55:55,825 --> 00:55:57,400
+of just general kind of utterances,
+只是一般的话语，
+
+1123
+00:55:57,400 --> 00:56:00,460
+things that you could say and then maybe you sample one, uh,
+你可以说的东西，然后你可能会抽样，呃，
+
+1124
+00:56:00,460 --> 00:56:01,855
+from that test set,
+从那个测试集，
+
+1125
+00:56:01,855 --> 00:56:03,775
+th- the training set,
+- 训练集，
+
+1126
+00:56:03,775 --> 00:56:06,895
+and then you edit it to fit the current situation.
+然后编辑它以适应当前的情况。
+
+1127
+00:56:06,895 --> 00:56:10,630
+So it turns out that this is a pretty strong method to produce
+事实证明，这是一种非常强大的制作方法
+
+1128
+00:56:10,630 --> 00:56:14,800
+much more kind of diverse and human-like and interesting utterances, um,
+更多种多样，人性化和有趣的话语，嗯，
+
+1129
+00:56:14,800 --> 00:56:19,555
+because you can get all of that kind of fine grain detail from the sampled,
+因为您可以从采样中获得所有这种细粒度细节，
+
+1130
+00:56:19,555 --> 00:56:23,665
+ah, utterance and then you edit it as necessary to fit your current situation.
+啊，说话，然后根据需要编辑它以适应您当前的情况。
+
+1131
+00:56:23,665 --> 00:56:26,740
+So I mean, there are downsides to these kinds of methods like maybe it can be
+所以我的意思是，这些方法有些缺点，例如可能
+
+1132
+00:56:26,740 --> 00:56:30,145
+hard to edit it to actually appropriately fit the situation,
+很难编辑它以实际适合的情况，
+
+1133
+00:56:30,145 --> 00:56:32,410
+um, but it's certainly a way to effectively get like
+嗯，但这肯定是一种有效的方式
+
+1134
+00:56:32,410 --> 00:56:36,530
+some more diversity and, um, interest in that.
+更多的多样性，嗯，对此感兴趣。
+
+1135
+00:56:37,170 --> 00:56:40,810
+So on the subject of the repetition problem,
+所以关于重复问题，
+
+1136
+00:56:40,810 --> 00:56:43,105
+that was another kind of major problem we noticed for,
+这是我们注意到的另一个主要问题，
+
+1137
+00:56:43,105 --> 00:56:45,790
+um, applying seq2seq to, uh, chitchat.
+嗯，将seq2seq应用于，呃，聊天。
+
+1138
+00:56:45,790 --> 00:56:48,970
+Um, again, there are kind of simple solutions and more complex solutions.
+嗯，还有一些简单的解决方案和更复杂的解决方案。
+
+1139
+00:56:48,970 --> 00:56:52,150
+Um, so a simple solution is you could just block repeating
+嗯，所以一个简单的解决方案是你可以阻止重复
+
+1140
+00:56:52,150 --> 00:56:55,915
+n-grams during beam search and this is usually really quite effective.
+在光束搜索期间n-gram，这通常非常有效。
+
+1141
+00:56:55,915 --> 00:56:57,595
+And what I mean by that is, uh,
+我的意思是，呃，
+
+1142
+00:56:57,595 --> 00:56:59,815
+during beam search when you're kind of considering,
+在梁搜索期间，当你考虑时，
+
+1143
+00:56:59,815 --> 00:57:01,510
+you know, what are my K hypotheses?
+你知道吗，我的K假设是什么？
+
+1144
+00:57:01,510 --> 00:57:05,110
+Which is just kind of the top K in the probability distribution, you say,
+你说，这只是概率分布中的顶级K的一种，
+
+1145
+00:57:05,110 --> 00:57:09,535
+well, anything that would constitute a repeating n-gram just gets thrown out.
+好吧，任何构成重复n-gram的东西都会被抛弃。
+
+1146
+00:57:09,535 --> 00:57:11,590
+So when I say constitutes a repeating n-gram,
+所以当我说构成一个重复的n-gram时，
+
+1147
+00:57:11,590 --> 00:57:14,470
+I mean if you did take that word,
+我的意思是，如果你确实接受了那个词，
+
+1148
+00:57:14,470 --> 00:57:19,630
+would you now be creating a repeating let's say two-gram, bigram and, um,
+你现在要创造一个重复的让我们说两克，二元游戏，嗯，
+
+1149
+00:57:19,630 --> 00:57:23,500
+if we're deciding that we're banning all repeating bigrams or trigrams or whatever,
+如果我们决定禁止所有重复的双字母或三卦或其他什么，
+
+1150
+00:57:23,500 --> 00:57:26,620
+then you essentially just have to check for every possible word that you might
+那么你基本上只需要检查你可能的每个可能的单词
+
+1151
+00:57:26,620 --> 00:57:30,700
+be looking at in beam search and whether that would create a repeating n-gram.
+在光束搜索中查看是否会产生重复的n-gram。
+
+1152
+00:57:30,700 --> 00:57:32,440
+So this works pretty well, I mean,
+所以这很好用，我的意思是，
+
+1153
+00:57:32,440 --> 00:57:34,780
+it's by no means a kind of principled solution, right?
+它绝不是一种原则性的解决方案，对吧？
+
+1154
+00:57:34,780 --> 00:57:37,495
+If feels like we should kind of have a better way to learn not to repeat, um,
+如果觉得我们应该有更好的方法来学习不重复，嗯，
+
+1155
+00:57:37,495 --> 00:57:39,790
+but as a kind of, uh,
+但作为一种，呃，
+
+1156
+00:57:39,790 --> 00:57:42,535
+effective hack, I think that works, that works pretty well.
+有效的黑客，我认为有效，但效果很好。
+
+1157
+00:57:42,535 --> 00:57:44,830
+So the more complex solutions are,
+所以更复杂的解决方案是，
+
+1158
+00:57:44,830 --> 00:57:47,920
+for example, you can train something called coverage mechanism.
+例如，你可以训练一种叫做覆盖机制的东西。
+
+1159
+00:57:47,920 --> 00:57:50,530
+Um, so in seq2seq, and this is mostly, uh,
+嗯，所以在seq2seq，这主要是，呃，
+
+1160
+00:57:50,530 --> 00:57:53,800
+inspired by the machine translation setting, uh,
+灵感来自机器翻译设置，呃，
+
+1161
+00:57:53,800 --> 00:57:56,440
+a coverage mechanism is a kind of objective that prevents
+覆盖机制是一种阻止的目标
+
+1162
+00:57:56,440 --> 00:57:58,630
+the attention mechanism from attending to
+关注的机制
+
+1163
+00:57:58,630 --> 00:58:01,810
+the same words multiple times or too many times.
+相同的单词多次或多次。
+
+1164
+00:58:01,810 --> 00:58:03,655
+And the intuition here is that, uh,
+这里的直觉是，呃，
+
+1165
+00:58:03,655 --> 00:58:06,595
+maybe repetition is caused by repeated attention.
+也许重复是由反复注意引起的。
+
+1166
+00:58:06,595 --> 00:58:08,620
+So if you attend to the same things many times,
+所以，如果你多次照顾同样的事情，
+
+1167
+00:58:08,620 --> 00:58:09,970
+then maybe you're gonna repeat,
+那么也许你会重复，
+
+1168
+00:58:09,970 --> 00:58:11,605
+you know, the same output many times.
+你知道，同样的输出很多次。
+
+1169
+00:58:11,605 --> 00:58:13,690
+So if you prevent the repeated attention,
+所以，如果你阻止反复注意，
+
+1170
+00:58:13,690 --> 00:58:15,280
+you prevent the repeated output.
+你防止重复输出。
+
+1171
+00:58:15,280 --> 00:58:18,190
+So this does work pretty well but it's definitely,
+所以这确实很好用但是肯定的，
+
+1172
+00:58:18,190 --> 00:58:21,490
+um, more of a complex thing to implement,
+嗯，更复杂的事情要实施，
+
+1173
+00:58:21,490 --> 00:58:23,635
+it's less convenient and,
+它不太方便，
+
+1174
+00:58:23,635 --> 00:58:25,120
+um, I don't know,
+嗯，我不知道，
+
+1175
+00:58:25,120 --> 00:58:28,075
+in some settings, it does seem like the simple solution is,
+在某些情况下，它似乎是简单的解决方案，
+
+1176
+00:58:28,075 --> 00:58:29,530
+uh, easier and works just as well.
+呃，更容易，同样有效。
+
+1177
+00:58:29,530 --> 00:58:32,740
+Uh, so other complex solutions
+呃，其他复杂的解决方案
+
+1178
+00:58:32,740 --> 00:58:35,800
+might be you could define a training objective to discourage repetition.
+也许你可以定义一个培训目标来阻止重复。
+
+1179
+00:58:35,800 --> 00:58:38,320
+Uh, this cou- you could try to, um,
+呃，你可以尝试，嗯，
+
+1180
+00:58:38,320 --> 00:58:41,125
+define something differentiable but one of the,
+定义可区分的东西，但其中一个，
+
+1181
+00:58:41,125 --> 00:58:45,600
+the difficulties there is that because you're training with a teacher forcing, right?
+有困难是因为你正在和老师一起训练，对吗？
+
+1182
+00:58:45,600 --> 00:58:47,055
+Where you're always like looking at the,
+你总是喜欢看的地方，
+
+1183
+00:58:47,055 --> 00:58:48,435
+the gold inputs so far,
+迄今为止的黄金投入，
+
+1184
+00:58:48,435 --> 00:58:50,700
+then you never really do the thing where
+那么你从来没有真正做过的事情
+
+1185
+00:58:50,700 --> 00:58:53,010
+you generate your own output and start repeating yourself.
+你生成自己的输出并开始重复自己。
+
+1186
+00:58:53,010 --> 00:58:55,845
+So it's kind of hard to define the penalty in that situation.
+所以在那种情况下很难定义惩罚。
+
+1187
+00:58:55,845 --> 00:58:58,350
+So maybe this needs to be a kind of non-differentiable function.
+所以这可能需要成为一种不可微分的功能。
+
+1188
+00:58:58,350 --> 00:59:00,255
+So kind of like how,
+有点像，如何，
+
+1189
+00:59:00,255 --> 00:59:03,745
+um, the Paul et al paper was, uh,
+嗯，Paul等人的论文是，呃，
+
+1190
+00:59:03,745 --> 00:59:06,250
+optimizing for ROUGE, maybe we kind of, uh,
+优化ROUGE，也许我们有点，呃，
+
+1191
+00:59:06,250 --> 00:59:11,455
+optimize for not repeating which is a discrete function of the input.
+优化不重复哪个是输入的离散函数。
+
+1192
+00:59:11,455 --> 00:59:14,425
+Uh, I'm going to skip ahead to storytelling.
+呃，我要跳过讲故事。
+
+1193
+00:59:14,425 --> 00:59:16,195
+So in storytelling, uh,
+所以在讲故事，呃，
+
+1194
+00:59:16,195 --> 00:59:19,015
+there's a lot of interesting neural storytelling work going on right now.
+现在有很多有趣的神经故事讲述工作正在进行中。
+
+1195
+00:59:19,015 --> 00:59:22,285
+And most of it uses some kind of prompt to write a story.
+而且大多数都使用某种提示来写故事。
+
+1196
+00:59:22,285 --> 00:59:24,610
+So for example, uh,
+所以，例如，呃，
+
+1197
+00:59:24,610 --> 00:59:28,115
+writing a story given an image or given a writing prompt
+写一个故事给一个图像或给一个写作提示
+
+1198
+00:59:28,115 --> 00:59:32,715
+or writing the next sentence of the story given the story so far.
+或者到目前为止写下故事的下一句话。
+
+1199
+00:59:32,715 --> 00:59:37,645
+So, uh, here's an example of generating a story from an image.
+所以，呃，这是一个从图像生成故事的例子。
+
+1200
+00:59:37,645 --> 00:59:40,360
+And what's interesting here is that we have this image which
+这里有趣的是我们有这个图像
+
+1201
+00:59:40,360 --> 00:59:42,940
+is a picture of what appears to be an explosion and
+是一张看似爆炸的照片
+
+1202
+00:59:42,940 --> 00:59:44,740
+then here you have
+那么你有
+
+1203
+00:59:44,740 --> 00:59:48,475
+a story about the image but written in the style of Taylor Swift lyrics.
+关于图像的故事，但以泰勒斯威夫特的歌词风格写成。
+
+1204
+00:59:48,475 --> 00:59:52,015
+So it says, you have to be the only light bulb in the night sky I thought,
+所以它说，你必须成为我认为的夜空中唯一的灯泡，
+
+1205
+00:59:52,015 --> 00:59:55,225
+oh god, it's so dark out of me that I missed you, I promise.
+哦，上帝，我这么黑暗，我想念你，我保证。
+
+1206
+00:59:55,225 --> 00:59:58,690
+And what's interesting here is that there wasn't any straightforward, supervised,
+这里有趣的是，没有任何直截了当，有监督，
+
+1207
+00:59:58,690 --> 01:00:02,620
+you know, image-captioning data set of explosions and Taylor Swift lyrics.
+你知道，图像字幕数据集的爆炸和泰勒斯威夫特的歌词。
+
+1208
+01:00:02,620 --> 01:00:05,890
+Um, they kind of learned this, uh, separately.
+嗯，他们有点学习这个，呃，分开。
+
+1209
+01:00:05,890 --> 01:00:12,220
+So how they did this is that they used a kind of common sentence encoding space.
+所以他们这样做是因为他们使用了一种常见的句子编码空间。
+
+1210
+01:00:12,220 --> 01:00:15,160
+So they used this particular kind of sentence encoding called
+所以他们用这种特殊的句子编码叫做
+
+1211
+01:00:15,160 --> 01:00:18,205
+skip-thought vectors and then they trained,
+跳过思想向量，然后他们训练，
+
+1212
+01:00:18,205 --> 01:00:21,880
+um, this COCO image-captioning, uh,
+嗯，这个COCO图像字幕，呃，
+
+1213
+01:00:21,880 --> 01:00:24,790
+system to go from the image to the encoding of
+系统从图像到编码
+
+1214
+01:00:24,790 --> 01:00:28,105
+the sentence and then separately they also trained,
+句子，然后分别他们也训练，
+
+1215
+01:00:28,105 --> 01:00:30,370
+uh, a language model, a conditional language model to go from
+呃，一种语言模型，一种来自的条件语言模型
+
+1216
+01:00:30,370 --> 01:00:33,010
+the sentence-encoding to the Taylor Swift lyrics.
+这句话编码为Taylor Swift的歌词。
+
+1217
+01:00:33,010 --> 01:00:35,230
+And then because you had this shared encoding space,
+然后因为你有这个共享的编码空间，
+
+1218
+01:00:35,230 --> 01:00:38,305
+you can now put the two together and then go from the picture,
+你现在可以把两者放在一起，然后从图片中走出来，
+
+1219
+01:00:38,305 --> 01:00:41,050
+to the embedding, to the Taylor Swift style output,
+嵌入式，泰勒斯威夫特式输出，
+
+1220
+01:00:41,050 --> 01:00:43,790
+which I think is pretty, pretty amazing.
+我认为很漂亮，非常棒。
+
+1221
+01:00:44,220 --> 01:00:46,600
+Wow, I've really lost, lost track of the time.
+哇，我真的输了，忘记了时间。
+
+1222
+01:00:46,600 --> 01:00:48,250
+So I, I think I have to hurry up quite a lot.
+所以我，我想我必须快点。
+
+1223
+01:00:48,250 --> 01:00:55,140
+So, um, we've got some really impressive story,
+所以，嗯，我们有一些令人印象深刻的故事，
+
+1224
+01:00:55,140 --> 01:00:57,900
+generation systems, recently, um,
+发电系统，最近，嗯，
+
+1225
+01:00:57,900 --> 01:01:00,795
+and this is an example of,
+这是一个例子，
+
+1226
+01:01:00,795 --> 01:01:02,580
+uh, a system which,
+呃，一个系统，
+
+1227
+01:01:02,580 --> 01:01:03,840
+uh, prepares a new data set,
+呃，准备一个新的数据集，
+
+1228
+01:01:03,840 --> 01:01:05,745
+where you write a story given a prompt,
+给你一个提示的故事，
+
+1229
+01:01:05,745 --> 01:01:08,165
+and they made this very impressive,
+他们让这个非常令人印象深刻
+
+1230
+01:01:08,165 --> 01:01:10,900
+very beefed-up, uh, convolutional language model,
+非常强化，呃，卷积语言模型，
+
+1231
+01:01:10,900 --> 01:01:13,975
+seq-to-seq system that generates the story given the input.
+seq-to-seq系统，根据输入生成故事。
+
+1232
+01:01:13,975 --> 01:01:15,640
+I'm not gonna go through all these details,
+我不打算通过所有这些细节，
+
+1233
+01:01:15,640 --> 01:01:18,070
+but I encourage you if you want to check out, uh,
+但我鼓励你，如果你想看看，呃，
+
+1234
+01:01:18,070 --> 01:01:20,950
+what's the state of the art in story generation, you should check this out.
+什么是故事生成的最新技术，你应该检查一下。
+
+1235
+01:01:20,950 --> 01:01:23,110
+There's a lot of different interesting things going on with
+有很多不同的有趣的事情正在发生
+
+1236
+01:01:23,110 --> 01:01:25,780
+very fancy attention and convolutions and so on,
+非常花哨的注意力和卷积等等，
+
+1237
+01:01:25,780 --> 01:01:29,695
+and they managed to generate some really interesting, um, impressive stories.
+他们设法产生了一些非常有趣，嗯，令人印象深刻的故事。
+
+1238
+01:01:29,695 --> 01:01:31,749
+So here, if you look at this example,
+所以在这里，如果你看一下这个例子，
+
+1239
+01:01:31,749 --> 01:01:36,280
+we've got some really interesting, um, kind of,
+我们有一些非常有趣的，嗯，有点儿，
+
+1240
+01:01:36,280 --> 01:01:39,324
+uh, story generation that's kind of diverse, it's non-generic,
+呃，故事的产生是多种多样的，它是非通用的，
+
+1241
+01:01:39,324 --> 01:01:41,320
+it's stylistically dramatic which is good,
+这是风格上的戏剧性，这很好，
+
+1242
+01:01:41,320 --> 01:01:42,925
+and is related to the prompts.
+并与提示有关。
+
+1243
+01:01:42,925 --> 01:01:46,330
+Um, but I think you can see here kind of the limits of what
+嗯，但我想你可以看到这里有什么限制
+
+1244
+01:01:46,330 --> 01:01:49,855
+the state of the art story generation system can do which is that- um,
+最先进的故事生成系统可以做到这一点，嗯，
+
+1245
+01:01:49,855 --> 01:01:51,715
+although it's kind of in style,
+虽然它有点风格，
+
+1246
+01:01:51,715 --> 01:01:54,625
+it's mostly kind of atmospheric and descriptive.
+它主要是大气和描述性的。
+
+1247
+01:01:54,625 --> 01:01:56,140
+It's not really moving the plot forward.
+这并没有真正推动情节向前发展。
+
+1248
+01:01:56,140 --> 01:01:57,940
+There's no kind of events here, right?
+这里没有任何事件，对吧？
+
+1249
+01:01:57,940 --> 01:02:02,305
+Um, so the problem is it gets even worse when you generate for longer.
+嗯，问题是当你生成更长时间时会变得更糟。
+
+1250
+01:02:02,305 --> 01:02:04,180
+When you generate a long, a long text,
+生成长文本时，
+
+1251
+01:02:04,180 --> 01:02:08,755
+then it will mostly just stay on the same idea without moving forward with new ideas.
+那么它将主要只是保持相同的想法，而不是向前推进新的想法。
+
+1252
+01:02:08,755 --> 01:02:11,500
+Okay. So I'm gonna skip forward a lot and,
+好的。所以我要跳过很多东西，
+
+1253
+01:02:11,500 --> 01:02:13,510
+uh, sorry, ought to have planned better.
+呃，对不起，应该有更好的计划。
+
+1254
+01:02:13,510 --> 01:02:15,160
+There's a lot of information here which you wanna check
+这里有很多你想检查的信息
+
+1255
+01:02:15,160 --> 01:02:17,335
+out about poetry generation and other things.
+关于诗歌生成和其他事情。
+
+1256
+01:02:17,335 --> 01:02:19,690
+I'm going to skip ahead because I want to get to
+我要跳过去，因为我想要去
+
+1257
+01:02:19,690 --> 01:02:23,320
+the NLG evaluation section because that's pretty important.
+NLG评估部分，因为这非常重要。
+
+1258
+01:02:23,320 --> 01:02:27,655
+So, um, we've talked about Automatic Evaluation Metrics fr NLG,
+所以，嗯，我们已经讨论过NLG的自动评估指标，
+
+1259
+01:02:27,655 --> 01:02:30,760
+and we know that these words overlap based metrics, such as BLEU,
+我们知道这些单词重叠基于指标，例如BLEU，
+
+1260
+01:02:30,760 --> 01:02:32,155
+and ROUGE, and METEOR, uh,
+和ROUGE，和METEOR，呃，
+
+1261
+01:02:32,155 --> 01:02:34,360
+we know they're not ideal for machine translation.
+我们知道它们不适合机器翻译。
+
+1262
+01:02:34,360 --> 01:02:37,780
+Ah, they're kind of even worse for summarization mostly
+啊，他们对于摘要大多更糟糕
+
+1263
+01:02:37,780 --> 01:02:41,770
+because summarization is even more open-ended than machine translation.
+因为摘要比机器翻译更开放。
+
+1264
+01:02:41,770 --> 01:02:44,170
+And that means that having this kind of rigid notion,
+这意味着拥有这种严格的概念，
+
+1265
+01:02:44,170 --> 01:02:45,835
+if you've got to match the N-grams,
+如果你必须匹配N克，
+
+1266
+01:02:45,835 --> 01:02:47,380
+is even less useful.
+甚至没那么有用。
+
+1267
+01:02:47,380 --> 01:02:49,930
+And then for something even more open-ended like dialogue,
+然后对于像对话更开放的东西，
+
+1268
+01:02:49,930 --> 01:02:51,580
+then it's just kind of a disaster.
+那真是一场灾难。
+
+1269
+01:02:51,580 --> 01:02:54,220
+It's not even a metric that gives you a good signal at all,
+它根本不是一个能给你一个好信号的指标，
+
+1270
+01:02:54,220 --> 01:02:58,045
+and this also applies to anything else open-ended, like story generation.
+这也适用于任何其他开放式的，如故事生成。
+
+1271
+01:02:58,045 --> 01:03:01,225
+So it's been shown, and you can check out the paper at the bottom,
+所以它已经显示出来，你可以查看底部的纸张，
+
+1272
+01:03:01,225 --> 01:03:05,125
+that word overlap metrics are just not a good fit for dialogue.
+这个词重叠指标不适合对话。
+
+1273
+01:03:05,125 --> 01:03:07,480
+So the orange box is showing you, uh,
+所以橙色的盒子正在向你展示，呃，
+
+1274
+01:03:07,480 --> 01:03:13,855
+some plots of the correlation between human score on a dialog class and BLEU-2,
+对话类和BLEU-2上人类得分之间相关性的一些图，
+
+1275
+01:03:13,855 --> 01:03:15,415
+some variation of BLEU.
+BLEU的一些变种。
+
+1276
+01:03:15,415 --> 01:03:18,490
+And the prob- the problem here is you're not seeing much of a correlation at all, right?
+而问题是，你根本没有看到很多相关性，对吧？
+
+1277
+01:03:18,490 --> 01:03:21,420
+It seems that particularly on this dialogue setting, ah,
+看来特别是这个对话设置啊，
+
+1278
+01:03:21,420 --> 01:03:23,370
+the correlation between the BLEU metric and
+BLEU度量与BLEU之间的相关性
+
+1279
+01:03:23,370 --> 01:03:26,565
+the human judgment of whether it's a good dialogue response is,
+人类对是否是一个良好的对话反应的判断是，
+
+1280
+01:03:26,565 --> 01:03:28,020
+uh, the correlation is- I mean,
+呃，相关性是 - 我的意思是，
+
+1281
+01:03:28,020 --> 01:03:29,040
+it looks kind of non-existent.
+它看起来有点不存在。
+
+1282
+01:03:29,040 --> 01:03:30,720
+It's at least very weak.
+它至少非常弱。
+
+1283
+01:03:30,720 --> 01:03:35,120
+So that's pretty unfortunate and there's some other papers that show much the same thing.
+所以这很不幸，还有一些其他论文表明了同样的事情。
+
+1284
+01:03:35,120 --> 01:03:36,640
+So you might think, "Well,
+所以你可能会想，“好吧，
+
+1285
+01:03:36,640 --> 01:03:38,920
+what other automatic metrics can we use?
+我们可以使用哪些其他自动指标？
+
+1286
+01:03:38,920 --> 01:03:40,600
+"What about perplexity?
+“困惑怎么样？
+
+1287
+01:03:40,600 --> 01:03:45,820
+Um, so perplexity certainly captures how powerful your language model is,
+嗯，所以困惑肯定会抓住你的语言模型有多强大，
+
+1288
+01:03:45,820 --> 01:03:48,085
+but it doesn't tell you anything about generation.
+但它并没有告诉你关于发电的任何事情。
+
+1289
+01:03:48,085 --> 01:03:51,970
+So for example, if your deca- decoding algorithm is bad in some way,
+因此，例如，如果您的deca-解码算法在某种程度上是坏的，
+
+1290
+01:03:51,970 --> 01:03:54,700
+then perplexity is not gonna tell you anything about that, right?
+然后困惑不会告诉你任何事情，对吧？
+
+1291
+01:03:54,700 --> 01:03:57,640
+Because decoding is something you apply to your trained language model.
+因为解码是您应用于训练有素的语言模型的东西。
+
+1292
+01:03:57,640 --> 01:04:00,130
+Perplexity can tell if you've got a strong language model or not,
+困惑可以判断你是否有一个强大的语言模型，
+
+1293
+01:04:00,130 --> 01:04:01,840
+but it's not gonna tell you, um,
+但它不会告诉你，嗯，
+
+1294
+01:04:01,840 --> 01:04:04,165
+necessarily how good your generation is.
+你这一代人有多好。
+
+1295
+01:04:04,165 --> 01:04:07,330
+So some other thoughts you might have about automatic evaluation are,
+因此，您可能对自动评估有一些其他想法，
+
+1296
+01:04:07,330 --> 01:04:09,460
+well, what about word embedding based metrics?
+那么，基于单词嵌入的指标呢？
+
+1297
+01:04:09,460 --> 01:04:12,145
+Uh, so the main idea with word embedding based metrics,
+呃，所以基于单词嵌入的指标的主要思想，
+
+1298
+01:04:12,145 --> 01:04:14,515
+uh, you want to compute the similarity of the,
+呃，你想计算相似度，
+
+1299
+01:04:14,515 --> 01:04:18,220
+the word embeddings or maybe the average of the word embeddings across a sentence,
+单词嵌入或可能是句子中嵌入单词的平均值，
+
+1300
+01:04:18,220 --> 01:04:20,530
+not just the overlap of the words themselves.
+不只是单词本身的重叠。
+
+1301
+01:04:20,530 --> 01:04:22,780
+Um, so the idea is that rather than just being
+嗯，所以我的想法是，而不仅仅是存在
+
+1302
+01:04:22,780 --> 01:04:25,510
+very strict and saying only the exact same word counts,
+非常严格，只说完全相同的字数，
+
+1303
+01:04:25,510 --> 01:04:28,885
+you say, "Well, if the words are similar and in word embedding space, then they count."
+你说，“好吧，如果这些词是相似的，并且在单词嵌入空间中，那么它们就算数了。”
+
+1304
+01:04:28,885 --> 01:04:31,900
+So this is certainly more flexible, but unfortunately, uh,
+所以这当然更灵活，但不幸的是，呃，
+
+1305
+01:04:31,900 --> 01:04:34,360
+the same paper I showed before shows that this doesn't
+我之前展示的同一篇论文表明这不是
+
+1306
+01:04:34,360 --> 01:04:37,315
+correlate well either with human judgments of quality,
+与人类对质量的判断相关联，
+
+1307
+01:04:37,315 --> 01:04:39,955
+at least for the- the dialogue task they are looking at.
+至少对于他们正在关注的对话任务。
+
+1308
+01:04:39,955 --> 01:04:43,285
+So here, the middle column is showing the correlation between human,
+所以在这里，中间的列显示了人类之间的相关性，
+
+1309
+01:04:43,285 --> 01:04:47,515
+judgments, and some kind of average of word embedding based metric.
+判断，以及基于词嵌入度量的某种平均值。
+
+1310
+01:04:47,515 --> 01:04:49,540
+So, um, yeah, that doesn't look great either,
+所以，嗯，是的，这看起来也不好看，
+
+1311
+01:04:49,540 --> 01:04:51,400
+not a great correlation.
+没有很大的相关性。
+
+1312
+01:04:51,400 --> 01:04:54,970
+So if we have no automatic metrics to adequately
+因此，如果我们没有充分的自动指标
+
+1313
+01:04:54,970 --> 01:04:58,435
+capture overall quality for natural language generation,
+捕捉自然语言生成的整体质量，
+
+1314
+01:04:58,435 --> 01:05:00,460
+um, what, what can we do instead?
+嗯，什么，我们能做什么呢？
+
+1315
+01:05:00,460 --> 01:05:02,590
+So I think often the strategy is,
+所以我认为策略通常是，
+
+1316
+01:05:02,590 --> 01:05:06,280
+you end up defining some more kind of focused automatic metrics to
+你最终定义了一些更专注的自动指标
+
+1317
+01:05:06,280 --> 01:05:10,705
+capture the particular aspects of the generated text that you might be interested in.
+捕获您可能感兴趣的生成文本的特定方面。
+
+1318
+01:05:10,705 --> 01:05:13,640
+Um, so for example, you might be interested in, uh, fluency,
+嗯，例如，你可能感兴趣，呃，流利，
+
+1319
+01:05:13,640 --> 01:05:15,540
+and you can compute that by just kind of running
+你可以通过运行来计算它
+
+1320
+01:05:15,540 --> 01:05:18,734
+a well-trained language model over your text and generating the probability,
+对文本进行训练有素的语言模型并生成概率，
+
+1321
+01:05:18,734 --> 01:05:23,505
+and that's kind of a proxy for how well it's written, you know, good,  fluent, grammatical text.
+这就是它的写作能力的代表，你知道，它是好的，流利的，语法的文本。
+
+1322
+01:05:23,505 --> 01:05:28,000
+Um, if you're particularly interested in maybe generating text in a particular style,
+嗯，如果你对特定风格的文本产生特别感兴趣，
+
+1323
+01:05:28,000 --> 01:05:29,860
+then you could ta- take a language model that's
+然后你可以采用一种语言模型
+
+1324
+01:05:29,860 --> 01:05:32,185
+trained on the corpus representing that style,
+训练代表那种风格的语料库，
+
+1325
+01:05:32,185 --> 01:05:35,110
+and now the probability tells you not only is it a good text,
+现在概率告诉你不仅是一个好文本，
+
+1326
+01:05:35,110 --> 01:05:36,685
+but is it in the right style.
+但是它的风格是否合适
+
+1327
+01:05:36,685 --> 01:05:38,875
+Um, there are some other things as well that are like,
+嗯，还有一些其他的东西，比如，
+
+1328
+01:05:38,875 --> 01:05:41,185
+you know, diversity, um,
+你知道，多样性，嗯，
+
+1329
+01:05:41,185 --> 01:05:43,900
+and you can can that pretty easily by just having some statistics about,
+你可以通过一些统计数据轻松地做到这一点，
+
+1330
+01:05:43,900 --> 01:05:45,940
+you know, how much you're using rare words.
+你知道吗，你使用了多少罕见的词汇。
+
+1331
+01:05:45,940 --> 01:05:48,250
+Um, relevance to input,
+嗯，与投入有关，
+
+1332
+01:05:48,250 --> 01:05:50,710
+you can kind of compute a similarity score with the input,
+你可以用输入来计算相似度得分，
+
+1333
+01:05:50,710 --> 01:05:52,555
+and there are just some simple things like, you know,
+并且只有一些简单的事情，比如，你知道，
+
+1334
+01:05:52,555 --> 01:05:55,480
+length and repetition that you surely can count, and yes,
+你肯定可以计算的长度和重复，是的，
+
+1335
+01:05:55,480 --> 01:05:58,075
+it doesn't tell you overall the overall quality,
+它没有告诉你整体质量，
+
+1336
+01:05:58,075 --> 01:06:00,535
+but these things are worth measuring.
+但这些东西值得衡量。
+
+1337
+01:06:00,535 --> 01:06:02,410
+So I think my main point is that yes,
+所以我认为我的主要观点是，是的，
+
+1338
+01:06:02,410 --> 01:06:04,960
+we have a really difficult situation with NLG evaluation.
+NLG评估我们遇到了非常困难的情况。
+
+1339
+01:06:04,960 --> 01:06:06,400
+There's no kind of overall metric.
+没有任何整体指标。
+
+1340
+01:06:06,400 --> 01:06:08,860
+Often, they capture this overall quality.
+通常，他们捕捉到这种整体质量。
+
+1341
+01:06:08,860 --> 01:06:11,365
+Um, but if you measure lots of these things,
+嗯，但如果你测量很多这些东西，
+
+1342
+01:06:11,365 --> 01:06:16,075
+then they certainly can help you track some important things that you should know.
+那么他们当然可以帮助你跟踪一些你应该知道的重要事情。
+
+1343
+01:06:16,075 --> 01:06:21,895
+So we talked about how automatic evaluation metrics for NLG are really tough.
+所以我们讨论了NLG的自动评估指标是如何变得非常困难的。
+
+1344
+01:06:21,895 --> 01:06:23,710
+So let's talk about human evaluation.
+那么让我们来谈谈人类评估。
+
+1345
+01:06:23,710 --> 01:06:27,400
+Uh, human judgments are regarded as the gold standard, right?
+呃，人类的判断被视为黄金标准，对吧？
+
+1346
+01:06:27,400 --> 01:06:30,865
+But we already know that human evaluation is slow and expensive,
+但我们已经知道人类的评估是缓慢而昂贵的，
+
+1347
+01:06:30,865 --> 01:06:34,165
+uh, but are those the only problems with human eval?
+呃，但这些是人类评估的唯一问题吗？
+
+1348
+01:06:34,165 --> 01:06:36,910
+Let's suppose that you do have access, uh, to,
+我们假设您确实可以访问，呃，
+
+1349
+01:06:36,910 --> 01:06:40,060
+let's say, the time or money you need to do human evaluations.
+比方说，你做人类评估所需的时间或金钱。
+
+1350
+01:06:40,060 --> 01:06:42,115
+Um, does that solve all your problems?
+嗯，这能解决你所有的问题吗？
+
+1351
+01:06:42,115 --> 01:06:43,480
+Suppose you have unlimited human eval,
+假设你有无限的人类评价，
+
+1352
+01:06:43,480 --> 01:06:44,980
+does that actually solve your problems?
+这实际上解决了你的问题吗？
+
+1353
+01:06:44,980 --> 01:06:47,590
+And my answer is, uh, no.
+我的回答是，呃，不。
+
+1354
+01:06:47,590 --> 01:06:49,630
+And this is kinda from personal experience.
+这有点来自个人经历。
+
+1355
+01:06:49,630 --> 01:06:53,590
+Um, conducting human evaluation in itself is very difficult to get right.
+嗯，进行人体评估本身很难做到。
+
+1356
+01:06:53,590 --> 01:06:57,280
+It's not easy at all, and this is partially because humans do a lot of weird things.
+这根本不容易，这部分是因为人类会做很多奇怪的事情。
+
+1357
+01:06:57,280 --> 01:06:59,905
+Humans, uh, unlike a metric, uh,
+人类，呃，不像公制，呃，
+
+1358
+01:06:59,905 --> 01:07:02,125
+an automatic metric, they're inconsistent,
+一个自动度量，他们是不一致的，
+
+1359
+01:07:02,125 --> 01:07:03,670
+they could be illogical.
+他们可能是不合逻辑的。
+
+1360
+01:07:03,670 --> 01:07:05,290
+Sometimes, they just get bored of your task,
+有时，他们只是厌倦了你的任务，
+
+1361
+01:07:05,290 --> 01:07:06,760
+and they don't really pay attention anymore.
+他们不再关注了。
+
+1362
+01:07:06,760 --> 01:07:09,580
+Uh, they can misinterpret the question you asked,
+呃，他们可以曲解你提出的问题，
+
+1363
+01:07:09,580 --> 01:07:12,400
+and sometimes they do things they can't really explain why they did it.
+有时他们会做一些他们无法解释为什么会这样做的事情。
+
+1364
+01:07:12,400 --> 01:07:14,440
+So, um, as a kind of case study of
+所以，嗯，作为一种案例研究
+
+1365
+01:07:14,440 --> 01:07:16,540
+this I'm going to tell you about, um,
+我会告诉你的，嗯，
+
+1366
+01:07:16,540 --> 01:07:18,010
+a project I did where I was,
+我做过的一个项目，
+
+1367
+01:07:18,010 --> 01:07:19,540
+uh, building some chatbots,
+呃，建立一些聊天机器人，
+
+1368
+01:07:19,540 --> 01:07:23,485
+and it turned out that the human evaluation was kind of the hardest part of the project.
+事实证明，人类评估是项目中最难的部分。
+
+1369
+01:07:23,485 --> 01:07:26,230
+So I was trying to build these chatbots for the Persona-Chat data
+所以我试图为Persona-Chat数据构建这些聊天机器人
+
+1370
+01:07:26,230 --> 01:07:29,635
+set and in particular investigating controllability.
+设定并特别研究可控性。
+
+1371
+01:07:29,635 --> 01:07:32,875
+So we're trying to control aspects of the generated texts such as, you know,
+所以我们试图控制生成的文本的各个方面，例如，你知道，
+
+1372
+01:07:32,875 --> 01:07:34,045
+whether you repeat itself,
+你重复一遍，
+
+1373
+01:07:34,045 --> 01:07:35,395
+how generic you are,
+你是多么通用，
+
+1374
+01:07:35,395 --> 01:07:37,615
+kind of these same problems that we noted before.
+我们之前提到的那些同样的问题。
+
+1375
+01:07:37,615 --> 01:07:40,180
+So we built these models that control, you know,
+所以我们建立了这些控制的模型，你知道，
+
+1376
+01:07:40,180 --> 01:07:42,085
+specificity of what we're saying and
+我们所说和的特殊性
+
+1377
+01:07:42,085 --> 01:07:44,740
+how related what we're saying is to what the user said.
+我们所说的与用户所说的有关。
+
+1378
+01:07:44,740 --> 01:07:46,090
+So here you can see that,
+所以在这里你可以看到，
+
+1379
+01:07:46,090 --> 01:07:48,880
+you know, uh, our partner said something like, "Yes,
+你知道，呃，我们的伙伴说的是，“是的，
+
+1380
+01:07:48,880 --> 01:07:51,745
+I'm studying law at the moment," and we can kind of control-
+我现在正在学习法律，“我们可以控制 -
+
+1381
+01:07:51,745 --> 01:07:54,715
+turn this control knob that makes us say something very generic like,
+转动这个控制旋钮，让我们说一些非常通用的东西，比如
+
+1382
+01:07:54,715 --> 01:07:57,010
+"Oh," and then like 20 dots or something
+“哦，”然后像20点或者其他东西
+
+1383
+01:07:57,010 --> 01:07:59,470
+just completely bonkers that's just all the rare words you know.
+只是完全疯狂，这就是你所知道的所有罕见词汇。
+
+1384
+01:07:59,470 --> 01:08:01,510
+And there's like a sweet- a sweet spot between what you say,
+就像你说的那样甜蜜的甜蜜点，
+
+1385
+01:08:01,510 --> 01:08:03,955
+"That sounds like a lot of fun. How long have you been studying?"
+“这听起来很有趣。你在学习多久了？”
+
+1386
+01:08:03,955 --> 01:08:06,955
+And then similarly, we have a knob we can turn to,
+然后类似地，我们有一个旋钮，我们可以转向，
+
+1387
+01:08:06,955 --> 01:08:11,260
+uh, determine how semantically related what we say is to what, what they said.
+呃，确定我们所说的与他们所说的内容有何关系。
+
+1388
+01:08:11,260 --> 01:08:13,540
+So, um, you know, that's kind of interesting.
+所以，嗯，你知道，这很有趣。
+
+1389
+01:08:13,540 --> 01:08:16,615
+It's, it's a way to control the output of the, uh, NLG system.
+这是，它是一种控制呃NLG系统输出的方法。
+
+1390
+01:08:16,615 --> 01:08:19,525
+But actually, I want to tell you about how the human evaluation was so difficult,
+但实际上，我想告诉你人类评估是如此困难，
+
+1391
+01:08:19,525 --> 01:08:22,885
+so we have these systems that we wanted to generate using human eval.
+所以我们想要使用人类eval生成这些系统。
+
+1392
+01:08:22,885 --> 01:08:26,230
+So the question is, how do you ask for the human quality judgments here?
+所以问题是，你如何在这里要求人类的质量判断？
+
+1393
+01:08:26,230 --> 01:08:29,800
+Uh, you can ask kind of simple overall quality questions,
+呃，你可以问一些简单的整体质量问题，
+
+1394
+01:08:29,800 --> 01:08:31,975
+like, you know, how well does the conversation go?
+比如，你知道，谈话的进展情况如何？
+
+1395
+01:08:31,975 --> 01:08:33,670
+Was- was the user engaging?
+是 - 用户参与了吗？
+
+1396
+01:08:33,670 --> 01:08:34,990
+Um, or maybe comparative,
+嗯，或者可能比较，
+
+1397
+01:08:34,990 --> 01:08:38,605
+Which of these users gave the best response? Uh, questions like this.
+哪些用户给出了最佳回复？呃，这样的问题。
+
+1398
+01:08:38,605 --> 01:08:40,330
+And, you know, we tried a lot of them,
+而且，你知道，我们尝试了很多，
+
+1399
+01:08:40,330 --> 01:08:43,000
+but there were just major problems with all of them.
+但是所有这些都存在重大问题。
+
+1400
+01:08:43,000 --> 01:08:46,960
+Like, these questions are necessarily very subjective and also,
+就像，这些问题必然是非常主观的，而且，
+
+1401
+01:08:46,960 --> 01:08:49,150
+the different respondents have different expectations,
+不同的受访者有不同的期望，
+
+1402
+01:08:49,150 --> 01:08:50,620
+and this affects their judgments.
+这影响了他们的判断。
+
+1403
+01:08:50,620 --> 01:08:53,695
+So for example, if you ask, do you think this user is a human or a bot?
+例如，如果你问，你认为这个用户是人还是机器人？
+
+1404
+01:08:53,695 --> 01:08:55,645
+Then, well, that depends entirely on
+那么，那完全取决于
+
+1405
+01:08:55,645 --> 01:09:00,220
+this respondents' knowledge of bots or opinion of bots and what they think they can do.
+这些受访者对机器人的知识或对机器人的看法以及他们认为可以做些什么。
+
+1406
+01:09:00,220 --> 01:09:03,940
+Another example is, you'd have kind of catastrophic misunderstanding of the question.
+另一个例子是，你对这个问题有一种灾难性的误解。
+
+1407
+01:09:03,940 --> 01:09:05,140
+So for example, if we ask,
+例如，如果我们问，
+
+1408
+01:09:05,140 --> 01:09:07,675
+was this user- was this chatbot engaging?
+这个用户是这个聊天机器人吗？
+
+1409
+01:09:07,675 --> 01:09:09,475
+Then someone responded saying, "Yup,
+然后有人回答说：“是的，
+
+1410
+01:09:09,475 --> 01:09:11,020
+it was engaging because it always wrote back",
+它很吸引人，因为它总是回信“，
+
+1411
+01:09:11,020 --> 01:09:12,310
+which clearly isn't what we meant.
+这显然不是我们的意思。
+
+1412
+01:09:12,310 --> 01:09:14,605
+We meant like are they an engaging conversation partner,
+我们的意思是他们是一个吸引人的对话伙伴，
+
+1413
+01:09:14,605 --> 01:09:16,765
+but they took a very literal assumption,
+但他们采取了非常字面的假设，
+
+1414
+01:09:16,765 --> 01:09:19,075
+uh, of, of what engaging means.
+什么吸引人的意思。
+
+1415
+01:09:19,075 --> 01:09:22,975
+So the problem here is that overall quality depends on many underlying factors,
+所以问题在于整体质量取决于许多潜在因素，
+
+1416
+01:09:22,975 --> 01:09:25,390
+and it's pretty hard to kind of find a single,
+很难找到一个，
+
+1417
+01:09:25,390 --> 01:09:28,720
+overall question that captures just overall quality.
+整体问题，只捕捉整体质量。
+
+1418
+01:09:28,720 --> 01:09:31,030
+So we ended up doing this, we ended up breaking this down
+所以我们最终做到了这一点，我们最终打破了这个
+
+1419
+01:09:31,030 --> 01:09:34,270
+into lots more kind of factors of quality.
+更多的质量因素。
+
+1420
+01:09:34,270 --> 01:09:36,205
+So, uh, the way we saw it is that,
+所以，呃，我们看到它的方式是，
+
+1421
+01:09:36,205 --> 01:09:39,820
+you have maybe these kind of overall measures of quality of the chatbot,
+你可能有这些聊天机器人的质量总体衡量标准，
+
+1422
+01:09:39,820 --> 01:09:41,380
+such as how engaging was it,
+比如它有多吸引人，
+
+1423
+01:09:41,380 --> 01:09:43,135
+how enjoyable was it to talk to,
+跟他说话有多愉快，
+
+1424
+01:09:43,135 --> 01:09:45,685
+and kind of maybe how convincing was it that it was human.
+也许它有多么令人信服，它是人类。
+
+1425
+01:09:45,685 --> 01:09:47,230
+And then below those,
+然后低于那些，
+
+1426
+01:09:47,230 --> 01:09:49,810
+we kind of broke down as these more low level, uh,
+我们有点打破这些更低的水平，呃，
+
+1427
+01:09:49,810 --> 01:09:51,685
+components of quality such as,
+质量的组成部分，如，
+
+1428
+01:09:51,685 --> 01:09:53,290
+you know, uh, were you interesting?
+你知道吗，呃，你有意思吗？
+
+1429
+01:09:53,290 --> 01:09:55,150
+Were you li- showing that you were listening?
+你是谁 - 表明你在听？
+
+1430
+01:09:55,150 --> 01:09:56,935
+Were you asking enough questions and so on?
+你问了足够的问题等等吗？
+
+1431
+01:09:56,935 --> 01:09:59,620
+And then below that, we had these kind of controllable attributes which
+然后在下面，我们有这些可控制的属性
+
+1432
+01:09:59,620 --> 01:10:02,470
+were the knobs that we were turning and then the goal was to figure out,
+是我们转动的旋钮，然后目标是找出，
+
+1433
+01:10:02,470 --> 01:10:04,525
+um, how these things affected the output.
+嗯，这些东西如何影响输出。
+
+1434
+01:10:04,525 --> 01:10:09,745
+Um, so let's see.
+嗯，让我们看看。
+
+1435
+01:10:09,745 --> 01:10:13,120
+Um, so we had a bunch of findings here, and I think,
+嗯，所以我们在这里有一堆发现，我想，
+
+1436
+01:10:13,120 --> 01:10:16,440
+maybe the ones which I will highlight were,
+也许我要强调的是，
+
+1437
+01:10:16,440 --> 01:10:18,060
+uh, these two kind of in the middle.
+呃，这两种在中间。
+
+1438
+01:10:18,060 --> 01:10:19,980
+So the overall metric engagingness,
+所以整体度量参与度，
+
+1439
+01:10:19,980 --> 01:10:23,085
+which means enjoyment, that was really easy to maximize.
+这意味着享受，这是非常容易最大化。
+
+1440
+01:10:23,085 --> 01:10:24,420
+It turned out, uh,
+原来，呃，
+
+1441
+01:10:24,420 --> 01:10:28,300
+our bots managed to get near human performance in terms of engagingness.
+我们的机器人设法在接触方面接近人类表现。
+
+1442
+01:10:28,300 --> 01:10:30,730
+Um, but the overall metric humanness,
+嗯，但总体度量人性，
+
+1443
+01:10:30,730 --> 01:10:32,440
+that is the kind of Turing test metric,
+这是图灵测试指标的一种，
+
+1444
+01:10:32,440 --> 01:10:34,405
+that was not at all easy to maximize.
+这根本不容易最大化。
+
+1445
+01:10:34,405 --> 01:10:35,920
+All of our bots were way,
+我们所有的机器人都是这样，
+
+1446
+01:10:35,920 --> 01:10:38,020
+way below humans in terms of humanness, right?
+在人性方面低于人类，对吧？
+
+1447
+01:10:38,020 --> 01:10:40,300
+So we were not at all convincing of being human,
+所以我们完全没有说服人为，
+
+1448
+01:10:40,300 --> 01:10:41,785
+and this is kind of interesting, right?
+这有点儿，对吧？
+
+1449
+01:10:41,785 --> 01:10:44,035
+Like, we were as enjoyable as talk to as humans,
+就像，我们和人类一样愉快，
+
+1450
+01:10:44,035 --> 01:10:46,630
+but we were clearly not human, right?
+但我们显然不是人类，对吗？
+
+1451
+01:10:46,630 --> 01:10:50,245
+So like, humanness is not the same thing as conversational quality.
+因此，人性与会话质量不同。
+
+1452
+01:10:50,245 --> 01:10:52,615
+And one of the interesting things we found in this,
+我们在此发现的一件有趣的事情，
+
+1453
+01:10:52,615 --> 01:10:55,390
+um, study, where we not only evaluated our chatbots,
+嗯，学习，我们不仅评估我们的聊天机器人，
+
+1454
+01:10:55,390 --> 01:10:57,655
+we also actually got humans to evaluate each other,
+我们实际上还让人类相互评估，
+
+1455
+01:10:57,655 --> 01:11:00,925
+was that, um, humans are sub-optimal conversationalists.
+就是这样，嗯，人类是次优的会话主义者。
+
+1456
+01:11:00,925 --> 01:11:05,170
+Uh, they scored pretty poorly on interestingness, fluency, listening.
+呃，他们在有趣，流利，聆听方面得分很差。
+
+1457
+01:11:05,170 --> 01:11:06,895
+They didn't ask each other enough questions,
+他们没有问对方足够的问题，
+
+1458
+01:11:06,895 --> 01:11:09,460
+and this is kind of the reason why we managed to like approach
+这就是为什么我们设法喜欢接近的原因
+
+1459
+01:11:09,460 --> 01:11:13,150
+human performance in kind of enjoyableness to talk to you because we just,
+因为我们只是，人类表现出与你交谈的乐趣
+
+1460
+01:11:13,150 --> 01:11:16,500
+for example, turned up the question asking knob, asked more questions,
+例如，问了一下问题旋钮，问了更多问题，
+
+1461
+01:11:16,500 --> 01:11:19,875
+and people responded really well to that because people like talking about themselves.
+因为人们喜欢谈论自己，人们的反应非常好。
+
+1462
+01:11:19,875 --> 01:11:22,290
+So, um, yeah.
+那么，恩，是的。
+
+1463
+01:11:22,290 --> 01:11:23,610
+I think this is kind of interesting, right?
+我觉得这很有意思吧？
+
+1464
+01:11:23,610 --> 01:11:26,820
+Because it shows that there is no obvious just one question to ask, right?
+因为它表明没有明显的问题要问，对吧？
+
+1465
+01:11:26,820 --> 01:11:27,990
+Because if you just seemed, "Oh,
+因为如果你看起来像，“哦，
+
+1466
+01:11:27,990 --> 01:11:31,870
+the one question to ask is clearly engagingness or it's clearly humanness,
+要问的一个问题显然是吸引力，或者显然是人性，
+
+1467
+01:11:31,870 --> 01:11:35,365
+then we would have gotten completely different reads on how well we were doing, right?
+然后我们会对我们的表现做出完全不同的解读，对吧？
+
+1468
+01:11:35,365 --> 01:11:39,770
+Whereas asking these multiple questions kind of gives you more of an overview.
+而问这些多个问题会给你更多的概述。
+
+1469
+01:11:41,730 --> 01:11:46,780
+I am going to skip this just because there's not a lot of time.
+我将跳过这个，因为没有太多时间。
+
+1470
+01:11:46,780 --> 01:11:48,595
+Okay. So, here's the final section.
+好的。所以，这是最后一节。
+
+1471
+01:11:48,595 --> 01:11:51,670
+Uh, this is my kind of wrap-up thoughts on NLG research,
+呃，这是我对NLG研究的总结思路，
+
+1472
+01:11:51,670 --> 01:11:54,340
+the current trends and where we're going in the future.
+目前的趋势以及我们未来的发展方向。
+
+1473
+01:11:54,340 --> 01:11:59,020
+So, here's kind of three exciting current trends to identify in NLG.
+所以，这是在NLG中确定的三种令人兴奋的当前趋势。
+
+1474
+01:11:59,020 --> 01:12:00,985
+And of course your mileage may vary,
+当然，你的里程可能会有所不同，
+
+1475
+01:12:00,985 --> 01:12:02,860
+you might think that other things are more interesting.
+你可能会认为其他事情更有趣。
+
+1476
+01:12:02,860 --> 01:12:05,110
+So, uh, the ones which I was thinking about, are
+所以，呃，我正在思考的是，
+
+1477
+01:12:05,110 --> 01:12:08,635
+firstly incorporating discrete latent variables into NLG.
+首先将离散潜在变量纳入NLG。
+
+1478
+01:12:08,635 --> 01:12:11,140
+Um, so, you should go check out
+嗯，你应该去看看
+
+1479
+01:12:11,140 --> 01:12:13,585
+the slides I skipped over because there were some examples of this.
+我跳过的幻灯片，因为有一些例子。
+
+1480
+01:12:13,585 --> 01:12:16,960
+But the idea is that with some tasks such as for example
+但是这个想法是通过某些任务来完成的
+
+1481
+01:12:16,960 --> 01:12:19,360
+storytelling or task oriented dialogue
+讲故事或面向任务的对话
+
+1482
+01:12:19,360 --> 01:12:21,100
+where you're trying to actually get something done.
+你在哪里尝试实际完成某件事。
+
+1483
+01:12:21,100 --> 01:12:22,810
+Um, you probably want a more kind of
+嗯，你可能想要更多一点
+
+1484
+01:12:22,810 --> 01:12:25,540
+concrete hard notion of the things that you're talking about
+你正在谈论的事情的具体概念
+
+1485
+01:12:25,540 --> 01:12:30,160
+like you know, entities and people and events and negotiation and so on.
+就像你所知，实体和人，事件和谈判等等。
+
+1486
+01:12:30,160 --> 01:12:33,805
+So, uh, there's, there's mentioning what kind of modeling
+所以，呃，有，提到什么样的建模
+
+1487
+01:12:33,805 --> 01:12:38,860
+these discrete latent variables inside these continuous, uh, NLG methods.
+这些连续的，呃，NLG方法中的这些离散潜在变量。
+
+1488
+01:12:38,860 --> 01:12:42,520
+The second one is alternatives to strict left to right generation.
+第二个是严格从左到右生成的替代方案。
+
+1489
+01:12:42,520 --> 01:12:44,440
+And I'm really sorry [LAUGHTER] I skipped over so many things.
+我真的很抱歉[笑声]我跳过这么多事情。
+
+1490
+01:12:44,440 --> 01:12:47,020
+Um, so, there's some interesting work recently in trying
+嗯，所以，最近尝试了一些有趣的工作
+
+1491
+01:12:47,020 --> 01:12:49,810
+to generate text in ways other than left to right.
+以从左到右的方式生成文本。
+
+1492
+01:12:49,810 --> 01:12:51,160
+So, for example there's some kind of
+所以，例如，有某种
+
+1493
+01:12:51,160 --> 01:12:55,735
+parallel generation stuff or maybe writing something and iteratively refining it, uh,
+平行生成东西或者写东西并迭代地改进它，呃，
+
+1494
+01:12:55,735 --> 01:12:59,815
+there's also the idea of kind of top-down generation, um, for
+还有一种自上而下的一代的想法，嗯，为
+
+1495
+01:12:59,815 --> 01:13:02,800
+especially longer pieces of text like maybe tried to decide the contents
+特别是较长的文本片段，可能试图决定内容
+
+1496
+01:13:02,800 --> 01:13:06,385
+of each of the sentences separately before uh, writing the words.
+在每个单独的句子之前，写下单词。
+
+1497
+01:13:06,385 --> 01:13:08,620
+And then a third one is like
+然后第三个就像
+
+1498
+01:13:08,620 --> 01:13:11,530
+alternatives to maximum likelihood training with teacher forcing.
+教师强迫最大可能性培训的替代方案。
+
+1499
+01:13:11,530 --> 01:13:14,320
+So, to remind you, a maximum likelihood training with teacher forcing is
+因此，提醒您，教师强迫的最大可能性训练是
+
+1500
+01:13:14,320 --> 01:13:16,420
+just the standard method of training
+只是标准的培训方法
+
+1501
+01:13:16,420 --> 01:13:19,210
+a language model that we've been telling you about in the class so far.
+到目前为止我们一直在课堂上告诉你的语言模型。
+
+1502
+01:13:19,210 --> 01:13:20,755
+Um, so, you know,
+嗯，你知道，
+
+1503
+01:13:20,755 --> 01:13:23,200
+there's some interesting work on looking at more kind of holistic,
+关于更多类型的整体，有一些有趣的工作，
+
+1504
+01:13:23,200 --> 01:13:25,735
+um, sentence level rather than word level objectives.
+嗯，句子级别而不是单词级别目标。
+
+1505
+01:13:25,735 --> 01:13:27,550
+Uh, so, unfortunately I ran out of time with
+呃，不幸的是，我没时间了
+
+1506
+01:13:27,550 --> 01:13:29,860
+this slide, and I didn't have time to put the references in but I will
+这张幻灯片，我没有时间把参考文献放进去，但我会
+
+1507
+01:13:29,860 --> 01:13:31,990
+put the references in later and it
+把引用放在后面和它
+
+1508
+01:13:31,990 --> 01:13:34,945
+will be on the course website so you can go check them out later.
+将在课程网站上，以便您以后可以查看它们。
+
+1509
+01:13:34,945 --> 01:13:39,820
+Okay. So, as a kind of overview, NLG research, where are we and where are we going?
+好的。那么，作为一种概述，NLG研究，我们在哪里以及我们要去哪里？
+
+1510
+01:13:39,820 --> 01:13:41,950
+Um, so my metaphor is I think that
+嗯，所以我的比喻是我认为的
+
+1511
+01:13:41,950 --> 01:13:46,210
+about five years ago NLP and deep learning research was a kind of a Wild West.
+大约五年前，NLP和深度学习研究是一种狂野的西部。
+
+1512
+01:13:46,210 --> 01:13:50,770
+Right? Like everything was new and um, we were unsure,
+对？就像一切都是新的和嗯，我们不确定，
+
+1513
+01:13:50,770 --> 01:13:52,300
+NLP research weren't sure what kind of what
+NLP研究不确定是什么样的
+
+1514
+01:13:52,300 --> 01:13:55,660
+the new research landscape was because uh, you know,
+新的研究领域是因为呃，你知道，
+
+1515
+01:13:55,660 --> 01:13:58,645
+uh, neural methods kind of changed machine translation a lot,
+呃，神经方法有点改变了机器的翻译，
+
+1516
+01:13:58,645 --> 01:14:01,675
+looked like they might change other areas but it was uncertain how much.
+看起来他们可能会改变其他领域，但不确定多少。
+
+1517
+01:14:01,675 --> 01:14:04,690
+Um, but these days you know five years later,
+嗯，但这几天你知道五年后，
+
+1518
+01:14:04,690 --> 01:14:06,475
+um, it's a lot less wild.
+嗯，它不那么狂野了。
+
+1519
+01:14:06,475 --> 01:14:09,125
+I'd say, you know things are settled down a lot kind of
+我会说，你知道事情已经解决了很多
+
+1520
+01:14:09,125 --> 01:14:13,140
+standard practices have emerged and sure there's still a lot of things changing.
+已经出现了标准做法，并确保仍有许多事情在发生变化。
+
+1521
+01:14:13,140 --> 01:14:15,240
+Um, but you know there's more people in the community,
+嗯，但你知道社区里有更多的人，
+
+1522
+01:14:15,240 --> 01:14:16,500
+there's more standard practices,
+有更多的标准做法，
+
+1523
+01:14:16,500 --> 01:14:18,240
+we have things like TensorFlow and PyTorch.
+我们有像TensorFlow和PyTorch这样的东西。
+
+1524
+01:14:18,240 --> 01:14:20,085
+So, you don't have to take up gradients anymore.
+所以，你不必再占用渐变了。
+
+1525
+01:14:20,085 --> 01:14:22,665
+So, I'd say things are a lot less wild now
+所以，我说现在的事情要少得多
+
+1526
+01:14:22,665 --> 01:14:26,370
+but I would say NLG does seem to be one of the wildest parts
+但我会说NLG似乎确实是最疯狂的部分之一
+
+1527
+01:14:26,370 --> 01:14:29,880
+remaining and part of the reasons for that is because of
+剩下的部分原因是因为
+
+1528
+01:14:29,880 --> 01:14:33,915
+the lack of evaluation metrics that makes it so difficult to tell what we're doing.
+缺乏评估指标，因此很难说出我们正在做什么。
+
+1529
+01:14:33,915 --> 01:14:37,260
+It's, uh, quite difficult to identify like what are the main methods that are
+呃，很难确定主要方法是什么
+
+1530
+01:14:37,260 --> 01:14:41,810
+working when we don't have any metrics that can clearly tell us what's going on.
+当我们没有任何可以清楚地告诉我们发生了什么的指标时工作。
+
+1531
+01:14:41,880 --> 01:14:44,710
+So, another thing that I'm really glad to see is that
+所以，我真的很高兴看到的另一件事是
+
+1532
+01:14:44,710 --> 01:14:47,830
+the neural NLG community is rapidly expanding.
+神经NLG社区正在迅速扩大。
+
+1533
+01:14:47,830 --> 01:14:51,040
+Um, so, in the early years, uh,
+嗯，早年，呃，
+
+1534
+01:14:51,040 --> 01:14:55,390
+people were mostly transferring successful NMT methods to various NLG tasks.
+人们大多将成功的NMT方法转移到各种NLG任务。
+
+1535
+01:14:55,390 --> 01:14:58,870
+Uh, but now I'm seeing you know, increasingly more inventive NLG techniques
+呃，但现在我看到你知道了，越来越有创造力的NLG技术了
+
+1536
+01:14:58,870 --> 01:15:02,725
+merging which is specific to the non-NMT generation settings.
+合并特定于非NMT生成设置。
+
+1537
+01:15:02,725 --> 01:15:05,845
+Um, and again I urge you to go back into the slides that I skipped.
+嗯，我再次敦促你回到我跳过的幻灯片。
+
+1538
+01:15:05,845 --> 01:15:08,650
+Um, so, I'm also saying there's increasingly more kind of
+嗯，所以，我也说越来越多了
+
+1539
+01:15:08,650 --> 01:15:11,590
+neural NLG workshops and competitions especially
+特别是神经NLG研讨会和比赛
+
+1540
+01:15:11,590 --> 01:15:14,470
+focusing on open-ended NLG like those tasks that we
+专注于开放式NLG，就像我们那些任务一样
+
+1541
+01:15:14,470 --> 01:15:18,055
+know are not well suited by the automatic metrics that work for NMT.
+知道不适合适用于NMT的自动指标。
+
+1542
+01:15:18,055 --> 01:15:22,720
+So, there's a neural generation workshop, a storytelling workshop uh,
+那么，有一个神经生成研讨会，一个讲故事的研讨会呃，
+
+1543
+01:15:22,720 --> 01:15:26,470
+and various challenges as well where people enter their for example, um,
+以及人们进入他们的各种挑战，例如，嗯，
+
+1544
+01:15:26,470 --> 01:15:28,870
+conversational dialogue agents to be,
+会话对话代理人，
+
+1545
+01:15:28,870 --> 01:15:31,495
+um, evaluated against each other.
+嗯，互相评估。
+
+1546
+01:15:31,495 --> 01:15:33,520
+So, I think that these different, um,
+所以，我认为这些不同，嗯，
+
+1547
+01:15:33,520 --> 01:15:35,350
+kind of community organizing workshops and
+一种社区组织研讨会和
+
+1548
+01:15:35,350 --> 01:15:38,710
+competitions are really doing a great job to kind of organize a community,
+比赛对于组织社区来说确实做得很好，
+
+1549
+01:15:38,710 --> 01:15:44,080
+increase reproducibility and standard evaluate, standardized evaluation.
+提高再现性和标准评估，标准化评估。
+
+1550
+01:15:44,080 --> 01:15:46,300
+Um, so, this is great but I'd say
+嗯，这很好，但我会说
+
+1551
+01:15:46,300 --> 01:15:50,230
+the biggest roadblock to progress is definitely still evaluation.
+进步的最大障碍仍然是评估。
+
+1552
+01:15:50,230 --> 01:15:53,305
+Okay. So, the last thing that I want to share with you
+好的。所以，我想与你分享的最后一件事
+
+1553
+01:15:53,305 --> 01:15:56,260
+is eight things that I've learned from working in NLG.
+我在NLG工作中学到了八件事。
+
+1554
+01:15:56,260 --> 01:15:58,930
+So, the first one is the more open-ended the task,
+所以，第一个是更开放的任务，
+
+1555
+01:15:58,930 --> 01:16:00,535
+the harder everything becomes.
+一切都变得越来越难。
+
+1556
+01:16:00,535 --> 01:16:03,655
+Evaluation becomes harder, defining what you're doing becomes harder,
+评估变得更难，定义你正在做的事情变得更难，
+
+1557
+01:16:03,655 --> 01:16:05,905
+telling when you're doing a good job becomes harder.
+告诉你什么时候做得好就变得更难了。
+
+1558
+01:16:05,905 --> 01:16:09,130
+So, for this reason constraints can sometimes make things more welcome.
+所以，出于这个原因，约束有时会使事情变得更受欢迎。
+
+1559
+01:16:09,130 --> 01:16:15,370
+So, if you decide to constrain your task then sometimes it's easier to, to complete it.
+因此，如果您决定约束您的任务，那么有时候完成它会更容易。
+
+1560
+01:16:15,370 --> 01:16:19,120
+Uh, the next one is aiming for a specific improvement can
+呃，下一个目标是具体的改进可以
+
+1561
+01:16:19,120 --> 01:16:22,675
+often be more manageable than aiming to improve overall generation quality.
+通常比旨在提高整体发电质量更易于管理。
+
+1562
+01:16:22,675 --> 01:16:25,285
+So, for example, if you decide that you want to
+因此，例如，如果您决定要这样做
+
+1563
+01:16:25,285 --> 01:16:27,865
+well for example increase diversity for your model, like say
+例如，为您的模型增加多样性，例如
+
+1564
+01:16:27,865 --> 01:16:31,270
+more interesting things that's an easier thing to achieve and measure than just
+更有趣的事情，更容易实现和衡量，而不仅仅是
+
+1565
+01:16:31,270 --> 01:16:35,875
+saying we want to do overall generation quality because of the evaluation problem.
+因为评估问题，我们想要做整体发电质量。
+
+1566
+01:16:35,875 --> 01:16:40,285
+The next one is if you're using your language model to do NLG,
+下一个是如果你使用你的语言模型做NLG，
+
+1567
+01:16:40,285 --> 01:16:44,860
+then improving the language model that is getting better with perplexity will give you
+然后改善困惑变得越来越好的语言模型会给你
+
+1568
+01:16:44,860 --> 01:16:46,960
+probably better generation quality because you've got
+可能更好的发电质量，因为你有
+
+1569
+01:16:46,960 --> 01:16:51,220
+a stronger language model but it's not the only way to improve generation quality,
+一个更强大的语言模型，但它不是提高发电质量的唯一方法，
+
+1570
+01:16:51,220 --> 01:16:53,065
+as we talked about before, uh,
+就像我们之前谈过的那样，呃，
+
+1571
+01:16:53,065 --> 01:16:56,995
+there's also other components that can affect generation apart from just language model,
+除了语言模型之外，还有其他可以影响生成的组件，
+
+1572
+01:16:56,995 --> 01:17:00,340
+and that's part of the problem is that that's not in the training objective.
+问题的一部分是，这不在培训目标中。
+
+1573
+01:17:00,340 --> 01:17:03,655
+Um, my next tip is that you should look at your output a lot,
+嗯，我的下一个提示是你应该多看一下你的输出，
+
+1574
+01:17:03,655 --> 01:17:07,150
+partially because you don't have any single metric that can tell you what's going on.
+部分原因是您没有任何单一的指标可以告诉您发生了什么。
+
+1575
+01:17:07,150 --> 01:17:10,270
+It's pretty important to look at your output a lot to form your own opinions.
+非常重要的是要仔细查看您的输出以形成自己的意见。
+
+1576
+01:17:10,270 --> 01:17:12,745
+It can be time consuming but it's probably worth doing.
+它可能很耗时，但它可能值得做。
+
+1577
+01:17:12,745 --> 01:17:14,575
+I ended up talking to these chatbots
+我最后和这些聊天机器人交谈了
+
+1578
+01:17:14,575 --> 01:17:17,440
+a huge amount during the time that I was working on the project.
+在我从事这个项目的过程中，这个数字很大。
+
+1579
+01:17:17,440 --> 01:17:21,640
+Okay. Almost done, so, five you need an automatic metric, even if it's imperfect.
+好的。几乎完成了，所以，五，你需要一个自动度量，即使它不完美。
+
+1580
+01:17:21,640 --> 01:17:23,050
+So, I know you that already know this because we
+所以，我知道你已经知道了，因为我们
+
+1581
+01:17:23,050 --> 01:17:25,135
+wrote it all over the project instructions.
+在项目说明书上写下了这一切。
+
+1582
+01:17:25,135 --> 01:17:29,200
+Uh, but I'd probably amend that to like maybe you need several automatic metrics.
+呃，但我可能会修改它，以便你可能需要几个自动指标。
+
+1583
+01:17:29,200 --> 01:17:30,760
+I talked earlier about how you might track
+我之前谈过你如何跟踪
+
+1584
+01:17:30,760 --> 01:17:33,445
+multiple things to get an overall picture of what's going on,
+多种东西可以全面了解正在发生的事情，
+
+1585
+01:17:33,445 --> 01:17:36,100
+I'd say the more open-ended your NLG task is,
+我会说你的NLG任务越开放，
+
+1586
+01:17:36,100 --> 01:17:39,175
+the more likely you need probably several metrics.
+您可能需要的几个指标。
+
+1587
+01:17:39,175 --> 01:17:43,195
+If you do human eval, you want to make the questions as focused as possible.
+如果你做人类评估，你想让问题尽可能集中。
+
+1588
+01:17:43,195 --> 01:17:45,100
+So, as I found out the hard way if you
+所以，正如我发现你的困难
+
+1589
+01:17:45,100 --> 01:17:47,785
+define the question as a very kind of overall vague thing,
+将问题定义为一种非常模糊的东西，
+
+1590
+01:17:47,785 --> 01:17:49,885
+then you're just opening yourself up to, um,
+那么你只是打开自己，嗯，
+
+1591
+01:17:49,885 --> 01:17:52,975
+the respondents kind of misunderstanding you and, uh,
+受访者有点误解你，呃，
+
+1592
+01:17:52,975 --> 01:17:54,670
+if they are doing that then it's actually not their fault,
+如果他们这样做那么实际上不是他们的错，
+
+1593
+01:17:54,670 --> 01:17:57,475
+it's your fault and you need to take your questions and that's what I learned.
+这是你的错，你需要回答你的问题，这就是我所学到的。
+
+1594
+01:17:57,475 --> 01:17:59,860
+Uh, next thing is reproducibility is
+呃，接下来的事情是再现性
+
+1595
+01:17:59,860 --> 01:18:03,580
+a huge problem in today's NLP and deep learning in general,
+今天的NLP和一般的深度学习中存在的一个巨大问题，
+
+1596
+01:18:03,580 --> 01:18:06,130
+and the problem is only bigger in NLG,
+这个问题只在NLG中更大，
+
+1597
+01:18:06,130 --> 01:18:08,380
+I guess it's another way that it's still a wild west.
+我想这是另一种方式，它仍然是一个狂野的西部。
+
+1598
+01:18:08,380 --> 01:18:10,930
+So, I'd say that, uh, it would be really great,
+所以，我会说，呃，这真的很棒，
+
+1599
+01:18:10,930 --> 01:18:13,300
+if everybody could publicly release all of
+如果每个人都可以公开发布全部内容
+
+1600
+01:18:13,300 --> 01:18:15,985
+their generated output when they write NLG papers.
+他们写NLG论文时产生的输出。
+
+1601
+01:18:15,985 --> 01:18:20,155
+I think this is a great practice because if you released your generated outputs,
+我认为这是一个很好的做法，因为如果你发布了你生成的输出，
+
+1602
+01:18:20,155 --> 01:18:23,875
+then if someone later let's say comes up with a great automatic metric,
+然后如果有人后来说出了一个很棒的自动指标，
+
+1603
+01:18:23,875 --> 01:18:27,985
+then they can just grab your generated output and then compute the metric on that.
+然后他们可以抓住您生成的输出，然后计算出该指标。
+
+1604
+01:18:27,985 --> 01:18:30,040
+Whereas if he never released your output or you
+然而，如果他从未发布过您的输出或您
+
+1605
+01:18:30,040 --> 01:18:32,470
+released with some kind of imperfect metric number,
+发布时带有某种不完美的公制数字，
+
+1606
+01:18:32,470 --> 01:18:35,020
+then future researchers have nothing to compare it against.
+然后未来的研究人员没有什么可以比较它。
+
+1607
+01:18:35,020 --> 01:18:38,575
+Uh, so lastly, my last thought
+呃，最后，我最后的想法
+
+1608
+01:18:38,575 --> 01:18:42,790
+about working in NLG is that it can be very frustrating sometimes,
+关于在NLG工作，有时会非常令人沮丧，
+
+1609
+01:18:42,790 --> 01:18:45,745
+uh, because things can be difficult and it's hard to know when you're making progress.
+呃，因为事情可能很困难，很难知道你什么时候才能取得进步。
+
+1610
+01:18:45,745 --> 01:18:48,805
+But the upside is it can also be very funny.
+但好处是它也可以非常有趣。
+
+1611
+01:18:48,805 --> 01:18:52,740
+So this my last slide, here are some bizarre conversations that I've had with my chatbot.
+所以这是我的最后一张幻灯片，这里是我聊天机器人的一些奇怪的对话。
+
+1612
+01:18:52,740 --> 01:18:54,000
+[LAUGHTER] Thanks.
+[大笑]谢谢。
+
+1613
+01:18:54,000 --> 01:19:37,000
+[NOISE] [LAUGHTER] All right, thanks.
+[NOISE] [大笑]好的，谢谢。
+
+1614
+
+

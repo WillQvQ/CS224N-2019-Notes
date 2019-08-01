@@ -1,0 +1,7008 @@
+1
+00:00:04,970 --> 00:00:08,670
+Okay. Let's get started again.
+好的。让我们重新开始吧。
+
+2
+00:00:08,670 --> 00:00:11,445
+Okay. So welcome back to, um,
+好的。欢迎回来，嗯，
+
+3
+00:00:11,445 --> 00:00:14,895
+week three of CS224N.
+第二周的CS224N。
+
+4
+00:00:14,895 --> 00:00:20,760
+Okay. So we- we've got a bit of a change of pace today after week two.
+好的。所以我们 - 在第二周之后，我们今天的节奏有所改变。
+
+5
+00:00:20,760 --> 00:00:24,190
+So, um, this week in week three,
+所以，嗯，本周第三周，
+
+6
+00:00:24,190 --> 00:00:28,205
+we're actually going to have some human language,
+我们实际上会有一些人类语言，
+
+7
+00:00:28,205 --> 00:00:32,630
+and so this lecture has no partial derivative signs in it.
+所以这个讲座没有任何偏导信号。
+
+8
+00:00:32,630 --> 00:00:35,030
+And so we'll be moving away, um,
+所以我们会离开，嗯，
+
+9
+00:00:35,030 --> 00:00:39,715
+from sort of working out the so technicalities of doing, um,
+从某种程度上解决这样做的技术性，嗯，
+
+10
+00:00:39,715 --> 00:00:42,735
+new networks and back propagation,
+新网络和反向传播，
+
+11
+00:00:42,735 --> 00:00:45,435
+um, and a sort of math heavy week two.
+嗯，还有一个数学重的第二周。
+
+12
+00:00:45,435 --> 00:00:46,680
+So then, this week,
+那么，本周，
+
+13
+00:00:46,680 --> 00:00:48,855
+what we actually want- well,
+我们真正想要的 - 好吧，
+
+14
+00:00:48,855 --> 00:00:51,165
+in today's lecture, we want to look at, well,
+在今天的演讲中，我们想看看，好吧，
+
+15
+00:00:51,165 --> 00:00:55,455
+what kind of structures do human language sentences have,
+人类语言句子有什么样的结构，
+
+16
+00:00:55,455 --> 00:00:58,515
+and how we can build models that,
+以及我们如何建立模型，
+
+17
+00:00:58,515 --> 00:01:02,990
+um, build that kind of structure for sentences that we see.
+嗯，为我们看到的句子建立那种结构。
+
+18
+00:01:02,990 --> 00:01:05,090
+Um, so first of all,
+嗯，首先，
+
+19
+00:01:05,090 --> 00:01:08,795
+I'm gonna sort of explain and motivate a bit about,
+我会解释和激励一点，
+
+20
+00:01:08,795 --> 00:01:11,150
+um, structure of human language sentences.
+嗯，人类语言句子的结构。
+
+21
+00:01:11,150 --> 00:01:13,250
+So, that's kind of like, um,
+所以，那有点像，嗯，
+
+22
+00:01:13,250 --> 00:01:16,040
+linguistics in 20 minutes or something.
+语言学在20分钟左右。
+
+23
+00:01:16,040 --> 00:01:19,850
+Um, then going particularly focusing on dependency grammars,
+嗯，然后特别关注依赖语法，
+
+24
+00:01:19,850 --> 00:01:23,495
+and then gonna present a method for doing dependency structure,
+然后提出一种做依赖结构的方法，
+
+25
+00:01:23,495 --> 00:01:27,905
+dependency grammar parsing called transition-based dependency parsing.
+依赖语法解析称为基于转换的依赖解析。
+
+26
+00:01:27,905 --> 00:01:33,795
+And then talk about how you can make neural, um, dependency parsers.
+然后讨论如何制作神经，嗯，依赖解析器。
+
+27
+00:01:33,795 --> 00:01:36,390
+Um, so, um, going on just,
+嗯，嗯，继续吧，
+
+28
+00:01:36,390 --> 00:01:38,130
+you know, a couple of announcements.
+你知道，有几个公告。
+
+29
+00:01:38,130 --> 00:01:42,120
+So, assignment two was due one minute ago,
+因此，作业一分钟到期，
+
+30
+00:01:42,120 --> 00:01:44,595
+so I hope everyone's succeeded,
+所以我希望每个人都成功，
+
+31
+00:01:44,595 --> 00:01:47,430
+um, in getting assignment two out of the way.
+嗯，让任务2完成。
+
+32
+00:01:47,430 --> 00:01:49,200
+If you're still working on it,
+如果你还在做，
+
+33
+00:01:49,200 --> 00:01:50,720
+do make sure to make, um,
+确保做，嗯，
+
+34
+00:01:50,720 --> 00:01:52,790
+use of the office hours and get help for that.
+利用办公时间并获得帮助。
+
+35
+00:01:52,790 --> 00:01:56,060
+Coming out just today is assignment three.
+即将到来的是第三项任务。
+
+36
+00:01:56,060 --> 00:01:58,640
+Um, assignment three, um,
+嗯，任务三，嗯，
+
+37
+00:01:58,640 --> 00:02:01,385
+is basically about this lecture.
+基本上是关于这个讲座。
+
+38
+00:02:01,385 --> 00:02:03,350
+Um, so, [LAUGHTER] in assignment three,
+嗯，[大笑]在任务三，
+
+39
+00:02:03,350 --> 00:02:06,994
+what you're doing is building a neural dependency parser,
+你正在做的是建立一个神经依赖解析器，
+
+40
+00:02:06,994 --> 00:02:09,980
+and so we hope that you can put together what you learned about
+所以我们希望你能把你学到的东西放在一起
+
+41
+00:02:09,980 --> 00:02:13,445
+neural networks last week and the content of today,
+神经网络上周和今天的内容，
+
+42
+00:02:13,445 --> 00:02:17,750
+and jump straight right in to building a neural dependency parser.
+并直接跳转到构建神经依赖解析器。
+
+43
+00:02:17,750 --> 00:02:21,830
+Um, the other thing that happens in assignment three is that,
+嗯，在任务三中发生的另一件事是，
+
+44
+00:02:21,830 --> 00:02:25,080
+we start using a deep learning framework PyTorch.
+我们开始使用深度学习框架PyTorch。
+
+45
+00:02:25,080 --> 00:02:28,680
+So, for doing assignment three, instruction zero,
+因此，对于任务三，指令零，
+
+46
+00:02:28,680 --> 00:02:30,945
+and this is in the PDF for the assignment,
+这是在作业的PDF中，
+
+47
+00:02:30,945 --> 00:02:34,515
+is to install PyTorch as a Python package,
+是将PyTorch安装为Python包，
+
+48
+00:02:34,515 --> 00:02:36,255
+and start using that.
+并开始使用它。
+
+49
+00:02:36,255 --> 00:02:43,710
+Um, so we've attempted to make assignment three sort of be a highly scaffolded tutorial,
+嗯，所以我们试图让任务成为一个高度脚手架的教程，
+
+50
+00:02:43,710 --> 00:02:47,360
+where you can start to learn how to do things in PyTorch by just,
+在那里你可以开始学习如何在PyTorch中做事，
+
+51
+00:02:47,360 --> 00:02:50,730
+um, writing a few lines of code at a time.
+嗯，一次写几行代码。
+
+52
+00:02:50,730 --> 00:02:53,130
+Hopefully that works out for people.
+希望这对人们有益。
+
+53
+00:02:53,130 --> 00:02:55,020
+Um, if you have any issues with,
+嗯，如果你有任何问题，
+
+54
+00:02:55,020 --> 00:02:56,580
+with that, um, well,
+那个，恩，嗯，
+
+55
+00:02:56,580 --> 00:02:58,830
+obviously, you can send Piazza messages,
+显然，你可以发送Piazza消息，
+
+56
+00:02:58,830 --> 00:03:00,180
+come to office hours.
+上班时间。
+
+57
+00:03:00,180 --> 00:03:02,830
+I mean, the one other thing you could think of doing is that there's sort of
+我的意思是，你能想到的另一件事就是那种
+
+58
+00:03:02,830 --> 00:03:06,220
+a one hour introduction to PyTorch on the PyTorch site,
+在PyTorch网站上一小时介绍PyTorch，
+
+59
+00:03:06,220 --> 00:03:09,895
+where you down- where you're directed for installing PyTorch,
+你在哪里 - 你被指示安装PyTorch，
+
+60
+00:03:09,895 --> 00:03:13,000
+and you could also look at that if that was maybe helpful.
+你也可以看一下，如果这可能有帮助。
+
+61
+00:03:13,000 --> 00:03:16,710
+Um, now the final mentions, yes.
+嗯，现在最后提到，是的。
+
+62
+00:03:16,710 --> 00:03:19,320
+So, um, final projects, um, you know,
+所以，嗯，最后的项目，嗯，你知道，
+
+63
+00:03:19,320 --> 00:03:22,060
+we're going to sort of focus on those more in week five,
+我们将在第五周更加专注于那些，
+
+64
+00:03:22,060 --> 00:03:25,120
+but if it's not bad to be thinking about things you could do,
+但如果想到你能做的事情并不坏，
+
+65
+00:03:25,120 --> 00:03:27,145
+if you're under a custom final project.
+如果你是一个自定义的最终项目。
+
+66
+00:03:27,145 --> 00:03:30,400
+You're certainly encouraged to come and talk to me or the TAs.
+你当然鼓励你来和我或者谈谈。
+
+67
+00:03:30,400 --> 00:03:34,315
+We have under the sort of office hours page on the website,
+我们在网站的办公时间页面下，
+
+68
+00:03:34,315 --> 00:03:37,810
+a listing of the expertise of some of the different TAs.
+一些不同助教的专业知识清单。
+
+69
+00:03:37,810 --> 00:03:42,220
+Um, since I missed my office hours yesterday,
+嗯，因为我昨天错过了办公时间，
+
+70
+00:03:42,220 --> 00:03:46,520
+I'm gonna have a shortened office hour tomorrow from 1:00 to 2:20.
+明天1点到2点20分，我的办公时间会缩短。
+
+71
+00:03:46,520 --> 00:03:49,490
+Um, that's at the same time as the,
+嗯，那是在同一时间，
+
+72
+00:03:49,490 --> 00:03:53,045
+um, normal CS224N, um,
+嗯，正常的CS224N，嗯，
+
+73
+00:03:53,045 --> 00:03:56,300
+office hours, so you can kind of come for any reason you want,
+办公时间，所以你可以出于任何理由来，你想要的，
+
+74
+00:03:56,300 --> 00:03:58,430
+but it might be especially good to come to me if you want
+但如果你愿意的话，来找我可能会特别好
+
+75
+00:03:58,430 --> 00:04:00,910
+to talk about, um, final projects.
+谈谈，嗯，最后的项目。
+
+76
+00:04:00,910 --> 00:04:07,475
+Okay. So, let's leap in and start talking about the structure of sentences.
+好的。所以，让我们跳进去，开始谈论句子的结构。
+
+77
+00:04:07,475 --> 00:04:15,650
+And so, I just sort of want to explain something about human language sentence structure,
+所以，我只是想解释一下人类语言句子结构，
+
+78
+00:04:15,650 --> 00:04:18,530
+and how people think about that structure,
+以及人们如何看待这种结构，
+
+79
+00:04:18,530 --> 00:04:22,775
+and what kind of goals then people in natural language processing
+然后人们在自然语言处理中有什么样的目标
+
+80
+00:04:22,775 --> 00:04:27,725
+have of sort of building structure to understand the meaning of sentences.
+有一种建筑结构来理解句子的意义。
+
+81
+00:04:27,725 --> 00:04:31,890
+Um, all of the examples I'm going to give today are in English,
+嗯，我今天要给的所有例子都是英文的，
+
+82
+00:04:31,890 --> 00:04:36,390
+um, because that's the language that you're all expected to have some competence in.
+嗯，因为这是你所有人都希望拥有一定能力的语言。
+
+83
+00:04:36,390 --> 00:04:39,545
+But this really isn't meant to be sort of facts about English.
+但这并不意味着有关英语的事实。
+
+84
+00:04:39,545 --> 00:04:43,460
+This is meant to be sort of ideas of how you can think about the structure of
+这是对如何思考结构的想法
+
+85
+00:04:43,460 --> 00:04:48,145
+human language sentences that are applied to all sorts of languages.
+适用于各种语言的人类语言句子。
+
+86
+00:04:48,145 --> 00:04:51,575
+Okay. So in general,
+好的。所以总的来说，
+
+87
+00:04:51,575 --> 00:04:54,410
+there are two different ways that
+有两种不同的方式
+
+88
+00:04:54,410 --> 00:04:57,650
+linguists have thought about the structure of sentences,
+语言学家已经考虑过句子的结构，
+
+89
+00:04:57,650 --> 00:04:59,420
+though there's some relations to them.
+虽然与他们有一些关系。
+
+90
+00:04:59,420 --> 00:05:02,165
+One of them is called phrase structure,
+其中一个称为短语结构，
+
+91
+00:05:02,165 --> 00:05:04,085
+or phrase structure grammars.
+或短语结构语法。
+
+92
+00:05:04,085 --> 00:05:08,480
+And if you vaguely remember from CS103 if you did that,
+如果你依旧从CS103中记得，如果你这样做，
+
+93
+00:05:08,480 --> 00:05:12,900
+when you spent about the lecture on context-free grammars, um,
+当你花在关于无上下文语法的讲座上时，嗯，
+
+94
+00:05:12,900 --> 00:05:15,050
+phrase structure grammars are using the tools of
+短语结构语法正在使用的工具
+
+95
+00:05:15,050 --> 00:05:17,930
+context-free grammars to put structures over sentences.
+无结构语法将结构放在句子上。
+
+96
+00:05:17,930 --> 00:05:22,670
+So, I'm first of all going to just briefly introduce that, so you've seen it,
+所以，我首先要简要介绍一下，所以你已经看过了，
+
+97
+00:05:22,670 --> 00:05:24,590
+but actually the main tool that we're going to
+但实际上是我们要去的主要工具
+
+98
+00:05:24,590 --> 00:05:27,700
+use in this class and for assignment three,
+在这个班级使用和任务三，
+
+99
+00:05:27,700 --> 00:05:30,560
+is to do put dependency structures over,
+是把依赖结构放在上面，
+
+100
+00:05:30,560 --> 00:05:33,110
+um, sentences, so I'll then go about that.
+嗯，句子，所以我会去那。
+
+101
+00:05:33,110 --> 00:05:36,290
+So, the idea of phrase structure is to say that
+所以，短语结构的概念就是说
+
+102
+00:05:36,290 --> 00:05:40,810
+sentences are built out of units that progressively nest.
+句子是逐步嵌套的单位构建的。
+
+103
+00:05:40,810 --> 00:05:44,140
+So, we start off with words that, cat, cuddly,
+所以，我们从猫，可爱的话开始，
+
+104
+00:05:44,140 --> 00:05:48,280
+et cetera, and then we're gonna put them into bigger units that we call phrases,
+等等，然后我们将它们放入我们称之为短语的更大单元中，
+
+105
+00:05:48,280 --> 00:05:50,425
+like "The cuddly cat by the door",
+比如“门边的可爱猫咪”，
+
+106
+00:05:50,425 --> 00:05:54,190
+and then you can keep on combining those up into even bigger phrases,
+然后你可以继续将这些组合成更大的短语，
+
+107
+00:05:54,190 --> 00:05:56,465
+like, "The cuddly cat by the door."
+比如，“门边的可爱猫咪”。
+
+108
+00:05:56,465 --> 00:06:00,660
+Um, [NOISE] Okay, that's that.
+嗯，[NOISE]好的，就是这样。
+
+109
+00:06:00,660 --> 00:06:02,235
+So, how does this work?
+那么，这是如何工作的？
+
+110
+00:06:02,235 --> 00:06:04,230
+Well, so the idea of it,
+那么，它的想法，
+
+111
+00:06:04,230 --> 00:06:06,570
+and this is sort of the way linguists thinks,
+这是语言学家认为的方式，
+
+112
+00:06:06,570 --> 00:06:08,205
+is to say, "Well,
+就是说，“好吧，
+
+113
+00:06:08,205 --> 00:06:10,260
+here's this language, which,
+这是这种语言，
+
+114
+00:06:10,260 --> 00:06:12,465
+you know, might not be English.
+你知道，可能不是英文。
+
+115
+00:06:12,465 --> 00:06:15,055
+It might be Oaxacan or some other language.
+它可能是Oaxacan或其他语言。
+
+116
+00:06:15,055 --> 00:06:17,320
+What kind of structure does it have?
+它有什么样的结构？
+
+117
+00:06:17,320 --> 00:06:21,985
+And well, we could look at lots of sentences of the language.
+好吧，我们可以看一下这种语言的很多句子。
+
+118
+00:06:21,985 --> 00:06:24,205
+And so the linguist is gonna think,
+所以语言学家会想到，
+
+119
+00:06:24,205 --> 00:06:25,585
+"Well, I can see,
+“好吧，我可以看到，
+
+120
+00:06:25,585 --> 00:06:28,485
+um, patterns, like the cat,
+嗯，模式，像猫，
+
+121
+00:06:28,485 --> 00:06:29,820
+a dog, the dog,
+狗，狗，
+
+122
+00:06:29,820 --> 00:06:31,280
+a cat, et cetera.
+一只猫，等等。
+
+123
+00:06:31,280 --> 00:06:34,940
+So, it's sort of seems like there's one word class here,
+所以，这似乎有一个单词类，
+
+124
+00:06:34,940 --> 00:06:37,940
+which linguists often referred to as determiners.
+哪些语言学家经常称之为决定者。
+
+125
+00:06:37,940 --> 00:06:40,700
+Um, they're also referred to as article sometimes in English.
+嗯，它们有时也被称为英文文章。
+
+126
+00:06:40,700 --> 00:06:44,390
+There's another word class here of nouns.
+这里还有另一个名词类。
+
+127
+00:06:44,390 --> 00:06:48,295
+And so, what I- to capture this pattern here,
+所以，我在这里捕捉这种模式，
+
+128
+00:06:48,295 --> 00:06:51,230
+it seems like we can make this unit, um,
+好像我们可以制作这个单位，嗯，
+
+129
+00:06:51,230 --> 00:06:55,025
+that I see all over the place in language, um,
+我用语言看到了这个地方，嗯，
+
+130
+00:06:55,025 --> 00:06:57,095
+which is made of a,
+由a制成，
+
+131
+00:06:57,095 --> 00:07:00,340
+um, a determiner, followed by a noun.
+嗯，一个限定词，后跟一个名词。
+
+132
+00:07:00,340 --> 00:07:02,190
+So, I've write, um,
+所以，我写的，嗯，
+
+133
+00:07:02,190 --> 00:07:04,275
+a phrase structure grammar role,
+短语结构语法角色，
+
+134
+00:07:04,275 --> 00:07:07,490
+a context-free grammar role of- I can have
+我可以拥有的无上下文语法角色
+
+135
+00:07:07,490 --> 00:07:11,245
+a noun phrase that goes to a determiner, and a noun.
+转到限定词的名词短语和名词。
+
+136
+00:07:11,245 --> 00:07:12,795
+Okay. But, you know,
+好的。但是，你知道，
+
+137
+00:07:12,795 --> 00:07:16,980
+that's not the only thing that I can, um, see.
+那不是我能做的唯一一件事，嗯，看到了。
+
+138
+00:07:16,980 --> 00:07:20,870
+So, I can also see, um,
+所以，我也可以看到，嗯，
+
+139
+00:07:20,870 --> 00:07:24,470
+other examples in my language of the large cat,
+用我的大猫的语言的其他例子，
+
+140
+00:07:24,470 --> 00:07:25,955
+or a barking dog,
+或吠狗，
+
+141
+00:07:25,955 --> 00:07:28,400
+or the cuddly cat, the cuddly dog.
+或可爱的猫，可爱的狗。
+
+142
+00:07:28,400 --> 00:07:33,080
+So, that seems that I need to put a bit more stuff into my grammar.
+所以，似乎我需要在语法中加入更多东西。
+
+143
+00:07:33,080 --> 00:07:38,430
+So, maybe I can say from my grammar that a noun phrase goes to a determiner,
+所以，也许我可以从我的语法中说出一个名词短语转到一个限定词，
+
+144
+00:07:38,430 --> 00:07:41,195
+and then optionally, you can put in an adjective,
+然后可选地，你可以放一个形容词，
+
+145
+00:07:41,195 --> 00:07:42,710
+and then you can have a noun.
+然后你可以有一个名词。
+
+146
+00:07:42,710 --> 00:07:45,800
+And then I poke around a little bit further and I
+然后我进一步探讨了一下我
+
+147
+00:07:45,800 --> 00:07:48,995
+can find examples like the cat in a crate,
+可以找到像箱子里的猫一样的例子，
+
+148
+00:07:48,995 --> 00:07:52,220
+or a barking dog by the door.
+或门口的吠狗。
+
+149
+00:07:52,220 --> 00:07:55,100
+And I can see lots of sentences like this.
+我可以看到很多像这样的句子。
+
+150
+00:07:55,100 --> 00:07:58,470
+And so I want to put those into my grammar.
+所以我想把它们放进我的语法中。
+
+151
+00:07:58,470 --> 00:08:01,410
+But at that point, I noticed something special, because look,
+但就在那时，我发现了一些特别的东西，因为看，
+
+152
+00:08:01,410 --> 00:08:04,245
+here are some other things,
+这里有一些其他的东西，
+
+153
+00:08:04,245 --> 00:08:08,540
+and these things look a lot like the things I started off with.
+这些东西看起来很像我开始的东西。
+
+154
+00:08:08,540 --> 00:08:09,590
+So, it seems like,
+所以，好像，
+
+155
+00:08:09,590 --> 00:08:12,230
+which sort of having a phrase with
+哪种有短语
+
+156
+00:08:12,230 --> 00:08:17,840
+the same expansion potential that's nested inside this bigger phrase,
+嵌套在这个更大的短语中的扩展潜力相同，
+
+157
+00:08:17,840 --> 00:08:21,150
+because these ones can also be, um, expanded, right?
+因为这些也可以扩展，对吧？
+
+158
+00:08:21,150 --> 00:08:24,720
+I could have something like the green door something in here.
+我可以在这里找到绿色的东西。
+
+159
+00:08:24,720 --> 00:08:27,315
+So, I just wanna capture that in some way.
+所以，我只想以某种方式捕获它。
+
+160
+00:08:27,315 --> 00:08:32,885
+So, maybe I could say that a noun phrase goes to a determiner,
+所以，也许我可以说一个名词短语去了一个限定词，
+
+161
+00:08:32,885 --> 00:08:36,315
+optionally an adjective, a noun,
+可选的形容词，名词，
+
+162
+00:08:36,315 --> 00:08:37,650
+and then a something else,
+然后是别的东西，
+
+163
+00:08:37,650 --> 00:08:39,930
+which I'll call a prepositional phrase.
+我称之为介词短语。
+
+164
+00:08:39,930 --> 00:08:42,530
+And then I'm gonna write a second rule saying that
+然后我会写第二条规则
+
+165
+00:08:42,530 --> 00:08:46,820
+a prepositional phrase goes to a preposition,
+一个介词短语去介词，
+
+166
+00:08:46,820 --> 00:08:49,665
+that's gonna be these words here,
+这就是这些话，
+
+167
+00:08:49,665 --> 00:08:53,595
+um, followed by a noun phrase.
+嗯，后跟一个名词短语。
+
+168
+00:08:53,595 --> 00:09:00,980
+So then I'm reuse- [NOISE] I'm reusing my noun phrase that I defined up here.
+那么我重用 -  [NOISE]我正在重用我在这里定义的名词短语。
+
+169
+00:09:00,980 --> 00:09:04,205
+So then I could immediately generate other stuff.
+那么我可以立即生成其他东西。
+
+170
+00:09:04,205 --> 00:09:05,870
+I can sort of say,
+我可以说，
+
+171
+00:09:05,870 --> 00:09:10,515
+"The cat by the, the large door."
+“猫，大门。”
+
+172
+00:09:10,515 --> 00:09:11,970
+Or indeed I could say,
+或者我可以说，
+
+173
+00:09:11,970 --> 00:09:15,190
+"The cat by the large crate."
+“大箱子里的猫。”
+
+174
+00:09:15,190 --> 00:09:18,990
+Um, "The cat by the large crate on the table",
+嗯，“桌子上的大箱子里的猫”，
+
+175
+00:09:18,990 --> 00:09:20,160
+or something like that,
+或类似的东西，
+
+176
+00:09:20,160 --> 00:09:23,900
+because once I can have the prepositional phrase includes a noun phrase,
+因为一旦我可以让介词短语包括一个名词短语，
+
+177
+00:09:23,900 --> 00:09:26,960
+and a noun phrase includes a prepositional phrase,
+名词短语包括介词短语，
+
+178
+00:09:26,960 --> 00:09:29,990
+I've already got something that I can kind of
+我已经有了一些我可以做的事情
+
+179
+00:09:29,990 --> 00:09:33,650
+recursively go back and forth between noun phrases,
+递归地在名词短语之间来回移动，
+
+180
+00:09:33,650 --> 00:09:36,265
+and I can make infinitely big sentences, right?
+我可以做出无限大句子，对吧？
+
+181
+00:09:36,265 --> 00:09:39,090
+Yeah?
+是吗？
+
+182
+00:09:39,090 --> 00:09:42,530
+Yeah? So, I could write something like, yeah,
+是吗？所以，我可以写一些类似的东西，是的，
+
+183
+00:09:42,530 --> 00:09:46,690
+"The cat by
+“那只猫
+
+184
+00:09:46,690 --> 00:09:55,110
+the large crate on the,
+上面的大箱子，
+
+185
+00:09:55,120 --> 00:10:02,410
+um, large table, um, by the door."
+嗯，大桌子，嗯，在门口。“
+
+186
+00:10:02,410 --> 00:10:06,365
+Right. I can keep on going and make big sentences.
+对。我可以继续前进并做出重大判决。
+
+187
+00:10:06,365 --> 00:10:08,150
+And I could say, well,
+我可以说，好吧，
+
+188
+00:10:08,150 --> 00:10:12,260
+I've got a- I don't have space to fit it on this slide,
+我有一个 - 我没有足够的空间放在这张幻灯片上，
+
+189
+00:10:12,260 --> 00:10:15,680
+but I've got an analysis of this according to my grammar,
+但我根据我的语法对此进行了分析，
+
+190
+00:10:15,680 --> 00:10:21,110
+where that's a noun phrase goes to a determiner noun prepositional phrase.
+在那里，名词短语转到确定词名词介词短语。
+
+191
+00:10:21,110 --> 00:10:23,855
+The prepositional phrase goes to a preposition,
+介词短语是介词，
+
+192
+00:10:23,855 --> 00:10:25,520
+and a noun phrase,
+和名词短语
+
+193
+00:10:25,520 --> 00:10:27,920
+and this noun phrase goes to a determiner,
+这个名词短语去了一个限定词，
+
+194
+00:10:27,920 --> 00:10:32,385
+adjective, noun prepositional phrase.
+形容词，名词介词短语。
+
+195
+00:10:32,385 --> 00:10:35,040
+And that goes to a preposition,
+这是一个介词，
+
+196
+00:10:35,040 --> 00:10:36,415
+and another noun phrase,
+和另一个名词短语，
+
+197
+00:10:36,415 --> 00:10:40,270
+and I keep on going and I can produce big sentences.
+我继续前进，我可以产生大句子。
+
+198
+00:10:40,270 --> 00:10:45,570
+Okay. You know, that kind of then continues on,
+好的。你知道，那种情况会持续下去，
+
+199
+00:10:45,570 --> 00:10:47,835
+because, um, you know,
+因为，嗯，你知道，
+
+200
+00:10:47,835 --> 00:10:50,970
+I can then start seeing more bits of grammar.
+然后我可以开始看到更多的语法。
+
+201
+00:10:50,970 --> 00:10:52,290
+So, I could say, "Well,
+所以，我可以说，“好吧，
+
+202
+00:10:52,290 --> 00:10:54,450
+I can now talk to the cat."
+我现在可以和猫说话了。“
+
+203
+00:10:54,450 --> 00:10:56,760
+Um, and so if I wanna capture,
+嗯，如果我想抓住，
+
+204
+00:10:56,760 --> 00:10:59,970
+um, this talking to a cat here, well,
+嗯，这在这里跟猫说话，好吧，
+
+205
+00:10:59,970 --> 00:11:02,100
+that now means I've got a verb,
+现在意味着我有一个动词，
+
+206
+00:11:02,100 --> 00:11:05,760
+because words like talk and walk are verbs.
+因为像说话和走路这样的词都是动词。
+
+207
+00:11:05,760 --> 00:11:07,830
+And then talk to the cat,
+然后和猫说话，
+
+208
+00:11:07,830 --> 00:11:09,180
+it seems like after that,
+好像在那之后，
+
+209
+00:11:09,180 --> 00:11:11,210
+it could become a prepositional phrase.
+它可能成为一个介词短语。
+
+210
+00:11:11,210 --> 00:11:14,555
+And so I could write another rule saying that a verb phrase
+所以我可以写另一个规则，说一个动词短语
+
+211
+00:11:14,555 --> 00:11:18,410
+goes to a verb followed by a prepositional phrase.
+转到动词后跟一个介词短语。
+
+212
+00:11:18,410 --> 00:11:21,110
+And then I can make more bigger sentences like that.
+然后我可以制作更大的句子。
+
+213
+00:11:21,110 --> 00:11:27,060
+And I could look at more sentences of the language and start building up these,
+我可以查看更多语言的句子并开始构建这些语句，
+
+214
+00:11:27,060 --> 00:11:32,310
+these context-free grammar rules to describe the structure of the language.
+这些无上下文的语法规则用于描述语言的结构。
+
+215
+00:11:32,310 --> 00:11:34,285
+And that's part of what linguists do,
+这是语言学家所做的一部分，
+
+216
+00:11:34,285 --> 00:11:38,465
+and different languages, um, have different structures.
+不同的语言，嗯，有不同的结构。
+
+217
+00:11:38,465 --> 00:11:40,890
+So, um, for example,
+所以，嗯，例如，
+
+218
+00:11:40,890 --> 00:11:43,235
+like in this, uh,
+就像在这，呃，
+
+219
+00:11:43,235 --> 00:11:46,620
+little grammar I've had and in general in English, um,
+我用过的小语法，一般用英语，嗯，
+
+220
+00:11:46,620 --> 00:11:51,995
+what you do, what you find is that prepositional phrases following the verb.
+你做了什么，你发现的是动词之后的介词短语。
+
+221
+00:11:51,995 --> 00:11:54,940
+But if you go to a different language like Chinese,
+但是，如果你使用其他语言，如中文，
+
+222
+00:11:54,940 --> 00:11:57,980
+what you find is the prepositional phrases come before the verb.
+你发现的是介词短语出现在动词之前。
+
+223
+00:11:57,980 --> 00:11:59,310
+And so, we could say okay,
+所以，我们可以说没问题，
+
+224
+00:11:59,310 --> 00:12:02,400
+there are different rules for Chinese, um,
+中国有不同的规则，嗯，
+
+225
+00:12:02,400 --> 00:12:07,305
+and I could start writing a context-free grammar for them. Okay, beauty.
+我可以开始为他们编写一个无上下文的语法。好的，美女。
+
+226
+00:12:07,305 --> 00:12:10,169
+Um,so that's the idea of context-free grammars,
+嗯，这就是无上下文语法的概念，
+
+227
+00:12:10,169 --> 00:12:12,265
+and actually, you know,
+实际上，你知道，
+
+228
+00:12:12,265 --> 00:12:15,980
+this is the dominant approached linguistic structure
+这是占主导地位的语言结构
+
+229
+00:12:15,980 --> 00:12:20,570
+that you'll see if you go and do a linguistics class in the linguistics department,
+如果你去语言学系做语言学课，你会看到，
+
+230
+00:12:20,570 --> 00:12:24,180
+people make these kinds of Phrase Structure Grammar trees.
+人们制作这些短语结构语法树。
+
+231
+00:12:24,180 --> 00:12:26,160
+Um, but just to be contrary,
+嗯，但恰恰相反，
+
+232
+00:12:26,160 --> 00:12:28,205
+no, it's not actually just to be contrary,
+不，这实际上并不恰恰相反，
+
+233
+00:12:28,205 --> 00:12:30,660
+it's because this alternative approach has been
+这是因为这种替代方法已经存在
+
+234
+00:12:30,660 --> 00:12:33,555
+very dominant in computational linguistics.
+在计算语言学中占主导地位。
+
+235
+00:12:33,555 --> 00:12:36,625
+What I'm going to show you instead, um,
+我要告诉你的是，嗯，
+
+236
+00:12:36,625 --> 00:12:40,655
+is the view point of dependency structure.
+是依赖结构的观点。
+
+237
+00:12:40,655 --> 00:12:44,100
+So, the idea of dependency structure
+所以，依赖结构的想法
+
+238
+00:12:44,100 --> 00:12:47,750
+is rather than having these sort of phrasal categories,
+而不是有这些类型的短语，
+
+239
+00:12:47,750 --> 00:12:50,314
+like, noun phrases and prepositional phrases,
+喜欢，名词短语和介词短语，
+
+240
+00:12:50,314 --> 00:12:51,745
+and things like that,
+和那样的事情，
+
+241
+00:12:51,745 --> 00:12:54,775
+we are going to directly, um,
+我们要直接，嗯，
+
+242
+00:12:54,775 --> 00:12:58,945
+represent the structure of sentences by saying,
+用句子来表示句子的结构，
+
+243
+00:12:58,945 --> 00:13:05,630
+how words, how arguments or modifiers of other words in a recursive faction.
+如何在递归派中的单词，如何参数或修饰语。
+
+244
+00:13:05,630 --> 00:13:09,895
+Which is sort of another way of saying how the dependence on other words.
+这是另一种说法如何依赖其他词的方式。
+
+245
+00:13:09,895 --> 00:13:11,100
+So, we have a sentence,
+所以，我们有一句话，
+
+246
+00:13:11,100 --> 00:13:13,840
+''Look in the large crate in the kitchen by the door''.
+“看看门边厨房里的大箱子”。
+
+247
+00:13:13,840 --> 00:13:16,300
+And if we want to we can give these word,
+如果我们想要，我们可以说出这些话，
+
+248
+00:13:16,300 --> 00:13:19,865
+words word classes, so we can still say this is a verb,
+单词类，所以我们仍然可以说这是一个动词，
+
+249
+00:13:19,865 --> 00:13:21,375
+and this is a preposition,
+这是一个介词，
+
+250
+00:13:21,375 --> 00:13:22,829
+and this is a determiner,
+这是一个决定因素，
+
+251
+00:13:22,829 --> 00:13:24,465
+and this is an adjective,
+这是一个形容词，
+
+252
+00:13:24,465 --> 00:13:25,940
+and this is a noun.
+这是一个名词。
+
+253
+00:13:25,940 --> 00:13:27,920
+But to represent the structure,
+但要代表结构，
+
+254
+00:13:27,920 --> 00:13:30,305
+what we're going to say is, "Well,
+我们要说的是，“嗯，
+
+255
+00:13:30,305 --> 00:13:35,105
+look here is the the root of this whole sentence."
+看这里是整个句子的根源。“
+
+256
+00:13:35,105 --> 00:13:37,440
+So, that's where things start.
+所以，这就是事情的起点。
+
+257
+00:13:37,440 --> 00:13:42,530
+Um, and then, well, where are we going to look is in the large crate,
+嗯，然后，好吧，我们要去的地方是在大箱子里，
+
+258
+00:13:42,530 --> 00:13:46,875
+so that is a dependent of look.
+所以这是外观的依赖。
+
+259
+00:13:46,875 --> 00:13:52,799
+And well, if we- then we have for the crate,
+好吧，如果我们 - 那么我们有箱子，
+
+260
+00:13:52,799 --> 00:13:55,890
+it's got some modifies its a large crate.
+它有一些修改它的大箱子。
+
+261
+00:13:55,890 --> 00:13:57,660
+So, that's a dependent of crate.
+所以，这是箱子的依赖。
+
+262
+00:13:57,660 --> 00:13:59,515
+Its the large crate,
+它的大箱子，
+
+263
+00:13:59,515 --> 00:14:01,395
+that's a dependence of crate.
+这是箱子的依赖。
+
+264
+00:14:01,395 --> 00:14:05,285
+And in this system of dependencies I'm going to show you,
+在这个依赖系统中，我将告诉你，
+
+265
+00:14:05,285 --> 00:14:08,425
+we've got in as kind of,
+我们有点像，
+
+266
+00:14:08,425 --> 00:14:11,360
+um, a modifier of crate in the large crate.
+嗯，大箱子里的板条箱的修饰符。
+
+267
+00:14:11,360 --> 00:14:13,020
+I could come back to that.
+我可以回过头来看看。
+
+268
+00:14:13,020 --> 00:14:16,355
+Well, but this crate has its own modification,
+好吧，但这个箱子有自己的修改，
+
+269
+00:14:16,355 --> 00:14:18,385
+because it's a crate in the kitchen.
+因为它是厨房里的箱子。
+
+270
+00:14:18,385 --> 00:14:21,665
+So, we have, in the kitchen,
+所以，我们在厨房里
+
+271
+00:14:21,665 --> 00:14:23,910
+as a modifier of crate.
+作为箱子的修饰语。
+
+272
+00:14:23,910 --> 00:14:26,740
+And it's the kitchen in the kitchen,
+这是厨房里的厨房，
+
+273
+00:14:26,740 --> 00:14:29,735
+these are dependence of crate.
+这些是箱子的依赖。
+
+274
+00:14:29,735 --> 00:14:34,115
+And well, then we have this next bit by the door.
+好吧，那么我们接下来就在门口了。
+
+275
+00:14:34,115 --> 00:14:36,075
+And as I'll discuss in a minute, well,
+我将在一分钟内讨论，好吧，
+
+276
+00:14:36,075 --> 00:14:39,345
+what does the by the door modifying?
+门修改了什么？
+
+277
+00:14:39,345 --> 00:14:40,950
+It's still modifying the crate,
+它还在修改箱子，
+
+278
+00:14:40,950 --> 00:14:42,770
+it saying, ''It's the crate by the door.''
+它说，“这是门边的箱子。”
+
+279
+00:14:42,770 --> 00:14:47,465
+Okay. So, the by the door is also a dependent of crate,
+好的。所以，门口也是箱子的依赖，
+
+280
+00:14:47,465 --> 00:14:53,775
+and then we've got the structure of dependencies coming off of it.
+然后我们就得到了依赖关系的结构。
+
+281
+00:14:53,775 --> 00:14:56,265
+Okay. And so that's then, um,
+好的。那就是那个，嗯，
+
+282
+00:14:56,265 --> 00:14:59,010
+the structure you get may be drawn a little bit more
+你得到的结构可能会更多
+
+283
+00:14:59,010 --> 00:15:02,110
+neatly when I did that in advance like this.
+当我提前这样做的时候整齐地说。
+
+284
+00:15:02,110 --> 00:15:05,790
+And so we call these things, uh, dependency structure.
+所以我们称这些东西，呃，依赖结构。
+
+285
+00:15:05,790 --> 00:15:08,670
+And so crucially, what we're doing here,
+至关重要的是，我们在这里做的是什么，
+
+286
+00:15:08,670 --> 00:15:14,145
+um, is that we're- sorry,
+嗯，是我们 - 抱歉，
+
+287
+00:15:14,145 --> 00:15:15,750
+I had two different examples.
+我有两个不同的例子。
+
+288
+00:15:15,750 --> 00:15:17,010
+[NOISE] different examples.
+[NOISE]不同的例子。
+
+289
+00:15:17,010 --> 00:15:19,330
+[LAUGHTER] Um, um,
+[笑声]嗯，嗯，
+
+290
+00:15:19,330 --> 00:15:21,275
+what we're doing is saying, what,
+我们正在做的是说什么，
+
+291
+00:15:21,275 --> 00:15:24,840
+what words modify other words?
+什么词修饰其他词？
+
+292
+00:15:24,840 --> 00:15:28,365
+And so, that allows us to sort of
+所以，这让我们可以做到
+
+293
+00:15:28,365 --> 00:15:32,570
+understand how the different parts of the sentence relate to each other.
+理解句子的不同部分如何相互关联。
+
+294
+00:15:32,570 --> 00:15:34,945
+And so, overall, you know,
+总的来说，你知道，
+
+295
+00:15:34,945 --> 00:15:37,225
+then- let me just so say here,
+那么 - 让我这样说，
+
+296
+00:15:37,225 --> 00:15:39,920
+you might want to why do we need sentence structure?
+你可能想要为什么我们需要句子结构？
+
+297
+00:15:39,920 --> 00:15:41,760
+You know, the way, um,
+你知道吗，嗯，
+
+298
+00:15:41,760 --> 00:15:44,280
+language seems to work when you're talking to
+当你说话时，语言似乎有效
+
+299
+00:15:44,280 --> 00:15:47,429
+your friends is that you just blab of something,
+你的朋友就是你的东西，
+
+300
+00:15:47,429 --> 00:15:50,735
+and I understand what you're saying, and, um,
+我明白你在说什么，嗯，
+
+301
+00:15:50,735 --> 00:15:52,995
+what goes on beyond that, um,
+除此之外发生了什么，嗯，
+
+302
+00:15:52,995 --> 00:15:55,905
+is sort of not really accessible to consciousness.
+有点意识不到。
+
+303
+00:15:55,905 --> 00:16:01,780
+But well, to be able to have machines that interpret language correctly,
+但是，能够拥有正确解释语言的机器，
+
+304
+00:16:01,780 --> 00:16:05,660
+we sort of need to understand the structure of these sentences,
+我们需要理解这些句子的结构，
+
+305
+00:16:05,660 --> 00:16:10,485
+because unless we know what words are arguments and modifiers of other words,
+因为除非我们知道哪些词是其他词的论点和修饰词，
+
+306
+00:16:10,485 --> 00:16:13,560
+we can't actually work out what sentences mean.
+我们实际上无法弄清楚句子是什么意思。
+
+307
+00:16:13,560 --> 00:16:17,260
+And I'll show some examples of that as to how things go wrong immediately,
+我将展示一些关于如何立即出错的例子，
+
+308
+00:16:17,260 --> 00:16:19,410
+because actually, a lot of the time there are
+因为实际上，很多时候都有
+
+309
+00:16:19,410 --> 00:16:22,230
+different possible interpretations you can have.
+你可以有不同的解释。
+
+310
+00:16:22,230 --> 00:16:23,495
+And so, in general,
+所以，总的来说，
+
+311
+00:16:23,495 --> 00:16:24,845
+our goal is, you know,
+我们的目标是，你知道，
+
+312
+00:16:24,845 --> 00:16:27,815
+up until now we've sort of looked at the meaning of words, right?
+到目前为止，我们已经看过单词的含义，对吧？
+
+313
+00:16:27,815 --> 00:16:29,140
+We did word vectors,
+我们做了单词向量，
+
+314
+00:16:29,140 --> 00:16:31,325
+and we found that words there was similar meaning,
+我们发现那里的词语含义相似，
+
+315
+00:16:31,325 --> 00:16:32,550
+and things like that.
+和那样的事情。
+
+316
+00:16:32,550 --> 00:16:36,960
+Um, and you can get somewhere in human languages with just saying words.
+嗯，你可以用语言来获得人类语言的某个地方。
+
+317
+00:16:36,960 --> 00:16:40,085
+I mean you can say, "Hi",
+我的意思是你可以说，“嗨”，
+
+318
+00:16:40,085 --> 00:16:44,350
+and friendly, um, and things like that,
+和友好，嗯，这样的事情，
+
+319
+00:16:44,350 --> 00:16:46,695
+but you can't get very far with just words, right?
+但你不能用言语走得很远，对吗？
+
+320
+00:16:46,695 --> 00:16:48,890
+The way human beings can express
+人类可以表达的方式
+
+321
+00:16:48,890 --> 00:16:52,550
+complex ideas and explain and teach things to each other,
+复杂的想法，互相解释和教导事物，
+
+322
+00:16:52,550 --> 00:16:57,500
+is you can put together words to express more complex meanings.
+你能用语言来表达更复杂的含义吗？
+
+323
+00:16:57,500 --> 00:17:00,570
+And then, you can do that over and over again
+然后，你可以一遍又一遍地做到这一点
+
+324
+00:17:00,570 --> 00:17:04,120
+recursively to build up more and more complex meanings,
+递归地建立越来越复杂的意义，
+
+325
+00:17:04,120 --> 00:17:07,420
+so that by the time you're reading the morning newspaper,
+所以当你在看早报的时候，
+
+326
+00:17:07,420 --> 00:17:10,805
+you know most sentences are sort of 20-30 words long,
+你知道大多数句子长20-30个字，
+
+327
+00:17:10,805 --> 00:17:12,225
+and they're saying, um,
+他们说，嗯，
+
+328
+00:17:12,225 --> 00:17:14,335
+some complex meaning, like you know,
+一些复杂的意思，就像你知道的那样
+
+329
+00:17:14,335 --> 00:17:17,965
+"Overnight Senate Republicans resolve that they would not do blah blah blah blah.''
+“隔夜参议院共和党人决定他们不会做等等等等等等。”
+
+330
+00:17:17,965 --> 00:17:20,070
+And you understand that flawlessly,
+你完全理解，
+
+331
+00:17:20,070 --> 00:17:22,850
+by just sort of putting together those meanings of words.
+只是把那些词的含义放在一起。
+
+332
+00:17:22,850 --> 00:17:25,230
+And so, we need to be able to know what is connected to
+因此，我们需要能够知道连接的内容
+
+333
+00:17:25,230 --> 00:17:28,010
+what in order to be able to do that.
+什么才能做到这一点。
+
+334
+00:17:28,010 --> 00:17:30,740
+And one of the ways of saying, um,
+还有一种说法，嗯，
+
+335
+00:17:30,740 --> 00:17:32,765
+that's important is saying,
+那很重要的是说，
+
+336
+00:17:32,765 --> 00:17:34,805
+''What can go wrong?''
+“什么可能出错？”
+
+337
+00:17:34,805 --> 00:17:38,675
+Okay. So here, is a newspaper article.
+好的。所以这里是一篇报纸文章。
+
+338
+00:17:38,675 --> 00:17:42,380
+Uh, ''San Jose cop kills man with knife''.
+呃，“圣何塞警察用刀杀死了男人”。
+
+339
+00:17:42,380 --> 00:17:46,605
+Um, now, this has two meanings and the two meanings, um,
+嗯，现在，这有两个含义和两个含义，嗯，
+
+340
+00:17:46,605 --> 00:17:50,630
+depend on, well, what you decide depends on what,
+取决于，你决定什么取决于什么，
+
+341
+00:17:50,630 --> 00:17:52,190
+you know, what modifies what?
+你知道吗，什么修改了什么？
+
+342
+00:17:52,190 --> 00:17:55,535
+So, what are the two meanings. Meaning one.
+那么，这两个意思是什么。意思是一个。
+
+343
+00:17:55,535 --> 00:17:57,580
+The cop stabs the guy. [LAUGHTER]
+警察刺伤了那个家伙。 [笑声]
+
+344
+00:17:57,580 --> 00:17:59,310
+The cop stabs the guy.
+警察刺伤了那个家伙。
+
+345
+00:17:59,310 --> 00:18:02,235
+Right. So, meaning one is the cop stabs that guy.
+对。所以，意思是一个人就是警察。
+
+346
+00:18:02,235 --> 00:18:04,625
+So, what we've got here is,
+那么，我们在这里得到的是，
+
+347
+00:18:04,625 --> 00:18:07,330
+we've got the cops that are killing.
+我们有警察正在杀人。
+
+348
+00:18:07,330 --> 00:18:12,070
+So, this is what we'll say is the subject of kill,
+所以，这就是我们所说的杀人主题，
+
+349
+00:18:12,070 --> 00:18:15,635
+is the cops, and I'll just call them the San Jose cops here.
+是警察，我会在这里称他们为圣何塞警察。
+
+350
+00:18:15,635 --> 00:18:19,365
+And well, there's what they kill which say that,
+好吧，他们杀了什么，说，
+
+351
+00:18:19,365 --> 00:18:24,155
+the man is an object of killing.
+这个人是杀人的对象。
+
+352
+00:18:24,155 --> 00:18:27,615
+Um, and then while one person is the,
+嗯，然后当一个人是，
+
+353
+00:18:27,615 --> 00:18:30,460
+the cop using knife to kill the person.
+警察用刀杀死了这个人。
+
+354
+00:18:30,460 --> 00:18:34,790
+And so that's then that this is, um,
+那么就是这样，嗯，
+
+355
+00:18:34,790 --> 00:18:38,739
+modifier and here if we complex we call it an instrumental
+修饰符，如果我们复杂，我们称之为工具
+
+356
+00:18:38,739 --> 00:18:43,200
+modifier to say that the cops are killing people with a knife.
+修饰语说，警察用刀杀人。
+
+357
+00:18:43,200 --> 00:18:45,300
+That's one possible analysis.
+这是一种可能的分析。
+
+358
+00:18:45,300 --> 00:18:49,055
+Okay. Then, there's a second meaning sentence can have.
+好的。然后，句子可以有第二个含义。
+
+359
+00:18:49,055 --> 00:18:52,275
+The second meaning sentence can have. [NOISE]
+第二个含义句可以有。 [噪声]
+
+360
+00:18:52,275 --> 00:18:55,380
+Okay. The second meaning the sentence can have is,
+好的。句子的第二个含义是，
+
+361
+00:18:55,380 --> 00:18:57,225
+that's the man has a knife.
+那个男人有一把刀。
+
+362
+00:18:57,225 --> 00:18:59,490
+So, um, in that case,
+所以，嗯，在这种情况下，
+
+363
+00:18:59,490 --> 00:19:01,350
+what we wanna say is, well, you know,
+我们想说的是，嗯，你知道，
+
+364
+00:19:01,350 --> 00:19:03,165
+is this word man,
+这个词是男人，
+
+365
+00:19:03,165 --> 00:19:06,540
+and this man has, uh,
+这个男人有，呃，
+
+366
+00:19:06,540 --> 00:19:12,600
+noun modifier, um, which is sort of saying something that the man possesses,
+名词修饰语，嗯，这有点像男人拥有的东西，
+
+367
+00:19:12,600 --> 00:19:14,595
+and then this dependency is the same,
+然后这个依赖是相同的，
+
+368
+00:19:14,595 --> 00:19:16,860
+and it's a man with a knife.
+这是一个拿刀的男人。
+
+369
+00:19:16,860 --> 00:19:23,430
+Okay. And so, the interpretations of these sentences that you can get depend on putting
+好的。所以，你可以得到的这些句子的解释取决于推杆
+
+370
+00:19:23,430 --> 00:19:30,405
+different structures over the sentences in terms of who is- what is modifying what?
+句子的不同结构就是谁来修改什么？
+
+371
+00:19:30,405 --> 00:19:33,675
+Um, here is another one that's just like that one.
+嗯，这是另一个就像那个。
+
+372
+00:19:33,675 --> 00:19:37,020
+Um, scientists count whales from space.
+嗯，科学家们从太空中统计鲸鱼。
+
+373
+00:19:37,020 --> 00:19:38,850
+[LAUGHTER] Okay.
+[大笑]好的。
+
+374
+00:19:38,850 --> 00:19:42,960
+So again, this sentence has two possible structures, right?
+再说一次，这句话有两种可能的结构，对吧？
+
+375
+00:19:42,960 --> 00:19:46,860
+[LAUGHTER] That we have, the scientists are the subject that are
+[笑声]我们拥有，科学家们就是这样的主题
+
+376
+00:19:46,860 --> 00:19:51,330
+counting and the whales are the object.
+计数和鲸鱼是对象。
+
+377
+00:19:51,330 --> 00:19:57,135
+Um, and, well, one possibility is that this is how they're doing the counting,
+嗯，而且，有一种可能性就是这就是他们在做计数的方式，
+
+378
+00:19:57,135 --> 00:20:02,520
+um, so that they're counting the whales from space using something like a satellite.
+嗯，所以他们用卫星等东西来计算鲸鱼。
+
+379
+00:20:02,520 --> 00:20:06,000
+Um, but the other possibility is that these parts are the same,
+嗯，但另一种可能性是这些部分是相同的，
+
+380
+00:20:06,000 --> 00:20:07,230
+this is the subject,
+这是主题，
+
+381
+00:20:07,230 --> 00:20:08,835
+and this is the object,
+这是对象，
+
+382
+00:20:08,835 --> 00:20:12,750
+but these are whales from space which, you know,
+但这些是来自太空的鲸鱼，你知道，
+
+383
+00:20:12,750 --> 00:20:16,875
+we could have analyzed as a noun phrase goes to,
+我们可以用名词短语进行分析，
+
+384
+00:20:16,875 --> 00:20:19,050
+um, and now, on a PP,
+嗯，现在，在PP上，
+
+385
+00:20:19,050 --> 00:20:21,330
+you know, um, constituency grammar,
+你知道，嗯，选区语法，
+
+386
+00:20:21,330 --> 00:20:23,340
+but its dependency grammar we saying, "Oh,
+但它的依赖语法我们说，“哦，
+
+387
+00:20:23,340 --> 00:20:28,275
+this is now a modifier of the whales,
+现在这是鲸鱼的修饰者，
+
+388
+00:20:28,275 --> 00:20:31,200
+and that they are whales from space, um,
+他们是太空中的鲸鱼，嗯，
+
+389
+00:20:31,200 --> 00:20:34,184
+that are starting to turn up as in the bottom example."
+正如最下面的例子中那样开始出现。“
+
+390
+00:20:34,184 --> 00:20:40,440
+Right? So, obviously what you want is this one is correct and this one is here wrong.
+对？所以，显然你想要的是这个是正确的，这个错了。
+
+391
+00:20:40,440 --> 00:20:46,455
+Um, and so this choice is referred to as a prepositional phrase attachment ambiguity,
+嗯，所以这个选择被称为介词短语附件歧义，
+
+392
+00:20:46,455 --> 00:20:51,810
+and it's one of the most common ambiguities in the parsing of English, right?
+这是解析英语时最常见的含糊之处，对吧？
+
+393
+00:20:51,810 --> 00:20:55,140
+So, here's our prepositional phrase from space.
+所以，这是我们来自太空的介词短语。
+
+394
+00:20:55,140 --> 00:20:56,370
+And so in general,
+一般来说，
+
+395
+00:20:56,370 --> 00:21:00,840
+when you have prepositional phrases and before it you have verbs,
+当你有介词短语时，在它之前你有动词，
+
+396
+00:21:00,840 --> 00:21:03,480
+and noun phrases, or nouns,
+和名词短语，或名词，
+
+397
+00:21:03,480 --> 00:21:06,405
+that the prepositional phrase can modify
+介词短语可以修改
+
+398
+00:21:06,405 --> 00:21:09,525
+either of the things that come beforehand, right?
+事先发生的事情，对吧？
+
+399
+00:21:09,525 --> 00:21:12,330
+And so this is a crucial way in which
+所以这是一个至关重要的方式
+
+400
+00:21:12,330 --> 00:21:16,200
+human languages are different from programming languages, right?
+人类语言与编程语言不同，对吧？
+
+401
+00:21:16,200 --> 00:21:20,360
+In programming languages, we have hard rules
+在编程语言中，我们有严格的规则
+
+402
+00:21:20,360 --> 00:21:24,890
+as to how you meant to interpret things that dangle afterwards, right?
+至于你如何解释事后摇摆的事物，对吧？
+
+403
+00:21:24,890 --> 00:21:27,140
+So, in programming languages,
+那么，在编程语言中，
+
+404
+00:21:27,140 --> 00:21:31,765
+you have an else is always construed with the closest if.
+你有一个其他总是被解释为最接近的if。
+
+405
+00:21:31,765 --> 00:21:33,930
+Well, if that's not what you want, um,
+好吧，如果这不是你想要的，嗯，
+
+406
+00:21:33,930 --> 00:21:37,110
+you have to use parentheses or indentation or something like that.
+你必须使用括号或缩进或类似的东西。
+
+407
+00:21:37,110 --> 00:21:39,870
+I guess, it's different in Python because you have to use indentation.
+我猜，它在Python中有所不同，因为你必须使用缩进。
+
+408
+00:21:39,870 --> 00:21:43,365
+But if we think of something like C or a similar language, right?
+但如果我们想到像C或类似语言的东西，对吗？
+
+409
+00:21:43,365 --> 00:21:45,165
+Um, if you haven't used,
+嗯，如果你还没有用过，
+
+410
+00:21:45,165 --> 00:21:46,965
+um, braces to indicate,
+嗯，大括号表示，
+
+411
+00:21:46,965 --> 00:21:51,060
+it's just deterministically, the else goes with the closest if.
+它只是确定性的，否则与最接近的if一起。
+
+412
+00:21:51,060 --> 00:21:54,105
+Um, but that's not how human languages are.
+嗯，但这不是人类语言的方式。
+
+413
+00:21:54,105 --> 00:21:55,920
+Human languages are, um,
+人类语言是，嗯，
+
+414
+00:21:55,920 --> 00:21:59,940
+this prepositional phrase can go with anything proceeding,
+这个介词短语可以随着任何事情进行，
+
+415
+00:21:59,940 --> 00:22:04,485
+and the hearer is assumed to be smart enough to work out the right one.
+并且假定听者足够聪明以找出合适的人。
+
+416
+00:22:04,485 --> 00:22:07,050
+And, you know, that's actually a pa- large part of why
+而且，你知道，这实际上是一个很大的原因
+
+417
+00:22:07,050 --> 00:22:10,440
+human communication is so efficient, right?
+人际交往是如此高效，对吧？
+
+418
+00:22:10,440 --> 00:22:14,250
+Like, um, we can do such a good job at communicating with
+就像，嗯，我们可以做很好的沟通
+
+419
+00:22:14,250 --> 00:22:18,360
+each other because most of the time we don't have to say very much,
+彼此因为大多数时候我们不必多说，
+
+420
+00:22:18,360 --> 00:22:21,495
+and there's this really smart person on the other end, um,
+而另一端是真聪明的人，嗯，
+
+421
+00:22:21,495 --> 00:22:25,905
+who can interpret the words that we say in the right way.
+谁能够以正确的方式解释我们所说的话。
+
+422
+00:22:25,905 --> 00:22:31,800
+Um, so, that's where if you want to have artificial intelligence and smart computers,
+嗯，所以，如果你想拥有人工智能和智能电脑，
+
+423
+00:22:31,800 --> 00:22:37,065
+we then start to need to build language understanding devices who can also,
+然后我们开始需要构建语言理解设备，他们也可以，
+
+424
+00:22:37,065 --> 00:22:38,910
+um, work on that basis.
+嗯，在此基础上工作。
+
+425
+00:22:38,910 --> 00:22:44,985
+That they can just decide what would be the right thing for form space to modify.
+他们可以决定修改表单空间的正确方法。
+
+426
+00:22:44,985 --> 00:22:46,560
+And if we have that working really well,
+如果我们的工作得非常好，
+
+427
+00:22:46,560 --> 00:22:49,050
+we can then apply it back to programming languages,
+然后我们可以将它应用回编程语言，
+
+428
+00:22:49,050 --> 00:22:52,725
+and you could just not put in any braces in your programming languages,
+你不能在编程语言中添加任何大括号，
+
+429
+00:22:52,725 --> 00:22:55,110
+and the compiler would work out what you meant.
+编译器可以解决你的意思。
+
+430
+00:22:55,110 --> 00:22:58,575
+Um, okay. So, this is prepositional phrase attachment.
+嗯，好的。所以，这是介词短语附件。
+
+431
+00:22:58,575 --> 00:23:02,445
+It's sort of seems maybe not that hard there,
+看起来似乎并不那么难，
+
+432
+00:23:02,445 --> 00:23:04,965
+but you know, it, it gets worse, I mean,
+但你知道，它变得更糟，我的意思是，
+
+433
+00:23:04,965 --> 00:23:06,990
+this isn't as fun an example,
+这不是一个有趣的例子，
+
+434
+00:23:06,990 --> 00:23:12,465
+but it's a real example of a sentence from The Wall Street Journal actually.
+但这实际上是“华尔街日报”一句话的真实例子。
+
+435
+00:23:12,465 --> 00:23:18,120
+The board approved this acquisition by Royal Trustco Limited of Toronto for $0,27,
+董事会以0,27美元的价格批准了多伦多皇家信托有限公司的收购，
+
+436
+00:23:18,120 --> 00:23:20,955
+$27 a share at its monthly meeting.
+每月27美元的月度会议。
+
+437
+00:23:20,955 --> 00:23:22,635
+Boring sentence, but, um,
+无聊的句子，但是，嗯，
+
+438
+00:23:22,635 --> 00:23:24,660
+what is the structure of this sentence?
+这句话的结构是什么？
+
+439
+00:23:24,660 --> 00:23:26,670
+Well, you know, we've got a verb here,
+嗯，你知道，我们这里有一个动词，
+
+440
+00:23:26,670 --> 00:23:29,805
+and we've got exactly the same subject,
+我们有完全相同的主题，
+
+441
+00:23:29,805 --> 00:23:32,295
+and for this noun,
+对于这个名词，
+
+442
+00:23:32,295 --> 00:23:34,965
+um, object coming after it.
+嗯，物体追随它。
+
+443
+00:23:34,965 --> 00:23:36,570
+But then what happens after that?
+但那后会发生什么？
+
+444
+00:23:36,570 --> 00:23:38,670
+Well, here, we've got a prepositional phrase.
+好吧，在这里，我们有一个介词短语。
+
+445
+00:23:38,670 --> 00:23:40,575
+Here, we've got a prepositional phrase.
+在这里，我们有一个介词短语。
+
+446
+00:23:40,575 --> 00:23:44,700
+You've just got a see four prepositional phrases in a row.
+你刚刚连续看到四个介词短语。
+
+447
+00:23:44,700 --> 00:23:48,600
+And so, well, what we wanna
+那么，好吧，我们想要什么
+
+448
+00:23:48,600 --> 00:23:52,845
+do is say for each of these prepositional phrases what they modify,
+对于这些介词短语中的每一个，他们修改了什么，
+
+449
+00:23:52,845 --> 00:23:55,589
+and starting off there only two choices,
+从那里开始只有两个选择，
+
+450
+00:23:55,589 --> 00:23:58,020
+the verb and the noun proceeding as before.
+动词和名词一如既往地进行。
+
+451
+00:23:58,020 --> 00:24:01,590
+But it's gonna get more complicated as we go in, because look,
+但随着我们的进入，它会变得更加复杂，因为看，
+
+452
+00:24:01,590 --> 00:24:02,910
+there's another noun here,
+这里有另一个名词，
+
+453
+00:24:02,910 --> 00:24:04,245
+and another noun here,
+和另一个名词，
+
+454
+00:24:04,245 --> 00:24:06,825
+and another noun here.
+和另一个名词。
+
+455
+00:24:06,825 --> 00:24:11,475
+Um, so once we start getting further in there'll be more possibilities.
+嗯，所以一旦我们开始进一步发展，就会有更多的可能性。
+
+456
+00:24:11,475 --> 00:24:13,185
+Okay. So, let's see if we can,
+好的。那么，让我们看看我们是否可以，
+
+457
+00:24:13,185 --> 00:24:14,400
+um, work it out.
+嗯，实现它。
+
+458
+00:24:14,400 --> 00:24:18,720
+So, um, by Royal Trustco Limited, what's that modifying?
+所以，嗯，皇家信托有限公司，有什么改变？
+
+459
+00:24:18,720 --> 00:24:25,709
+[NOISE] Right. You see acquisition,
+[NOISE]对。你看到收购，
+
+460
+00:24:25,709 --> 00:24:28,800
+so it's not the board approved by Royal Trustco Limited,
+所以这不是Royal Trustco Limited批准的董事会，
+
+461
+00:24:28,800 --> 00:24:32,145
+it's an acquisition by Royal Trustco Limited.
+这是Royal Trustco Limited的收购。
+
+462
+00:24:32,145 --> 00:24:36,750
+Okay. So, this one is a dependent of the acquisition.
+好的。所以，这个是收购的依赖。
+
+463
+00:24:36,750 --> 00:24:39,975
+Okay. Um, now, we went to of Toronto,
+好的。嗯，现在，我们去了多伦多，
+
+464
+00:24:39,975 --> 00:24:41,580
+and we have three choices,
+我们有三个选择，
+
+465
+00:24:41,580 --> 00:24:43,875
+that could be this, this, or this.
+可能是这个，这个或者这个。
+
+466
+00:24:43,875 --> 00:24:48,340
+Okay. So, of Toronto is modifying.
+好的。因此，多伦多正在修改。
+
+467
+00:24:50,060 --> 00:24:51,540
+Acquisition. [NOISE]
+收购。 [噪声]
+
+468
+00:24:51,540 --> 00:24:53,010
+Its acquisition of Toronto?
+它收购多伦多？
+
+469
+00:24:53,010 --> 00:24:59,055
+[LAUGHTER] No, I think that's a wrong answer.
+[大笑]不，我认为这是一个错误的答案。
+
+470
+00:24:59,055 --> 00:25:04,080
+Um. [LAUGHTER] Is there another guess for what of Toronto is modifying?
+嗯。 [大笑]多伦多正在修改什么？
+
+471
+00:25:04,080 --> 00:25:05,640
+Royal Trustco.
+皇家信托公司。
+
+472
+00:25:05,640 --> 00:25:09,180
+Royal Trustco, right. So, it's Royal Trustco Limited of Toronto.
+皇家信托公司，对。所以，它是多伦多皇家信托有限公司。
+
+473
+00:25:09,180 --> 00:25:14,550
+So, this of Toronto is a dependent of Royal Trustco Limited.
+因此，多伦多的这家公司是Royal Trustco Limited的继承人。
+
+474
+00:25:14,550 --> 00:25:16,170
+And Royal Trustco Limited,
+和Royal Trustco Limited，
+
+475
+00:25:16,170 --> 00:25:17,580
+right, that's this again,
+对，就是这样，
+
+476
+00:25:17,580 --> 00:25:18,840
+sort of this noun phrase,
+这个名词短语，
+
+477
+00:25:18,840 --> 00:25:21,840
+so it can also have modifiers by prepositional phrase.
+所以它也可以通过介词短语来修饰。
+
+478
+00:25:21,840 --> 00:25:29,400
+Okay. For $27 a share is modifying acquisition, right?
+好的。每股27美元正在修改收购，对吧？
+
+479
+00:25:29,400 --> 00:25:32,220
+[NOISE] So now, we leap right back.
+[NOISE]现在，我们马上跳回来。
+
+480
+00:25:32,220 --> 00:25:34,320
+[NOISE] I'm drawing this wrong.
+[NOISE]我画错了。
+
+481
+00:25:34,320 --> 00:25:37,170
+Now, we leap right back and,
+现在，我们向后跳跃，
+
+482
+00:25:37,170 --> 00:25:40,350
+um, is now the acquisition that's being modified.
+嗯，现在是正在修改的收购。
+
+483
+00:25:40,350 --> 00:25:45,600
+And then finally, we have at its monthly meeting is modifying?
+最后，我们在其月度会议上正在修改？
+
+484
+00:25:45,600 --> 00:25:47,940
+[NOISE]
+[噪声]
+
+485
+00:25:47,940 --> 00:25:48,120
+Approved.
+批准。
+
+486
+00:25:48,120 --> 00:25:49,410
+Well, the approved, right?
+好吧，批准了吧？
+
+487
+00:25:49,410 --> 00:25:50,520
+It's approved, yeah.
+它被批准了，是的。
+
+488
+00:25:50,520 --> 00:25:53,055
+It's approved that its monthly meeting.
+它已经批准了它的月度会议。
+
+489
+00:25:53,055 --> 00:25:55,110
+Okay. [NOISE] I drew that on,
+好的。 [噪音]我画了，
+
+490
+00:25:55,110 --> 00:25:59,730
+[NOISE] I drew that one the wrong way around with the arrow.
+[噪音]我用箭头错误地画了那个。
+
+491
+00:25:59,730 --> 00:26:01,830
+Sorry, it should have been done this way.
+对不起，它应该是这样做的。
+
+492
+00:26:01,830 --> 00:26:05,260
+I'm getting my arrows wrong. [NOISE] Um, um.
+我的箭错了。 [NOISE]恩，嗯。
+
+493
+00:26:06,390 --> 00:26:13,670
+Okay. So that we've got this pattern of how things are modifying.
+好的。这样我们就可以了解事物的修改方式。
+
+494
+00:26:13,770 --> 00:26:17,175
+Um, [NOISE] and so actually, you know,
+嗯，[NOISE]所以实际上，你知道，
+
+495
+00:26:17,175 --> 00:26:21,390
+once you start having a lot of things that have choices like this,
+一旦你开始有很多有这样的选择的东西，
+
+496
+00:26:21,390 --> 00:26:25,165
+you stop having- if I wanna put an analysis ac-
+如果我想进行分析，你就不要再了
+
+497
+00:26:25,165 --> 00:26:29,680
+on to this sentence I've to work out the, the right structure,
+在这句话中，我要弄清楚，正确的结构，
+
+498
+00:26:29,680 --> 00:26:36,415
+I have to potentially consider an exponential number of possible structures because,
+我必须考虑指数的可能结构，因为，
+
+499
+00:26:36,415 --> 00:26:40,435
+I've got this situation where for the first prepositional phrase,
+我有这种情况，第一个介词短语，
+
+500
+00:26:40,435 --> 00:26:43,540
+there were two places that could have modified.
+有两个地方可以修改。
+
+501
+00:26:43,540 --> 00:26:45,610
+For the second prepositional phrase,
+对于第二个介词短语，
+
+502
+00:26:45,610 --> 00:26:47,965
+there are three places that could have modified.
+有三个地方可以修改。
+
+503
+00:26:47,965 --> 00:26:49,180
+For the fourth one,
+对于第四个，
+
+504
+00:26:49,180 --> 00:26:51,580
+there are five places that could have modified.
+有五个地方可以修改。
+
+505
+00:26:51,580 --> 00:26:53,605
+That just sounds like a factorial.
+这听起来像是一个因素。
+
+506
+00:26:53,605 --> 00:26:57,325
+It's not quite as bad as the factorial, because normally,
+它并不像阶乘一样糟糕，因为通常情况下，
+
+507
+00:26:57,325 --> 00:27:01,930
+once you've let back that kind of closes off the ones in the middle.
+一旦你放弃了中间的那种关闭。
+
+508
+00:27:01,930 --> 00:27:04,900
+And so, further prepositional phrases have to be
+因此，必须有进一步的介词短语
+
+509
+00:27:04,900 --> 00:27:08,140
+at least as far back in terms of what they modify.
+至少在他们修改的内容方面。
+
+510
+00:27:08,140 --> 00:27:13,000
+And so, if you get into this sort of combinatorics stuff the number of analyses you get
+所以，如果你进入这种组合学的东西，你得到的分析数量
+
+511
+00:27:13,000 --> 00:27:17,830
+when you get multiple prepositional phrases is the sequence called the Catalan numbers.
+当你得到多个介词短语时，这个序列称为加泰罗尼亚语数字。
+
+512
+00:27:17,830 --> 00:27:20,890
+Ah, but that's still an exponential series.
+啊，但这仍然是一个指数系列。
+
+513
+00:27:20,890 --> 00:27:26,080
+And it's sort of one that turns up in a lot of places when they're tree-like contexts.
+当它们像树状环境时，它会出现在许多地方。
+
+514
+00:27:26,080 --> 00:27:30,910
+So, if any of you are doing or have done CS228,
+那么，如果你们中有人在做或做过CS228，
+
+515
+00:27:30,910 --> 00:27:32,140
+where you see, um,
+在哪里看到，嗯，
+
+516
+00:27:32,140 --> 00:27:35,575
+triangular- triangulation of, ah,
+三角形三角剖分，啊，
+
+517
+00:27:35,575 --> 00:27:40,210
+probabilistic graphical models and you ask how many triangulations there are,
+概率图形模型，你问有多少三角形，
+
+518
+00:27:40,210 --> 00:27:43,375
+that's sort of like making a tree over your variables.
+这有点像在你的变量上做一棵树。
+
+519
+00:27:43,375 --> 00:27:47,605
+And that's, again, gives you the number of them as the Catalan series.
+而且，再次，它为您提供了加泰罗尼亚系列的数量。
+
+520
+00:27:47,605 --> 00:27:49,180
+Okay. But- so the point is,
+好的。但是 - 重点是，
+
+521
+00:27:49,180 --> 00:27:52,315
+we ha- end up with a lot of ambiguities.
+我们最终会有很多含糊之处。
+
+522
+00:27:52,315 --> 00:27:55,060
+Okay. So, that's prepositional phrase attachments.
+好的。所以，这是介词短语附件。
+
+523
+00:27:55,060 --> 00:27:56,950
+A lot of those going on.
+很多人都在继续。
+
+524
+00:27:56,950 --> 00:27:59,320
+They are far from the only kind of ambiguity.
+它们远非唯一的歧义。
+
+525
+00:27:59,320 --> 00:28:01,900
+So, I wanted to tell you about a few others.
+所以，我想告诉你一些其他的事情。
+
+526
+00:28:01,900 --> 00:28:08,950
+Um, okay, shuttle veteran and longtime NASA executive Fred Gregory appointed to board.
+嗯，好吧，航天飞机退伍军人和长期担任美国宇航局执行委员弗雷德格雷戈里的董事会成员。
+
+527
+00:28:08,950 --> 00:28:12,790
+Um, why is this sentence ambiguous?
+嗯，为什么这句话含糊不清？
+
+528
+00:28:12,790 --> 00:28:14,929
+What are the different reading of this statement?
+这句话的不同之处是什么？
+
+529
+00:28:14,929 --> 00:28:16,400
+[NOISE].
+[噪声]。
+
+530
+00:28:16,400 --> 00:28:20,800
+Yes?
+是？
+
+531
+00:28:20,800 --> 00:28:22,150
+Uh, it's a better [inaudible]
+呃，这是一个更好的[音频不清晰]
+
+532
+00:28:22,150 --> 00:28:24,700
+Okay. So, um, right answer.
+好的。所以，嗯，正确答案。
+
+533
+00:28:24,700 --> 00:28:26,920
+So, yeah there are two possibilities, right?
+所以，是的，有两种可能性，对吧？
+
+534
+00:28:26,920 --> 00:28:30,235
+That is either that there's somebody who's
+那要么就是那个人
+
+535
+00:28:30,235 --> 00:28:34,030
+a shuttle veteran and a long time NASA executive,
+穿梭老兵和美国宇航局长期执行，
+
+536
+00:28:34,030 --> 00:28:35,875
+and their name is Fred Gregory,
+他们的名字叫Fred Gregory，
+
+537
+00:28:35,875 --> 00:28:38,395
+and that they've been appointed to the board.
+并且他们已被任命为董事会成员。
+
+538
+00:28:38,395 --> 00:28:42,550
+Um, or, um, the other possibility
+嗯，或者，嗯，另一种可能性
+
+539
+00:28:42,550 --> 00:28:46,570
+is that there's a shuttle veteran and there's a long time NASA executive,
+这是一个航天飞机老兵，很长一段时间NASA执行官，
+
+540
+00:28:46,570 --> 00:28:51,175
+Fred Gregory, and both of them have been appointed to the board.
+弗雷德格雷戈里，他们两人都被任命为董事会成员。
+
+541
+00:28:51,175 --> 00:28:56,980
+And so, again, we can start to indicate the structure of that using our dependency.
+因此，我们再次开始使用我们的依赖关系来指示它的结构。
+
+542
+00:28:56,980 --> 00:28:58,360
+So, we can ether,
+那么，我们可以以太，
+
+543
+00:28:58,360 --> 00:29:02,980
+um, say, okay, um,
+嗯，说，好吧，嗯，
+
+544
+00:29:02,980 --> 00:29:09,955
+there's Fred Gregory and then this person is, um,
+有弗雷德格雷戈里然后这个人，嗯，
+
+545
+00:29:09,955 --> 00:29:15,205
+a shuttle veteran and long ta- and whoops,
+穿梭老兵和长ta-和呐喊，
+
+546
+00:29:15,205 --> 00:29:17,680
+and longtime NASA executive.
+和NASA的长期执行官。
+
+547
+00:29:17,680 --> 00:29:20,140
+Or we can say, well,
+或者我们可以说，好吧，
+
+548
+00:29:20,140 --> 00:29:28,690
+we're doing appointment of a veteran and the longtime NASA executive, Fred Gregory.
+我们正在任命退伍军人和美国宇航局长期执行官弗雷德格雷戈里。
+
+549
+00:29:28,690 --> 00:29:31,060
+And so, we can represent by dependencies,
+所以，我们可以通过依赖来表示，
+
+550
+00:29:31,060 --> 00:29:33,715
+um, these two different structures.
+嗯，这两种不同的结构。
+
+551
+00:29:33,715 --> 00:29:37,645
+Okay. Um, that's, um, one.
+好的。嗯，那个，嗯，一个。
+
+552
+00:29:37,645 --> 00:29:40,120
+Um, That one is not very funny again.
+嗯，那个又不是很好笑。
+
+553
+00:29:40,120 --> 00:29:45,775
+So- so, here's a funnier example that illustrates the same ambiguity effectively.
+所以，这是一个更有趣的例子，有效地说明了同样的模糊性。
+
+554
+00:29:45,775 --> 00:29:49,630
+Um, so, here's precedence first physical.
+嗯，所以，这里首先是物理上的优先权。
+
+555
+00:29:49,630 --> 00:29:52,570
+Doctor: No heart, cognitive issues.
+医生：没有心脏，认知问题。
+
+556
+00:29:52,570 --> 00:29:56,590
+[LAUGHTER] Um, so, there isn't actually an explicit,
+[大笑]嗯，所以，实际上没有明确的，
+
+557
+00:29:56,590 --> 00:29:59,620
+um, coordination word here.
+嗯，协调一词在这里。
+
+558
+00:29:59,620 --> 00:30:02,830
+But effectively in, um,
+但有效地，嗯，
+
+559
+00:30:02,830 --> 00:30:06,445
+a natural language or certainly English, um,
+一种自然语言或当然是英语，嗯，
+
+560
+00:30:06,445 --> 00:30:11,170
+you can use kind of just comma of sort of list intonation
+你可以使用一种列表语调的逗号
+
+561
+00:30:11,170 --> 00:30:16,300
+to effectively act as if it was an "And" or an "Or", right?
+有效地表现得像是“和”或“或”，对吧？
+
+562
+00:30:16,300 --> 00:30:22,645
+So, here, um, we have again two possibilities that either we have
+所以，在这里，嗯，我们还有两种可能性
+
+563
+00:30:22,645 --> 00:30:26,650
+issues and the dep- and the dependencies
+问题和dep-和依赖
+
+564
+00:30:26,650 --> 00:30:31,240
+of- the dependencies of issues is that there are no issues.
+- 问题的依赖性是没有问题。
+
+565
+00:30:31,240 --> 00:30:36,025
+So, that's actually a determiner, ah, no issues.
+所以，这实际上是一个决定因素，啊，没有问题。
+
+566
+00:30:36,025 --> 00:30:40,210
+Um, and then it's sort of like no heart or cognitive issues.
+嗯，然后它有点像没有心脏或认知问题。
+
+567
+00:30:40,210 --> 00:30:42,790
+So, heart is another dependent.
+所以，心脏是另一种依赖。
+
+568
+00:30:42,790 --> 00:30:45,610
+It's sort of a non-compound heart issues.
+这是一种非复合心脏问题。
+
+569
+00:30:45,610 --> 00:30:48,745
+And so, we refer to that as an independency,
+所以，我们将其称为独立性，
+
+570
+00:30:48,745 --> 00:30:53,890
+and then it's heart or, um, cognitive.
+然后它是心脏，或者，嗯，认知。
+
+571
+00:30:53,890 --> 00:30:57,040
+Um, so that heart or cognitive is
+嗯，所以心脏或认知是
+
+572
+00:30:57,040 --> 00:31:03,400
+a conjoined phrase inside of this "No heart" or "Cognitive issues".
+这个“无心”或“认知问题”中的联合短语。
+
+573
+00:31:03,400 --> 00:31:05,410
+But there's another possibility,
+但还有另一种可能性，
+
+574
+00:31:05,410 --> 00:31:07,075
+um, which is, um,
+嗯，嗯，
+
+575
+00:31:07,075 --> 00:31:14,470
+that the coordination is at the top level that we have "No heart" and "Cognitive issues".
+协调处于最高水平，我们有“无心”和“认知问题”。
+
+576
+00:31:14,470 --> 00:31:16,885
+And, um, at that point,
+而且，嗯，那时，
+
+577
+00:31:16,885 --> 00:31:23,604
+we ha- have the "Cognitive" as an adjective modifier of the "Issues" and the "No heart",
+我们将“认知”作为“问题”和“无心”的形容词修饰语，
+
+578
+00:31:23,604 --> 00:31:26,410
+the determiner is just a modifier of "Heart",
+确定者只是“心脏”的修饰语，
+
+579
+00:31:26,410 --> 00:31:29,530
+and then these being conjoined together.
+然后这些被连在一起。
+
+580
+00:31:29,530 --> 00:31:36,920
+So, um, "Heart" has a depend- has a coordinated dependency of "Issues".
+所以，嗯，“心脏”依赖于“问题”的协调依赖。
+
+581
+00:31:37,020 --> 00:31:40,880
+Okay. That's one one.
+好的。这是一个。
+
+582
+00:31:40,980 --> 00:31:44,005
+Um, I've got more funny ones.
+嗯，我有更多有趣的。
+
+583
+00:31:44,005 --> 00:31:48,580
+Susan gets- [NOISE] [LAUGHTER] Okay.
+苏珊得到 -  [NOISE] [大笑]好的。
+
+584
+00:31:48,580 --> 00:31:52,240
+So, what the person [LAUGHTER] who wrote this intended to
+那么，写这篇文章的人是什么人[笑声]
+
+585
+00:31:52,240 --> 00:31:57,460
+have is that there- we- Here we've got an adjective modifier ambiguity.
+我们有一个形容词修饰语歧义。
+
+586
+00:31:57,460 --> 00:32:00,490
+So, the intended reading was, um,
+那么，预期的阅读是，嗯，
+
+587
+00:32:00,490 --> 00:32:08,935
+that "First" is an adjectival modifier of "First hand" and it's firsthand experience.
+“First”是“第一手”的形容词修饰语，是第一手经验。
+
+588
+00:32:08,935 --> 00:32:12,700
+Um, so, the "First hand" is a modifier of
+嗯，所以，“第一手”是一个修饰语
+
+589
+00:32:12,700 --> 00:32:18,295
+"Experience" and the "Job" is also a modifier of "Experience".
+“经验”和“工作”也是“经验”的修饰语。
+
+590
+00:32:18,295 --> 00:32:21,265
+And then we have the same kind of subject,
+然后我们有同样的主题，
+
+591
+00:32:21,265 --> 00:32:26,275
+object, um, reading on that one.
+对象，嗯，读那个。
+
+592
+00:32:26,275 --> 00:32:31,810
+Um, but unfortunately, um, this sentence, um,
+嗯，但不幸的是，嗯，这句话，嗯，
+
+593
+00:32:31,810 --> 00:32:34,585
+has a different reading, um,
+有一个不同的阅读，嗯，
+
+594
+00:32:34,585 --> 00:32:38,050
+where you change the modification relationships.
+您在哪里更改修改关系。
+
+595
+00:32:38,050 --> 00:32:47,830
+Um, and you have it's the first experience and it goes like this. Um. [LAUGHTER] Okay.
+嗯，你有它的第一次体验，就像这样。嗯。 [大笑]好的。
+
+596
+00:32:47,830 --> 00:32:50,395
+[NOISE] One more example.
+[NOISE]还有一个例子。
+
+597
+00:32:50,395 --> 00:32:57,265
+Um, "Mutilated body washes up on Rio beach to be used for Olympics beach volleyball."
+嗯，“残缺不全的身体在里约海滩上冲洗，用于奥运会沙滩排球。”
+
+598
+00:32:57,265 --> 00:33:01,780
+Um, wha- what are- [LAUGHTER]
+嗯，什么 -  [大笑]
+
+599
+00:33:01,780 --> 00:33:06,100
+what are the two ambigui- What are the two readings that you can get for this one?
+两个ambigui是什么 - 你能为这个获得两个读数是什么？
+
+600
+00:33:06,100 --> 00:33:11,860
+[NOISE]
+[噪声]
+
+601
+00:33:11,860 --> 00:33:15,610
+We've got this big phrase that I want to try and put
+我们有这个我想尝试和放的大词
+
+602
+00:33:15,610 --> 00:33:20,305
+a structure of to be used for Olympic beach volleyball,
+一种用于奥运沙滩排球的结构，
+
+603
+00:33:20,305 --> 00:33:22,300
+um, and then, you know,
+嗯，然后，你知道，
+
+604
+00:33:22,300 --> 00:33:26,170
+this is sort of like a prepositional phrase attachment ambiguity
+这有点像介词短语附件歧义
+
+605
+00:33:26,170 --> 00:33:30,715
+but this time instead of it's a prepositional phrase that's being attached,
+但这一次，而不是它是一个附加的介词短语，
+
+606
+00:33:30,715 --> 00:33:34,060
+we've now got this big verb phrase we call it, right,
+我们现在有了这个我们称之为动词的大词，对，
+
+607
+00:33:34,060 --> 00:33:37,960
+so that when you've sort of got most of a sentence but without any subject to it,
+所以，当你有一个大部分的句子，但没有任何条件，
+
+608
+00:33:37,960 --> 00:33:40,510
+that's sort of a verb phrase to be used for
+这是一种用于动词的动词
+
+609
+00:33:40,510 --> 00:33:44,095
+Olympic beach volleyball which might be then infinitive form.
+奥运沙滩排球可能是不定形式。
+
+610
+00:33:44,095 --> 00:33:48,850
+Sometimes it's in part of CPO form like being used for beach volleyball.
+有时它是CPO形式的一部分，就像用于沙滩排球一样。
+
+611
+00:33:48,850 --> 00:33:54,970
+And really, those kind of verb phrases they sort of just like, um, prepositional phrases.
+实际上，那些动词短语他们就像是，介词短语。
+
+612
+00:33:54,970 --> 00:33:58,120
+Whenever they appear towards the right end of sentences,
+每当它们出现在句子的右端时，
+
+613
+00:33:58,120 --> 00:34:01,840
+they can modify various things like verbs or nouns.
+他们可以修改动词或名词等各种内容。
+
+614
+00:34:01,840 --> 00:34:05,830
+Um, so, here, um, we have two possibilities.
+嗯，所以，在这里，嗯，我们有两种可能性。
+
+615
+00:34:05,830 --> 00:34:09,070
+So, this to be used for Olympics beach volleyball.
+所以，这个用于奥运沙滩排球。
+
+616
+00:34:09,070 --> 00:34:14,650
+Um, what the right answer is meant to be is that that is a dependent of the Rio beach.
+嗯，正确答案的意思是，这是里约海滩的依赖。
+
+617
+00:34:14,650 --> 00:34:15,835
+So, it's a, um,
+所以，这是一个，嗯，
+
+618
+00:34:15,835 --> 00:34:18,475
+modifier of the Rio Beach.
+里约海滩的修改者。
+
+619
+00:34:18,475 --> 00:34:20,845
+Um, but the funny reading is,
+嗯，但有趣的是，
+
+620
+00:34:20,845 --> 00:34:23,380
+um, that instead of that, um,
+嗯，那不是那个，嗯，
+
+621
+00:34:23,380 --> 00:34:28,135
+we can have here is another noun phrase muti- mutilated body,
+我们可以在这里有另一个名词短语多重身体，
+
+622
+00:34:28,135 --> 00:34:32,425
+um, and it's the mutilated body that's going to be used.
+嗯，这是将被使用的残缺的身体。
+
+623
+00:34:32,425 --> 00:34:35,590
+Um, and so then this would be, uh,
+嗯，那么这就是，呃，
+
+624
+00:34:35,590 --> 00:34:39,820
+a noun phrase modifier [NOISE] of that.
+一个名词短语修饰符[NOISE]。
+
+625
+00:34:39,820 --> 00:34:45,430
+Okay. Um, so knowing the right structure of sentences is
+好的。嗯，所以知道句子的正确结构是
+
+626
+00:34:45,430 --> 00:34:48,130
+important to understand the interpretations you're
+了解你的解释很重要
+
+627
+00:34:48,130 --> 00:34:51,775
+meant to get and the interpretations you're not meant to get.
+意味着得到你想要得到的解释。
+
+628
+00:34:51,775 --> 00:34:55,330
+Okay. But it's, it's sort of, um, okay,
+好的。但它是，它有点，嗯，没关系，
+
+629
+00:34:55,330 --> 00:34:58,780
+you know, I was using funny examples for the obvious reason, but, you know,
+你知道，我使用有趣的例子是显而易见的原因，但是，你知道，
+
+630
+00:34:58,780 --> 00:35:01,720
+this is sort of essential to all the things that
+这对所有事情都至关重要
+
+631
+00:35:01,720 --> 00:35:05,140
+we'd like to get out of language most of the time.
+我们大多数时候都想摆脱语言。
+
+632
+00:35:05,140 --> 00:35:07,180
+So, you know, this is back to the kind of
+所以，你知道，这又回到了那种状态
+
+633
+00:35:07,180 --> 00:35:10,240
+boring stuff that we often work with of reading through
+我们经常阅读的无聊的东西
+
+634
+00:35:10,240 --> 00:35:14,170
+biomedical research articles and trying to extract facts
+生物医学研究文章并试图提取事实
+
+635
+00:35:14,170 --> 00:35:18,220
+about protein-protein interactions from them or something like that.
+关于蛋白质 - 蛋白质相互作用或类似的东西。
+
+636
+00:35:18,220 --> 00:35:19,720
+So, you know, this is, um,
+所以，你知道，这是，嗯，
+
+637
+00:35:19,720 --> 00:35:28,465
+the results demonstrated that KaiC interacts rhythmically with SasA Ka- KaiA and KaiB.
+结果表明，KaiC与SasA Ka-KaiA和KaiB有节奏地互动。
+
+638
+00:35:28,465 --> 00:35:33,550
+Um, and well, [NOISE] I turned the notification's off.
+嗯，好吧，[NOISE]我关闭了通知。
+
+639
+00:35:33,550 --> 00:35:40,705
+[NOISE] Um, so, if we wanna get out sort of protein-protein interaction,
+[NOISE]嗯，如果我们想要摆脱蛋白质 - 蛋白质的相互作用，
+
+640
+00:35:40,705 --> 00:35:42,130
+um, facts, you know, well,
+嗯，事实，你知道，嗯，
+
+641
+00:35:42,130 --> 00:35:47,395
+we have this KaiC that's interacting with these other proteins over there.
+我们有这个KaiC，它与那些其他蛋白质相互作用。
+
+642
+00:35:47,395 --> 00:35:53,560
+And well, the way we can do that is looking at patterns in our dependency analysis,
+而且，我们可以这样做的方法是查看依赖性分析中的模式，
+
+643
+00:35:53,560 --> 00:35:56,245
+and so that we can sort of, um,
+所以我们可以这样，嗯，
+
+644
+00:35:56,245 --> 00:36:00,055
+see this repeated pattern where you have, um,
+看到这个重复的模式，你有，嗯，
+
+645
+00:36:00,055 --> 00:36:07,930
+the noun subject here interacts with a noun modifier,
+这里的名词主题与名词修饰语交互，
+
+646
+00:36:07,930 --> 00:36:12,760
+and then it's going to be these things that are beneath that of the SasA
+那么这些东西将会落在SasA之下
+
+647
+00:36:12,760 --> 00:36:18,055
+and its conjoin things KaiA and KaiB are the things that interacts with.
+它的联合事物KaiA和KaiB是与之相互作用的东西。
+
+648
+00:36:18,055 --> 00:36:24,340
+So, we can kind of think of these two things as essentially, um, patterns.
+所以，我们可以把这两件事看作是基本的，嗯，模式。
+
+649
+00:36:24,340 --> 00:36:26,920
+[NOISE] I actually mis-edited this.
+[NOISE]我实际上误编了这个。
+
+650
+00:36:26,920 --> 00:36:29,170
+Sorry. This should also be nmod:with.
+抱歉。这也应该是nmod：with。
+
+651
+00:36:29,170 --> 00:36:33,910
+[NOISE] Um, we can kind of think of
+[NOISE]嗯，我们可以想到
+
+652
+00:36:33,910 --> 00:36:36,010
+these two things as sort of patterns and
+这两件事作为一种模式和
+
+653
+00:36:36,010 --> 00:36:40,315
+dependencies that we could look for to find examples of,
+我们可以寻找的依赖项，
+
+654
+00:36:40,315 --> 00:36:46,495
+um, just protein-protein interactions that appear in biomedical text.
+嗯，只是生物医学文本中出现的蛋白质 - 蛋白质相互作用。
+
+655
+00:36:46,495 --> 00:36:51,940
+Okay. Um, so that's the general idea of what we wanna do,
+好的。嗯，这就是我们想要做的一般想法，
+
+656
+00:36:51,940 --> 00:36:55,690
+and so the total we want to do it with is these Dependency Grammars.
+因此，我们想要做的总是这些依赖性语法。
+
+657
+00:36:55,690 --> 00:36:59,305
+And so, I've sort of shown you some Dependency Grammars.
+所以，我有点向你展示了一些依赖性语法。
+
+658
+00:36:59,305 --> 00:37:03,280
+I just want us to sort of motivate Dependency Grammar a bit more,
+我只是想让我们更多地激励依赖语法，
+
+659
+00:37:03,280 --> 00:37:05,830
+um, formally and fully, right?
+嗯，正式和完全，对吧？
+
+660
+00:37:05,830 --> 00:37:08,365
+So, Dependency Grammar, um,
+那么，Dependency Grammar，嗯，
+
+661
+00:37:08,365 --> 00:37:13,210
+postulates the what is syntactic structure is is that you have, um,
+假设你的语法结构是什么，嗯，
+
+662
+00:37:13,210 --> 00:37:15,970
+relations between lexical items that are sort of
+词汇项之间的关系
+
+663
+00:37:15,970 --> 00:37:19,690
+binary asymmetric relations which we draw as arrows,
+二进制不对称关系，我们绘制为箭头，
+
+664
+00:37:19,690 --> 00:37:21,520
+because they are binary and asymmetric,
+因为它们是二元和不对称的
+
+665
+00:37:21,520 --> 00:37:23,890
+and we call dependencies.
+我们称之为依赖。
+
+666
+00:37:23,890 --> 00:37:26,290
+And there's sort of two ways, common ways,
+有两种方式，常见的方式，
+
+667
+00:37:26,290 --> 00:37:29,290
+of writing them, and I've sort of shown both now.
+写它们，我现在已经显示出来了。
+
+668
+00:37:29,290 --> 00:37:33,565
+One way is you sort of put the words in a line and that makes it.
+一种方法是你把这些单词放在一行中就可以了。
+
+669
+00:37:33,565 --> 00:37:35,680
+He see, let's see the whole sentence.
+他看，让我们看看整个句子。
+
+670
+00:37:35,680 --> 00:37:38,470
+You draw this sort of loopy arrows above them and
+你在它们上方画出这种环状箭头
+
+671
+00:37:38,470 --> 00:37:41,905
+the other way is you sort of more represent it as a tree,
+另一种方式是你更像是一棵树，
+
+672
+00:37:41,905 --> 00:37:44,470
+where you put the head of the whole sentence at the top,
+你把整个句子的头部放在顶部，
+
+673
+00:37:44,470 --> 00:37:49,240
+submitted and then you say the dependence of submitted,
+提交然后你说提交的依赖，
+
+674
+00:37:49,240 --> 00:37:51,970
+uh, bills were in Brownback and then you say,
+呃，账单是在布朗巴克，然后你说，
+
+675
+00:37:51,970 --> 00:37:54,250
+um, the dependence of each of those.
+嗯，每个人的依赖性。
+
+676
+00:37:54,250 --> 00:37:58,240
+Um, so, it was bills on ports and immigration.
+嗯，这是关于港口和移民的法案。
+
+677
+00:37:58,240 --> 00:38:01,840
+So, the dependence of bills and were submitted words,
+所以，账单的依赖性和提交的单词，
+
+678
+00:38:01,840 --> 00:38:05,755
+the dependent of submitted and you're giving this kind of tree structure.
+提交的依赖，你给这种树结构。
+
+679
+00:38:05,755 --> 00:38:12,700
+Okay. Um, so, in addition to the arrows commonly what we do is we
+好的。嗯，所以，除了箭头，我们通常做的是我们
+
+680
+00:38:12,700 --> 00:38:19,120
+put a type on each arrow which says what grammatical relations holding them between them.
+在每个箭头上加上一个类型，说明它们之间存在什么语法关系。
+
+681
+00:38:19,120 --> 00:38:21,640
+So, is this the subject of the sentence?
+那么，这是句子的主题吗？
+
+682
+00:38:21,640 --> 00:38:23,620
+Is it the object of the verb?
+它是动词的对象吗？
+
+683
+00:38:23,620 --> 00:38:25,225
+Is that a, um,
+那是一个，嗯，
+
+684
+00:38:25,225 --> 00:38:27,280
+a conjunct and things like that?
+合相等等？
+
+685
+00:38:27,280 --> 00:38:30,550
+We have a system of dependency labels.
+我们有一个依赖标签系统。
+
+686
+00:38:30,550 --> 00:38:32,815
+Um, so, for the assignment,
+嗯，对于任务，
+
+687
+00:38:32,815 --> 00:38:36,910
+what we're gonna do is use universal dependencies,
+我们要做的是使用通用依赖，
+
+688
+00:38:36,910 --> 00:38:38,140
+which I'll show you more,
+我会告诉你更多，
+
+689
+00:38:38,140 --> 00:38:39,955
+a little bit more in a minute.
+一分钟多一点。
+
+690
+00:38:39,955 --> 00:38:41,125
+And if you think,
+如果你认为，
+
+691
+00:38:41,125 --> 00:38:42,790
+"Man, this stuff is fascinating.
+“伙计，这东西很吸引人。
+
+692
+00:38:42,790 --> 00:38:45,250
+I wanna learn all about these linguist structures."
+我想学习这些语言学家的所有结构。“
+
+693
+00:38:45,250 --> 00:38:47,830
+Um, there's a universal dependency site, um,
+嗯，有一个通用依赖站点，嗯，
+
+694
+00:38:47,830 --> 00:38:50,860
+that you go and can go off and look at it and learn all about them.
+你去了，可以去看看它，并了解它们的一切。
+
+695
+00:38:50,860 --> 00:38:54,100
+But, if you don't think that's fascinating, um,
+但是，如果你不认为这很有意思，嗯，
+
+696
+00:38:54,100 --> 00:38:56,365
+for what we're doing for this class,
+为了我们为这堂课所做的一切，
+
+697
+00:38:56,365 --> 00:38:59,095
+we're never gonna make use of these labels.
+我们永远不会使用这些标签。
+
+698
+00:38:59,095 --> 00:39:02,620
+All we're doing is making use of the arrows.
+我们所做的只是利用箭头。
+
+699
+00:39:02,620 --> 00:39:04,165
+And for the arrows,
+而对于箭头，
+
+700
+00:39:04,165 --> 00:39:08,590
+you should be able to interpret things like prepositional phrases as to what they're
+你应该能够解释介词短语之类的东西
+
+701
+00:39:08,590 --> 00:39:10,930
+modifying just in terms of where
+只是在哪里修改
+
+702
+00:39:10,930 --> 00:39:15,430
+the prepositional phrases are connected and whether that's right or wrong.
+介词短语是相互关联的，无论是对还是错。
+
+703
+00:39:15,430 --> 00:39:18,070
+Okay. Yes. So formally,
+好的。是。正式地说，
+
+704
+00:39:18,070 --> 00:39:20,695
+when we have this kind of Dependency Grammar,
+当我们有这种依赖语法时，
+
+705
+00:39:20,695 --> 00:39:24,310
+we've sort of drawing these arrows and we sort of refer to
+我们有点画这些箭，我们有点参考
+
+706
+00:39:24,310 --> 00:39:28,390
+the thing at this end as the head of a dependency.
+在这一端的事情作为依赖的头。
+
+707
+00:39:28,390 --> 00:39:33,025
+And the thing at this end as the dependent of the dependency.
+而在这一端的事情依赖于依赖。
+
+708
+00:39:33,025 --> 00:39:36,910
+And as in these examples are normal expectation
+正如在这些例子中是正常的期望
+
+709
+00:39:36,910 --> 00:39:41,170
+and what our policies are gonna do is the dependencies form a tree.
+我们的政策将要做的是树的依赖性。
+
+710
+00:39:41,170 --> 00:39:44,274
+So, it's a connected acyclic single,
+所以，它是一个连接的非循环单，
+
+711
+00:39:44,274 --> 00:39:47,635
+um, rooted graph at the end of the day.
+嗯，在一天结束时生根图。
+
+712
+00:39:47,635 --> 00:39:52,855
+Okay. So, Dependency Grammar has an enormously long history.
+好的。因此，依赖语法有着悠久的历史。
+
+713
+00:39:52,855 --> 00:39:59,110
+So, basically, the famous first linguists that human beings know about his Panini who,
+所以，基本上，着名的第一个语言学家，人类知道他的帕尼尼，
+
+714
+00:39:59,110 --> 00:40:02,125
+um, wrote in the fifth century before the Common Era
+嗯，在共同时代之前的第五世纪写道
+
+715
+00:40:02,125 --> 00:40:05,470
+and tried to describe the structure of Sanskrit.
+并试图描述梵语的结构。
+
+716
+00:40:05,470 --> 00:40:09,610
+And a lot of what Panini did was working out things about all of
+帕尼尼所做的很多事情都是关于所有事情的
+
+717
+00:40:09,610 --> 00:40:14,035
+the morphology of Sanskrit that I'm not gonna touch at the moment.
+梵文的形态，我此刻不会碰。
+
+718
+00:40:14,035 --> 00:40:19,330
+But beyond that, he started trying to describe the structure of Sanskrit sentences.
+但除此之外，他开始试图描述梵文句子的结构。
+
+719
+00:40:19,330 --> 00:40:23,335
+And, um, the notation was sort of different but, essentially,
+而且，嗯，这种符号有点不同，但基本上，
+
+720
+00:40:23,335 --> 00:40:26,290
+the mechanism he used for describing the structure of
+他用来描述结构的机制
+
+721
+00:40:26,290 --> 00:40:29,770
+Sanskrit was dependencies of sort of working out these,
+梵语依赖于解决这些问题，
+
+722
+00:40:29,770 --> 00:40:35,740
+um, what are arguments in modifies of what relationships like we've been looking at.
+嗯，什么是改变我们一直在关注的关系的论点。
+
+723
+00:40:35,740 --> 00:40:40,840
+And indeed, if you look at kind of the history of humankind, um,
+事实上，如果你看一下人类的历史，嗯，
+
+724
+00:40:40,840 --> 00:40:44,380
+most of attempts to understand the structure of
+大多数人试图了解其结构
+
+725
+00:40:44,380 --> 00:40:48,010
+human languages are essentially Dependency Grammars.
+人类语言本质上是依赖性语法。
+
+726
+00:40:48,010 --> 00:40:52,870
+Um, so, sort of in the later parts of the first millennium,
+嗯，所以，在第一个千年的后期，
+
+727
+00:40:52,870 --> 00:40:56,680
+there was a ton of work by Arabic grammarians and essentially what
+阿拉伯语语法学家有很多工作，基本上是什么
+
+728
+00:40:56,680 --> 00:41:00,670
+they used is also kind of basically a Dependency Grammar.
+他们使用的也是一种基本上是依赖语法。
+
+729
+00:41:00,670 --> 00:41:03,325
+Um, so compared to that, you know,
+嗯，相比之下，你知道，
+
+730
+00:41:03,325 --> 00:41:05,740
+the idea of context-free grammars and
+无上下文语法和语法的概念
+
+731
+00:41:05,740 --> 00:41:10,120
+phrase structure grammars is incredibly incredibly new.
+短语结构语法是令人难以置信的新奇。
+
+732
+00:41:10,120 --> 00:41:12,430
+I mean, you can basically, um, totally date it.
+我的意思是，你基本上可以，完全约会它。
+
+733
+00:41:12,430 --> 00:41:16,570
+There was this guy Wells in 1947 who first proposed
+1947年有一个人韦尔斯首次提出
+
+734
+00:41:16,570 --> 00:41:20,980
+this idea of having these constituents and phrase structure grammars,
+这个有这些成分和短语结构语法的想法，
+
+735
+00:41:20,980 --> 00:41:25,510
+and where it then became really famous is through the work of Chomsky, um,
+然后它真正出名的地方是通过乔姆斯基的工作，嗯，
+
+736
+00:41:25,510 --> 00:41:29,725
+which love him or hate him is by far the most famous, um,
+爱他或恨他的是迄今为止最着名的，嗯，
+
+737
+00:41:29,725 --> 00:41:34,015
+linguist and also variously contributed to Computer Science.
+语言学家也为计算机科学做出了各种贡献。
+
+738
+00:41:34,015 --> 00:41:35,800
+Who's head of the Chomsky hierarchy?
+谁是乔姆斯基等级制度的负责人？
+
+739
+00:41:35,800 --> 00:41:37,615
+Do people remember that 103?
+人们还记得103吗？
+
+740
+00:41:37,615 --> 00:41:40,210
+Yeah. Okay, the Chomsky hierarchy,
+是啊。好的，乔姆斯基的等级，
+
+741
+00:41:40,210 --> 00:41:46,375
+the Chomsky hierarchy was not invented to torture beginning computer science students.
+乔姆斯基的等级制度不是为了折磨计算机科学专业的学生而发明的。
+
+742
+00:41:46,375 --> 00:41:51,265
+The Chomsky hierarchy was invented because Chomsky wanted to make
+乔姆斯基的等级制度是因为乔姆斯基想要制造而发明的
+
+743
+00:41:51,265 --> 00:41:57,020
+arguments as to what the complexity of human languages was, um.
+关于人类语言的复杂性的争论，嗯。
+
+744
+00:41:57,020 --> 00:42:00,120
+Okay. Yeah. So, in modern work,
+好的。是啊。所以，在现代工作中，
+
+745
+00:42:00,120 --> 00:42:03,180
+uh, there's this guy Lucie Tesniere.
+呃，这个家伙Lucie Tesniere。
+
+746
+00:42:03,180 --> 00:42:06,120
+Um, and he sort of formalized
+嗯，他有点正式化了
+
+747
+00:42:06,120 --> 00:42:09,755
+the kind of version of dependency grammar that I've been showing you.
+我一直在向你展示的那种依赖语法。
+
+748
+00:42:09,755 --> 00:42:13,375
+So, um we sort of often talk about his work.
+所以，我们经常谈论他的工作。
+
+749
+00:42:13,375 --> 00:42:18,250
+And you know it's- it's long-term being influential and computational linguistics.
+而且你知道它是长期的有影响力和计算语言学。
+
+750
+00:42:18,250 --> 00:42:20,315
+Some of the earliest parsing work in
+一些最早的解析工作
+
+751
+00:42:20,315 --> 00:42:23,435
+US Computational Linguistics was dependency grammars.
+美国计算语言学是依赖语法。
+
+752
+00:42:23,435 --> 00:42:27,030
+But I won't go on about that um more now.
+但我现在不再继续谈论那个了。
+
+753
+00:42:27,030 --> 00:42:29,780
+Okay. Um, just one,
+好的。嗯，只有一个，
+
+754
+00:42:29,780 --> 00:42:32,635
+two little things um, to note.
+嗯，要注意两件小事。
+
+755
+00:42:32,635 --> 00:42:37,434
+I mean, if you somehow start looking at other papers where their dependency grammars,
+我的意思是，如果你以某种方式开始查看其他依赖语法的论文，
+
+756
+00:42:37,434 --> 00:42:42,230
+people aren't consistent on which way to have the arrows point.
+人们对箭头指向的方式不一致。
+
+757
+00:42:42,230 --> 00:42:46,115
+There's sort of two ways of thinking about this um,
+有两种方式来思考这个，
+
+758
+00:42:46,115 --> 00:42:49,090
+that you can either think okay,
+那你可以想想没关系，
+
+759
+00:42:49,090 --> 00:42:53,575
+I'm gonna start at the head and point to the dependent.
+我要从头开始指向依赖者。
+
+760
+00:42:53,575 --> 00:42:57,660
+Or you can say I'm going to start at the dependent and say what its head is,
+或者你可以说我将从依赖开始说出它的头是什么，
+
+761
+00:42:57,660 --> 00:42:59,080
+and you find both of them.
+你找到了他们两个。
+
+762
+00:42:59,080 --> 00:43:04,425
+Uh, the way we're gonna do it in this class is to do it the way Tesniere did it,
+呃，我们在这堂课上要做的就是按照Tesniere的方式去做，
+
+763
+00:43:04,425 --> 00:43:08,490
+which was she started the head and pointed to the dependent.
+这是她开始头，并指向依赖。
+
+764
+00:43:08,490 --> 00:43:11,360
+Uh, sorry. I'm drawing that wrong.
+呃，对不起。我画错了。
+
+765
+00:43:11,360 --> 00:43:14,920
+Whoops, um because discussion of the outstanding issues.
+哎呀，因为讨论了悬而未决的问题。
+
+766
+00:43:14,920 --> 00:43:19,495
+So, really um, the dependent is sort of discussion.
+所以，真的嗯，依赖是一种讨论。
+
+767
+00:43:19,495 --> 00:43:22,065
+Um, okay. We go from heads to dependence.
+嗯，好的。我们从头到依赖。
+
+768
+00:43:22,065 --> 00:43:26,880
+And usually, it's convenient to serve in addition to the sentence to
+通常，除了句子之外，服务也很方便
+
+769
+00:43:26,880 --> 00:43:31,790
+sort of have a fake root node that points to the head of the whole sentence.
+有一个假根节点指向整个句子的头部。
+
+770
+00:43:31,790 --> 00:43:34,250
+So, we use that as well.
+所以，我们也使用它。
+
+771
+00:43:34,250 --> 00:43:42,825
+Okay. Um, so to build a dependency pauses or to indeed build
+好的。嗯，所以建立一个依赖暂停或确实构建
+
+772
+00:43:42,825 --> 00:43:47,679
+any kind of human language structure
+任何一种人类语言结构
+
+773
+00:43:47,679 --> 00:43:51,530
+finders including kind of constituency grammar pauses,
+发现者包括选区的语法停顿，
+
+774
+00:43:51,530 --> 00:43:55,470
+the central tool in recent work,
+近期工作的核心工具，
+
+775
+00:43:55,470 --> 00:44:03,185
+where recent work kind of means the last 25 years has been this idea of tree banks.
+最近的工作意味着过去25年来树木银行的这种想法。
+
+776
+00:44:03,185 --> 00:44:08,160
+Um, and the idea of tree banks is to say we are going to get
+嗯，树库的想法就是说我们会得到
+
+777
+00:44:08,160 --> 00:44:15,605
+human beings to sit around and [NOISE] put grammatical structures over sentences.
+人类坐在那里[噪音]把语法结构放在句子上。
+
+778
+00:44:15,605 --> 00:44:17,660
+So, here are some examples I'm showing you from
+所以，这里有一些我向你展示的例子
+
+779
+00:44:17,660 --> 00:44:22,070
+Universal Dependencies where here are some um, English sentences.
+普遍依赖，这里有一些英文句子。
+
+780
+00:44:22,070 --> 00:44:25,445
+I think Miramar was a famous goat trainer or something.
+我认为Miramar是一位着名的山羊训练师。
+
+781
+00:44:25,445 --> 00:44:28,530
+And some human being has sat and put
+有些人已经坐下来放了
+
+782
+00:44:28,530 --> 00:44:31,760
+a dependency structure over this sentence and all the rest.
+这句话和其他所有的依赖结构。
+
+783
+00:44:31,760 --> 00:44:34,854
+Um, and with the name Universal Dependencies,
+嗯，名字叫Universal Dependencies，
+
+784
+00:44:34,854 --> 00:44:36,385
+this is just an aside.
+这只是一个旁边。
+
+785
+00:44:36,385 --> 00:44:40,655
+Um, Universal Dependencies is actually project I've been strongly involved with.
+嗯，Universal Dependencies实际上是我一直积极参与的项目。
+
+786
+00:44:40,655 --> 00:44:43,735
+But precisely what the goal of universal dependencies
+但恰恰是普遍依赖的目标
+
+787
+00:44:43,735 --> 00:44:47,435
+was is to say what we'd like to do is have
+就是说我们想要做的就是拥有
+
+788
+00:44:47,435 --> 00:44:50,090
+a uniform parallel system of
+一个统一的并行系统
+
+789
+00:44:50,090 --> 00:44:55,035
+dependency description which could be used for any human language.
+依赖描述，可用于任何人类语言。
+
+790
+00:44:55,035 --> 00:44:58,490
+So, if you go to the Universal Dependencies website,
+那么，如果你去Universal Dependencies网站，
+
+791
+00:44:58,490 --> 00:45:00,385
+it's not only about English.
+它不仅仅是关于英语的。
+
+792
+00:45:00,385 --> 00:45:05,290
+You can find Universal Dependency analyses of you know, French,
+您可以找到您所知道的普遍依赖性分析，法语，
+
+793
+00:45:05,290 --> 00:45:07,235
+or German, or Finish,
+或德语，或完成，
+
+794
+00:45:07,235 --> 00:45:09,850
+or Carsac, or Indonesian,
+或Carsac，或印度尼西亚语，
+
+795
+00:45:09,850 --> 00:45:11,440
+um, lots of languages.
+嗯，很多语言。
+
+796
+00:45:11,440 --> 00:45:14,070
+Of course, there are um, even more languages
+当然，还有更多的语言
+
+797
+00:45:14,070 --> 00:45:16,800
+which there aren't Universal Dependencies analyses of.
+没有普遍依赖关系的分析。
+
+798
+00:45:16,800 --> 00:45:19,835
+So, if you have a- a big calling to say I'm gonna
+所以，如果你有一个很大的号召，我会说
+
+799
+00:45:19,835 --> 00:45:23,110
+build a Swahili Universal Dependencies um,
+建立一个斯瓦希里语普遍依赖关系嗯，
+
+800
+00:45:23,110 --> 00:45:25,415
+treebank, um, you can get in touch.
+treebank，嗯，你可以联系。
+
+801
+00:45:25,415 --> 00:45:27,190
+Um, but anyway.
+嗯，但无论如何。
+
+802
+00:45:27,190 --> 00:45:29,580
+So, this is the idea of treebank.
+所以，这就是树库的想法。
+
+803
+00:45:29,580 --> 00:45:37,230
+You know, historically, tree banks wasn't something that people thought of immediately.
+你知道，从历史上看，树木银行并不是人们想到的。
+
+804
+00:45:37,230 --> 00:45:40,960
+This so- an idea that took quite a long time to develop, right?
+这个想法需要相当长的时间来开发，对吧？
+
+805
+00:45:40,960 --> 00:45:44,490
+That um, people started thinking about grammars
+那个人，人们开始考虑语法
+
+806
+00:45:44,490 --> 00:45:48,340
+of languages even in modern times in the fifties,
+甚至在五十年代的现代语言中，
+
+807
+00:45:48,340 --> 00:45:55,760
+and people started building parses for languages in the 19, early 1960s.
+20世纪60年代初，人们开始为语言建立解析。
+
+808
+00:45:55,760 --> 00:45:59,549
+So, there was decades of work in the 60s,
+所以，60年代有几十年的工作，
+
+809
+00:45:59,549 --> 00:46:03,130
+70s, 80s, and no one had tree banks.
+70年代，80年代，没有人有树库。
+
+810
+00:46:03,130 --> 00:46:07,140
+The way people did this work is that they wrote grammars,
+人们做这项工作的方式是他们写语法，
+
+811
+00:46:07,140 --> 00:46:10,775
+that they either wrote grammars like the one I did for constituency of
+他们要么像我为选区所做的那样编写语法
+
+812
+00:46:10,775 --> 00:46:14,630
+noun phrase goes to determiner, optional adjective noun.
+名词短语去确定者，可选的形容词名词。
+
+813
+00:46:14,630 --> 00:46:16,995
+Noun goes to goat um,
+名词去山羊，
+
+814
+00:46:16,995 --> 00:46:21,350
+or the equivalent kind of grammars and a dependency format,
+或等效的语法和依赖格式，
+
+815
+00:46:21,350 --> 00:46:26,565
+and they hand built these grammars and then train,
+他们手工制作这些语法，然后训练，
+
+816
+00:46:26,565 --> 00:46:29,930
+had parsers that could parse these sentences.
+有解析器可以解析这些句子。
+
+817
+00:46:29,930 --> 00:46:37,480
+Going into things, having a human being write a grammar feels more efficient.
+进入事物，让人类写出语法会感觉更有效率。
+
+818
+00:46:37,480 --> 00:46:39,275
+Because if you write uh,
+因为如果你写呃，
+
+819
+00:46:39,275 --> 00:46:43,590
+a rule like noun phrase goes to determiner optional adjective noun.
+像名词短语的规则去确定可选的形容词名词。
+
+820
+00:46:43,590 --> 00:46:46,085
+I mean, that- that describes
+我的意思是，那 - 描述
+
+821
+00:46:46,085 --> 00:46:49,570
+a huge number of phrases or actually infinite number of phrases.
+大量的短语或实际上无限多的短语。
+
+822
+00:46:49,570 --> 00:46:50,920
+Um, so that you know,
+嗯，你知道吗，
+
+823
+00:46:50,920 --> 00:46:53,200
+this is the structure of you know, the cat, the dog,
+这就是你知道的结构，猫，狗，
+
+824
+00:46:53,200 --> 00:46:56,910
+or cat or dog, or large dog all those things we saw at the beginning.
+我们在开始时看到的那些东西，或猫或狗，或大狗。
+
+825
+00:46:56,910 --> 00:47:01,160
+So, it's really efficient you're capturing lots of stuff with one rule.
+所以，用一条规则捕捉很多东西真的很有效率。
+
+826
+00:47:01,160 --> 00:47:07,475
+Um, but it sort of turned out that in practice that wasn't such a good idea,
+嗯，但事实证明，在实践中这不是一个好主意，
+
+827
+00:47:07,475 --> 00:47:10,440
+and it turned out to be much better to have
+结果证明要好得多
+
+828
+00:47:10,440 --> 00:47:14,210
+these kind of treebank supporting structures over sentences.
+这些树库支持结构而不是句子。
+
+829
+00:47:14,210 --> 00:47:17,135
+It's often a bit more subtle was to why that
+对于那个原因，往往有点微妙
+
+830
+00:47:17,135 --> 00:47:20,320
+is because it sounds like pretty menial work um,
+是因为听起来像是非常琐碎的工作，
+
+831
+00:47:20,320 --> 00:47:22,850
+building tree banks, and in some sense it is.
+建设树库，从某种意义上说它是。
+
+832
+00:47:22,850 --> 00:47:25,060
+Um, but you know,
+嗯，但是你知道，
+
+833
+00:47:25,060 --> 00:47:27,815
+it turns out to be much more useful.
+事实证明它更有用。
+
+834
+00:47:27,815 --> 00:47:33,535
+I mean, so one huge benefit is that treebanks are very reusable.
+我的意思是，一个巨大的好处是树库是非常可重复使用的。
+
+835
+00:47:33,535 --> 00:47:36,190
+That effectively what they was in 60s, 70s,
+这实际上是他们在60年代，70年代，
+
+836
+00:47:36,190 --> 00:47:39,450
+and 80s was that every different you know,
+80年代是你所知道的每一个人，
+
+837
+00:47:39,450 --> 00:47:42,965
+people who started about building a parser invented
+开始构建解析器的人发明了
+
+838
+00:47:42,965 --> 00:47:46,970
+their own notation for grammar rules which got more and more complex,
+他们自己的语法规则符号越来越复杂，
+
+839
+00:47:46,970 --> 00:47:50,675
+and it was only used by their parser and nobody else's parser.
+它只被他们的解析器和其他人的解析器使用。
+
+840
+00:47:50,675 --> 00:47:54,610
+So, there was no sharing and reuse of the work those done by human beings.
+因此，没有共享和重用人类所做的工作。
+
+841
+00:47:54,610 --> 00:47:55,990
+Well, once you have a treebank,
+好吧，一旦你有了树库，
+
+842
+00:47:55,990 --> 00:48:01,510
+it's reusable for all sorts of purposes that lots of people build parsers format.
+它可以重复用于各种各样的目的，许多人构建解析器格式。
+
+843
+00:48:01,510 --> 00:48:04,890
+But also other people use it as well like linguists now often used
+但也有其他人使用它，就像现在经常使用的语言学家一样
+
+844
+00:48:04,890 --> 00:48:08,650
+tree banks to find examples of different constructions.
+树库找到不同结构的例子。
+
+845
+00:48:08,650 --> 00:48:10,400
+Um, but beyond that,
+嗯，但除此之外，
+
+846
+00:48:10,400 --> 00:48:14,695
+this sort of just became necessary once we wanted to do machine learning.
+一旦我们想要进行机器学习，这种情况就变得必不可少了。
+
+847
+00:48:14,695 --> 00:48:17,405
+So that if we want to do machine learning,
+所以如果我们想做机器学习，
+
+848
+00:48:17,405 --> 00:48:20,240
+we want to have data that we can build models on.
+我们希望拥有可以构建模型的数据。
+
+849
+00:48:20,240 --> 00:48:21,730
+In particular, a lot of what
+特别是很多什么
+
+850
+00:48:21,730 --> 00:48:27,015
+our machine learning models exploit is how common are different structures.
+我们的机器学习模型利用是不同结构的共同点。
+
+851
+00:48:27,015 --> 00:48:30,645
+So, we want to know about the commoners and the frequency of things.
+所以，我们想知道平民和事物的频率。
+
+852
+00:48:30,645 --> 00:48:34,335
+Um, but then treebanks gave us another big thing which is,
+嗯，但树库给了我们另一件大事，就是，
+
+853
+00:48:34,335 --> 00:48:37,365
+well, lots of sentences are ambiguous,
+好吧，很多句子含糊不清，
+
+854
+00:48:37,365 --> 00:48:44,530
+and what we want to do is build models that find the right structure for sentences.
+我们想要做的是建立能够找到正确句子结构的模型。
+
+855
+00:48:44,530 --> 00:48:48,065
+If all you do is have a grammar you have no way of
+如果您所做的只是语法，那么您无法做到
+
+856
+00:48:48,065 --> 00:48:51,805
+telling what is the right structure for ambiguous sentences.
+告诉模糊句子的正确结构是什么。
+
+857
+00:48:51,805 --> 00:48:54,620
+All you can do is say hey that sentence with
+所有你能做的就是说嘿那句话
+
+858
+00:48:54,620 --> 00:48:58,780
+four prepositional phrases after it that I showed you earlier,
+我之前向你展示的四个介词短语，
+
+859
+00:48:58,780 --> 00:49:00,430
+it has 14 different parsers.
+它有14种不同的解析器。
+
+860
+00:49:00,430 --> 00:49:02,075
+Let me show you all of them.
+让我告诉你他们所有人。
+
+861
+00:49:02,075 --> 00:49:04,890
+Um, but once you have um,
+嗯，但是一旦你有，
+
+862
+00:49:04,890 --> 00:49:12,185
+treebank examples, you can say this is the right structure for this sentence in context.
+树库的例子，你可以说这是上下文中这句话的正确结构。
+
+863
+00:49:12,185 --> 00:49:17,255
+So, you should be building a machine learning model which will recover that structure,
+所以，你应该建立一个机器学习模型来恢复这个结构，
+
+864
+00:49:17,255 --> 00:49:19,020
+and if you don't that you're wrong.
+如果你不这样做，那你错了。
+
+865
+00:49:19,020 --> 00:49:23,980
+[NOISE]. Okay. Um, so that's treebanks.
+[噪声]。好的。嗯，这就是树库。
+
+866
+00:49:23,980 --> 00:49:28,320
+Um, so how are we gonna do build dependency parsers?
+嗯，那么我们如何构建依赖解析器呢？
+
+867
+00:49:28,320 --> 00:49:34,790
+Well, somehow we want models that can kind of capture what's the right parse.
+好吧，不知何故，我们想要能够捕获正确解析的模型。
+
+868
+00:49:34,790 --> 00:49:37,240
+Just thinking about abstractly, you know,
+你只需要抽象思考，
+
+869
+00:49:37,240 --> 00:49:40,340
+there's sort of different things that we can pay attention to.
+有一些我们可以注意的不同的事情。
+
+870
+00:49:40,340 --> 00:49:46,030
+So, one thing that we can pay attention to is the sort of actual words, right?
+所以，我们可以注意的一件事是实际的话，对吧？
+
+871
+00:49:46,030 --> 00:49:47,490
+Discussion of issues.
+讨论问题。
+
+872
+00:49:47,490 --> 00:49:49,590
+That's a reasonable thing.
+这是一个合理的事情。
+
+873
+00:49:49,590 --> 00:49:55,235
+So, it's reasonable to have issues as dependent of discussion um,
+因此，将问题视为讨论的依赖是合理的，
+
+874
+00:49:55,235 --> 00:49:58,090
+where you know, discussion of outstanding.
+在哪里知道，讨论优秀。
+
+875
+00:49:58,090 --> 00:49:59,105
+That sounds weird.
+这听起来很奇怪。
+
+876
+00:49:59,105 --> 00:50:01,570
+So, you probably don't want that dependency.
+所以，你可能不希望那种依赖。
+
+877
+00:50:01,570 --> 00:50:05,045
+Um, there's a question of how far apart words are.
+嗯，有一个问题是单词的距离有多远。
+
+878
+00:50:05,045 --> 00:50:07,480
+Most dependencies are fairly short distance.
+大多数依赖是相当短的距离。
+
+879
+00:50:07,480 --> 00:50:08,960
+They not all of them are.
+他们不是全部都是。
+
+880
+00:50:08,960 --> 00:50:11,385
+There's a question of what's in between.
+有一个问题是介于两者之间。
+
+881
+00:50:11,385 --> 00:50:13,385
+Um, if there's a semicolon in between,
+嗯，如果中间有分号，
+
+882
+00:50:13,385 --> 00:50:15,335
+there probably is an a dependency across that.
+可能存在一种依赖关系。
+
+883
+00:50:15,335 --> 00:50:20,190
+Um, and the other issue is sort of how many arguments do things take?
+嗯，另一个问题是有多少参数需要做什么？
+
+884
+00:50:20,190 --> 00:50:22,355
+So, here we have was completed.
+所以，我们已经完成了。
+
+885
+00:50:22,355 --> 00:50:24,590
+If you see the words was completed,
+如果你看到单词已经完成，
+
+886
+00:50:24,590 --> 00:50:29,410
+you sort of expect that there'll be a subject before of the something was completed,
+你有点期望在事情完成之前会有一个主题，
+
+887
+00:50:29,410 --> 00:50:31,145
+and it would be wrong if there wasn't.
+如果没有，那就错了。
+
+888
+00:50:31,145 --> 00:50:34,470
+So, you're expecting an argument on that side.
+所以，你期待那方面的争论。
+
+889
+00:50:34,470 --> 00:50:37,960
+But on the other side, hand it won't have object after it.
+但另一方面，它手上没有对象。
+
+890
+00:50:37,960 --> 00:50:41,630
+You won't say the discussion was completed the goat.
+你不会说讨论完成了山羊。
+
+891
+00:50:41,630 --> 00:50:44,080
+Um, that's not a good sentence, right?
+嗯，这不是一个好句子，对吗？
+
+892
+00:50:44,080 --> 00:50:47,135
+So, you won't have ah, um, an object after it.
+所以，你不会有啊，嗯，它后面的一个对象。
+
+893
+00:50:47,135 --> 00:50:49,060
+So, there's sort of information of that sort,
+所以，有那种信息，
+
+894
+00:50:49,060 --> 00:50:54,305
+and we want to have our dependency parsers be able to make use of that structure.
+我们希望我们的依赖解析器能够使用该结构。
+
+895
+00:50:54,305 --> 00:50:56,830
+[NOISE] Okay.
+[NOISE]好的。
+
+896
+00:50:56,830 --> 00:51:04,360
+Um, so effectively what we do when we build a dependency parser is going to say,
+嗯，我们在构建依赖解析器时所做的事情非常有效，
+
+897
+00:51:04,360 --> 00:51:11,560
+for each word is- is going to be the dependent of some other word or the root.
+因为每个单词都是某个其他单词或根的依赖。
+
+898
+00:51:11,560 --> 00:51:15,600
+So, this give here is actually the head of the sentence.
+所以，这里给出的实际上是句子的头部。
+
+899
+00:51:15,600 --> 00:51:17,570
+So, it's a dependent of root,
+所以，它是root的依赖，
+
+900
+00:51:17,570 --> 00:51:20,620
+the talk is a dependent of give,
+谈话是给予的依赖，
+
+901
+00:51:20,620 --> 00:51:24,040
+'ll is a dependent of talk.
+将是谈话的依赖。
+
+902
+00:51:24,040 --> 00:51:28,660
+And so, for each word we want to choose what is
+因此，对于每个单词我们都想选择什么
+
+903
+00:51:28,660 --> 00:51:34,600
+the dependent of and we want to do it in such a way that the dependencies form a tree.
+我们希望以依赖关系形成树的方式来实现它。
+
+904
+00:51:34,600 --> 00:51:39,565
+So that means it would be a bad idea if we made a cycle.
+所以这意味着如果我们制定一个循环将是一个坏主意。
+
+905
+00:51:39,565 --> 00:51:43,435
+So, if we sort of said, Bootstrapping, um,
+所以，如果我们说，Bootstrapping，嗯，
+
+906
+00:51:43,435 --> 00:51:47,860
+was a dependent of, um, talk,
+是一个依赖，嗯，谈话，
+
+907
+00:51:47,860 --> 00:51:52,420
+um, but then we had things sort of move around.
+嗯，但后来我们有事情四处走动。
+
+908
+00:51:52,420 --> 00:51:53,935
+So,this goes to here,
+所以，这就到了这里，
+
+909
+00:51:53,935 --> 00:51:55,600
+but then talk is a dependent that,
+但话说是依赖，
+
+910
+00:51:55,600 --> 00:51:57,430
+and so I'm gonna cycle that's bad news,
+所以我要循环这个坏消息，
+
+911
+00:51:57,430 --> 00:52:00,145
+we don't want cycles, we want a tree.
+我们不想要循环，我们想要一棵树。
+
+912
+00:52:00,145 --> 00:52:03,175
+And there's one final issue,
+还有一个最后的问题，
+
+913
+00:52:03,175 --> 00:52:06,970
+um, which is we don't want things that,
+嗯，这是我们不想要的东西，
+
+914
+00:52:06,970 --> 00:52:11,680
+um, is whether we want to allow dependencies to cross or not,
+嗯，我们是否想要允许依赖关系交叉，
+
+915
+00:52:11,680 --> 00:52:14,035
+um, and this is an example of this.
+嗯，这是一个例子。
+
+916
+00:52:14,035 --> 00:52:16,405
+So, most of the time, um,
+所以，大部分时间，嗯，
+
+917
+00:52:16,405 --> 00:52:19,180
+dependencies don't cross each other.
+依赖关系不会相互交叉。
+
+918
+00:52:19,180 --> 00:52:22,180
+Uh, but sometimes they do,
+呃，但有时他们这样做，
+
+919
+00:52:22,180 --> 00:52:26,770
+and this example here is actually an instance for that.
+这个例子实际上是一个实例。
+
+920
+00:52:26,770 --> 00:52:31,195
+So, I'll give a talk tomorrow, um, on bootstrapping.
+所以，明天我会在谈论中发表演讲。
+
+921
+00:52:31,195 --> 00:52:35,710
+So, we're giving a talk that's the object,
+所以，我们正在讲一个对象，
+
+922
+00:52:35,710 --> 00:52:39,025
+and when it's being given is tomorrow,
+当它被给予明天时，
+
+923
+00:52:39,025 --> 00:52:43,240
+but this talk has a modifier that's on bootstrapping.
+但是这个讲话有一个修改器在引导上。
+
+924
+00:52:43,240 --> 00:52:50,905
+So, we actually have another dependency here that crosses, um, that dependency.
+所以，我们实际上在这里有另一个依赖，那就是依赖。
+
+925
+00:52:50,905 --> 00:52:52,150
+And that's sort of rare,
+这有点罕见，
+
+926
+00:52:52,150 --> 00:52:53,890
+that doesn't happen a ton in English,
+这不会发生英语，
+
+927
+00:52:53,890 --> 00:52:57,085
+but it happens sometimes in some structures like that.
+但有时在某些结构中会发生这种情况。
+
+928
+00:52:57,085 --> 00:52:59,770
+And so, this is the question of whether, um,
+所以，这是一个问题，是否，嗯，
+
+929
+00:52:59,770 --> 00:53:04,900
+what we say is that the positive sentence is projective if there
+我们所说的是积极的句子是投射的
+
+930
+00:53:04,900 --> 00:53:10,015
+no crossing dependencies and it's non-projective if there are crossing dependencies,
+没有交叉依赖，如果存在交叉依赖，则它是非投影的，
+
+931
+00:53:10,015 --> 00:53:12,370
+and most of the time, English's projective and it's
+而且大多数时候，英语的投射都是如此
+
+932
+00:53:12,370 --> 00:53:15,130
+parses of sentences, but occasionally not.
+解析句子，但偶尔不会。
+
+933
+00:53:15,130 --> 00:53:16,780
+And when it's not is when you kind of have
+而当它不是你的时候
+
+934
+00:53:16,780 --> 00:53:20,740
+these constituents that are delayed to the end of the sentence, right?
+这些成分延迟到句末，对吗？
+
+935
+00:53:20,740 --> 00:53:24,055
+You could've said, I'll give a talk on bootstrapping tomorrow,
+你可以说，明天我会谈谈自助，
+
+936
+00:53:24,055 --> 00:53:27,490
+and then a [inaudible] have a projective parse, but if you want to,
+然后[听不清]有一个投射解析，但如果你愿意，
+
+937
+00:53:27,490 --> 00:53:30,940
+you can kind of delay that extra modifier and say I'll give a talk
+你可以延迟那个额外的修饰语并说我会发表演讲
+
+938
+00:53:30,940 --> 00:53:34,780
+tomorrow on bootstrapping and then the parse becomes non-projective.
+明天在bootstrapping然后解析成为非投影。
+
+939
+00:53:34,780 --> 00:53:38,410
+Um, okay.
+嗯，好的。
+
+940
+00:53:38,410 --> 00:53:40,450
+So, that's that.
+那就是那个。
+
+941
+00:53:40,450 --> 00:53:43,285
+Um, there are various ways of,
+嗯，有各种各样的方式，
+
+942
+00:53:43,285 --> 00:53:46,435
+um, doing dependency parsing,
+嗯，做依赖解析，
+
+943
+00:53:46,435 --> 00:53:50,200
+but basically what I am gonna tell you about today is this one called
+但基本上我今天要告诉你的是这个叫做的
+
+944
+00:53:50,200 --> 00:53:54,205
+transition-based or deterministic dependency parsing,
+基于转换或确定性的依赖解析，
+
+945
+00:53:54,205 --> 00:53:55,555
+and this is, um,
+这是，嗯，
+
+946
+00:53:55,555 --> 00:54:01,030
+the one that's just been enormously influential in practical deployments of parsing.
+在实际的解析部署中具有巨大影响力的那个。
+
+947
+00:54:01,030 --> 00:54:04,375
+So, when Google goes off and parses every web page,
+因此，当Google推出并解析每个网页时，
+
+948
+00:54:04,375 --> 00:54:07,690
+what they're using is a transition based parser.
+他们使用的是基于过渡的解析器。
+
+949
+00:54:07,690 --> 00:54:12,040
+Um, and so, this was a notion of parsing that, um,
+嗯，等等，这是解析那个的概念，嗯，
+
+950
+00:54:12,040 --> 00:54:14,800
+was mainly popularized by this guy,
+主要是由这个家伙推广，
+
+951
+00:54:14,800 --> 00:54:17,980
+walk him Joakim Nivre, he is a Swedish computational linguists.
+他是Joakim Nivre，他是瑞典计算语言学家。
+
+952
+00:54:17,980 --> 00:54:25,075
+Um, and what you do it's- it's sort of inspired by shift-reduce parsing.
+嗯，你做了什么 - 它有点受到shift-reduce解析的启发。
+
+953
+00:54:25,075 --> 00:54:29,980
+So, probably in- in our CS103 or compilers class or something,
+所以，可能在我们的CS103或编译器类或其他东西中，
+
+954
+00:54:29,980 --> 00:54:32,650
+you saw a little bit of shift-reduce parsing.
+你看到了一些shift-reduce解析。
+
+955
+00:54:32,650 --> 00:54:35,965
+And this is sort of like a shift-reduce parser,
+这有点像shift-reduce解析器，
+
+956
+00:54:35,965 --> 00:54:38,710
+apart from when we reduce,
+除了我们减少，
+
+957
+00:54:38,710 --> 00:54:42,430
+we build dependencies instead of constituent.
+我们建立依赖而不是成分。
+
+958
+00:54:42,430 --> 00:54:46,270
+Um, and this has a lot of very technical description that
+嗯，这有很多非常技术性的描述
+
+959
+00:54:46,270 --> 00:54:50,515
+doesn't help you at all to look at in terms of understanding what,
+在理解什么方面，你根本没有帮助你
+
+960
+00:54:50,515 --> 00:54:53,080
+um, a shift-reduce parser does.
+嗯，一个shift-reduce解析器。
+
+961
+00:54:53,080 --> 00:54:55,570
+And here's a formal description of a
+这是一个正式的描述
+
+962
+00:54:55,570 --> 00:54:59,890
+transition-based shift-reduce parser and which also doesn't help you at all.
+基于转换的shift-reduce解析器，它根本没有帮助你。
+
+963
+00:54:59,890 --> 00:55:02,770
+Um, so, instead we kinda look at this example,
+嗯，所以，我们看看这个例子，
+
+964
+00:55:02,770 --> 00:55:05,335
+uh, [LAUGHTER] because that will hopefully help you.
+呃，[大笑]，因为那将有希望帮助你。
+
+965
+00:55:05,335 --> 00:55:10,030
+So, what I wanna to do is parse the sentence "I ate fish".
+所以，我想要做的就是解析“我吃鱼”这句话。
+
+966
+00:55:10,030 --> 00:55:14,530
+And yet formally what I have is I have a why I start,
+然而，正式我拥有的是我有一个为什么我开始，
+
+967
+00:55:14,530 --> 00:55:17,500
+there are three actions I can take and I have
+我可以采取三种行动
+
+968
+00:55:17,500 --> 00:55:20,895
+a finished condition for formal parse, parse.
+正式解析的完成条件，解析。
+
+969
+00:55:20,895 --> 00:55:23,410
+Um, and so here's what I do.
+嗯，这就是我的工作。
+
+970
+00:55:23,410 --> 00:55:29,080
+So, I have a stack which is on this side and I have a buffer.
+所以，我有一个这方面的堆栈，我有一个缓冲区。
+
+971
+00:55:29,080 --> 00:55:32,455
+Um, so, the stack is what I have built,
+嗯，堆栈就是我建的，
+
+972
+00:55:32,455 --> 00:55:36,055
+and the buffer is all the words in the sentence I haven't dealt with yet.
+缓冲区是我尚未处理的句子中的所有单词。
+
+973
+00:55:36,055 --> 00:55:38,020
+So, I stop the parse,
+所以，我停止解析，
+
+974
+00:55:38,020 --> 00:55:41,575
+and that's the sort of instruction here, by putting route,
+这就是这里的指示，通过路线，
+
+975
+00:55:41,575 --> 00:55:44,395
+my root for my whole sentence onto my stack,
+我把我整个句子放到我的堆栈上，
+
+976
+00:55:44,395 --> 00:55:47,200
+and my buffer is the whole sentence,
+我的缓冲区是整句话，
+
+977
+00:55:47,200 --> 00:55:49,630
+and I haven't found any dependencies yet.
+我还没有找到任何依赖。
+
+978
+00:55:49,630 --> 00:55:51,055
+Okay, and so then,
+好的，等等，
+
+979
+00:55:51,055 --> 00:55:55,645
+the actions I can take is to shift things onto the stack
+我可以采取的行动是将事情转移到堆栈上
+
+980
+00:55:55,645 --> 00:56:01,570
+or to do the equivalent of a Reduce where I build dependencies.
+或者在我构建依赖项的地方做一个Reduce。
+
+981
+00:56:01,570 --> 00:56:03,945
+So, starting off, um,
+所以，开始，嗯，
+
+982
+00:56:03,945 --> 00:56:07,755
+I can't build a dependency because I only have root on the stack,
+我无法构建依赖项，因为我只在堆栈上有root，
+
+983
+00:56:07,755 --> 00:56:09,840
+so the only thing I can do is shift,
+所以我唯一能做的就是转移，
+
+984
+00:56:09,840 --> 00:56:12,215
+so I can shift I onto the stack.
+所以我可以把我转移到堆栈上。
+
+985
+00:56:12,215 --> 00:56:14,800
+Um, now, I could at this point say,
+嗯，现在，我可以在这一点上说，
+
+986
+00:56:14,800 --> 00:56:16,150
+let's build a dependency,
+让我们建立一个依赖，
+
+987
+00:56:16,150 --> 00:56:17,680
+I is a dependent of root,
+我是root的依赖者，
+
+988
+00:56:17,680 --> 00:56:19,660
+but that would be the wrong analysis,
+但这是错误的分析，
+
+989
+00:56:19,660 --> 00:56:23,080
+because really the head of this sentence is I ate.
+因为这句话真的是我吃的。
+
+990
+00:56:23,080 --> 00:56:26,065
+So, I'm a clever boy and I shift again.
+所以，我是一个聪明的孩子，我再次转移。
+
+991
+00:56:26,065 --> 00:56:30,205
+And now I have root I ate on the stack.
+现在我有根我吃了堆栈。
+
+992
+00:56:30,205 --> 00:56:33,280
+Okay, and so, at this point,
+好的，等等，此时，
+
+993
+00:56:33,280 --> 00:56:34,720
+I'm in a position where,
+我处在一个位置，
+
+994
+00:56:34,720 --> 00:56:40,105
+hey, what I'm gonna do is reductions that build structure, because look,
+嘿，我要做的是减少构建结构，因为看，
+
+995
+00:56:40,105 --> 00:56:44,125
+I have I ate here and I want to be able to say
+我在这里吃了，我希望能说
+
+996
+00:56:44,125 --> 00:56:49,600
+that I is the subject of dependency of ate,
+我是吃饭依赖的主题，
+
+997
+00:56:49,600 --> 00:56:51,130
+and I will do that by,
+我会这样做的，
+
+998
+00:56:51,130 --> 00:56:54,595
+um, by doing a reduction.
+嗯，通过减少。
+
+999
+00:56:54,595 --> 00:57:00,730
+And so, what I'm gonna do is the left-arc reduction, which says, look,
+所以，我要做的是左弧减少，看起来，
+
+1000
+00:57:00,730 --> 00:57:04,494
+I'm gonna treat the second from top thing on the stack
+我要从堆栈中的顶级东西处理第二个问题
+
+1001
+00:57:04,494 --> 00:57:08,605
+as a dependent of the thing that's on top of the stack.
+作为堆栈顶部的东西的依赖。
+
+1002
+00:57:08,605 --> 00:57:10,210
+And so, I do that,
+所以，我这样做，
+
+1003
+00:57:10,210 --> 00:57:12,520
+and so, when I do that,
+所以，当我这样做的时候，
+
+1004
+00:57:12,520 --> 00:57:17,575
+I create the second from the head thing as a subject dependent of ate,
+我从头部开始创建第二个作为依赖于ate的主题，
+
+1005
+00:57:17,575 --> 00:57:21,085
+and I leave the head on the stack ate,
+我把头放在堆叠上，
+
+1006
+00:57:21,085 --> 00:57:25,675
+but I sort of add this dependencies as other dependencies I've built.
+但我将这些依赖项添加为我构建的其他依赖项。
+
+1007
+00:57:25,675 --> 00:57:29,305
+Okay, um, so, I do that.
+好的，嗯，我这样做。
+
+1008
+00:57:29,305 --> 00:57:34,720
+Um, now, I could immediately reduce again and say ate is a dependent of root,
+嗯，现在，我可以立即再次减少并说吃了是根的依赖，
+
+1009
+00:57:34,720 --> 00:57:37,855
+but my sentence's actually I ate fish.
+但我的判决实际上是我吃了鱼。
+
+1010
+00:57:37,855 --> 00:57:40,990
+So, what I want to do is say, "Oh,
+所以，我想做的是说，“哦，
+
+1011
+00:57:40,990 --> 00:57:45,610
+if it's still fish on the buffer," so what I should first do is shift again,
+如果它仍然在缓冲区钓鱼，“所以我应该先做的是再次转移，
+
+1012
+00:57:45,610 --> 00:57:48,265
+have root ate fish in my sentence,
+在我的句子中有根吃鱼，
+
+1013
+00:57:48,265 --> 00:57:49,960
+and then I'll be able to say, Look,
+然后我就可以说，看，
+
+1014
+00:57:49,960 --> 00:57:52,795
+I want to now build, um,
+我想现在建立，嗯，
+
+1015
+00:57:52,795 --> 00:57:55,705
+the thing on the top of this stack as
+这个堆栈顶部的东西是
+
+1016
+00:57:55,705 --> 00:57:59,905
+a right dependent of the thing that's second from top of the stack,
+依赖于堆栈顶部第二个的东西，
+
+1017
+00:57:59,905 --> 00:58:02,664
+and so that's referred to as a Right-Arc move,
+所以这被称为右弧移动，
+
+1018
+00:58:02,664 --> 00:58:05,680
+and so, I say Right Arc, and so,
+所以，我说右弧，所以，
+
+1019
+00:58:05,680 --> 00:58:08,410
+I do a reduction where I've generated
+我在生成的地方做了缩减
+
+1020
+00:58:08,410 --> 00:58:14,245
+a new dependency and I take the two things that are on top of the stack and say,
+一个新的依赖项，我把堆栈顶部的两个东西说成是
+
+1021
+00:58:14,245 --> 00:58:17,245
+um, fish is a dependent of ate,
+嗯，鱼是吃的依赖，
+
+1022
+00:58:17,245 --> 00:58:20,575
+and so therefore, I just keep the head.
+因此，我只是保持头脑。
+
+1023
+00:58:20,575 --> 00:58:25,915
+I always just keep the hit on the stack and the- and I generate this new Arc.
+我总是只是保持在堆栈上的命中和 - 我生成这个新的Arc。
+
+1024
+00:58:25,915 --> 00:58:27,640
+And so, at this point,
+所以，在这一点上，
+
+1025
+00:58:27,640 --> 00:58:33,685
+I'm in the same position I want to say that this ate is a right dependent of my route,
+我处于相同的位置，我想说这个吃饭是我的路线的正确依赖，
+
+1026
+00:58:33,685 --> 00:58:36,985
+and so, I'm again going to do Right Arc,
+所以，我再次去做右弧，
+
+1027
+00:58:36,985 --> 00:58:40,840
+um, and make this extra dependency here.
+嗯，并在这里做出额外的依赖。
+
+1028
+00:58:40,840 --> 00:58:43,450
+Okay. So, then my finished condition of having
+好的。所以，那么我完成了条件
+
+1029
+00:58:43,450 --> 00:58:46,420
+successfully parsed the sentence is my buffer is
+成功解析的句子是我的缓冲区
+
+1030
+00:58:46,420 --> 00:58:52,600
+empty and I just have root left on my stack because that's what I sort of said back here,
+空的，我只是在我的堆栈上留下了根，因为这就是我在这里说的，
+
+1031
+00:58:52,600 --> 00:58:55,675
+that was, buffer is empty as my finished condition.
+也就是说，缓冲区是空的，因为我已经完成了。
+
+1032
+00:58:55,675 --> 00:58:59,230
+Okay. So, I've parsed the sentence.
+好的。所以，我已经解析了这句话。
+
+1033
+00:58:59,230 --> 00:59:01,870
+So that worked well but, you know,
+这样运作得很好，但是，你知道，
+
+1034
+00:59:01,870 --> 00:59:07,870
+I actually had different choices of when to pa- when to shift and when to reduce.
+我实际上有什么不同的选择，什么时候换班，何时换班。
+
+1035
+00:59:07,870 --> 00:59:12,325
+And I just miraculously made the right choice at each point.
+我只是奇迹般地在每个点做出了正确的选择。
+
+1036
+00:59:12,325 --> 00:59:16,630
+And well, one thing you could do at this point is say, well,
+好吧，你现在可以做的一件事就是说，好吧，
+
+1037
+00:59:16,630 --> 00:59:20,155
+you could have explored every choice and,
+你可以探索每一个选择，
+
+1038
+00:59:20,155 --> 00:59:24,355
+um, seen what happened and gone different parsers.
+嗯，看到发生了什么，走了不同的解析器。
+
+1039
+00:59:24,355 --> 00:59:25,765
+And I could have,
+我可以，
+
+1040
+00:59:25,765 --> 00:59:28,269
+but if that's what I'd done,
+但如果这就是我所做的，
+
+1041
+00:59:28,269 --> 00:59:35,680
+I would've explored this exponential size tree of different possible parsers.
+我会探索这种不同可能的解析器的指数大小树。
+
+1042
+00:59:35,680 --> 00:59:37,570
+And if that was what I was doing,
+如果这就是我在做的事情，
+
+1043
+00:59:37,570 --> 00:59:39,610
+I wouldn't be able to parse efficiently.
+我无法有效地解析。
+
+1044
+00:59:39,610 --> 00:59:44,110
+And indeed that's not what people did in the 60s, 70s and 80s.
+事实上，这不是人们在60年代，70年代和80年代所做的事情。
+
+1045
+00:59:44,110 --> 00:59:47,305
+Uh, clever people in the 60s said,
+呃，60年代的聪明人说，
+
+1046
+00:59:47,305 --> 00:59:50,305
+uh, rather than doing a crummy search here,
+呃，而不是在这里做一个糟糕的搜索，
+
+1047
+00:59:50,305 --> 00:59:54,430
+we can come up with clever dynamic programming algorithms and you
+我们可以提出聪明的动态编程算法和你
+
+1048
+00:59:54,430 --> 00:59:58,870
+can relatively efficiently explore the space of all possible parsers.
+可以相对有效地探索所有可能的解析器的空间。
+
+1049
+00:59:58,870 --> 01:00:03,295
+Uh, and that was sort of the mainstay of parsing in those decades.
+呃，这几十年来一直是解析的主要支柱。
+
+1050
+01:00:03,295 --> 01:00:06,700
+But when Joakim Nivre came along,
+但是当Joakim Nivre出现的时候，
+
+1051
+01:00:06,700 --> 01:00:10,420
+he said "Yeah, that's true, um, but hey,
+他说：“是的，那是真的，嗯，但是，嘿，
+
+1052
+01:00:10,420 --> 01:00:12,595
+I've got a clever idea, uh,
+我有一个聪明的主意，呃，
+
+1053
+01:00:12,595 --> 01:00:18,220
+because now it's the 2000s and I know machine learning."
+因为现在是2000年代，我知道机器学习。“
+
+1054
+01:00:18,220 --> 01:00:21,550
+Um, so, what I could do instead,
+嗯，那么，我能做些什么，
+
+1055
+01:00:21,550 --> 01:00:26,890
+is say I'm at a particular position in the parse and I'm gonna build
+我说我在解析中处于一个特定的位置而且我要建立
+
+1056
+01:00:26,890 --> 01:00:30,340
+a machine learning classifier and that machine learning
+机器学习分类器和机器学习
+
+1057
+01:00:30,340 --> 01:00:33,970
+classifier is gonna tell me the next thing to do.
+分类器会告诉我接下来要做的事情。
+
+1058
+01:00:33,970 --> 01:00:36,250
+It's gonna tell me whether to shift,
+它会告诉我是否转移，
+
+1059
+01:00:36,250 --> 01:00:39,955
+um, with left arc or right arc.
+嗯，有左弧或右弧。
+
+1060
+01:00:39,955 --> 01:00:42,550
+So, if we're only just so talking about, well,
+所以，如果我们只是如此谈论，那么，
+
+1061
+01:00:42,550 --> 01:00:43,750
+how to build the arrows,
+如何建造箭头，
+
+1062
+01:00:43,750 --> 01:00:45,160
+they're just three actions,
+他们只是三个动作，
+
+1063
+01:00:45,160 --> 01:00:47,215
+shift, left arc or right arc.
+移位，左弧或右弧。
+
+1064
+01:00:47,215 --> 01:00:50,770
+Um, if we also wanted to put labels on the dependencies,
+嗯，如果我们还想在依赖项上添加标签，
+
+1065
+01:00:50,770 --> 01:00:53,140
+and we have our different labels, um,
+我们有不同的标签，嗯，
+
+1066
+01:00:53,140 --> 01:00:56,110
+there are then sort of 2R plus actions because she is
+然后有一些2R加上行动，因为她是
+
+1067
+01:00:56,110 --> 01:01:00,790
+sort of left arc subject or left arc object or something like that.
+左弧形对象或左弧形对象或类似的东西。
+
+1068
+01:01:00,790 --> 01:01:04,060
+But anyway, there's a set of actions and so you gonna build
+但无论如何，有一系列行动，所以你要建立
+
+1069
+01:01:04,060 --> 01:01:07,570
+a classifier with machine learning somehow which will predict
+一个分类器，机器学习以某种方式预测
+
+1070
+01:01:07,570 --> 01:01:14,685
+the right action and Joakim Nivre showed the sort of slightly surprising fact
+正确的行动和Joakim Nivre展示了一些令人惊讶的事实
+
+1071
+01:01:14,685 --> 01:01:22,530
+that actually you could predict the correct action to take with high accuracy.
+实际上你可以高精度地预测正确的行动。
+
+1072
+01:01:22,530 --> 01:01:27,265
+So, um, in the simplest version of this,
+所以，嗯，在最简单的版本中，
+
+1073
+01:01:27,265 --> 01:01:29,440
+um, there's absolutely no search.
+嗯，绝对没有搜索。
+
+1074
+01:01:29,440 --> 01:01:31,720
+You just run a classifier at each step and it
+您只需在每个步骤运行分类器即可
+
+1075
+01:01:31,720 --> 01:01:34,090
+says "What you should do next is shift" and you shift,
+说“接下来你应该做什么就是转变”然后你转移，
+
+1076
+01:01:34,090 --> 01:01:36,820
+and then it says "What you should do is left arc" and you left arc
+然后它说“你应该做的是左弧”然后你离开弧线
+
+1077
+01:01:36,820 --> 01:01:39,685
+and you run that through and he proved, no,
+你经历了这一切，他证明了，不，
+
+1078
+01:01:39,685 --> 01:01:42,385
+he showed empirically, that even doing that,
+他凭经验表明，即使这样做，
+
+1079
+01:01:42,385 --> 01:01:45,565
+you could parse sentences with high accuracy.
+你可以高精度地解析句子。
+
+1080
+01:01:45,565 --> 01:01:47,380
+Now if you wanna do some searching around,
+现在，如果你想做一些搜索，
+
+1081
+01:01:47,380 --> 01:01:48,505
+you can do a bit better,
+你可以做得更好，
+
+1082
+01:01:48,505 --> 01:01:50,440
+but it's not necessary.
+但这没有必要。
+
+1083
+01:01:50,440 --> 01:01:54,700
+Um, and we're not gonna do it for our, um, assignment.
+嗯，我们不会为我们的工作做这件事。
+
+1084
+01:01:54,700 --> 01:01:58,480
+But so if you're doing this just sort of run classify,
+但是，如果你这样做只是运行分类，
+
+1085
+01:01:58,480 --> 01:02:01,434
+predict action, run classify, predict action,
+预测行动，运行分类，预测行动，
+
+1086
+01:02:01,434 --> 01:02:04,030
+we then get this wonderful result which
+然后我们得到了这个奇妙的结果
+
+1087
+01:02:04,030 --> 01:02:07,645
+you're meant to explain a bit honest on your assignment 3,
+你的意思是对你的作业3说实话
+
+1088
+01:02:07,645 --> 01:02:11,275
+is that what we've built is a linear time parser.
+我们构建的是一个线性时间解析器。
+
+1089
+01:02:11,275 --> 01:02:15,370
+Right? That because we are gonna be sort of- as we chug through a sentence,
+对？那是因为我们会像一句话一样，
+
+1090
+01:02:15,370 --> 01:02:17,485
+where we're only doing a linear amount of work for
+我们只做了一定数量的工作
+
+1091
+01:02:17,485 --> 01:02:21,220
+each word and that was sort of an enormous breakthrough.
+每个词都是一个巨大的突破。
+
+1092
+01:02:21,220 --> 01:02:23,380
+Because although people in the 60s hadn't come
+因为虽然60年代的人还没来
+
+1093
+01:02:23,380 --> 01:02:25,840
+up with these dynamic programming algorithms,
+使用这些动态编程算法，
+
+1094
+01:02:25,840 --> 01:02:31,705
+dynamic programming algorithms for sentences were always cubic or worse.
+句子的动态规划算法总是立方的或更糟的。
+
+1095
+01:02:31,705 --> 01:02:34,375
+And that's not very good if you want to parse the whole web,
+如果你想解析整个网络，这不是很好，
+
+1096
+01:02:34,375 --> 01:02:37,450
+whereas if you have something that's linear time,
+而如果你有一些线性时间，
+
+1097
+01:02:37,450 --> 01:02:40,105
+that's really getting you places.
+这真的让你得到了一席之地。
+
+1098
+01:02:40,105 --> 01:02:45,085
+Okay. So this is the conventional way in which this was done.
+好的。所以这就是传统方式。
+
+1099
+01:02:45,085 --> 01:02:48,010
+Was, you know, we have a stack,
+是的，你知道，我们有一个堆栈，
+
+1100
+01:02:48,010 --> 01:02:50,750
+we might have already built some structure if we
+如果我们可能已经建立了一些结构
+
+1101
+01:02:50,750 --> 01:02:53,410
+hadn't working out something's dependent of something.
+没有找到依赖某事的东西。
+
+1102
+01:02:53,410 --> 01:02:57,790
+We have a buffer of words that we don't deal with and we want to predict the next action.
+我们有一个我们没有处理的单词缓冲区，我们想要预测下一步行动。
+
+1103
+01:02:57,790 --> 01:03:00,910
+So the conventional way to do this is to say well,
+所以这样做的传统方法就是说，
+
+1104
+01:03:00,910 --> 01:03:02,665
+we want to have features.
+我们想拥有功能。
+
+1105
+01:03:02,665 --> 01:03:06,100
+And well, the kind of features you wanted was so
+好吧，你想要的那种功能就是如此
+
+1106
+01:03:06,100 --> 01:03:09,535
+the usually some kind of conjunction or multiple things so
+通常是某种联合或多种事情
+
+1107
+01:03:09,535 --> 01:03:13,720
+that if the top word of the stack is good,
+如果堆栈的顶部字是好的，
+
+1108
+01:03:13,720 --> 01:03:18,760
+um, and something else is true, right,
+嗯，还有别的事情是对的，对，
+
+1109
+01:03:18,760 --> 01:03:22,930
+that the second top word of the stack it has,
+它所拥有的堆栈的第二个顶部字，
+
+1110
+01:03:22,930 --> 01:03:25,120
+and it's part of speech is verb,
+它的一部分是动词，
+
+1111
+01:03:25,120 --> 01:03:27,580
+then maybe that's an indicator of do some action.
+那么也许这是做一些行动的指标。
+
+1112
+01:03:27,580 --> 01:03:31,705
+So ha- had these very complex binary indicator features
+所以我有这些非常复杂的二元指标功能
+
+1113
+01:03:31,705 --> 01:03:35,710
+and you'd build- you literally have millions of
+而你建立 - 你真的有数百万
+
+1114
+01:03:35,710 --> 01:03:39,130
+these binary indicator features and you'd feed them into
+这些二进制指示器功能，你可以将它们输入
+
+1115
+01:03:39,130 --> 01:03:41,530
+some big logistic regression or
+一些大的逻辑回归或
+
+1116
+01:03:41,530 --> 01:03:46,705
+support vector machine or something like that and you would build parses.
+支持向量机或类似的东西，你会建立解析。
+
+1117
+01:03:46,705 --> 01:03:48,775
+And these parses worked pretty well.
+这些解析工作得很好。
+
+1118
+01:03:48,775 --> 01:03:55,600
+Um, but you sort of had these sort of very complex hand engineered binary features.
+嗯，但你有一些非常复杂的手工设计二进制功能。
+
+1119
+01:03:55,600 --> 01:04:00,520
+Um, so in the last bit of lecture I want to show you what people have done in the,
+嗯，所以在最后一点讲座中我想告诉你人们在做什么，
+
+1120
+01:04:00,520 --> 01:04:02,980
+um, neural dependency parsing world.
+嗯，神经依赖解析世界。
+
+1121
+01:04:02,980 --> 01:04:04,270
+But before I do that,
+但在我这样做之前，
+
+1122
+01:04:04,270 --> 01:04:05,890
+let me just explain how you,
+让我来解释一下你是怎样的，
+
+1123
+01:04:05,890 --> 01:04:11,220
+um, how you evaluate, um, dependency parses.
+嗯，你如何评价，嗯，依赖解析。
+
+1124
+01:04:11,220 --> 01:04:13,200
+And that's actually very simple, right?
+这其实很简单，对吧？
+
+1125
+01:04:13,200 --> 01:04:16,130
+So, what you do is well,
+所以，你做的很好，
+
+1126
+01:04:16,130 --> 01:04:18,880
+you assume because the human wrote it down,
+你假设，因为人类写下来，
+
+1127
+01:04:18,880 --> 01:04:22,300
+that there is a correct dependency parse for a sentence.
+对句子有一个正确的依赖解析。
+
+1128
+01:04:22,300 --> 01:04:24,580
+She saw the video lecture like this.
+她看到了这样的视频讲座。
+
+1129
+01:04:24,580 --> 01:04:29,560
+And so these are the correct arcs and to evaluate our dependency parser,
+所以这些是正确的弧并评估我们的依赖解析器，
+
+1130
+01:04:29,560 --> 01:04:32,140
+we're simply gonna say,
+我们只想说，
+
+1131
+01:04:32,140 --> 01:04:34,465
+uh, which arcs are correct.
+呃，这些弧是正确的。
+
+1132
+01:04:34,465 --> 01:04:36,505
+So, there are the gold arcs,
+那么，有金弧，
+
+1133
+01:04:36,505 --> 01:04:38,410
+so there's a gold arc,
+所以有一个金弧，
+
+1134
+01:04:38,410 --> 01:04:41,439
+um, from two to one,
+嗯，从两个到一个，
+
+1135
+01:04:41,439 --> 01:04:47,110
+She saw subject, and there's a gold arc from zero to two,
+她看到了主题，从0到2有一个金弧，
+
+1136
+01:04:47,110 --> 01:04:48,190
+the root of the sentence,
+句子的根，
+
+1137
+01:04:48,190 --> 01:04:49,825
+these the gold arcs.
+这些金弧。
+
+1138
+01:04:49,825 --> 01:04:52,480
+Um, if we generate a parse,
+嗯，如果我们生成一个解析，
+
+1139
+01:04:52,480 --> 01:04:56,935
+we're gonna propose some arcs as to what is the head of each word.
+我们要提出一些关于每个单词头部的弧线。
+
+1140
+01:04:56,935 --> 01:05:00,685
+And we're simply going to count up how many of them are correct,
+而我们只是要计算其中有多少是正确的，
+
+1141
+01:05:00,685 --> 01:05:02,785
+treating each arc individually.
+单独处理每个弧。
+
+1142
+01:05:02,785 --> 01:05:04,900
+And there are two ways we can do that.
+我们有两种方法可以做到这一点。
+
+1143
+01:05:04,900 --> 01:05:07,885
+We can either, as we're going to do,
+我们可以，正如我们要做的那样，
+
+1144
+01:05:07,885 --> 01:05:11,500
+ignore the labels and that's then,
+忽略标签然后，
+
+1145
+01:05:11,500 --> 01:05:15,865
+uh, referred to as the unlabeled attachment score.
+呃，被称为未标记的附件分数。
+
+1146
+01:05:15,865 --> 01:05:19,000
+So here in my example, my dependency paths,
+所以在我的例子中，我的依赖路径，
+
+1147
+01:05:19,000 --> 01:05:23,860
+I've got most of the arcs right but it got this one wrong.
+我已经把大部分弧线都弄好了，但是这个错了。
+
+1148
+01:05:23,860 --> 01:05:28,690
+So I say my unlabeled attachment score is 80 percent or we can also
+所以我说我的未标记附件分数是80％，或者我们也可以
+
+1149
+01:05:28,690 --> 01:05:33,820
+look at the labels and then my parser wasn't very good at getting the labels rights,
+看看标签然后我的解析器不是很擅长获得标签权利，
+
+1150
+01:05:33,820 --> 01:05:35,380
+so I'm only getting 40 percent.
+所以我只得到了40％。
+
+1151
+01:05:35,380 --> 01:05:40,810
+And so we can just count up the number of dependencies and how many we get correct.
+因此，我们可以只计算依赖项的数量以及我们得到的正确数量。
+
+1152
+01:05:40,810 --> 01:05:44,080
+And that's in our accuracy and in the assignment,
+这就是我们的准确性和任务，
+
+1153
+01:05:44,080 --> 01:05:49,225
+you're meant to build a dependency parser with a certain accuracy.
+你的意思是建立一个具有一定准确性的依赖解析器。
+
+1154
+01:05:49,225 --> 01:05:51,265
+I forget the number now is saying,
+我忘记了现在说的数字，
+
+1155
+01:05:51,265 --> 01:05:55,645
+some number 80 something or something that you're meant to get to.
+一些数字80或者你想要达到的东西。
+
+1156
+01:05:55,645 --> 01:05:58,855
+Okay. Um, maybe I'll skip that.
+好的。嗯，也许我会跳过那个。
+
+1157
+01:05:58,855 --> 01:06:03,370
+Okay. Um, so, now I wanted to sort of explain to you just a bit
+好的。嗯，所以，现在我想向你解释一下
+
+1158
+01:06:03,370 --> 01:06:07,780
+about neural dependency parses and why they are motivated.
+关于神经依赖性解析及其激励的原因。
+
+1159
+01:06:07,780 --> 01:06:11,845
+So I'd mentioned to you already that the conventional model, uh,
+所以我已经向你提到了传统的模型，呃，
+
+1160
+01:06:11,845 --> 01:06:16,360
+had these sort of indicated features of, um,
+有这些特征，嗯，
+
+1161
+01:06:16,360 --> 01:06:19,180
+on the top of the stack is the word good and the second thing on
+堆栈顶部是好的，第二个是
+
+1162
+01:06:19,180 --> 01:06:22,360
+the stack is the verb has or on
+堆栈是动词有或开
+
+1163
+01:06:22,360 --> 01:06:28,720
+the top of the stack is some other word and the second top is of some part of speech.
+堆栈的顶部是另一个单词，第二个顶部是某些词性。
+
+1164
+01:06:28,720 --> 01:06:30,670
+And that part of speech has already been
+那段话已经有了
+
+1165
+01:06:30,670 --> 01:06:32,620
+joined with the dependency of another part of speech.
+与另一个词性的依赖性相结合。
+
+1166
+01:06:32,620 --> 01:06:35,500
+People hand-engineer these features.
+人们手工设计这些功能。
+
+1167
+01:06:35,500 --> 01:06:36,760
+And the problems with that,
+那个问题，
+
+1168
+01:06:36,760 --> 01:06:39,040
+was these features were very sparse.
+这些功能是非常稀疏的。
+
+1169
+01:06:39,040 --> 01:06:42,100
+Each of these features matches very few things.
+这些功能中的每一个都很少匹配。
+
+1170
+01:06:42,100 --> 01:06:48,865
+Um, they match some configurations but not others so the features tend to be incomplete.
+嗯，它们匹配一些配置但不匹配其他配置，因此功能往往不完整。
+
+1171
+01:06:48,865 --> 01:06:51,760
+Um, and there are a lot of them,
+嗯，还有很多，
+
+1172
+01:06:51,760 --> 01:06:54,655
+they're are commonly millions of features.
+它们通常是数以百万计的功能。
+
+1173
+01:06:54,655 --> 01:06:57,040
+And so it turned out that actually computing
+事实证明，实际上是计算
+
+1174
+01:06:57,040 --> 01:07:01,690
+these features was just expensive so that you had some configuration on
+这些功能只是昂贵的，所以你有一些配置
+
+1175
+01:07:01,690 --> 01:07:05,260
+your stack and the buffer and then you wanted to know which of
+你的堆栈和缓冲区然后你想知道哪个
+
+1176
+01:07:05,260 --> 01:07:10,945
+these features were active for that stack and buffer configuration.
+这些功能对于堆栈和缓冲区配置是活动的。
+
+1177
+01:07:10,945 --> 01:07:13,315
+And so you had to compute features format.
+所以你必须计算功能格式。
+
+1178
+01:07:13,315 --> 01:07:14,500
+And it turned out that
+结果证明了这一点
+
+1179
+01:07:14,500 --> 01:07:19,795
+conventional dependency parsers spent most of their time computing features,
+传统的依赖解析器大部分时间用于计算功能，
+
+1180
+01:07:19,795 --> 01:07:24,640
+then went into the machine learning model rather than doing the sort of shifting and,
+然后进入机器学习模型而不是做那种转移，
+
+1181
+01:07:24,640 --> 01:07:28,810
+which you're are seeing, are just a pure parser operation.
+你所看到的，只是一个纯粹的解析器操作。
+
+1182
+01:07:28,810 --> 01:07:34,030
+And so that seemed like it left open the possibility that, well,
+所以这似乎留下了可能性，嗯，
+
+1183
+01:07:34,030 --> 01:07:38,110
+what if we could get rid of all of this stuff and we could run
+如果我们可以摆脱所有这些东西并且我们可以运行怎么办？
+
+1184
+01:07:38,110 --> 01:07:43,360
+a neural network directly on the stack and buffer configuration,
+直接在堆栈和缓冲区配置上的神经网络，
+
+1185
+01:07:43,360 --> 01:07:48,550
+then maybe that would allow us to build a dependency parser which was
+那么也许这将允许我们构建一个依赖解析器
+
+1186
+01:07:48,550 --> 01:07:55,705
+faster and suffer less from issues of sparseness than the conventional dependency parser.
+与传统的依赖解析器相比，更快并且更少受到稀疏问题的影响。
+
+1187
+01:07:55,705 --> 01:08:02,785
+And so that was a project that Dan Chi Chen and me tried to do in 2014,
+所以这是Dan Chi Chen和我在2014年试图做的一个项目，
+
+1188
+01:08:02,785 --> 01:08:06,310
+uh, we used to build a neural dependency parser.
+呃，我们曾经建立过一个神经依赖解析器。
+
+1189
+01:08:06,310 --> 01:08:09,565
+And, you know, effectively what we found,
+而且，你知道，实际上我们找到了，
+
+1190
+01:08:09,565 --> 01:08:12,730
+is that that's exactly what you could do.
+这就是你能做的。
+
+1191
+01:08:12,730 --> 01:08:15,940
+So, here's sort of a few stats here.
+所以，这里有一些统计数据。
+
+1192
+01:08:15,940 --> 01:08:18,940
+So these are these same UAS and LAS.
+所以这些是同样的UAS和LAS。
+
+1193
+01:08:18,940 --> 01:08:24,430
+Uh, so MaltParser was Joakim Nivre's Parser that I sort of,
+呃，所以MaltParser是我的Joakim Nivre的Parser，
+
+1194
+01:08:24,430 --> 01:08:27,490
+uh, we started showing before.
+呃，我们之前开始露面了。
+
+1195
+01:08:27,490 --> 01:08:28,735
+And they've got, um,
+他们有，嗯，
+
+1196
+01:08:28,735 --> 01:08:33,625
+a UAS on this data of 89,8.
+关于这个89,8的数据的UAS。
+
+1197
+01:08:33,625 --> 01:08:35,500
+But everybody loved that.
+但每个人都喜欢这样。
+
+1198
+01:08:35,500 --> 01:08:41,590
+And the reason they loved it is it could parse at 469 sentences a second.
+他们喜欢它的原因是它可以解析每秒469个句子。
+
+1199
+01:08:41,590 --> 01:08:44,500
+There had been other people that have worked out
+还有其他人已经解决了
+
+1200
+01:08:44,500 --> 01:08:47,350
+different more complex ways
+不同的更复杂的方式
+
+1201
+01:08:47,350 --> 01:08:52,360
+of doing parsing with so-called graph-based dependency parsers.
+使用所谓的基于图形的依赖解析器进行解析。
+
+1202
+01:08:52,360 --> 01:08:56,380
+So this is another famous dependency parser from the 90s.
+所以这是90年代另一个着名的依赖解析器。
+
+1203
+01:08:56,380 --> 01:08:58,660
+So it was actually, you know,
+所以实际上，你知道，
+
+1204
+01:08:58,660 --> 01:09:01,600
+a bit more accurate but it was a bit more
+更精确一点，但它更多一点
+
+1205
+01:09:01,600 --> 01:09:05,680
+accurate at the cost of being two orders of magnitude slower.
+以两个数量级的速度成本准确。
+
+1206
+01:09:05,680 --> 01:09:07,780
+And, you know, people have worked on top of that.
+而且，你知道，人们已经开始工作了。
+
+1207
+01:09:07,780 --> 01:09:11,680
+So, here is an even more complex graph-based parser, uh,
+那么，这是一个更复杂的基于图形的解析器，呃，
+
+1208
+01:09:11,680 --> 01:09:14,350
+from the 2000s and well, you know,
+从2000年代开始，你知道，
+
+1209
+01:09:14,350 --> 01:09:17,890
+it's a little bit more accurate again but it's gotten even slower.
+它再次准确一点，但速度更慢。
+
+1210
+01:09:17,890 --> 01:09:19,450
+Um, okay.
+嗯，好的。
+
+1211
+01:09:19,450 --> 01:09:25,210
+So, what we were able to show is that using the idea of instead using
+所以，我们能够表现出的是使用相反的想法
+
+1212
+01:09:25,210 --> 01:09:33,055
+a neural network to make the decisions of Joakim Nivre Style shift-reduce parser,
+一个神经网络来决定Joakim Nivre Style shift-reduce解析器，
+
+1213
+01:09:33,055 --> 01:09:37,180
+we could produce something that was almost
+我们可以生产出差不多的东西
+
+1214
+01:09:37,180 --> 01:09:41,380
+as accurate as the very best parsers available at that time.
+与当时可用的最佳解析器一样准确。
+
+1215
+01:09:41,380 --> 01:09:45,745
+I mean, strictly we won over here and we are a fraction behind on UAS.
+我的意思是，严格来说，我们在这里赢了，而且我们在UAS方面落后了一小部分。
+
+1216
+01:09:45,745 --> 01:09:47,610
+Um, but, you know,
+嗯，但是，你知道，
+
+1217
+01:09:47,610 --> 01:09:51,840
+it was not only just as fast as Nivre's parser,
+它不仅和Nivre的解析器一样快，
+
+1218
+01:09:51,840 --> 01:09:54,795
+it was actually faster than Nivre's parser,
+它实际上比Nivre的解析器更快，
+
+1219
+01:09:54,795 --> 01:09:59,520
+because we didn't have to spend as much time on feature computation.
+因为我们不必花费太多时间在特征计算上。
+
+1220
+01:09:59,520 --> 01:10:02,175
+And that's actually almost a surprising result, right?
+这实际上几乎是一个令人惊讶的结果，对吧？
+
+1221
+01:10:02,175 --> 01:10:04,690
+It's not that we didn't have to do anything.
+并不是说我们没有做任何事情。
+
+1222
+01:10:04,690 --> 01:10:08,050
+We had to do matrix multiplies in our neural network,
+我们必须在神经网络中进行矩阵乘法，
+
+1223
+01:10:08,050 --> 01:10:09,805
+but it turned out, um,
+但事实证明，嗯，
+
+1224
+01:10:09,805 --> 01:10:13,330
+you could do the matrix multiplies more quickly than
+你可以做矩阵倍增比
+
+1225
+01:10:13,330 --> 01:10:17,350
+the feature computation that he was doing even though at the end of the day,
+即使在一天结束时他正在做的特征计算，
+
+1226
+01:10:17,350 --> 01:10:21,235
+it was sort of looking at weights that went into a support vector machine.
+它有点看着进入支持向量机的权重。
+
+1227
+01:10:21,235 --> 01:10:23,020
+So that was kind of cool.
+所以这很酷。
+
+1228
+01:10:23,020 --> 01:10:25,420
+And so the secret was we're gonna make use of
+所以秘密就是我们要利用它
+
+1229
+01:10:25,420 --> 01:10:31,025
+distributed representations like we've already seen for words.
+分布式表示，就像我们已经看过的那样。
+
+1230
+01:10:31,025 --> 01:10:32,970
+So for each word,
+所以对于每个单词，
+
+1231
+01:10:32,970 --> 01:10:35,645
+we're going to represent it as a word embedding,
+我们将把它表示为嵌入字，
+
+1232
+01:10:35,645 --> 01:10:38,005
+like we've all what already seen.
+就像我们已经看到的一样。
+
+1233
+01:10:38,005 --> 01:10:40,175
+And in particular, um,
+特别是，嗯，
+
+1234
+01:10:40,175 --> 01:10:44,260
+we are gonna make use of word vectors
+我们将利用单词向量
+
+1235
+01:10:44,260 --> 01:10:49,075
+and use them as the represent- the starting representations of words in our Parser.
+并使用它们作为代表 - 我们的解析器中单词的起始表示。
+
+1236
+01:10:49,075 --> 01:10:53,145
+But well, if we're interested in distributed representations,
+但是，如果我们对分布式表示感兴趣，
+
+1237
+01:10:53,145 --> 01:10:58,550
+it seem to us like maybe you should only have distributed representations of words.
+在我们看来，也许你应该只有分布的单词表示。
+
+1238
+01:10:58,550 --> 01:11:03,260
+Um, maybe it also be good temp distributed representations of other things.
+嗯，也许它也是很好的临时分布式代表其他东西。
+
+1239
+01:11:03,260 --> 01:11:05,440
+So we had parts of speech like,
+所以我们有一些词性，比如
+
+1240
+01:11:05,440 --> 01:11:08,085
+you know, nouns and verbs and adjectives and so on.
+你知道，名词和动词以及形容词等等。
+
+1241
+01:11:08,085 --> 01:11:13,230
+Well some of those parts of speech have more to do with each other than others.
+那些言论中的某些部分与其他部分有更多的关系。
+
+1242
+01:11:13,230 --> 01:11:15,310
+I mean, [NOISE] in particular, um,
+我的意思是，[NOISE]特别是，嗯，
+
+1243
+01:11:15,310 --> 01:11:20,320
+most NLP work uses fine-grained parts of speech.
+大多数NLP工作使用细粒度的词性。
+
+1244
+01:11:20,320 --> 01:11:23,620
+So you don't only have a part of speech like noun or verb,
+所以你不仅要有名词或动词等词性，
+
+1245
+01:11:23,620 --> 01:11:26,890
+you have parts of speech like singular noun versus
+你有像单数名词对比的词性
+
+1246
+01:11:26,890 --> 01:11:31,650
+plural noun and you have different parts of speech for, you know,
+复数名词，你有不同的词性，你知道，
+
+1247
+01:11:31,650 --> 01:11:36,070
+work, works, working, kind of the different forms of
+工作，工作，工作，种类的不同形式
+
+1248
+01:11:36,070 --> 01:11:41,170
+verbs are given different parts of speech, um, as well.
+动词也有不同的词性，嗯。
+
+1249
+01:11:41,170 --> 01:11:45,355
+So there's sort of sets of parts of speech labels that kind of clusters.
+因此，有一些语音标签集合是一类集群。
+
+1250
+01:11:45,355 --> 01:11:47,940
+So maybe we could have distributed representations,
+也许我们可以分发表示，
+
+1251
+01:11:47,940 --> 01:11:50,955
+a part of speech that represent their similarity.
+表示其相似性的词性。
+
+1252
+01:11:50,955 --> 01:11:53,670
+Why not? Um, well if we're gonna do that,
+为什么不？嗯，好吧，如果我们要那样做，
+
+1253
+01:11:53,670 --> 01:11:57,140
+why not just keep on going and say the dependency labels.
+为什么不继续说依赖标签。
+
+1254
+01:11:57,140 --> 01:12:00,875
+They also, um, have a distributed representation.
+他们也有分布式代表。
+
+1255
+01:12:00,875 --> 01:12:04,405
+And so, we built a representation that did that.
+因此，我们建立了一个表达方式。
+
+1256
+01:12:04,405 --> 01:12:10,290
+So the idea is that we have in our stack,
+所以这个想法是我们在我们的堆栈中，
+
+1257
+01:12:10,290 --> 01:12:13,185
+the sort of the top positions of the stack,
+堆栈的顶部位置，
+
+1258
+01:12:13,185 --> 01:12:17,695
+the first positions of the buffer and for each of those positions,
+缓冲区的第一个位置以及每个位置的位置，
+
+1259
+01:12:17,695 --> 01:12:23,275
+we have a word and a part of speech and if we've already built structure as here,
+我们有一个词和一个词性，如果我们已经建立了这里的结构，
+
+1260
+01:12:23,275 --> 01:12:27,525
+we kind of know about a dependency that's already been built.
+我们知道已经建立的依赖关系。
+
+1261
+01:12:27,525 --> 01:12:31,790
+And so we've got a triple for each position and we're gonna convert
+所以我们每个位置都有三倍，我们会转换
+
+1262
+01:12:31,790 --> 01:12:36,295
+all of those into a distributed representation,
+所有这些都成为分布式表示，
+
+1263
+01:12:36,295 --> 01:12:41,960
+um, which we are learning and we're gonna use those distributed representations,
+嗯，我们正在学习，我们将使用那些分布式表示，
+
+1264
+01:12:41,960 --> 01:12:45,065
+um, to build our parser.
+嗯，构建我们的解析器。
+
+1265
+01:12:45,065 --> 01:12:47,750
+Okay. Now for- so,
+好的。现在，所以，
+
+1266
+01:12:47,750 --> 01:12:52,440
+you know starting from- starting from the next lecture forward,
+你知道从下一个讲座开始，
+
+1267
+01:12:52,440 --> 01:12:58,835
+we're gonna sort of s- start using a more complex forms of neural models.
+我们将开始使用更复杂形式的神经模型。
+
+1268
+01:12:58,835 --> 01:13:01,250
+But for this model, um,
+但对于这个模型，嗯，
+
+1269
+01:13:01,250 --> 01:13:05,780
+we did it in a sort of a very simple straightforward way.
+我们以一种非常简单明了的方式做到了。
+
+1270
+01:13:05,780 --> 01:13:10,960
+We said, well, we could just use exactly the same model,
+我们说，好吧，我们可以使用完全相同的模型，
+
+1271
+01:13:10,960 --> 01:13:15,160
+exactly the same parser structure that Nivre used, right?
+与Nivre完全相同的解析器结构，对吧？
+
+1272
+01:13:15,160 --> 01:13:18,620
+Doing those shifts and left arcs and right arcs.
+做那些移位并留下弧线和右弧线。
+
+1273
+01:13:18,620 --> 01:13:21,010
+Um, the only part we're gonna turn into
+嗯，我们唯一要变成的部分
+
+1274
+01:13:21,010 --> 01:13:25,590
+a neural network is we're gonna have the decision of what to do next,
+一个神经网络，我们将决定下一步做什么，
+
+1275
+01:13:25,590 --> 01:13:28,815
+um, being controlled by our neural network.
+嗯，由我们的神经网络控制。
+
+1276
+01:13:28,815 --> 01:13:31,070
+So our neural network is
+所以我们的神经网络是
+
+1277
+01:13:31,070 --> 01:13:37,040
+just a very simple classifier of the kind that we are talking about last week.
+这是我们上周谈论的一种非常简单的分类器。
+
+1278
+01:13:37,040 --> 01:13:39,665
+So based on the configuration,
+所以根据配置，
+
+1279
+01:13:39,665 --> 01:13:44,400
+we create an input layer which means we're sort
+我们创建一个输入层，这意味着我们要排序
+
+1280
+01:13:44,400 --> 01:13:49,140
+of taking the stuff in these boxers and turn- and looking up
+把这些东西拿进这些拳击手然后转身看
+
+1281
+01:13:49,140 --> 01:13:54,580
+a vector representation for each one and concatenating them together to produce
+每个人的矢量表示，并将它们连接在一起产生
+
+1282
+01:13:54,580 --> 01:13:59,050
+a input representation that's sort of similar to when we were making
+输入表示与我们制作时的类似
+
+1283
+01:13:59,050 --> 01:14:03,935
+those window classifiers and then we can concatenate a bunch of stuff together.
+那些窗口分类器然后我们可以将一堆东西连接在一起。
+
+1284
+01:14:03,935 --> 01:14:06,040
+So that gives us in our input layer.
+这样我们就可以进入输入层了。
+
+1285
+01:14:06,040 --> 01:14:08,490
+[NOISE] Um, so from there,
+[NOISE]嗯，所以从那里，
+
+1286
+01:14:08,490 --> 01:14:12,200
+we put things through a hidden layer just like last week.
+我们就像上周一样把事情透过隐藏层。
+
+1287
+01:14:12,200 --> 01:14:18,130
+We do Wx plus b and then put it through a ReLU or a non-linearity to a hidden layer.
+我们做Wx加b然后通过ReLU或非线性到隐藏层。
+
+1288
+01:14:18,130 --> 01:14:19,910
+And then on top of that,
+然后最重要的是，
+
+1289
+01:14:19,910 --> 01:14:23,605
+we're simply gonna stick a softmax output layer.
+我们只是要坚持使用softmax输出层。
+
+1290
+01:14:23,605 --> 01:14:25,820
+So multiplying by another matrix,
+所以乘以另一个矩阵，
+
+1291
+01:14:25,820 --> 01:14:28,905
+adding another, um, bias term,
+添加另一个，嗯，偏见术语，
+
+1292
+01:14:28,905 --> 01:14:32,000
+and then that goes into the softmax which is gonna give
+然后进入softmax，它将给予
+
+1293
+01:14:32,000 --> 01:14:37,780
+a probability over our actions as to whether it's shift left arc or right arc,
+关于它是左移弧还是右弧的行为的概率，
+
+1294
+01:14:37,780 --> 01:14:40,055
+or the corresponding one with labels.
+或带有标签的相应的。
+
+1295
+01:14:40,055 --> 01:14:45,800
+And then we're gonna use the same kind of cross entropy loss to say how good a job did we
+然后我们将使用相同类型的交叉熵损失来说明我们的工作有多好
+
+1296
+01:14:45,800 --> 01:14:48,440
+do at guessing the action that we should have
+猜测我们应该采取的行动
+
+1297
+01:14:48,440 --> 01:14:52,050
+taken according to the tree bank parse of the sentence.
+根据树库解析句子。
+
+1298
+01:14:52,050 --> 01:14:56,490
+And so each step of the shift-reduce parser,
+所以shift-reduce解析器的每一步，
+
+1299
+01:14:56,490 --> 01:15:01,120
+we're making a decision as what to do next and we're doing it by this classifier
+我们正在决定下一步做什么，我们正在通过这个分类器来做
+
+1300
+01:15:01,120 --> 01:15:03,120
+and we're getting a loss to
+我们正在亏损
+
+1301
+01:15:03,120 --> 01:15:06,815
+the extent that we don't give probability one to the right action.
+我们在多大程度上没有给出正确行动的概率。
+
+1302
+01:15:06,815 --> 01:15:11,380
+Um, and so that's what we did using the tree bank.
+嗯，这就是我们使用树库做的事情。
+
+1303
+01:15:11,380 --> 01:15:14,145
+We trained up our parser, um,
+我们训练了解析器，嗯，
+
+1304
+01:15:14,145 --> 01:15:19,825
+and it was then able to predict the sentences.
+然后就可以预测句子了。
+
+1305
+01:15:19,825 --> 01:15:23,680
+And the cool thing- the cool thing was,
+而酷的东西 - 很酷的是，
+
+1306
+01:15:23,680 --> 01:15:26,410
+um, that this, um,
+嗯，这个，嗯，
+
+1307
+01:15:26,410 --> 01:15:30,160
+had all the good things of Nivre's parser but, you know,
+拥有Nivre解析器的所有好东西，但是，你知道，
+
+1308
+01:15:30,160 --> 01:15:33,890
+by having it use these dense representations,
+通过让它使用这些密集的表示，
+
+1309
+01:15:33,890 --> 01:15:36,280
+it meant that we could get greater accuracy and
+这意味着我们可以获得更高的准确性
+
+1310
+01:15:36,280 --> 01:15:39,845
+speed than Nivre's parser at the same time.
+速度比Nivre的解析器同时快。
+
+1311
+01:15:39,845 --> 01:15:43,270
+So here is sort of some results on that.
+所以这里有一些结果。
+
+1312
+01:15:43,270 --> 01:15:46,230
+I mean, I already showed you some earlier results, right?
+我的意思是，我已经向你展示了一些早期的结果，对吗？
+
+1313
+01:15:46,230 --> 01:15:49,215
+So this was showing, um, the fact, um,
+所以这表明，嗯，事实，嗯，
+
+1314
+01:15:49,215 --> 01:15:53,310
+that, you know, we're outperforming these earlier parsers basically.
+你知道，我们基本上超越了这些早期的解析器。
+
+1315
+01:15:53,310 --> 01:15:56,445
+But subsequent to us doing this work,
+但是在我们做完这项工作之后
+
+1316
+01:15:56,445 --> 01:15:58,880
+um, people at Google,
+嗯，谷歌的人，
+
+1317
+01:15:58,880 --> 01:16:03,050
+um, these papers here by Weiss and Andor,
+嗯，Weiss和Andor的这些论文，
+
+1318
+01:16:03,050 --> 01:16:05,625
+um, they said, "Well, this is pretty cool.
+嗯，他们说，“嗯，这很酷。
+
+1319
+01:16:05,625 --> 01:16:11,460
+Um, maybe we can get the numbers even better if we make our neural network,
+嗯，如果我们建立神经网络，也许我们可以得到更好的数字，
+
+1320
+01:16:11,460 --> 01:16:17,705
+um, bigger and deeper and we spend a lot more time tuning our hyper-parameters."
+嗯，越来越大，我们花了很多时间来调整我们的超参数。“
+
+1321
+01:16:17,705 --> 01:16:19,690
+Um, sad but true.
+嗯，伤心但真实。
+
+1322
+01:16:19,690 --> 01:16:21,900
+All of these things help when you're building
+所有这些都有助于你的建设
+
+1323
+01:16:21,900 --> 01:16:25,015
+neural networks and when you're doing your final project.
+神经网络，当你做最后的项目时。
+
+1324
+01:16:25,015 --> 01:16:29,185
+Sometimes the answer to making the results better is to make it bigger,
+有时，使结果更好的答案是使其更大，
+
+1325
+01:16:29,185 --> 01:16:32,795
+deeper and spend more time choosing the hyper-parameters.
+更深入，花更多时间选择超参数。
+
+1326
+01:16:32,795 --> 01:16:36,205
+Um, they put in Beam search as I sort of mentioned.
+嗯，他们提到了Beam搜索，正如我提到的那样。
+
+1327
+01:16:36,205 --> 01:16:37,950
+Um, Beam search can really help.
+嗯，Beam搜索确实有帮助。
+
+1328
+01:16:37,950 --> 01:16:39,490
+So in Beam search,
+所以在Beam搜索中，
+
+1329
+01:16:39,490 --> 01:16:42,320
+you know, rather than just saying,
+你知道，而不仅仅是说，
+
+1330
+01:16:42,320 --> 01:16:44,850
+"Let's work out what's the best next action,
+“让我们找出最好的下一步行动，
+
+1331
+01:16:44,850 --> 01:16:46,530
+do that one and repeat over",
+做那个并重复“，
+
+1332
+01:16:46,530 --> 01:16:49,300
+you allow yourself to do a little bit of search.
+你允许自己做一些搜索。
+
+1333
+01:16:49,300 --> 01:16:53,520
+You sort of say, "Well, let's consider two actions and explore what happens."
+你有点说，“好吧，让我们考虑两个动作并探索会发生什么。”
+
+1334
+01:16:53,520 --> 01:16:55,780
+Um, quick question.
+嗯，快速提问。
+
+1335
+01:16:55,780 --> 01:17:00,480
+Do humans always agree on how to build this trees and if they don't,
+人类总是同意如何建造这些树木，如果他们不这样做，
+
+1336
+01:17:00,480 --> 01:17:05,525
+what will be the [inaudible] or agreement of humans relative to [inaudible] [OVERLAPPING] [NOISE]
+与[听不清] [重叠] [噪音]相比，人类的[音频不清晰]或协议会是什么？
+
+1337
+01:17:05,525 --> 01:17:08,685
+So that's a good question which I haven't addressed.
+所以这是一个我没有提到的好问题。
+
+1338
+01:17:08,685 --> 01:17:11,485
+Um, humans don't always agree.
+嗯，人类并不总是同意。
+
+1339
+01:17:11,485 --> 01:17:15,010
+There are sort of two reasons they can't agree fundamentally.
+有两个原因他们无法从根本上达成一致。
+
+1340
+01:17:15,010 --> 01:17:16,980
+One is that, uh, humans,
+一个是，呃，人类，
+
+1341
+01:17:16,980 --> 01:17:18,480
+um, sort of mess up, right?
+嗯，有点搞砸，对吧？
+
+1342
+01:17:18,480 --> 01:17:20,950
+Because human work is doing this aren't perfect.
+因为人类的工作做得并不完美。
+
+1343
+01:17:20,950 --> 01:17:25,360
+And the other one is they generally think that there should be different structures.
+而另一个是他们普遍认为应该有不同的结构。
+
+1344
+01:17:25,360 --> 01:17:27,030
+Um, so, you know,
+嗯，你知道，
+
+1345
+01:17:27,030 --> 01:17:30,455
+it depend- varies depending on the circumstances and so on.
+它取决于具体情况，具体取决于具体情况。
+
+1346
+01:17:30,455 --> 01:17:33,840
+If you just get humans to parse sentences and say,
+如果你让人类解析句子并说，
+
+1347
+01:17:33,840 --> 01:17:37,220
+"Well, what is the agreement and what they produced?"
+“嗯，协议是什么，他们制作了什么？”
+
+1348
+01:17:37,220 --> 01:17:41,055
+You know, maybe you're only getting something like 92 percent.
+你知道，也许你的收入只有92％。
+
+1349
+01:17:41,055 --> 01:17:45,465
+But, you know, if you then do an adjudication phase and you say, "Um,
+但是，你知道，如果你再做一个裁决阶段并且你说，“嗯，
+
+1350
+01:17:45,465 --> 01:17:47,955
+look at these differences,
+看看这些差异，
+
+1351
+01:17:47,955 --> 01:17:50,340
+um, is one of them right or wrong?"
+嗯，其中一个是对还是错？“
+
+1352
+01:17:50,340 --> 01:17:52,050
+There are a lot of them where, you know,
+你知道，其中有很多地方
+
+1353
+01:17:52,050 --> 01:17:53,830
+one of the person is effectively saying,
+其中一个人有效地说，
+
+1354
+01:17:53,830 --> 01:17:55,000
+"Oh yeah, I goofed.
+“哦，是的，我傻了。
+
+1355
+01:17:55,000 --> 01:17:57,570
+Um, wasn't paying attention or whatever."
+嗯，没有注意或其他什么。“
+
+1356
+01:17:57,570 --> 01:17:58,950
+Um, and so then,
+嗯，等等，
+
+1357
+01:17:58,950 --> 01:18:01,450
+what's the residual rate in which,
+什么是剩余率，
+
+1358
+01:18:01,450 --> 01:18:05,350
+um, people can actually disagree about possible parses?
+嗯，人们实际上可能不同意可能的解析？
+
+1359
+01:18:05,350 --> 01:18:07,760
+I think that's sort of more around three percent.
+我认为这有点大约3％。
+
+1360
+01:18:07,760 --> 01:18:09,400
+Um, yeah.
+嗯，是的
+
+1361
+01:18:09,400 --> 01:18:11,790
+But there certainly are cases and that includes
+但肯定有案例，包括
+
+1362
+01:18:11,790 --> 01:18:14,685
+some of the prepositional phrase attachment ambiguities.
+一些介词短语附件含糊不清。
+
+1363
+01:18:14,685 --> 01:18:17,510
+Sometimes there are multiple attachments
+有时会有多个附件
+
+1364
+01:18:17,510 --> 01:18:19,290
+that sort of same clause although it's not really
+那种相同的条款虽然不是真的
+
+1365
+01:18:19,290 --> 01:18:21,600
+clear which one is right even though there are lots of
+明确哪一个是正确的，即使有很多
+
+1366
+01:18:21,600 --> 01:18:24,710
+other circumstances where one of them is very clearly wrong.
+其中一个人非常明显错误的其他情况。
+
+1367
+01:18:24,710 --> 01:18:27,120
+Um, yeah.
+嗯，是的
+
+1368
+01:18:27,120 --> 01:18:28,280
+[inaudible].
+[听不见的。
+
+1369
+01:18:28,950 --> 01:18:32,210
+There's- there's still room to do better.
+还有更好的空间。
+
+1370
+01:18:32,210 --> 01:18:34,400
+I mean, at the unlabeled attachment score,
+我的意思是，在未标记的附件分数，
+
+1371
+01:18:34,400 --> 01:18:35,960
+it's actually starting to get pretty good.
+它实际上开始变得非常好。
+
+1372
+01:18:35,960 --> 01:18:38,570
+But there's still room to do better. Um, yeah.
+但仍有改善的空间。嗯，是的
+
+1373
+01:18:38,570 --> 01:18:40,460
+Um, yeah.
+嗯，是的
+
+1374
+01:18:40,460 --> 01:18:41,910
+So Beam search,
+所以梁搜索，
+
+1375
+01:18:41,910 --> 01:18:45,110
+the final thing that they did was- that we're not gonna talk about here,
+他们做的最后一件事是 - 我们不会在这里讨论，
+
+1376
+01:18:45,110 --> 01:18:49,480
+is the sort of more global inference to make sure, um, it's sensible.
+是一种更全面的推理，以确保，嗯，这是明智的。
+
+1377
+01:18:49,480 --> 01:18:51,610
+Um, and so, um,
+嗯，等等，嗯，
+
+1378
+01:18:51,610 --> 01:18:56,250
+that then led to Google developing these models that they gave silly names to,
+然后导致谷歌开发这些模型，他们给出了愚蠢的名字，
+
+1379
+01:18:56,250 --> 01:18:59,095
+especially the Parsey McPa- parseFace,
+尤其是Parsey McPa-parseFace，
+
+1380
+01:18:59,095 --> 01:19:01,355
+um, model of parsing.
+嗯，解析模型。
+
+1381
+01:19:01,355 --> 01:19:03,385
+Um, and so, yeah.
+嗯，是的，是的。
+
+1382
+01:19:03,385 --> 01:19:08,395
+So that then- that's sort of pushed up the numbers even further so that they were sort of
+那么那就是 - 这种情况进一​​步推高了这些数字，以至于它们有点像
+
+1383
+01:19:08,395 --> 01:19:13,775
+getting close to 95 percent unlabeled accuracy score from these models.
+从这些模型中获得接近95％的未标记准确度分数。
+
+1384
+01:19:13,775 --> 01:19:15,905
+And actually, this work has kind of,
+实际上，这项工作有点儿，
+
+1385
+01:19:15,905 --> 01:19:19,485
+you know, deep learning people like to optimize.
+你知道，深入学习的人喜欢优化。
+
+1386
+01:19:19,485 --> 01:19:21,730
+Um, this work [LAUGHTER] has continued along
+嗯，这项工作[笑声]一直在继续
+
+1387
+01:19:21,730 --> 01:19:24,345
+in the intervening two years and the numbers are sort of getting,
+在这两年间，数字有点增加，
+
+1388
+01:19:24,345 --> 01:19:26,310
+um, a bit higher again.
+嗯，再高一点。
+
+1389
+01:19:26,310 --> 01:19:29,345
+But, you know, so this actually, um,
+但是，你知道，所以这实际上，嗯，
+
+1390
+01:19:29,345 --> 01:19:37,440
+led to ah sort of a new era of sort of better parsers because so effectively this was the
+导致了一种更好的解析器的新时代，因为有效地这就是
+
+1391
+01:19:37,440 --> 01:19:42,350
+90's- the 90's era of parsers that was sort of where
+90年代 -  90年代的解析器时代就在哪里
+
+1392
+01:19:42,350 --> 01:19:48,320
+around 90 percent and then going into this sort of new generation of,
+大约90％，然后进入这种新一代，
+
+1393
+01:19:48,320 --> 01:19:51,580
+um, neural transition based dependency parsers.
+嗯，基于神经过渡的依赖解析器。
+
+1394
+01:19:51,580 --> 01:19:55,260
+We sort of have gone down that we've halve that error- error rate.
+我们已经失败了，我们已经将误差率降低了一半。
+
+1395
+01:19:55,260 --> 01:19:59,120
+And we're now down to sort of about a five percent error rate.
+而现在我们的错误率大约为5％。
+
+1396
+01:19:59,120 --> 01:20:01,430
+Yeah. I'm basically out of time now but, you know,
+是啊。我现在基本上没时间了，但是，你知道，
+
+1397
+01:20:01,430 --> 01:20:04,080
+there is further work including, you know, at Stanford.
+还有更多的工作，包括你在斯坦福大学的工作。
+
+1398
+01:20:04,080 --> 01:20:07,660
+Um, another student, Tim Dossad has some sort of more recent work.
+嗯，另一名学生Tim Dossad最近有一些工作。
+
+1399
+01:20:07,660 --> 01:20:09,590
+It's more accurate than 95 percent, right?
+它比95％准确，对吧？
+
+1400
+01:20:09,590 --> 01:20:13,180
+So we- we're still going on but I think I'd better stop here today,
+所以我们 - 我们还在继续，但我想我今天最好在这里停下来，
+
+1401
+01:20:13,180 --> 01:20:16,310
+um, and that's neural dependency parsing. [NOISE].
+嗯，这是神经依赖解析。 [噪声]。
+
+1402
+
+

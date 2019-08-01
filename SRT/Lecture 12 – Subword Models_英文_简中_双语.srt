@@ -1,0 +1,6148 @@
+1
+00:00:05,480 --> 00:00:07,890
+Okay. Hi, everyone.
+好的。嗨，大家好。
+
+2
+00:00:07,890 --> 00:00:10,365
+Let's get started again.
+让我们重新开始吧。
+
+3
+00:00:10,365 --> 00:00:17,100
+Okay, so first of all let me just say a bit about Assignment 5.
+好的，首先让我先谈谈作业5。
+
+4
+00:00:17,100 --> 00:00:20,715
+So Assignment 5 is coming out today.
+所以作业5今天即将发布。
+
+5
+00:00:20,715 --> 00:00:22,580
+Um, it's a brand new assignment,
+嗯，这是一个全新的任务，
+
+6
+00:00:22,580 --> 00:00:25,080
+so you guys are the guinea pigs for that.
+所以你们这些是豚鼠。
+
+7
+00:00:25,080 --> 00:00:31,365
+Um, and so what it's going to be, it essentially builds on Assignment 4.
+嗯，所以它将会是什么，它基本上建立在作业4上。
+
+8
+00:00:31,365 --> 00:00:34,560
+Um, so it's okay if you didn't do perfectly on Assignment 4,
+嗯，如果你没有在作业4上做得很好，那也没关系，
+
+9
+00:00:34,560 --> 00:00:36,405
+but I think actually most people did.
+但我认为大多数人都这样做了。
+
+10
+00:00:36,405 --> 00:00:39,990
+Um, and what we're gonna be doing is adding, um,
+嗯，我们要做的就是补充一下，嗯，
+
+11
+00:00:39,990 --> 00:00:42,290
+convolutional neural networks and subword
+卷积神经网络和子词
+
+12
+00:00:42,290 --> 00:00:45,590
+modeling to the neural machine translation system,
+建模到神经机器翻译系统，
+
+13
+00:00:45,590 --> 00:00:47,305
+seeking it to make it better.
+寻求它使它变得更好。
+
+14
+00:00:47,305 --> 00:00:52,850
+Um, so this assignment is coding heavy, written questions light.
+嗯，所以这个任务编写繁重的书面问题。
+
+15
+00:00:52,850 --> 00:00:56,360
+Um, so I mean the coding that you have
+嗯，所以我的意思是你所拥有的编码
+
+16
+00:00:56,360 --> 00:01:00,410
+to do sort of isn't actually really more difficult than Assignment 4,
+做什么实际上并不比分配4更难，
+
+17
+00:01:00,410 --> 00:01:02,585
+it's kind of like Assignment 4.
+这有点像作业4。
+
+18
+00:01:02,585 --> 00:01:08,710
+But what we're hoping is that this time you will be able to do it on your own.
+但我们希望这次你能够自己做到这一点。
+
+19
+00:01:08,710 --> 00:01:10,725
+Now what I mean by that,
+我的意思是，
+
+20
+00:01:10,725 --> 00:01:12,480
+um, is for Assignment 4.
+嗯，是作业4。
+
+21
+00:01:12,480 --> 00:01:16,640
+Well, there was tons of scaffolding telling you what everything should be,
+好吧，有大量的脚手架告诉你应该是什么，
+
+22
+00:01:16,640 --> 00:01:20,270
+and there were all of these auto-grader checks and you could keep on working on
+并且有所有这些自动分级员检查，你可以继续工作
+
+23
+00:01:20,270 --> 00:01:24,980
+your code until they passed all the autograder checks, and everybody did.
+你的代码，直到他们通过所有的自动编程检查，每个人都做了。
+
+24
+00:01:24,980 --> 00:01:29,270
+Um, and so it was very kind of coddled, shall we say.
+嗯，所以它非常娇宠，我们可以说。
+
+25
+00:01:29,270 --> 00:01:31,625
+Um, but I mean,
+嗯，但我的意思是，
+
+26
+00:01:31,625 --> 00:01:37,160
+I guess what we're really wanting to achieve is to have a more- sorry, question.
+我想我们真正希望实现的目标是提出一个更令人遗憾的问题。
+
+27
+00:01:37,160 --> 00:01:38,390
+[inaudible]?
+[听不清]？
+
+28
+00:01:38,390 --> 00:01:43,510
+Yes. So what we're hoping is that this can be, uh, useful.
+是。所以我们希望这可以，呃，有用。
+
+29
+00:01:43,510 --> 00:01:48,380
+Um, it'll be short-term pain but useful as being
+嗯，这将是短暂的痛苦但是有用
+
+30
+00:01:48,380 --> 00:01:51,350
+a more effective ramp to doing
+做得更有效
+
+31
+00:01:51,350 --> 00:01:55,400
+the final project and indeed for the rest of your life, right.
+最后的项目，确实是你的余生，对吧。
+
+32
+00:01:55,400 --> 00:01:58,220
+And the- the reality is that in the rest of your life,
+而现实是，在你的余生中，
+
+33
+00:01:58,220 --> 00:02:01,820
+you sort of if you're going to be doing things with deep learning,
+如果你要用深度学习做事，你会有点兴奋，
+
+34
+00:02:01,820 --> 00:02:03,920
+you kind of have to work out what kind of
+你有点想弄出什么样的
+
+35
+00:02:03,920 --> 00:02:06,740
+model to build and which pieces to stitch together,
+建造模型和拼接的部分，
+
+36
+00:02:06,740 --> 00:02:11,090
+and how to write some tests to see if it's doing something sensible.
+以及如何编写一些测试来看看它是否做了明智的事情。
+
+37
+00:02:11,090 --> 00:02:13,775
+And if it's not doing something sensible, um,
+如果它没有做一些明智的事，嗯，
+
+38
+00:02:13,775 --> 00:02:17,509
+to figure out how you could change things and try different things,
+弄清楚如何改变事物并尝试不同的事物，
+
+39
+00:02:17,509 --> 00:02:19,355
+and get it to work sensibly.
+让它明智地工作。
+
+40
+00:02:19,355 --> 00:02:21,155
+And so that's what we're hoping,
+这就是我们所希望的，
+
+41
+00:02:21,155 --> 00:02:22,730
+um, that people, um,
+嗯，那个人，嗯，
+
+42
+00:02:22,730 --> 00:02:24,650
+can do in Assignment 5,
+可以在作业5中做，
+
+43
+00:02:24,650 --> 00:02:25,850
+so you've got to,
+所以你必须这样做，
+
+44
+00:02:25,850 --> 00:02:28,090
+um, figure things out.
+嗯，搞清楚。
+
+45
+00:02:28,090 --> 00:02:31,790
+Um, should write your own testing code.
+嗯，应该编写自己的测试代码。
+
+46
+00:02:31,790 --> 00:02:34,490
+Um, we don't have a public autograder,
+嗯，我们没有公共自动贩卖机，
+
+47
+00:02:34,490 --> 00:02:38,510
+so you should- that's part of working out your own sanity checks,
+所以你应该 - 这是你自己的理智检查的一部分，
+
+48
+00:02:38,510 --> 00:02:44,150
+trying to do things like what I talked about last week of sort of getting
+试着去做我上周谈到的那种事情
+
+49
+00:02:44,150 --> 00:02:47,420
+simple bits working, confirming that they work on
+简单的工作，确认他们的工作
+
+50
+00:02:47,420 --> 00:02:51,620
+minute amounts of test data and so on, and doing things more sensibly.
+微量的测试数据等，并做得更明智。
+
+51
+00:02:51,620 --> 00:02:53,999
+I mean in particular,
+我的意思是，
+
+52
+00:02:55,490 --> 00:02:59,100
+um, the one particular part of that,
+嗯，其中一个特别的部分，
+
+53
+00:02:59,100 --> 00:03:02,640
+that we were planning to do, um, for,
+我们打算做的，嗯，因为，
+
+54
+00:03:02,640 --> 00:03:06,015
+um, this assignment, I was looking for it,
+嗯，这个任务，我一直在找，
+
+55
+00:03:06,015 --> 00:03:07,920
+um, but it's on the next slide.
+嗯，但它是在下一张幻灯片上。
+
+56
+00:03:07,920 --> 00:03:11,620
+Um, so, um, for this assignment and beyond, um,
+嗯，所以，嗯，对于这项任务以及更远，嗯，
+
+57
+00:03:11,620 --> 00:03:16,260
+we're going to enforce rules like more like they are in CS107,
+我们将执行更像CS107中的规则，
+
+58
+00:03:16,260 --> 00:03:18,130
+for those of you who are undergrads,
+对于那些本科生来说，
+
+59
+00:03:18,130 --> 00:03:22,835
+meaning that the TAs don't look at and debug your code for you.
+这意味着TA不会为您查看和调试代码。
+
+60
+00:03:22,835 --> 00:03:24,860
+Um, and so, you know,
+嗯，你知道，
+
+61
+00:03:24,860 --> 00:03:29,930
+of course we still want TAs to be helpful, come to them with your problems, um,
+当然，我们仍然希望助教有帮助，带着你的问题来找他们，嗯，
+
+62
+00:03:29,930 --> 00:03:33,514
+talk about how you're meant to use different things,
+谈谈你如何使用不同的东西，
+
+63
+00:03:33,514 --> 00:03:35,420
+um, in the PyTorch library,
+嗯，在PyTorch图书馆，
+
+64
+00:03:35,420 --> 00:03:41,300
+um, but you shouldn't be regarding it as the TA's job of, here's a big Python file.
+嗯，但你不应该把它视为TA的工作，这是一个很大的Python文件。
+
+65
+00:03:41,300 --> 00:03:43,580
+Um, can you tell me what's wrong with it,
+嗯，你能告诉我它有什么问题吗？
+
+66
+00:03:43,580 --> 00:03:45,830
+and fix it up for you.
+并为你解决。
+
+67
+00:03:45,830 --> 00:03:49,485
+Okay. Um, the precise policy for that's,
+好的。嗯，这个的确切政策，
+
+68
+00:03:49,485 --> 00:03:51,870
+um, written up on Piazza.
+嗯，写在广场上。
+
+69
+00:03:51,870 --> 00:03:58,130
+Okay. So after- any questions about that or do I go straight on in?
+好的。那么之后 - 有关于此的任何问题或我是否会直接进入？
+
+70
+00:03:59,580 --> 00:04:05,145
+Okay. Um, yes so today's lecture,
+好的。嗯，是的，今天的讲座，
+
+71
+00:04:05,145 --> 00:04:10,650
+um, in some sense today's lecture is an easy lecture.
+嗯，在某种意义上，今天的讲座是一个简单的讲座。
+
+72
+00:04:10,650 --> 00:04:13,350
+Um, so last time's lecture,
+嗯，所以上次讲座，
+
+73
+00:04:13,350 --> 00:04:16,420
+there was really sort of a ton of new stuff
+真的有很多新东西
+
+74
+00:04:16,420 --> 00:04:19,975
+of other stuff on neural networks that you haven't seen before,
+你以前没见过的神经网络上的其他东西，
+
+75
+00:04:19,975 --> 00:04:23,410
+and we did Convnets and we did pooling layers,
+我们做了Convnets，我们做了汇集层，
+
+76
+00:04:23,410 --> 00:04:26,260
+and we did highway and residual connections,
+我们做了高速公路和剩余连接，
+
+77
+00:04:26,260 --> 00:04:29,970
+and batch norms, and I don't know, whatever else we did.
+和批量规范，我不知道，我们做了什么。
+
+78
+00:04:29,970 --> 00:04:32,525
+Um, size one convolutions I guess.
+嗯，我想是一个大小的卷积。
+
+79
+00:04:32,525 --> 00:04:36,110
+So there are tons of new stuff really
+所以真的有很多新东西
+
+80
+00:04:36,110 --> 00:04:39,580
+in this lecture in terms of sort of neural network machinery,
+在这个讲座中，神经网络机器的种类，
+
+81
+00:04:39,580 --> 00:04:41,300
+there isn't any new stuff at all.
+没有任何新东西。
+
+82
+00:04:41,300 --> 00:04:42,500
+So this is really easy.
+所以这很容易。
+
+83
+00:04:42,500 --> 00:04:48,875
+Um, and this is also really a new lecture but it was sort of put in for a reason.
+嗯，这也是一个新的讲座，但它有点理由。
+
+84
+00:04:48,875 --> 00:04:53,570
+And the reason for this relates to a kinda remark I made
+其原因与我所作的一种评论有关
+
+85
+00:04:53,570 --> 00:04:58,700
+last time about how lots of stuff keeps changing in neural network land.
+上一次关于神经网络领域中有多少东西不断变化的问题。
+
+86
+00:04:58,700 --> 00:05:01,850
+So at the time we first designed this class and
+所以当时我们第一次设计这个课程和
+
+87
+00:05:01,850 --> 00:05:05,090
+the way as- that a lot of the structure of it still is.
+因为它的很多结构仍然存在。
+
+88
+00:05:05,090 --> 00:05:10,830
+Um, that sort of around 2014-2015 when we designed this class,
+嗯，就在2014  -  2015年我们设计这个课程时，
+
+89
+00:05:10,830 --> 00:05:13,175
+it was basically axiomatic that
+这基本上是公理化的
+
+90
+00:05:13,175 --> 00:05:18,185
+all deep learning models for natural language processing worked off words.
+所有用于自然语言处理的深度学习模型都能解决问题。
+
+91
+00:05:18,185 --> 00:05:22,400
+And therefore it completely made sense that we start with word vectors,
+因此，我们从单词向量开始是完全有意义的，
+
+92
+00:05:22,400 --> 00:05:26,170
+and then we start looking at things like recurrent models over words.
+然后我们开始研究复发模型等词语。
+
+93
+00:05:26,170 --> 00:05:31,580
+Whereas the fact of the matter is in the last approximately three years,
+事情的事实是在过去大约三年，
+
+94
+00:05:31,580 --> 00:05:36,455
+there's been a ton of new work including some of the most influential new work.
+有大量的新作品，包括一些最有影响力的新作品。
+
+95
+00:05:36,455 --> 00:05:40,960
+There's building language models that aren't- isn't -isn't aren't, um,
+那些不是的建筑语言模型 - 不是 - 不是，嗯，
+
+96
+00:05:40,960 --> 00:05:46,895
+being built over words that they're building, built over pieces of words or characters.
+建立在他们正在建造的文字上，建立在文字或字符之上。
+
+97
+00:05:46,895 --> 00:05:49,640
+And so this lecture is sort of meant to give you
+所以这个讲座有点意味着给你
+
+98
+00:05:49,640 --> 00:05:52,985
+some sense of these other ways of doing things and,
+对这些其他做事方式的一些感觉，
+
+99
+00:05:52,985 --> 00:05:56,900
+um, some orientation to some of the things that's going on.
+嗯，对一些正在发生的事情有所了解。
+
+100
+00:05:56,900 --> 00:05:59,930
+But the actual kind of models that we're looking at, uh,
+但是我们正在看的实际模型，呃，
+
+101
+00:05:59,930 --> 00:06:03,920
+sort of using all of the building blocks that we've already looked at, things like,
+使用我们已经看过的所有构建块，比如，
+
+102
+00:06:03,920 --> 00:06:08,030
+um, RNNs and ConvNets and things like that.
+嗯，RNN和ConvNets等等。
+
+103
+00:06:08,030 --> 00:06:09,950
+So let's get into this.
+所以让我们进入这个。
+
+104
+00:06:09,950 --> 00:06:13,130
+Um, so I'm going to start off with a teeny bit
+嗯，所以我要开始一点点
+
+105
+00:06:13,130 --> 00:06:17,105
+of linguistics of learning about the structure of language, um,
+学习语言结构的语言学，嗯，
+
+106
+00:06:17,105 --> 00:06:22,520
+at first sort of lower level units of language and then we'll see how that pans out,
+在第一种较低级别的语言单元，然后我们将看到如何平移，
+
+107
+00:06:22,520 --> 00:06:25,345
+um, for things like character level models.
+对于角色等级模型这样的东西。
+
+108
+00:06:25,345 --> 00:06:27,440
+So in linguistics, um,
+那么在语言学方面，嗯，
+
+109
+00:06:27,440 --> 00:06:30,980
+if you start at the bottom of the totem pole,
+如果你从图腾柱的底部开始，
+
+110
+00:06:30,980 --> 00:06:34,099
+the first-level of linguistics is phonetics,
+第一级语言学是语音学，
+
+111
+00:06:34,099 --> 00:06:38,420
+which is sort of understanding the sounds and the physiology of human speech.
+这有点理解人类语音的声音和生理学。
+
+112
+00:06:38,420 --> 00:06:40,860
+So that's sort of like physics, or physiology,
+所以这有点像物理学或生理学，
+
+113
+00:06:40,860 --> 00:06:44,355
+or something, right, there are mouth parts that move,
+或某事，对，有嘴部分移动，
+
+114
+00:06:44,355 --> 00:06:46,529
+there are ear parts that act as filters,
+有耳部作为过滤器，
+
+115
+00:06:46,529 --> 00:06:50,030
+and there's, um, audio waves in between the two of them.
+嗯，这两者之间有音频波。
+
+116
+00:06:50,030 --> 00:06:53,270
+So that's kind of uncontroversial in some sense.
+从某种意义上讲，这是毫无争议的。
+
+117
+00:06:53,270 --> 00:06:55,420
+Um, but above that level,
+嗯，但高于那个水平，
+
+118
+00:06:55,420 --> 00:07:00,460
+the standard thing that people do for the analysis of human languages is to say,
+人们为分析人类语言所做的标准事情就是说，
+
+119
+00:07:00,460 --> 00:07:06,230
+well human languages may seem to make use of a relatively small set of
+好的人类语言似乎可以利用相对较小的一组
+
+120
+00:07:06,230 --> 00:07:12,320
+distinctive units which are then commonly called phonemes which are actually categorical.
+然后通常称为音素的独特单元实际上是分类的。
+
+121
+00:07:12,320 --> 00:07:16,480
+And the idea here is that well,
+这里的想法很好，
+
+122
+00:07:16,480 --> 00:07:19,890
+uh, our mouths are continuous spaces, right.
+呃，我们的嘴是连续的空间，对。
+
+123
+00:07:19,890 --> 00:07:23,030
+That they've got these various bits of their mouths like, you know,
+你知道，他们有各种各样的嘴巴
+
+124
+00:07:23,030 --> 00:07:24,890
+tongues and pharynges and so on,
+舌头和咽喉等等，
+
+125
+00:07:24,890 --> 00:07:27,020
+but it's a continuous space.
+但这是一个连续的空间。
+
+126
+00:07:27,020 --> 00:07:31,610
+So actually, um, we can make an infinite variety of sounds, right.
+所以实际上，嗯，我们可以发出无数种声音，对吧。
+
+127
+00:07:31,610 --> 00:07:37,830
+So if I open my mouth and apply voicing and just wiggle my tongue around, I can go [NOISE].
+因此，如果我张开嘴并施加嗓音，只是扭动我的舌头，我就可以[NOISE]。
+
+128
+00:07:37,830 --> 00:07:41,570
+And I can make an infinite variety of different sounds.
+我可以制作各种不同的声音。
+
+129
+00:07:41,570 --> 00:07:46,990
+But the reality is that human languages aren't like that,
+但现实是人类语言不是那样的，
+
+130
+00:07:46,990 --> 00:07:49,915
+that out of that infinite variety of sounds,
+那种无穷无尽的声音，
+
+131
+00:07:49,915 --> 00:07:53,230
+we distinguish a small space of sounds.
+我们区分了一小段声音。
+
+132
+00:07:53,230 --> 00:07:58,570
+Um, and something that happens when languages change is, um,
+嗯，当语言改变时发生的事情是，嗯，
+
+133
+00:07:58,570 --> 00:08:01,535
+that the space of sounds that are seen as
+被视为的声音空间
+
+134
+00:08:01,535 --> 00:08:05,365
+important and distinguished in a language change.
+语言变化中的重要和杰出。
+
+135
+00:08:05,365 --> 00:08:10,570
+And that happens even with inside one language as- as English.
+即使用一种语言 - 就像英语一样，这种情况也会发生。
+
+136
+00:08:10,570 --> 00:08:13,255
+And I'm about to give an example of that.
+我即将举一个例子。
+
+137
+00:08:13,255 --> 00:08:20,630
+Um, so people in cog psych talk about the phenomenon of categorical perception.
+嗯，因此cog psych的人们谈论分类感知的现象。
+
+138
+00:08:20,630 --> 00:08:24,535
+And what that means is that really there's something continuous,
+这意味着什么是真的有连续的东西，
+
+139
+00:08:24,535 --> 00:08:30,410
+but that humans perceive it as belonging to fairly sharp categories.
+但人类认为它属于相当尖锐的类别。
+
+140
+00:08:30,410 --> 00:08:31,720
+Um, and, you know,
+嗯，你知道，
+
+141
+00:08:31,720 --> 00:08:34,345
+you can use that for sort of, you know,
+你知道，你可以使用它
+
+142
+00:08:34,345 --> 00:08:38,350
+styles of clothing or whether someone counts as fat or not.
+服装的风格或者是否有人认为是否有脂肪。
+
+143
+00:08:38,350 --> 00:08:43,745
+Um, but the most famous examples of categorical perception are in language,
+嗯，但最着名的分类感知的例子是语言，
+
+144
+00:08:43,745 --> 00:08:46,930
+where we can make an infinite variety of sounds but
+在哪里我们可以发出无数种声音但是
+
+145
+00:08:46,930 --> 00:08:50,435
+people per- perceive them as categories.
+人们将他们视为类别。
+
+146
+00:08:50,435 --> 00:08:55,775
+And so effectively what that means is when you have categorical perception,
+当你有分类感知时，这意味着什么呢？
+
+147
+00:08:55,775 --> 00:09:00,650
+the differences within a category are sort of perceived to have shrunk.
+一个类别中的差异有点被认为已经缩小。
+
+148
+00:09:00,650 --> 00:09:03,700
+You barely notice them at all where differences
+你几乎没有注意到它们的差异
+
+149
+00:09:03,700 --> 00:09:07,615
+across categories are expanded and very clear.
+跨类别的扩展和非常明确。
+
+150
+00:09:07,615 --> 00:09:09,850
+And so one of the cases that sort of studied
+所以研究的案例之一
+
+151
+00:09:09,850 --> 00:09:12,770
+a lot is what's called- referred to as sort of,
+所谓的很多 - 被称为，
+
+152
+00:09:12,770 --> 00:09:14,770
+um, voice onset time.
+嗯，发声时间。
+
+153
+00:09:14,770 --> 00:09:19,930
+So lots of languages including English have pairs of sounds like p and b, uh,
+所以包括英语在内的很多语言都有成对的声音，比如p和b，呃，
+
+154
+00:09:19,930 --> 00:09:25,150
+pah and bah, and they differ based on when voicing starts.
+pah和bah，他们根据发声开始时的不同而不同。
+
+155
+00:09:25,150 --> 00:09:29,165
+So buh, it has a voice sound like a vowel with an r in it.
+所以，它有一个声音，就像一个带有r的元音。
+
+156
+00:09:29,165 --> 00:09:31,510
+And well that's a continuous parameter,
+这是一个连续的参数，
+
+157
+00:09:31,510 --> 00:09:36,835
+you can sort of make any point along a spectrum between a p and a b but, um,
+你可以在ap和ab之间的频谱上做任何一点，但是，嗯，
+
+158
+00:09:36,835 --> 00:09:39,710
+human beings, um, who speak English,
+人类，嗯，会说英语，
+
+159
+00:09:39,710 --> 00:09:43,010
+um, perceive just two points on that spectrum.
+嗯，在这个频谱上只感知两点。
+
+160
+00:09:43,010 --> 00:09:47,320
+And you don't sort of really notice the fine differences between them.
+你并没有真正注意到它们之间的细微差别。
+
+161
+00:09:47,320 --> 00:09:50,380
+Um, some languages distinguish more points on the spectrum.
+嗯，一些语言区分了频谱上的更多点。
+
+162
+00:09:50,380 --> 00:09:53,980
+So Thai distinguishes three different consonant sounds,
+所以泰语区分了三种不同的辅音，
+
+163
+00:09:53,980 --> 00:09:56,810
+um, in depending on the voice onset time.
+嗯，取决于发声时间。
+
+164
+00:09:56,810 --> 00:09:58,840
+Um, something that might be, um,
+嗯，可能是，嗯，
+
+165
+00:09:58,840 --> 00:10:01,400
+more accessible to you is,
+你更容易接近，
+
+166
+00:10:01,400 --> 00:10:03,920
+um, this is an example of language change.
+嗯，这是语言变化的一个例子。
+
+167
+00:10:03,920 --> 00:10:06,375
+So for a speaker like me, um,
+对于像我这样的演讲者，嗯，
+
+168
+00:10:06,375 --> 00:10:10,480
+there was caught and cot and those are different vowels,
+有被抓住和婴儿床，这些是不同的元音，
+
+169
+00:10:10,480 --> 00:10:12,815
+and I hear them as different vowels.
+我听到他们是不同的元音。
+
+170
+00:10:12,815 --> 00:10:17,455
+But if you are someone who grew up in the southwest of the United States,
+但如果你是在美国西南部长大的人，
+
+171
+00:10:17,455 --> 00:10:21,820
+um, then these are exactly the same vowel and you don't distinguish them.
+嗯，那么这些是完全相同的元音，你不区分它们。
+
+172
+00:10:21,820 --> 00:10:26,390
+Then- you thought I said the same thing twice even though I'm saying two different vowels.
+然后 - 你以为我说过两次同样的事情，尽管我说的是两个不同的元音。
+
+173
+00:10:26,390 --> 00:10:34,120
+And so that's where in even at a dialectal issue- level that people develop
+因此，即使是在人们发展的方言问题上也是如此
+
+174
+00:10:34,120 --> 00:10:36,420
+categorical perception as to
+分类感知
+
+175
+00:10:36,420 --> 00:10:43,400
+which- which distinctions and sounds they're sensitive to or not sensitive to.
+哪些区别和声音对他们敏感或不敏感。
+
+176
+00:10:43,950 --> 00:10:46,535
+Okay. And summing- and,
+好的。总结 - 和，
+
+177
+00:10:46,535 --> 00:10:51,370
+I mean why I'm mentioning this is in some senses these sound distinctions of
+我的意思是为什么我提到这是在某些意义上这些声音的区别
+
+178
+00:10:51,370 --> 00:10:54,460
+categorical sound distinctions that are what a lot of
+分类的声音区别是很多
+
+179
+00:10:54,460 --> 00:10:58,975
+our language writing systems that we'll come to in a minute record.
+我们的语言编写系统，我们将在一分钟内记录。
+
+180
+00:10:58,975 --> 00:11:03,500
+Okay. Um, so in traditional linguistics, um,
+好的。嗯，所以在传统语言学中，嗯，
+
+181
+00:11:03,500 --> 00:11:08,195
+you have sounds, but sounds don't have any meanings in language.
+你有声音，但声音在语言中没有任何意义。
+
+182
+00:11:08,195 --> 00:11:10,805
+So pah and bah don't have meanings,
+所以pah和bah没有意义，
+
+183
+00:11:10,805 --> 00:11:12,935
+and a and e don't have meanings.
+和a和e没有意义。
+
+184
+00:11:12,935 --> 00:11:15,875
+And so people then normally distinguish as
+因此人们通常会将其区分为
+
+185
+00:11:15,875 --> 00:11:20,150
+the next level up morphology is parts of words.
+下一级的形态学是单词的一部分。
+
+186
+00:11:20,150 --> 00:11:23,540
+And this is seen as the minimal level that has meaning.
+这被视为具有意义的最低级别。
+
+187
+00:11:23,540 --> 00:11:27,620
+And so the idea is lots of words are complex and can be made
+因此，这个想法很多词很复杂，可以制作
+
+188
+00:11:27,620 --> 00:11:31,660
+u- made up of pieces but these pieces do have meanings.
+u-由碎片组成，但这些碎片确实有意义。
+
+189
+00:11:31,660 --> 00:11:36,050
+So fortune has a meaning, um, fortunate,
+财富有意义，嗯，幸运，
+
+190
+00:11:36,050 --> 00:11:38,805
+you end in this ate ending,
+你结束了这个结局，
+
+191
+00:11:38,805 --> 00:11:42,510
+um, which sort of gives the- gives fortune to somebody.
+嗯，哪种给予了 - 给某人带来了财富。
+
+192
+00:11:42,510 --> 00:11:45,405
+So that means you know, having fortune, um,
+这意味着你知道，有财富，嗯，
+
+193
+00:11:45,405 --> 00:11:46,610
+that has a meaning,
+那有意义，
+
+194
+00:11:46,610 --> 00:11:49,360
+un has a meaning which means to reverse that.
+un具有意义，意味着扭转这一点。
+
+195
+00:11:49,360 --> 00:11:54,195
+So unfortunate means that you don't have fortune, and ly, um,
+所以不幸意味着你没有财富，嗯，嗯，
+
+196
+00:11:54,195 --> 00:11:57,265
+then has a meaning of turning this all into an adverb,
+然后有把这一切变成副词的意思，
+
+197
+00:11:57,265 --> 00:11:59,825
+and you can say unfortunately not having,
+并且你可以说不幸没有，
+
+198
+00:11:59,825 --> 00:12:02,290
+um, gotten fortune, something happened.
+嗯，得到了财富，发生了什么事。
+
+199
+00:12:02,290 --> 00:12:04,400
+And so these sort of pieces of, um,
+所以这些，嗯，
+
+200
+00:12:04,400 --> 00:12:07,910
+words are then the minimal things that have meaning.
+那些词就是有意义的最小的东西。
+
+201
+00:12:07,910 --> 00:12:10,775
+Um, almost no work in deep learning has tried to
+嗯，几乎没有深度学习的工作试过
+
+202
+00:12:10,775 --> 00:12:13,480
+make use of this sort of morpheme level of structure.
+利用这种语素层次的结构。
+
+203
+00:12:13,480 --> 00:12:17,785
+Actually me and a couple of students six years ago did actually
+实际上，六年前我和几个学生确实做过
+
+204
+00:12:17,785 --> 00:12:22,515
+try and build a system where it built these tree structured neural networks,
+尝试构建一个构建这些树形结构神经网络的系统，
+
+205
+00:12:22,515 --> 00:12:25,710
+that put together meanings of words out of their pieces.
+把文字的意义放在一起。
+
+206
+00:12:25,710 --> 00:12:29,875
+Um, but that really isn't an idea that's taken on widely.
+嗯，但这真的不是一个广泛采用的想法。
+
+207
+00:12:29,875 --> 00:12:33,660
+There's sort of a reason why it hasn't taken on widely,
+有一个原因，它没有广泛，
+
+208
+00:12:33,660 --> 00:12:38,490
+which is doing this and working out the semantically meaningful pieces of words,
+这样做并制定出语义上有意义的单词，
+
+209
+00:12:38,490 --> 00:12:44,925
+is kind of hard and a lot of the time in NLP what people have found
+在NLP中，人们发现了很多困难和很多时间
+
+210
+00:12:44,925 --> 00:12:48,215
+is you can just about get the same kind of
+是你可以得到同样的
+
+211
+00:12:48,215 --> 00:12:52,090
+results if you just work with character n-grams.
+结果如果你只是使用字符n-gram。
+
+212
+00:12:52,090 --> 00:12:55,560
+The kind of units that you put into the convolutional neural net.
+你放入卷积神经网络的那种单位。
+
+213
+00:12:55,560 --> 00:12:59,105
+Because if you just have a model that uses, um,
+因为如果你只有一个使用的模型，嗯，
+
+214
+00:12:59,105 --> 00:13:05,045
+character trigrams and you have sort of start of word, un, and nfo, and so on.
+字符三元组，你有一些单词，un和nfo的开头，等等。
+
+215
+00:13:05,045 --> 00:13:08,770
+For going through the ly end of word,
+为了通过单词的结尾，
+
+216
+00:13:08,770 --> 00:13:10,840
+that those different units.
+那些不同的单位。
+
+217
+00:13:10,840 --> 00:13:13,085
+There's different character trigrams,
+有不同的人物三卦，
+
+218
+00:13:13,085 --> 00:13:15,280
+in a distributed way will pick up
+以分布式的方式将提升
+
+219
+00:13:15,280 --> 00:13:19,765
+all the important meaning components of the word pretty well,
+这个词的所有重要意义成分相当不错，
+
+220
+00:13:19,765 --> 00:13:21,545
+and that that's just good enough.
+那就够了。
+
+221
+00:13:21,545 --> 00:13:27,035
+And that's actually a very classic idea that's sort of been revived.
+而这实际上是一种非常经典的想法，有点复活了。
+
+222
+00:13:27,035 --> 00:13:30,220
+Um, so back in the second coming of
+嗯，所以回到第二次来了
+
+223
+00:13:30,220 --> 00:13:35,045
+neural networks in the mid-80s into the early 90s, um,
+神经网络在80年代中期到90年代初期，嗯，
+
+224
+00:13:35,045 --> 00:13:37,255
+there was qu- um,
+有人，
+
+225
+00:13:37,255 --> 00:13:41,440
+there was quite a bit of sort of controversial work on
+有很多有争议的工作
+
+226
+00:13:41,440 --> 00:13:46,030
+the structure of language and in particular Dave Rumelhart and Jay McClelland.
+语言的结构，尤其是Dave Rumelhart和Jay McClelland。
+
+227
+00:13:46,030 --> 00:13:48,500
+So Jay McClelland's still in the psych department here,
+所以Jay McClelland还在这里的心理科，
+
+228
+00:13:48,500 --> 00:13:50,725
+if you want to look him up in your spare time.
+如果你想在业余时间看他。
+
+229
+00:13:50,725 --> 00:13:57,460
+Um, they proposed a model of how to model generating past tense forms in English.
+嗯，他们提出了一个如何用英语建立过去时形式的模型。
+
+230
+00:13:57,460 --> 00:14:00,610
+So this was sort of a cog-psych experiment of can we build
+所以这是我们可以建立的一种齿轮心理实验
+
+231
+00:14:00,610 --> 00:14:04,045
+a system that can learn past tenses of English verbs?
+一个可以学习英语动词过去时态的系统？
+
+232
+00:14:04,045 --> 00:14:07,780
+And the difficult part there is some, many verbs are regular,
+而困难的部分有一些，很多动词是常规的，
+
+233
+00:14:07,780 --> 00:14:09,740
+you add the kinda -ed ending,
+你添加有点结尾，
+
+234
+00:14:09,740 --> 00:14:14,015
+but some words are irregular and you had to sort of learn about the irregular patterning.
+但有些词是不规则的，你必须要了解不规则的图案。
+
+235
+00:14:14,015 --> 00:14:17,015
+Um, but the way they did that.
+嗯，但他们这样做的方式。
+
+236
+00:14:17,015 --> 00:14:23,530
+I mean partly because this was sort of early days with respect to, um, sequence models,
+我的意思是部分因为这是关于序列模型的早期日子，
+
+237
+00:14:23,530 --> 00:14:27,094
+is that they used a representation where they represented
+是他们使用了他们所代表的代表
+
+238
+00:14:27,094 --> 00:14:31,255
+words precisely with these sort of character trigrams.
+准确地说这些字符三元组。
+
+239
+00:14:31,255 --> 00:14:35,780
+And that was the representation of words that they used and fed forward in their model.
+这就是他们在模型中使用并向前推进的单词的表示。
+
+240
+00:14:35,780 --> 00:14:40,220
+And that, um, idea was met with a lot of controversy by
+那个，嗯，这个想法遭到了很多争议
+
+241
+00:14:40,220 --> 00:14:43,535
+linguists, philosophers, and other people with their ideas of
+语言学家，哲学家和其他有他们想法的人
+
+242
+00:14:43,535 --> 00:14:47,075
+language and so there was a lot of debate in those days about that.
+语言，所以那时候有很多争论。
+
+243
+00:14:47,075 --> 00:14:50,500
+But from a- as a purely engineering solution that
+但是从a-作为纯粹的工程解决方案
+
+244
+00:14:50,500 --> 00:14:54,070
+sort of proved to be a pretty good way to do things.
+事实证明这是一种非常好的做事方式。
+
+245
+00:14:54,070 --> 00:14:59,245
+And so this decade there's been other work which includes the model, um,
+所以这十年还有其他工作包括模型，嗯，
+
+246
+00:14:59,245 --> 00:15:02,995
+developed at Microsoft of a sort of a deep, um,
+微软开发的一种深度，嗯，
+
+247
+00:15:02,995 --> 00:15:05,860
+semantics model where what they're using as these kind of
+语义模型，他们正在使用这些类型的东西
+
+248
+00:15:05,860 --> 00:15:09,420
+character n-grams to put meaning over words.
+字符n-gram将意义置于文字之上。
+
+249
+00:15:09,420 --> 00:15:17,195
+Okay so, um, so now we might be interested in building models that aren't over words.
+好的，嗯，现在我们可能有兴趣建立不超过单词的模型。
+
+250
+00:15:17,195 --> 00:15:21,065
+So we're going to have a word written as characters
+所以我们要写一个字作为字符
+
+251
+00:15:21,065 --> 00:15:25,355
+and we're going to do something with it such as build character n-grams.
+我们将用它来做一些事情，例如构建字符n-gram。
+
+252
+00:15:25,355 --> 00:15:28,775
+And so something that is just useful, um,
+所以有用的东西，嗯，
+
+253
+00:15:28,775 --> 00:15:31,010
+to know is there's actually
+要知道实际上是这样的
+
+254
+00:15:31,010 --> 00:15:33,980
+a fair amount of variation between languages when you do this.
+执行此操作时，语言之间存在相当大的差异。
+
+255
+00:15:33,980 --> 00:15:36,200
+So it's not all the same stuff, right?
+所以这不是一回事，对吧？
+
+256
+00:15:36,200 --> 00:15:38,465
+So the first problem is, um,
+所以第一个问题是，嗯，
+
+257
+00:15:38,465 --> 00:15:42,455
+there are some languages that don't put spaces between words.
+有些语言不会在单词之间放置空格。
+
+258
+00:15:42,455 --> 00:15:45,125
+The most famous example is Chinese.
+最着名的例子是中国人。
+
+259
+00:15:45,125 --> 00:15:51,545
+Um, but an interesting fact for those people of European ancestry, um,
+嗯，但对于那些欧洲血统的人来说这是个有趣的事实，嗯，
+
+260
+00:15:51,545 --> 00:15:56,630
+is that you know if- for- when the ancient Greeks wrote ancient Greek,
+你知道，如果古希腊人写古希腊语，
+
+261
+00:15:56,630 --> 00:15:59,525
+um, they didn't put spaces between words either.
+嗯，他们也没有在单词之间放置空格。
+
+262
+00:15:59,525 --> 00:16:02,390
+It was actually a later invention of
+它实际上是后来的发明
+
+263
+00:16:02,390 --> 00:16:06,170
+medieval scholars who are recopying their manuscripts,
+中世纪学者正在重新复制他们的手稿，
+
+264
+00:16:06,170 --> 00:16:08,690
+who they decided [NOISE] maybe that'll be easier to read if we
+他们决定[噪音]他们可能会更容易阅读，如果我们
+
+265
+00:16:08,690 --> 00:16:11,720
+put spaces in and then they started doing it.
+把空间放进去，然后他们就开始做了。
+
+266
+00:16:11,720 --> 00:16:20,000
+Um, [NOISE] most languages these days do put spaces in between words but even,
+嗯，[NOISE]这些天大多数语言确实在单词之间放置了空格，但即便如此，
+
+267
+00:16:20,000 --> 00:16:22,580
+then there's sort of a lot of fine cases.
+然后有很多很好的案例。
+
+268
+00:16:22,580 --> 00:16:26,930
+So in particular, a lot of languages have some sort of little bits
+所以特别是，很多语言都有一些小问题
+
+269
+00:16:26,930 --> 00:16:31,550
+of stuff which might be pronouns, or prepositions,
+可能是代词或介词的东西，
+
+270
+00:16:31,550 --> 00:16:36,380
+or various kind of joining words like and, and so,
+或者各种各样的加入词，等等，
+
+271
+00:16:36,380 --> 00:16:42,050
+and which sometimes they write together and sometimes separately.
+有时他们一起写，有时一起写。
+
+272
+00:16:42,050 --> 00:16:44,750
+So in French, um,
+所以用法语，嗯，
+
+273
+00:16:44,750 --> 00:16:49,865
+you get these kind of prepositional, I'm sorry,
+你得到这种介词，对不起，
+
+274
+00:16:49,865 --> 00:16:55,865
+pronominal, um, markers for you, I, you, have brought.
+代词，嗯，标记为你，我，你，带来了。
+
+275
+00:16:55,865 --> 00:16:58,640
+Um, and you know, these kind of little words and
+嗯，你知道，这些小词和
+
+276
+00:16:58,640 --> 00:17:01,940
+pronunciation just sort of run together as je vous ai,
+发音只是像je vous ai一样运行，
+
+277
+00:17:01,940 --> 00:17:05,060
+and arguably it's almost one word,
+可以说这几乎是一个字，
+
+278
+00:17:05,060 --> 00:17:07,325
+but it's written as separate words.
+但它是作为单独的单词写的。
+
+279
+00:17:07,325 --> 00:17:11,480
+Um, where there are other languages which sort of stick things together,
+嗯，还有其他语言可以把东西粘在一起，
+
+280
+00:17:11,480 --> 00:17:13,580
+where arguably they're separate words.
+可以说他们是单独的词。
+
+281
+00:17:13,580 --> 00:17:19,550
+So in Arabic, you get pronominal clitics and some of these sort of joining words like so,
+所以在阿拉伯语中，你会得到代词的clitics ，以及其中一些像这样的加入词，
+
+282
+00:17:19,550 --> 00:17:23,960
+and and, and they are sort of written together as one word,
+而且，它们就像一个字一样写在一起，
+
+283
+00:17:23,960 --> 00:17:27,485
+where arguably that they should really be four words.
+可以说他们应该真的是四个字。
+
+284
+00:17:27,485 --> 00:17:31,790
+Another famous case of that is with compound nouns.
+另一个着名的案例是复合名词。
+
+285
+00:17:31,790 --> 00:17:34,025
+Um, so in English,
+嗯，所以用英文，
+
+286
+00:17:34,025 --> 00:17:37,160
+we write compound nouns with spaces between them,
+我们写复合名词，它们之间有空格，
+
+287
+00:17:37,160 --> 00:17:38,690
+so you can see each noun.
+所以你可以看到每个名词。
+
+288
+00:17:38,690 --> 00:17:42,290
+Um, even though in many respects compound nouns
+嗯，即使在许多方面复合名词
+
+289
+00:17:42,290 --> 00:17:46,460
+something like whiteboard behaves like it's one word, or high-school.
+像白板这样的东西就像是单词或高中。
+
+290
+00:17:46,460 --> 00:17:48,770
+Um, whereas other languages,
+嗯，而其他语言，
+
+291
+00:17:48,770 --> 00:17:50,480
+German is the most famous case,
+德语是最着名的案例，
+
+292
+00:17:50,480 --> 00:17:52,580
+but also other Germanic languages,
+还有其他日耳曼语言，
+
+293
+00:17:52,580 --> 00:17:57,470
+just write them all as one word and you get very long words like that.
+把它们全部写成一个单词就可以得到很长的单词。
+
+294
+00:17:57,470 --> 00:18:03,680
+So we can get different words if we just use spaces and don't do much else. Um, good.
+因此，如果我们只使用空格而不做其他事情，我们可以得到不同的词。嗯，好的。
+
+295
+00:18:03,680 --> 00:18:07,310
+Okay. Yes. So for dealing with words,
+好的。是。所以对于处理单词，
+
+296
+00:18:07,310 --> 00:18:10,175
+there are these practical problems.
+有这些实际问题。
+
+297
+00:18:10,175 --> 00:18:13,070
+Um, and we sort of already started to
+嗯，我们已经开始了
+
+298
+00:18:13,070 --> 00:18:16,339
+touch on them that if you're trying to build word-based models,
+触摸它们，如果你正在尝试构建基于单词的模型，
+
+299
+00:18:16,339 --> 00:18:18,785
+there's this huge space of words,
+这是一个巨大的文字空间，
+
+300
+00:18:18,785 --> 00:18:21,740
+and well, strictly there's an infinite space of words
+而且，严格来说，这是一个无限的单词空间
+
+301
+00:18:21,740 --> 00:18:24,845
+because once you allow in things like numbers,
+因为一旦你允许像数字这样的东西，
+
+302
+00:18:24,845 --> 00:18:28,985
+let alone FedEx routing numbers, or, um,
+更不用说联邦快递的路由号码，或者，嗯，
+
+303
+00:18:28,985 --> 00:18:31,520
+or if you allow just morphology,
+或者如果你只允许形态学，
+
+304
+00:18:31,520 --> 00:18:34,175
+when you can make those ones like unfortunately.
+什么时候你可以做那些不幸的。
+
+305
+00:18:34,175 --> 00:18:37,190
+Yeah, sort of, you can just expand the space of words,
+是的，有点，你可以扩大单词的空间，
+
+306
+00:18:37,190 --> 00:18:40,265
+so you get this large open vocabulary.
+所以你得到这个庞大的开放词汇。
+
+307
+00:18:40,265 --> 00:18:43,340
+Um, English, you know, a bit problematic.
+嗯，英语，你知道，有点问题。
+
+308
+00:18:43,340 --> 00:18:46,400
+It gets way more problematic than a lot of other languages.
+它比许多其他语言更容易出问题。
+
+309
+00:18:46,400 --> 00:18:49,160
+So here's a lovely Czech word, um,
+所以这是一个可爱的捷克语，嗯，
+
+310
+00:18:49,160 --> 00:18:51,635
+to the worst farmable one, um,
+到最糟糕的一个，嗯，
+
+311
+00:18:51,635 --> 00:18:56,420
+where you can make sort of much more complex words in lots of other languages.
+在那里你可以用许多其他语言制作更复杂的单词。
+
+312
+00:18:56,420 --> 00:18:59,150
+Um, many Native American languages,
+嗯，很多美洲土着语言，
+
+313
+00:18:59,150 --> 00:19:03,170
+other European languages like Finnish have these sort of very complex words,
+像芬兰语这样的其他欧洲语言有这些非常复杂的单词，
+
+314
+00:19:03,170 --> 00:19:05,570
+Turkish has very complex words.
+土耳其语有很复杂的词。
+
+315
+00:19:05,570 --> 00:19:07,895
+Um, so that's bad news.
+嗯，这是个坏消息。
+
+316
+00:19:07,895 --> 00:19:10,190
+Um, there are other more reasons we'd like to be able to
+嗯，还有其他更多我们想要的理由
+
+317
+00:19:10,190 --> 00:19:12,410
+look at words below the word level,
+看看单词级别下面的单词，
+
+318
+00:19:12,410 --> 00:19:13,970
+to know things about them.
+了解他们的事情。
+
+319
+00:19:13,970 --> 00:19:16,115
+So when you're translating,
+所以当你翻译时，
+
+320
+00:19:16,115 --> 00:19:18,110
+there's a wide space of things,
+这里有很多东西，
+
+321
+00:19:18,110 --> 00:19:23,405
+especially names, where translation is essentially transliteration,
+特别是名字，其中翻译基本上是音译，
+
+322
+00:19:23,405 --> 00:19:29,015
+that you're going to rewrite the sound of somebody's name as just roughly, you know,
+你要重写一个人名字的声音，你知道，
+
+323
+00:19:29,015 --> 00:19:31,790
+perhaps not perfectly correctly but roughly correctly
+也许不是完全正确但大致正确
+
+324
+00:19:31,790 --> 00:19:34,730
+according to the sound systems of the different language.
+根据不同语言的音响系统。
+
+325
+00:19:34,730 --> 00:19:36,020
+And well, if we want to do that,
+好吧，如果我们想这样做，
+
+326
+00:19:36,020 --> 00:19:38,900
+we essentially want to work- operate at the letter level,
+我们基本上想要在字母层面上工作，
+
+327
+00:19:38,900 --> 00:19:40,310
+not the word level.
+不是单词级别。
+
+328
+00:19:40,310 --> 00:19:46,340
+But another huge modern reason why we'd like to start modeling below the word level is,
+但是，我们想要在单词级别下开始建模的另一个巨大的现代原因是，
+
+329
+00:19:46,340 --> 00:19:51,350
+we live in this age of social media and if you're in the social media land,
+我们生活在这个社交媒体时代，如果你在社交媒体领域，
+
+330
+00:19:51,350 --> 00:19:53,810
+there's a lot of stuff that's written not
+有很多东西都写不了
+
+331
+00:19:53,810 --> 00:19:56,975
+using the canonical words that you find in the dictionary,
+使用你在字典中找到的规范词，
+
+332
+00:19:56,975 --> 00:19:58,730
+and somehow we'd wanna start,
+不知何故，我们想要开始，
+
+333
+00:19:58,730 --> 00:20:00,005
+um, to model that.
+嗯，模仿那个。
+
+334
+00:20:00,005 --> 00:20:02,180
+So in some sense this is the, um,
+所以在某种意义上说，这是，嗯，
+
+335
+00:20:02,180 --> 00:20:03,545
+easy case.
+容易的情况。
+
+336
+00:20:03,545 --> 00:20:06,260
+Um, good vibes.
+嗯，好振动。
+
+337
+00:20:06,260 --> 00:20:08,720
+Um, but nevertheless this is spelled with one,
+嗯，但是这拼写了一个，
+
+338
+00:20:08,720 --> 00:20:10,370
+two, three, four, five, six,
+二，三，四，五，六，
+
+339
+00:20:10,370 --> 00:20:13,010
+seven O's, and one, two,
+七个O，一个，两个，
+
+340
+00:20:13,010 --> 00:20:15,875
+three, four, five, oh and also seven S's, they match.
+三，四，五，哦，还有七个S，它们匹配。
+
+341
+00:20:15,875 --> 00:20:20,270
+I don't know if that's deliberate or not [LAUGHTER]. Um, okay.
+我不知道这是否是故意的[笑声]。嗯，好的。
+
+342
+00:20:20,270 --> 00:20:24,905
+So this sty le of writing is very common, um, and well,
+所以这种写作风格很常见，嗯，好吧，
+
+343
+00:20:24,905 --> 00:20:27,830
+you know, we kind of sunk if we're
+你知道，如果我们这样的话，我们就会沉没
+
+344
+00:20:27,830 --> 00:20:31,100
+treating things at the word level and we're trying to model this right.
+在单词级别处理事物，我们正在尝试对此进行建模。
+
+345
+00:20:31,100 --> 00:20:34,730
+That's clearly not what human beings are doing, we're sort of looking at
+这显然不是人类正在做的事情，我们有点看
+
+346
+00:20:34,730 --> 00:20:38,675
+the characters and recognizing what goes on.
+人物并认识到发生了什么。
+
+347
+00:20:38,675 --> 00:20:45,290
+Um, in some sense that's kind of the easy case that you could imagine preprocessing out.
+嗯，从某种意义上说，这是一种你可以想象预处理的简单案例。
+
+348
+00:20:45,290 --> 00:20:49,100
+Um, there's a lot of harder stuff that then turns up.
+嗯，有很多更难的东西然后出现。
+
+349
+00:20:49,100 --> 00:20:53,645
+Um, I guess there's sort of the abbreviation speak, like I don't care.
+嗯，我猜有些缩写说话，就像我不在乎。
+
+350
+00:20:53,645 --> 00:20:58,640
+Um, but then you sort of get a lot of creative spellings, um,
+嗯，但是你得到了很多创造性的拼写，嗯，
+
+351
+00:20:58,640 --> 00:21:04,565
+that come off of kind of reduced pronunciations like I'mma go, sumn.
+来自像我这样的减少发音，sumn。
+
+352
+00:21:04,565 --> 00:21:08,450
+Um, and it seems like somehow we need something other than
+嗯，好像我们需要的东西不仅仅是
+
+353
+00:21:08,450 --> 00:21:13,265
+canonical words if we're going to start to deal better with a lot of this text.
+如果我们要开始更好地处理大量的文本，那就是规范性的话语。
+
+354
+00:21:13,265 --> 00:21:22,070
+Oops. Okay. So that suggests we sort of want to start doing that with our models.
+哎呀。好的。所以这表明我们想要开始使用我们的模型。
+
+355
+00:21:22,070 --> 00:21:28,055
+And so, that's led to a lot of interest in using character level models.
+因此，这引起了人们对使用角色等级模型的极大兴趣。
+
+356
+00:21:28,055 --> 00:21:35,300
+Um, and I mean there are sort of two extents to which you can do this,
+嗯，我的意思是有两种范围可以做到这一点，
+
+357
+00:21:35,300 --> 00:21:38,045
+and we'll look at them both a bit.
+我们会稍微看一下它们。
+
+358
+00:21:38,045 --> 00:21:40,940
+Um, one level is to say,
+嗯，一个级别就是说，
+
+359
+00:21:40,940 --> 00:21:43,820
+look we're still gonna have words in our system.
+看，我们的系统中仍然会有文字。
+
+360
+00:21:43,820 --> 00:21:47,345
+Basically, we're going to build a system that works over words,
+基本上，我们将构建一个对单词有效的系统，
+
+361
+00:21:47,345 --> 00:21:49,670
+but we want to be able to create
+但我们希望能够创造
+
+362
+00:21:49,670 --> 00:21:54,950
+word representations for any character sequence and we'd like to
+我们想要的任何字符序列的单词表示
+
+363
+00:21:54,950 --> 00:21:58,910
+do it in a way that takes advantage of being able to
+以一种利用能力的方式做到这一点
+
+364
+00:21:58,910 --> 00:22:03,050
+recognize parts of the character sequence that look familiar,
+识别看起来熟悉的字符序列部分，
+
+365
+00:22:03,050 --> 00:22:07,790
+so that we can probably guess what vibes means.
+这样我们就可以猜出什么是共鸣。
+
+366
+00:22:07,790 --> 00:22:10,670
+Um, and so that sort of then solves the problems
+嗯，然后那样解决问题
+
+367
+00:22:10,670 --> 00:22:13,489
+with unknown words and we get similar words,
+用不明的单词，我们得到相似的单词，
+
+368
+00:22:13,489 --> 00:22:18,125
+similar embeddings for words with similar terms, spellings, et cetera.
+类似术语，拼写等等的类似嵌入。
+
+369
+00:22:18,125 --> 00:22:20,810
+But the other alternative is to say,
+但另一种选择是说，
+
+370
+00:22:20,810 --> 00:22:23,820
+oh no, just forget about these words altogether, who needs- um,
+哦不，只要完全忘记这些话，谁需要，
+
+371
+00:22:23,820 --> 00:22:28,880
+why don't we just do all of our language processing on sequence of characters,
+为什么我们不只是对字符序列进行所有语言处理，
+
+372
+00:22:28,880 --> 00:22:30,410
+it'll work out fine.
+它会很好的。
+
+373
+00:22:30,410 --> 00:22:35,090
+Um, both of these methods have been proven to work very successfully.
+嗯，这两种方法都被证明非常成功。
+
+374
+00:22:35,090 --> 00:22:38,810
+Um, and I just wanted to dwell on that for one moment,
+嗯，我只是想纠缠一下，
+
+375
+00:22:38,810 --> 00:22:41,480
+and that sort of goes back to my,
+那种可以追溯到我的，
+
+376
+00:22:41,480 --> 00:22:44,630
+um, morphology slide here.
+嗯，形态滑落在这里。
+
+377
+00:22:44,630 --> 00:22:47,840
+When people first started proposing that they are going
+当人们第一次提出他们要去的时候
+
+378
+00:22:47,840 --> 00:22:51,245
+to build deep learning models over characters.
+在角色上建立深度学习模型。
+
+379
+00:22:51,245 --> 00:22:54,650
+I mean, my first feeling was oh, that is never going to
+我的意思是，我的第一感觉是哦，那是永远不会的
+
+380
+00:22:54,650 --> 00:22:57,965
+work because it sort of seemed like,
+工作，因为它有点像，
+
+381
+00:22:57,965 --> 00:23:01,310
+okay, words have a meaning it makes sense,
+好吧，单词有意义有意义，
+
+382
+00:23:01,310 --> 00:23:03,890
+um, that you can do something like build
+嗯，你可以做类似构建的事情
+
+383
+00:23:03,890 --> 00:23:07,160
+a word2vec model and that's going to really be able to
+一个word2vec模型，这真的能够
+
+384
+00:23:07,160 --> 00:23:09,650
+sort of see words and their distribution and learn
+有点看单词及其分布和学习
+
+385
+00:23:09,650 --> 00:23:12,905
+the meanings of the words because words have a meaning.
+词语的意义，因为词语有意义。
+
+386
+00:23:12,905 --> 00:23:15,680
+The idea that you're going to be able to say, well,
+你能够说，好吧，
+
+387
+00:23:15,680 --> 00:23:19,310
+I'm going to come up with a vector representation of h,
+我想出一个h的向量表示，
+
+388
+00:23:19,310 --> 00:23:22,880
+and a different vector representation of a,
+和一个不同的矢量表示，
+
+389
+00:23:22,880 --> 00:23:26,404
+and a different vec- vector representation of t,
+和t的不同vec-向量表示，
+
+390
+00:23:26,404 --> 00:23:29,330
+and somehow that'll be useful for representing what a hat
+并且不知何故，这对于表示帽子有用
+
+391
+00:23:29,330 --> 00:23:32,495
+means once I put it through enough neural network layers,
+意味着一旦我通过足够的神经网络层，
+
+392
+00:23:32,495 --> 00:23:36,335
+um, frankly it sounded pretty unconvincing to me.
+嗯，坦白说这对我来说听起来很难说。
+
+393
+00:23:36,335 --> 00:23:40,315
+Um, but, um, I guess, you know-
+嗯，但是，嗯，我猜，你知道 -
+
+394
+00:23:40,315 --> 00:23:44,595
+But it, it, totally works so I'm convinced now, empirical proof.
+但它，它完全有效，所以我现在确信，经验证明。
+
+395
+00:23:44,595 --> 00:23:48,885
+And I think what we so essentially need to realize,
+而且我认为我们基本上需要认识到的是，
+
+396
+00:23:48,885 --> 00:23:52,350
+is that with going- that yes,
+就是这样 - 是的，
+
+397
+00:23:52,350 --> 00:23:55,755
+at some level we just have these characters that don't mean much.
+在某种程度上，我们只是拥有这些并不重要的字符。
+
+398
+00:23:55,755 --> 00:24:02,940
+But we then have these very powerful combinatory models with a lot of parameters in them,
+但是我们有这些非常强大的组合模型，其中包含很多参数，
+
+399
+00:24:02,940 --> 00:24:04,950
+things like recurrent neural networks and
+像递归神经网络和
+
+400
+00:24:04,950 --> 00:24:10,305
+convolutional neural networks and that they are respectively able to, sort of, build,
+卷积神经网络，它们分别能够构建，构建，
+
+401
+00:24:10,305 --> 00:24:15,330
+store and build representations of meaning from multi-letter groups,
+存储和构建来自多个字母组的含义表示，
+
+402
+00:24:15,330 --> 00:24:18,720
+in such a way that they can model the meanings of
+以这样的方式，他们可以模拟的意义
+
+403
+00:24:18,720 --> 00:24:22,590
+morphemes and larger units and therefore put together word meanings.
+语素和更大的单位，因此汇总了词义。
+
+404
+00:24:22,590 --> 00:24:24,420
+Um, yeah. So, um,
+嗯，是的那么，嗯，
+
+405
+00:24:24,420 --> 00:24:27,930
+one more detail on using characters,
+关于使用字符的更多细节，
+
+406
+00:24:27,930 --> 00:24:30,195
+um, from writing systems.
+嗯，来自写作系统。
+
+407
+00:24:30,195 --> 00:24:33,660
+So if you're a linguist you tend to think of sounds as primary.
+所以，如果你是语言学家，你往往认为声音是主要的。
+
+408
+00:24:33,660 --> 00:24:36,900
+Those were the phonemes that we- I mentioned beforehand.
+那些是我们事先提到过的音素。
+
+409
+00:24:36,900 --> 00:24:40,170
+You know, um, essentially,
+你知道，嗯，基本上，
+
+410
+00:24:40,170 --> 00:24:43,250
+um, deep learning hasn't tried to use phonemes at all.
+嗯，深度学习根本没有试过使用音素。
+
+411
+00:24:43,250 --> 00:24:46,425
+Traditional speech recognizers often did use phonemes,
+传统的语音识别器经常使用音素，
+
+412
+00:24:46,425 --> 00:24:48,135
+but in the deep learning land,
+但在深度学习的土地上，
+
+413
+00:24:48,135 --> 00:24:53,580
+you want to have a lot of data and the way you get a lot of data is you just use, um,
+你想要拥有大量数据，以及你获得大量数据的方式，你只需要使用，嗯，
+
+414
+00:24:53,580 --> 00:24:55,340
+written stuff because, you know,
+写的东西，因为，你知道，
+
+415
+00:24:55,340 --> 00:25:00,920
+it's the easily found data where you can get millions and billions of words of stuff.
+这是容易找到的数据，你可以获得数百万和数十亿字的东西。
+
+416
+00:25:00,920 --> 00:25:04,220
+Um, so that sort of makes sense from a data point of view.
+嗯，从数据的角度来看，这是有道理的。
+
+417
+00:25:04,220 --> 00:25:07,805
+But the thing that ends up as a little weird about that,
+但最终有点奇怪的是，
+
+418
+00:25:07,805 --> 00:25:11,005
+is that when you're then building a character level model,
+当你正在建立一个角色等级模型时，
+
+419
+00:25:11,005 --> 00:25:13,714
+what your character level model is,
+你的角色等级模型是什么，
+
+420
+00:25:13,714 --> 00:25:17,325
+actually varies depending on the writing system of the language.
+实际上取决于语言的书写系统。
+
+421
+00:25:17,325 --> 00:25:18,875
+And so you, kind of,
+所以，你，有点，
+
+422
+00:25:18,875 --> 00:25:21,990
+have these quite different writing systems.
+有这些完全不同的书写系统。
+
+423
+00:25:21,990 --> 00:25:27,405
+So you have some writing systems which are just completely phonemic,
+所以你有一些完全音素化的书写系统，
+
+424
+00:25:27,405 --> 00:25:32,130
+that there are letters that have a particular sound and you say that sound.
+有些字母有特定的声音，你说的是声音。
+
+425
+00:25:32,130 --> 00:25:34,575
+Something like Spanish is pretty much phonemic.
+像西班牙语这样的东西几乎是音素。
+
+426
+00:25:34,575 --> 00:25:36,810
+Sometimes it's a teeny bit complicated.
+有时它有点复杂。
+
+427
+00:25:36,810 --> 00:25:38,580
+So you might have a digraph.
+所以你可能有一个有向图。
+
+428
+00:25:38,580 --> 00:25:41,700
+So this digraph, ngabulu, is, kind of, like,
+所以这个有向图，ngabulu，有点像，
+
+429
+00:25:41,700 --> 00:25:46,470
+the N-G of English that is used for "ng" sound like at the end of seeing,
+用于“听”声的英语NG，就像在看到结束时一样，
+
+430
+00:25:46,470 --> 00:25:49,080
+but, you know, basically this is just 'jiyawu',
+但是，你知道，基本上这只是'jiyawu'，
+
+431
+00:25:49,080 --> 00:25:50,939
+each letter is a sound,
+每个字母都是一个声音，
+
+432
+00:25:50,939 --> 00:25:52,860
+you can read it, um,
+你可以读它，嗯，
+
+433
+00:25:52,860 --> 00:25:54,960
+and it's just, um, phonemic.
+这只是，嗯，音素。
+
+434
+00:25:54,960 --> 00:25:58,140
+Um, that then contrasts from something like English where
+嗯，然后与英语在哪里形成鲜明对比
+
+435
+00:25:58,140 --> 00:26:01,890
+all the non-native speakers know the spelling is terrible.
+所有非母语人士都知道拼写很糟糕。
+
+436
+00:26:01,890 --> 00:26:04,515
+It's got this, sort of, highly fossilized,
+它有这种，高度僵化，
+
+437
+00:26:04,515 --> 00:26:05,700
+once upon a time,
+很久以前，
+
+438
+00:26:05,700 --> 00:26:08,885
+phonemic system in the tenth century or something.
+十世纪的音素系统还是什么的。
+
+439
+00:26:08,885 --> 00:26:12,030
+Um, but now we have this system that words have
+嗯，但现在我们有了这个系统的话
+
+440
+00:26:12,030 --> 00:26:17,700
+fairly arbitrary spelling that doesn't actually represent the sounds, um, very clearly.
+相当随意的拼写，实际上并不代表声音，嗯，非常清楚。
+
+441
+00:26:17,700 --> 00:26:20,490
+But it's sort of a phonemic system.
+但它是一种音素系统。
+
+442
+00:26:20,490 --> 00:26:23,430
+But then there are languages that use larger units.
+但是，有些语言使用更大的单位。
+
+443
+00:26:23,430 --> 00:26:25,235
+Um, this is, um,
+嗯，这是，嗯，
+
+444
+00:26:25,235 --> 00:26:29,715
+Canadian and Inuktitut which I just put in there because it's such a pretty writing system.
+加拿大和Inuktitut，我刚刚放在那里，因为它是一个非常漂亮的书写系统。
+
+445
+00:26:29,715 --> 00:26:35,820
+Um, but there are a lot of languages that represent syllables by their characters.
+嗯，但是有很多语言代表他们角色的音节。
+
+446
+00:26:35,820 --> 00:26:38,880
+Um, so you'd have something like this in Korean for example,
+嗯，所以你在韩国有这样的东西，例如，
+
+447
+00:26:38,880 --> 00:26:41,190
+with Korean Hangul, that each, um,
+与韩国韩语，每个，嗯，
+
+448
+00:26:41,190 --> 00:26:46,860
+letter is then being a syllable of a sort of consonant vowel combination like bar.
+那么字母就是像条形一样的辅音元音组合的音节。
+
+449
+00:26:46,860 --> 00:26:52,455
+Um, if you can then go up a level from that and if we get back to Chinese again,
+嗯，如果你可以从那里升级，如果我们再次回到中国，
+
+450
+00:26:52,455 --> 00:26:57,465
+well, um, this is sort of also a syllabic system, you could say.
+嗯，嗯，这也是一个音节系统，你可以说。
+
+451
+00:26:57,465 --> 00:27:02,130
+But really, the Chinese characters are much more than just the sound.
+但实际上，汉字不仅仅是声音。
+
+452
+00:27:02,130 --> 00:27:03,515
+They also have a meaning.
+它们也有意义。
+
+453
+00:27:03,515 --> 00:27:06,435
+That this is really then an ideographic system
+这真的是一个表意系统
+
+454
+00:27:06,435 --> 00:27:09,570
+where there are characters with particular meanings attached to them.
+哪里有附有特殊含义的字符。
+
+455
+00:27:09,570 --> 00:27:10,860
+So they're, sort of, uh,
+所以他们是，有点，呃，
+
+456
+00:27:10,860 --> 00:27:14,025
+whole morphemes in- written as one letter.
+整个语素写成一个字母。
+
+457
+00:27:14,025 --> 00:27:16,964
+And, you know, another example of such language,
+而且，你知道，这种语言的另一个例子，
+
+458
+00:27:16,964 --> 00:27:19,500
+um, was Egyptian hieroglyphs, if you've seen those.
+嗯，是埃及的象形文字，如果你看过那些。
+
+459
+00:27:19,500 --> 00:27:23,700
+That they're, sort of, ideographic systems where you have letters with meanings.
+他们是一种表意系统，你有字母意义。
+
+460
+00:27:23,700 --> 00:27:27,420
+Um, and then you have language systems that sort of mix several of those.
+嗯，然后你有语言系统混合其中几个。
+
+461
+00:27:27,420 --> 00:27:31,875
+So Japanese is sort of a mixture of partly moraic,
+所以日语有点是复杂的，
+
+462
+00:27:31,875 --> 00:27:34,875
+partly ideographic systems mixed together.
+部分表意系统混合在一起。
+
+463
+00:27:34,875 --> 00:27:36,100
+So if you just,
+所以，如果你只是，
+
+464
+00:27:36,100 --> 00:27:37,695
+sort of, start off and say,
+一点，开始说，
+
+465
+00:27:37,695 --> 00:27:41,805
+"Okay, I'm gonna build a character-based system." That's fine.
+“好的，我要建立一个基于角色的系统。”没关系。
+
+466
+00:27:41,805 --> 00:27:45,495
+But effectively, your character units like
+但实际上，你的角色单位喜欢
+
+467
+00:27:45,495 --> 00:27:50,610
+letter trigrams are just very different in a language like Chinese,
+字母三卦与中文这样的语言差异很大，
+
+468
+00:27:50,610 --> 00:27:54,030
+where commonly a letter trigram will be, sort of,
+通常一个字母trigram将是，有点，
+
+469
+00:27:54,030 --> 00:27:55,140
+a word and a half,
+一个半字，
+
+470
+00:27:55,140 --> 00:27:57,915
+three morphemes with meaning.
+三个有意义的语素。
+
+471
+00:27:57,915 --> 00:27:59,820
+Whereas if you're in something like English,
+如果你喜欢英语，
+
+472
+00:27:59,820 --> 00:28:03,105
+your character trigram will be something like T-H-O
+你的角色三元组会像THO一样
+
+473
+00:28:03,105 --> 00:28:06,980
+which is still sort of much too small a unit to have any meaning.
+这仍然是一个太小的单位，没有任何意义。
+
+474
+00:28:06,980 --> 00:28:08,810
+So moving right ahead.
+所以前进吧。
+
+475
+00:28:08,810 --> 00:28:11,550
+So these two kind of approaches, um,
+所以这两种方法，嗯，
+
+476
+00:28:11,550 --> 00:28:15,875
+one was just do a completely character level model and then the other one was,
+一个只是做一个完全字符级别的模型然后另一个是，
+
+477
+00:28:15,875 --> 00:28:18,120
+sort of, you make use of characters
+有点，你利用人物
+
+478
+00:28:18,120 --> 00:28:20,640
+to build bigger things that you're then gonna put something,
+建造更大的东西，然后你要放东西，
+
+479
+00:28:20,640 --> 00:28:22,860
+like, into a more word level model.
+喜欢，进入更多的单词级别模型。
+
+480
+00:28:22,860 --> 00:28:25,455
+So I'll do this one first and the other one.
+所以我先做一个，另一个做。
+
+481
+00:28:25,455 --> 00:28:27,810
+So for purely character level models,
+所以对于纯粹的角色级别模型，
+
+482
+00:28:27,810 --> 00:28:30,785
+I actually showed an example of that last time. Do you remember?
+我实际上展示了上一次的例子。你还记得吗？
+
+483
+00:28:30,785 --> 00:28:33,820
+So there was that very deep convolutional network from
+所以有一个非常深刻的卷积网络
+
+484
+00:28:33,820 --> 00:28:37,710
+the Conneau et-al word for text classification at the end, um,
+最后，Conneau等人的文字分类，嗯，
+
+485
+00:28:37,710 --> 00:28:39,660
+and that just started with a big line of
+而这只是从一大堆开始
+
+486
+00:28:39,660 --> 00:28:43,620
+characters and built these convolutional layers on top of that,
+字符并在其上构建这些卷积层，
+
+487
+00:28:43,620 --> 00:28:47,565
+in the vision like network and classified the documents.
+在视觉上像网络和分类文件。
+
+488
+00:28:47,565 --> 00:28:51,450
+Um, so that was, sort of, a completely character-level model.
+嗯，所以那是一种完全属性级别的模型。
+
+489
+00:28:51,450 --> 00:28:54,405
+Um, but here's a bit more work on this.
+嗯，但是这里有更多的工作。
+
+490
+00:28:54,405 --> 00:28:59,325
+So people for machine translation have built, um,
+因此机器翻译的人已经建成，嗯，
+
+491
+00:28:59,325 --> 00:29:05,250
+machine translation systems that just read characters and write characters.
+只读字符和写字符的机器翻译系统。
+
+492
+00:29:05,250 --> 00:29:08,615
+And when people first tried to do that,
+当人们第一次尝试这样做时，
+
+493
+00:29:08,615 --> 00:29:11,940
+um, it, sort of, didn't work, right?
+嗯，它，有点，不起作用，对吧？
+
+494
+00:29:11,940 --> 00:29:13,740
+The people thought it might help to build
+人们认为这可能有助于建设
+
+495
+00:29:13,740 --> 00:29:17,775
+character-level models especially for languages like Chinese.
+字符级模型，尤其适用于中文等语言。
+
+496
+00:29:17,775 --> 00:29:21,240
+But people just weren't able to build models that worked as
+但人们只是无法构建有效的模型
+
+497
+00:29:21,240 --> 00:29:25,365
+well as word-based models and either the pre-neural,
+以及基于单词的模型和前神经，
+
+498
+00:29:25,365 --> 00:29:28,095
+the non-neural or the neural world.
+非神经或神经世界。
+
+499
+00:29:28,095 --> 00:29:30,930
+But gradually that started to change.
+但逐渐开始改变。
+
+500
+00:29:30,930 --> 00:29:36,480
+So people started to have successful character-level decoders and then,
+所以人们开始拥有成功的字符级解码器，然后，
+
+501
+00:29:36,480 --> 00:29:40,065
+sort of, around 2015 and '16,
+在2015年和2016年左右，
+
+502
+00:29:40,065 --> 00:29:41,790
+um, people started to show,
+嗯，人们开始表现出来，
+
+503
+00:29:41,790 --> 00:29:45,840
+look you could- can actually do machine translation very
+看起来你可以 - 实际上可以做机器翻译
+
+504
+00:29:45,840 --> 00:29:50,055
+well at just a character level with a few asterisks.
+只有一个带有几个星号的字符级别。
+
+505
+00:29:50,055 --> 00:29:53,910
+And so, um, here's a bit of work, um, that we did.
+所以，嗯，这是一些工作，嗯，我们做了。
+
+506
+00:29:53,910 --> 00:29:56,400
+Um, the Luong and Manning one, from, um,
+嗯，Luong和Manning一个，来自，嗯，
+
+507
+00:29:56,400 --> 00:29:59,145
+2015 on the last slide.
+2015年的最后一张幻灯片。
+
+508
+00:29:59,145 --> 00:30:03,570
+So this is looking at English to Czech translation and Czech's
+所以这是关注英语到捷克语和捷克语
+
+509
+00:30:03,570 --> 00:30:07,800
+a good language to use if you want to motivate doing things at the character level,
+如果你想激励在角色层面做事，那么这是一种很好的语言，
+
+510
+00:30:07,800 --> 00:30:10,650
+because it had those big horrible words with lots of
+因为它有很多可怕的话
+
+511
+00:30:10,650 --> 00:30:15,555
+morphology like the example I showed you before and I'll show you some more later.
+形态像我之前向你展示的例子，我稍后会告诉你更多。
+
+512
+00:30:15,555 --> 00:30:20,145
+So people had built word-level models for Czech.
+所以人们为捷克人建立了单词级模型。
+
+513
+00:30:20,145 --> 00:30:22,650
+Um, and, you know, they didn't work great,
+嗯，你知道，他们工作不好，
+
+514
+00:30:22,650 --> 00:30:25,320
+partly because of some of these vocab problems.
+部分是因为这些词汇问题。
+
+515
+00:30:25,320 --> 00:30:26,880
+So, um, the, sort of,
+所以，嗯，那种，
+
+516
+00:30:26,880 --> 00:30:31,905
+word-level state of the art was at this time was 15,7 BLEU,
+现阶段的单词级别是15,7 BLEU，
+
+517
+00:30:31,905 --> 00:30:37,680
+which as you know is much less than we will accept for full grades in your homework.
+如你所知，这比我们在你的家庭作业中接受全部成绩要少得多。
+
+518
+00:30:37,680 --> 00:30:39,555
+[LAUGHTER] Um, but, you know,
+[笑声]嗯，但是，你知道，
+
+519
+00:30:39,555 --> 00:30:43,740
+what counts as a good BLEU score depends on how difficult the language pair is.
+什么算是一个好的BLEU分数取决于语言对的难度。
+
+520
+00:30:43,740 --> 00:30:46,320
+Uh, um, and so you're not doing Czech.
+呃，嗯，所以你不是在做捷克语。
+
+521
+00:30:46,320 --> 00:30:48,875
+Um, but, um, so this was, sort of, the,
+嗯，但是，嗯，所以这就是，有点，
+
+522
+00:30:48,875 --> 00:30:51,690
+kind of, neural MT model that we've talked about.
+我们谈过的那种神经MT模型。
+
+523
+00:30:51,690 --> 00:30:53,400
+So it was a Seq2Seq model,
+所以这是一个Seq2Seq模型，
+
+524
+00:30:53,400 --> 00:31:00,375
+with attention and then it had extra stuff for substituting UNKs with either,
+注意然后它有额外的东西代替UNKs，
+
+525
+00:31:00,375 --> 00:31:05,790
+uh, single word translation or by copying stuff from the source.
+呃，单字翻译或从源头复制东西。
+
+526
+00:31:05,790 --> 00:31:07,200
+So it was, sort of, basically,
+所以它基本上是，
+
+527
+00:31:07,200 --> 00:31:12,825
+state of the art neural MT of 2015, got 15,7 BLEU.
+2015年最先进的神经MT，获得了15,7 BLEU。
+
+528
+00:31:12,825 --> 00:31:14,970
+And the difference isn't big,
+差别不大，
+
+529
+00:31:14,970 --> 00:31:16,380
+um, but we were able to show,
+嗯，但我们能够表明，
+
+530
+00:31:16,380 --> 00:31:18,875
+look we can build this completely, um,
+看，我们可以完全建立这个，嗯，
+
+531
+00:31:18,875 --> 00:31:22,530
+character-level model and then actually, it did fractionally better.
+字符级模型，然后实际上，它做得更好。
+
+532
+00:31:22,530 --> 00:31:24,300
+Um, so this, sort of,
+嗯，所以这个，有点像，
+
+533
+00:31:24,300 --> 00:31:28,260
+showed that in terms of translation quality, um,
+表明在翻译质量方面，嗯，
+
+534
+00:31:28,260 --> 00:31:32,760
+character, purely character-based models were completely viable at
+角色，纯粹基于角色的模型完全可行
+
+535
+00:31:32,760 --> 00:31:37,380
+capturing the meaning of text as well as word-based models.
+捕获文本的含义以及基于单词的模型。
+
+536
+00:31:37,380 --> 00:31:40,395
+Um, was this a great result?
+嗯，这是一个很棒的结果吗？
+
+537
+00:31:40,395 --> 00:31:42,630
+Um, in many, in some ways,
+嗯，在很多方面，在某些方面，
+
+538
+00:31:42,630 --> 00:31:45,105
+yes, in another way, no.
+是的，换句话说，没有。
+
+539
+00:31:45,105 --> 00:31:48,810
+I mean, this model was truly terrible to train, right?
+我的意思是，这种模式训练真的很糟糕，对吧？
+
+540
+00:31:48,810 --> 00:31:52,590
+So it took about three weeks for us to train this model and at run-time,
+所以我们花了大约三个星期的时间训练这个模型并在运行时，
+
+541
+00:31:52,590 --> 00:31:54,855
+it also worked very slowly.
+它的工作也很慢。
+
+542
+00:31:54,855 --> 00:31:57,240
+And so the problem with character-level models,
+所以字符级模型的问题，
+
+543
+00:31:57,240 --> 00:32:00,135
+if you're putting them into something like an LSTM,
+如果你把它们放进像LSTM这样的东西，
+
+544
+00:32:00,135 --> 00:32:02,580
+is your sequences get way longer, right.
+是你的序列变得更长，对吧。
+
+545
+00:32:02,580 --> 00:32:07,110
+So you've got about seven times as long sequences as you used to have.
+所以你的序列大约是你以前的七倍。
+
+546
+00:32:07,110 --> 00:32:10,440
+And since there's not much information, the characters,
+因为没有太多的信息，人物，
+
+547
+00:32:10,440 --> 00:32:15,840
+you have to do back propagation through time much further back.
+你必须在更远的时候做回传播。
+
+548
+00:32:15,840 --> 00:32:19,040
+And so we were running back propagation through time for
+所以我们在时间上跑回来传播
+
+549
+00:32:19,040 --> 00:32:22,590
+600 steps before we were trun- truncating it.
+在我们将它截断之前的600个步骤。
+
+550
+00:32:22,590 --> 00:32:23,990
+And so this, sort of, made,
+所以，有点，做，
+
+551
+00:32:23,990 --> 00:32:25,210
+maybe that was excessive,
+也许这太过分了，
+
+552
+00:32:25,210 --> 00:32:27,770
+but it made the models, um, very slow.
+但它使模型，嗯，非常慢。
+
+553
+00:32:27,770 --> 00:32:32,520
+But we were able to show that it was able to get some of these good effects, right.
+但我们能够证明它能够获得一些好的效果，对吧。
+
+554
+00:32:32,520 --> 00:32:33,705
+So here's a Czech,
+所以这里是捷克人，
+
+555
+00:32:33,705 --> 00:32:35,230
+um, translating to Czech,
+嗯，翻译成捷克语，
+
+556
+00:32:35,230 --> 00:32:36,540
+her 11 year-old daughter,
+她11岁的女儿，
+
+557
+00:32:36,540 --> 00:32:39,645
+Shani Bart, said it felt a little bit weird.
+Shani Bart说，感觉有点奇怪。
+
+558
+00:32:39,645 --> 00:32:42,885
+And, um, I don't know, probably.
+而且，嗯，我可能不知道。
+
+559
+00:32:42,885 --> 00:32:45,480
+Does anyone speak Czech, any Czech speakers?
+有人说捷克语，捷克语吗？
+
+560
+00:32:45,480 --> 00:32:48,615
+Um, no Czech speakers?
+嗯，没有捷克语人士？
+
+561
+00:32:48,615 --> 00:32:51,195
+Okay, um, I don't speak Czech either, um,
+好吧，嗯，我也不会说捷克语，嗯，
+
+562
+00:32:51,195 --> 00:32:57,390
+but we can see that the [LAUGHTER] we can see that this does interesting things, right.
+但我们可以看到[笑声]我们可以看到这确实很有趣，对吧。
+
+563
+00:32:57,390 --> 00:33:00,045
+So the second line is the human translation
+所以第二行是人类翻译
+
+564
+00:33:00,045 --> 00:33:03,010
+into Czech which we can use for some guidance.
+我们可以用捷克语来获得一些指导。
+
+565
+00:33:03,010 --> 00:33:04,590
+And so in particular, um,
+尤其如此，嗯，
+
+566
+00:33:04,590 --> 00:33:07,815
+in Czech there's a word for 11 years old,
+在捷克，有一个11岁的词，
+
+567
+00:33:07,815 --> 00:33:11,295
+um, which you can see is that blue word on the second line.
+嗯，你可以看到第二行是蓝字。
+
+568
+00:33:11,295 --> 00:33:15,645
+And you can see that despite 11-year-old was, um,
+你可以看到，尽管11岁，嗯，
+
+569
+00:33:15,645 --> 00:33:19,425
+that for 11-year-old it's just able to perfectly, um,
+对于11岁的孩子来说，它能够完美，嗯，
+
+570
+00:33:19,425 --> 00:33:21,720
+produce letter by letter, um,
+一个字母地生产，嗯，
+
+571
+00:33:21,720 --> 00:33:25,830
+the Czech word for 11 years old and that works beautifully.
+11岁的捷克语，效果很好。
+
+572
+00:33:25,830 --> 00:33:29,160
+In contrast, for the word-level model, um,
+相比之下，对于词级模型，嗯，
+
+573
+00:33:29,160 --> 00:33:33,585
+11 year-old was an unknown word because that wasn't in the vocabulary.
+11岁是一个不为人知的词，因为这不在词汇中。
+
+574
+00:33:33,585 --> 00:33:37,920
+And so then it had two mechanisms to try and deal with, um, unknown words.
+所以它有两个机制来尝试和处理，嗯，未知的单词。
+
+575
+00:33:37,920 --> 00:33:39,435
+It could either do, uh,
+它可以做，呃，
+
+576
+00:33:39,435 --> 00:33:43,485
+unigram translation of them or it could just copy them.
+unigram翻译它们或者只是复制它们。
+
+577
+00:33:43,485 --> 00:33:46,230
+And for whatever reason, it decided here that the best strategy
+无论出于何种原因，它在这里决定了最好的策略
+
+578
+00:33:46,230 --> 00:33:49,580
+was to copy and so that was a complete fail.
+是复制，所以这是一个彻底的失败。
+
+579
+00:33:49,580 --> 00:33:53,115
+Um, and if we go along for the character-level model,
+嗯，如果我们继续使用角色级模型，
+
+580
+00:33:53,115 --> 00:33:55,890
+another thing that it gets right that's really cool,
+另一件事，它是正确的，真的很酷，
+
+581
+00:33:55,890 --> 00:33:57,995
+um, is the name Shani Bart.
+嗯，是Shani Bart的名字。
+
+582
+00:33:57,995 --> 00:34:02,370
+It's able to do this transliteration tasks that I mentioned just perfectly.
+它能够做到我完全提到的音译任务。
+
+583
+00:34:02,370 --> 00:34:04,755
+And it turns that to Shani Bartova
+它转向Shani Bartova
+
+584
+00:34:04,755 --> 00:34:07,760
+which is exactly what the human translator did as well.
+这正是人类翻译所做的。
+
+585
+00:34:07,760 --> 00:34:11,440
+And so, you know, it's actually doing some really kind of nice, um,
+所以，你知道，它实际上做了一些非常好的，嗯，
+
+586
+00:34:11,440 --> 00:34:15,635
+human translator, um, like things.
+人类翻译，嗯，喜欢的东西。
+
+587
+00:34:15,635 --> 00:34:17,480
+I mean, in fact,
+事实上，我的意思是，
+
+588
+00:34:17,480 --> 00:34:20,605
+as best I can tell from spending a bit of time on Google Translate,
+我在谷歌翻译上花了一些时间，我可以说是最好的，
+
+589
+00:34:20,605 --> 00:34:23,195
+it actually does a pretty good job in this sentence, period.
+在这句话中，它确实做得很好。
+
+590
+00:34:23,195 --> 00:34:25,880
+All right, this part here starts to be different,
+好吧，这部分开始有所不同，
+
+591
+00:34:25,880 --> 00:34:27,815
+um, from the human translator.
+嗯，来自人工翻译。
+
+592
+00:34:27,815 --> 00:34:29,480
+But it's not actually bad.
+但它实际上并不坏。
+
+593
+00:34:29,480 --> 00:34:31,460
+It's sort of a more literal translation.
+这是一种更直接的翻译。
+
+594
+00:34:31,460 --> 00:34:33,210
+So this citi um,
+所以这个城市，
+
+595
+00:34:33,210 --> 00:34:37,340
+actually translates feel like in the English texts.
+实际翻译感觉就像在英文文本中。
+
+596
+00:34:37,340 --> 00:34:38,875
+Whereas the human, sort of,
+而人类，有点像，
+
+597
+00:34:38,875 --> 00:34:43,230
+didn't actually use the word feel in the Czech version that they just went,
+实际上并没有使用他们刚刚去过的捷克语中的“感觉”这个词，
+
+598
+00:34:43,230 --> 00:34:45,550
+um, was a little bit,
+嗯，有点儿，
+
+599
+00:34:45,550 --> 00:34:49,360
+um, weird or strange. So that's cool.
+嗯，奇怪或奇怪。这太酷了。
+
+600
+00:34:49,360 --> 00:34:54,965
+Okay. So here are a couple more results from this.
+好的。所以这里有更多的结果。
+
+601
+00:34:54,965 --> 00:34:58,535
+So here's another system that was built the next year.
+所以这是另一个在明年建成的系统。
+
+602
+00:34:58,535 --> 00:35:00,830
+By these people Jason Lee,
+这些人杰森李，
+
+603
+00:35:00,830 --> 00:35:03,425
+Kyunghyun Cho and Thomas Hoffman.
+Kyunghyun Cho和Thomas Hoffman。
+
+604
+00:35:03,425 --> 00:35:09,515
+So they wanted to do something that was, I don't know,
+所以他们想做一些我不知道的事情，
+
+605
+00:35:09,515 --> 00:35:12,980
+much more complex and neural and
+更加复杂，神经质和
+
+606
+00:35:12,980 --> 00:35:16,385
+understanding the meaning of the text on the source side.
+了解源端文本的含义。
+
+607
+00:35:16,385 --> 00:35:20,555
+And so they were more using the kind of technologies we saw last time.
+因此他们更多地使用我们上次看到的那种技术。
+
+608
+00:35:20,555 --> 00:35:29,960
+So on the encoder side you started off with a letter sequence of character embeddings.
+所以在编码器方面，你开始使用字母嵌入字母序列。
+
+609
+00:35:29,960 --> 00:35:34,850
+And then you're sort of using convolutions of four,
+然后你有点使用四个卷积，
+
+610
+00:35:34,850 --> 00:35:39,710
+three and five of characters to get representations up here.
+三个和五个字符在这里得到表示。
+
+611
+00:35:39,710 --> 00:35:44,270
+You're then doing a max pooling with a stride of five.
+然后你以5的步幅进行最大池化。
+
+612
+00:35:44,270 --> 00:35:49,370
+So you're getting a max pooled representation of pieces of the text for each of the three,
+因此，您将获得三个中每个文本的最大池化表示，
+
+613
+00:35:49,370 --> 00:35:51,680
+four and five convolutions.
+四个和五个卷积。
+
+614
+00:35:51,680 --> 00:35:54,590
+You're then feeding that through multiple layers of
+然后，你通过多层进食
+
+615
+00:35:54,590 --> 00:35:57,815
+highway network and feeding that through
+公路网和喂养通过
+
+616
+00:35:57,815 --> 00:36:05,570
+a bidirectional gated recurrent unit and that's giving you your source representation.
+一个双向门控循环单元，它将为您提供源代码。
+
+617
+00:36:05,570 --> 00:36:07,519
+On the decoder side,
+在解码器方面，
+
+618
+00:36:07,519 --> 00:36:09,440
+it was sort of the same as our decoder,
+它和我们的解码器有点相似，
+
+619
+00:36:09,440 --> 00:36:13,680
+it was just running a character level sequence model.
+它只是运行一个字符级序列模型。
+
+620
+00:36:14,110 --> 00:36:21,590
+So overall, so they were doing the opposite task.
+总的来说，他们正在做相反的任务。
+
+621
+00:36:21,590 --> 00:36:24,330
+This is Czech to English.
+这是捷克语到英语。
+
+622
+00:36:25,120 --> 00:36:28,325
+But, so they are starting to get better scores.
+但是，他们开始获得更好的分数。
+
+623
+00:36:28,325 --> 00:36:31,610
+But I mean actually if you're sort of looking at these different numbers,
+但我的意思是，如果你有点看这些不同的数字，
+
+624
+00:36:31,610 --> 00:36:34,475
+where I'll explain this system more in a minute,
+我会在一分钟内解释这个系统，
+
+625
+00:36:34,475 --> 00:36:41,630
+I mean it sort of seems like the place where they get a lot of value is that using
+我的意思是它看起来像是一个有很多价值的地方就是使用它
+
+626
+00:36:41,630 --> 00:36:46,700
+the character level decoder gives them a lot of value by
+字符级解码器为它们提供了很多价值
+
+627
+00:36:46,700 --> 00:36:53,550
+this very complex model on the source side is giving them almost no value at all.
+源端的这个非常复杂的模型几乎没有任何价值。
+
+628
+00:36:54,760 --> 00:36:58,085
+One even more recent paper,
+最近的一篇论文，
+
+629
+00:36:58,085 --> 00:37:03,425
+so this is Colin Cherry and fellow researchers at Google.
+所以这是Colin Cherry和Google的研究人员。
+
+630
+00:37:03,425 --> 00:37:09,560
+So they last year did one more exploration of
+所以他们去年又做了一次探索
+
+631
+00:37:09,560 --> 00:37:11,570
+doing LSTM sequence to sequence
+做LSTM序列来排序
+
+632
+00:37:11,570 --> 00:37:16,505
+style models of comparing word and character-based models.
+比较单词和基于字符的模型的样式模型。
+
+633
+00:37:16,505 --> 00:37:19,220
+And this is English to French and this
+这是英语到法语和这个
+
+634
+00:37:19,220 --> 00:37:23,090
+is um, Czech to English which is just what we were doing.
+是嗯，捷克语到英语，这正是我们正在做的事情。
+
+635
+00:37:23,090 --> 00:37:27,440
+And so in both cases when you have a big model,
+在这两种情况下，如果你有一个大型模型，
+
+636
+00:37:27,440 --> 00:37:30,005
+the character model wins for them.
+角色模型为他们赢了。
+
+637
+00:37:30,005 --> 00:37:34,670
+The blue model comes out on top but the sort of interesting thing as you
+蓝色模型出现在顶部，但有点像你一样有趣
+
+638
+00:37:34,670 --> 00:37:36,830
+sort of see these different effects depending on
+有点看到这些不同的效果取决于
+
+639
+00:37:36,830 --> 00:37:39,140
+the morphological complexity of the language.
+语言的形态复杂性。
+
+640
+00:37:39,140 --> 00:37:41,555
+So for a language like Czech,
+所以对于像捷克这样的语言，
+
+641
+00:37:41,555 --> 00:37:43,850
+it's a really good idea,
+这是一个非常好的主意，
+
+642
+00:37:43,850 --> 00:37:45,995
+if you want to build a good model,
+如果你想建立一个好的模型，
+
+643
+00:37:45,995 --> 00:37:49,760
+to use character level that they're getting about a BLEU point of difference there,
+使用他们所获得的关于BLEU差异点的角色等级，
+
+644
+00:37:49,760 --> 00:37:54,710
+whereas for a model without putting French or English there's
+而对于没有放法语或英语的模型
+
+645
+00:37:54,710 --> 00:38:01,295
+actually a tiny but very little gain from using a character level model.
+使用角色等级模型实际上是一个微小但很少的收获。
+
+646
+00:38:01,295 --> 00:38:05,300
+Okay so let me just explain these models,
+好的，让我来解释这些模型，
+
+647
+00:38:05,300 --> 00:38:08,405
+so these models are models of different sizes.
+所以这些型号是不同尺寸的型号。
+
+648
+00:38:08,405 --> 00:38:17,720
+So these models are using bidirectional LSTM encoders and one-directional LSTM decoders.
+因此，这些模型使用双向LSTM编码器和单向LSTM解码器。
+
+649
+00:38:17,720 --> 00:38:20,405
+So the simplest model just has
+所以最简单的模型就是这样
+
+650
+00:38:20,405 --> 00:38:28,430
+a shallow bidirectional LSTM encoder and a two layer LSTM decoder.
+浅双向LSTM编码器和双层LSTM解码器。
+
+651
+00:38:28,430 --> 00:38:33,080
+The middle model has a three deep stack of
+中间模型有三个深层堆栈
+
+652
+00:38:33,080 --> 00:38:39,935
+bidirectional LSTM encoders and a four deep stack of LSTM decoders.
+双向LSTM编码器和四层深度LSTM解码器。
+
+653
+00:38:39,935 --> 00:38:43,940
+And the most complex model has a six deep stack of
+而最复杂的模型有六个深层堆栈
+
+654
+00:38:43,940 --> 00:38:51,530
+bidirectional LSTM encoders and an eight deep stack of LSTM decoders.
+双向LSTM编码器和8个深度LSTM解码器堆栈。
+
+655
+00:38:51,530 --> 00:38:53,660
+This is where it helps to work at Google.
+这是它有助于在Google工作的地方。
+
+656
+00:38:53,660 --> 00:38:55,310
+Probably for your projects,
+可能对你的项目来说，
+
+657
+00:38:55,310 --> 00:38:59,750
+you don't want to go beyond three or four. Stay over here.
+你不想超越三四个。留在这里。
+
+658
+00:38:59,750 --> 00:39:04,310
+Okay yeah so, so these are the results.
+好的，是的，所以这些都是结果。
+
+659
+00:39:04,310 --> 00:39:07,010
+So basically what you're finding is if you're making
+所以基本上你发现的是你正在制作的
+
+660
+00:39:07,010 --> 00:39:10,100
+sort of smaller models you're better off with words,
+一些较小的模特，你最好用文字，
+
+661
+00:39:10,100 --> 00:39:15,680
+but as you go to big models especially if you're in a morphologically rich language,
+但是当你去大模特时，特别是如果你是一个形态丰富的语言，
+
+662
+00:39:15,680 --> 00:39:18,425
+you clearly start to win from the characters.
+你明显开始从角色中获胜。
+
+663
+00:39:18,425 --> 00:39:21,410
+But there is still a loss which is essentially
+但基本上仍然存在损失
+
+664
+00:39:21,410 --> 00:39:27,635
+exactly the same loss that we were suffering from in 2015, right?
+和我们在2015年遭受的损失完全相同，对吧？
+
+665
+00:39:27,635 --> 00:39:35,510
+This is the time graph and so these are the same three models as over here,
+这是时间图，因此这些是与此处相同的三个模型，
+
+666
+00:39:35,510 --> 00:39:40,610
+it's just the axis is changed to sort of sum the total number of LSTM layers.
+它只是将轴更改为LSTM层总数的总和。
+
+667
+00:39:40,610 --> 00:39:45,050
+And so essentially, if you're at the word level,
+基本上，如果你在单词级别，
+
+668
+00:39:45,050 --> 00:39:51,800
+you can run any of these three models and they are fast that you can be translating in
+你可以运行这三种模型中的任何一种，它们很快你可以翻译
+
+669
+00:39:51,800 --> 00:39:59,000
+sort of not much time but for the character level models your slope is much higher.
+有点时间，但对于角色等级模型，你的坡度要高得多。
+
+670
+00:39:59,000 --> 00:40:04,770
+So it starts to get quite expensive to run the deep character level models.
+因此，运行深度字符级模型开始变得非常昂贵。
+
+671
+00:40:05,860 --> 00:40:09,035
+Okay, so that's that section.
+好的，那就是那个部分。
+
+672
+00:40:09,035 --> 00:40:12,810
+So then chugging along.
+所以然后继续。
+
+673
+00:40:12,910 --> 00:40:18,395
+I then wanted to look at other ways of doing things.
+然后我想看看其他做事方式。
+
+674
+00:40:18,395 --> 00:40:23,930
+And so these are models that in some sense still do have words but where
+所以这些模型在某种意义上仍然有文字，但在哪里
+
+675
+00:40:23,930 --> 00:40:29,675
+we're going to want to sort of build word representations out of pieces.
+我们想要构建单独的单词表示。
+
+676
+00:40:29,675 --> 00:40:35,465
+And there are essentially two families of ways that people have explored doing this.
+基本上有两种方式可供人们探索这样做。
+
+677
+00:40:35,465 --> 00:40:39,830
+One way of doing it is to say look we just want to use
+一种方法是说我们只想使用它
+
+678
+00:40:39,830 --> 00:40:44,495
+exactly the same architecture as we use for a word model
+与我们用于单词模型的结构完全相同
+
+679
+00:40:44,495 --> 00:40:48,710
+except our words aren't really going to
+除了我们的话并非如此
+
+680
+00:40:48,710 --> 00:40:53,390
+be words at least sometimes they're going to be pieces of words.
+至少有时它们会成为一些单词。
+
+681
+00:40:53,390 --> 00:40:56,750
+And so those are often called word piece models.
+因此，这些通常被称为单词模型。
+
+682
+00:40:56,750 --> 00:40:59,450
+And in particular, there's one commonest way of doing it.
+特别是，有一种最常用的方法。
+
+683
+00:40:59,450 --> 00:41:03,740
+It's called BPE, which I'll go through in some detail.
+它被称为BPE，我将详细介绍它。
+
+684
+00:41:03,740 --> 00:41:06,695
+The other alternative is to say,
+另一种选择是说，
+
+685
+00:41:06,695 --> 00:41:09,710
+well, we're gonna kind of make a mixture or a hybrid.
+好吧，我们要做一个混合物或混合物。
+
+686
+00:41:09,710 --> 00:41:14,420
+So our main model is going to work in terms of words but we're
+因此，我们的主要模型将在单词方面起作用，但我们是
+
+687
+00:41:14,420 --> 00:41:19,415
+going to have some kind of facility where we can construct a representation,
+会有一些我们可以建造代表的设施，
+
+688
+00:41:19,415 --> 00:41:21,530
+for otherwise unknown words,
+对于其他未知的单词，
+
+689
+00:41:21,530 --> 00:41:24,380
+by doing things that at a character or a lower level.
+通过做一个角色或更低层次的事情。
+
+690
+00:41:24,380 --> 00:41:26,750
+And I'll show you a bit of that as well.
+而且我也会告诉你一点。
+
+691
+00:41:26,750 --> 00:41:31,370
+Okay, so this is BPE.
+好的，这就是BPE。
+
+692
+00:41:31,370 --> 00:41:36,080
+BPE is actually a pretty simple idea which has nothing to
+BPE实际上是一个非常简单的想法，它什么都没有
+
+693
+00:41:36,080 --> 00:41:41,150
+do with deep learning but the use of BPE has sort of become
+深入学习，但BPE的使用已经成为现实
+
+694
+00:41:41,150 --> 00:41:49,340
+pretty standard and successful for representing pieces of words to allow you to
+相当标准，并成功表示允许你的单词
+
+695
+00:41:49,340 --> 00:41:52,685
+have an infinite vocabulary
+有一个无限的词汇
+
+696
+00:41:52,685 --> 00:41:58,490
+while an infinite effective vocabulary while actually working with a finite vocabulary.
+而实际上使用有限的词汇表时，无限有效的词汇量。
+
+697
+00:41:58,490 --> 00:42:01,670
+So the origins of Byte Pair Encoding and
+所以字节对编码的起源和
+
+698
+00:42:01,670 --> 00:42:07,760
+the name byte pair has nothing to do with natural language processing or neural nets,
+名称字节对与自然语言处理或神经网络无关，
+
+699
+00:42:07,760 --> 00:42:10,115
+we're just writing a compression algorithm.
+我们只是在写一个压缩算法。
+
+700
+00:42:10,115 --> 00:42:14,375
+So this is something like compressing your documents with gzip.
+所以这就像使用gzip压缩文档一样。
+
+701
+00:42:14,375 --> 00:42:18,830
+So what basic Byte Pair Encoding is,
+那么基本的字节对编码是什么，
+
+702
+00:42:18,830 --> 00:42:23,090
+that you've got a collection of stuff with bytes and you are
+你有一些字节的东西，你是
+
+703
+00:42:23,090 --> 00:42:28,820
+looking for the most frequent sequence of two bytes and you say,
+寻找最常见的两个字节序列，你说，
+
+704
+00:42:28,820 --> 00:42:32,675
+okay, I'm going to add that sequence of two bytes as
+好吧，我要将两个字节的序列添加为
+
+705
+00:42:32,675 --> 00:42:37,700
+a new element to my dictionary of possible values.
+我的可能值字典的新元素。
+
+706
+00:42:37,700 --> 00:42:42,830
+And that means I can have 257 different values for bytes so to
+这意味着我可以有257个不同的字节值
+
+707
+00:42:42,830 --> 00:42:45,110
+speak that I can shrink the length of
+说我可以缩短长度
+
+708
+00:42:45,110 --> 00:42:49,370
+my sequence and I can repeat over and do that again.
+我的序列和我可以重复并再次这样做。
+
+709
+00:42:49,370 --> 00:42:53,900
+And so essentially, this work suggested,
+基本上，这项工作建议，
+
+710
+00:42:53,900 --> 00:42:58,700
+well we can apply this kind of compression algorithm and use it as
+我们可以应用这种压缩算法并将其用作
+
+711
+00:42:58,700 --> 00:43:03,890
+a way of coming up with pieces of words that were
+提出一些单词的方法
+
+712
+00:43:03,890 --> 00:43:08,480
+useful, doing it not strictly with bytes despite
+虽然有用，但不严格按字节操作
+
+713
+00:43:08,480 --> 00:43:13,400
+the name but instead with characters and character n-grams.
+名称，但改为字符和字符n-gram。
+
+714
+00:43:13,400 --> 00:43:16,190
+And so the most common way to do this with
+所以最常见的方法就是这样做
+
+715
+00:43:16,190 --> 00:43:19,850
+characters and character n-grams and if you're up with modern times,
+字符和字符n-gram如果你现代的话，
+
+716
+00:43:19,850 --> 00:43:22,790
+you know that means there's unicode and you can represent
+你知道这意味着有unicode，你可以代表
+
+717
+00:43:22,790 --> 00:43:26,060
+all of these lovely letters like Canadian Inuktitut's
+所有这些可爱的信件，如加拿大Inuktitut的
+
+718
+00:43:26,060 --> 00:43:28,445
+syllabics and stuff like that.
+音节和类似的东西。
+
+719
+00:43:28,445 --> 00:43:31,340
+But there's actually a problem with Unicode,
+但实际上Unicode存在问题，
+
+720
+00:43:31,340 --> 00:43:34,595
+which is there actually a lot of Unicode characters.
+实际上有很多Unicode字符。
+
+721
+00:43:34,595 --> 00:43:36,815
+I forget the number theoretically.
+我理论上忘了这个数字。
+
+722
+00:43:36,815 --> 00:43:40,520
+I think there's about 200,000 possible Unicode characters.
+我认为大约有200,000个可能的Unicode字符。
+
+723
+00:43:40,520 --> 00:43:44,900
+But at any rate, if you want to handle a bunch of languages which include East Asian languages,
+但无论如何，如果你想处理一堆包含东亚语言的语言，
+
+724
+00:43:44,900 --> 00:43:49,205
+maybe you need something like 20,000 characters and that's sort of a lot.
+也许你需要20,000个字符，这有点像。
+
+725
+00:43:49,205 --> 00:43:54,920
+So there are actually some people who've literally gone back to bytes and said,
+所以实际上有些人真的回到了字节并说，
+
+726
+00:43:54,920 --> 00:43:57,650
+"You know 200,000, that's a really big vocabulary.
+“你知道20万，这是一个非常大的词汇。
+
+727
+00:43:57,650 --> 00:43:59,270
+I don't want to deal with anything."
+我不想处理任何事情。“
+
+728
+00:43:59,270 --> 00:44:01,700
+Sorry, 200,000 is a really big vocabulary.
+对不起，200,000是一个非常大的词汇。
+
+729
+00:44:01,700 --> 00:44:03,845
+I don't even want to deal with anything that large.
+我甚至不想处理那么大的事情。
+
+730
+00:44:03,845 --> 00:44:10,010
+So why don't I actually just do these kind of algorithms over bytes?
+那么为什么我实际上不只是在字节上做这些算法呢？
+
+731
+00:44:10,010 --> 00:44:14,495
+And so that means that in UTF-8 encoding,
+这意味着在UTF-8编码中，
+
+732
+00:44:14,495 --> 00:44:17,870
+Chinese characters take three bytes each.
+汉字各占三个字节。
+
+733
+00:44:17,870 --> 00:44:21,890
+And so you're actually have to- you only get whole characters if you
+所以你真的必须 - 如果你，你只能获得整个角色
+
+734
+00:44:21,890 --> 00:44:27,100
+actually merge together several bytes that are common sequencers.
+实际上将几个字节合并为常见的序列发生器。
+
+735
+00:44:27,100 --> 00:44:30,600
+Okay. So more concretely,
+好的。更具体地说，
+
+736
+00:44:30,600 --> 00:44:32,040
+um, how does this work?
+嗯，这是怎么回事？
+
+737
+00:44:32,040 --> 00:44:37,110
+So we're sort of doing this bottom-up clustering of short sequences.
+所以我们有点做这种自下而上的短序列聚类。
+
+738
+00:44:37,110 --> 00:44:40,245
+So we start with a unigram vocabulary,
+所以我们从unigram词汇开始，
+
+739
+00:44:40,245 --> 00:44:44,120
+which is all of the Unicode characters and some data.
+这是所有的Unicode字符和一些数据。
+
+740
+00:44:44,120 --> 00:44:49,310
+We then sort of ask, what's the most frequent ngram here?
+然后我们问一下，这里最常见的ngram是什么？
+
+741
+00:44:49,310 --> 00:44:53,985
+Um, initially it will be a bigram pair and we add that to our vocabulary.
+嗯，最初它将是一对二元组，我们将它添加到我们的词汇表中。
+
+742
+00:44:53,985 --> 00:44:56,610
+So if we start off, you know,
+所以，如果我们开始，你知道，
+
+743
+00:44:56,610 --> 00:44:59,670
+we can take our text that's- um,
+我们可以把我们的文字拿来，
+
+744
+00:44:59,670 --> 00:45:00,810
+I'll come back to this in a minute.
+我马上回过头来看看。
+
+745
+00:45:00,810 --> 00:45:05,895
+Let's assume we have a text that has been divided into words so we do have word tokens.
+假设我们有一个文本被分成单词，所以我们有单词标记。
+
+746
+00:45:05,895 --> 00:45:11,670
+And so we can represent as a dictionary and say here are some words with their frequency.
+因此我们可以将其表示为字典，并在这里说出一些带有频率的单词。
+
+747
+00:45:11,670 --> 00:45:17,985
+Um, and so now we look for a common letter sequence and we say, "Oh, es."
+嗯，所以现在我们寻找一个共同的字母序列，我们说，“哦，es。”
+
+748
+00:45:17,985 --> 00:45:20,610
+That occurs nine times, um,
+这发生了九次，嗯，
+
+749
+00:45:20,610 --> 00:45:25,250
+in this data because we have the counts for the words on the left side.
+在这个数据中，因为我们对左侧的单词有计数。
+
+750
+00:45:25,250 --> 00:45:30,600
+So, um, we start with our vocabulary being all the individual letters.
+所以，嗯，我们的词汇是所有单个字母。
+
+751
+00:45:30,600 --> 00:45:34,515
+We find a commonest letter sequence like es,
+我们找到一个最常见的字母序列，如es，
+
+752
+00:45:34,515 --> 00:45:40,245
+and so we say, "Let's clump that together and make that a new thing in our vocabulary."
+所以我们说，“让我们一起团结起来，把它作为我们词汇中的新东西。”
+
+753
+00:45:40,245 --> 00:45:43,185
+So now we've got an extra thing in our vocabulary.
+所以现在我们的词汇量还有额外的东西。
+
+754
+00:45:43,185 --> 00:45:47,340
+And now what's the commonest ngram sequence that clumped something?
+现在什么是最常见的ngram序列聚集了什么？
+
+755
+00:45:47,340 --> 00:45:51,030
+Well, actually all of these es's are followed by t,
+嗯，实际上所有这些es都跟着t，
+
+756
+00:45:51,030 --> 00:45:52,650
+so we also have es,
+所以我们也有es，
+
+757
+00:45:52,650 --> 00:45:55,065
+t with frequency nine,
+t频率为9，
+
+758
+00:45:55,065 --> 00:45:58,050
+and so we can add that to our vocabulary.
+所以我们可以将它添加到我们的词汇表中。
+
+759
+00:45:58,050 --> 00:45:59,670
+And then we ask again, well,
+然后我们再问一遍，好吧，
+
+760
+00:45:59,670 --> 00:46:03,030
+what's another common letter sequence?
+什么是另一个常见的字母序列？
+
+761
+00:46:03,030 --> 00:46:06,825
+Let's see, there are seven cases of o double- well,
+让我们看看，有七个双井的情况，
+
+762
+00:46:06,825 --> 00:46:10,170
+I guess there are seven cases of either l o or o w,
+我猜有七个案例都是lo或ow，
+
+763
+00:46:10,170 --> 00:46:13,380
+so we can lump those and then we can lump
+所以我们可以把它们混为一谈然后我们可以把它们混为一谈
+
+764
+00:46:13,380 --> 00:46:17,795
+again and make an lo w. So if we sort of run this,
+再次做出一个低谷。所以，如果我们运行这个，
+
+765
+00:46:17,795 --> 00:46:22,410
+we start to build these clumps of common letter sequences,
+我们开始构建这些共同字母序列的团块，
+
+766
+00:46:22,410 --> 00:46:26,205
+and so common bits like est,
+像est这样常见的比特，
+
+767
+00:46:26,205 --> 00:46:28,450
+but also just common words,
+但也只是常用词，
+
+768
+00:46:28,450 --> 00:46:31,470
+something like that in English will very quickly be
+像英语这样的东西很快就会出现
+
+769
+00:46:31,470 --> 00:46:35,130
+clumped together and be a unit of our vocabulary.
+聚集在一起，成为我们词汇的一个单元。
+
+770
+00:46:35,130 --> 00:46:38,300
+Um, and so we do that for a while.
+嗯，所以我们这样做了一段时间。
+
+771
+00:46:38,300 --> 00:46:40,650
+So normally what we do is we decide
+通常我们所做的就是决定
+
+772
+00:46:40,650 --> 00:46:44,250
+a vocabulary size that we want to work with. We say, "Okay.
+我们想要使用的词汇量。我们说，“好的。
+
+773
+00:46:44,250 --> 00:46:47,400
+I want to work with a vocabulary size of 8,000 words."
+我想使用8,000字的词汇量。“
+
+774
+00:46:47,400 --> 00:46:49,905
+That'll mean my model will be fast,
+这意味着我的模型会很快，
+
+775
+00:46:49,905 --> 00:46:54,255
+and we just sort of keep doing this until we have 8,000 things in our vocabulary.
+我们只是继续这样做，直到我们的词汇量中有8000个东西。
+
+776
+00:46:54,255 --> 00:46:56,900
+And that means that our vocabulary will have in it
+这意味着我们的词汇将包含在其中
+
+777
+00:46:56,900 --> 00:47:00,650
+all single letters because we started with them and it'll
+所有单个字母，因为我们从它们开始，它会
+
+778
+00:47:00,650 --> 00:47:07,285
+have common subsequences of words like the es and the est that are now in our vocabulary,
+有像我们词汇中现在的es和est这样的单词的共同子序列，
+
+779
+00:47:07,285 --> 00:47:11,420
+but also have whole words whenever there're common words, like, you know,
+每当有常见的词语时，也会有完整的词汇，比如，你知道，
+
+780
+00:47:11,420 --> 00:47:13,280
+the, and too, and with,
+这个，也是，和，
+
+781
+00:47:13,280 --> 00:47:16,835
+and so on, will become parts of our vocabulary.
+等等，将成为我们词汇的一部分。
+
+782
+00:47:16,835 --> 00:47:21,000
+Um, and so then when we have a piece of text we can do
+嗯，等等，当我们有一段文字时，我们可以做
+
+783
+00:47:21,000 --> 00:47:25,125
+a deterministic longest piece segmentation of words,
+单词的确定性最长片段，
+
+784
+00:47:25,125 --> 00:47:28,310
+and we will say that is our eeset of word pieces.
+我们会说这是我们的文字片段。
+
+785
+00:47:28,310 --> 00:47:30,900
+And so for an input piece of text,
+对于输入的文本，
+
+786
+00:47:30,900 --> 00:47:32,700
+we turn into word pieces,
+我们变成了单词，
+
+787
+00:47:32,700 --> 00:47:37,695
+and then we just run it through our MT system as if we were using words,
+然后我们只是通过我们的MT系统运行它，好像我们正在使用单词，
+
+788
+00:47:37,695 --> 00:47:39,900
+but really it's pieces of words,
+但实际上它是一些单词，
+
+789
+00:47:39,900 --> 00:47:42,000
+and then on the output side,
+然后在输出端，
+
+790
+00:47:42,000 --> 00:47:45,845
+we just concatenate them back together as needed.
+我们只是根据需要将它们连接在一起。
+
+791
+00:47:45,845 --> 00:47:49,875
+Okay. So we get this sort of automatic word-based system.
+好的。所以我们得到了这种基于单词的自动系统。
+
+792
+00:47:49,875 --> 00:47:53,525
+And that's proved to be a very successful system.
+事实证明这是一个非常成功的系统。
+
+793
+00:47:53,525 --> 00:47:57,525
+So this idea of using byte pair encoding sort of really
+所以这种使用字节对编码的想法真的很好
+
+794
+00:47:57,525 --> 00:48:02,115
+emerged in 2015 and then in 2016, uh,
+出现在2015年，然后在2016年，呃，
+
+795
+00:48:02,115 --> 00:48:06,480
+workshop on machine translation which has been the main sort of annual competition for
+机器翻译研讨会一直是年度竞争的主要方式
+
+796
+00:48:06,480 --> 00:48:12,300
+MT systems that the several top systems were built using byte pair encoding.
+几个顶级系统使用字节对编码构建的MT系统。
+
+797
+00:48:12,300 --> 00:48:14,700
+If you look at last year's competition,
+如果看一下去年的比赛，
+
+798
+00:48:14,700 --> 00:48:16,350
+there's a bit more variety,
+有更多的变化，
+
+799
+00:48:16,350 --> 00:48:21,044
+but really a number of the top systems are still using byte pair encoding,
+但实际上许多顶级系统仍在使用字节对编码，
+
+800
+00:48:21,044 --> 00:48:24,345
+that's just been a good way to do things.
+这只是做事的好方法。
+
+801
+00:48:24,345 --> 00:48:29,130
+So for Google's Neural Machine Translation,
+那么对于谷歌的神经机器翻译，
+
+802
+00:48:29,130 --> 00:48:33,450
+they effectively use of- a variant of byte pair encoding.
+它们有效地使用了字节对编码的变体。
+
+803
+00:48:33,450 --> 00:48:37,160
+So they don't use exactly the same algorithm, um,
+所以他们不使用完全相同的算法，嗯，
+
+804
+00:48:37,160 --> 00:48:40,260
+they use a slightly different algorithm where they're
+他们使用的算法略有不同
+
+805
+00:48:40,260 --> 00:48:44,010
+using a language model and they're saying,
+使用语言模型，他们说，
+
+806
+00:48:44,010 --> 00:48:47,285
+what- what- rather than just using pure counts,
+什么 - 而不仅仅是使用纯粹的计数，
+
+807
+00:48:47,285 --> 00:48:52,575
+they're saying, "What clumping together would maximally reduce
+他们说，“聚集在一起会最大限度地减少
+
+808
+00:48:52,575 --> 00:48:58,410
+the perplexity of my language model and clump those things and repeat over?"
+我的语言模型的困惑，并把这些东西弄成团块并重复过来？“
+
+809
+00:48:58,410 --> 00:49:02,280
+And so they did- they've done two versions of this model.
+所以他们做了 - 他们已经完成了这个模型的两个版本。
+
+810
+00:49:02,280 --> 00:49:07,170
+So the first version, the wordpiece model kind of like, um,
+所以第一个版本，wordpiece模型有点像，嗯，
+
+811
+00:49:07,170 --> 00:49:11,585
+byte pair encoding assumed that you have an initial tokenization
+字节对编码假定您有一个初始标记化
+
+812
+00:49:11,585 --> 00:49:16,035
+to words and then you're just sort of having pieces of words,
+单词，然后你只是有一些单词，
+
+813
+00:49:16,035 --> 00:49:17,880
+um, using this algorithm.
+嗯，使用这个算法。
+
+814
+00:49:17,880 --> 00:49:20,790
+And then they did a second version, um,
+然后他们做了第二个版本，嗯，
+
+815
+00:49:20,790 --> 00:49:25,050
+the sentencepiece model which you can find at this GitHub site which said, "Well,
+你可以在这个GitHub网站找到的句子模型说：“嗯，
+
+816
+00:49:25,050 --> 00:49:28,560
+it's problematic if we need to tokenize into words first
+如果我们需要首先将其标记为单词，这是有问题的
+
+817
+00:49:28,560 --> 00:49:30,208
+because then we need to have a tokenizer for
+因为那时我们需要有一个tokenizer
+
+818
+00:49:30,208 --> 00:49:32,550
+every language and that's a lot of work."
+每种语言，这都是很多工作。“
+
+819
+00:49:32,550 --> 00:49:34,545
+Um, so maybe instead of that,
+嗯，也许不是那样，
+
+820
+00:49:34,545 --> 00:49:36,825
+we could just sort of treat,
+我们可以只是对待，
+
+821
+00:49:36,825 --> 00:49:39,080
+go from a character sequence,
+从一个字符序列，
+
+822
+00:49:39,080 --> 00:49:44,855
+retain whitespaces and regard that as something that's part of the clumping process,
+保留空格并将其视为集合过程中的一部分，
+
+823
+00:49:44,855 --> 00:49:47,045
+and so that, um,
+所以，嗯，
+
+824
+00:49:47,045 --> 00:49:50,015
+you just build your word pieces which
+你只需要建立自己的文字片段
+
+825
+00:49:50,015 --> 00:49:54,485
+commonly will have spaces on one side or the other of them, um,
+通常会在一侧或另一侧有空间，嗯，
+
+826
+00:49:54,485 --> 00:49:57,710
+because often things inside a word are the
+因为一句话里面的东西经常是
+
+827
+00:49:57,710 --> 00:50:01,680
+commoner- more common clumps and you build those up,
+布衣 - 更常见的团块，你建立起来，
+
+828
+00:50:01,680 --> 00:50:04,755
+and that's proven to be quite successful.
+这被证明是非常成功的。
+
+829
+00:50:04,755 --> 00:50:10,530
+Um, in particular, one place where some of you might see this,
+嗯，特别是，有些人可能会看到这个，
+
+830
+00:50:10,530 --> 00:50:14,375
+um, is, um, we've yet to get to describing it in the class really,
+嗯，是，嗯，我们还没有真正在课堂上描述它，
+
+831
+00:50:14,375 --> 00:50:19,950
+but there's been this recent work which we actually talk about next week in class, are
+但是最近我们在课堂上实际谈到的这项工作是
+
+832
+00:50:19,950 --> 00:50:22,980
+building these transformer models, in particular,
+建造这些变压器模型，特别是
+
+833
+00:50:22,980 --> 00:50:26,160
+Google has released this BERT model which gives you
+谷歌发布了这款BERT模型
+
+834
+00:50:26,160 --> 00:50:29,460
+very good, um, word representations.
+非常好，嗯，字表示。
+
+835
+00:50:29,460 --> 00:50:32,835
+And if you download BERT and try and use it,
+如果您下载BERT并尝试使用它，
+
+836
+00:50:32,835 --> 00:50:36,615
+what you will find out is it doesn't operate over words,
+你会发现它不会在文字上运作，
+
+837
+00:50:36,615 --> 00:50:40,050
+it operates over word pieces.
+它运行在文字片段上。
+
+838
+00:50:40,050 --> 00:50:43,260
+Um, and so it has a large vocabulary.
+嗯，所以它有很大的词汇量。
+
+839
+00:50:43,260 --> 00:50:46,470
+It's not a vocabulary of like 8,000 words.
+这不是像8000字的词汇。
+
+840
+00:50:46,470 --> 00:50:47,685
+I forget the number,
+我忘记了号码，
+
+841
+00:50:47,685 --> 00:50:50,640
+but the models have a large vocabulary,
+但模型的词汇量很大，
+
+842
+00:50:50,640 --> 00:50:55,380
+but they're still not a huge vocabulary and it's using word pieces.
+但它们仍然不是一个庞大的词汇，它使用的是文字。
+
+843
+00:50:55,380 --> 00:50:57,450
+So lots of words are in the vocabulary.
+所以词汇量中有很多单词。
+
+844
+00:50:57,450 --> 00:50:59,070
+So if you look at the English model,
+所以如果你看看英文模特，
+
+845
+00:50:59,070 --> 00:51:01,140
+it not only has words like f in it,
+它不仅有像f这样的词，
+
+846
+00:51:01,140 --> 00:51:04,470
+but it even has words like Fairfax and 1910s,
+但它甚至有像费尔法克斯和1910年代这样的词，
+
+847
+00:51:04,470 --> 00:51:06,045
+which aren't that common.
+这并不常见。
+
+848
+00:51:06,045 --> 00:51:10,245
+Um, but it's nevertheless to cover all words,
+嗯，但它仍然涵盖所有的话，
+
+849
+00:51:10,245 --> 00:51:12,660
+it's again using this wordpiece idea.
+它再次使用这个词组的想法。
+
+850
+00:51:12,660 --> 00:51:16,075
+So if I want a representation for the word hypatia, um,
+所以如果我想要一个hypatia这个词的表示，嗯，
+
+851
+00:51:16,075 --> 00:51:17,895
+that's not in the vocabulary,
+这不在词汇表中，
+
+852
+00:51:17,895 --> 00:51:19,800
+and so I'm making it up of pieces.
+所以我正在制作碎片。
+
+853
+00:51:19,800 --> 00:51:21,795
+There's an h representation,
+有一个代表，
+
+854
+00:51:21,795 --> 00:51:24,110
+and then in the BERT version,
+然后在BERT版本中，
+
+855
+00:51:24,110 --> 00:51:26,880
+which is different to the Google NMT version,
+这与Google NMT版本不同，
+
+856
+00:51:26,880 --> 00:51:32,625
+the non- the non-initial word pieces are represented with two hashes at the start,
+非初始单词片段在开头用两个哈希表示，
+
+857
+00:51:32,625 --> 00:51:36,944
+so I can put that together with h##yp etc.,
+所以我可以把它与h ## yp等放在一起，
+
+858
+00:51:36,944 --> 00:51:40,200
+and this would be my representation of hypatia.
+这将是我对hypatia的代表。
+
+859
+00:51:40,200 --> 00:51:43,245
+So effectively, I have word vectors, um,
+如此有效，我有单词向量，嗯，
+
+860
+00:51:43,245 --> 00:51:45,435
+for four word pieces,
+四个字，
+
+861
+00:51:45,435 --> 00:51:47,880
+and then I have to work out what to do with them.
+然后我必须弄清楚如何处理它们。
+
+862
+00:51:47,880 --> 00:51:51,600
+The simplest and quite common way is I just average the four of them.
+最简单和最常见的方式是我只平均其中的四个。
+
+863
+00:51:51,600 --> 00:51:53,340
+And there are obviously other things you could do.
+显然，你可以做其他事情。
+
+864
+00:51:53,340 --> 00:51:56,100
+You could ConvNet and maxpool or you could run
+您可以使用ConvNet和maxpool，也可以运行
+
+865
+00:51:56,100 --> 00:52:00,640
+a little LSTM or something to put together a representation.
+一点点LSTM或什么东西来组合一个表示。
+
+866
+00:52:00,840 --> 00:52:07,220
+Okay. Yeah. So- so those were the models that, um,
+好的。是啊。所以那些模型，嗯，
+
+867
+00:52:07,220 --> 00:52:10,530
+sort of, worked with pieces of words to give you
+有点像，用词语来给你
+
+868
+00:52:10,530 --> 00:52:14,835
+infinite vocabulary and ran them through a normal system.
+无限的词汇，并通过正常的系统运行它们。
+
+869
+00:52:14,835 --> 00:52:18,335
+The other possibility is to say, "Well,
+另一种可能性就是说，“好吧，
+
+870
+00:52:18,335 --> 00:52:22,530
+we wanna work with characters so we can deal with an infinite vocabulary,
+我们想与角色合作，这样我们就可以处理无限的词汇，
+
+871
+00:52:22,530 --> 00:52:27,945
+but we're gonna sort of incorporate those into a bigger system."
+但我们会把它们整合到一个更大的系统中。“
+
+872
+00:52:27,945 --> 00:52:30,540
+And a whole bunch of work has done this
+而且一大堆工作已经完成了
+
+873
+00:52:30,540 --> 00:52:33,990
+and in some sense it's a fairly obvious thing to do.
+从某种意义上讲，这是一个相当明显的事情。
+
+874
+00:52:33,990 --> 00:52:38,730
+Um, so this work in 2014 was one of the early ones.
+嗯，所以2014年的这项工作是早期的工作之一。
+
+875
+00:52:38,730 --> 00:52:40,005
+So they said, "Well,
+所以他们说，“好吧，
+
+876
+00:52:40,005 --> 00:52:42,165
+we could start with characters.
+我们可以从角色开始。
+
+877
+00:52:42,165 --> 00:52:47,640
+We can do a convolution over the characters to generate word embeddings,
+我们可以对字符进行卷积以生成单词嵌入，
+
+878
+00:52:47,640 --> 00:52:53,250
+and then we can use those word embeddings for something in a higher level model."
+然后我们可以在更高级别的模型中使用这些嵌入词。“
+
+879
+00:52:53,250 --> 00:52:58,215
+Um, this was actually sort of a fixed window model for doing part of speech tagging.
+嗯，这实际上是用于进行部分语音标记的固定窗口模型。
+
+880
+00:52:58,215 --> 00:53:00,240
+Um, that makes sense.
+嗯，这很有道理。
+
+881
+00:53:00,240 --> 00:53:01,935
+Instead of a convolution,
+而不是卷积，
+
+882
+00:53:01,935 --> 00:53:03,690
+you could use LSTM.
+你可以使用LSTM。
+
+883
+00:53:03,690 --> 00:53:06,720
+So this was work from a year later,
+所以这是一年后的工作，
+
+884
+00:53:06,720 --> 00:53:07,835
+and they said, "Well,
+他们说：“好吧，
+
+885
+00:53:07,835 --> 00:53:09,795
+we're also gonna build up, um,
+我们也要积累起来，嗯，
+
+886
+00:53:09,795 --> 00:53:12,245
+word representations from characters.
+字符的单词表示。
+
+887
+00:53:12,245 --> 00:53:17,520
+And the way we're gonna do it is we're gonna run character level Bi-LSTMs,
+而我们要做的就是运行角色级Bi-LSTMs，
+
+888
+00:53:17,520 --> 00:53:20,044
+concatenate the two final states,
+连接两个最终状态，
+
+889
+00:53:20,044 --> 00:53:23,430
+and we're gonna call that outward representation,
+我们要称之为外向代表，
+
+890
+00:53:23,430 --> 00:53:27,750
+and then we're gonna put that word representation into a
+然后我们将把这个单词表示放入一个
+
+891
+00:53:27,750 --> 00:53:34,890
+language model which is then a higher level LSTM that works along a sequence of words."
+语言模型，然后是一个更高级别的LSTM，沿着一系列单词工作。“
+
+892
+00:53:34,890 --> 00:53:37,785
+And I thought I'd just- Oh, yeah.
+我以为我只是 - 哦，是的。
+
+893
+00:53:37,785 --> 00:53:41,400
+Words, are they training uh, like character-
+话说，他们是训练呃，喜欢性格 -
+
+894
+00:53:41,400 --> 00:53:44,130
+Yeah. Oh yeah, that's very important to realize.
+是啊。哦，是的，这一点非常重要。
+
+895
+00:53:44,130 --> 00:53:50,550
+Yes so yeah so if you're learning- you'll learn- I mean this is the hidden layer.
+是的所以是的，如果你正在学习 - 你将学习 - 我的意思是这是隐藏层。
+
+896
+00:53:50,550 --> 00:53:54,150
+I guess I'm not actually showing the input layer but for the input layer
+我想我实际上并没有显示输入层，而是显示输入层
+
+897
+00:53:54,150 --> 00:53:58,260
+you're learning a vector for each character.
+你正在为每个角色学习一个向量。
+
+898
+00:53:58,260 --> 00:54:01,800
+So effectively you're doing the same kind of thing we saw
+所以你有效地做了我们所看到的同样的事情
+
+899
+00:54:01,800 --> 00:54:07,545
+before that you're starting with random representations for each character.
+在此之前，您将从每个角色的随机表示开始。
+
+900
+00:54:07,545 --> 00:54:13,590
+You've got this embedded inside a word sequence LSTM,
+你已将它嵌入到单词序列LSTM中，
+
+901
+00:54:13,590 --> 00:54:20,160
+your goal is to minimize the perplexity of the higher level LSTM as,
+你的目标是最大限度地减少高级LSTM的困惑，因为，
+
+902
+00:54:20,160 --> 00:54:26,100
+um, as a language model and so it filters back its gradients.
+嗯，作为一种语言模型，所以它过滤掉它的渐变。
+
+903
+00:54:26,100 --> 00:54:30,450
+So it's wanting to come up with character vectors such that if it
+所以它想要提出角色向量，如果它
+
+904
+00:54:30,450 --> 00:54:35,860
+produces good word vectors which produces low, um, perplexities.
+产生良好的单词向量，产生低，嗯，困惑。
+
+905
+00:54:35,900 --> 00:54:41,220
+Good question. Um, so here's, um,
+好问题。嗯，所以这里，嗯，
+
+906
+00:54:41,220 --> 00:54:44,820
+a slightly more complex version of trying to
+尝试稍微复杂一点的版本
+
+907
+00:54:44,820 --> 00:54:48,720
+do this that's a bit more recent where again the idea is can we build
+做到这一点，这是一个更近期，我们可以建立的想法
+
+908
+00:54:48,720 --> 00:54:53,505
+a good language model by starting out from characters
+一个好的语言模型，从字符开始
+
+909
+00:54:53,505 --> 00:54:59,010
+and wanting to exploit sort of related sub words and rare words.
+并希望利用一些相关的子词和罕见的词。
+
+910
+00:54:59,010 --> 00:55:02,760
+And so they built sort of this kind of
+所以他们建造了这种类型
+
+911
+00:55:02,760 --> 00:55:07,815
+this more stacked complex model that we'll go through the stages of wherefore
+这个更加堆叠的复杂模型，我们将经历其中的各个阶段
+
+912
+00:55:07,815 --> 00:55:11,805
+we start with a word represented as characters.
+我们从一个表示为字符的单词开始。
+
+913
+00:55:11,805 --> 00:55:14,700
+We have character embeddings which we build
+我们有自己构建的字符嵌入
+
+914
+00:55:14,700 --> 00:55:17,910
+into a convolutional network and then we head upwards.
+进入卷积网络，然后我们向上。
+
+915
+00:55:17,910 --> 00:55:20,354
+So if we take that one piece at a time,
+所以，如果我们一次拿一件，
+
+916
+00:55:20,354 --> 00:55:24,420
+um, so you have a character embedding for each character.
+嗯，所以你有一个角色嵌入每个角色。
+
+917
+00:55:24,420 --> 00:55:28,680
+Um, you'll then have a convolutional layer which
+嗯，你会有一个卷积层
+
+918
+00:55:28,680 --> 00:55:33,540
+then sort of rep, has various filters that work over those,
+然后排序代表，有各种过滤器，这些过滤器，
+
+919
+00:55:33,540 --> 00:55:37,800
+um, character sequence of two, three and four grams of characters.
+嗯，两个，三个和四个字符的字符序列。
+
+920
+00:55:37,800 --> 00:55:41,340
+So you're getting representations of parts of words.
+所以你得到了部分单词的表示。
+
+921
+00:55:41,340 --> 00:55:48,600
+Um, then from those convolutional networks you're then doing max pooling over time which
+嗯，然后从那些卷积网络，你随后随着时间的推移做最大的汇集
+
+922
+00:55:48,600 --> 00:55:51,510
+is effectively sort of like choosing which of
+实际上有点像选择哪一个
+
+923
+00:55:51,510 --> 00:55:56,155
+these n-grams best represents the meaning of a word.
+这些n-gram最能代表一个词的含义。
+
+924
+00:55:56,155 --> 00:56:00,350
+Um, then what they do after that is so at that point
+嗯，那之后他们做的就是那个时候
+
+925
+00:56:00,350 --> 00:56:05,030
+they've got an output representation for character n-grams,
+他们有一个字符n-gram的输出表示，
+
+926
+00:56:05,030 --> 00:56:12,095
+and so then they feed that into a highway network like we talked about a bit last time.
+然后他们把它送进高速公路网，就像我们上次谈到的那样。
+
+927
+00:56:12,095 --> 00:56:16,985
+And then the output of that then at the word level,
+然后在单词级别的输出，
+
+928
+00:56:16,985 --> 00:56:20,405
+um, goes into an LSTM network,
+嗯，进入LSTM网络，
+
+929
+00:56:20,405 --> 00:56:24,365
+and this LSTM network is now word-level LSTM network,
+而这个LSTM网络现在是字级LSTM网络，
+
+930
+00:56:24,365 --> 00:56:27,710
+and you're trying to sort of maxim- minimize
+而你正试图将最大化最小化
+
+931
+00:56:27,710 --> 00:56:32,365
+perplexity like for the neural language models we saw earlier.
+像我们之前看到的神经语言模型一样令人困惑。
+
+932
+00:56:32,365 --> 00:56:35,385
+Um, so what could they show with this?
+嗯，那么他们能用什么表现呢？
+
+933
+00:56:35,385 --> 00:56:38,910
+Well, the first thing they could show with it is that it
+嗯，他们可以用它来展示的第一件事就是它
+
+934
+00:56:38,910 --> 00:56:43,950
+actually again just works well as a language model despite that skepticism
+尽管存在怀疑态度，但实际上它再次作为一种语言模型很有效
+
+935
+00:56:43,950 --> 00:56:46,800
+that I hadn't told you of about the fact of
+我没有告诉过你关于这个事实的事实
+
+936
+00:56:46,800 --> 00:56:50,040
+the matter is you could build these kind of character level models and
+问题是你可以建立这种角色级别的模型和
+
+937
+00:56:50,040 --> 00:56:56,535
+train them and they work to a first approximation as well as word-level language models.
+训练他们，他们工作的第一个近似以及词级语言模型。
+
+938
+00:56:56,535 --> 00:56:59,790
+But one of the observations that they make is that you can be
+但他们所做的一个观察是你可以
+
+939
+00:56:59,790 --> 00:57:03,840
+getting as good results but with much smaller models.
+获得良好的结果，但模型更小。
+
+940
+00:57:03,840 --> 00:57:05,235
+So up at the top here are
+所以在这里是顶部
+
+941
+00:57:05,235 --> 00:57:10,695
+the character level LSTM models and word ones that the models they built.
+字符级LSTM模型和他们建立的模型的单词。
+
+942
+00:57:10,695 --> 00:57:14,460
+And here are a whole bunch of models over this data-set.
+这里有一大堆关于这个数据集的模型。
+
+943
+00:57:14,460 --> 00:57:19,410
+Um, and so as time went by perplexities have been going down,
+嗯，随着时间的推移，困惑一直在减少，
+
+944
+00:57:19,410 --> 00:57:23,790
+gone to 78,4 and their point was well we can
+去了78,4他们的意思很好
+
+945
+00:57:23,790 --> 00:57:29,100
+build pretty much as good a character model with 78,9 perplexity but
+以78,9的困惑构建非常好的角色模型但是
+
+946
+00:57:29,100 --> 00:57:32,730
+our model is actually much smaller, this model here has
+我们的模型实际上要小得多，这个模型在这里有
+
+947
+00:57:32,730 --> 00:57:35,760
+52 million parameters whereas our model that
+5200万参数，而我们的模型
+
+948
+00:57:35,760 --> 00:57:39,240
+works on a character level has only 19 million parameters.
+在角色级别上工作只有1900万个参数。
+
+949
+00:57:39,240 --> 00:57:41,685
+So it's about 40% of the size.
+所以它的大小约为40％。
+
+950
+00:57:41,685 --> 00:57:45,210
+And that seems,um, kind of interesting.
+这似乎，嗯，有点有趣。
+
+951
+00:57:45,210 --> 00:57:51,510
+But perhaps what's more interesting is to sort of peek inside it and see what
+但也许更有趣的是窥视它并看看它是什么
+
+952
+00:57:51,510 --> 00:57:55,500
+happens with the representation of words when
+发生在单词的表示时
+
+953
+00:57:55,500 --> 00:57:59,745
+built out of characters and this part is sort of actually a bit cool.
+用字符构建而且这部分实际上有点酷。
+
+954
+00:57:59,745 --> 00:58:06,064
+Um, so what this is showing is for words that are up to the top while,
+嗯，所以这显示的是那些高达顶部的单词，
+
+955
+00:58:06,064 --> 00:58:08,235
+his, you, Richard, trading.
+他，你，理查德，交易。
+
+956
+00:58:08,235 --> 00:58:11,520
+It's asking what other words are most
+它在问其他单词最多
+
+957
+00:58:11,520 --> 00:58:15,510
+similar to it according to the word representations that's computed.
+与根据计算的单词表示类似。
+
+958
+00:58:15,510 --> 00:58:21,480
+And the top part is the output of a word level LSTM model and that's sort of okay.
+顶部是单词级LSTM模型的输出，这有点好。
+
+959
+00:58:21,480 --> 00:58:23,550
+Richard comes out as similar to Jonathan,
+理查德出来与乔纳森相似，
+
+960
+00:58:23,550 --> 00:58:25,515
+Robert, Neil and Nancy et cetera.
+罗伯特，尼尔和南希等。
+
+961
+00:58:25,515 --> 00:58:30,810
+While although letting though minute mainly okay.
+虽然虽然让分钟主要还好。
+
+962
+00:58:30,810 --> 00:58:35,730
+But it's sort of interesting what happens with their character level models,um,
+但是他们的角色等级模型会发生什么有趣的事，嗯，
+
+963
+00:58:35,730 --> 00:58:37,605
+and so in particular, um,
+特别是，嗯，
+
+964
+00:58:37,605 --> 00:58:41,910
+what's kind of interesting is like first of all you remember they sort of had
+有趣的是，首先你记得他们曾经有过
+
+965
+00:58:41,910 --> 00:58:46,845
+the character embeddings that went through the convolutional layer and the max pooling.
+经过卷积层和最大池的字符嵌入。
+
+966
+00:58:46,845 --> 00:58:51,150
+And if at that point you ask what things are most
+如果在那时你问什么是最重要的事情
+
+967
+00:58:51,150 --> 00:58:55,830
+similar that basically it's still remembering things about characters.
+类似的，基本上它仍然记得有关人物的事情。
+
+968
+00:58:55,830 --> 00:58:58,350
+So the most similar words to while,
+那么最相似的话，
+
+969
+00:58:58,350 --> 00:59:01,740
+chile, whole, meanwhile and white.
+智利，整体，同时和白色。
+
+970
+00:59:01,740 --> 00:59:06,600
+So at least for the sort of first ones they all end in LE.
+所以至少对于那些他们都以LE结尾的那些。
+
+971
+00:59:06,600 --> 00:59:10,560
+And you see that pattern elsewhere right close to Richard,
+你在其他地方看到理查德那样的模式，
+
+972
+00:59:10,560 --> 00:59:15,630
+hard, rich, richer, richter that hard ends in ARD, rich.
+坚强，富裕，富裕，富有，在ARD中坚硬，富有。
+
+973
+00:59:15,630 --> 00:59:18,390
+So you're just sort of getting this character sequence similarity,
+所以你只是得到这个字符序列的相似性，
+
+974
+00:59:18,390 --> 00:59:20,595
+it's not really doing meaning at all.
+它根本就没有意义。
+
+975
+00:59:20,595 --> 00:59:25,500
+But interestingly when they're then putting it through the highway layers,
+但有趣的是，当他们将它穿过高速公路层时，
+
+976
+00:59:25,500 --> 00:59:29,775
+that the highway layers are suc- successfully learning how to
+高速公路层成功学习如何
+
+977
+00:59:29,775 --> 00:59:33,285
+transform those character sequence representations
+转换那些字符序列表示
+
+978
+00:59:33,285 --> 00:59:35,685
+into something that does capture meaning.
+进入能够捕捉意义的东西。
+
+979
+00:59:35,685 --> 00:59:38,850
+So if you then say at the output of
+所以，如果你然后在输出中说
+
+980
+00:59:38,850 --> 00:59:44,295
+the highway layers what words are most similar then it seems to be working pretty well,
+高速公路层层覆盖哪些词最相似然后它似乎工作得很好，
+
+981
+00:59:44,295 --> 00:59:49,245
+While was similar to meanwhile, Richard is similar to Edward, Gerard, Edward with Carl.
+与此同时，理查德与爱德华，杰拉德，爱德华和卡尔相似。
+
+982
+00:59:49,245 --> 00:59:51,750
+They're sort of now working much more like
+他们现在的工作方式更像
+
+983
+00:59:51,750 --> 00:59:55,755
+a word level model in capturing semantic similarity.
+捕获语义相似度的词级模型。
+
+984
+00:59:55,755 --> 00:59:57,900
+So that seems kind of cool.
+所以这看起来很酷。
+
+985
+00:59:57,900 --> 01:00:02,070
+Um, so then they say well what about if we ask about
+嗯，那么如果我们问的话，他们会说得好
+
+986
+01:00:02,070 --> 01:00:06,555
+words that aren't in the vocabulary of the model.
+不属于模型词汇的单词。
+
+987
+01:00:06,555 --> 01:00:09,150
+Well, if they're not in the vocabulary of the model,
+好吧，如果他们不在模型的词汇中，
+
+988
+01:00:09,150 --> 01:00:13,890
+the word level model can't do anything and so that's why you get those dashes there.
+单词级别模型不能做任何事情，所以这就是你在那里获得那些破折号的原因。
+
+989
+01:00:13,890 --> 01:00:16,650
+And what they're wanting to show is that
+而他们想要表现的是
+
+990
+01:00:16,650 --> 01:00:19,470
+the character level model still works pretty well.
+角色等级模型仍然很好用。
+
+991
+01:00:19,470 --> 01:00:23,310
+So if you give it look with seven O's in the middle of
+所以如果你看看中间有七个O.
+
+992
+01:00:23,310 --> 01:00:27,300
+it that it's correctly deciding that look,
+这是正确决定外观，
+
+993
+01:00:27,300 --> 01:00:29,370
+look, look, looking are actually
+看，看，实际上是
+
+994
+01:00:29,370 --> 01:00:33,150
+the most similar words to that which is actually working very nicely.
+最相似的单词，实际上工作得非常好。
+
+995
+01:00:33,150 --> 01:00:36,375
+And some of the other examples are similar, computer-aided,
+其他一些例子类似，计算机辅助，
+
+996
+01:00:36,375 --> 01:00:38,865
+is seen as most similar to computer-guided,
+被视为与计算机指导最相似，
+
+997
+01:00:38,865 --> 01:00:44,685
+computer-driven, computerized, computer, you're getting pretty similar sensible results.
+计算机驱动，计算机化，计算机，你得到了非常相似的明智结果。
+
+998
+01:00:44,685 --> 01:00:47,010
+And then the little picture on the,
+然后是小图片，
+
+999
+01:00:47,010 --> 01:00:49,755
+um, right is sort of, um,
+嗯，对，有点像，嗯，
+
+1000
+01:00:49,755 --> 01:00:56,235
+showing, um, one of these 2D visualizations of the units that have been learned.
+显示，嗯，已经学习的单元的2D可视化之一。
+
+1001
+01:00:56,235 --> 01:00:58,770
+And so the red,
+所以红色，
+
+1002
+01:00:58,770 --> 01:01:02,760
+the red things are word character prefixes,
+红色的东西是单词字符前缀，
+
+1003
+01:01:02,760 --> 01:01:05,550
+the blue things are character suffixes,
+蓝色的东西是字符后缀，
+
+1004
+01:01:05,550 --> 01:01:09,180
+the orange things are hyphenated things
+橙色的东西是连字符的东西
+
+1005
+01:01:09,180 --> 01:01:13,050
+like in the middle of computer-guided and gray is everything else.
+就像在计算机引导的中间，灰色就是其他一切。
+
+1006
+01:01:13,050 --> 01:01:14,790
+And so there's some sort of sense,
+所以有某种意义，
+
+1007
+01:01:14,790 --> 01:01:19,050
+with which it's picking out different important parts of words.
+它正在挑选出不同的重要部分。
+
+1008
+01:01:19,050 --> 01:01:26,880
+Okay. Um, and that's why also I guess just another good example of how you can sort of
+好的。嗯，这就是为什么我想也是另一个很好的例子，你可以如何排序
+
+1009
+01:01:26,880 --> 01:01:30,870
+compose together different kinds of building blocks to
+把不同种类的积木组合在一起
+
+1010
+01:01:30,870 --> 01:01:32,670
+make more powerful models that you might
+制作更强大的模型
+
+1011
+01:01:32,670 --> 01:01:35,415
+also want to think about for your final projects.
+也想考虑你的最终项目。
+
+1012
+01:01:35,415 --> 01:01:37,450
+Okay.
+好的。
+
+1013
+01:01:45,200 --> 01:01:46,770
+Um, so here's
+嗯，所以这里
+
+1014
+01:01:46,770 --> 01:01:51,135
+back to one other example from a neural machine translation system
+回到神经机器翻译系统的另一个例子
+
+1015
+01:01:51,135 --> 01:01:55,995
+of doing this hybrid architecture that has word-level and character level.
+这种具有词级和字符级别的混合架构。
+
+1016
+01:01:55,995 --> 01:01:59,400
+I showed you earlier a purely character level model.
+我之前向您展示了一个纯粹的角色等级模型。
+
+1017
+01:01:59,400 --> 01:02:02,580
+I mean we built that out of interest to see
+我的意思是我们出于兴趣而建立起来
+
+1018
+01:02:02,580 --> 01:02:05,940
+how well it did but we were sort of really wanting to build
+它有多好，但我们真的很想建立
+
+1019
+01:02:05,940 --> 01:02:09,810
+a hybrid model because that seemed like it would be much more practical
+混合模型，因为它似乎更实用
+
+1020
+01:02:09,810 --> 01:02:14,265
+to build something that translated relatively quickly and well.
+建立一个相对快速和良好翻译的东西。
+
+1021
+01:02:14,265 --> 01:02:16,860
+Um, so the idea was we'd mainly build
+嗯，所以我们的想法主要是建造
+
+1022
+01:02:16,860 --> 01:02:20,550
+a word-level neural machine translation system but we'd
+我们是一个单词级神经机器翻译系统
+
+1023
+01:02:20,550 --> 01:02:26,970
+be able to work with character level stuff when we had rare or unseen words.
+当我们有罕见或看不见的单词时，能够使用字符级别的东西。
+
+1024
+01:02:26,970 --> 01:02:30,090
+Um, and that turned out to work pretty,
+嗯，结果很漂亮，
+
+1025
+01:02:30,090 --> 01:02:33,000
+um, successfully at improving performance.
+嗯，成功地提高了性能。
+
+1026
+01:02:33,000 --> 01:02:35,355
+So the idea of that model is this.
+所以这个模型的想法是这样的。
+
+1027
+01:02:35,355 --> 01:02:40,575
+Um, that we're going to run a pretty standard, um,
+嗯，我们打算运行一个非常标准的，嗯，
+
+1028
+01:02:40,575 --> 01:02:47,100
+sequence to sequence with attention LSTM neural machine translation system.
+序列序列与注意LSTM神经机器翻译系统。
+
+1029
+01:02:47,100 --> 01:02:51,900
+In my pic- I mean, it's actually a four-level deep system but in my picture I
+在我的照片中 - 我的意思是，它实际上是一个四级深度系统，但在我的照片中我
+
+1030
+01:02:51,900 --> 01:02:56,490
+showed less than four levels stacked to make it easier to see things.
+显示不到四个级别堆叠，以便更容易看到事物。
+
+1031
+01:02:56,490 --> 01:03:01,920
+And we're going to run this with a reasonable vocabulary of 16,000 words.
+我们将以16,000字的合理词汇来运行它。
+
+1032
+01:03:01,920 --> 01:03:07,995
+So for common words we just have word representations that we're feeding into
+因此，对于常见的词语，我们只是有词表示，我们正在加入
+
+1033
+01:03:07,995 --> 01:03:13,320
+our neural machine translation model but for words that aren't in the vocabulary we're
+我们的神经机器翻译模型，但对于我们不在词汇表中的单词
+
+1034
+01:03:13,320 --> 01:03:19,530
+going to work out a word representation for them by using a character level LSTM,
+通过使用字符级LSTM来计算出他们的单词表示，
+
+1035
+01:03:19,530 --> 01:03:23,130
+and conversely, when we start to generate words on
+相反，当我们开始生成单词时
+
+1036
+01:03:23,130 --> 01:03:28,710
+the other side we have a soft max with a vocabulary of 16,000.
+另一方面，我们有一个软的最大值，词汇量为16,000。
+
+1037
+01:03:28,710 --> 01:03:34,275
+It could just generate words like [NOISE] but one of those words is the UNK symbol.
+它可以生成像[NOISE]这样的单词，但其中一个单词是UNK符号。
+
+1038
+01:03:34,275 --> 01:03:38,610
+And if it generates the UNK symbol we then run a- we take
+如果它产生了UNK符号，那么我们就运行一个 - 我们采取
+
+1039
+01:03:38,610 --> 01:03:42,060
+this hidden representation and feed it in as
+这个隐藏的表示形式并将其作为
+
+1040
+01:03:42,060 --> 01:03:47,370
+the initial input into a character level LSTM and then we have the character level
+初始输入到字符级别LSTM然后我们有字符级别
+
+1041
+01:03:47,370 --> 01:03:51,390
+LSTM generate a character sequence until it generates
+LSTM生成一个字符序列，直到它生成
+
+1042
+01:03:51,390 --> 01:03:56,650
+a stop symbol and we use that to generate words. Um-
+一个停止符号，我们用它来生成单词。 UM-
+
+1043
+01:03:57,240 --> 01:04:02,080
+Okay. So we end up sort of with this sort of
+好的。所以我们最终会遇到这种情况
+
+1044
+01:04:02,080 --> 01:04:08,170
+hybrid composed stack of eight LSTM layers. Uh, yeah.
+由8个LSTM层组成的混合组合。呃，是的
+
+1045
+01:04:08,170 --> 01:04:12,690
+[inaudible] and you always get some probability for the UNK symbol.
+[听不清]你总是得到UNK符号的概率。
+
+1046
+01:04:12,690 --> 01:04:15,180
+So if you wanted to get the- the proper gradient,
+所以，如果你想获得适当的梯度，
+
+1047
+01:04:15,180 --> 01:04:19,230
+you- you'll always have to run it for every word but what- what do you-?
+你 - 你总是要为每个单词运行它，但是你做什么 - ？
+
+1048
+01:04:19,230 --> 01:04:22,870
+I would often say, you only run during training,
+我经常说，你只在训练期间跑，
+
+1049
+01:04:22,870 --> 01:04:28,990
+you only run the character level LSTM when the UNK symbol receives the highest likelihood.
+只有在UNK符号获得最高可能性时才运行字符级别LSTM。
+
+1050
+01:04:28,990 --> 01:04:29,905
+So we-
+所以我们 -
+
+1051
+01:04:29,905 --> 01:04:30,685
+What is that?
+那是什么？
+
+1052
+01:04:30,685 --> 01:04:34,335
+So at training, at training time,
+所以在培训时，在培训时间，
+
+1053
+01:04:34,335 --> 01:04:36,510
+there's a determinant piece of tech, right?
+有一个决定性的技术，对吧？
+
+1054
+01:04:36,510 --> 01:04:39,705
+You know the source and you know the target,
+你知道来源，你知道目标，
+
+1055
+01:04:39,705 --> 01:04:43,740
+and so we're, and at training time,
+所以我们是，在训练时，
+
+1056
+01:04:43,740 --> 01:04:46,230
+we've already decided our vocabulary, right?
+我们已经决定了我们的词汇，对吗？
+
+1057
+01:04:46,230 --> 01:04:51,400
+That we've just decided what are the 15,999 most common words,
+我们刚刚确定了最常见的15,999个单词，
+
+1058
+01:04:51,400 --> 01:04:53,950
+those and UNK are our vocabulary.
+那些和UNK是我们的词汇。
+
+1059
+01:04:53,950 --> 01:04:57,115
+So for both the input and the output side,
+所以对于输入和输出端，
+
+1060
+01:04:57,115 --> 01:05:00,895
+we know which words aren't in our vocabulary.
+我们知道哪些词不在我们的词汇中。
+
+1061
+01:05:00,895 --> 01:05:03,400
+And so if it's not in our vocabulary,
+所以，如果它不在我们的词汇中，
+
+1062
+01:05:03,400 --> 01:05:04,840
+we're running this one.
+我们正在运行这个。
+
+1063
+01:05:04,840 --> 01:05:07,450
+If if what was the output is not in our vocabulary,
+如果输出的内容不在我们的词汇表中，
+
+1064
+01:05:07,450 --> 01:05:11,950
+we're running that one, and otherwise we're just not running it at all, yeah.
+我们正在运行那个，否则我们根本就没有运行它，是的。
+
+1065
+01:05:11,950 --> 01:05:18,130
+So and and the bit that I didn't explain but is actually important perhaps
+所以，而且我没有解释但实际上也许很重要
+
+1066
+01:05:18,130 --> 01:05:23,920
+related like when we're calculating a loss that we can back
+相关的，就像我们计算一个我们可以支持的损失
+
+1067
+01:05:23,920 --> 01:05:26,200
+propagate, that sort of up here,
+传播，在这里，
+
+1068
+01:05:26,200 --> 01:05:28,120
+there are sort of two losses.
+有两种损失。
+
+1069
+01:05:28,120 --> 01:05:32,920
+There's a loss at the word level that you know you'd like to in this position,
+在这个位置，你知道你想要的单词级别有一个损失，
+
+1070
+01:05:32,920 --> 01:05:36,085
+give probability 1 to generating UNK but really,
+给出概率1来生成UNK，但实际上，
+
+1071
+01:05:36,085 --> 01:05:41,470
+this model we'll softmax, we'll say UNK is you know probability 0,2 or whatever.
+这个模型我们将softmax，我们会说UNK你知道概率0,2或其他什么。
+
+1072
+01:05:41,470 --> 01:05:44,515
+So there's a loss there and then secondarily,
+所以那里有一个损失，其次是，
+
+1073
+01:05:44,515 --> 01:05:48,400
+there's a particular sequence of characters you wanna generate and you've also got
+你想要产生一个特定的角色序列，你也得到了
+
+1074
+01:05:48,400 --> 01:05:53,410
+a loss because you've met the probabilities you put over the characters.
+失败是因为你已经遇到了你对角色的概率。
+
+1075
+01:05:53,410 --> 01:05:55,825
+Um, So then, um,
+嗯，那么，嗯，
+
+1076
+01:05:55,825 --> 01:05:58,570
+I think we- I think Abby sort of briefly mentioned this.
+我想我们 - 我认为艾比有点简单地提到了这一点。
+
+1077
+01:05:58,570 --> 01:06:01,810
+Commonly, the decoders do some kind of
+通常，解码器会做某种事情
+
+1078
+01:06:01,810 --> 01:06:06,310
+beam search to consider different possibilities before deciding,
+光束搜索在决定之前考虑不同的可能性，
+
+1079
+01:06:06,310 --> 01:06:10,795
+um, the highest probability one over a sequence of words.
+嗯，一个词序列的概率最高。
+
+1080
+01:06:10,795 --> 01:06:13,930
+And so this was doing a slightly more complex version of that.
+所以这是一个稍微复杂一点的版本。
+
+1081
+01:06:13,930 --> 01:06:17,830
+So there's a word-level beam search when running it and then
+因此，在运行它时会有一个字级光束搜索
+
+1082
+01:06:17,830 --> 01:06:23,335
+also doing a character level beam search to consider different possibilities.
+还进行字符级光束搜索以考虑不同的可能性。
+
+1083
+01:06:23,335 --> 01:06:27,235
+And so if you wanna integrate the the two of those together.
+所以，如果你想将这两者结合在一起。
+
+1084
+01:06:27,235 --> 01:06:29,785
+Um, but essentially, um,
+嗯，但基本上，嗯，
+
+1085
+01:06:29,785 --> 01:06:32,980
+this worked pretty well.
+这非常有效。
+
+1086
+01:06:32,980 --> 01:06:40,510
+Um, so, um, this was the winning system at WMT 2015 which
+嗯，所以，嗯，这是WMT 2015的获奖系统
+
+1087
+01:06:40,510 --> 01:06:43,540
+used 30 times as much data and ensembled together
+使用了30倍的数据并整合在一起
+
+1088
+01:06:43,540 --> 01:06:48,115
+three other systems compared to the data that was provided for the task.
+与为该任务提供的数据相比，其他三个系统。
+
+1089
+01:06:48,115 --> 01:06:52,675
+This was the system I showed before, they got 18,3.
+这是我之前展示的系统，他们得到了18,3。
+
+1090
+01:06:52,675 --> 01:06:54,940
+Um, and if you remember our character,
+嗯，如果你还记得我们的角色，
+
+1091
+01:06:54,940 --> 01:06:58,375
+purely character level system got 18,5.
+纯粹的角色级别系统得到18,5。
+
+1092
+01:06:58,375 --> 01:07:02,500
+Um, then by building this hybrid system,
+嗯，然后建立这个混合系统，
+
+1093
+01:07:02,500 --> 01:07:07,600
+that we were able to build a much better system that was about 2,5 BLEU points better,
+我们能够建立一个更好的系统，大约2,5 BLEU点更好，
+
+1094
+01:07:07,600 --> 01:07:12,805
+um, than after- than either this word level or the character level system.
+嗯，比之后 - 比这个单词级别或字符级别系统。
+
+1095
+01:07:12,805 --> 01:07:15,070
+So that was kind of nice, um,
+所以这很好，嗯，
+
+1096
+01:07:15,070 --> 01:07:17,725
+and in particular that was the state of the art at the time.
+特别是当时的艺术水平。
+
+1097
+01:07:17,725 --> 01:07:21,355
+Now of course, if you were paying very close attention,
+当然，如果你非常关注，
+
+1098
+01:07:21,355 --> 01:07:24,430
+that's now nowhere near the state of the art.
+现在已经远远不是最先进的了。
+
+1099
+01:07:24,430 --> 01:07:30,370
+Because when I showed you that slide way earlier of the Google system,
+因为当我向您展示Google系统之前的那种幻灯片时，
+
+1100
+01:07:30,370 --> 01:07:33,310
+you will have noticed that they have
+你会注意到他们有
+
+1101
+01:07:33,310 --> 01:07:37,600
+much higher numbers in the 20s, but that's what happens as the years go by.
+20年代的数字要高得多，但这就是随着岁月的流逝而发生的事情。
+
+1102
+01:07:37,600 --> 01:07:39,490
+Um, okay.
+嗯，好的。
+
+1103
+01:07:39,490 --> 01:07:41,800
+But here's an example that shows
+但这是一个显示的例子
+
+1104
+01:07:41,800 --> 01:07:46,300
+these different systems working and some of the mistakes they make.
+这些不同的系统工作和他们犯的一些错误。
+
+1105
+01:07:46,300 --> 01:07:48,775
+Um, here's a cherry picked example, um,
+嗯，这是一个樱桃挑选的例子，嗯，
+
+1106
+01:07:48,775 --> 01:07:51,940
+where our system, the hybrid system,
+我们的系统，混合动力系统，
+
+1107
+01:07:51,940 --> 01:07:54,985
+works perfectly because what- that's what you expect to see.
+是完美的，因为那是你期望看到的。
+
+1108
+01:07:54,985 --> 01:07:57,685
+Um, and so, you know,
+嗯，你知道，
+
+1109
+01:07:57,685 --> 01:08:02,260
+you can see some of the defects of things that can go wrong.
+你可以看到一些可能出错的东西的缺陷。
+
+1110
+01:08:02,260 --> 01:08:05,155
+Um, so in this case,
+嗯，所以在这种情况下，
+
+1111
+01:08:05,155 --> 01:08:09,550
+you know the character level system didn't work here because it just sort
+你知道角色级系统在这里不起作用，因为它只是排序
+
+1112
+01:08:09,550 --> 01:08:15,250
+of starting with the Steph, it sort of seemed to free associate,
+从斯蒂芬开始，它似乎是自由联想，
+
+1113
+01:08:15,250 --> 01:08:19,690
+um, a completely made up name that doesn't really have anything to do with the source.
+嗯，一个完全组成的名字，与源码没有任何关系。
+
+1114
+01:08:19,690 --> 01:08:22,570
+So that one isn't very good.
+所以一个人不是很好。
+
+1115
+01:08:22,570 --> 01:08:27,595
+Um, the word level system went bang here,
+嗯，字级系统在这里爆炸，
+
+1116
+01:08:27,595 --> 01:08:30,340
+so you remember when it generates an UNK,
+所以你记得它什么时候生成UNK，
+
+1117
+01:08:30,340 --> 01:08:36,400
+the word level system would have when it generates, it's using attention.
+单词级别系统在生成时会有，它正在使用注意力。
+
+1118
+01:08:36,400 --> 01:08:38,890
+So when it wants to generate, um,
+所以当它想生成时，嗯，
+
+1119
+01:08:38,890 --> 01:08:42,010
+it has attention back to words and the source.
+它重视文字和来源。
+
+1120
+01:08:42,010 --> 01:08:45,070
+And when it generates UNK has two strategies.
+而当它产生UNK有两个策略。
+
+1121
+01:08:45,070 --> 01:08:50,410
+It can either do unigram translation of the word that it's maximally
+它可以对单词的单词翻译进行最大化
+
+1122
+01:08:50,410 --> 01:08:56,140
+putting attention on or it could copy the word that it's maximally putting attention on.
+注意或者它可以复制它最大限度地关注的词。
+
+1123
+01:08:56,140 --> 01:08:57,790
+Um, so in this case,
+嗯，所以在这种情况下，
+
+1124
+01:08:57,790 --> 01:09:02,890
+it chose to translate the word that it was maximally putting attention on but the word it
+它选择翻译它最大限度地引起注意的那个词，而不是它
+
+1125
+01:09:02,890 --> 01:09:08,080
+was maximally putting attention on was after rather than diagnosis.
+最大限度地关注是在经过而不是诊断之后。
+
+1126
+01:09:08,080 --> 01:09:11,290
+And so you just get this po po coming out of after,
+所以你只是让这个po po出来了，
+
+1127
+01:09:11,290 --> 01:09:14,140
+after and we've completely lost the word.
+之后，我们完全失去了这个词。
+
+1128
+01:09:14,140 --> 01:09:17,965
+Um, and in this example, in this example,
+嗯，在这个例子中，在这个例子中，
+
+1129
+01:09:17,965 --> 01:09:20,065
+how a hybrid system, um,
+混合动力系统怎么样，嗯，
+
+1130
+01:09:20,065 --> 01:09:24,370
+just ends up working beautifully and gives you exactly the right translation.
+只是最终工作得很漂亮，并为您提供完全正确的翻译。
+
+1131
+01:09:24,370 --> 01:09:26,740
+Yeah. Um, of course,
+是啊。嗯，当然，
+
+1132
+01:09:26,740 --> 01:09:29,035
+it's not always that good in the real world.
+它在现实世界中并不总是那么好。
+
+1133
+01:09:29,035 --> 01:09:31,000
+Um, so here's a different example.
+嗯，所以这是一个不同的例子。
+
+1134
+01:09:31,000 --> 01:09:35,455
+So this is the example I showed before with the 11-year-old daughter.
+所以这就是我之前与11岁女儿展示的例子。
+
+1135
+01:09:35,455 --> 01:09:40,420
+Um, and in this example,
+嗯，在这个例子中，
+
+1136
+01:09:40,420 --> 01:09:44,350
+the hybrid model has the same strength of the character model.
+混合模型具有与角色模型相同的强度。
+
+1137
+01:09:44,350 --> 01:09:50,065
+It correctly generates 11 years old at a character level in its translation,
+它在翻译中正确生成了11年的字符级别，
+
+1138
+01:09:50,065 --> 01:09:52,300
+but you know this time, for whatever reason,
+但是你知道这一次，无论出于何种原因，
+
+1139
+01:09:52,300 --> 01:09:56,170
+it's the hybrid model that goes bang in
+它是混合模型
+
+1140
+01:09:56,170 --> 01:10:01,165
+generating the names and it translates Shani Bart as Graham Bart.
+生成这些名字并将Shani Bart翻译为Graham Bart。
+
+1141
+01:10:01,165 --> 01:10:04,015
+Um, whereas the character level model gets it right.
+嗯，而角色等级模型是正确的。
+
+1142
+01:10:04,015 --> 01:10:06,700
+Um, actually, I think this is one of the weaknesses of
+嗯，实际上，我认为这是其中一个缺点
+
+1143
+01:10:06,700 --> 01:10:10,120
+this hybrid model compared to the character level model.
+这种混合模型与人物等级模型相比较。
+
+1144
+01:10:10,120 --> 01:10:13,060
+That because of the character level generator is
+因为字符级生成器是
+
+1145
+01:10:13,060 --> 01:10:16,670
+kind of this sort of second level.
+有点像这种二级。
+
+1146
+01:10:17,190 --> 01:10:20,605
+For the purely character level model,
+对于纯粹的角色级别模型，
+
+1147
+01:10:20,605 --> 01:10:27,010
+it's able to use the character sequence as conditioning context very effectively.
+它能够非常有效地使用字符序列作为条件上下文。
+
+1148
+01:10:27,010 --> 01:10:28,870
+Whereas our hybrid model,
+而我们的混合模型，
+
+1149
+01:10:28,870 --> 01:10:32,410
+although we feed the hidden representation of
+虽然我们提供隐藏的表示
+
+1150
+01:10:32,410 --> 01:10:34,450
+the word level model in as
+单词级别模型
+
+1151
+01:10:34,450 --> 01:10:37,855
+the starting hidden representation of the character level model,
+字符级模型的起始隐藏表示，
+
+1152
+01:10:37,855 --> 01:10:40,570
+it doesn't have any representation further
+它没有任何进一步的表示
+
+1153
+01:10:40,570 --> 01:10:43,615
+back than that of what's in the word level model.
+比单词级别模型中的更低。
+
+1154
+01:10:43,615 --> 01:10:47,695
+And so it tends to not always do as good a job at representing,
+因此，它往往并不总能在表现方面做得很好，
+
+1155
+01:10:47,695 --> 01:10:53,030
+of capturing the context that allows it to do translation of things like names.
+捕获允许它进行名称之类的翻译的上下文。
+
+1156
+01:10:53,100 --> 01:10:58,510
+Okay. Um, very- almost finished but there's
+好的。嗯，非常接近完成但是有
+
+1157
+01:10:58,510 --> 01:11:01,120
+just sort of one thing I wanted to mention before
+只是我之前想提到的一件事
+
+1158
+01:11:01,120 --> 01:11:03,985
+the end which is almost a practical thing.
+结束这几乎是一件实事。
+
+1159
+01:11:03,985 --> 01:11:07,465
+Um, So we started off with word embeddings,
+嗯，所以我们开始使用单词嵌入，
+
+1160
+01:11:07,465 --> 01:11:10,510
+but now we've been talking a lot of character level models.
+但现在我们一直在谈论很多角色级别的模型。
+
+1161
+01:11:10,510 --> 01:11:15,760
+So surely, just for word embedding, you should be able to do useful things with them,
+当然，只是为了嵌入字，你应该能够用它们做有用的事情，
+
+1162
+01:11:15,760 --> 01:11:18,880
+with characters or pieces of words.
+用字符或单词。
+
+1163
+01:11:18,880 --> 01:11:21,340
+And that's something that people start to play with.
+这是人们开始玩的东西。
+
+1164
+01:11:21,340 --> 01:11:24,790
+So in this Cao and Rei paper they said well
+所以在这篇Cao和Rei论文中，他们说得很好
+
+1165
+01:11:24,790 --> 01:11:30,280
+let's train a Word2vec model using exactly the same, um,
+让我们使用完全相同的训练Word2vec模型，嗯，
+
+1166
+01:11:30,280 --> 01:11:34,495
+loss as Word2vec uses but let's,
+Word2vec使用但是让我们失去了
+
+1167
+01:11:34,495 --> 01:11:37,795
+um, rather than having word representations,
+嗯，而不是用词表示，
+
+1168
+01:11:37,795 --> 01:11:42,160
+let's start with character sequences and run
+让我们从字符序列开始并运行
+
+1169
+01:11:42,160 --> 01:11:47,425
+a bidirectional LSTM to work out word representations,
+双向LSTM来计算单词表示，
+
+1170
+01:11:47,425 --> 01:11:49,720
+and we'll then sort of be effectively
+然后我们就会有效
+
+1171
+01:11:49,720 --> 01:11:52,780
+training this more complex model where we're learning
+在我们学习的地方训练这个更复杂的模型
+
+1172
+01:11:52,780 --> 01:12:00,550
+character embeddings and LSTM parameters and that will give us our word representations.
+字符嵌入和LSTM参数，这将为我们提供单词表示。
+
+1173
+01:12:00,550 --> 01:12:04,480
+And that's an idea that people have continued to play with,
+这是人们继续玩的想法，
+
+1174
+01:12:04,480 --> 01:12:08,845
+and so in particular I just wanted to mention these FastText embeddings.
+所以我特别想提到这些FastText嵌入。
+
+1175
+01:12:08,845 --> 01:12:10,900
+Um, so a couple of years ago,
+嗯，几年前，
+
+1176
+01:12:10,900 --> 01:12:12,820
+um, people now at Facebook,
+嗯，现在Facebook的人，
+
+1177
+01:12:12,820 --> 01:12:16,015
+the same Tomas Mikolov who did the original Word2vec,
+做原始Word2vec的Tomas Mikolov一样，
+
+1178
+01:12:16,015 --> 01:12:18,100
+brought out a new set of embeddings,
+推出了一套新的嵌入，
+
+1179
+01:12:18,100 --> 01:12:21,340
+the FastText embeddings and their goal was to sort of
+FastText嵌入和他们的目标是排序
+
+1180
+01:12:21,340 --> 01:12:24,880
+have a next-generation Word2vec, um,
+有下一代Word2vec，嗯，
+
+1181
+01:12:24,880 --> 01:12:27,940
+which is sort of an efficient fast, um,
+这是一种有效的快速，嗯，
+
+1182
+01:12:27,940 --> 01:12:30,535
+word vector learning library, um,
+单词矢量学习图书馆，嗯，
+
+1183
+01:12:30,535 --> 01:12:35,215
+but it was better for rare words and languages with lots of morphology.
+但对于具有大量形态学的罕见词汇和语言来说，它会更好。
+
+1184
+01:12:35,215 --> 01:12:39,010
+And the way they did it was that they sort of essentially took the Word2vec skip
+他们这样做的方式是他们基本上采用了Word2vec跳过
+
+1185
+01:12:39,010 --> 01:12:43,585
+gram model but they augmented it to put in character n-grams.
+克模型，但他们增加它以加入字符n-gram。
+
+1186
+01:12:43,585 --> 01:12:46,450
+So more precisely, this is what they did.
+更确切地说，这就是他们所做的。
+
+1187
+01:12:46,450 --> 01:12:49,720
+So, um, when you had a word,
+所以，嗯，当你说了一句话，
+
+1188
+01:12:49,720 --> 01:12:52,000
+my example word is where,
+我的例子是在哪里，
+
+1189
+01:12:52,000 --> 01:12:57,610
+for some n-gram size you represent it as a set of n-gram.
+对于某些n-gram大小，您将其表示为一组n-gram。
+
+1190
+01:12:57,610 --> 01:13:01,180
+So this is kind of just about like those, we called phonemes I mentioned
+所以这就像那些，我们称之为音素
+
+1191
+01:13:01,180 --> 01:13:05,080
+right at the beginning where you have a kind of a boundary symbol,
+在一开始你有一种边界符号，
+
+1192
+01:13:05,080 --> 01:13:06,820
+so you know the beginning of the word.
+所以你知道这个词的开头。
+
+1193
+01:13:06,820 --> 01:13:11,965
+So if the length is three you have beginning of word WH, WHE, HER,
+所以如果长度为3，你就有WH，WHE，HER这个词的开头
+
+1194
+01:13:11,965 --> 01:13:14,500
+ERE, RE end of word,
+ERE，RE结尾，
+
+1195
+01:13:14,500 --> 01:13:17,695
+as pieces of representation.
+作为代表作品。
+
+1196
+01:13:17,695 --> 01:13:20,740
+And then you have an additional one for just the whole word.
+然后你还有一个额外的单词。
+
+1197
+01:13:20,740 --> 01:13:24,355
+So you do still have whole word representations in this model.
+所以你在这个模型中仍然有完整的单词表示。
+
+1198
+01:13:24,355 --> 01:13:28,980
+So where is represented by six things and so
+那么六件事代表哪里呢？
+
+1199
+01:13:28,980 --> 01:13:34,350
+then you're going to use all six of those things in your computation.
+那么你将在你的计算中使用所有这六个东西。
+
+1200
+01:13:34,350 --> 01:13:37,260
+Um, so if you sort of remember the guts of
+嗯，所以如果你有点记得那些胆量
+
+1201
+01:13:37,260 --> 01:13:40,590
+Word2vec that what you were doing was you were doing
+Word2vec，你正在做的是你在做什么
+
+1202
+01:13:40,590 --> 01:13:45,585
+these vector dot products between your context representation
+这些矢量点产品介于您的上下文表示之间
+
+1203
+01:13:45,585 --> 01:13:48,240
+and your center word representation.
+和你的中心单词表示。
+
+1204
+01:13:48,240 --> 01:13:52,080
+So they're going to do exactly the same thing but for
+所以他们会做同样的事情，但是
+
+1205
+01:13:52,080 --> 01:13:56,870
+the center word they're gonna use all six of these vectors.
+他们将使用所有这六个向量的中心词。
+
+1206
+01:13:56,870 --> 01:14:00,400
+All the vectors corresponding to all six of
+所有向量对应于所有六个
+
+1207
+01:14:00,400 --> 01:14:03,685
+these representations and they're going to sum them.
+这些陈述，他们将总结他们。
+
+1208
+01:14:03,685 --> 01:14:06,910
+And so you're just doing a simple summing operation,
+所以你只是做一个简单的求和操作，
+
+1209
+01:14:06,910 --> 01:14:10,765
+and that's sort of then giving you your representation of similarity.
+然后那就是给你相似的表示。
+
+1210
+01:14:10,765 --> 01:14:13,180
+Um, very precisely, they don't quite do that
+嗯，非常确切地说，他们并不那么做
+
+1211
+01:14:13,180 --> 01:14:15,550
+because there's a hashing trick but I'll leave that out.
+因为有一个哈希技巧，但我会把它留下来。
+
+1212
+01:14:15,550 --> 01:14:21,370
+But what they're able to show is that that model actually works pretty successfully.
+但他们能够展示的是，该模型实际上非常成功。
+
+1213
+01:14:21,370 --> 01:14:24,340
+So these are words similarity scores,
+所以这些是单词相似度得分，
+
+1214
+01:14:24,340 --> 01:14:28,480
+skip gram, they're all CBOW,
+跳过克，他们都是CBOW，
+
+1215
+01:14:28,480 --> 01:14:31,554
+and then this is the sort of new model,
+然后这就是那种新型号，
+
+1216
+01:14:31,554 --> 01:14:36,925
+um, that, um, uses these kind of n-grams.
+嗯，那个，嗯，使用这种n-gram。
+
+1217
+01:14:36,925 --> 01:14:38,755
+And in this, um,
+在这，嗯，
+
+1218
+01:14:38,755 --> 01:14:40,960
+you know at least for one of the English data sets,
+你知道至少有一个英文数据集，
+
+1219
+01:14:40,960 --> 01:14:42,235
+it doesn't get any better.
+它没有变得更好。
+
+1220
+01:14:42,235 --> 01:14:47,830
+Um, but what they especially notice this is for languages that have more,
+嗯，但他们特别注意到这是有更多的语言，
+
+1221
+01:14:47,830 --> 01:14:52,690
+morp- more morphology that you're sort of getting some fairly clear gains.
+更多的形态，你可以获得一些相当明显的收益。
+
+1222
+01:14:52,690 --> 01:14:55,375
+70, 69 onto 75,
+70,69到75，
+
+1223
+01:14:55,375 --> 01:14:58,765
+59, 60 on to 66 in the right column,
+59,66到右栏66，
+
+1224
+01:14:58,765 --> 01:15:02,440
+so then these wordpiece models do give them a better model of
+所以这些文字模型确实给了他们一个更好的模型
+
+1225
+01:15:02,440 --> 01:15:07,330
+words and just practically FastText, um,
+单词，只是几乎FastText，嗯，
+
+1226
+01:15:07,330 --> 01:15:12,940
+library now has sort of word embeddings for about 60 or 70 different languages,
+库现在有大约60种或70种不同语言的单词嵌入，
+
+1227
+01:15:12,940 --> 01:15:16,930
+so it's sort of a good source of word embeddings for multilingual applications.
+所以它是多语言应用程序的一个很好的字嵌入源。
+
+1228
+01:15:16,930 --> 01:15:19,735
+Okay, I think I am done.
+好的，我想我已经完成了。
+
+1229
+01:15:19,735 --> 01:15:23,000
+So thanks a lot and see you again next week.
+非常感谢，下周再见。
+
+1230
+
+
